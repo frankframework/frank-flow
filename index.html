@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+	<link rel="stylesheet" data-name="vs/editor/editor.main" href="node_modules/monaco-editor/min/vs/editor/editor.main.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+	<div class="tools-editors-wrapper">
+		<div class="top-wrapper">
+			<h2>Grafische flowchart designer</h2>
+			<select id="adapterSelect">
+				<option value="0">default</option>
+			</select>
+			<div class="menu">
+				<img src="https://img.icons8.com/cotton/64/000000/menu.png">
+				<ul class="menu-list">
+					<li id="lineChanges">Change lines</li>
+					<li id="addPipe">Add a new pipe</li>
+					<li id="setData">Generate flow</li>
+					<li id="toggleH">Toggle horizontal</li>
+					<li id="runXsd">Run xsd</li>
+					<li id="beautify">Beautify</li>
+				</ul>
+			</div>
+		</div>
+		<div class="monaco-flow-wrapper">
+			<div id="monacoContainer" class="monacoContainer"></div>
+			<div id="flowContainer" class="flowContainer">
+				<div class="jtk-demo-canvas source-target-demo" id="canvas">
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script>
+		var require = {
+			paths: {
+				'vs': 'node_modules/monaco-editor/min/vs'
+			}
+		};
+	</script>
+	<script language="JavaScript" type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script language="JavaScript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
+	<script language="JavaScript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
+	<script language="JavaScript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.panzoom/3.2.2/jquery.panzoom.min.js"></script>
+
+	<script src="node_modules/vkbeautify/index.js" type="text/javascript"></script>
+	<script src="node_modules/xmllint/xmllint.js" type="text/javascript"></script>
+	<script src="node_modules/jsplumb/dist/js/jsplumb.min.js"></script>
+	<script src="node_modules/monaco-editor/min/vs/loader.js"></script>
+	<script src="node_modules/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
+	<script src="node_modules/monaco-editor/min/vs/editor/editor.main.js"></script>
+	<script src="node_modules/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
+	<script src="js/index.js"></script>
+	<script src="js/codeEditor.js"></script>
+	<script src="js/flowEditor.js"></script>
+</body>
+
+</html>

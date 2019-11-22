@@ -1,0 +1,299 @@
+body, html {
+  height: 100%;
+}
+hr {
+  width: 100%;
+  border: 1px solid black;
+}
+
+.myGlyphMarginClass {
+  background: red;
+}
+
+.myContentClass {
+  background: #d4d4d4;
+}
+
+.monaco-flow-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.tools-editors-wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.monacoContainer {
+  min-width: 35%;
+  height: 100%;
+  border: 1px solid grey;
+  resize:horizontal;
+  overflow: auto;
+}
+
+#nameWrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.flowContainer {
+  width: 65%;
+  height: 100%;
+  border: 1px solid grey;
+  position: relative;
+  background-color: white;
+  overflow: scroll;
+}
+
+.editorTools {
+  width: 100%;
+  height: 10%;
+  background-color: #ECECEC;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.top-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  background-color: #ECECEC;
+}
+
+.top-wrapper h2 {
+  margin-left: 35%;
+}
+
+ul {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+.menu {
+  margin-right: 8%;
+}
+
+.menu:hover ul {
+  display: block;
+  position: absolute;
+  z-index: 4000;
+  background-color: grey;
+}
+
+ul li:hover {
+  background: #555;
+}
+
+ul {
+  position: absolute;
+  width: auto;
+  display: none;
+}
+
+li {
+  list-style-type: none;
+  font-size: 25px;
+}
+
+ul li ul li:hover {
+  background: #666;
+}
+
+.selectedItem {
+  background: #555;
+}
+
+.ibisdocDisplay {
+  width: 100%;
+  height: 40%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.panzoomContainer {
+  width: 50%;
+  height: 100%;
+  overflow: scroll;
+  background: repeating-linear-gradient(45deg, #eee, #eee 10px, #e5e5e5 10px, #e5e5e5 20px);
+  border: 1px solid black;
+}
+
+.demo {
+  /* for IE10+ touch devices */
+  touch-action: none;
+}
+
+html, body {
+  height: 100%;
+}
+
+/** ELEMENTS **/
+.window {
+  position: absolute;
+}
+
+.window:hover {
+  box-shadow: 2px 2px 19px #444;
+  -o-box-shadow: 2px 2px 19px #444;
+  -webkit-box-shadow: 2px 2px 19px #444;
+  -moz-box-shadow: 2px 2px 19px #fff;
+}
+
+.source-target-demo .window {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0.5em;
+}
+
+.smallWindow {
+  background-color: #558822;
+  cursor: move;
+}
+
+/** ENABLE/DISABLE LINK **/
+#enableDisableSource {
+  position: absolute;
+  top: 1em;
+  right: 5px;
+  color: #DDD;
+  font-size: 12px;
+}
+
+#enableDisableSource:hover {
+  color: orange;
+}
+
+.bottomContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  height: 50%;
+}
+
+.typeImg {
+  width: 40px;
+  height: 40px;
+}
+
+.typeWindow {
+  width: 100%;
+  height: 20%;
+  position: relative;
+  bottom: 0%;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.enableDisableTarget {
+  color: white;
+  right: 5px;
+  top: 5px;
+  position: absolute;
+  font-size: 12px;
+}
+
+.element-disabled {
+  outline: 2px solid lightblue;
+}
+
+.sourceWindow {
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  border-radius: 10px;
+  left: 14em;
+  width: 220px;
+  height: 190px;
+  z-index: 3000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.labelContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  position: relative;
+  bottom: 23%;
+  right: 5%;
+}
+
+#moveButton {
+  margin-left: 3px;
+}
+
+#editButton {
+  margin-left: 15px;
+}
+
+/** LARGE WINDOW STYLE AND POSITION **/
+#strong {
+  width: 100%;
+  white-space: normal;
+  word-break: break-all;
+  text-align: center;
+}
+
+/** JSPLUMB ARTEFACTS **/
+.jtk-endpoint {
+  z-index: 32;
+}
+
+.jtk-overlay {
+  margin-top: 1%;
+  margin-left: 1%;
+}
+
+.jtk-demo-main, #canvas {
+  min-height: 2500px;
+  min-width: 2500px;
+  background-color: white;
+  position: absolute;
+}
+
+path, .jtk-endpoint {
+  cursor: pointer;
+}
+
+/* ENDPOINT STYLES */
+.large-green circle {
+  fill: #558822;
+}
+
+.small-blue circle {
+  fill: #0d78bc;
+}
+
+.exit {
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+  text-align: center;
+}
+
+.exit strong {
+  margin-top: 8%;
+}
+
+.exit .typeWindow {
+  bottom: 70%;
+}
