@@ -8,7 +8,7 @@ This project will help you visualize your adapters in flow format.
   Clone this project and place it inside your own ibis project.
   </li>
   <li>
-  Put the files inside of the folder webapps/ibis.
+  Put the files inside of the folder webapps/ibis (or just webapps in case you have no ibis folder).
   </li>
   <li>
   Start your ibis.
