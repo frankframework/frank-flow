@@ -13,6 +13,7 @@ The project has been tested in firefox, other browsers will give an inacurate re
   Put the files inside of the folder webapp/ibis (or just webapps in case you have no ibis folder).
   If you have multiple webapp folders then put it in the src/main/webapp folder.
   </li>
+  ![frankflowDownloadTut](https://user-images.githubusercontent.com/38459075/70925830-3bac0300-202c-11ea-977e-126ecda3b362.png)
   <li>
   Start your ibis.
   </li>
