@@ -21,6 +21,7 @@ The project has been tested in firefox, other browsers will give an inacurate re
   Navigate to the url http://localhost/ibis/frank-flow/.
   If the url isn't working, look good at your file structure. The url is dependant on the map you put it in.
   </li>
+  <img src="media/frankFlowMain.png" />
 
 # How to use the frank-flow
   
