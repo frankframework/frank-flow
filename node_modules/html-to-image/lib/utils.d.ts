@@ -1,0 +1,15 @@
+export declare const uuid: () => string;
+export declare function parseExtension(url: string): string;
+export declare function getMimeType(url: string): string;
+export declare function delay(ms: number): (ret: any) => Promise<any>;
+export declare function createImage(url: string): Promise<HTMLImageElement>;
+export declare function isDataUrl(url: string): Boolean;
+export declare function toDataURL(content: string, mimeType: string): string;
+export declare function getDataURLContent(dataURL: string): string;
+export declare function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob | null>;
+export declare function toArray<T>(arrayLike: any): T[];
+export declare function getNodeWidth(node: HTMLElement): number;
+export declare function getNodeHeight(node: HTMLElement): number;
+export declare function getPixelRatio(): number;
+export declare function svgToDataURL(svg: SVGElement): Promise<string>;
+export declare function getBlobFromImageURL(url: string): Promise<string>;

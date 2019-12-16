@@ -1,18 +1,24 @@
 {
-  "name": "converter-test",
+  "name": "Grafische designer",
   "version": "1.0.0",
-  "description": "test converter",
-  "main": "converter.js",
+  "description": "dev tool to work with the Frank framework",
+  "main": "Controller/MainController.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "ruben",
   "license": "ISC",
   "dependencies": {
+    "dom-to-image": "^2.6.0",
+    "html-to-image": "^0.1.1",
     "jsplumb": "^2.11.2",
     "monaco-editor": "^0.18.0",
     "nodejs": "0.0.0",
     "vkbeautify": "^0.99.3",
     "xmllint": "^0.1.1"
+  },
+  "devDependencies": {
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   }
 }
