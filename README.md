@@ -16,3 +16,6 @@ This project will help you visualize your adapters in flow format.
   <li>
   Navigate to the url http://localhost/ibis/frank-flow/.
   </li>
+
+# How to use the frank-flow
+  
