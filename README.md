@@ -3,18 +3,22 @@ Graphical flow editor for Frank configurations
 
 This project will help you visualize your adapters in flow format.
 
+The project has been tested in firefox, other browsers will give an inacurate representation of the editor.
+
 # To integrate the frank-flow: 
   <li>
   Clone this project and place it inside your own ibis project.
   </li>
   <li>
-  Put the files inside of the folder webapps/ibis (or just webapps in case you have no ibis folder).
+  Put the files inside of the folder webapp/ibis (or just webapps in case you have no ibis folder).
+  If you have multiple webapp folders then put it in the src/main/webapp folder.
   </li>
   <li>
   Start your ibis.
   </li>
   <li>
   Navigate to the url http://localhost/ibis/frank-flow/.
+  If the url isn't working, look good at your file structure. The url is dependant on the map you put it in.
   </li>
 
 # How to use the frank-flow
