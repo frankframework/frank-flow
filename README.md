@@ -14,6 +14,7 @@ The project has been tested in firefox, other browsers will give an inacurate re
   If you have multiple webapp folders then put it in the src/main/webapp folder.
   </li>
   ![frankflowDownloadTut](frankflowDownloadTut.png)
+  <img src="media/frankflowDownloadTut.png" />
   <li>
   Start your ibis.
   </li>
