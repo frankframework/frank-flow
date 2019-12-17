@@ -23,7 +23,7 @@ export default class CodeController {
     switch (data.type) {
       case "getData":
         this.getXsd();
-        this.getCode();
+        this.getIbisdoc();
         this.getConfigurations();
         break;
       case "setEditor":
@@ -55,7 +55,7 @@ export default class CodeController {
       e.target.range.startColumn = 1;
       let textPossition = cur.editor.getModel().getValueInRange(e.target.range);
       let adapters = textPossition.match(/<Adapter[^]*?name=".*?">/g);
-      if(adapters != null) {
+      if (adapters != null) {
         let adapterName = adapters[adapters.length - 1].match(/name="[^]*?"/g)[0].match(/"[^]*?"/g)[0].replace(/"/g, '');
         localStorage.setItem("currentAdapter", adapterName);
         cur.mainController.generateFlow();
@@ -131,7 +131,7 @@ export default class CodeController {
   }
 
 
-  getCode() {
+  getIbisdoc() {
     let cur = this;
     fetch('../rest/ibisdoc/ibisdoc.json', {
         method: 'GET'
@@ -147,6 +147,27 @@ export default class CodeController {
       .catch(err => {
         // Do something for an error here
         console.log(err);
+        this.getDefaultIbisdoc();
+      })
+  }
+
+  getDefaultIbisdoc() {
+    let cur = this;
+    fetch('https://cors-anywhere.herokuapp.com/https://ibis4example.ibissource.org/rest/ibisdoc/ibisdoc.json', {
+        method: 'GET'
+      })
+      .then(response => {
+        return response.json()
+      })
+      .then(data => {
+        // Work with JSON data here
+        cur.codeView.ibisdocJson = data;
+        cur.mainController.setPipes(data);
+      })
+      .catch(err => {
+        // Do something for an error here
+        console.log(err);
+
       })
   }
 
@@ -164,13 +185,36 @@ export default class CodeController {
       })
       .catch(err => {
         console.log("not loaded xsd", err);
+        this.getDefaultXsd();
         // Do something for an error here
       })
   }
 
-  getConfigurations() {
-    let cur = this;
-    fetch('../iaf/api/configurations', {
+  getDefaultXsd() {
+    fetch('https://cors-anywhere.herokuapp.com/https://ibis4example.ibissource.org/rest/ibisdoc/ibisdoc.xsd', {
+        method: 'GET'
+      })
+      .then(response => {
+        return response.text()
+      })
+      .then(data => {
+        // Work with JSON data here
+        localStorage.setItem("ibisdocXsd", data);
+        console.log("xsd is loaded!, here");
+      })
+      .catch(err => {
+        console.log("not loaded xsd", err);
+        // Do something for an error here
+      })
+  }
+
+  getConfigurations(secondTry) {
+    let cur = this,
+    path = '../iaf/api/configurations';
+    if(secondTry) {
+      path = '../' + path;
+    }
+    fetch(path, {
         method: 'GET'
       })
       .then(response => {
@@ -203,7 +247,12 @@ export default class CodeController {
         cur.codeView.addOptions(data);
       })
       .catch(err => {
+        if(secondTry) {
         console.log('couldnt load configurations', err)
+      } else {
+        console.log("configurations path was incorrect, trying other path now...");
+        cur.getConfigurations(true);
+      }
       })
   }
 }

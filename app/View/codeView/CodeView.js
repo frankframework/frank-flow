@@ -92,8 +92,9 @@ export default class CodeView {
   //change possition for pipes
   changePossition(name, newX, newY) {
     let cur = this;
-    let attributeObjectRegex = '<[\\S]*?[^"/][pP]ipe[\\s\\t\\n][^]*?>';
+    let attributeObjectRegex = '<[\\S]*?[^"/][pP]ipe[\\s\\t\\n][^]*?>|Receiver[\\s\\t\\n][^]*?>';
     let matches = this.editor.getModel().findMatches(attributeObjectRegex, false, true, false, false);
+    name = name.replace('(receiver): ', '');
     matches.forEach(function(item, index) {
       let pipe = cur.editor.getModel().getValueInRange(item.range);
       if (pipe.split('"').find(word => word === name)) {

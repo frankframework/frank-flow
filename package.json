@@ -1,5 +1,5 @@
 {
-  "name": "Grafische designer",
+  "name": "GrafischeDesigner",
   "version": "1.0.0",
   "description": "dev tool to work with the Frank framework",
   "main": "Controller/MainController.js",
@@ -11,6 +11,10 @@
   "dependencies": {
     "dom-to-image": "^2.6.0",
     "html-to-image": "^0.1.1",
+    "jquery": "^3.4.1",
+    "jquery-ui-dist": "^1.12.1",
+    "jquery.mousewheel": "^3.1.9",
+    "jquery.panzoom": "^3.2.3",
     "jsplumb": "^2.11.2",
     "monaco-editor": "^0.18.0",
     "nodejs": "0.0.0",
