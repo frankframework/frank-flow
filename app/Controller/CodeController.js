@@ -39,7 +39,7 @@ export default class CodeController {
       let adapter = $('#adapterSelect').val();
       cur.editor.getModel().setValue(localStorage.getItem(adapter));
     });
-    
+
     $('#adapterSelect').on('click', function(e) {
       let adapter = $('#adapterSelect').val();
       localStorage.setItem(adapter, cur.editor.getModel().getValue());
