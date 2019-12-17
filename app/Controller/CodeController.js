@@ -39,7 +39,7 @@ export default class CodeController {
       let adapter = $('#adapterSelect').val();
       cur.editor.getModel().setValue(localStorage.getItem(adapter));
     });
-
+    
     $('#adapterSelect').on('click', function(e) {
       let adapter = $('#adapterSelect').val();
       localStorage.setItem(adapter, cur.editor.getModel().getValue());
@@ -133,7 +133,7 @@ export default class CodeController {
 
   getCode() {
     let cur = this;
-    fetch('https://cors-anywhere.herokuapp.com/https://ibis4example.ibissource.org/rest/ibisdoc/ibisdoc.json', {
+    fetch('../rest/ibisdoc/ibisdoc.json', {
         method: 'GET'
       })
       .then(response => {
@@ -151,7 +151,7 @@ export default class CodeController {
   }
 
   getXsd() {
-    fetch('https://cors-anywhere.herokuapp.com/https://ibis4example.ibissource.org/rest/ibisdoc/ibisdoc.xsd', {
+    fetch('../rest/ibisdoc/ibisdoc.xsd', {
         method: 'GET'
       })
       .then(response => {
@@ -170,7 +170,7 @@ export default class CodeController {
 
   getConfigurations() {
     let cur = this;
-    fetch('https://cors-anywhere.herokuapp.com/https://ibis4example.ibissource.org/iaf/api/configurations', {
+    fetch('../iaf/api/configurations', {
         method: 'GET'
       })
       .then(response => {
