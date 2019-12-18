@@ -10,7 +10,7 @@ The project has been tested and made in firefox, other browsers will give an ina
   Clone this project and place it inside your own ibis project.
   </li>
   <li>
-  Put the files inside of the folder webapps/ibis (or just webapps in case you have no ibis folder).
+  Put the frank-flow folder inside of the folder webapps/ibis (or just webapps in case you have no ibis folder).
   If you have multiple webapps folders then put it in the src/main/webapps folder.
   </li>
   <img src="media/frankflowDownloadTut.png" />
