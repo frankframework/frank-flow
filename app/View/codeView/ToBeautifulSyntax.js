@@ -35,6 +35,7 @@ export default class ToBeautifulSyntax {
     doc = doc.replace(/<Exits>[^]*?<\/Exits>/g, '')
       .replace(/<\/Pipeline>/g, exits + '\n \t\t</Pipeline>')
       .replace(/className=".*?"/g, "");
+    
     return doc;
   }
 }

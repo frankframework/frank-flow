@@ -146,7 +146,7 @@ export default class CodeController {
       })
       .catch(err => {
         // Do something for an error here
-        console.log(err);
+        console.log("couldn't load ibisdoc, now switching to default ibisdoc");
         this.getDefaultIbisdoc();
       })
   }
@@ -184,7 +184,7 @@ export default class CodeController {
         console.log("xsd is loaded!, here");
       })
       .catch(err => {
-        console.log("not loaded xsd", err);
+        console.log("couldn't load xsd, now loading deafult xsd", err);
         this.getDefaultXsd();
         // Do something for an error here
       })
@@ -223,16 +223,23 @@ export default class CodeController {
       .then(response => {
         let configurations = [],
           dom, obj;
-        response.match(/<[cC]onfiguration[^]*?>[^]*?<\/[cC]onfiguration>/g).forEach(function(item, index) {
+        response.match(/<[cC]onfiguration[^]*?>[^]*?<\/[cC]onfiguration>|<IOS-Adaptering[^]*?>[^]*?<\/IOS-Adaptering>/g).forEach(function(item, index) {
+        	if(item != null) {
           configurations.push(item);
-          // item.match(/<[aA]dapter[^]*?>[^]*?<\/[aA]dapter>/g).forEach(function(item, index) {
-          // });
+        	} else {
+        		console.log('unknown configuration encountered');
+        	}
         })
+
         return configurations;
       })
       .then(response => {
         response.forEach(function(item, index) {
           if (item.match(/<Configuration/g) == null) {
+        	  if(item.match(/IOS-Adaptering/g) != null) {
+        		  item = item.replace(/IOS-Adaptering/g, 'Configuration');
+        		  console.log("this item is adaptering: ", item);
+        	  }
             response[index] = cur.toBeautiful.toBeautifulSyntax(item);
             localStorage.setItem(index, cur.toBeautiful.toBeautifulSyntax(item));
           } else {
@@ -250,8 +257,8 @@ export default class CodeController {
         if(secondTry) {
         console.log('couldnt load configurations', err)
       } else {
-        console.log("configurations path was incorrect, trying other path now...");
-        cur.getConfigurations(true);
+        console.log("configurations path was incorrect, trying other path now...", err);
+        //cur.getConfigurations(true);
       }
       })
   }
