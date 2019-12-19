@@ -8,7 +8,7 @@ export default class ToBeautifulSyntax {
     let matches = xml.match(/<pipe(\n\t*)?(\s\w*="(\s?\S)*"(\n\t*)?)*>[^]*?<\/pipe>/g),
       doc = xml,
       exits;
-    if (matches == null) return;
+    if (matches == null) return xml;
     matches.forEach(function(item, index) {
       let oldPipe = item,
         newPipe = "";
