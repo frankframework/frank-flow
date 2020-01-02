@@ -34,37 +34,40 @@ export default class PipeView {
         this.descriptionView.addDescription(descText, possitions, id);
       }
     }
+    
+    instance.makeTarget(el, {
+        dropOptions: {
+          hoverClass: "hover"
+        },
+        anchor: ["Left", "Top", "Right"],
+        endpoint: ["Dot", {
+          radius: 11,
+          cssClass: "large-green"
+        }]
+      });
+    
     if (isExit) {
       $(el).addClass('exit');
+    } else {
+	    instance.makeSource(el, {
+	      filter: ".enableDisableSource",
+	      filterExclude: true,
+	      maxConnections: -1,
+	      endpoint: ["Dot", {
+	        radius: 7,
+	        cssClass: "small-blue"
+	      }],
+	      anchor: flowView.sourceAnchors,
+	      connector: [flowView.connectorType, {
+	        stub: [40, 60],
+	        gap: 10,
+	        cornerRadius: 5,
+	        alwaysRespectStubs: true,
+	        midpoint: 0.0001
+	      }]
+	    });
     }
-    instance.makeSource(el, {
-      filter: ".enableDisableSource",
-      filterExclude: true,
-      maxConnections: -1,
-      endpoint: ["Dot", {
-        radius: 7,
-        cssClass: "small-blue"
-      }],
-      anchor: flowView.sourceAnchors,
-      connector: [flowView.connectorType, {
-        stub: [40, 60],
-        gap: 10,
-        cornerRadius: 5,
-        alwaysRespectStubs: true,
-        midpoint: 0.0001
-      }]
-    });
 
-    instance.makeTarget(el, {
-      dropOptions: {
-        hoverClass: "hover"
-      },
-      anchor: ["Left", "Top", "Right"],
-      endpoint: ["Dot", {
-        radius: 11,
-        cssClass: "large-green"
-      }]
-    });
     canvas.append(el);
     if(descText) {
     instance.connect({source: "sourceWindow" + id, target: "description" + id});

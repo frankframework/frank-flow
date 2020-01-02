@@ -1,6 +1,8 @@
 import ValidateConfigurationView from './ValidateConfigurationView.js';
 import CodeCompletionView from './CodeCompletionView.js';
 
+export const logColor = 'background: #222; color: #bada55';
+
 export default class CodeView {
 
   constructor() {
@@ -119,7 +121,7 @@ export default class CodeView {
   changeExitPossition(name, newX, newY) {
     let cur = this;
     let adapterName = $('#canvas').text().match(/Adapter:\s.*?\s/g)[0].replace(/Adapter:\s/g, '').replace(' ', '');
-    let attributeObjectRegex = '<Adapter name="' + localStorage.getItem("currentAdapter") + '"[\\s\\S\\n]*?<Exit [^]*?\\/>';
+    let attributeObjectRegex = '<Adapter[^>]*? name="' + localStorage.getItem("currentAdapter") + '"[\\s\\S\\n]*?<Exit [^]*?\\/>';
     let matches = this.editor.getModel().findMatches(attributeObjectRegex, false, true, false, false);
 
     matches.forEach(function(item, index) {

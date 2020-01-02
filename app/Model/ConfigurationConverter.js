@@ -13,19 +13,23 @@ export default class ConfigurationConverter {
     if (transformedXml.Configuration.Module == null && transformedXml.Configuration.Adapter != null) {
       transformedXml.Adapter = transformedXml.Configuration.Adapter;
     } else {
-      transformedXml.Configuration.Module.forEach(function(item, index) {
-        if (Array.isArray(item.Adapter)) {
-          item.Adapter.forEach(function(item, index) {
-            if (item["@name"] != null && item["@name"] == localStorage.getItem("currentAdapter")) {
-              transformedXml.Adapter = item;
-            }
-          })
-        } else {
-          if (item.Adapter != null && item.Adapter["@name"] != null && item.Adapter["@name"] == localStorage.getItem("currentAdapter")) {
-            transformedXml = item;
-          }
-        }
-      });
+	      if(Array.isArray(transformedXml.Configuration.Module)) {
+	      transformedXml.Configuration.Module.forEach(function(item, index) {
+	        if (Array.isArray(item.Adapter)) {
+	          item.Adapter.forEach(function(item, index) {
+	            if (item["@name"] != null && item["@name"] == localStorage.getItem("currentAdapter")) {
+	              transformedXml.Adapter = item;
+	            }
+	          })
+	        } else {
+	          if (item.Adapter != null && item.Adapter["@name"] != null && item.Adapter["@name"] == localStorage.getItem("currentAdapter")) {
+	            transformedXml = item;
+	          }
+	        }
+	      });
+	    } else {
+	    	transformedXml.Adapter = transformedXml.Configuration.Module.Adapter;
+	    }
     }
     return transformedXml;
   }

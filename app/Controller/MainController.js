@@ -9,6 +9,7 @@ class MainController {
     this.configurationConverter = new ConfigurationConverter();
     this.codeController = new CodeController(this);
     this.flowController = new FlowController(this);
+    console.log(window.webkitRequestFileSystem);
   }
 
   convertConfiguration() {
@@ -61,5 +62,6 @@ class MainController {
     }
   }
 }
+
 
 let mainController = new MainController();

@@ -1,6 +1,9 @@
 import CodeModel from '../Model/CodeModel.js';
 import CodeView from '../View/codeView/CodeView.js';
 import ToBeautifulSyntax from '../View/codeView/ToBeautifulSyntax.js';
+import {
+  saveAs
+} from 'file-saver';
 export default class CodeController {
 
   constructor(mainController) {
@@ -32,6 +35,15 @@ export default class CodeController {
     }
   }
 
+  saveFile() {
+    var FileSaver = require('file-saver');
+    let fileData = this.editor.getModel().getValue();
+    var blob = new Blob([fileData], {
+      type: "text/xml"
+    });
+    FileSaver.saveAs(blob, "FrankConfiguration")
+  }
+
 
   initListeners() {
     let cur = this;
@@ -39,6 +51,24 @@ export default class CodeController {
       let adapter = $('#adapterSelect').val();
       cur.editor.getModel().setValue(localStorage.getItem(adapter));
     });
+
+    $('#fileReader').on('change', function(e) {
+      var input = event.target;
+      console.log(input);
+
+      var reader = new FileReader();
+      reader.onload = function() {
+        var dataURL = reader.result;
+        let xml = atob(dataURL.replace(/[^]*?,/, ''));
+        xml = '<Configuration>\n' + xml + '\n</Configuration>'
+        cur.editor.setValue(xml);
+      }
+      reader.readAsDataURL(input.files[0]);
+    });
+
+    $('#uploadFile').on('click', function(e) {
+      cur.saveFile();
+    })
 
     $('#adapterSelect').on('click', function(e) {
       let adapter = $('#adapterSelect').val();
@@ -210,8 +240,8 @@ export default class CodeController {
 
   getConfigurations(secondTry) {
     let cur = this,
-    path = '../iaf/api/configurations';
-    if(secondTry) {
+      path = '../iaf/api/configurations';
+    if (secondTry) {
       path = '../' + path;
     }
     fetch(path, {
@@ -224,11 +254,11 @@ export default class CodeController {
         let configurations = [],
           dom, obj;
         response.match(/<[cC]onfiguration[^]*?>[^]*?<\/[cC]onfiguration>|<IOS-Adaptering[^]*?>[^]*?<\/IOS-Adaptering>/g).forEach(function(item, index) {
-        	if(item != null) {
-          configurations.push(item);
-        	} else {
-        		console.log('unknown configuration encountered');
-        	}
+          if (item != null) {
+            configurations.push(item);
+          } else {
+            console.log('unknown configuration encountered');
+          }
         })
 
         return configurations;
@@ -236,10 +266,9 @@ export default class CodeController {
       .then(response => {
         response.forEach(function(item, index) {
           if (item.match(/<Configuration/g) == null) {
-        	  if(item.match(/IOS-Adaptering/g) != null) {
-        		  item = item.replace(/IOS-Adaptering/g, 'Configuration');
-        		  console.log("this item is adaptering: ", item);
-        	  }
+            if (item.match(/IOS-Adaptering/g) != null) {
+              item = item.replace(/IOS-Adaptering/g, 'Configuration');
+            }
             response[index] = cur.toBeautiful.toBeautifulSyntax(item);
             localStorage.setItem(index, cur.toBeautiful.toBeautifulSyntax(item));
           } else {
@@ -254,12 +283,12 @@ export default class CodeController {
         cur.codeView.addOptions(data);
       })
       .catch(err => {
-        if(secondTry) {
-        console.log('couldnt load configurations', err)
-      } else {
-        console.log("configurations path was incorrect, trying other path now...", err);
-        //cur.getConfigurations(true);
-      }
+        if (secondTry) {
+          console.log('couldnt load configurations', err)
+        } else {
+          console.log("configurations path was incorrect, trying other path now...", err);
+          //cur.getConfigurations(true);
+        }
       })
   }
 }

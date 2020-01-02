@@ -1,5 +1,4 @@
 import FlowGenerator from './FlowGenerator.js'
-
 export default class FlowView {
 
   constructor() {
@@ -28,7 +27,7 @@ export default class FlowView {
     domtoimage.toSvg(node)
       .then(function(dataUrl) {
         var link = document.createElement('a');;
-        link.download = 'lol.svg';
+        link.download = localStorage.getItem('currentAdapter') + '.svg';
         link.href = dataUrl;
         link.click();
       })
@@ -86,7 +85,7 @@ export default class FlowView {
   /*
    * one function to modify the flow and code at the same time.
    * @param change: insert here the action you want to do.
-   * @param callback: insert an object with necessary information.
+   * @param obj: insert an object with necessary information.
    */
   modifyFlow(change, obj) {
     switch (change) {

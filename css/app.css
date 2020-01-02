@@ -112,13 +112,14 @@ hr {
 .top-wrapper {
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
   background-color: #ECECEC;
 }
 
 .top-wrapper h2 {
-  margin-left: 35%;
+  margin-left: 10%;
 }
 
 ul {
@@ -206,10 +207,6 @@ html, body {
   padding: 0.5em;
 }
 
-.smallWindow {
-  background-color: #558822;
-  cursor: move;
-}
 
 /** ENABLE/DISABLE LINK **/
 #enableDisableSource {
@@ -229,8 +226,8 @@ html, body {
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  width: 100%;
   height: 50%;
+  margin-bottom: 10%;
 }
 
 .typeImg {
@@ -268,7 +265,8 @@ html, body {
   color: black;
   border-radius: 10px;
   left: 14em;
-  width: 220px;
+  min-width: 220px;
+  width: auto;
   height: 190px;
   z-index: 3000;
   display: flex;
@@ -278,6 +276,7 @@ html, body {
 .description {
   position: absolute;
   background-color: orange;
+  text-align:center;
   width: 220px;
   height: 100px;
   border: 1px dashed black;

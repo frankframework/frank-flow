@@ -14,5 +14,6 @@ export default class DescriptionView {
     $(el).css('left', possitions.x + 'px');
     $(el).css('top', possitions.y + 'px');
     canvas.append(el);
+    instance.draggable(el);
   }
 }

@@ -1,9 +1,12 @@
 import PipeView from './PipeView.js';
+import ConsoleColorPick from '../ConsoleColorPick.js';
+
 
 export default class FlowGenerator {
   constructor(flowView) {
     this.flowView = flowView;
     this.pipeView = new PipeView(flowView);
+    this.consoleColor = new ConsoleColorPick();
   }
 
   addPipe(name = "pipe" + (this.flowView.windows), possitions, extra = "", isExit, descText) {
@@ -41,9 +44,9 @@ export default class FlowGenerator {
             } else if (pipe[p].FixedQuerySender != null && pipe[p].FixedQuerySender['@query'] != null) {
               extraText = pipe[p].FixedQuerySender['@query'].slice(0, 15) + '...';
             }
-            if(pipe[p].description != null) {
-              console.log(pipe[p].description);
-              descText = pipe[p].description;
+            if(pipe[p].Documentation != null) {
+              console.log(pipe[p].Documentation);
+              descText = pipe[p].Documentation;
             }
 
             this.addPipe(name, possitions, extraText, null, descText);
@@ -119,6 +122,7 @@ export default class FlowGenerator {
     }
   }
 
+  //check if possitions exist, if only one possition exists then duplicate the existing possitions.
   checkPossitions(xpos, ypos) {
     if (xpos == null && ypos != null) {
       xpos = ypos;
@@ -135,6 +139,7 @@ export default class FlowGenerator {
     }
   }
 
+  //method to add one receiver
   addReceiver(transformedXml, target) {
     this.addPipe('(receiver): ' + transformedXml.Adapter.Receiver['@name'], {
       x: "600",
@@ -147,6 +152,7 @@ export default class FlowGenerator {
     };
   }
 
+  // method to add all exits
   addExits(exits) {
     let exit = exits,
       possitions,
