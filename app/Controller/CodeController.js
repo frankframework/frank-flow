@@ -1,6 +1,8 @@
 import CodeModel from '../Model/CodeModel.js';
 import CodeView from '../View/codeView/CodeView.js';
 import ToBeautifulSyntax from '../View/codeView/ToBeautifulSyntax.js';
+import JSZip from '../../node_modules/jszip/dist/jszip.js';
+import FileTreeView from '../View/codeView/FileTreeView.js';
 import {
   saveAs
 } from 'file-saver';
@@ -12,36 +14,23 @@ export default class CodeController {
     this.codeView = new CodeView();
     this.codeView.addListener(this);
     this.toBeautiful = new ToBeautifulSyntax();
-    this.notify({
-      type: "getData"
-    });
-    this.notify({
-      type: "setEditor"
-    });
+    this.getXsd();
+    this.getIbisdoc();
+    this.getConfigurations();
+    this.codeView.makeEditor();
     this.editor = this.codeView.editor;
+    this.fileTreeView = new FileTreeView(this.editor);
     this.initListeners();
   }
 
-  notify(data) {
-    switch (data.type) {
-      case "getData":
-        this.getXsd();
-        this.getIbisdoc();
-        this.getConfigurations();
-        break;
-      case "setEditor":
-        this.codeView.makeEditor();
-        break;
-    }
-  }
-
   saveFile() {
+    let zip = this.fileTreeView.zip;
     var FileSaver = require('file-saver');
-    let fileData = this.editor.getModel().getValue();
-    var blob = new Blob([fileData], {
-      type: "text/xml"
-    });
-    FileSaver.saveAs(blob, "FrankConfiguration")
+    zip.generateAsync({
+      type: "blob"
+    }).then(function(blob) {
+      FileSaver.saveAs(blob, "FrankConfiguration");
+    })
   }
 
 
@@ -49,22 +38,17 @@ export default class CodeController {
     let cur = this;
     $('#adapterSelect').on('change', function(e) {
       let adapter = $('#adapterSelect').val();
+      console.log(adapter);
       cur.editor.getModel().setValue(localStorage.getItem(adapter));
     });
 
     $('#fileReader').on('change', function(e) {
       var input = event.target;
-      console.log(input);
+      console.log(input.files);
+      cur.fileTreeView.makeTree(input, cur.editor);
 
-      var reader = new FileReader();
-      reader.onload = function() {
-        var dataURL = reader.result;
-        let xml = atob(dataURL.replace(/[^]*?,/, ''));
-        xml = '<Configuration>\n' + xml + '\n</Configuration>'
-        cur.editor.setValue(xml);
-      }
-      reader.readAsDataURL(input.files[0]);
     });
+
 
     $('#uploadFile').on('click', function(e) {
       cur.saveFile();
@@ -80,6 +64,7 @@ export default class CodeController {
       cur.editor.getModel().setValue(prettyXML);
     });
 
+    //generate the adapter with the curren possition of the mouse.
     cur.editor.onMouseDown(function(e) {
       e.target.range.startLineNumber = 1;
       e.target.range.startColumn = 1;
@@ -88,25 +73,30 @@ export default class CodeController {
       if (adapters != null) {
         let adapterName = adapters[adapters.length - 1].match(/name="[^]*?"/g)[0].match(/"[^]*?"/g)[0].replace(/"/g, '');
         localStorage.setItem("currentAdapter", adapterName);
-        cur.mainController.generateFlow();
+        cur.quickGenerate();
       }
     })
 
-    this.editor.getModel().onDidChangeContent(function(e) {
-      if (!cur.mainController.flowController.flowView.moving && !cur.mainController.flowController.flowView.adding) {
-        try {
-          $('#canvas').css('display', 'block');
-          $('.customErrorMessage').remove();
-          cur.mainController.generateFlow();
-          // if(editor.getModel().getValue() == "") {
-          //   undoDecorations();
-          // }
-        } catch (error) {
-          console.log("error", error);
-          cur.mainController.flowController.flowView.modifyFlow("error", error);
-        }
-      }
-    })
+    function debounce(func, wait, immediate) {
+      var timeout;
+      return function() {
+        var context = this,
+          args = arguments;
+        var later = function() {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+      };
+    };
+
+    //when typing, generate the flow.
+    this.editor.getModel().onDidChangeContent(debounce(function() {
+      cur.quickGenerate()
+    }, 250))
 
     //run the xsd to the xml that is currently in the editor
     $('#runXsd').click(function() {
@@ -121,6 +111,23 @@ export default class CodeController {
         });
       }
     })
+  }
+
+  quickGenerate() {
+    let cur = this;
+    if (!cur.mainController.flowController.flowView.moving && !cur.mainController.flowController.flowView.adding) {
+      try {
+        $('#canvas').css('display', 'block');
+        $('.customErrorMessage').remove();
+        cur.mainController.generateFlow();
+        // if(editor.getModel().getValue() == "") {
+        //   undoDecorations();
+        // }
+      } catch (error) {
+        console.log("error", error);
+        cur.mainController.flowController.flowView.modifyFlow("error", error);
+      }
+    }
   }
 
   selectPipe(name) {
@@ -179,6 +186,7 @@ export default class CodeController {
         console.log("couldn't load ibisdoc, now switching to default ibisdoc");
         this.getDefaultIbisdoc();
       })
+
   }
 
   getDefaultIbisdoc() {
@@ -270,7 +278,14 @@ export default class CodeController {
               item = item.replace(/IOS-Adaptering/g, 'Configuration');
             }
             response[index] = cur.toBeautiful.toBeautifulSyntax(item);
-            localStorage.setItem(index, cur.toBeautiful.toBeautifulSyntax(item));
+            // let name = item.match(/<configuration[^]*?name=".*?"/g);
+            // if (name != null) {
+            //   name = name[0].match(/".*?"/g)[0].replace(/"/g, '');
+            //   console.log(name);
+            //   localStorage.setItem(name, cur.toBeautiful.toBeautifulSyntax(item));
+            // } else {
+            //   localStorage.setItem(index, cur.toBeautiful.toBeautifulSyntax(item));
+            // }
           } else {
             localStorage.setItem(index, item);
           }

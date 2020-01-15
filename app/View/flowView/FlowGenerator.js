@@ -141,10 +141,23 @@ export default class FlowGenerator {
 
   //method to add one receiver
   addReceiver(transformedXml, target) {
+    let xCord,
+    yCord;
+
+    //check for empty coordinates.
+    if(transformedXml.Adapter.Receiver['@x'] != null && transformedXml.Adapter.Receiver['@y'] != null) {
+      xCord = transformedXml.Adapter.Receiver['@x'];
+      yCord = transformedXml.Adapter.Receiver['@y']
+    } else {
+      xCord = 600;
+      yCord = 400;
+    }
+
     this.addPipe('(receiver): ' + transformedXml.Adapter.Receiver['@name'], {
-      x: "600",
-      y: "400"
+      x: xCord,
+      y: yCord
     });
+
     return {
       sourcePipe: '(receiver): ' + transformedXml.Adapter.Receiver['@name'],
       targetPipe: target,
@@ -159,9 +172,12 @@ export default class FlowGenerator {
       name,
       ypos,
       xpos;
+
     if (exit == null) {
       return;
     }
+
+    //check if there is more then one exit.
     if (Array.isArray(exit)) {
       let cur = this;
       exit.forEach(function(item, index) {
@@ -201,6 +217,7 @@ export default class FlowGenerator {
     let generated = true;
     let cur = this;
 
+    //event handler for when a connection is made.
     instance.bind("connection", function(i, c) {
       let counter = 0;
       instance.getAllConnections().forEach(function(conn) {
@@ -211,6 +228,8 @@ export default class FlowGenerator {
         }
       });
 
+
+      //bind a double click event for deleting forwards.
       let source = i.sourceEndpoint.element.lastChild.firstElementChild.textContent;
       let target = i.targetEndpoint.element.lastChild.firstElementChild.textContent;
       i.connection.bind("dblclick", function(conn) {
@@ -231,6 +250,7 @@ export default class FlowGenerator {
         return;
       }
 
+      //check if the connection is generated. 
       if (!generated) {
         cur.flowView.modifyFlow('connection', {
           source: source,

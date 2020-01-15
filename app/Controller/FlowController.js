@@ -27,6 +27,7 @@ export default class FlowController {
         break;
       case "changeName":
         this.mainController.modifyCode("changeName", data);
+        console.log("name changer")
         break;
       case "changeAddPipe":
         this.mainController.modifyCode("changeAddPipe", data);
@@ -86,11 +87,11 @@ export default class FlowController {
       }
     });
 
-    jsPlumb.on($('#canvas'), "mouseover", ".sourceWindow", function() {
+    jsPlumb.on($('#canvas'), "mouseover", ".sourceWindow, .description", function() {
       $panzoom.panzoom("disable");
     });
 
-    jsPlumb.on($('#canvas'), "mouseout", ".sourceWindow", function() {
+    jsPlumb.on($('#canvas'), "mouseout", ".sourceWindow, .description", function() {
       $panzoom.panzoom("enable");
       $('#flowContainer').attr('style', '');
     });

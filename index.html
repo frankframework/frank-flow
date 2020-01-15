@@ -6,6 +6,7 @@
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 	<link rel="stylesheet" data-name="vs/editor/editor.main" href="node_modules/monaco-editor/min/vs/editor/editor.main.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link href="fileTree/dist/css/file-tree.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/app.css">
 </head>
 
@@ -13,7 +14,7 @@
 
 	<div class="tools-editors-wrapper">
 		<div class="top-wrapper">
-			<input type="file" accept="text/xml" id="fileReader">
+			<input type="file" accept="application/x-zip-compressed" id="fileReader">
 			<h2>Grafische flowchart designer</h2>
 			<select id="adapterSelect">
 			</select>
@@ -27,11 +28,16 @@
 					<li id="runXsd">Run xsd</li>
 					<li id="beautify">Beautify</li>
 					<li id="downloadLink">download flow</li>
-					<li id="uploadFile">upload file</li>
+					<li id="uploadFile">download file</li>
 				</ul>
 			</div>
 		</div>
 		<div class="monaco-flow-wrapper">
+			<div id="fileTree" class="fileTree">
+				<h2>file tree</h2>
+				<div id="fileTreeItems">
+				</div>
+			</div>
 			<div id="monacoContainer" class="monacoContainer"></div>
 			<div id="flowContainer" class="flowContainer">
 				<div class="jtk-demo-canvas source-target-demo" id="canvas">
@@ -55,6 +61,7 @@
 		<script language="JavaScript" type="text/javascript" src="node_modules/jquery-ui-dist/jquery-ui.min.js"></script>
 		<script language="JavaScript" type="text/javascript" src="node_modules/jquery.mousewheel/jquery.mousewheel.js"></script>
 		<script language="JavaScript" type="text/javascript" src="node_modules/jquery.panzoom/dist/jquery.panzoom.min.js"></script>
+		<script src="fileTree/dist/js/file-tree.min.js"></script>
 
 		<script src="node_modules/vkbeautify/index.js" type="text/javascript"></script>
 		<script src="node_modules/xmllint/xmllint.js" type="text/javascript"></script>

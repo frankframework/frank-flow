@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "proxy": "http://localhost:8000",
   "author": "ruben",
   "license": "ISC",
   "dependencies": {
@@ -17,6 +18,7 @@
     "jquery.mousewheel": "^3.1.9",
     "jquery.panzoom": "^3.2.3",
     "jsplumb": "^2.11.2",
+    "jszip": "^3.2.2",
     "monaco-editor": "^0.18.0",
     "nodejs": "0.0.0",
     "vkbeautify": "^0.99.3",

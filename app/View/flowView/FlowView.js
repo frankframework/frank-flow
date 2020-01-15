@@ -21,21 +21,6 @@ export default class FlowView {
     this.listeners.forEach(l => l.notify(data));
   }
 
-  getImage() {
-    var node = document.getElementById('canvas');
-
-    domtoimage.toSvg(node)
-      .then(function(dataUrl) {
-        var link = document.createElement('a');;
-        link.download = localStorage.getItem('currentAdapter') + '.svg';
-        link.href = dataUrl;
-        link.click();
-      })
-      .catch(function(error) {
-        console.error('oops, something went wrong!', error);
-      });
-  }
-
   resetWindows() {
     this.windows = 0;
   }
@@ -96,7 +81,9 @@ export default class FlowView {
         this.notifyListeners(this.addCustomPipe(obj.name, obj.className));
         break;
       case 'edit':
-        this.notifyListeners(this.editTitle(obj));
+        obj = this.editTitle(obj);
+        obj.type = "changeName";
+        this.notifyListeners(obj);
         break;
       case 'connection':
         this.adding = true;
@@ -122,6 +109,21 @@ export default class FlowView {
         this.displayError(obj);
         break;
     }
+  }
+
+  getImage() {
+    var node = document.getElementById('canvas');
+
+    domtoimage.toSvg(node)
+      .then(function(dataUrl) {
+        var link = document.createElement('a');;
+        link.download = localStorage.getItem('currentAdapter') + '.svg';
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch(function(error) {
+        console.error('oops, something went wrong!', error);
+      });
   }
 
   cleanPossitions(obj) {
@@ -182,25 +184,40 @@ export default class FlowView {
 
   // a function to put distance between the pipes
   setOffsets(possitions) {
-    let boxOffset = 0;
+    let boxOffset = 0,
+      exitOffset = 0;
     let container = null;
 
     this.moving = true;
     for (let i = 1; i <= this.windows; i++) {
-      boxOffset += 250;
+
+      if (!$('#sourceWindow' + (i - 1)).hasClass('exit')) {
+        boxOffset += 250;
+      }
       if (!possitions) {
         let box = $('#sourceWindow' + i);
         if (!this.horizontalBuild) {
+
           box.css("top", boxOffset + "px");
         } else {
           box.css("top", "100px");
           box.css("left", boxOffset + "px");
         }
-        this.modifyFlow('drag', {
-          name: box[0].lastChild.firstElementChild.textContent,
-          x: box.css("left"),
-          y: box.css("top")
-        })
+        if (!box.hasClass('exit')) {
+          this.modifyFlow('drag', {
+            name: box[0].lastChild.firstElementChild.textContent,
+            x: box.css("left"),
+            y: box.css("top")
+          });
+        } else {
+          exitOffset += 250;
+          console.log(exitOffset);
+          this.modifyFlow('dragExit', {
+            name: box[0].lastChild.firstElementChild.textContent,
+            x: parseInt(box.css("left").replace('px', '')) + exitOffset + 'px',
+            y: box.css("top")
+          });
+        }
       }
       let totalLength, windowLength;
       if (!this.horizontalBuild) {
