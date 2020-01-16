@@ -1,6 +1,6 @@
 /*!-----------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
- * Version: 0.18.0(c339a5605cafb261247285527889157733bae14f)
+ * Version: 0.18.1(d7a26172c5955d29d2a8cca4377b53b28925c766)
  * Released under the MIT license
  * https://github.com/Microsoft/vscode/blob/master/LICENSE.txt
  *-----------------------------------------------------------*/
@@ -55,15 +55,15 @@ define("vs/editor/editor.main.nls.zh-cn", {
 		"Shift",
 		"Alt",
 		"Super",
-		"控件",
+		"Control",
 		"Shift",
 		"Alt",
-		"命令",
-		"控件",
+		"Command",
+		"Control",
 		"Shift",
 		"Alt",
 		"Windows",
-		"控件",
+		"Control",
 		"Shift",
 		"Alt",
 		"Super",
@@ -472,7 +472,7 @@ define("vs/editor/editor.main.nls.zh-cn", {
 		"为{1}找到了{0}",
 		"{0} 在 {2} 处找到 {1}",
 		"{0} 已找到 {1}",
-		"按 Ctrl+Enter 现可插入换行符，而不是全部替换。可修改 editor.action.replaceAll 的键绑定来覆盖此行为。",
+		"Ctrl+Enter 现在由全部替换改为插入换行。你可以修改editor.action.replaceAll 的按键绑定以覆盖此行为。",
 	],
 	"vs/editor/contrib/folding/folding": [
 		"展开",

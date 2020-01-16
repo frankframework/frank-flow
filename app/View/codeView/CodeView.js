@@ -35,6 +35,9 @@ export default class CodeView {
       theme: "vs-dark",
       glyphMargin: true,
       automaticLayout: true,
+      verticalScrollbarSize: 17,
+      horizontalScrollbarSize: 17,
+      arrowSize: 30
 
     });
     this.validateConfigurationView = new ValidateConfigurationView(this.editor);

@@ -2059,7 +2059,7 @@ define('vs/language/json/languageFeatures',["require", "exports", "vscode-langua
      */
     function createScanner(text, ignoreTrivia) {
         if (ignoreTrivia === void 0) { ignoreTrivia = false; }
-        var pos = 0, len = text.length, value = '', tokenOffset = 0, token = 16 /* Unknown */, scanError = 0 /* None */;
+        var pos = 0, len = text.length, value = '', tokenOffset = 0, token = 16 /* Unknown */, lineNumber = 0, lineStartOffset = 0, tokenLineStartOffset = 0, prevTokenLineStartOffset = 0, scanError = 0 /* None */;
         function scanHexDigits(count, exact) {
             var digits = 0;
             var value = 0;
@@ -2216,6 +2216,8 @@ define('vs/language/json/languageFeatures',["require", "exports", "vscode-langua
             value = '';
             scanError = 0 /* None */;
             tokenOffset = pos;
+            lineStartOffset = lineNumber;
+            prevTokenLineStartOffset = tokenLineStartOffset;
             if (pos >= len) {
                 // at the end
                 tokenOffset = len;
@@ -2239,6 +2241,8 @@ define('vs/language/json/languageFeatures',["require", "exports", "vscode-langua
                     pos++;
                     value += '\n';
                 }
+                lineNumber++;
+                tokenLineStartOffset = pos;
                 return token = 14 /* LineBreakTrivia */;
             }
             switch (code) {
@@ -2294,6 +2298,13 @@ define('vs/language/json/languageFeatures',["require", "exports", "vscode-langua
                                 break;
                             }
                             pos++;
+                            if (isLineBreak(ch)) {
+                                if (ch === 13 /* carriageReturn */ && text.charCodeAt(pos) === 10 /* lineFeed */) {
+                                    pos++;
+                                }
+                                lineNumber++;
+                                tokenLineStartOffset = pos;
+                            }
                         }
                         if (!commentClosed) {
                             pos++;
@@ -2383,7 +2394,9 @@ define('vs/language/json/languageFeatures',["require", "exports", "vscode-langua
             getTokenValue: function () { return value; },
             getTokenOffset: function () { return tokenOffset; },
             getTokenLength: function () { return pos - tokenOffset; },
-            getTokenError: function () { return scanError; }
+            getTokenStartLine: function () { return lineStartOffset; },
+            getTokenStartCharacter: function () { return tokenOffset - prevTokenLineStartOffset; },
+            getTokenError: function () { return scanError; },
         };
     }
     exports.createScanner = createScanner;
@@ -2983,10 +2996,10 @@ define('vs/language/json/languageFeatures',["require", "exports", "vscode-langua
         if (options === void 0) { options = ParseOptions.DEFAULT; }
         var _scanner = scanner_1.createScanner(text, false);
         function toNoArgVisit(visitFunction) {
-            return visitFunction ? function () { return visitFunction(_scanner.getTokenOffset(), _scanner.getTokenLength()); } : function () { return true; };
+            return visitFunction ? function () { return visitFunction(_scanner.getTokenOffset(), _scanner.getTokenLength(), _scanner.getTokenStartLine(), _scanner.getTokenStartCharacter()); } : function () { return true; };
         }
         function toOneArgVisit(visitFunction) {
-            return visitFunction ? function (arg) { return visitFunction(arg, _scanner.getTokenOffset(), _scanner.getTokenLength()); } : function () { return true; };
+            return visitFunction ? function (arg) { return visitFunction(arg, _scanner.getTokenOffset(), _scanner.getTokenLength(), _scanner.getTokenStartLine(), _scanner.getTokenStartCharacter()); } : function () { return true; };
         }
         var onObjectBegin = toNoArgVisit(visitor.onObjectBegin), onObjectProperty = toOneArgVisit(visitor.onObjectProperty), onObjectEnd = toNoArgVisit(visitor.onObjectEnd), onArrayBegin = toNoArgVisit(visitor.onArrayBegin), onArrayEnd = toNoArgVisit(visitor.onArrayEnd), onLiteralValue = toOneArgVisit(visitor.onLiteralValue), onSeparator = toOneArgVisit(visitor.onSeparator), onComment = toNoArgVisit(visitor.onComment), onError = toOneArgVisit(visitor.onError);
         var disallowComments = options && options.disallowComments;
@@ -3456,7 +3469,7 @@ define('vs/language/json/languageFeatures',["require", "exports", "vscode-langua
     exports.getLocation = parser.getLocation;
     /**
      * Parses the given text and returns the object the JSON content represents. On invalid input, the parser tries to be as fault tolerant as possible, but still return a result.
-     * Therefore always check the errors list to find out if the input was valid.
+     * Therefore, always check the errors list to find out if the input was valid.
      */
     exports.parse = parser.parse;
     /**
@@ -3468,7 +3481,7 @@ define('vs/language/json/languageFeatures',["require", "exports", "vscode-langua
      */
     exports.findNodeAtLocation = parser.findNodeAtLocation;
     /**
-     * Finds the most inner node at the given offset. If includeRightBound is set, also finds nodes that end at the given offset.
+     * Finds the innermost node at the given offset. If includeRightBound is set, also finds nodes that end at the given offset.
      */
     exports.findNodeAtOffset = parser.findNodeAtOffset;
     /**
@@ -3521,7 +3534,7 @@ define('vs/language/json/languageFeatures',["require", "exports", "vscode-langua
      * removals of text segments. All offsets refer to the original state of the document. No two edits must change or remove the same range of
      * text in the original document. However, multiple edits can have
      * the same offset, for example multiple inserts, or an insert followed by a remove or replace. The order in the array defines which edit is applied first.
-     * To apply edits to an input, you can use `applyEdits`
+     * To apply edits to an input, you can use `applyEdits`.
      */
     function format(documentText, range, options) {
         return formatter.format(documentText, range, options);
@@ -3540,7 +3553,7 @@ define('vs/language/json/languageFeatures',["require", "exports", "vscode-langua
      * removals of text segments. All offsets refer to the original state of the document. No two edits must change or remove the same range of
      * text in the original document. However, multiple edits can have
      * the same offset, for example multiple inserts, or an insert followed by a remove or replace. The order in the array defines which edit is applied first.
-     * To apply edits to an input, you can use `applyEdits`
+     * To apply edits to an input, you can use `applyEdits`.
      */
     function modify(text, path, value, options) {
         return edit.setProperty(text, path, value, options.formattingOptions, options.getInsertionIndex);
@@ -3721,6 +3734,7 @@ define('vs/language/json/jsonMode',["require", "exports", "./workerManager", "./
     Object.defineProperty(exports, "__esModule", { value: true });
     function setupMode(defaults) {
         var disposables = [];
+        var providers = [];
         var client = new workerManager_1.WorkerManager(defaults);
         disposables.push(client);
         var worker = function () {
@@ -3730,19 +3744,58 @@ define('vs/language/json/jsonMode',["require", "exports", "./workerManager", "./
             }
             return client.getLanguageServiceWorker.apply(client, uris);
         };
-        var languageId = defaults.languageId;
-        disposables.push(monaco.languages.registerCompletionItemProvider(languageId, new languageFeatures.CompletionAdapter(worker)));
-        disposables.push(monaco.languages.registerHoverProvider(languageId, new languageFeatures.HoverAdapter(worker)));
-        disposables.push(monaco.languages.registerDocumentSymbolProvider(languageId, new languageFeatures.DocumentSymbolAdapter(worker)));
-        disposables.push(monaco.languages.registerDocumentFormattingEditProvider(languageId, new languageFeatures.DocumentFormattingEditProvider(worker)));
-        disposables.push(monaco.languages.registerDocumentRangeFormattingEditProvider(languageId, new languageFeatures.DocumentRangeFormattingEditProvider(worker)));
-        disposables.push(new languageFeatures.DiagnosticsAdapter(languageId, worker, defaults));
-        disposables.push(monaco.languages.setTokensProvider(languageId, tokenization_1.createTokenizationSupport(true)));
-        disposables.push(monaco.languages.setLanguageConfiguration(languageId, richEditConfiguration));
-        disposables.push(monaco.languages.registerColorProvider(languageId, new languageFeatures.DocumentColorAdapter(worker)));
-        disposables.push(monaco.languages.registerFoldingRangeProvider(languageId, new languageFeatures.FoldingRangeAdapter(worker)));
+        function registerProviders() {
+            var languageId = defaults.languageId, modeConfiguration = defaults.modeConfiguration;
+            disposeAll(providers);
+            if (modeConfiguration.documentFormattingEdits) {
+                providers.push(monaco.languages.registerDocumentFormattingEditProvider(languageId, new languageFeatures.DocumentFormattingEditProvider(worker)));
+            }
+            if (modeConfiguration.documentRangeFormattingEdits) {
+                providers.push(monaco.languages.registerDocumentRangeFormattingEditProvider(languageId, new languageFeatures.DocumentRangeFormattingEditProvider(worker)));
+            }
+            if (modeConfiguration.completionItems) {
+                providers.push(monaco.languages.registerCompletionItemProvider(languageId, new languageFeatures.CompletionAdapter(worker)));
+            }
+            if (modeConfiguration.hovers) {
+                providers.push(monaco.languages.registerHoverProvider(languageId, new languageFeatures.HoverAdapter(worker)));
+            }
+            if (modeConfiguration.documentSymbols) {
+                providers.push(monaco.languages.registerDocumentSymbolProvider(languageId, new languageFeatures.DocumentSymbolAdapter(worker)));
+            }
+            if (modeConfiguration.tokens) {
+                providers.push(monaco.languages.setTokensProvider(languageId, tokenization_1.createTokenizationSupport(true)));
+            }
+            if (modeConfiguration.colors) {
+                providers.push(monaco.languages.registerColorProvider(languageId, new languageFeatures.DocumentColorAdapter(worker)));
+            }
+            if (modeConfiguration.foldingRanges) {
+                providers.push(monaco.languages.registerFoldingRangeProvider(languageId, new languageFeatures.FoldingRangeAdapter(worker)));
+            }
+            if (modeConfiguration.diagnostics) {
+                providers.push(new languageFeatures.DiagnosticsAdapter(languageId, worker, defaults));
+            }
+        }
+        registerProviders();
+        disposables.push(monaco.languages.setLanguageConfiguration(defaults.languageId, richEditConfiguration));
+        var modeConfiguration = defaults.modeConfiguration;
+        defaults.onDidChange(function (newDefaults) {
+            if (newDefaults.modeConfiguration !== modeConfiguration) {
+                modeConfiguration = newDefaults.modeConfiguration;
+                registerProviders();
+            }
+        });
+        disposables.push(asDisposable(providers));
+        return asDisposable(disposables);
     }
     exports.setupMode = setupMode;
+    function asDisposable(disposables) {
+        return { dispose: function () { return disposeAll(disposables); } };
+    }
+    function disposeAll(disposables) {
+        while (disposables.length) {
+            disposables.pop().dispose();
+        }
+    }
     var richEditConfiguration = {
         wordPattern: /(-?\d*\.\d\w*)|([^\[\{\]\}\:\"\,\s]+)/g,
         comments: {

@@ -250,7 +250,7 @@ export default class FlowGenerator {
         return;
       }
 
-      //check if the connection is generated. 
+      //check if the connection is generated.
       if (!generated) {
         cur.flowView.modifyFlow('connection', {
           source: source,

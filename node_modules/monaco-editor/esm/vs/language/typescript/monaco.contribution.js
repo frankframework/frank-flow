@@ -4,6 +4,7 @@ import '../../editor/editor.api.js';
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 'use strict';
+import { typescriptVersion } from './lib/typescriptServicesMetadata.js'; // do not import the whole typescriptServices here
 var Emitter = monaco.Emitter;
 var LanguageServiceDefaultsImpl = /** @class */ (function () {
     function LanguageServiceDefaultsImpl(compilerOptions, diagnosticsOptions) {
@@ -119,7 +120,7 @@ var ModuleKind;
     ModuleKind[ModuleKind["UMD"] = 3] = "UMD";
     ModuleKind[ModuleKind["System"] = 4] = "System";
     ModuleKind[ModuleKind["ES2015"] = 5] = "ES2015";
-    ModuleKind[ModuleKind["ESNext"] = 6] = "ESNext";
+    ModuleKind[ModuleKind["ESNext"] = 99] = "ESNext";
 })(ModuleKind || (ModuleKind = {}));
 var JsxEmit;
 (function (JsxEmit) {
@@ -141,9 +142,11 @@ var ScriptTarget;
     ScriptTarget[ScriptTarget["ES2016"] = 3] = "ES2016";
     ScriptTarget[ScriptTarget["ES2017"] = 4] = "ES2017";
     ScriptTarget[ScriptTarget["ES2018"] = 5] = "ES2018";
-    ScriptTarget[ScriptTarget["ESNext"] = 6] = "ESNext";
+    ScriptTarget[ScriptTarget["ES2019"] = 6] = "ES2019";
+    ScriptTarget[ScriptTarget["ES2020"] = 7] = "ES2020";
+    ScriptTarget[ScriptTarget["ESNext"] = 99] = "ESNext";
     ScriptTarget[ScriptTarget["JSON"] = 100] = "JSON";
-    ScriptTarget[ScriptTarget["Latest"] = 6] = "Latest";
+    ScriptTarget[ScriptTarget["Latest"] = 99] = "Latest";
 })(ScriptTarget || (ScriptTarget = {}));
 var ModuleResolutionKind;
 (function (ModuleResolutionKind) {
@@ -167,6 +170,7 @@ function createAPI() {
         NewLineKind: NewLineKind,
         ScriptTarget: ScriptTarget,
         ModuleResolutionKind: ModuleResolutionKind,
+        typescriptVersion: typescriptVersion,
         typescriptDefaults: typescriptDefaults,
         javascriptDefaults: javascriptDefaults,
         getTypeScriptWorker: getTypeScriptWorker,

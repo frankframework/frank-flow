@@ -159,6 +159,12 @@ define(["require", "exports", "./lib/typescriptServices", "./lib/lib"], function
         TypeScriptWorker.prototype.getFormattingEditsAfterKeystroke = function (fileName, postion, ch, options) {
             return Promise.resolve(this._languageService.getFormattingEditsAfterKeystroke(fileName, postion, ch, options));
         };
+        TypeScriptWorker.prototype.findRenameLocations = function (fileName, positon, findInStrings, findInComments, providePrefixAndSuffixTextForRename) {
+            return Promise.resolve(this._languageService.findRenameLocations(fileName, positon, findInStrings, findInComments, providePrefixAndSuffixTextForRename));
+        };
+        TypeScriptWorker.prototype.getRenameInfo = function (fileName, positon, options) {
+            return Promise.resolve(this._languageService.getRenameInfo(fileName, positon, options));
+        };
         TypeScriptWorker.prototype.getEmitOutput = function (fileName) {
             return Promise.resolve(this._languageService.getEmitOutput(fileName));
         };

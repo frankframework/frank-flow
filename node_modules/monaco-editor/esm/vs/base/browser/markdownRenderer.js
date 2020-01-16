@@ -8,7 +8,7 @@ import { onUnexpectedError } from '../common/errors.js';
 import { parseHrefAndDimensions, removeMarkdownEscapes } from '../common/htmlContent.js';
 import { defaultGenerator } from '../common/idGenerator.js';
 import * as marked from '../common/marked/marked.js';
-import * as insane from '../common/insane/insane.js';
+import { insane } from '../common/insane/insane.js';
 import { parse } from '../common/marshalling.js';
 import { cloneAndChange } from '../common/objects.js';
 import { escape } from '../common/strings.js';

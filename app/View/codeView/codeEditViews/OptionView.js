@@ -1,7 +1,9 @@
-export default class OptionView {
+import CodeEditView from './CodeEditView.js';
+
+export default class OptionView extends CodeEditView {
 
   constructor(editor) {
-    this.editor = editor;
+    super(editor);
   }
 
   //add options to the dropdown.
@@ -21,9 +23,11 @@ export default class OptionView {
       }
     });
     if (urlParams.has('configuration') && urlParams.has('adapter')) {
-      console.log(urlParams.get('configuration'), urlParams.get('adapter'));
-      //this.editor.setValue(localStorage.getItem(urlParams.get('configuration')));
+      console.log(urlParams.get('configuration').replace(/"/g, ''), urlParams.get('adapter'));
       this.editor.setValue(localStorage.getItem("IAF_WebControl"));
+      this.editor.setValue(localStorage.getItem(urlParams.get('configuration').replace(/"/g, '')));
+      localStorage.setItem('currentAdapter', urlParams.get('adapter').replace(/"/g, ''));
+      this.focusLine('<Adapter[^]*? name=' + urlParams.get('adapter') + '[^]*?>');
     } else {
       this.editor.setValue(localStorage.getItem("IAF_WebControl"));
     }

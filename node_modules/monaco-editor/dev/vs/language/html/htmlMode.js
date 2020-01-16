@@ -1922,6 +1922,7 @@ define('vs/language/html/languageFeatures',["require", "exports", "vscode-langua
                     detail: '',
                     containerName: item.containerName,
                     kind: toSymbolKind(item.kind),
+                    tags: [],
                     range: toRange(item.location.range),
                     selectionRange: toRange(item.location.range)
                 }); });

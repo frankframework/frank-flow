@@ -197,11 +197,15 @@ export default class FlowView {
       if (!possitions) {
         let box = $('#sourceWindow' + i);
         if (!this.horizontalBuild) {
-
           box.css("top", boxOffset + "px");
+          console.log('set top pipe offset');
         } else {
           box.css("top", "100px");
           box.css("left", boxOffset + "px");
+        }
+        if(this.windows == 2) {
+          this.moving = false;
+          return;
         }
         if (!box.hasClass('exit')) {
           this.modifyFlow('drag', {
@@ -211,7 +215,6 @@ export default class FlowView {
           });
         } else {
           exitOffset += 250;
-          console.log(exitOffset);
           this.modifyFlow('dragExit', {
             name: box[0].lastChild.firstElementChild.textContent,
             x: parseInt(box.css("left").replace('px', '')) + exitOffset + 'px',

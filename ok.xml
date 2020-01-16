@@ -1,0 +1,839 @@
+console.log(data[index - 1]);
+let reg = /[^]*?\//g,
+	currMap = item.name.match(reg),
+	prevMap = data[index - 1].name.match(reg);
+	console.log(item.name, data[index - 1].name);
+console.log(prevMap[prevMap.length - 1], currMap[currMap.length - 2])
+if (prevMap[prevMap.length - 1] == currMap[currMap.length - 2] && obj.type == "dir") {
+	data[index - 1].children = [];
+	data[index - 1].children.push(obj)
+	console.log(data);
+}
+
+
+
+
+
+<?xml version="1.0" encoding="UTF-8"?><configuration name="IAF_WebControl">
+
+	<module>
+
+	<adapter name="WebControlShowConfigurationStatus">
+
+		<receiver className="nl.nn.adapterframework.receivers.GenericReceiver" name="WebControlShowConfigurationStatus">
+
+			<listener className="nl.nn.adapterframework.http.RestListener" name="WebControlShowConfigurationStatus" uriPattern="showConfigurationStatus" view="false"/>
+
+		</receiver>
+
+		<pipeline firstPipe="doShowConfigurationStatus">
+
+			<exits>
+
+				<exit path="EXIT" state="success"/>
+
+			</exits>
+
+
+
+			<pipe className="nl.nn.adapterframework.webcontrol.pipes.ShowConfigurationStatus" name="doShowConfigurationStatus" throwException="false">
+
+				<forward name="success" path="showConfigurationStatus"/>
+
+			</pipe>
+
+
+
+			<pipe className="nl.nn.adapterframework.pipes.CreateRestViewPipe" name="showConfigurationStatus" styleSheetName="ShowConfigurationStatus/xsl/ShowConfigurationStatus.xsl" xslt2="true">
+
+				<param name="userAgent" sessionKey="userAgent"/>
+
+				<param name="configurationName" sessionKey="configurationName"/>
+
+				<param name="classLoaderType" sessionKey="classLoaderType"/>
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+		</pipeline>
+
+	</adapter>
+
+</module>
+
+
+
+	<module>
+
+	<adapter name="WebControlShowConfiguration">
+
+		<receiver className="nl.nn.adapterframework.receivers.GenericReceiver" name="WebControlShowConfiguration">
+
+			<listener className="nl.nn.adapterframework.http.RestListener" name="WebControlShowConfiguration" uriPattern="showConfiguration" view="false"/>
+
+		</receiver>
+
+		<pipeline firstPipe="doShowConfiguration">
+
+			<exits>
+
+				<exit path="EXIT" state="success"/>
+
+			</exits>
+
+
+
+			<pipe className="nl.nn.adapterframework.webcontrol.pipes.ShowConfiguration" name="doShowConfiguration" throwException="false">
+
+				<forward name="success" path="showConfiguration"/>
+
+			</pipe>
+
+
+
+			<pipe className="nl.nn.adapterframework.pipes.CreateRestViewPipe" name="showConfiguration" styleSheetName="ShowConfiguration/xsl/ShowConfiguration.xsl" xslt2="true">
+
+				<param name="configurationName" sessionKey="configurationName"/>
+
+				<param name="classLoaderType" sessionKey="classLoaderType"/>
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+		</pipeline>
+
+	</adapter>
+
+</module>
+
+
+
+	<module>
+
+	<adapter name="WebControlWebservices">
+
+		<receiver className="nl.nn.adapterframework.receivers.GenericReceiver" name="WebControlWebservices">
+
+			<listener className="nl.nn.adapterframework.http.RestListener" name="WebControlWebservices" uriPattern="webservices" view="false"/>
+
+		</receiver>
+
+		<pipeline firstPipe="doWebservices">
+
+			<exits>
+
+				<exit path="EXIT" state="success"/>
+
+			</exits>
+
+
+
+			<pipe className="nl.nn.adapterframework.webcontrol.pipes.Webservices" name="doWebservices" throwException="false">
+
+				<forward name="success" path="webservices"/>
+
+			</pipe>
+
+
+
+			<pipe className="nl.nn.adapterframework.pipes.CreateRestViewPipe" name="webservices" skipOnEmptyInput="true" styleSheetName="Webservices/xsl/Webservices.xsl" xslt2="true">
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+		</pipeline>
+
+	</adapter>
+
+</module>
+
+
+
+	<module>
+
+	<adapter name="WebControlTestPipeLine">
+
+		<receiver className="nl.nn.adapterframework.receivers.GenericReceiver" name="WebControlTestPipeLine">
+
+			<listener authRoles="IbisAdmin,IbisTester" className="nl.nn.adapterframework.http.RestListener" name="WebControlTestPipeLine" uriPattern="testPipeLine" view="false" writeSecLogMessage="true" writeToSecLog="true"/>
+
+		</receiver>
+
+		<pipeline firstPipe="doTestPipeLine">
+
+			<exits>
+
+				<exit path="EXIT" state="success"/>
+
+			</exits>
+
+
+
+			<pipe className="nl.nn.adapterframework.webcontrol.pipes.TestPipeLine" name="doTestPipeLine" throwException="false">
+
+				<param name="timeout" sessionKey="timeout"/>
+
+				<forward name="success" path="testPipeLine"/>
+
+			</pipe>
+
+
+
+			<pipe className="nl.nn.adapterframework.pipes.CreateRestViewPipe" name="testPipeLine" styleSheetName="TestPipeLine/xsl/TestPipeLine.xsl" xslt2="true">
+
+				<param name="adapterList" sessionKey="adapterList"/>
+
+				<param name="adapterName" sessionKey="adapterName"/>
+
+				<param name="timeout" sessionKey="timeout"/>
+
+				<param name="message" sessionKey="message"/>
+
+				<param name="fileEncoding" sessionKey="fileEncoding"/>
+
+				<param name="result" sessionKey="result"/>
+
+				<param name="state" sessionKey="state"/>
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+		</pipeline>
+
+	</adapter>
+
+</module>
+
+
+
+	<module>
+
+	<adapter active="${active.ifsa}" name="WebControlTestIfsaService">
+
+		<receiver className="nl.nn.adapterframework.receivers.GenericReceiver" name="WebControlTestIfsaService">
+
+			<listener authRoles="IbisAdmin,IbisTester" className="nl.nn.adapterframework.http.RestListener" name="WebControlTestIfsaService" uriPattern="testIfsaService" view="false"/>
+
+		</receiver>
+
+		<pipeline firstPipe="doIfsaService">
+
+			<exits>
+
+				<exit path="EXIT" state="success"/>
+
+			</exits>
+
+
+
+			<pipe className="nl.nn.adapterframework.webcontrol.pipes.TestIfsaService" name="doIfsaService" throwException="false">
+
+				<forward name="success" path="testIfsaService"/>
+
+			</pipe>
+
+
+
+			<pipe className="nl.nn.adapterframework.pipes.CreateRestViewPipe" name="testIfsaService" styleSheetName="WebControl/TestIfsaService/xsl/TestIfsaService.xsl" xslt2="true">
+
+				<param name="protocolList" sessionKey="protocolList"/>
+
+				<param name="applicationId" sessionKey="applicationId"/>
+
+				<param name="serviceId" sessionKey="serviceId"/>
+
+				<param name="messageProtocol" sessionKey="messageProtocol"/>
+
+				<param name="message" sessionKey="message"/>
+
+				<param name="fileEncoding" sessionKey="fileEncoding"/>
+
+				<param name="result" sessionKey="result"/>
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+		</pipeline>
+
+	</adapter>
+
+</module>
+
+
+
+	<module>
+
+	<adapter active="${active.config.database}" name="WebControlUploadConfig">
+
+		<receiver className="nl.nn.adapterframework.receivers.GenericReceiver" name="WebControlUploadConfig">
+
+			<listener authRoles="IbisDataAdmin,IbisAdmin,IbisTester" className="nl.nn.adapterframework.http.RestListener" name="WebControlUploadConfig" uriPattern="uploadConfig"/>
+
+		</receiver>
+
+		<pipeline firstPipe="doUploadConfig">
+
+			<exits>
+
+				<exit path="EXIT" state="success"/>
+
+			</exits>
+
+
+
+			<pipe className="nl.nn.adapterframework.webcontrol.pipes.UploadConfig" name="doUploadConfig" throwException="false">
+
+				<forward name="success" path="uploadConfig"/>
+
+			</pipe>
+
+
+
+			<pipe className="nl.nn.adapterframework.pipes.CreateRestViewPipe" name="uploadConfig" styleSheetName="UploadConfig/xsl/UploadConfig.xsl" xslt2="true">
+
+				<param name="jmsRealmList" sessionKey="jmsRealmList"/>
+
+				<param name="jmsRealm" sessionKey="jmsRealm"/>
+
+				<param name="name" sessionKey="name"/>
+
+				<param name="version" sessionKey="version"/>
+
+				<param name="fileEncoding" sessionKey="fileEncoding"/>
+
+				<param name="multipleConfigs" sessionKey="multipleConfigs"/>
+
+				<param name="activeConfig" sessionKey="activeConfig"/>
+
+				<param name="autoReload" sessionKey="autoReload"/>
+
+				<param name="result" sessionKey="result"/>
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+		</pipeline>
+
+	</adapter>
+
+</module>
+
+
+
+	<module>
+
+	<adapter active="${active.config.database}" name="WebControlShowConfig">
+
+		<receiver className="nl.nn.adapterframework.receivers.GenericReceiver" name="WebControlShowConfig">
+
+			<listener className="nl.nn.adapterframework.http.RestListener" name="WebControlShowConfig" uriPattern="showConfig"/>
+
+		</receiver>
+
+		<pipeline firstPipe="doShowConfig">
+
+			<exits>
+
+				<exit path="EXIT" state="success"/>
+
+			</exits>
+
+
+
+			<pipe className="nl.nn.adapterframework.webcontrol.pipes.ShowConfig" name="doShowConfig" throwException="false">
+
+				<forward name="success" path="showConfig"/>
+
+			</pipe>
+
+
+
+			<pipe className="nl.nn.adapterframework.pipes.CreateRestViewPipe" name="showConfig" skipOnEmptyInput="true" styleSheetName="ShowConfig/xsl/ShowConfig.xsl" xslt2="true">
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+		</pipeline>
+
+	</adapter>
+
+</module>
+
+
+
+	<module>
+
+	<adapter name="WebControlShowFlowDiagram">
+
+		<receiver className="nl.nn.adapterframework.receivers.GenericReceiver" name="WebControlShowFlowDiagram">
+
+			<listener className="nl.nn.adapterframework.http.RestListener" name="WebControlShowFlowDiagram" uriPattern="showFlowDiagram" view="false"/>
+
+		</receiver>
+
+		<pipeline firstPipe="setContentType">
+
+			<exits>
+
+				<exit path="EXIT" state="success"/>
+
+			</exits>
+
+
+
+			<pipe className="nl.nn.adapterframework.pipes.PutInSession" name="setContentType" sessionKey="contentType" value="image/svg+xml">
+
+				<forward name="success" path="doShowFlowDiagram"/>
+
+			</pipe>
+
+
+
+			<pipe className="nl.nn.adapterframework.webcontrol.pipes.ShowFlowDiagram" name="doShowFlowDiagram" storeResultInSessionKey="flowDiagram">
+
+				<forward name="success" path="switchFlowDiagram"/>
+
+			</pipe>
+
+
+
+			<pipe className="nl.nn.adapterframework.pipes.XmlSwitch" emptyForwardName="noImageAvailable" name="switchFlowDiagram" notFoundForwardName="readFile" sessionKey="flowDiagram">
+
+			</pipe>
+
+
+
+			<pipe className="nl.nn.adapterframework.pipes.FixedResult" fileName="/GenerateFlowDiagram/svg/no_image_available.svg" name="noImageAvailable">
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+
+
+			<pipe actions="read" className="nl.nn.adapterframework.pipes.FilePipe" name="readFile" outputType="stream" streamResultToServlet="true">
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+		</pipeline>
+
+	</adapter>
+
+</module>
+
+	<module>
+
+	<adapter active="${active.config.database}" name="WebControlExecuteJdbcProperties">
+
+		<receiver className="nl.nn.adapterframework.receivers.GenericReceiver" name="WebControlExecuteJdbcProperties">
+
+			<listener authRoles="IbisDataAdmin,IbisAdmin,IbisTester" className="nl.nn.adapterframework.http.RestListener" name="WebControlExecuteJdbcProperties" uriPattern="executeJdbcProperties"/>
+
+		</receiver>
+
+		<pipeline firstPipe="doExecuteJdbcProperties">
+
+			<exits>
+
+				<exit path="EXIT" state="success"/>
+
+			</exits>
+
+
+
+			<pipe className="nl.nn.adapterframework.webcontrol.pipes.ExecuteJdbcProperties" name="doExecuteJdbcProperties" throwException="false">
+
+				<forward name="success" path="executeJdbcProperties"/>
+
+			</pipe>
+
+
+
+			<pipe className="nl.nn.adapterframework.pipes.CreateRestViewPipe" name="executeJdbcProperties" skipOnEmptyInput="true" styleSheetName="ExecuteJdbcProperties/xsl/ExecuteJdbcProperties.xsl" xslt2="true">
+
+				<param name="jmsRealmList" sessionKey="jmsRealmList"/>
+
+				<param name="jmsRealm" sessionKey="jmsRealm"/>
+
+				<param name="actionList" sessionKey="actionList"/>
+
+				<param name="action" sessionKey="action"/>
+
+				<param name="name" sessionKey="name"/>
+
+				<param name="value" sessionKey="value"/>
+
+				<param name="result" sessionKey="result"/>
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+		</pipeline>
+
+	</adapter>
+
+</module>
+
+
+
+	<module>
+
+	<adapter name="WebControlShowEnvironmentVariables">
+
+		<receiver className="nl.nn.adapterframework.receivers.GenericReceiver" name="WebControlShowEnvironmentVariables-get">
+
+			<listener className="nl.nn.adapterframework.http.RestListener" method="GET" name="WebControlShowEnvironmentVariables-get" uriPattern="showEnvironmentVariables" view="false"/>
+
+		</receiver>
+
+		<receiver className="nl.nn.adapterframework.receivers.GenericReceiver" name="WebControlShowEnvironmentVariables-post">
+
+			<listener authRoles="IbisDataAdmin,IbisAdmin,IbisTester" className="nl.nn.adapterframework.http.RestListener" method="POST" name="WebControlShowEnvironmentVariables-post" uriPattern="showEnvironmentVariables" view="false"/>
+
+		</receiver>
+
+		<pipeline firstPipe="doShowEnvironmentVariables">
+
+			<exits>
+
+				<exit path="EXIT" state="success"/>
+
+			</exits>
+
+
+
+			<pipe className="nl.nn.adapterframework.webcontrol.pipes.ShowEnvironmentVariables" name="doShowEnvironmentVariables" throwException="false">
+
+				<forward name="success" path="showEnvironmentVariables"/>
+
+			</pipe>
+
+
+
+			<pipe className="nl.nn.adapterframework.pipes.CreateRestViewPipe" name="showEnvironmentVariables" styleSheetName="ShowEnvironmentVariables/xsl/ShowEnvironmentVariables.xsl" xslt2="true">
+
+				<param name="configurationName" sessionKey="configurationName"/>
+
+				<param name="classLoaderType" sessionKey="classLoaderType"/>
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+		</pipeline>
+
+	</adapter>
+
+</module>
+
+
+
+</configuration>nullnullnullnullnullnull<?xml version="1.0" encoding="UTF-8"?><configuration name="Ibis4SapHana">
+
+	<jmsRealms>
+
+		<jmsRealm datasourceName="jdbc/${instance.name.lc}" realmName="jdbc"/>
+
+		<!-- jmsRealm realmName="qcf" queueConnectionFactoryName="jms/qcf"/ -->
+
+	</jmsRealms>
+
+
+
+</configuration><?xml version="1.0" encoding="UTF-8"?><configuration name="IAF_Util">
+
+	<!-- include configuration for managing the database -->
+
+	<module>
+
+	<adapter active="${manageDatabase.active}" description="Manage the database" name="ManageDatabase">
+
+		<errorMessageFormatter className="nl.nn.adapterframework.errormessageformatters.FixedErrorMessage" fileName="/ManageDatabase/xml/ErrorMessage.xml" replaceFrom="%reasonCode" replaceTo="INTERNAL_ERROR"/>
+
+		<receiver className="nl.nn.adapterframework.receivers.GenericReceiver" name="ManageDatabase">
+
+			<listener className="nl.nn.adapterframework.receivers.JavaListener" name="ManageDatabase"/>
+
+		</receiver>
+
+		<receiver active="${manageDatabase.webServiceListener.active}" className="nl.nn.adapterframework.receivers.GenericReceiver" name="ManageDatabase-ws">
+
+			<listener className="nl.nn.adapterframework.http.WebServiceListener" name="ManageDatabase-ws" serviceNamespaceURI="http://managedatabase.ibissource.org/"/>
+
+		</receiver>
+
+		<pipeline firstPipe="Query" transactionAttribute="Required">
+
+			<inputValidator className="nl.nn.adapterframework.pipes.XmlValidator" root="manageDatabaseREQ" schema="ManageDatabase/xsd/ManageDatabase.xsd">
+
+				<forward name="failure" path="InputValidateFailure"/>
+
+				<forward name="parserError" path="InputValidateError"/>
+
+			</inputValidator>
+
+			<outputValidator className="nl.nn.adapterframework.pipes.XmlValidator" root="manageDatabaseRLY" schema="ManageDatabase/xsd/ManageDatabase.xsd">
+
+				<forward name="failure" path="InternalXsdFailure"/>
+
+				<forward name="parserError" path="InternalXsdError"/>
+
+			</outputValidator>
+
+			<exits>
+
+				<exit path="EXIT" state="success"/>
+
+			</exits>
+
+			<pipe className="nl.nn.adapterframework.pipes.ForEachChildElementPipe" elementXPathExpression="manageDatabaseREQ/*" ignoreExceptions="true" name="Query">
+
+				<sender className="nl.nn.adapterframework.jdbc.XmlQuerySender" jmsRealm="jdbc"/>
+
+				<forward name="success" path="ManageDatabaseRLY"/>
+
+			</pipe>
+
+			<pipe className="nl.nn.adapterframework.pipes.XsltPipe" name="ManageDatabaseRLY" styleSheetName="/ManageDatabase/xsl/ManageDatabaseRLY.xsl">
+
+				<param name="returnResults" sessionKey="originalMessage" xpathExpression="/manageDatabaseREQ/@returnResults"/>
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+			<!-- ERRORS -->
+
+			<pipe className="nl.nn.adapterframework.pipes.FixedResult" fileName="/ManageDatabase/xml/ErrorMessage.xml" name="InputValidateError" replaceFrom="%reasonCode" replaceTo="NOT_WELL_FORMED_XML">
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+			<pipe className="nl.nn.adapterframework.pipes.XsltPipe" getInputFromFixedValue="&lt;dummy/&gt;" name="InputValidateFailure" styleSheetName="/ManageDatabase/xsl/ErrorMessage.xsl">
+
+				<param name="errorCode" value="INVALID_XML"/>
+
+				<param name="failureReason" sessionKey="failureReason"/>
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+			<pipe className="nl.nn.adapterframework.pipes.XsltPipe" getInputFromFixedValue="&lt;dummy/&gt;" name="InternalXsdError" styleSheetName="/ManageDatabase/xsl/ErrorMessage.xsl">
+
+				<param name="errorCode" value="INTERNAL_XSD_ERROR"/>
+
+				<param name="failureReason" value="NOT_WELL_FORMED_XML"/>
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+			<pipe className="nl.nn.adapterframework.pipes.XsltPipe" getInputFromFixedValue="&lt;dummy/&gt;" name="InternalXsdFailure" styleSheetName="/ManageDatabase/xsl/ErrorMessage.xsl">
+
+				<param name="errorCode" value="INTERNAL_XSD_ERROR"/>
+
+				<param name="failureReason" sessionKey="failureReason"/>
+
+				<forward name="success" path="EXIT"/>
+
+			</pipe>
+
+		</pipeline>
+
+	</adapter>
+
+</module>
+
+	<!-- include configuration for reloading configurations -->
+
+	<module>
+
+	<scheduler>
+
+		<job active="${checkReload.active}" description="Reload configs from database (if necessary)" function="checkReload" interval="${checkReload.interval}" name="CheckReload"/>
+
+	</scheduler>
+
+</module>
+
+	<!-- include configuration for collection of statistics, flexible monitoring, cleaning up the database and fxf files, and recover adapters -->
+
+	<module>
+
+	<scheduler>
+
+		<job cronExpression="${statistics.cron}" description="Dump statistics to log file" function="dumpStatistics" name="dump Statistics"/>
+
+	</scheduler>
+
+</module>
+
+
+
+	<monitoring enabled="${monitoring.enabled}">
+
+	<destinations>
+
+		<destination className="nl.nn.adapterframework.monitoring.GalmMonitorAdapter" name="GALM"/>
+
+	</destinations>
+
+		<!--
+		<destination name="log" className="nl.nn.adapterframework.monitoring.SenderMonitorAdapter">
+			<sender className="nl.nn.adapterframework.senders.LogSender" logCategory="monitoring"/>
+		</destination>
+		-->
+
+	<monitors>
+
+		<monitor destinations="GALM" name="Internal adapter exception" type="TECHNICAL">
+
+			<alarm eventCode="Pipe Exception" period="3600" severity="CRITICAL" threshold="10"/>
+
+		</monitor>
+
+		<monitor destinations="GALM" name="Sender timeout" type="TECHNICAL">
+
+			<alarm eventCode="Sender Timeout" period="3600" severity="CRITICAL" threshold="10"/>
+
+		</monitor>
+
+		<monitor destinations="GALM" name="Sender exception" type="TECHNICAL">
+
+			<alarm eventCode="Sender Exception Caught" period="3600" severity="CRITICAL" threshold="10"/>
+
+		</monitor>
+
+		<monitor name="Invalid XML Message" type="FUNCTIONAL">
+
+			<alarm eventCode="Invalid XML: does not comply to XSD" severity="WARNING"/>
+
+			<alarm eventCode="Invalid XML: parser error" severity="WARNING"/>
+
+		</monitor>
+
+		<monitor destinations="GALM" name="Configuration error" type="TECHNICAL">
+
+			<alarm eventCode="Exception Configuring Receiver" severity="CRITICAL"/>
+
+		</monitor>
+
+		<monitor name="Message size exceeding" type="TECHNICAL">
+
+			<alarm eventCode="Pipe Message Size Exceeding" severity="WARNING"/>
+
+		</monitor>
+
+		<monitor destinations="GALM" name="Message in Error" type="FUNCTIONAL">
+
+			<alarm severity="WARNING">
+
+				<events>
+
+					<event>Receiver Moved Message to ErrorStorage</event>
+
+				</events>
+
+				<filters filterExclusive="false"/>
+
+			</alarm>
+
+			<clearing severity="WARNING">
+
+				<events>
+
+					<event>Receiver Moved Message to ErrorStorage</event>
+
+				</events>
+
+				<filters filterExclusive="false"/>
+
+			</clearing>
+
+		</monitor>
+
+		<monitor destinations="GALM" name="Receiver Shutdown" type="TECHNICAL">
+
+			<alarm severity="WARNING">
+
+				<events>
+
+					<event>Receiver Shutdown</event>
+
+				</events>
+
+				<filters filterExclusive="false"/>
+
+			</alarm>
+
+			<clearing severity="WARNING">
+
+				<events>
+
+					<event>Receiver Shutdown</event>
+
+				</events>
+
+				<filters filterExclusive="false"/>
+
+			</clearing>
+
+		</monitor>
+
+	</monitors>
+
+</monitoring>
+
+	<module>
+
+	<scheduler>
+
+		<job cronExpression="${cleanup.database.cron}" description="Cleanup the database (IbisLock and IbisStore)" function="cleanupDatabase" name="cleanup Database">
+
+			<locker ignoreTableNotExist="true" jmsRealm="jdbc" objectId="CleanupDatabase"/>
+
+		</job>
+
+	</scheduler>
+
+</module>
+
+	<module>
+
+	<scheduler>
+
+		<job cronExpression="${cleanup.filesystem.cron}" description="Cleanup the file system" function="cleanupFileSystem" name="cleanup File System">
+
+			<directoryCleaner directory="${fxf.dir}" notExistWarn="false" subdirectories="true"/>
+
+			<directoryCleaner directory="${log.dir}" retention="${cleanup.log.dir.retention}"/>
+
+		</job>
+
+	</scheduler>
+
+</module>
+
+	<module>
+
+	<scheduler>
+
+		<job description="Recover adapters (and receivers) and log status to heartbeat log" function="recoverAdapters" interval="${recover.adapters.interval}" name="recover Adapters"/>
+
+	</scheduler>
+
+</module>
+
+</configuration>

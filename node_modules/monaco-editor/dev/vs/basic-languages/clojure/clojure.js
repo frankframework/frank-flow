@@ -743,7 +743,7 @@ define(["require", "exports"], function (require, exports) {
                 ],
             ],
             whitespace: [
-                [/\s+/, 'white'],
+                [/[\s,]+/, 'white'],
                 [/;.*$/, 'comment'],
                 [/\(comment\b/, 'comment', '@comment'],
             ],

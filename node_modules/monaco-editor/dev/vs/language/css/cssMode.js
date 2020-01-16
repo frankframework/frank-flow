@@ -1983,6 +1983,7 @@ define('vs/language/css/languageFeatures',["require", "exports", "vscode-languag
                     detail: '',
                     containerName: item.containerName,
                     kind: toSymbolKind(item.kind),
+                    tags: [],
                     range: toRange(item.location.range),
                     selectionRange: toRange(item.location.range)
                 }); });

@@ -204,13 +204,13 @@
 				]
 			}
 		],
-		"vs/base/browser/ui/aria/aria": [
-			"repeated",
-			"repeatedNtimes"
-		],
 		"vs/base/parts/quickopen/browser/quickOpenModel": [
 			"quickOpenAriaLabelEntry",
 			"quickOpenAriaLabel"
+		],
+		"vs/base/browser/ui/aria/aria": [
+			"repeated",
+			"repeatedNtimes"
 		],
 		"vs/editor/contrib/goToDefinition/goToDefinitionCommands": [
 			"noResultWord",
@@ -312,6 +312,11 @@
 				]
 			}
 		],
+		"vs/base/common/severity": [
+			"sev.error",
+			"sev.warning",
+			"sev.info"
+		],
 		"vs/platform/theme/common/colorRegistry": [
 			"foreground",
 			"errorForeground",
@@ -410,11 +415,6 @@
 			"overviewRulerFindMatchForeground",
 			"overviewRulerSelectionHighlightForeground",
 			"minimapFindMatchHighlight"
-		],
-		"vs/base/common/severity": [
-			"sev.error",
-			"sev.warning",
-			"sev.info"
 		],
 		"vs/editor/common/view/editorColorRegistry": [
 			"lineHighlight",
@@ -601,15 +601,6 @@
 		"vs/editor/contrib/rename/renameInputField": [
 			"renameAriaLabel"
 		],
-		"vs/base/browser/ui/actionbar/actionbar": [
-			{
-				"key": "titleLabel",
-				"comment": [
-					"action title",
-					"action keybinding"
-				]
-			}
-		],
 		"vs/editor/contrib/format/format": [
 			"hint11",
 			"hintn1",
@@ -634,6 +625,15 @@
 			"checkingForQuickFixes",
 			"noQuickFixes",
 			"quick fixes"
+		],
+		"vs/base/browser/ui/actionbar/actionbar": [
+			{
+				"key": "titleLabel",
+				"comment": [
+					"action title",
+					"action keybinding"
+				]
+			}
 		],
 		"vs/platform/list/browser/listService": [
 			"workbenchConfigurationTitle",
@@ -1365,13 +1365,13 @@
 			"Shrink Selection",
 			"&&Shrink Selection"
 		],
-		"vs/base/browser/ui/aria/aria": [
-			"{0} (occurred again)",
-			"{0} (occurred {1} times)"
-		],
 		"vs/base/parts/quickopen/browser/quickOpenModel": [
 			"{0}, picker",
 			"picker"
+		],
+		"vs/base/browser/ui/aria/aria": [
+			"{0} (occurred again)",
+			"{0} (occurred {1} times)"
 		],
 		"vs/editor/contrib/goToDefinition/goToDefinitionCommands": [
 			"No definition found for '{0}'",
@@ -1437,6 +1437,11 @@
 			"Find Previous Selection",
 			"Replace",
 			"&&Replace"
+		],
+		"vs/base/common/severity": [
+			"Error",
+			"Warning",
+			"Info"
 		],
 		"vs/platform/theme/common/colorRegistry": [
 			"Overall foreground color. This color is only used if not overridden by a component.",
@@ -1536,11 +1541,6 @@
 			"Overview ruler marker color for find matches. The color must not be opaque so as not to hide underlying decorations.",
 			"Overview ruler marker color for selection highlights. The color must not be opaque so as not to hide underlying decorations.",
 			"Minimap marker color for find matches."
-		],
-		"vs/base/common/severity": [
-			"Error",
-			"Warning",
-			"Info"
 		],
 		"vs/editor/common/view/editorColorRegistry": [
 			"Background color for the highlight of line at the cursor position.",
@@ -1677,9 +1677,6 @@
 		"vs/editor/contrib/rename/renameInputField": [
 			"Rename input. Type new name and press Enter to commit."
 		],
-		"vs/base/browser/ui/actionbar/actionbar": [
-			"{0} ({1})"
-		],
 		"vs/editor/contrib/format/format": [
 			"Made 1 formatting edit on line {0}",
 			"Made {0} formatting edits on line {1}",
@@ -1704,6 +1701,9 @@
 			"Checking for quick fixes...",
 			"No quick fixes available",
 			"Quick Fix..."
+		],
+		"vs/base/browser/ui/actionbar/actionbar": [
+			"{0} ({1})"
 		],
 		"vs/platform/list/browser/listService": [
 			"Workbench",

@@ -24,22 +24,24 @@ function getWorker(workerId, label) {
     // ESM-comment-end
     throw new Error("You must define a function MonacoEnvironment.getWorkerUrl or MonacoEnvironment.getWorker");
 }
-export function getWorkerBootstrapUrl(scriptPath, label) {
-    if (/^(http:)|(https:)|(file:)/.test(scriptPath)) {
-        var currentUrl = String(window.location);
-        var currentOrigin = currentUrl.substr(0, currentUrl.length - window.location.hash.length - window.location.search.length - window.location.pathname.length);
-        if (scriptPath.substring(0, currentOrigin.length) !== currentOrigin) {
-            // this is the cross-origin case
-            // i.e. the webpage is running at a different origin than where the scripts are loaded from
-            var myPath = 'vs/base/worker/defaultWorkerFactory.js';
-            var workerBaseUrl = require.toUrl(myPath).slice(0, -myPath.length);
-            var js = "/*" + label + "*/self.MonacoEnvironment={baseUrl: '" + workerBaseUrl + "'};importScripts('" + scriptPath + "');/*" + label + "*/";
-            var url = "data:text/javascript;charset=utf-8," + encodeURIComponent(js);
-            return url;
-        }
-    }
-    return scriptPath + '#' + label;
-}
+// ESM-comment-begin
+// export function getWorkerBootstrapUrl(scriptPath: string, label: string): string {
+// 	if (/^(http:)|(https:)|(file:)/.test(scriptPath)) {
+// 		const currentUrl = String(window.location);
+// 		const currentOrigin = currentUrl.substr(0, currentUrl.length - window.location.hash.length - window.location.search.length - window.location.pathname.length);
+// 		if (scriptPath.substring(0, currentOrigin.length) !== currentOrigin) {
+// 			// this is the cross-origin case
+// 			// i.e. the webpage is running at a different origin than where the scripts are loaded from
+// 			const myPath = 'vs/base/worker/defaultWorkerFactory.js';
+// 			const workerBaseUrl = require.toUrl(myPath).slice(0, -myPath.length);
+// 			const js = `/*${label}*/self.MonacoEnvironment={baseUrl: '${workerBaseUrl}'};importScripts('${scriptPath}');/*${label}*/`;
+// 			const url = `data:text/javascript;charset=utf-8,${encodeURIComponent(js)}`;
+// 			return url;
+// 		}
+// 	}
+// 	return scriptPath + '#' + label;
+// }
+// ESM-comment-end
 function isPromiseLike(obj) {
     if (typeof obj.then === 'function') {
         return true;
