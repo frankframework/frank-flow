@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link href="fileTree/dist/css/file-tree.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/app.css">
+	<link rel="stylesheet" href="custom-scrollbar/jquery.mCustomScrollbar.min.css">
 </head>
 
 <body>
@@ -15,7 +16,10 @@
 	<div class="tools-editors-wrapper">
 		<div class="top-wrapper">
 			<input type="file" accept="application/x-zip-compressed" id="fileReader">
-			<h2>Grafische flowchart designer</h2>
+			<div class="sliderContainter">
+				<label>zoom:</label>
+				<input type="range" min="1" max="10" value="5" class="slider" id="slider">
+			</div>
 			<select id="adapterSelect">
 			</select>
 			<div class="menu">
@@ -29,8 +33,12 @@
 					<li id="beautify">Beautify</li>
 					<li id="downloadLink">download flow</li>
 					<li id="uploadFile">download file</li>
+					<li id="fullFlow">fullscreen flow</li>
+					<li id="fullEditor">fullscreen editor</li>
+					<li id="normalLayout">normal layout</li>
 				</ul>
 			</div>
+
 		</div>
 		<div class="monaco-flow-wrapper">
 			<div id="fileTree" class="fileTree">
@@ -40,10 +48,10 @@
 			</div>
 			<div id="monacoContainer" class="monacoContainer"></div>
 			<div id="flowContainer" class="flowContainer">
-				<div class="jtk-demo-canvas source-target-demo" id="canvas">
+				<div class="jtk-demo-canvas source-target-demo  mCustomScrollbar" id="canvas">
 				</div>
 			</div>
-			<div id="palette" class="palette">
+			<div id="palette" class="palette mCustomScrollbar" data-mcs-theme="dark">
 				<h2>pipe palette</h2>
 			</div>
 		</div>
@@ -62,6 +70,8 @@
 		<script language="JavaScript" type="text/javascript" src="node_modules/jquery.mousewheel/jquery.mousewheel.js"></script>
 		<script language="JavaScript" type="text/javascript" src="node_modules/jquery.panzoom/dist/jquery.panzoom.min.js"></script>
 		<script src="fileTree/dist/js/file-tree.min.js"></script>
+		<script src="custom-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+
 
 		<script src="node_modules/vkbeautify/index.js" type="text/javascript"></script>
 		<script src="node_modules/xmllint/xmllint.js" type="text/javascript"></script>

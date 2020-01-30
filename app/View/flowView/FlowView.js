@@ -116,7 +116,7 @@ export default class FlowView {
 
     domtoimage.toSvg(node)
       .then(function(dataUrl) {
-        var link = document.createElement('a');;
+        var link = document.createElement('a');
         link.download = localStorage.getItem('currentAdapter') + '.svg';
         link.href = dataUrl;
         link.click();
@@ -232,7 +232,7 @@ export default class FlowView {
       } else {
         totalLength = boxOffset + ((64 * i) - 1000);
         windowLength = parseInt($('#canvas').css('width').replace('px', ''));
-        if (totalLength > windowLength) {
+        if (totalLength > windowLength && !this.customWidth) {
           $('#canvas').css('width', totalLength);
         }
       }

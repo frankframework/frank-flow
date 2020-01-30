@@ -18,6 +18,7 @@ export default class PaletteView {
 
   generatePalettePipes(pipes) {
     let pipeView = new PipeView(this.flowView),
+    types = this.flowView.getTypes();
     // xmlButton = $('<button></button>').attr('type', 'button').addClass('collapsible listItem').text("xml pipes"),
     // xmlCollaps = $('<div></div>').addClass('content'),
     palette = $('#palette');
@@ -28,7 +29,7 @@ export default class PaletteView {
       button = $('<button></button>').attr('type', 'button').addClass('collapsible listItem'),
       collapsBox = $('<div></div>').addClass('content'),
       buttonText = $('<span></span>').addClass('buttonText').text(item.name);
-      img = pipeView.getTypeImage(item.name, true).attr('id', item.name );
+      img = pipeView.getTypeImage(item.name, true, types).attr('id', item.name );
       button.append(buttonText);
       collapsBox.append(img);
       // if(item.name.match(/Xml/g) != null) {

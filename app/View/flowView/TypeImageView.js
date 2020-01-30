@@ -3,11 +3,18 @@ export default class TypeImageView {
     this.flowView = flowView;
   }
 
-  getTypeImage(name, paletteImg) {
-    let types = this.flowView.getTypes(),
+  getTypeImage(name, paletteImg, type) {
+    let types = type,
       img,
       testImage = new Image(),
       url;
+
+    if(types == null) {
+      types = this.flowView.getTypes();
+    }
+    if(types[name] != null && types[name].match('Sender') != null) {
+      types[name] = 'SenderPipe';
+    }
     if (paletteImg) {
       url = 'media/' + name + '.png';
     } else {

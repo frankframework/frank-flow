@@ -1,8 +1,10 @@
 import JSZip from '../../../node_modules/jszip/dist/jszip.js';
+import ConsoleColorPick from '../ConsoleColorPick.js';
 
 export default class FileTreeView {
   constructor(editor) {
     this.editor = editor;
+    this.colorPick = new ConsoleColorPick();
   }
 
   makeTree(input) {
@@ -70,10 +72,11 @@ export default class FileTreeView {
     });
   }
 
+  //create file objects, sort them with the map method and then generate file tree
   generateTree(fileTree) {
     let data = [],
-    path,
-    cur = this;
+      path = [],
+      cur = this;
     //make for each file entry a JSON object with info about the file.
     fileTree.forEach(function(item, index) {
       let obj = {
@@ -81,10 +84,13 @@ export default class FileTreeView {
         name: item.name,
         type: (item.dir ? 'dir' : 'file')
       }
-      path = item.name.match(/[^]*?\//g);
-        if(index == 0) {
-          cur.root = obj;
-        }
+      let newPath = item.name.match(/[^]*?\//g);
+      if (newPath.length > path.length) {
+        path = newPath;
+      }
+      if (index == 0) {
+        cur.root = obj;
+      }
 
       data.push(obj);
       //decode the content of the file and put it in local storage.
@@ -105,34 +111,56 @@ export default class FileTreeView {
     $('#fileTree').css('display', 'flex');
   }
 
-
   //algorithm to put each file inside of the corresponding map.
   mapFileTree(data, path) {
-    console.log("data before mapping algorithm", data, path);
     let curDir,
-    cur = this;
-    path.forEach(function (p, index) {
-      data = [cur.root].concat(data.slice(1));
-      data.forEach(function (dat, ind) {
-        let name = dat.name.match(/[^]*?\//g);
-        name = name[name.length - 1];
-        console.log(p, dat, name);
-        if(p == name) {
+      mainDir,
+      directoryArray = [],
+      cur = this,
+      fileTree = [];
 
-          if(dat.type == "dir") {
-            dat.children = [];
-            curDir = dat;
-          } else {
-            curDir.children.push(dat);
-            data[ind] = null;
-          }
-          console.log("cur dir is: ", curDir);
+    //first concat the root file to the beginning of the array.
+    data = [cur.root].concat(data.slice(1));
+
+    //first make the objects for the directory's
+    path.forEach(function(p, index) {
+      let obj = {
+        id: 'dir' + index,
+        name: p,
+        type: 'dir',
+        children: []
+      }
+      //array to refference each directory.
+      directoryArray.push(obj);
+
+      //put all of the directory's inside of each other.
+      if (curDir != null) {
+        curDir.children.push(obj);
+        curDir = obj;
+      } else {
+        curDir = obj;
+        mainDir = curDir;
+      }
+    });
+
+    //add the root to the fileTree array.
+    fileTree.push(mainDir);
+
+    //filter all of the directory's out of the data array.
+    data = data.filter(function(el) {
+      return el.type != 'dir'
+    });
+
+    //loop over the data array and match directory name.
+    data.forEach(function(item, index) {
+      let name = item.name.match(/[^]*?\//g);
+      name = name[name.length - 1];
+      directoryArray.forEach(function(dir, ind) {
+        if (dir.name == name) {
+          dir.children.push(item);
         }
       });
     });
-
-    data = data.filter(function(el) {return el != null});
-    console.log("data after mapping algorithm", data);
-    return data;
+    return fileTree;
   }
 }

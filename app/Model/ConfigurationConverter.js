@@ -3,6 +3,8 @@ export default class ConfigurationConverter {
   // a function that converts the xml to a readable json format and then generates a flow
   convertConfiguration(editor) {
     let value = editor.getValue();
+
+    //replace all pipe classes with 'pipe' so all pipes can become an array of pipes.
     value = value.replace(/<[^\/][\S]*?[^"\/]Pipe/g, "<pipe");
     value = value.replace(/<[\/][\S]*?[^"\/]Pipe/g, "</pipe").replace(/&/g, '');
     value = value.replace(/<!--[^]*?-->/g, '')

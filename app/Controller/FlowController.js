@@ -9,7 +9,9 @@ export default class FlowController {
     this.flowView.addListener(this);
     this.paletteView = new PaletteView(this);
     this.paletteView.addListener(this);
-    this.notify({type: "getPipes"});
+    this.notify({
+      type: "getPipes"
+    });
     this.hoverSourceWindow = false;
     this.initHandlers();
   }
@@ -49,8 +51,14 @@ export default class FlowController {
 
   initHandlers() {
     let cur = this;
+
+
+
     $('#addPipe').click(function() {
-      cur.flowView.modifyFlow('add', {name: "newPipe", className: "customPipe"});
+      cur.flowView.modifyFlow('add', {
+        name: "newPipe",
+        className: "customPipe"
+      });
     });
 
     $('#downloadLink').click(function() {
@@ -76,6 +84,30 @@ export default class FlowController {
         $('#toggleH').removeClass('selectedItem');
       }
       cur.flowView.generateFlow(cur.flowView);
+    });
+
+    $('#fullFlow').on('click', function() {
+      $('#flowContainer').addClass('fullFlowContainer');
+      $('#flowContainer').css('display', 'flex');
+      $('#monacoContainer').css('display', 'none');
+      $('#palette').css('display', 'flex');
+      $('.monaco-flow-wrapper').css('justify-content', 'flex-end');
+      cur.flowView.customWidth = true;
+    });
+
+    $('#fullEditor').on('click', function() {
+      $('#monacoContainer').addClass('fullMonacoContainer');
+      $('#monacoContainer').css('display', 'flex');
+      $('#flowContainer').css('display', 'none');
+      $('#palette').css('display', 'none');
+    });
+
+    $('#normalLayout').on('click', function() {
+      $('#monacoContainer').removeClass('fullMonacoContainer');
+      $('#flowContainer').removeClass('fullFlowContainer');
+      $('#palette').css('display', 'flex');
+      $('#monacoContainer').css('display', 'flex');
+      $('#flowContainer').css('display', 'flex');
     });
 
     //rename a pipe
@@ -185,6 +217,26 @@ export default class FlowController {
       $panzoom.panzoom('zoom', zoomOut, {
         increment: 0.1,
         focal: e
+      });
+    });
+
+    $('#slider').on('input', function(e) {
+      $panzoom.panzoom("enable");
+      let zoom = $('#slider').val();
+      let plus = true;
+      if (cur.prevZoom) {
+        if (cur.prevZoom < zoom && zoom != 10 && zoom != 9) {
+          plus = false;
+        } else if (zoom == 10) {
+          plus = false;
+        }
+      } else {
+        cur.prevZoom = zoom;
+      }
+      cur.prevZoom = zoom;
+      $panzoom.panzoom('zoom', plus, {
+        increment: 0.1,
+        step: 0.1
       });
     });
   }

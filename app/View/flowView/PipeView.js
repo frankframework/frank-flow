@@ -18,11 +18,12 @@ export default class PipeView {
 
   addPipe(name, possitions, extra, isExit, descText) {
     //make all html elements
+    this.types = this.flowView.getTypes();
     let flowView = this.flowView,
       id = flowView.windows += 1,
       canvas = $('#canvas'),
       el = $("<div></div>").addClass("window sourceWindow").attr("id", "sourceWindow" + id),
-      typeText = $("<strong></strong>").attr("id", "strong").text(flowView.getTypes()[name]),
+      typeText = $("<strong></strong>").attr("id", "strong").text(this.types[name]),
       typeWindow = $('<div></div>').addClass("typeWindow").append(this.getTypeImage(name), typeText),
       bottomContainer = $('<div></div>').addClass("bottomContainer"),
       nameText = $("<strong></strong>").attr("id", "strong").text(name),
@@ -91,6 +92,6 @@ export default class PipeView {
   }
 
   getTypeImage(name, paletteImg) {
-    return this.typeImageView.getTypeImage(name, paletteImg);
+    return this.typeImageView.getTypeImage(name, paletteImg, this.types);
   }
 }
