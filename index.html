@@ -8,6 +8,15 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link href="fileTree/dist/css/file-tree.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/app.css">
+	<link rel="stylesheet" href="css/flowThemes.css">
+	<link rel="stylesheet" href="css/flowStyles.css">
+	<link rel="stylesheet" href="css/fileTreeStyles.css">
+	<link rel="stylesheet" href="css/headerStyles.css">
+	<link rel="stylesheet" href="css/JsPlumbStyles.css">
+	<link rel="stylesheet" href="css/monacoStyles.css">
+	<link rel="stylesheet" href="css/paletteStyles.css">
+	<link rel="stylesheet" href="css/sliderStyles.css">
+	<link rel="stylesheet" href="css/pipeinfoStyles.css">
 	<link rel="stylesheet" href="custom-scrollbar/jquery.mCustomScrollbar.min.css">
 </head>
 
@@ -25,17 +34,16 @@
 			<div class="menu">
 				<img src="https://img.icons8.com/cotton/64/000000/menu.png">
 				<ul class="menu-list">
-					<li id="lineChanges">Change lines</li>
-					<li id="addPipe">Add a new pipe</li>
-					<li id="setData">Generate flow</li>
+					<li id="lineChanges">Curve lines</li>
 					<li id="toggleH">Toggle horizontal</li>
 					<li id="runXsd">Run xsd</li>
 					<li id="beautify">Beautify</li>
-					<li id="downloadLink">download flow</li>
-					<li id="uploadFile">download file</li>
-					<li id="fullFlow">fullscreen flow</li>
-					<li id="fullEditor">fullscreen editor</li>
-					<li id="normalLayout">normal layout</li>
+					<li id="downloadLink">Download flow</li>
+					<li id="uploadFile">Download file</li>
+					<li id="fullFlow">Fullscreen flow</li>
+					<li id="fullEditor">Fullscreen editor</li>
+					<li id="normalLayout">Hybrid layout</li>
+					<li id="setTheme">Set theme</li>
 				</ul>
 			</div>
 
@@ -47,40 +55,60 @@
 				</div>
 			</div>
 			<div id="monacoContainer" class="monacoContainer"></div>
-			<div id="flowContainer" class="flowContainer">
-				<div class="jtk-demo-canvas source-target-demo  mCustomScrollbar" id="canvas">
+			<div id="flowContainer" class="flowContainer" tabindex="0">
+				<div class="jtk-demo-canvas source-target-demo normalTheme" id="canvas">
 				</div>
 			</div>
-			<div id="palette" class="palette mCustomScrollbar" data-mcs-theme="dark">
-				<h2>pipe palette</h2>
+			<div id="palette" class="palette">
+				<h2>Pipes</h2>
+			</div>
+		</div>
+		<div class="pipeInfoWrapper">
+			<div class="pipeInfo">
+				<h2 id="pipeInfoNameTitle"><span id="pipeInfoTitleName"></span> - <span id="pipeInfoTitleType">CheckEmptyMessage</span></h2>
+				<div id="pipeNameTypeInfo" class="pipeNameTypeInfo">
+					<label for="name">Name: </label>
+					<input type="text" id="pipeInfoName" placeholder="pipe name" />
+
+					<label for="type">Type: </label>
+					<select id="typeSelect">
+
+					</select>
+				</div>
+				<div id="forwardsInfo" class="pipeNameTypeInfo">
+					<h4>Forwards</h4>
+					<hr>
+				</div>
 			</div>
 		</div>
 
-
-		<script>
-			var require = {
-				paths: {
-					'vs': 'node_modules/monaco-editor/min/vs'
-				}
-			};
-		</script>
-
-		<script language="JavaScript" type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
-		<script language="JavaScript" type="text/javascript" src="node_modules/jquery-ui-dist/jquery-ui.min.js"></script>
-		<script language="JavaScript" type="text/javascript" src="node_modules/jquery.mousewheel/jquery.mousewheel.js"></script>
-		<script language="JavaScript" type="text/javascript" src="node_modules/jquery.panzoom/dist/jquery.panzoom.min.js"></script>
-		<script src="fileTree/dist/js/file-tree.min.js"></script>
-		<script src="custom-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+	</div>
 
 
-		<script src="node_modules/vkbeautify/index.js" type="text/javascript"></script>
-		<script src="node_modules/xmllint/xmllint.js" type="text/javascript"></script>
-		<script src="node_modules/dom-to-image/src/dom-to-image.js" type="text/javascript"></script>
-		<script src="node_modules/jsplumb/dist/js/jsplumb.min.js"></script>
-		<script src="node_modules/monaco-editor/min/vs/loader.js"></script>
-		<script src="node_modules/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
-		<script src="node_modules/monaco-editor/min/vs/editor/editor.main.js"></script>
-		<script src="dist/main.js"></script>
+	<script>
+		var require = {
+			paths: {
+				'vs': 'node_modules/monaco-editor/min/vs'
+			}
+		};
+	</script>
+
+	<script language="JavaScript" type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script language="JavaScript" type="text/javascript" src="node_modules/jquery-ui-dist/jquery-ui.min.js"></script>
+	<script language="JavaScript" type="text/javascript" src="node_modules/jquery.mousewheel/jquery.mousewheel.js"></script>
+	<script language="JavaScript" type="text/javascript" src="node_modules/jquery.panzoom/dist/jquery.panzoom.min.js"></script>
+	<script src="fileTree/dist/js/file-tree.min.js"></script>
+	<script src="custom-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+
+
+	<script src="node_modules/vkbeautify/index.js" type="text/javascript"></script>
+	<script src="node_modules/xmllint/xmllint.js" type="text/javascript"></script>
+	<script src="node_modules/dom-to-image/src/dom-to-image.js" type="text/javascript"></script>
+	<script src="node_modules/jsplumb/dist/js/jsplumb.min.js"></script>
+	<script src="node_modules/monaco-editor/min/vs/loader.js"></script>
+	<script src="node_modules/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
+	<script src="node_modules/monaco-editor/min/vs/editor/editor.main.js"></script>
+	<script src="dist/main.js"></script>
 </body>
 
 </html>

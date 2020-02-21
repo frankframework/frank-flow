@@ -22,6 +22,17 @@ export default class OptionView extends CodeEditView {
         localStorage.setItem(name, item);
       }
     });
+
+    /**
+    check for url param and load configuration with adapter.
+    when no url param then load default adapter.
+
+    definition:
+      currentAdapter: this represents the adapter that the user is currently working in.
+                      When this variable changes the loaded adapter also changes.
+      editor:         This object represents the monaco editor and has all the crud functions necessary to chhange the code.
+      focusLine:      This function
+    */
     if (urlParams.has('configuration') && urlParams.has('adapter')) {
       console.log(urlParams.get('configuration').replace(/"/g, ''), urlParams.get('adapter'));
       this.editor.setValue(localStorage.getItem("IAF_WebControl"));
@@ -29,6 +40,7 @@ export default class OptionView extends CodeEditView {
       localStorage.setItem('currentAdapter', urlParams.get('adapter').replace(/"/g, ''));
       this.focusLine('<Adapter[^]*? name=' + urlParams.get('adapter') + '[^]*?>');
     } else {
+      localStorage.setItem('currentAdapter', 'WebControlShowConfigurationStatus');
       this.editor.setValue(localStorage.getItem("IAF_WebControl"));
     }
   }

@@ -4,7 +4,6 @@ export default class CodePipeView extends CodeEditView {
 
   constructor(editor) {
     super(editor);
-    console.log("in the codePipe!")
   }
   //change the name.
   changeName(oldWord, newWord) {
@@ -14,7 +13,7 @@ export default class CodePipeView extends CodeEditView {
     }
   }
 
-  //change the name of an pipe
+  //change the name of an pipe or forward
   changeNameCode(reg, oldWord, newWord) {
     let cur = this;
     let editor = this.editor;
@@ -54,6 +53,24 @@ export default class CodePipeView extends CodeEditView {
         inlineClassName: 'myContentClass'
       }
     }]);
+  }
+
+  //change the class type of a pipe
+  changePipeType(name, type, oldType) {
+    let cur = this,
+      attributeObjectRegex = '<[\\S]*?[^"/][pP]ipe[\\s\\t\\n][^]*?>[^]*?<[/][\\S]*?[^"/]Pipe>',
+      selectPipe = null,
+      matches = this.editor.getModel().findMatches(attributeObjectRegex, false, true, false, false);
+
+    console.log("pipe name: " + name + " with type: " + type);
+    matches.forEach(function(item, index) {
+      let pipe = cur.editor.getModel().getValueInRange(item.range);
+      if (pipe.match('<' + oldType + '[^]*? name="' + name + '"') !== null) {
+        console.log(pipe);
+        pipe = pipe.replace(new RegExp(oldType, 'g'), type);
+        cur.edit(item.range, pipe);
+      }
+    })
   }
 
   //change possition for pipes

@@ -58,9 +58,13 @@ export default class CodeView {
     this.codePipeView.selectPipe(name);
   }
 
+  //change the type of a pipes
+  changePipeType(name, type, oldType) {
+    this.codePipeView.changePipeType(name, type, oldType);
+  }
+
   //change the name.
   changeName(oldWord, newWord) {
-    console.log("code view change name");
     this.codePipeView.changeName(oldWord, newWord);
   }
 

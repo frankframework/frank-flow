@@ -78,7 +78,11 @@ export default class FlowView {
         this.generateFlow();
         break;
       case 'add':
-        this.notifyListeners(this.addCustomPipe(obj.name, obj.className));
+        if (obj.xpos == null || obj.ypos == null) {
+          obj.xpos = 100;
+          obj.ypos = 100;
+        }
+        this.notifyListeners(this.addCustomPipe(obj.name, obj.className, obj.xpos, obj.ypos));
         break;
       case 'edit':
         obj = this.editTitle(obj);
@@ -145,18 +149,18 @@ export default class FlowView {
     return null;
   }
 
-  addCustomPipe(name, className) {
+  addCustomPipe(name, className, xpos, ypos) {
     let newPipe = this.addPipe(name, {
-      x: 100,
-      y: 100
+      x: xpos,
+      y: ypos
     });
 
     return {
       type: "changeAddPipe",
       name: newPipe,
       possitions: {
-        x: 100,
-        y: 100
+        x: xpos,
+        y: ypos
       },
       className: className
     }
@@ -198,12 +202,11 @@ export default class FlowView {
         let box = $('#sourceWindow' + i);
         if (!this.horizontalBuild) {
           box.css("top", boxOffset + "px");
-          console.log('set top pipe offset');
         } else {
           box.css("top", "100px");
           box.css("left", boxOffset + "px");
         }
-        if(this.windows == 2) {
+        if (this.windows == 2) {
           this.moving = false;
           return;
         }
@@ -252,6 +255,10 @@ export default class FlowView {
     $('#canvas').empty();
     $('#canvas').css('display', 'none');
     $('.customErrorMessage').remove();
-    $('#flowContainer').append($("<h1></h1>").text('Error' + e).addClass('customErrorMessage'));
+    $('#flowContainer').append(
+      $("<h1></h1>").text('Configuration is incorrect, please check your xml.').addClass('customErrorMessage'),
+      $('<p></p>').text(' \n\n\n your error: \n' + this.transformedXml).addClass('customErrorMessage')
+    );
+    console.log('error: ', e, this.transformedXml)
   }
 }

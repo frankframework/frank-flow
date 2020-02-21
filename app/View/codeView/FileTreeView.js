@@ -74,93 +74,118 @@ export default class FileTreeView {
 
   //create file objects, sort them with the map method and then generate file tree
   generateTree(fileTree) {
-    let data = [],
-      path = [],
-      cur = this;
-    //make for each file entry a JSON object with info about the file.
-    fileTree.forEach(function(item, index) {
-      let obj = {
-        id: 'dir' + index,
-        name: item.name,
-        type: (item.dir ? 'dir' : 'file')
-      }
-      let newPath = item.name.match(/[^]*?\//g);
-      if (newPath.length > path.length) {
-        path = newPath;
-      }
-      if (index == 0) {
-        cur.root = obj;
-      }
+      let data = [],
+        path = [],
+        cur = this;
+      //make for each file entry a JSON object with info about the file.
+      fileTree.forEach(function(item, index) {
+        let obj = {
+          id: 'dir' + index,
+          name: item.name,
+          type: (item.dir ? 'dir' : 'file')
+        }
+        let newPath = item.name.match(/[^]*?\//g);
+        if (newPath.length > path.length) {
+          path = newPath;
+        }
+        if (index == 0) {
+          cur.root = obj;
+        }
 
-      data.push(obj);
-      //decode the content of the file and put it in local storage.
-      var string = String.fromCharCode.apply(null, fileTree[1]._data.compressedContent);
-      localStorage.setItem(item.name, string);
-    });
+        data.push(obj);
+        //decode the content of the file and put it in local storage.
+        var string = String.fromCharCode.apply(null, fileTree[1]._data.compressedContent);
+        localStorage.setItem(item.name, string);
+      });
 
-    data = this.mapFileTree(data, path);
+      data = this.mapFileTree(data, path);
 
-    //generate the tree.
-    $('#fileTreeItems').fileTree({
-      data: data,
-      sortable: false,
-      selectable: true
-    });
+      //generate the tree.
+      $('#fileTreeItems').fileTree({
+        data: data,
+        sortable: false,
+        selectable: true
+      });
 
-    //after generating the tree, display the tree.
-    $('#fileTree').css('display', 'flex');
-  }
+      //after generating the tree, display the tree.
+      $('#fileTree').css('display', 'flex');
 
-  //algorithm to put each file inside of the corresponding map.
-  mapFileTree(data, path) {
-    let curDir,
-      mainDir,
-      directoryArray = [],
-      cur = this,
-      fileTree = [];
+      //make the file tree resizable.
 
-    //first concat the root file to the beginning of the array.
-    data = [cur.root].concat(data.slice(1));
-
-    //first make the objects for the directory's
-    path.forEach(function(p, index) {
-      let obj = {
-        id: 'dir' + index,
-        name: p,
-        type: 'dir',
-        children: []
-      }
-      //array to refference each directory.
-      directoryArray.push(obj);
-
-      //put all of the directory's inside of each other.
-      if (curDir != null) {
-        curDir.children.push(obj);
-        curDir = obj;
-      } else {
-        curDir = obj;
-        mainDir = curDir;
-      }
-    });
-
-    //add the root to the fileTree array.
-    fileTree.push(mainDir);
-
-    //filter all of the directory's out of the data array.
-    data = data.filter(function(el) {
-      return el.type != 'dir'
-    });
-
-    //loop over the data array and match directory name.
-    data.forEach(function(item, index) {
-      let name = item.name.match(/[^]*?\//g);
-      name = name[name.length - 1];
-      directoryArray.forEach(function(dir, ind) {
-        if (dir.name == name) {
-          dir.children.push(item);
+      $('#fileTree').mousedown(function(e) {
+        if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
+          cur.resize = true;
         }
       });
-    });
-    return fileTree;
-  }
-}
+
+      $('#fileTree').mouseup(function(e) {
+        cur.resize = false;
+      })
+
+      $('#fileTree').mousemove(function(e) {
+        if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
+          $('#fileTree').css('cursor', 'e-resize');
+        } else {
+          $('#fileTree').css('cursor', 'auto');
+        }
+
+        if (cur.resize) {
+          $(this).css('width', e.offsetX);
+        }
+      });
+    }
+
+
+        //algorithm to put each file inside of the corresponding map.
+        mapFileTree(data, path) {
+          let curDir,
+            mainDir,
+            directoryArray = [],
+            cur = this,
+            fileTree = [];
+
+          //first concat the root file to the beginning of the array.
+          data = [cur.root].concat(data.slice(1));
+
+          //first make the objects for the directory's
+          path.forEach(function(p, index) {
+            let obj = {
+              id: 'dir' + index,
+              name: p,
+              type: 'dir',
+              children: []
+            }
+            //array to refference each directory.
+            directoryArray.push(obj);
+
+            //put all of the directory's inside of each other.
+            if (curDir != null) {
+              curDir.children.push(obj);
+              curDir = obj;
+            } else {
+              curDir = obj;
+              mainDir = curDir;
+            }
+          });
+
+          //add the root to the fileTree array.
+          fileTree.push(mainDir);
+
+          //filter all of the directory's out of the data array.
+          data = data.filter(function(el) {
+            return el.type != 'dir'
+          });
+
+          //loop over the data array and match directory name.
+          data.forEach(function(item, index) {
+            let name = item.name.match(/[^]*?\//g);
+            name = name[name.length - 1];
+            directoryArray.forEach(function(dir, ind) {
+              if (dir.name == name) {
+                dir.children.push(item);
+              }
+            });
+          });
+          return fileTree;
+        }
+      }

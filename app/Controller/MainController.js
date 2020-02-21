@@ -1,13 +1,17 @@
 import ConfigurationConverter from '../Model/ConfigurationConverter.js';
 import CodeController from './CodeController.js';
 import FlowController from './FlowController.js';
+import PipeInfoController from './PipeInfoController';
+import IbisdocModel from '../Model/IbisdocModel.js'
 
 
 class MainController {
 
   constructor() {
     this.configurationConverter = new ConfigurationConverter();
-    this.codeController = new CodeController(this);
+    this.ibisdocModel = new IbisdocModel();
+    this.pipeInfoController = new PipeInfoController(this, this.ibisdocModel);
+    this.codeController = new CodeController(this, this.ibisdocModel);
     this.flowController = new FlowController(this);
   }
 
@@ -38,8 +42,7 @@ class MainController {
         codeController.undoDecorations();
         break;
       case "changeName":
-        codeController.changeName(obj.oldTitle, obj.newTitle);
-        console.log("change!");
+        codeController.changeName(obj.oldName, obj.newName);
         break;
       case "changePossition":
         codeController.changePossition(obj.name, obj.x, obj.y);
@@ -58,6 +61,11 @@ class MainController {
         break;
       case "selectPipe":
         codeController.selectPipe(obj.name);
+        this.pipeInfoController.selectPipe(obj.name, obj.type);
+        break;
+      case "changePipeType":
+        console.log(obj.name)
+        codeController.changePipeType(obj.name, obj.type, obj.oldType);
         break;
     }
   }

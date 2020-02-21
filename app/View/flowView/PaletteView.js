@@ -18,63 +18,32 @@ export default class PaletteView {
 
   generatePalettePipes(pipes) {
     let pipeView = new PipeView(this.flowView),
-    types = this.flowView.getTypes();
-    // xmlButton = $('<button></button>').attr('type', 'button').addClass('collapsible listItem').text("xml pipes"),
-    // xmlCollaps = $('<div></div>').addClass('content'),
+      types = this.flowView.getTypes(),
+      cur = this;
     palette = $('#palette');
-    // palette.append(xmlButton, xmlCollaps);
-    pipes.forEach(function(item, index) {
-      let img,
-      strong = $('<strong></strong>').text(item.name),
-      button = $('<button></button>').attr('type', 'button').addClass('collapsible listItem'),
-      collapsBox = $('<div></div>').addClass('content'),
-      buttonText = $('<span></span>').addClass('buttonText').text(item.name);
-      img = pipeView.getTypeImage(item.name, true, types).attr('id', item.name );
-      button.append(buttonText);
-      collapsBox.append(img);
-      // if(item.name.match(/Xml/g) != null) {
-      //   xmlCollaps.append(button, collapsBox);
-      //   return;
-      // }
-      palette.append(button, collapsBox);
-    });
-    this.setHandlers();
-  }
 
-  setHandlers() {
-    let cur = this;
-    var coll = document.getElementsByClassName("collapsible");
-    var i;
+    let dragData = {
+      disabled: false,
+      drag: function(e) {
 
-    for (i = 0; i < coll.length; i++) {
-      coll[i].addEventListener("click", function() {
-        this.classList.toggle("active");
-        var content = this.nextElementSibling;
-        if (content.style.display === "block") {
-          content.style.display = "none";
-        } else {
-          content.style.display = "block";
-        }
-      });
+      },
+      stop: function(e) {
+        let name = e.el.firstChild.innerHTML;
+        cur.flowView.modifyFlow("add", {
+          name: "new" + name,
+          className: name,
+          xpos: e.finalPos[0] - 500,
+          ypos: e.finalPos[1]
+        });
+      }
     }
 
-    $('#canvas').on('dragover', function(ev) {
-      ev.preventDefault();
-      ev.stopPropagation()
-    });
-    $('#canvas').on('drop', function(ev) {
-      ev.preventDefault();
-      ev.stopPropagation();
-      let data = localStorage.getItem('dropPipe');
-      cur.flowView.modifyFlow("add", {
-        name: "new" + data,
-        className: data
-      });
-      //insert pipe in editor
-    })
-    $('.typeImg').on('dragstart', function(ev) {
-      console.log('drag');
-      localStorage.setItem("dropPipe", ev.target.id);
+    pipes.forEach(function(item, index) {
+      let toolBox = $('<div></div>').addClass('content');
+      let text = $('<p></p>').text(item.name);
+      toolBox.append(text);
+      palette.append(toolBox);
+      instance.draggable(toolBox, dragData);
     });
   }
 }

@@ -110,6 +110,17 @@ export default class FlowController {
       $('#flowContainer').css('display', 'flex');
     });
 
+    $('#setTheme').on('click', function() {
+      let theme = prompt('choose your theme!');
+      if(theme.match(/theme/gi) == null) return;
+
+      if(cur.currentTheme !== null) {
+        $('#canvas').removeClass(cur.currentTheme);
+      }
+      cur.currentTheme = theme;
+      $('#canvas').addClass(theme);
+    })
+
     //rename a pipe
     $("#canvas").on('dblclick', '#strong', function(e) {
       e.stopPropagation();
@@ -118,6 +129,8 @@ export default class FlowController {
         cur.flowView.modifyFlow('edit', this);
       }
     });
+
+
 
     jsPlumb.on($('#canvas'), "mouseover", ".sourceWindow, .description", function() {
       $panzoom.panzoom("disable");
@@ -132,7 +145,8 @@ export default class FlowController {
       e.preventDefault();
       cur.mainController.modifyCode("undoDecorations");
       cur.mainController.modifyCode("selectPipe", {
-        name: this.lastElementChild.firstElementChild.innerHTML
+        name: this.lastElementChild.firstElementChild.innerHTML,
+        type: this.firstElementChild.lastElementChild.innerHTML
       })
     })
 
