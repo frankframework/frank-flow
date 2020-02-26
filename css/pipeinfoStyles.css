@@ -1,5 +1,5 @@
 .pipeInfo {
-  height: 150%;
+  height: 550%;
   width: 100%;
   display: flex;
   align-items: center;
@@ -17,7 +17,6 @@
 
 .pipeInfo h2 {
   width: 95%;
-  margin-top: 15%;
 }
 
 .pipeInfo p {
@@ -34,7 +33,7 @@
 
 .pipeNameTypeInfo {
   width: 95%;
-  height: 200%;
+  height: 50%;
   margin-top: 15px;
   margin-bottom: 5px;
   display: flex;
