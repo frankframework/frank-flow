@@ -3,6 +3,7 @@ import CodeController from './CodeController.js';
 import FlowController from './FlowController.js';
 import PipeInfoController from './PipeInfoController';
 import IbisdocModel from '../Model/IbisdocModel.js'
+import FlowModel from '../Model/FlowModel.js';
 
 
 class MainController {
@@ -10,9 +11,10 @@ class MainController {
   constructor() {
     this.configurationConverter = new ConfigurationConverter();
     this.ibisdocModel = new IbisdocModel();
-    this.pipeInfoController = new PipeInfoController(this, this.ibisdocModel);
+    this.flowModel = new FlowModel();
+    this.pipeInfoController = new PipeInfoController(this, this.ibisdocModel, this.flowModel);
     this.codeController = new CodeController(this, this.ibisdocModel);
-    this.flowController = new FlowController(this);
+    this.flowController = new FlowController(this, this.flowModel);
   }
 
   convertConfiguration() {
@@ -66,6 +68,10 @@ class MainController {
       case "changePipeType":
         console.log(obj.name)
         codeController.changePipeType(obj.name, obj.type, obj.oldType);
+        break;
+      case "getAttributes":
+        console.log(obj)
+        return codeController.getAttributes(obj.name);
         break;
     }
   }

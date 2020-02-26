@@ -3,15 +3,16 @@ import PaletteView from '../View/flowView/PaletteView.js';
 
 export default class FlowController {
 
-  constructor(mainController) {
+  constructor(mainController, flowModel) {
     this.mainController = mainController;
-    this.flowView = new FlowView();
+    this.flowModel = flowModel;
+    this.flowView = new FlowView(flowModel);
     this.flowView.addListener(this);
     this.paletteView = new PaletteView(this);
     this.paletteView.addListener(this);
-    this.notify({
-      type: "getPipes"
-    });
+    // this.notify({
+    //   type: "getPipes"
+    // });
     this.hoverSourceWindow = false;
     this.initHandlers();
   }
@@ -22,7 +23,7 @@ export default class FlowController {
     };
     switch (data.type) {
       case "convertConfiguration":
-        this.flowView.transformedXml = this.mainController.convertConfiguration();
+        this.flowModel.setTransformedXml(this.mainController.convertConfiguration());
         break;
       case "getTypes":
         this.flowView.types = this.mainController.modifyCode("getTypes");

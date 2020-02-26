@@ -3,7 +3,8 @@ import ConsoleColorPick from '../ConsoleColorPick.js';
 
 
 export default class FlowGenerator {
-  constructor(flowView) {
+  constructor(flowView, flowModel) {
+    this.flowModel = flowModel;
     this.flowView = flowView;
     this.pipeView = new PipeView(flowView);
     this.consoleColor = new ConsoleColorPick();
@@ -19,10 +20,10 @@ export default class FlowGenerator {
   # if there is only one pipe only generate that one
   # push all forwards to the forwards array and generate the forwards
   */
-  generateFlow(xml, windows) {
+  generateFlow(windows) {
     this.flowView.resetWindows();
     let possitions = null;
-    let transformedXml = xml;
+    let transformedXml = this.flowModel.getTransformedXml();
     if (transformedXml != null && transformedXml.Adapter != null &&
       transformedXml.Adapter.Pipeline != null) {
       instance.reset();
@@ -142,7 +143,8 @@ export default class FlowGenerator {
   //method to add one receiver
   addReceiver(transformedXml, target) {
     let xCord,
-    yCord;
+    yCord,
+    prependText = '(receiver): ';
 
     //check for empty coordinates.
     if(transformedXml.Adapter.Receiver['@x'] != null && transformedXml.Adapter.Receiver['@y'] != null) {
@@ -153,13 +155,13 @@ export default class FlowGenerator {
       yCord = 400;
     }
 
-    this.addPipe('(receiver): ' + transformedXml.Adapter.Receiver['@name'], {
+    this.addPipe(prependText + transformedXml.Adapter.Receiver['@name'], {
       x: xCord,
       y: yCord
     });
 
     return {
-      sourcePipe: '(receiver): ' + transformedXml.Adapter.Receiver['@name'],
+      sourcePipe: prependText + transformedXml.Adapter.Receiver['@name'],
       targetPipe: target,
       name: 'request'
     };
@@ -216,6 +218,9 @@ export default class FlowGenerator {
     //when generating set to true and after generating to false.
     let generated = true;
     let cur = this;
+
+    this.flowModel.setForwards(forwards);
+
 
     //event handler for when a connection is made.
     instance.bind("connection", function(i, c) {

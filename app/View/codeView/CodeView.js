@@ -5,6 +5,8 @@ import OptionView from './codeEditViews/OptionView.js';
 import CodePipeView from './codeEditViews/CodePipeView.js';
 import CodeTypesView from './codeEditViews/CodeTypesView.js';
 import ExitPipeView from './codeEditViews/ExitPipeView.js';
+import CodeAttributesView from './codeEditViews/CodeAttributesView.js';
+import CodeParametersView from './codeEditViews/CodeParametersView.js';
 
 export const logColor = 'background: #222; color: #bada55';
 
@@ -40,12 +42,15 @@ export default class CodeView {
       arrowSize: 30
 
     });
+
     this.validateConfigurationView = new ValidateConfigurationView(this.editor);
     this.codeEditView = new CodeEditView(this.editor);
     this.codePipeView = new CodePipeView(this.editor);
     this.optionView = new OptionView(this.editor);
     this.typesView = new CodeTypesView(this.editor);
     this.exitPipeView = new ExitPipeView(this.editor);
+    this.codeAttributesView = new CodeAttributesView(this.editor);
+    this.codeParametersView = new CodeParametersView(this.editor);
   }
 
   //add options to the dropdown.
@@ -96,5 +101,9 @@ export default class CodeView {
   //gives back the types of pipes with the name of the pipe.
   getTypes() {
     return this.typesView.getTypes();
+  }
+
+  getAttributes(name) {
+    return this.codeAttributesView.getAttributes(name);
   }
 }

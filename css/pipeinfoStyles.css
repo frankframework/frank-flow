@@ -17,7 +17,7 @@
 
 .pipeInfo h2 {
   width: 95%;
-  margin-top: 5%;
+  margin-top: 15%;
 }
 
 .pipeInfo p {
@@ -30,7 +30,6 @@
 
 .pipeInfo hr {
   border: 1px solid #DDDDDD;
-  margin-bottom: 5%;
 }
 
 .pipeNameTypeInfo {
@@ -50,3 +49,8 @@
 }
 
 .forwardsInfo {}
+
+.attributeWrapper {
+  display: flex;
+  flex-direction: column;
+}

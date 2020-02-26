@@ -65,7 +65,6 @@ export default class CodeController {
       var input = event.target;
       console.log(input.files);
       cur.fileTreeView.makeTree(input, cur.editor);
-
     });
 
 
@@ -188,6 +187,9 @@ export default class CodeController {
   }
   getPipes() {
     return this.codeView.ibisdocJson;
+  }
+  getAttributes(name) {
+    return this.codeView.getAttributes(name);
   }
 
 

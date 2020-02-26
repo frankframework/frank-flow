@@ -1,8 +1,9 @@
 import FlowGenerator from './FlowGenerator.js'
 export default class FlowView {
 
-  constructor() {
+  constructor(flowModel) {
     this.transformedXml = null;
+    this.flowModel = flowModel;
     this.types = [];
     this.listeners = [];
     this.windows = 0;
@@ -10,7 +11,7 @@ export default class FlowView {
     this.adding = false;
     this.connectorType = "Flowchart";
     this.horizontalBuild = false;
-    this.flowGenerator = new FlowGenerator(this);
+    this.flowGenerator = new FlowGenerator(this, flowModel);
     this.getInstance();
   }
   addListener(listener) {
@@ -247,7 +248,7 @@ export default class FlowView {
     this.notifyListeners({
       type: "convertConfiguration"
     });
-    this.flowGenerator.generateFlow(this.transformedXml, this.windows);
+    this.flowGenerator.generateFlow(this.windows);
   }
 
   displayError(e) {
@@ -257,8 +258,8 @@ export default class FlowView {
     $('.customErrorMessage').remove();
     $('#flowContainer').append(
       $("<h1></h1>").text('Configuration is incorrect, please check your xml.').addClass('customErrorMessage'),
-      $('<p></p>').text(' \n\n\n your error: \n' + this.transformedXml).addClass('customErrorMessage')
+      $('<p></p>').text(' \n\n\n your error: \n' + this.flowModel.getTransformedXml()).addClass('customErrorMessage')
     );
-    console.log('error: ', e, this.transformedXml)
+    console.log('error: ', e, this.flowModel.getTransformedXml())
   }
 }
