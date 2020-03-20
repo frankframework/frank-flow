@@ -76,6 +76,8 @@ export default class CodeView {
   //change possition for pipes
   changePossition(name, newX, newY) {
     this.codePipeView.changePossition(name, newX, newY);
+    // this.codeAttributesView.changeAttribute(name, 'x', newX);
+    // this.codeAttributesView.changeAttribute(name, 'y', newY);
   }
 
   //change the possitions for the exits
@@ -105,5 +107,28 @@ export default class CodeView {
 
   getAttributes(name) {
     return this.codeAttributesView.getAttributes(name);
+  }
+
+  getParameters(name) {
+    return this.codeParametersView.getParameters(name);
+  }
+
+  changeAttribute(pipeName, attribute, attributeValue) {
+    this.codeAttributesView.changeAttribute(pipeName, attribute, attributeValue);
+  }
+
+  addAttribute(pipeName, attribute) {
+    this.codeAttributesView.addAttribute(pipeName, attribute);
+  }
+  deleteAttribute(pipeName, attribute) {
+    this.codeAttributesView.deleteAttribute(pipeName, attribute);
+  }
+
+  addParameter(pipeName, paramName) {
+    this.codeParametersView.addParameter(pipeName, paramName);
+  }
+
+  deleteParameter(pipeName, paramName) {
+    this.codeParametersView.deleteParameter(pipeName, paramName);
   }
 }

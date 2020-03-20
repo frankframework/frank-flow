@@ -62,11 +62,9 @@ export default class CodePipeView extends CodeEditView {
       selectPipe = null,
       matches = this.editor.getModel().findMatches(attributeObjectRegex, false, true, false, false);
 
-    console.log("pipe name: " + name + " with type: " + type);
     matches.forEach(function(item, index) {
       let pipe = cur.editor.getModel().getValueInRange(item.range);
       if (pipe.match('<' + oldType + '[^]*? name="' + name + '"') !== null) {
-        console.log(pipe);
         pipe = pipe.replace(new RegExp(oldType, 'g'), type);
         cur.edit(item.range, pipe);
       }

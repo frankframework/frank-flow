@@ -66,12 +66,28 @@ class MainController {
         this.pipeInfoController.selectPipe(obj.name, obj.type);
         break;
       case "changePipeType":
-        console.log(obj.name)
         codeController.changePipeType(obj.name, obj.type, obj.oldType);
         break;
       case "getAttributes":
-        console.log(obj)
         return codeController.getAttributes(obj.name);
+        break;
+      case "getParameters":
+        return codeController.getParameters(obj.name);
+        break;
+      case "changeAttribute":
+        codeController.changeAttribute(obj.pipeName, obj.attribute, obj.attributeValue);
+        break;
+      case "addAttribute":
+        codeController.addAttribute(obj.pipeName, obj.attribute);
+        break
+      case "deleteAttribute":
+        codeController.deleteAttribute(obj.pipeName, obj.attribute);
+        break;
+      case "addParameter":
+        codeController.addParameter(obj.pipeName, obj.paramName);
+        break;
+      case "deleteParameter":
+        codeController.deleteParameter(obj.pipeName, obj.paramName);
         break;
     }
   }

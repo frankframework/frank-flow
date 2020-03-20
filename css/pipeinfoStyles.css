@@ -33,7 +33,7 @@
 
 .pipeNameTypeInfo {
   width: 95%;
-  height: 50%;
+  height: 30%;
   margin-top: 15px;
   margin-bottom: 5px;
   display: flex;
@@ -41,6 +41,7 @@
   padding: 15px 20px;
   background: #FFFFFF;
   box-shadow: 2px 2px 1px rgba(103, 106, 108, 0.4), inset 0px 3px 0px #E7EAEC;
+  overflow-y: scroll;
 }
 
 .pipeNameTypeInfo label, select, input {
@@ -52,4 +53,48 @@
 .attributeWrapper {
   display: flex;
   flex-direction: column;
+}
+
+.paramAttributeWrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.parameterContent {
+  display: flex;
+  border: 1px solid grey;
+  width: 100%;
+  height: 10%;
+  margin: 0.3%;
+}
+
+.parameterContent p {
+  width: 40%;
+}
+.parameterToolbox {
+  display: none;
+  width: 100%;
+  height: auto;
+  border: 1px solid grey;
+  margin: 0.3%;
+  padding: 1%;
+  padding-top: 1.5%;
+}
+
+.parameterToolbox input {
+  height: 80%;
+}
+
+.deleteButton {
+  width: 30%;
+}
+
+#parameterDelete {
+  margin-left: 20%;
+}
+
+@media only screen and (max-width: 1300px) {
+  .parameterContent {
+    height: 20%;
+  }
 }

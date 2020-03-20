@@ -25,6 +25,8 @@ export default class PipeInfoView {
     $('#pipeInfoTitleType').text(this.pipeType);
     $('.forwardInfo').remove();
     $('.attributeWrapper').remove();
+    $('.parameterContent').remove();
+    $('.parameterToolbox').remove();
     this.generatePipeForwards();
   }
 
@@ -39,13 +41,63 @@ export default class PipeInfoView {
   }
 
   generatePipeAttributes(attributes) {
+    if (attributes.x && attributes.y) {
+      delete attributes.x;
+      delete attributes.y;
+    }
     for (let key in attributes) {
-      let attrWrapper = $('<div></div>').addClass('attributeWrapper'),
-        attrLabel = $('<label></label>').text(key + ': ').addClass('forwardInfo'),
-        attrInput = $('<input></input>').attr('type', 'input').val(attributes[key]);
+      if (key != "name") {
+        let attrWrapper = $('<div></div>').addClass('attributeWrapper'),
+          attrLabel = $('<label></label>').text(key + ': ').addClass('forwardInfo'),
+          deleteButton = $('<button></button>').text('Delete').attr({
+            id: 'attributeDelete',
+            name: key
+          })
+          .addClass('deleteButton'),
+          attrInput = $('<input></input>').attr({
+            type: 'input',
+            name: key
+          }).val(attributes[key]);
 
-      attrWrapper.append(attrLabel, attrInput);
-      $('#attributesInfo').append(attrWrapper);
+        attrWrapper.append(attrLabel, attrInput, deleteButton);
+        $('#attributesInfo').append(attrWrapper);
+      }
+    }
+  }
+
+  generatePipeParameters(parameters) {
+    if (parameters.length !== 0) {
+      console.log(parameters)
+      parameters.forEach((item, i) => {
+        let parameterBox = $('<div></div>').addClass('parameterContent'),
+          parameterToolbox = $('<div></div>').addClass('parameterToolbox'),
+          text = $('<p></p>').text("name" + ': ' + item["name"]);
+        parameterBox.append(text);
+
+
+        let deleteButton = $('<button></button>').text('X').attr({
+            id: 'parameterDelete',
+            name: item["name"]
+          })
+          .addClass('paramDeleteButton'),
+            addButton = $('<i></i>').addClass("fas fa-plus-circle");
+
+        for (let key in item) {
+          if (item["name"]) {
+
+            let attrLabel = $('<label></label>').text(key + ': ').addClass('forwardInfo'),
+              attrInput = $('<input></input>').attr('type', 'input').val(item[key]),
+              attrWrapper = $('<div></div>').addClass('paramAttributeWrapper')
+
+            attrWrapper.append(attrLabel, attrInput);
+            parameterToolbox.append(attrWrapper);
+          }
+        }
+        parameterToolbox.append(addButton);
+        parameterBox.append(deleteButton)
+        $('#parametersInfo').append(parameterBox, parameterToolbox);
+      });
+
     }
   }
 

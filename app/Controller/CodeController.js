@@ -191,6 +191,24 @@ export default class CodeController {
   getAttributes(name) {
     return this.codeView.getAttributes(name);
   }
+  getParameters(name) {
+    return this.codeView.getParameters(name);
+  }
+  changeAttribute(pipeName, attribute, attributeValue) {
+    this.codeView.changeAttribute(pipeName, attribute, attributeValue);
+  }
+  addAttribute(pipeName, attribute) {
+    this.codeView.addAttribute(pipeName, attribute);
+  }
+  deleteAttribute(pipeName, attribute) {
+    this.codeView.deleteAttribute(pipeName, attribute);
+  }
+  addParameter(pipeName, paramName) {
+    this.codeView.addParameter(pipeName, paramName);
+  }
+  deleteParameter(pipeName, paramName) {
+    this.codeView.deleteParameter(pipeName, paramName);
+  }
 
 
   getIbisdoc() {

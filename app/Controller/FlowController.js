@@ -1,5 +1,5 @@
 import FlowView from '../View/flowView/FlowView.js';
-import PaletteView from '../View/flowView/PaletteView.js';
+import PaletteView from '../View/paletteView/PaletteView.js';
 
 export default class FlowController {
 
