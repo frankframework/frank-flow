@@ -5,6 +5,16 @@ This project will help you visualize your adapters in flow format.
 
 The project has been tested in firefox, other browsers will give an inacurate representation of the editor.
 
+#npm
+
+After downloading the frank-flow you will need to install the node modules.
+To install the node modules, first download nodejs from: https://nodejs.org/en/
+After installing node, open a terminal in the frank-flow folder.
+Type node -v to check if node is installed (if this is not the case, please reinstall node).
+Type npm i
+Now all of the node modules will be installed.
+
+
 # To integrate the frank-flow: 
   <li>
   Clone this project and place it inside your own ibis project.
