@@ -10,9 +10,6 @@ export default class FlowController {
     this.flowView.addListener(this);
     this.paletteView = new PaletteView(this);
     this.paletteView.addListener(this);
-    // this.notify({
-    //   type: "getPipes"
-    // });
     this.hoverSourceWindow = false;
     this.initHandlers();
   }

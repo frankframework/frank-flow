@@ -30,6 +30,7 @@ export default class PipeView {
       hr = $('<hr>'),
       extraText = $("<strong></strong>").attr("id", "strong").text(extra);
 
+
     //if isExit is true then don't append the hr tag.
     isExit ? bottomContainer.append(nameText, extraText) : bottomContainer.append(nameText, hr, extraText);
 
@@ -91,7 +92,7 @@ export default class PipeView {
     }
   }
 
-  getTypeImage(name, paletteImg) {
-    return this.typeImageView.getTypeImage(name, paletteImg, this.types);
+  getTypeImage(name) {
+    return this.typeImageView.getTypeImage(name, this.types);
   }
 }

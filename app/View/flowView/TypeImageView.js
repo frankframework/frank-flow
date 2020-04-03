@@ -3,7 +3,7 @@ export default class TypeImageView {
     this.flowView = flowView;
   }
 
-  getTypeImage(name, paletteImg, type) {
+  getTypeImage(name, type) {
     let types = type,
       img,
       testImage = new Image(),
@@ -15,11 +15,7 @@ export default class TypeImageView {
     if(types[name] != null && types[name].match('Sender') != null) {
       types[name] = 'SenderPipe';
     }
-    if (paletteImg) {
-      url = 'media/' + name + '.png';
-    } else {
-      url = 'media/' + types[name] + '.png';
-    }
+    url = 'media/images/' + types[name] + '.png';
     if (url != null) {
       img = $('<img></img>').attr({
         src: url,
@@ -28,7 +24,7 @@ export default class TypeImageView {
       }).addClass("typeImg");
       testImage.src = url;
       testImage.onerror = function() {
-        img.attr('src', 'media/basicPipe.png');
+        img.attr('src', 'media/images/basicPipe.png');
       }
       return img;
     }
