@@ -43,6 +43,8 @@ export default class CodeView {
 
     });
 
+    this.setGlobalVariables()
+
     this.validateConfigurationView = new ValidateConfigurationView(this.editor);
     this.codeEditView = new CodeEditView(this.editor);
     this.codePipeView = new CodePipeView(this.editor);
@@ -51,6 +53,12 @@ export default class CodeView {
     this.exitPipeView = new ExitPipeView(this.editor);
     this.codeAttributesView = new CodeAttributesView(this.editor);
     this.codeParametersView = new CodeParametersView(this.editor);
+  }
+
+  setGlobalVariables() {
+    window.PIPESREGEX = function(name) {
+      return '<[\\S]*?[^"/][pP]ipe[\\s\\t\\n][^>]*?name="' + name + '"[^]*?>[^]*?<[/][\\S]*?[^"/]Pipe>';
+    }
   }
 
   //add options to the dropdown.

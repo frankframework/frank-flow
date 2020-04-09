@@ -82,7 +82,7 @@ export default class CodeController {
       cur.editor.getModel().setValue(prettyXML);
     });
 
-    //generate the adapter with the curren possition of the mouse.
+    //generate the adapter with the current possition of the mouse.
     cur.editor.onMouseDown(function(e) {
       e.target.range.startLineNumber = 1;
       e.target.range.startColumn = 1;
