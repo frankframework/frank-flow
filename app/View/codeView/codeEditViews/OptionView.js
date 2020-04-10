@@ -1,4 +1,5 @@
 import CodeEditView from './CodeEditView.js';
+import { css } from 'vkbeautify';
 
 export default class OptionView extends CodeEditView {
 
@@ -33,15 +34,27 @@ export default class OptionView extends CodeEditView {
       editor:         This object represents the monaco editor and has all the crud functions necessary to chhange the code.
       focusLine:      This function
     */
+
     if (urlParams.has('configuration') && urlParams.has('adapter')) {
       console.log(urlParams.get('configuration').replace(/"/g, ''), urlParams.get('adapter'));
       this.editor.setValue(localStorage.getItem("IAF_WebControl"));
       this.editor.setValue(localStorage.getItem(urlParams.get('configuration').replace(/"/g, '')));
       localStorage.setItem('currentAdapter', urlParams.get('adapter').replace(/"/g, ''));
       this.focusLine('<Adapter[^]*? name=' + urlParams.get('adapter') + '[^]*?>');
+      this.stripFlow()
     } else {
       localStorage.setItem('currentAdapter', 'WebControlShowConfigurationStatus');
       this.editor.setValue(localStorage.getItem("IAF_WebControl"));
     }
+  }
+
+  stripFlow() {
+    $('.top-wrapper').css('display', 'none');
+    $('#palette').css('display', 'none');
+    $('.pipeInfoWrapper').css('display', 'none')
+    $('.monaco-flow-wrapper').css('height', '100%')
+    $('#canvas').panzoom("zoom", true, 1);
+    $('#canvas').panzoom("zoom", true, 1);
+    $('#canvas').panzoom("pan", -500, -300);
   }
 }
