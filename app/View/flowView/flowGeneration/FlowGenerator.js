@@ -1,5 +1,5 @@
-import PipeView from './PipeView.js';
-import ConsoleColorPick from '../ConsoleColorPick.js';
+import PipeView from '../PipeView.js';
+import ConsoleColorPick from '../../ConsoleColorPick.js';
 
 
 export default class FlowGenerator {

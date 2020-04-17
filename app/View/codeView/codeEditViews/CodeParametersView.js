@@ -35,7 +35,7 @@ export default class CodeParametersView extends CodeEditView {
           if (attributes !== null) {
             let tempObj = {};
             attributes.forEach(function (attr, i) {
-              attr = attr.replace(/\s/g, '').replace(/"/g, '');
+              attr = attr.replace(/^\s/g, '').replace(/"/g, '');
               let id = attr.match(IDREGEX),
                 key = attr.match(KEYREGEX)[0].replace('=', '');
               tempObj[id] = key
@@ -77,10 +77,8 @@ export default class CodeParametersView extends CodeEditView {
       if (parameters !== null) {
         parameters.forEach(function (param, i) {
           if (param.match('name="' + paramName + '"') != null) {
-            console.log('changing param' + param)
             let newParam = param.replace(/\/>/, " " + attribute + '=""/>');
             pipe = pipe.replace(param, newParam)
-            console.log(newParam, pipe);
             cur.edit(matches[0].range, pipe);
           }
         })

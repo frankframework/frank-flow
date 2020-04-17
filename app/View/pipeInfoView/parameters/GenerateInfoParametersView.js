@@ -1,7 +1,6 @@
 export default class GenerateInfoParametersView {
     generatePipeParameters(parameters) {
         if (parameters.length !== 0) {
-          console.log(parameters)
           parameters.forEach((param, i) => {
             let parameterBox = $('<div></div>').addClass('parameterContent'),
               parameterToolbox = $('<div></div>').addClass('parameterToolbox'),
@@ -20,7 +19,7 @@ export default class GenerateInfoParametersView {
     
       generatePipeParameterAttributes(param, parameterToolbox) {
         for (let attribute in param) {
-          if (param["name"]) {
+          if (param["name"]) {  
     
             let attrLabel = $('<label></label>').text(attribute + ': ').addClass('forwardInfo'),
               attrInput = $('<input></input>').attr({type: 'input', id: attribute}).val(param[attribute]),

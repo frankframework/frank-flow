@@ -1,4 +1,4 @@
-import FlowGenerator from './FlowGenerator.js'
+import FlowGenerator from './flowGeneration/FlowGenerator.js'
 export default class FlowView {
 
   constructor(flowModel) {

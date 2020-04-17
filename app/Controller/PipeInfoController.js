@@ -187,16 +187,11 @@ export default class PipeInfoController {
     $('#parametersInfo .parameterToolbox i').on('click', function() {
       let parameterName = $(this).attr('name'),
       attributeName = prompt("name new attribute");
-      console.log(parameterName, attributeName);
+      attributeName = attributeName.replace(/\s/g, '');
       cur.addParameterAttribute(parameterName, attributeName);
     })
 
-    $('#parametersInfo .paramAttributeWrapper input').on('click', function(e) {
-      console.log($(this).val());
-    })
-
     $('#parametersInfo .paramAttributeWrapper input').on('change', function(e) {
-      console.log($(this).val(), $(this.parentElement).attr('name'));
       let parameterName = $(this.parentElement).attr('name'),
       attributeName = $(this).attr('id'),
       value = $(this).val();
