@@ -32,6 +32,8 @@ export default class PipeInfoController {
     this.setEventListeners();
   }
 
+  //_______________CRUD methods_______________
+
   //change the name in the configuration and set the previous name to the new name.
   changeName(oldName, newName) {
     this.mainController.modifyCode("changeName", {
@@ -98,7 +100,32 @@ export default class PipeInfoController {
     this.selectPipe(this.oldName, this.oldType);
   }
 
-  //set the event listeners for the pipeinfo view.
+  addParameterAttribute(parameter, attribute) {
+    let cur = this;
+    this.mainController.modifyCode('addParameterAttribute',
+      {
+        pipeName: cur.oldName,
+        paramName: parameter,
+        attributeName: attribute
+      }
+    )
+    this.selectPipe(this.oldName, this.oldType);
+  }
+
+
+  changeParameterAttribute(parameter, attribute, value) {
+    let cur = this;
+    this.mainController.modifyCode('changeParameterAttribute', {
+      pipeName: cur.oldName,
+      paramName: parameter,
+      attributeName: attribute,
+      value: value
+    })
+    this.selectPipe(this.oldName, this.oldType);
+  }
+
+  //_______________event listeners_______________
+
   setEventListeners() {
     let cur = this;
 
@@ -114,14 +141,7 @@ export default class PipeInfoController {
       cur.changeType(type);
     });
 
-    $('.parameterContent').on('click', function(e) {
-      let toolbox = e.currentTarget.nextElementSibling;
-      if ($(toolbox).css('display') == 'none') {
-        $(toolbox).css('display', 'block')
-      } else {
-        $(toolbox).css('display', 'none')
-      }
-    });
+    //_______________Attribute listeners_______________
 
     $('#attributesInfo input').on('change', function(e) {
       let attributeValue = $(e.currentTarget).val(),
@@ -141,6 +161,17 @@ export default class PipeInfoController {
       cur.deleteAttribute(attribute);
     });
 
+    //_______________Parameter listeners_______________
+
+    $('.parameterContent').on('click', function(e) {
+      let toolbox = e.currentTarget.nextElementSibling;
+      if ($(toolbox).css('display') == 'none') {
+        $(toolbox).css('display', 'block')
+      } else {
+        $(toolbox).css('display', 'none')
+      }
+    });
+
     $('#addParameter').off('click').on('click', function(e) {
       let parameterName = prompt("new parameter for " + cur.oldName + ':', 'parameter name');
       if(parameterName != null) {
@@ -157,6 +188,7 @@ export default class PipeInfoController {
       let parameterName = $(this).attr('name'),
       attributeName = prompt("name new attribute");
       console.log(parameterName, attributeName);
+      cur.addParameterAttribute(parameterName, attributeName);
     })
 
     $('#parametersInfo .paramAttributeWrapper input').on('click', function(e) {
@@ -164,7 +196,11 @@ export default class PipeInfoController {
     })
 
     $('#parametersInfo .paramAttributeWrapper input').on('change', function(e) {
-      console.log($(this).val());
+      console.log($(this).val(), $(this.parentElement).attr('name'));
+      let parameterName = $(this.parentElement).attr('name'),
+      attributeName = $(this).attr('id'),
+      value = $(this).val();
+      cur.changeParameterAttribute(parameterName, attributeName, value);
     })
   }
 }

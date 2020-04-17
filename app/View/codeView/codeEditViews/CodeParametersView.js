@@ -68,7 +68,6 @@ export default class CodeParametersView extends CodeEditView {
 
   addParameterAttribute(pipeName, paramName, attribute) {
     let cur = this,
-      returnArr = [],
       matches = this._getPipe(pipeName);
 
     matches.forEach(function (item, index) {
@@ -77,15 +76,36 @@ export default class CodeParametersView extends CodeEditView {
 
       if (parameters !== null) {
         parameters.forEach(function (param, i) {
-          if (param.match(/name/) === paramName) {
-            let newParam = param.replace(/\/>/, attribute + '=""/>');
+          if (param.match('name="' + paramName + '"') != null) {
+            console.log('changing param' + param)
+            let newParam = param.replace(/\/>/, " " + attribute + '=""/>');
             pipe = pipe.replace(param, newParam)
             console.log(newParam, pipe);
+            cur.edit(matches[0].range, pipe);
           }
         })
       }
-    })
-    return returnArr;
+    }) 
+  }
+
+  changeParameterAttribute(pipeName, paramName, attribute, value) {
+    let cur = this,
+      matches = this._getPipe(pipeName);
+      
+    matches.forEach(function (item, index) {
+      let pipe = cur.editor.getModel().getValueInRange(item.range),
+        parameters = pipe.match(PARAMETERREGEX);
+
+      if (parameters !== null) {
+        parameters.forEach(function (param, i) {
+          if (param.match('name="' + paramName + '"') != null) {
+            let newParam = param.replace(new RegExp(attribute + '="[^]*?"'), attribute + '="' + value + '"');
+            pipe = pipe.replace(param, newParam)
+            cur.edit(matches[0].range, pipe);
+          }
+        })
+      }
+    }) 
   }
 
   deleteParameter(pipeName, paramName) {

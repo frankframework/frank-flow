@@ -1,3 +1,6 @@
+import GenerateInfoParametersView from './parameters/GenerateInfoParametersView';
+import GenerateInfoAttributesView from './attributes/GenerateInfoAttributesView';
+
 export default class PipeInfoView {
 
   constructor(flowModel) {
@@ -40,82 +43,19 @@ export default class PipeInfoView {
     })
   }
 
-  generatePipeAttributes(attributes) {
-    if (attributes.x && attributes.y) {
-      delete attributes.x;
-      delete attributes.y;
-    }
-    for (let key in attributes) {
-      if (key != "name") {
-        let attrWrapper = $('<div></div>').addClass('attributeWrapper'),
-          attrLabel = $('<label></label>').text(key + ': ').addClass('forwardInfo'),
-          deleteButton = $('<button></button>').text('Delete').attr({
-            id: 'attributeDelete',
-            name: key
-          })
-          .addClass('deleteButton'),
-          attrInput = $('<input></input>').attr({
-            type: 'input',
-            name: key
-          }).val(attributes[key]);
-
-        attrWrapper.append(attrLabel, attrInput, deleteButton);
-        $('#attributesInfo').append(attrWrapper);
-      }
-    }
+  generatePipeAttributes(parameters) {
+    let attributeGenerator = new GenerateInfoAttributesView();
+    attributeGenerator.generatePipeAttributes(parameters);
   }
 
   generatePipeParameters(parameters) {
-    if (parameters.length !== 0) {
-      console.log(parameters)
-      parameters.forEach((param, i) => {
-        let parameterBox = $('<div></div>').addClass('parameterContent'),
-          parameterToolbox = $('<div></div>').addClass('parameterToolbox'),
-          text = $('<p></p>').text("name" + ': ' + param["name"]);
-        parameterBox.append(text);
-
-        let buttons = this.generatePipeParameterButtons(param);
-        this.generatePipeParameterAttributes(param, parameterToolbox);
-
-        parameterToolbox.append(buttons.addButton);
-        parameterBox.append(buttons.deleteButton);
-        $('#parametersInfo').append(parameterBox, parameterToolbox);
-      });
-    }
+    let paramGenerator = new GenerateInfoParametersView();
+    paramGenerator.generatePipeParameters(parameters);
   }
 
-  generatePipeParameterAttributes(param, parameterToolbox) {
-    for (let attribute in param) {
-      if (param["name"]) {
+ 
 
-        let attrLabel = $('<label></label>').text(attribute + ': ').addClass('forwardInfo'),
-          attrInput = $('<input></input>').attr('type', 'input').val(param[attribute]),
-          attrWrapper = $('<div></div>').addClass('paramAttributeWrapper')
-
-        attrWrapper.append(attrLabel, attrInput);
-        parameterToolbox.append(attrWrapper);
-      }
-    }
-  }
-
-  generatePipeParameterButtons(param) {
-    let deleteButton = $('<button></button>'),
-    addButton = $('<i></i>');
-
-  deleteButton.text('X').attr({
-    id: 'parameterDelete',
-    name: param["name"]
-  })
-  .addClass('paramDeleteButton')
-
-  addButton.addClass("fas fa-plus-circle").attr({
-    id: 'parameterAttributeAdd',
-    name: param["name"]
-  });
-
-  return {deleteButton: deleteButton, addButton: addButton}
-  }
-
+  //get all the different pipe types for the dropdown
   generateTypes(data) {
     let option;
     data[2].classes.forEach(function(item, index) {

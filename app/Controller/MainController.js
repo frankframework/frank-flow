@@ -18,16 +18,7 @@ class MainController {
 
   }
 
-  convertConfiguration() {
-    return this.configurationConverter.convertConfiguration(this.codeController.codeView.editor);
-  }
-
-  generateFlow() {
-    this.flowController.flowView.modifyFlow("generate");
-  }
-  setPipes(data) {
-    this.flowController.paletteView.generatePalettePipes(data[2].classes);
-  }
+  //_______________CRUD methods for the code view_______________
 
   modifyCode(type, obj) {
     let codeController = this.codeController;
@@ -90,7 +81,26 @@ class MainController {
       case "deleteParameter":
         codeController.deleteParameter(obj.pipeName, obj.paramName);
         break;
+      case "addParameterAttribute":
+        codeController.addParameterAttribute(obj.pipeName, obj.paramName, obj.attributeName);
+        break;
+      case "changeParameterAttribute":
+        codeController.changeParameterAttribute(obj.pipeName, obj.paramName, obj.attributeName, obj.value);   
+        break;
     }
+  }
+
+  //_______________Generation of flow_______________
+
+  convertConfiguration() {
+    return this.configurationConverter.convertConfiguration(this.codeController.codeView.editor);
+  }
+
+  generateFlow() {
+    this.flowController.flowView.modifyFlow("generate");
+  }
+  setPipes(data) {
+    this.flowController.paletteView.generatePalettePipes(data[2].classes);
   }
 }
 

@@ -209,6 +209,12 @@ export default class CodeController {
   deleteParameter(pipeName, paramName) {
     this.codeView.deleteParameter(pipeName, paramName);
   }
+  addParameterAttribute(pipeName, paramName, attribute) {
+    this.codeView.addParameterAttribute(pipeName, paramName, attribute);
+  }
+  changeParameterAttribute(pipeName, paramName, attribute, value) {
+    this.codeView.changeParameterAttribute(pipeName, paramName, attribute, value);
+  }
 
 
   getIbisdoc() {

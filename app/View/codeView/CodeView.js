@@ -139,4 +139,12 @@ export default class CodeView {
   deleteParameter(pipeName, paramName) {
     this.codeParametersView.deleteParameter(pipeName, paramName);
   }
+
+  addParameterAttribute(pipeName, paramName, attribute) {
+    this.codeParametersView.addParameterAttribute(pipeName, paramName, attribute);
+  }
+
+  changeParameterAttribute(pipeName, paramName, attribute, value) {
+    this.codeParametersView.changeParameterAttribute(pipeName, paramName, attribute, value);
+  }
 }
