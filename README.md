@@ -3,7 +3,7 @@ Graphical flow editor for Frank configurations
 
 This project will help you visualize your adapters in flow format.
 
-The project has been tested in firefox, other browsers will give an inacurate representation of the editor.
+The project has been tested in firefox and chrome, other browsers will give an inacurate representation of the editor.
 
 # NPM
 
