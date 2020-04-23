@@ -63,6 +63,7 @@ Now all of the node modules will be installed.
   </li>
 
   # fileTree
+  <ol>
   <li>
   To use the file tree your Frank configurations folder needs to be a zip file.
   </li>
@@ -76,6 +77,7 @@ Now all of the node modules will be installed.
   <li>
   When you have finished working on your project, download your configuration folder by clicking the 'download file' option in the hamburger menu.
   </li>
+  </ol>
 
 
   
