@@ -31,7 +31,7 @@ Now all of the node modules will be installed.
   Navigate to the url http://localhost/ibis/frank-flow/.
   If the url isn't working, look good at your file structure. The url is dependant on the map you put it in.
   </li>
-  <img src="media/images/frankFlowMain.png" />
+  <img src="media/images/frank-flow-huidig.png" />
 
 # How to use the frank-flow
   
