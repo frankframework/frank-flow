@@ -1,5 +1,3 @@
-# this is the Github README, formatting has not been modified for CodeCommit
-
 # frank-flow
 Graphical flow editor for Frank configurations
 
@@ -25,7 +23,7 @@ Now all of the node modules will be installed.
   Put the files inside of the folder webapp/ibis (or just webapps in case you have no ibis folder).
   If you have multiple webapp folders then put it in the src/main/webapp folder.
   </li>
-  <img src="media/frankflowDownloadTut.png" />
+  <img src="media/images/frankflowDownloadTut.png" />
   <li>
   Start your ibis.
   </li>
@@ -33,7 +31,7 @@ Now all of the node modules will be installed.
   Navigate to the url http://localhost/ibis/frank-flow/.
   If the url isn't working, look good at your file structure. The url is dependant on the map you put it in.
   </li>
-  <img src="media/frankFlowMain.png" />
+  <img src="media/images/frankFlowMain.png" />
 
 # How to use the frank-flow
   
