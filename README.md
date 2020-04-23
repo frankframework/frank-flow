@@ -17,19 +17,20 @@ Now all of the node modules will be installed.
 
 # To integrate the frank-flow: 
   <li>
-  Clone this project and place it inside your own ibis project.
+  Clone this project and place it inside your own Frank project.
   </li>
   <li>
-  Put the files inside of the folder webapp/ibis (or just webapps in case you have no ibis folder).
-  If you have multiple webapp folders then put it in the src/main/webapp folder.
+  Put the files inside of the folder webapp/ROOT (or just webapps in case you have no ROOT folder).
+  If you have multiple webapp folders then place the frank-flow in the src/main/webapp folder.
   </li>
   <img src="media/images/frankflowDownloadTut.png" />
   <li>
-  Start your ibis.
+  Start your Frank.
   </li>
   <li>
   Navigate to the url http://localhost/ibis/frank-flow/.
-  If the url isn't working, look good at your file structure. The url is dependant on the map you put it in.
+  If the url isn't working check your file structure.
+  The url depends on your map structure.
   </li>
   <img src="media/images/frank-flow-huidig.png" />
 
@@ -60,6 +61,23 @@ Now all of the node modules will be installed.
   <li>
   download: download your flowchart as an svg.
   </li>
+
+  # fileTree
+  <li>
+  To use the file tree your Frank configurations folder needs to be a zip file.
+  </li>
+  <li>
+  Upload your zip configuration to the file picker in the top-left corner of the screen.
+  Now a file tree wil appear on the left side of your screen.
+  </li>
+  <li>
+  Select the file you wish to change.
+  </li>
+  <li>
+  When you have finished working on your project, download your configuration folder by clicking the 'download file' option in the hamburger menu.
+  </li>
+
+
   
   # Autocomplete
   The editor also supports autocomplete. (WARNING: this feature is not complete yet)
