@@ -48,9 +48,6 @@ Now all of the node modules will be installed.
   change lines: change the connection type between your pipes.
   </li>
   <li>
-  generate flow: the flow will generate when you type in the editor or click on the editor but clicking this button will also generate the flow for you.
-  </li>
-  <li>
   toggle horizontal: clicking this button wil toggle between horizontal flow generation and vertical flow generation.
   </li>
   <li>
