@@ -1,11 +1,11 @@
-# frank-flow
+# Frank-flow
 Graphical flow editor for Frank configurations
 
 This project will help you visualize your adapters in flow format.
 
 The project has been tested in firefox, other browsers will give an inacurate representation of the editor.
 
-#npm
+# NPM
 
 After downloading the frank-flow you will need to install the node modules.
 To install the node modules, first download nodejs from: https://nodejs.org/en/
@@ -62,7 +62,7 @@ Now all of the node modules will be installed.
   download: download your flowchart as an svg.
   </li>
 
-  # fileTree
+  # FileTree
   <ol>
   <li>
   To use the file tree your Frank configurations folder needs to be a zip file.
@@ -86,4 +86,4 @@ Now all of the node modules will be installed.
   
   # IMPORTANT
   Your configuration must be in beautiful syntax, otherwise it may not load. 
-  If your configuration has multiple adapters note that there are still bugs with doing actions like adding forwards.
+  If your configuration has multiple adapters note that there are still bugs with performing actions like adding forwards.
