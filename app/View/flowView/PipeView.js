@@ -17,7 +17,6 @@ export default class PipeView {
   */
 
   addPipe(name, possitions, extra, isExit, descText) {
-    //make all html elements
     this.types = this.flowView.getTypes();
     let flowView = this.flowView,
       id = flowView.windows += 1,
@@ -34,7 +33,12 @@ export default class PipeView {
     //if isExit is true then don't append the hr tag.
     isExit ? bottomContainer.append(nameText, extraText) : bottomContainer.append(nameText, hr, extraText);
 
-    el.append(typeWindow, bottomContainer);
+    if(isExit | this.types['receiver ' + name.replace('(receiver): ', '')] == "Receiver") {
+      el.append(bottomContainer);
+    } else {
+      el.append(typeWindow, bottomContainer);
+    }
+
     if (possitions != null) {
       $(el).css('left', possitions.x + 'px');
       $(el).css('top', possitions.y + 'px');

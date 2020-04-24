@@ -226,13 +226,11 @@ export default class CodeController {
         return response.json()
       })
       .then(data => {
-        // Work with JSON data here
         cur.codeView.ibisdocJson = data;
         cur.ibisdocModel.setIbisdoc(data);
         cur.mainController.setPipes(data);
       })
       .catch(err => {
-        // Do something for an error here
         console.log("couldn't load ibisdoc, now switching to default ibisdoc");
         this.getDefaultIbisdoc();
       })
@@ -248,12 +246,11 @@ export default class CodeController {
         return response.json()
       })
       .then(data => {
-        // Work with JSON data here
         cur.codeView.ibisdocJson = data;
+        cur.ibisdocModel.setIbisdoc(data);
         cur.mainController.setPipes(data);
       })
       .catch(err => {
-        // Do something for an error here
         console.log(err);
 
       })
@@ -267,14 +264,12 @@ export default class CodeController {
         return response.text()
       })
       .then(data => {
-        // Work with JSON data here
         localStorage.setItem("ibisdocXsd", data);
         console.log("xsd is loaded!, here");
       })
       .catch(err => {
         console.log("couldn't load xsd, now loading deafult xsd", err);
         this.getDefaultXsd();
-        // Do something for an error here
       })
   }
 
@@ -286,13 +281,11 @@ export default class CodeController {
         return response.text()
       })
       .then(data => {
-        // Work with JSON data here
         localStorage.setItem("ibisdocXsd", data);
         console.log("xsd is loaded!, here");
       })
       .catch(err => {
         console.log("not loaded xsd", err);
-        // Do something for an error here
       })
   }
 
@@ -344,7 +337,6 @@ export default class CodeController {
         return response;
       })
       .then(data => {
-        // Work with JSON data here
         cur.codeView.addOptions(data);
       })
       .catch(err => {

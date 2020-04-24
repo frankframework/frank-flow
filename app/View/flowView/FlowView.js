@@ -191,7 +191,6 @@ export default class FlowView {
   setOffsets(possitions) {
     let boxOffset = 0,
       exitOffset = 0;
-    let container = null;
 
     this.moving = true;
     for (let i = 1; i <= this.windows; i++) {
@@ -201,48 +200,62 @@ export default class FlowView {
       }
       if (!possitions) {
         let box = $('#sourceWindow' + i);
-        if (!this.horizontalBuild) {
-          box.css("top", boxOffset + "px");
-        } else {
-          box.css("top", "100px");
-          box.css("left", boxOffset + "px");
-        }
+        this.setBuildDirection(box, boxOffset);
         if (this.windows == 2) {
           this.moving = false;
           return;
         }
-        if (!box.hasClass('exit')) {
-          this.modifyFlow('drag', {
-            name: box[0].lastChild.firstElementChild.textContent,
-            x: box.css("left"),
-            y: box.css("top")
-          });
-        } else {
-          exitOffset += 250;
-          this.modifyFlow('dragExit', {
-            name: box[0].lastChild.firstElementChild.textContent,
-            x: parseInt(box.css("left").replace('px', '')) + exitOffset + 'px',
-            y: box.css("top")
-          });
-        }
+        this.setExitPosition(box, exitOffset);
       }
-      let totalLength, windowLength;
-      if (!this.horizontalBuild) {
-        totalLength = boxOffset + ((64 * i) - 1450);
-        windowLength = parseInt($('#canvas').css('height').replace('px', ''));
-        if (totalLength > windowLength) {
-          $('#canvas').css('height', totalLength);
-        }
-      } else {
-        totalLength = boxOffset + ((64 * i) - 1000);
-        windowLength = parseInt($('#canvas').css('width').replace('px', ''));
-        if (totalLength > windowLength && !this.customWidth) {
-          $('#canvas').css('width', totalLength);
-        }
-      }
+      this.setCanvasBounds(boxOffset, i);
     }
     this.moving = false;
   }
+
+  setBuildDirection(box, boxOffset) {
+    if (!this.horizontalBuild) {
+      box.css("top", boxOffset + "px");
+    } else {
+      box.css("top", "100px");
+      box.css("left", boxOffset + "px");
+    }
+  }
+
+  setExitPosition(box, exitOffset) {
+    if (!box.hasClass('exit')) {
+      this.modifyFlow('drag', {
+        name: box[0].lastChild.firstElementChild.textContent,
+        x: box.css("left"),
+        y: box.css("top")
+      });
+    } else {
+      exitOffset += 250;
+      this.modifyFlow('dragExit', {
+        name: box[0].lastChild.firstElementChild.textContent,
+        x: parseInt(box.css("left").replace('px', '')) + exitOffset + 'px',
+        y: box.css("top")
+      });
+    }
+  }
+
+  setCanvasBounds(boxOffset, i) {
+    let totalLength, windowLength;
+    if (!this.horizontalBuild) {
+      totalLength = boxOffset + ((64 * i) - 1450);
+      windowLength = parseInt($('#canvas').css('height').replace('px', ''));
+      if (totalLength > windowLength) {
+        $('#canvas').css('height', totalLength);
+      }
+    } else {
+      totalLength = boxOffset + ((64 * i) - 1000);
+      windowLength = parseInt($('#canvas').css('width').replace('px', ''));
+      if (totalLength > windowLength && !this.customWidth) {
+        $('#canvas').css('width', totalLength);
+      }
+    }
+  }
+
+
 
   generateFlow() {
     this.notifyListeners({

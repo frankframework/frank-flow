@@ -156,7 +156,6 @@ export default class FlowController {
         disabled: false,
         containment: '#canvas',
         drag: function() {
-          //console.log(cur.flowView.modifyFlow);
           cur.flowView.moving = true;
           let dragObj = {
             x: $(sourceDiv).css('left'),
@@ -206,16 +205,21 @@ export default class FlowController {
       var current_pullY = parseInt($('#canvas').css('transform').split(',')[5]);
       var current_pullX = parseInt($('#canvas').css('transform').split(',')[4]);
       if (current_pullX >= 0) {
-        $panzoom.panzoom('pan', 0, current_pullY);
+        //$panzoom.panzoom('pan', 0, current_pullY);
+        $('#canvas').css('width', $('#canvas').css('width') + 100);
+        console.log('x> 0');
       }
       if (current_pullY <= -Math.abs($('#canvas').css('height').replace('px', '')) + 1000) {
         $panzoom.panzoom('pan', current_pullX, -Math.abs($('#canvas').css('height').replace('px', '')) + 1000);
+        console.log('y< 1000');
       }
       if (current_pullX <= -1540) {
         $panzoom.panzoom('pan', -1540, current_pullY);
+        console.log('x< 1540');
       }
       if (current_pullY >= 0) {
         $panzoom.panzoom('pan', current_pullX, 0);
+        console.log('y> 0');
       }
       $('#flowContainer').attr('style', '');
     });

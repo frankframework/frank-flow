@@ -16,7 +16,7 @@ export default class CodeTypesView {
     } else {
       receiver = 'NO_RECEIVER_FOUND'
     }
-    types['"receiver" ' + receiver] = "Receiver";
+    types['receiver ' + receiver] = "Receiver";
     occurences.forEach(function(item, index) {
       item = item.replace(/</g, '')
       if (item.search(/[^/][\S]*?[^"/]Pipe[^]*?name=".*?"/) > -1) {

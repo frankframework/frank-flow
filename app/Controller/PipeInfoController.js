@@ -14,8 +14,6 @@ export default class PipeInfoController {
     this.pipeInfoView.generateTypes(data);
   }
 
-
-  //call this method to set name and type in variables and in the view.
   selectPipe(name, type) {
     this.oldName = name;
     this.oldType = type;
@@ -34,7 +32,6 @@ export default class PipeInfoController {
 
   //_______________CRUD methods_______________
 
-  //change the name in the configuration and set the previous name to the new name.
   changeName(oldName, newName) {
     this.mainController.modifyCode("changeName", {
       oldName: oldName,
@@ -43,7 +40,6 @@ export default class PipeInfoController {
     this.oldName = newName;
   }
 
-  //change the type in the configuration and update the previous name to the new name.
   changeType(type) {
     let cur = this;
     this.mainController.modifyCode("changePipeType", {
@@ -180,7 +176,6 @@ export default class PipeInfoController {
     })
     $('#parametersInfo .parameterContent button').on('click', function(e) {
       let parameterName = $(this).attr('name');
-      console.log(parameterName)
       cur.deleteParameter(parameterName);
     })
 
