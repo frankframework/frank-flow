@@ -84,4 +84,3 @@ Now all of the node modules will be installed.
   
   # IMPORTANT
   Your configuration must be in beautiful syntax, otherwise it may not load. 
-  If your configuration has multiple adapters note that there are still bugs with performing actions like adding forwards.
