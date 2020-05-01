@@ -205,9 +205,7 @@ export default class FlowController {
       var current_pullY = parseInt($('#canvas').css('transform').split(',')[5]);
       var current_pullX = parseInt($('#canvas').css('transform').split(',')[4]);
       if (current_pullX >= 0) {
-        //$panzoom.panzoom('pan', 0, current_pullY);
-        $('#canvas').css('width', $('#canvas').css('width') + 100);
-        console.log('x> 0');
+         $panzoom.panzoom('pan', 0, current_pullY);
       }
       if (current_pullY <= -Math.abs($('#canvas').css('height').replace('px', '')) + 1000) {
         $panzoom.panzoom('pan', current_pullX, -Math.abs($('#canvas').css('height').replace('px', '')) + 1000);
@@ -223,6 +221,26 @@ export default class FlowController {
       }
       $('#flowContainer').attr('style', '');
     });
+
+    function calculateCanvasBorder(direction) {
+        $('#canvas').css('min-width', '+=500');
+        let centerX = parseInt($('#canvas').css('min-width').replace('px', '')) / 2;
+        console.log('centerX: ' + centerX);
+        $('.sourceWindow').each((index, element) => {
+          $(element).css('left', '+=250')
+          let pipe = {
+            x: $(element).css('left'),
+            y: $(element).css('top'),
+            name: element.lastElementChild.firstElementChild.innerHTML
+          }
+          if ($(element).hasClass('exit')) {
+            cur.flowView.modifyFlow('dragExit', pipe);
+          } else {
+            cur.flowView.modifyFlow('drag', pipe);
+          }
+        });
+        console.log('x> 0', $('#canvas').css('min-width'));
+    }
 
     //make zoom possible
     $panzoom.parent().on('mousewheel.focal', function(e) {

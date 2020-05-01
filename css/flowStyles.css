@@ -12,6 +12,12 @@
   display: flex;
 }
 
+.jtk-demo-main, #canvas {
+  min-height: 2500px;
+  min-width: 2500px;
+  position: absolute;
+}
+
 .source-target-demo .window {
   display: flex;
   flex-direction: column;
