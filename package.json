@@ -14,6 +14,7 @@
     "file-saver": "^2.0.2",
     "html-to-image": "^0.1.1",
     "jquery": "^3.4.1",
+    "jquery-contextmenu": "^2.9.1",
     "jquery-ui-dist": "^1.12.1",
     "jquery.mousewheel": "^3.1.9",
     "jquery.panzoom": "^3.2.3",
