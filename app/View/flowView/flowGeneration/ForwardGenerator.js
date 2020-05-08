@@ -1,6 +1,7 @@
 export default class ForwardGenerator {
-    constructor(flowModel) {
+    constructor(flowModel, flowView) {
         this.flowModel = flowModel;
+        this.flowView = flowView;
     }
 
       /*

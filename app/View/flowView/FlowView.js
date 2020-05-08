@@ -35,17 +35,14 @@ export default class FlowView {
         [1, 1, 0, 1]
       ],
       this.instance = window.instance = jsPlumb.getInstance({
-        // drag options
         DragOptions: {
           cursor: "pointer",
           zIndex: 2000
         },
-        // default to a gradient stroke from blue to green.
         PaintStyle: {
           stroke: "#000000",
           strokeWidth: 3
         },
-        //the arrow overlay for the connection
         ConnectionOverlays: [
           ["Arrow", {
             location: 1,
@@ -57,6 +54,11 @@ export default class FlowView {
         Container: "canvas"
       });
 
+      this.setBasicType();
+
+  }
+
+  setBasicType() {
     let basicType = {
       connector: ["StateMachine", {
         stub: [40, 60],
@@ -68,11 +70,6 @@ export default class FlowView {
     this.instance.registerConnectionType("basic", basicType);
   }
 
-  /*
-   * one function to modify the flow and code at the same time.
-   * @param change: insert here the action you want to do.
-   * @param obj: insert an object with necessary information.
-   */
   modifyFlow(change, obj) {
     switch (change) {
       case "generate":
@@ -131,6 +128,23 @@ export default class FlowView {
       });
   }
 
+  addCustomPipe(name, className, xpos, ypos) {
+    let newPipe = this.addPipe(name, {
+      x: xpos,
+      y: ypos
+    });
+
+    return {
+      type: "changeAddPipe",
+      name: newPipe,
+      possitions: {
+        x: xpos,
+        y: ypos
+      },
+      className: className
+    }
+  }
+
   cleanPossitions(obj) {
     obj.x = obj.x.replace(/px/, '');
     obj.y = obj.y.replace(/px/, '');
@@ -150,22 +164,6 @@ export default class FlowView {
     return null;
   }
 
-  addCustomPipe(name, className, xpos, ypos) {
-    let newPipe = this.addPipe(name, {
-      x: xpos,
-      y: ypos
-    });
-
-    return {
-      type: "changeAddPipe",
-      name: newPipe,
-      possitions: {
-        x: xpos,
-        y: ypos
-      },
-      className: className
-    }
-  }
 
   toggleConnectorType(cur) {
     if (cur.connectorType === "Flowchart") {
@@ -177,7 +175,7 @@ export default class FlowView {
   }
 
   addPipe(name, possitions, extra, isExit) {
-    return this.flowGenerator.addPipe(name, possitions, extra, isExit);
+    return this.flowGenerator.pipeGenerator.addPipe(name, possitions, extra, isExit);
   }
 
   getTypes() {
@@ -187,7 +185,6 @@ export default class FlowView {
     return this.types;
   }
 
-  // a function to put distance between the pipes
   setOffsets(possitions) {
     let boxOffset = 0,
       exitOffset = 0;

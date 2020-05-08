@@ -8,7 +8,7 @@ export default class PipeGenerator {
         this.flowModel = flowModel;
         this.flowView = flowView;
         this.pipeView = new PipeView(flowView);
-        this.forwardGenerator = new ForwardGenerator(flowModel);
+        this.forwardGenerator = new ForwardGenerator(flowModel, flowView);
         this.customElementGenerator = new CustomElementGenerator(this);
     }
 
@@ -41,7 +41,6 @@ export default class PipeGenerator {
                 forwards.push(forwardData);
             }
 
-            console.log(forwards)
             this.forwardGenerator.generateForwards(forwards);
         }
     }
