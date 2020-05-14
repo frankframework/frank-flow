@@ -115,7 +115,7 @@ export default class FlowController {
                 return true;
             }},
             "xsd": {name: "Run XSD", icon: "fas fa-play-circle"},
-            "download": {name: "Download", icon: "paste",
+            "download": {name: "Export SVG", icon: "paste",
               callback: function() {
                 cur.flowView.getImage();
                 return true;
@@ -133,10 +133,10 @@ export default class FlowController {
               callback: function() {
                 cur.setHybrid();
               }},
-            "editor": {name: "Editor", icon: "fas fa-file-code",
-              callback: function() {
-                cur.setFullEditor();
-              }}
+            // "editor": {name: "Editor", icon: "fas fa-file-code",
+            //   callback: function() {
+            //     cur.setFullEditor();
+            //   }}
         }
     });
 
