@@ -140,10 +140,6 @@ export default class FlowController {
         }
     });
 
-    $('.context-menu-one').on('click', function(e){
-        console.log('clicked', this);
-    })
-
     //rename a pipe
     $("#canvas").on('dblclick', '#strong', function(e) {
       e.stopPropagation();

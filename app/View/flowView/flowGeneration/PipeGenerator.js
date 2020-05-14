@@ -30,7 +30,11 @@ export default class PipeGenerator {
             }
             this.customElementGenerator.addExits(transformedXml.Adapter.Pipeline.Exit);
 
-            if (possitions == null) {
+            if (possitions == "duplicate") {
+                this.flowView.displayError("dupplicate");
+                return;
+            }
+            else if (possitions == null) {
                 this.flowView.setOffsets(false);
             } else {
                 this.flowView.setOffsets(true);
@@ -46,6 +50,22 @@ export default class PipeGenerator {
     }
 
     generateMultiplePipes(pipe, forwards, possitions) {
+        let cur = this,
+            error = false;
+        let sortedPipe = pipe.slice().sort();
+        sortedPipe.forEach((currentPipe, index) => {
+            if (sortedPipe[index + 1] != null) {
+                if (sortedPipe[index + 1]['@name'] === currentPipe['@name']) {
+                    console.log('duplicate: ', currentPipe);
+                    error = true;
+                }
+            }
+        })
+
+        if (error) {
+            return "duplicate";
+        }
+
         for (let p in pipe) {
             let name = pipe[p]['@name'],
                 xpos = pipe[p]['@x'],

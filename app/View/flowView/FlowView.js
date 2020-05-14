@@ -28,12 +28,12 @@ export default class FlowView {
 
   getInstance() {
     this.sourceAnchors = [
-        "Top", "Right", "Left",
-        [0.25, 1, 0, 1],
-        [0.5, 1, 0, 1],
-        [0.75, 1, 0, 1],
-        [1, 1, 0, 1]
-      ],
+      "Top", "Right", "Left",
+      [0.25, 1, 0, 1],
+      [0.5, 1, 0, 1],
+      [0.75, 1, 0, 1],
+      [1, 1, 0, 1]
+    ],
       this.instance = window.instance = jsPlumb.getInstance({
         DragOptions: {
           cursor: "pointer",
@@ -54,7 +54,7 @@ export default class FlowView {
         Container: "canvas"
       });
 
-      this.setBasicType();
+    this.setBasicType();
 
   }
 
@@ -117,13 +117,13 @@ export default class FlowView {
     var node = document.getElementById('canvas');
 
     domtoimage.toSvg(node)
-      .then(function(dataUrl) {
+      .then(function (dataUrl) {
         var link = document.createElement('a');
         link.download = localStorage.getItem('currentAdapter') + '.svg';
         link.href = dataUrl;
         link.click();
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.error('oops, something went wrong!', error);
       });
   }
@@ -266,10 +266,16 @@ export default class FlowView {
     $('#canvas').empty();
     $('#canvas').css('display', 'none');
     $('.customErrorMessage').remove();
-    $('#flowContainer').append(
-      $("<h1></h1>").text('Configuration is incorrect, please check your xml.').addClass('customErrorMessage'),
-      $('<p></p>').text(' \n\n\n your error: \n' + this.flowModel.getTransformedXml()).addClass('customErrorMessage')
-    );
+    if (e == "dupplicate") {
+      $('#flowContainer').append(
+        $("<h1></h1>").text('Duplicate pipe, please remove any duplicates.').addClass('customErrorMessage'),
+      );
+    } else {
+      $('#flowContainer').append(
+        $("<h1></h1>").text('Configuration is incorrect, please check your xml.').addClass('customErrorMessage'),
+        $('<p></p>').text(' \n\n\n your error: \n' + this.flowModel.getTransformedXml()).addClass('customErrorMessage')
+      );
+    }
     console.log('error: ', e, this.flowModel.getTransformedXml())
   }
 }
