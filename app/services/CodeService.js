@@ -39,14 +39,17 @@ export default class CodeService {
             method: 'GET'
         })
             .then(response => {
+                console.log(response)
                 return response.json()
             })
             .then(data => {
+                console.log(data)
                 cur.codeView.ibisdocJson = data;
                 cur.ibisdocModel.setIbisdoc(data);
                 cur.mainController.setPipes(data);
             })
             .catch(err => {
+                alert("couldn't load pipe palette");
                 console.log(err);
 
             })

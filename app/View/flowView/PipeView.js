@@ -3,10 +3,20 @@ import TypeImageView from './TypeImageView.js';
 
 export default class PipeView {
 
-  constructor(flowView) {
+  constructor(flowView, name, possitions, extra, isExit, descText) {
     this.flowView = flowView;
     this.descriptionView = new DescriptionView();
     this.typeImageView = new TypeImageView(flowView);
+
+    this.name = name;
+
+    //possitions is description positions??
+    this.possitions = possitions;
+    this.extra = extra;
+    this.isExit = isExit;
+    this.descText = descText;
+
+    this.addPipe();
   }
 
   /*
@@ -16,51 +26,61 @@ export default class PipeView {
   # bind to connection
   */
 
-  addPipe(name, possitions, extra, isExit, descText) {
+  addPipe() {
     this.types = this.flowView.getTypes();
     let flowView = this.flowView,
       id = flowView.windows += 1,
       canvas = $('#canvas'),
       el = $("<div></div>").addClass("window sourceWindow").attr("id", "sourceWindow" + id),
-      typeText = $("<strong></strong>").attr("id", "strong").text(this.types[name]),
-      typeWindow = $('<div></div>').addClass("typeWindow").append(this.getTypeImage(name), typeText),
-      bottomContainer = $('<div></div>').addClass("bottomContainer"),
-      nameText = $("<strong></strong>").attr("id", "strong").text(name),
-      hr = $('<hr>'),
-      extraText = $("<strong></strong>").attr("id", "strong").text(extra);
+      bottomContainer = $('<div></div>').addClass("bottomContainer");
 
+    el = this.checkForExitOrReceiver(el, bottomContainer);
+    this.addDescription(id);
+    this.makeInteractive(el);
+    canvas.append(el);
 
-    //if isExit is true then don't append the hr tag.
-    isExit ? bottomContainer.append(nameText, extraText) : bottomContainer.append(nameText, hr, extraText);
+    this.connectDescription(id);
+    return name;
+  }
 
-    if(isExit | this.types['receiver ' + name.replace('(receiver): ', '')] == "Receiver") {
+  checkForExitOrReceiver(el, bottomContainer) {
+    let typeText = $("<strong></strong>").attr("id", "strong").text(this.types[this.name]),
+        typeWindow = $('<div></div>').addClass("typeWindow").append(this.getTypeImage(), typeText),
+        nameText = $("<strong></strong>").attr("id", "strong").text(this.name),
+        hr = $('<hr>'),
+        extraText = $("<strong></strong>").attr("id", "strong").text(this.extra);
+
+    this.isExit ? bottomContainer.append(nameText, extraText) : bottomContainer.append(nameText, hr, extraText);
+
+    if (this.isExit | this.types['receiver ' + this.name.replace('(receiver): ', '')] == "Receiver") {
       el.append(bottomContainer);
     } else {
       el.append(typeWindow, bottomContainer);
     }
 
-    if (possitions != null) {
-      $(el).css('left', possitions.x + 'px');
-      $(el).css('top', possitions.y + 'px');
-      if (descText) {
-        this.descriptionView.addDescription(descText, possitions, id);
+    return el;
+  }
+
+  addDescription(id) {
+    if (this.possitions != null) {
+      $(el).css('left', this.possitions.x + 'px');
+      $(el).css('top', this.possitions.y + 'px');
+      if (this.descText) {
+        this.descriptionView.addDescription(this.descText, this.possitions, id);
       }
     }
+  }
 
-    this.makeInteractive(el, isExit);
-    canvas.append(el);
-
-    //if there is an description then connect the description.
-    if (descText) {
+  connectDescription(id) {
+    if (this.descText) {
       instance.connect({
         source: "sourceWindow" + id,
         target: "description" + id
       });
     }
-    return name;
   }
 
-  makeInteractive(el, isExit) {
+  makeInteractive(el) {
     let flowView = this.flowView;
     instance.makeTarget(el, {
       dropOptions: {
@@ -73,7 +93,7 @@ export default class PipeView {
       }]
     });
 
-    if (isExit) {
+    if (this.isExit) {
       $(el).addClass('exit');
     } else {
       instance.makeSource(el, {
@@ -96,7 +116,7 @@ export default class PipeView {
     }
   }
 
-  getTypeImage(name) {
-    return this.typeImageView.getTypeImage(name, this.types);
+  getTypeImage() {
+    return this.typeImageView.getTypeImage(this.name, this.types);
   }
 }
