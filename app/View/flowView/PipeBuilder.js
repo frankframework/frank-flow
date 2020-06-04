@@ -1,7 +1,8 @@
-import {PipeView} from './PipeView.js';
+import PipeView from './PipeView.js';
 
 export default class PipeBuilder {
-    constructor(name) {
+    constructor(flowView, name) {
+        this.flowView = flowView;
         this.name = name;
     }
 
@@ -26,6 +27,10 @@ export default class PipeBuilder {
     }
 
     build() {
+        if(!('isExit' in this)) {
+            throw new Error('isExit was not defined');
+        }
 
+        return new PipeView()
     }
 }

@@ -1,4 +1,5 @@
 import PipeView from '../PipeView.js';
+import PipeBuilder from '../PipeBuilder.js'
 import ForwardGenerator from './ForwardGenerator.js';
 import CustomElementGenerator from './CustomElementGenerator.js';
 
@@ -73,12 +74,18 @@ export default class PipeGenerator {
                 extraText = "",
                 docText = null;
 
-            possitions = this.checkPossitions(xpos, ypos);
+            positions = this.checkPossitions(xpos, ypos);
 
             extraText = this.createExtraText(pipe, p);
             docText = this.createDocText(pipe, p);
 
-            this.addPipe(name, possitions, extraText, null, docText);
+            //this.addPipe(name, positions, extraText, null, docText);
+            // new PipeBuilder(this.flowView, name)
+            //     .withPositions(positions)
+            //     .withExtra(extraText)
+            //     .isExit(false)
+            //     .docText(docText)
+            //     .build();
 
             if (pipe[p].Forward != null) {
                 forwards = this.createPipeForward(pipe, name, p, forwards);
@@ -152,6 +159,7 @@ export default class PipeGenerator {
     generateSinglePipe(pipe, forwards) {
         let name = pipe['@name'];
         this.addPipe(name);
+        new PipeBuilder(this.flowView, name).build()
 
         if (pipe.Forward != null) {
             let forwardData = null;
