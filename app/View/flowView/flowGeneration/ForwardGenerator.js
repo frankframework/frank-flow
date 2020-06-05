@@ -91,6 +91,7 @@ export default class ForwardGenerator {
         paintStyle.dashstyle = "2 4";
       }
       if (sourcePipe != "" && targetPipe != "") {
+        console.log(sourcePipe, targetPipe)
         instance.connect({
           source: sourcePipe,
           target: targetPipe,

@@ -35,7 +35,7 @@ export default class PipeView {
       bottomContainer = $('<div></div>').addClass("bottomContainer");
 
     el = this.checkForExitOrReceiver(el, bottomContainer);
-    this.addDescription(id);
+    this.addDescription(id, el);
     this.makeInteractive(el);
     canvas.append(el);
 
@@ -51,6 +51,7 @@ export default class PipeView {
         extraText = $("<strong></strong>").attr("id", "strong").text(this.extra);
 
     this.isExit ? bottomContainer.append(nameText, extraText) : bottomContainer.append(nameText, hr, extraText);
+    console.log(this.name)
 
     if (this.isExit | this.types['receiver ' + this.name.replace('(receiver): ', '')] == "Receiver") {
       el.append(bottomContainer);
@@ -61,7 +62,7 @@ export default class PipeView {
     return el;
   }
 
-  addDescription(id) {
+  addDescription(id, el) {
     if (this.possitions != null) {
       $(el).css('left', this.possitions.x + 'px');
       $(el).css('top', this.possitions.y + 'px');

@@ -6,7 +6,6 @@ export default class FlowGenerator {
   constructor(flowView, flowModel) {
     this.flowModel = flowModel;
     this.flowView = flowView;
-    this.pipeView = new PipeView(flowView);
     this.pipeGenerator = new PipeGenerator(flowModel, flowView);
     this.consoleColor = new ConsoleColorPick();
   }

@@ -1,6 +1,8 @@
+import PipeBuilder from '../PipeBuilder.js'
+
 export default class CustomElementGenerator {
-    constructor(pipeGenerator) {
-        this.pipeGenerator = pipeGenerator;
+    constructor(flowView) {
+        this.flowView = flowView;
     }
 
     addReceiver(transformedXml, target) {
@@ -16,10 +18,19 @@ export default class CustomElementGenerator {
             yCord = 400;
         }
 
-        this.pipeGenerator.addPipe(prependText + transformedXml.Adapter.Receiver['@name'], {
-            x: xCord,
-            y: yCord
-        });
+        // this.pipeGenerator.addPipe(prependText + transformedXml.Adapter.Receiver['@name'], {
+        //     x: xCord,
+        //     y: yCord
+        // });
+
+        let name = prependText + transformedXml.Adapter.Receiver['@name'],
+            positions = {
+                x: xCord,
+                y: yCord
+            }
+        new PipeBuilder(this.flowView, name)
+            .withPositions(positions)
+            .build();
 
         return {
             sourcePipe: prependText + transformedXml.Adapter.Receiver['@name'],
@@ -31,7 +42,7 @@ export default class CustomElementGenerator {
 
     addExits(exits) {
         let exit = exits,
-            possitions,
+            positions,
             name,
             ypos,
             xpos;
@@ -47,24 +58,32 @@ export default class CustomElementGenerator {
                     xpos = exit[index]['@x'],
                     ypos = exit[index]['@y'];
                 if (xpos != null && ypos != null) {
-                    possitions = {
+                    positions = {
                         x: xpos,
                         y: ypos
                     }
                 }
-                cur.pipeGenerator.addPipe(name, possitions, "", true);
+                // cur.pipeGenerator.addPipe(name, positions, "", true);
+                new PipeBuilder(cur.flowView, name)
+                    .withPositions(positions)
+                    .isExit(true)
+                    .build();
             });
         } else {
             name = exit['@path'],
                 xpos = exit['@x'],
                 ypos = exit['@y'];
             if (xpos != null && ypos != null) {
-                possitions = {
+                positions = {
                     x: xpos,
                     y: ypos
                 }
             }
-            this.pipeGenerator.addPipe(name, possitions, "", true);
+            // this.pipeGenerator.addPipe(name, positions, "", true);
+            new PipeBuilder(this.flowView, name)
+            .withPositions(positions)
+            .isExit(true)
+            .build();
         }
     }
 }

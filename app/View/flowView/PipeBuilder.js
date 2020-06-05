@@ -29,8 +29,14 @@ export default class PipeBuilder {
     build() {
         if(!('isExit' in this)) {
             throw new Error('isExit was not defined');
+        } else if(!('positions' in this)) {
+            this.positions = null;
+        } else if(!('extra' in this)) {
+            this.extra = null;
+        } else if(!('descText' in this)) {
+            this.descText = null;
         }
 
-        return new PipeView()
+        return new PipeView(this.flowView, this.name, this.positions, this.extra, this.isExit, this.descText);
     }
 }
