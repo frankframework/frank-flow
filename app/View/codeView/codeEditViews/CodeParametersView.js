@@ -34,15 +34,11 @@ export default class CodeParametersView extends CodeEditView {
 
           if (attributes !== null) {
             let tempObj = {};
-            //console.log(attributes);
             attributes.forEach(function (attr, i) {    
               attr = attr.replace(/^\s/g, '').replace(/"/g, '').replace(/["\n\r]/g, '');
               let id = attr.match(IDREGEX)[0].replace('[\r\n"]', ''),
                 key = attr.match(KEYREGEX)[0].replace('=', '');
-
-                console.log(id, key, attr);
               tempObj[id] = key
-              console.log(tempObj)
             })
             returnArr.push(tempObj);
           }

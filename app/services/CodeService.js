@@ -19,6 +19,7 @@ export default class CodeService {
             method: 'GET'
         })
             .then(response => {
+                console.log("get the docs!")
                 return response.json()
             })
             .then(data => {
@@ -27,7 +28,7 @@ export default class CodeService {
                 cur.mainController.setPipes(data);
             })
             .catch(err => {
-                console.log("couldn't load ibisdoc, now switching to default ibisdoc");
+                console.log("couldn't load ibisdoc, now switching to default ibisdoc", err);
                 this.getDefaultIbisdoc();
             })
 

@@ -84,7 +84,6 @@ export default class PipeGenerator {
             new PipeBuilder(this.flowView, name)
                 .withPositions(possitions)
                 .withExtra(extraText)
-                .isExit(false)
                 .withDescText(docText)
                 .build();
 
@@ -161,7 +160,6 @@ export default class PipeGenerator {
         let name = pipe['@name'];
         //this.addPipe(name);
         new PipeBuilder(this.flowView, name)
-        .isExit(false)
         .build()
 
         if (pipe.Forward != null) {

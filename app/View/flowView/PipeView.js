@@ -51,7 +51,6 @@ export default class PipeView {
         extraText = $("<strong></strong>").attr("id", "strong").text(this.extra);
 
     this.isExit ? bottomContainer.append(nameText, extraText) : bottomContainer.append(nameText, hr, extraText);
-    console.log(this.name)
 
     if (this.isExit | this.types['receiver ' + this.name.replace('(receiver): ', '')] == "Receiver") {
       el.append(bottomContainer);

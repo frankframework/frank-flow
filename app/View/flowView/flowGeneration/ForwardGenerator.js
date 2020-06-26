@@ -2,6 +2,7 @@ export default class ForwardGenerator {
     constructor(flowModel, flowView) {
         this.flowModel = flowModel;
         this.flowView = flowView;
+        this.connectorType = "Flowchart";
     }
 
       /*
@@ -14,6 +15,8 @@ export default class ForwardGenerator {
     //when generating set to true and after generating to false.
     let generated = true;
     let cur = this;
+    let connectorType = this.connectorType;
+
 
     this.flowModel.setForwards(forwards);
 
@@ -40,6 +43,8 @@ export default class ForwardGenerator {
           target: target
         });
       })
+
+      
       //connection already exists so delete the first connection.
       if (counter > 1) {
         instance.getAllConnections().some(function (conn) {
@@ -64,12 +69,16 @@ export default class ForwardGenerator {
     let sourcePipe = "";
     let targetPipe = "";
     generated = true;
+
+
     $(forwards).each(function (index, f) {
       sourcePipe = "";
       targetPipe = "";
       if (f.targetPipe == null) {
         f.targetPipe = f.name;
       }
+
+
       $(".sourceWindow").each(function (i, element) {
         var $element = $(element)[0];
         let refactoredText = $element.lastChild.firstChild.innerHTML;
@@ -79,10 +88,13 @@ export default class ForwardGenerator {
           targetPipe = $($element).attr('id');
         }
       });
+
       let paintStyle = {
         stroke: "#000000",
         strokeWidth: 3
       }
+
+
       if (f.name == 'failure' || f.name == 'exception') {
         paintStyle.stroke = "#FF0000";
       } else if (f.name == 'success') {
@@ -90,8 +102,9 @@ export default class ForwardGenerator {
       } else if (f.name == "request" || f.name == 'response') {
         paintStyle.dashstyle = "2 4";
       }
+
+
       if (sourcePipe != "" && targetPipe != "") {
-        console.log(sourcePipe, targetPipe)
         instance.connect({
           source: sourcePipe,
           target: targetPipe,
@@ -104,7 +117,7 @@ export default class ForwardGenerator {
               padding: 100
             }]
           ],
-          connector: [this.connectorType, {
+          connector: [connectorType, {
             stub: [40, 60],
             gap: 10,
             cornerRadius: 5,

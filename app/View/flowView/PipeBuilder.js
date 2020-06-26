@@ -16,8 +16,8 @@ export default class PipeBuilder {
         return this;
     }
 
-    isExit(isExit) {
-        this.isExit = isExit;
+    isExit(exit) {
+        this.exit = exit;
         return this;
     }
 
@@ -27,16 +27,20 @@ export default class PipeBuilder {
     }
 
     build() {
-        if(!('isExit' in this)) {
+        if (!('isExit' in this)) {
             throw new Error('isExit was not defined');
-        } else if(!('positions' in this)) {
+        } else if (!('positions' in this)) {
             this.positions = null;
-        } else if(!('extra' in this)) {
+        } else if (!('extra' in this)) {
             this.extra = null;
-        } else if(!('descText' in this)) {
+        } else if (!('descText' in this)) {
             this.descText = null;
+        } else if (!('exit' in this)) {
+            this.isExit = false;
         }
 
-        return new PipeView(this.flowView, this.name, this.positions, this.extra, this.isExit, this.descText);
+        if (this.name != null && this.flowView != null) {
+            return new PipeView(this.flowView, this.name, this.positions, this.extra, this.exit, this.descText);
+        }
     }
 }
