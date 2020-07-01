@@ -7,6 +7,7 @@
 	<link rel="stylesheet" data-name="vs/editor/editor.main" href="node_modules/monaco-editor/min/vs/editor/editor.main.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link href="fileTree/dist/css/file-tree.min.css" rel="stylesheet">
+	<link href="node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="media/fontawesome/css/all.css">
 	<link rel="stylesheet" href="css/app.css">
 	<link rel="stylesheet" href="css/flowThemes.css">
@@ -24,29 +25,12 @@
 
 	<div class="tools-editors-wrapper">
 		<div class="top-wrapper">
-			<input type="file" accept="application/x-zip-compressed" id="fileReader">
-			<div class="sliderContainter">
-				<label>zoom:</label>
-				<input type="range" min="1" max="10" value="5" class="slider" id="slider">
-			</div>
+			<p class="wrapper">File</p>
 			<select id="adapterSelect">
 			</select>
-			<div class="menu">
-				<img src="https://img.icons8.com/cotton/64/000000/menu.png">
-				<ul class="menu-list">
-					<li id="lineChanges">Curve lines</li>
-					<li id="toggleH">Toggle horizontal</li>
-					<li id="runXsd">Run xsd</li>
-					<li id="beautify">Beautify</li>
-					<li id="downloadLink">Download flow</li>
-					<li id="uploadFile">Download file</li>
-					<li id="fullFlow">Fullscreen flow</li>
-					<li id="fullEditor">Fullscreen editor</li>
-					<li id="normalLayout">Hybrid layout</li>
-					<li id="setTheme">Set theme</li>
-				</ul>
-			</div>
-
+		</div>
+		<div class="fileBox">
+			<input type="file" accept="application/x-zip-compressed" id="fileReader">
 		</div>
 		<div class="monaco-flow-wrapper">
 			<div id="fileTree" class="fileTree">
@@ -56,7 +40,7 @@
 			</div>
 			<div id="monacoContainer" class="monacoContainer"></div>
 			<div id="flowContainer" class="flowContainer" tabindex="0">
-				<div class="jtk-demo-canvas source-target-demo normalTheme" id="canvas">
+				<div class="jtk-demo-canvas source-target-demo normalTheme context-menu-one" id="canvas">
 				</div>
 			</div>
 			<div id="palette" class="palette">
@@ -111,6 +95,8 @@
 	<script language="JavaScript" type="text/javascript" src="node_modules/jquery-ui-dist/jquery-ui.min.js"></script>
 	<script language="JavaScript" type="text/javascript" src="node_modules/jquery.mousewheel/jquery.mousewheel.js"></script>
 	<script language="JavaScript" type="text/javascript" src="node_modules/jquery.panzoom/dist/jquery.panzoom.min.js"></script>
+	<script language="JavaScript" type="text/javascript" src="node_modules/jquery-contextmenu/dist/jquery.contextMenu.js"></script>
+	<script language="JavaScript" type="text/javascript" src="node_modules/jquery-contextmenu/dist/jquery.ui.position.min.js"></script>
 	<script src="fileTree/dist/js/file-tree.min.js"></script>
 
 

@@ -1,8 +1,8 @@
 import CodeModel from '../Model/CodeModel.js';
 import CodeView from '../View/codeView/CodeView.js';
-import ToBeautifulSyntax from '../View/codeView/ToBeautifulSyntax.js';
 import JSZip from '../../node_modules/jszip/dist/jszip.js';
 import FileTreeView from '../View/codeView/FileTreeView.js';
+import CodeService from '../services/CodeService.js';
 import {
   saveAs
 } from 'file-saver';
@@ -14,10 +14,7 @@ export default class CodeController {
     this.ibisdocModel = ibisdocModel;
     this.codeView = new CodeView();
     this.codeView.addListener(this);
-    this.toBeautiful = new ToBeautifulSyntax();
-    this.getXsd();
-    this.getIbisdoc();
-    this.getConfigurations();
+    this.codeService = new CodeService(this.codeView, ibisdocModel, mainController);
     this.codeView.makeEditor();
     this.editor = this.codeView.editor;
     this.fileTreeView = new FileTreeView(this.editor);
@@ -25,18 +22,12 @@ export default class CodeController {
   }
 
 
-  /**
-  * function that generates a zip from the file tree zip
-  * @function saveFile
-  * @file saves configuration as a zip file.
-  */
-
   saveFile() {
     let zip = this.fileTreeView.zip;
     var FileSaver = require('file-saver');
     zip.generateAsync({
       type: "blob"
-    }).then(function(blob) {
+    }).then(function (blob) {
       FileSaver.saveAs(blob, "FrankConfiguration");
     })
   }
@@ -45,11 +36,7 @@ export default class CodeController {
   initListeners() {
     let cur = this;
 
-    /**
-      @event adapterSelect
-      @param {object} e this defines the error object when something goes wrong
-    */
-    $('#adapterSelect').on('change', function(e) {
+    $('#adapterSelect').on('change', function (e) {
       let adapter = $('#adapterSelect').val();
       let textConfig = localStorage.getItem(adapter);
       cur.editor.getModel().setValue(textConfig);
@@ -61,29 +48,29 @@ export default class CodeController {
       }
     });
 
-    $('#fileReader').on('change', function(e) {
+    $('#fileReader').on('change', function (e) {
       var input = event.target;
       console.log(input.files);
       cur.fileTreeView.makeTree(input, cur.editor);
     });
 
 
-    $('#uploadFile').on('click', function(e) {
+    $('#uploadFile').on('click', function (e) {
       cur.saveFile();
     })
 
-    $('#adapterSelect').on('click', function(e) {
+    $('#adapterSelect').on('click', function (e) {
       let adapter = $('#adapterSelect').val();
       localStorage.setItem(adapter, cur.editor.getModel().getValue());
     });
 
-    $('#beautify').click(function() {
+    $('#beautify').click(function () {
       let prettyXML = beautify.xml(cur.editor.getValue(), 4);
       cur.editor.getModel().setValue(prettyXML);
     });
 
-    //generate the adapter with the current possition of the mouse.
-    cur.editor.onMouseDown(function(e) {
+
+    cur.editor.onMouseDown(function (e) {
       e.target.range.startLineNumber = 1;
       e.target.range.startColumn = 1;
       let textPossition = cur.editor.getModel().getValueInRange(e.target.range);
@@ -98,10 +85,10 @@ export default class CodeController {
 
     function debounce(func, wait, immediate) {
       var timeout;
-      return function() {
+      return function () {
         var context = this,
           args = arguments;
-        var later = function() {
+        var later = function () {
           timeout = null;
           if (!immediate) func.apply(context, args);
         };
@@ -112,19 +99,17 @@ export default class CodeController {
       };
     };
 
-    //when typing, generate the flow.
-    this.editor.getModel().onDidChangeContent(debounce(function() {
+    this.editor.getModel().onDidChangeContent(debounce(function () {
       cur.quickGenerate()
     }, 250))
 
-    //run the xsd to the xml that is currently in the editor
-    $('#runXsd').click(function() {
+    $('#runXsd').click(function () {
       let validate = cur.validateConfiguration(),
         lineNumber = 0;
       cur.undoDecorations();
       if (validate.errors !== null) {
         console.log(validate.errors);
-        validate.errors.forEach(function(item, index) {
+        validate.errors.forEach(function (item, index) {
           lineNumber = item.match(/:.*?:/)[0].replace(/:/g, '');
           cur.decorateLine(lineNumber);
         });
@@ -139,9 +124,6 @@ export default class CodeController {
         $('#canvas').css('display', 'block');
         $('.customErrorMessage').remove();
         cur.mainController.generateFlow();
-        // if(editor.getModel().getValue() == "") {
-        //   undoDecorations();
-        // }
       } catch (error) {
         console.log("error", error);
         cur.mainController.flowController.flowView.modifyFlow("error", error);
@@ -216,144 +198,4 @@ export default class CodeController {
     this.codeView.changeParameterAttribute(pipeName, paramName, attribute, value);
   }
 
-
-  getIbisdoc() {
-    let cur = this;
-    fetch('../rest/ibisdoc/ibisdoc.json', {
-        method: 'GET'
-      })
-      .then(response => {
-        return response.json()
-      })
-      .then(data => {
-        // Work with JSON data here
-        cur.codeView.ibisdocJson = data;
-        cur.ibisdocModel.setIbisdoc(data);
-        cur.mainController.setPipes(data);
-      })
-      .catch(err => {
-        // Do something for an error here
-        console.log("couldn't load ibisdoc, now switching to default ibisdoc");
-        this.getDefaultIbisdoc();
-      })
-
-  }
-
-  getDefaultIbisdoc() {
-    let cur = this;
-    fetch('https://cors-anywhere.herokuapp.com/https://ibis4example.ibissource.org/rest/ibisdoc/ibisdoc.json', {
-        method: 'GET'
-      })
-      .then(response => {
-        return response.json()
-      })
-      .then(data => {
-        // Work with JSON data here
-        cur.codeView.ibisdocJson = data;
-        cur.mainController.setPipes(data);
-      })
-      .catch(err => {
-        // Do something for an error here
-        console.log(err);
-
-      })
-  }
-
-  getXsd() {
-    fetch('../rest/ibisdoc/ibisdoc.xsd', {
-        method: 'GET'
-      })
-      .then(response => {
-        return response.text()
-      })
-      .then(data => {
-        // Work with JSON data here
-        localStorage.setItem("ibisdocXsd", data);
-        console.log("xsd is loaded!, here");
-      })
-      .catch(err => {
-        console.log("couldn't load xsd, now loading deafult xsd", err);
-        this.getDefaultXsd();
-        // Do something for an error here
-      })
-  }
-
-  getDefaultXsd() {
-    fetch('https://cors-anywhere.herokuapp.com/https://ibis4example.ibissource.org/rest/ibisdoc/ibisdoc.xsd', {
-        method: 'GET'
-      })
-      .then(response => {
-        return response.text()
-      })
-      .then(data => {
-        // Work with JSON data here
-        localStorage.setItem("ibisdocXsd", data);
-        console.log("xsd is loaded!, here");
-      })
-      .catch(err => {
-        console.log("not loaded xsd", err);
-        // Do something for an error here
-      })
-  }
-
-  getConfigurations(secondTry) {
-    let cur = this,
-      path = '../iaf/api/configurations';
-    if (secondTry) {
-      path = '../' + path;
-    }
-    fetch(path, {
-        method: 'GET'
-      })
-      .then(response => {
-        return response.text();
-      })
-      .then(response => {
-        let configurations = [],
-          dom, obj;
-        response.match(/<[cC]onfiguration[^]*?>[^]*?<\/[cC]onfiguration>|<IOS-Adaptering[^]*?>[^]*?<\/IOS-Adaptering>/g).forEach(function(item, index) {
-          if (item != null) {
-            configurations.push(item);
-          } else {
-            console.log('unknown configuration encountered');
-          }
-        })
-
-        return configurations;
-      })
-      .then(response => {
-        response.forEach(function(item, index) {
-          if (item.match(/<Configuration/g) == null) {
-            if (item.match(/IOS-Adaptering/g) != null) {
-              item = item.replace(/IOS-Adaptering/g, 'Configuration');
-            }
-            response[index] = cur.toBeautiful.toBeautifulSyntax(item);
-            // let name = item.match(/<configuration[^]*?name=".*?"/g);
-            // if (name != null) {
-            //   name = name[0].match(/".*?"/g)[0].replace(/"/g, '');
-            //   console.log(name);
-            //   localStorage.setItem(name, cur.toBeautiful.toBeautifulSyntax(item));
-            // } else {
-            //   localStorage.setItem(index, cur.toBeautiful.toBeautifulSyntax(item));
-            // }
-          } else {
-            localStorage.setItem(index, item);
-          }
-
-        });
-        return response;
-      })
-      .then(data => {
-        // Work with JSON data here
-        cur.codeView.addOptions(data);
-      })
-      .catch(err => {
-        if (secondTry) {
-          console.log('couldnt load configurations', err)
-        } else {
-          console.log("configurations path was incorrect, trying other path now...", err);
-          //cur.getConfigurations(true);
-        }
-      })
-  }
 }

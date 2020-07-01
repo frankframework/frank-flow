@@ -32,14 +32,14 @@ export default class GenerateInfoParametersView {
       }
     
       generatePipeParameterButtons(param) {
-        let deleteButton = $('<button></button>'),
+        let deleteButton = $('<i></i>'),
         addButton = $('<i></i>');
     
-      deleteButton.text('X').attr({
+      deleteButton.attr({
         id: 'parameterDelete',
         name: param["name"]
       })
-      .addClass('paramDeleteButton')
+      .addClass('fa fa-trash')
     
       addButton.addClass("fas fa-plus-circle").attr({
         id: 'parameterAttributeAdd',

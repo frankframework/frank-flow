@@ -8,11 +8,7 @@
   margin-left: 1%;
 }
 
-.jtk-demo-main, #canvas {
-  min-height: 2500px;
-  min-width: 2500px;
-  position: absolute;
-}
+
 
 
 path, .jtk-endpoint {

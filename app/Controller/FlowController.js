@@ -47,77 +47,98 @@ export default class FlowController {
     }
   }
 
+  toggleHorizontal() {
+    let horizontalBuild = this.flowView.horizontalBuild;
+    if (!horizontalBuild) {
+      this.flowView.horizontalBuild = true;
+      $('#toggleH').addClass('selectedItem');
+    } else {
+      this.flowView.horizontalBuild = false;
+      $('#toggleH').removeClass('selectedItem');
+    }
+    this.flowView.generateFlow(this.flowView);
+  }
+
+  setFullFlow() {
+    $('#flowContainer').addClass('fullFlowContainer');
+    $('#flowContainer').css('display', 'flex');
+    $('#monacoContainer').css('display', 'none');
+    $('#palette').css('display', 'flex');
+    $('.monaco-flow-wrapper').css('justify-content', 'flex-end');
+    this.flowView.customWidth = true;
+  }
+
+  setFullEditor() {
+    $('#monacoContainer').addClass('fullMonacoContainer');
+    $('#monacoContainer').css('display', 'flex');
+    $('#flowContainer').css('display', 'none');
+    $('#palette').css('display', 'none');
+  }
+
+  setHybrid() {
+    $('#monacoContainer').removeClass('fullMonacoContainer');
+    $('#flowContainer').removeClass('fullFlowContainer');
+    $('#palette').css('display', 'flex');
+    $('#monacoContainer').css('display', 'flex');
+    $('#flowContainer').css('display', 'flex');
+  }
+
+  setTheme() {
+    let theme = prompt('choose your theme!');
+    if(theme.match(/theme/gi) == null) return;
+
+    if(this.currentTheme !== null) {
+      $('#canvas').removeClass(this.currentTheme);
+    }
+    this.currentTheme = theme;
+    $('#canvas').addClass(theme);
+  }
+
   initHandlers() {
     let cur = this;
-
-
-
-    $('#addPipe').click(function() {
-      cur.flowView.modifyFlow('add', {
-        name: "newPipe",
-        className: "customPipe"
-      });
+      $.contextMenu({
+        selector: '.context-menu-one',
+        zIndex: 3001,
+        callback: function(key, options) {
+            var m = "clicked: " + key;
+            window.console && console.log(m) || alert(m); 
+        },
+        items: {
+            "curve": {name: "Toggle curve", icon: "fas fa-ruler-combined",
+            callback: function() {
+              cur.flowView.toggleConnectorType(cur.flowView);
+              return true;
+            }},
+            "horizontal": {name: "Toggle horizontal", icon: "fas fa-ruler-horizontal",
+              callback: function() {
+                cur.toggleHorizontal();
+                return true;
+            }},
+            "xsd": {name: "Run XSD", icon: "fas fa-play-circle"},
+            "download": {name: "Export SVG", icon: "paste",
+              callback: function() {
+                cur.flowView.getImage();
+                return true;
+              }},
+            "theme": {name: "Set theme", icon: "fas fa-adjust",
+              callback: function() {
+                cur.setTheme();
+              }},
+            "sep1": "---------",
+            "flow": {name: "Flow fullscreen", icon: "fas fa-compress",
+              callback: function() {
+                cur.setFullFlow();
+              }},
+            "hybrid": {name: "Hybrid", icon: "fas fa-window-restore",
+              callback: function() {
+                cur.setHybrid();
+              }},
+            // "editor": {name: "Editor", icon: "fas fa-file-code",
+            //   callback: function() {
+            //     cur.setFullEditor();
+            //   }}
+        }
     });
-
-    $('#downloadLink').click(function() {
-      cur.flowView.getImage();
-    })
-
-    $('#setData').click(function() {
-      cur.flowView.generateFlow(cur.flowView);
-    });
-
-    $('#lineChanges').click(function() {
-      cur.flowView.toggleConnectorType(cur.flowView);
-    });
-
-    //toggle building the flow in horizontal mode.
-    $('#toggleH').click(function() {
-      let horizontalBuild = cur.flowView.horizontalBuild;
-      if (!horizontalBuild) {
-        cur.flowView.horizontalBuild = true;
-        $('#toggleH').addClass('selectedItem');
-      } else {
-        cur.flowView.horizontalBuild = false;
-        $('#toggleH').removeClass('selectedItem');
-      }
-      cur.flowView.generateFlow(cur.flowView);
-    });
-
-    $('#fullFlow').on('click', function() {
-      $('#flowContainer').addClass('fullFlowContainer');
-      $('#flowContainer').css('display', 'flex');
-      $('#monacoContainer').css('display', 'none');
-      $('#palette').css('display', 'flex');
-      $('.monaco-flow-wrapper').css('justify-content', 'flex-end');
-      cur.flowView.customWidth = true;
-    });
-
-    $('#fullEditor').on('click', function() {
-      $('#monacoContainer').addClass('fullMonacoContainer');
-      $('#monacoContainer').css('display', 'flex');
-      $('#flowContainer').css('display', 'none');
-      $('#palette').css('display', 'none');
-    });
-
-    $('#normalLayout').on('click', function() {
-      $('#monacoContainer').removeClass('fullMonacoContainer');
-      $('#flowContainer').removeClass('fullFlowContainer');
-      $('#palette').css('display', 'flex');
-      $('#monacoContainer').css('display', 'flex');
-      $('#flowContainer').css('display', 'flex');
-    });
-
-    $('#setTheme').on('click', function() {
-      let theme = prompt('choose your theme!');
-      if(theme.match(/theme/gi) == null) return;
-
-      if(cur.currentTheme !== null) {
-        $('#canvas').removeClass(cur.currentTheme);
-      }
-      cur.currentTheme = theme;
-      $('#canvas').addClass(theme);
-    })
 
     //rename a pipe
     $("#canvas").on('dblclick', '#strong', function(e) {
@@ -156,7 +177,6 @@ export default class FlowController {
         disabled: false,
         containment: '#canvas',
         drag: function() {
-          //console.log(cur.flowView.modifyFlow);
           cur.flowView.moving = true;
           let dragObj = {
             x: $(sourceDiv).css('left'),
@@ -206,19 +226,42 @@ export default class FlowController {
       var current_pullY = parseInt($('#canvas').css('transform').split(',')[5]);
       var current_pullX = parseInt($('#canvas').css('transform').split(',')[4]);
       if (current_pullX >= 0) {
-        $panzoom.panzoom('pan', 0, current_pullY);
+         $panzoom.panzoom('pan', 0, current_pullY);
       }
       if (current_pullY <= -Math.abs($('#canvas').css('height').replace('px', '')) + 1000) {
         $panzoom.panzoom('pan', current_pullX, -Math.abs($('#canvas').css('height').replace('px', '')) + 1000);
+        console.log('y< 1000');
       }
       if (current_pullX <= -1540) {
         $panzoom.panzoom('pan', -1540, current_pullY);
+        console.log('x< 1540');
       }
       if (current_pullY >= 0) {
         $panzoom.panzoom('pan', current_pullX, 0);
+        console.log('y> 0');
       }
       $('#flowContainer').attr('style', '');
     });
+
+    function calculateCanvasBorder(direction) {
+        $('#canvas').css('min-width', '+=500');
+        let centerX = parseInt($('#canvas').css('min-width').replace('px', '')) / 2;
+        console.log('centerX: ' + centerX);
+        $('.sourceWindow').each((index, element) => {
+          $(element).css('left', '+=250')
+          let pipe = {
+            x: $(element).css('left'),
+            y: $(element).css('top'),
+            name: element.lastElementChild.firstElementChild.innerHTML
+          }
+          if ($(element).hasClass('exit')) {
+            cur.flowView.modifyFlow('dragExit', pipe);
+          } else {
+            cur.flowView.modifyFlow('drag', pipe);
+          }
+        });
+        console.log('x> 0', $('#canvas').css('min-width'));
+    }
 
     //make zoom possible
     $panzoom.parent().on('mousewheel.focal', function(e) {

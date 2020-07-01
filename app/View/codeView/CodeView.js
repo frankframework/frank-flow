@@ -61,54 +61,44 @@ export default class CodeView {
     }
   }
 
-  //add options to the dropdown.
   addOptions(adapters) {
     this.optionView.addOptions(adapters);
   }
 
-  //select a pipe.
   selectPipe(name) {
     this.codePipeView.selectPipe(name);
   }
 
-  //change the type of a pipes
   changePipeType(name, type, oldType) {
     this.codePipeView.changePipeType(name, type, oldType);
   }
 
-  //change the name.
   changeName(oldWord, newWord) {
     this.codePipeView.changeName(oldWord, newWord);
   }
 
-  //change possition for pipes
   changePossition(name, newX, newY) {
     this.codePipeView.changePossition(name, newX, newY);
     // this.codeAttributesView.changeAttribute(name, 'x', newX);
     // this.codeAttributesView.changeAttribute(name, 'y', newY);
   }
 
-  //change the possitions for the exits
   changeExitPossition(name, newX, newY) {
     this.exitPipeView.changeExitPossition(name, newX, newY);
   }
 
-  //add a forward
   changeAddForward(name, path) {
     this.codePipeView.changeAddForward(name, path);
   }
 
-  //delete a forward to an pipe.
   deleteForward(name, path) {
     this.codePipeView.deleteForward(name, path);
   }
 
-  // a method to add a pipe by hand.
   changeAddPipe(name, possitions, className = "customPipe") {
     this.codePipeView.changeAddPipe(name, possitions, className);
   }
 
-  //gives back the types of pipes with the name of the pipe.
   getTypes() {
     return this.typesView.getTypes();
   }

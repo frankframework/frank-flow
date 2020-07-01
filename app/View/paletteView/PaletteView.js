@@ -17,9 +17,7 @@ export default class PaletteView {
   }
 
   generatePalettePipes(pipes) {
-    let pipeView = new PipeView(this.flowView),
-      types = this.flowView.getTypes(),
-      cur = this,
+    let cur = this,
       palette = $('#palette');
 
     let dragData = {

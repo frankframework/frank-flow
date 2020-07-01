@@ -33,10 +33,10 @@ export default class PipeInfoView {
     this.generatePipeForwards();
   }
 
-  //generate <p> tags for all forwards in a pipe.
   generatePipeForwards() {
     let cur = this;
     this.flowModel.getForwards().forEach(function(item, index) {
+
       if (item.sourcePipe == cur.pipeName) {
         $('#forwardsInfo').append($('<p></p>').text(item.targetPipe + ' - ' + item.name).addClass('forwardInfo'));
       }
@@ -53,11 +53,9 @@ export default class PipeInfoView {
     paramGenerator.generatePipeParameters(parameters);
   }
 
- 
-
-  //get all the different pipe types for the dropdown
   generateTypes(data) {
     let option;
+    console.log(data)
     data[2].classes.forEach(function(item, index) {
       option = $('<option></option>').attr('value', item.name).text(item.name);
       $('#typeSelect').append(option);

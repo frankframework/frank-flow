@@ -28,24 +28,21 @@ export default class FlowView {
 
   getInstance() {
     this.sourceAnchors = [
-        "Top", "Right", "Left",
-        [0.25, 1, 0, 1],
-        [0.5, 1, 0, 1],
-        [0.75, 1, 0, 1],
-        [1, 1, 0, 1]
-      ],
+      "Top", "Right", "Left",
+      [0.25, 1, 0, 1],
+      [0.5, 1, 0, 1],
+      [0.75, 1, 0, 1],
+      [1, 1, 0, 1]
+    ],
       this.instance = window.instance = jsPlumb.getInstance({
-        // drag options
         DragOptions: {
           cursor: "pointer",
           zIndex: 2000
         },
-        // default to a gradient stroke from blue to green.
         PaintStyle: {
           stroke: "#000000",
           strokeWidth: 3
         },
-        //the arrow overlay for the connection
         ConnectionOverlays: [
           ["Arrow", {
             location: 1,
@@ -57,6 +54,11 @@ export default class FlowView {
         Container: "canvas"
       });
 
+    this.setBasicType();
+
+  }
+
+  setBasicType() {
     let basicType = {
       connector: ["StateMachine", {
         stub: [40, 60],
@@ -68,11 +70,6 @@ export default class FlowView {
     this.instance.registerConnectionType("basic", basicType);
   }
 
-  /*
-   * one function to modify the flow and code at the same time.
-   * @param change: insert here the action you want to do.
-   * @param obj: insert an object with necessary information.
-   */
   modifyFlow(change, obj) {
     switch (change) {
       case "generate":
@@ -120,15 +117,32 @@ export default class FlowView {
     var node = document.getElementById('canvas');
 
     domtoimage.toSvg(node)
-      .then(function(dataUrl) {
+      .then(function (dataUrl) {
         var link = document.createElement('a');
         link.download = localStorage.getItem('currentAdapter') + '.svg';
         link.href = dataUrl;
         link.click();
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.error('oops, something went wrong!', error);
       });
+  }
+
+  addCustomPipe(name, className, xpos, ypos) {
+    let newPipe = this.addPipe(name, {
+      x: xpos,
+      y: ypos
+    });
+
+    return {
+      type: "changeAddPipe",
+      name: name,
+      possitions: {
+        x: xpos,
+        y: ypos
+      },
+      className: className
+    }
   }
 
   cleanPossitions(obj) {
@@ -150,22 +164,6 @@ export default class FlowView {
     return null;
   }
 
-  addCustomPipe(name, className, xpos, ypos) {
-    let newPipe = this.addPipe(name, {
-      x: xpos,
-      y: ypos
-    });
-
-    return {
-      type: "changeAddPipe",
-      name: newPipe,
-      possitions: {
-        x: xpos,
-        y: ypos
-      },
-      className: className
-    }
-  }
 
   toggleConnectorType(cur) {
     if (cur.connectorType === "Flowchart") {
@@ -177,7 +175,7 @@ export default class FlowView {
   }
 
   addPipe(name, possitions, extra, isExit) {
-    return this.flowGenerator.addPipe(name, possitions, extra, isExit);
+    //return this.flowGenerator.pipeGenerator.addPipe(name, possitions, extra, isExit);
   }
 
   getTypes() {
@@ -187,11 +185,9 @@ export default class FlowView {
     return this.types;
   }
 
-  // a function to put distance between the pipes
   setOffsets(possitions) {
     let boxOffset = 0,
       exitOffset = 0;
-    let container = null;
 
     this.moving = true;
     for (let i = 1; i <= this.windows; i++) {
@@ -201,48 +197,62 @@ export default class FlowView {
       }
       if (!possitions) {
         let box = $('#sourceWindow' + i);
-        if (!this.horizontalBuild) {
-          box.css("top", boxOffset + "px");
-        } else {
-          box.css("top", "100px");
-          box.css("left", boxOffset + "px");
-        }
+        this.setBuildDirection(box, boxOffset);
         if (this.windows == 2) {
           this.moving = false;
           return;
         }
-        if (!box.hasClass('exit')) {
-          this.modifyFlow('drag', {
-            name: box[0].lastChild.firstElementChild.textContent,
-            x: box.css("left"),
-            y: box.css("top")
-          });
-        } else {
-          exitOffset += 250;
-          this.modifyFlow('dragExit', {
-            name: box[0].lastChild.firstElementChild.textContent,
-            x: parseInt(box.css("left").replace('px', '')) + exitOffset + 'px',
-            y: box.css("top")
-          });
-        }
+        this.setExitPosition(box, exitOffset);
       }
-      let totalLength, windowLength;
-      if (!this.horizontalBuild) {
-        totalLength = boxOffset + ((64 * i) - 1450);
-        windowLength = parseInt($('#canvas').css('height').replace('px', ''));
-        if (totalLength > windowLength) {
-          $('#canvas').css('height', totalLength);
-        }
-      } else {
-        totalLength = boxOffset + ((64 * i) - 1000);
-        windowLength = parseInt($('#canvas').css('width').replace('px', ''));
-        if (totalLength > windowLength && !this.customWidth) {
-          $('#canvas').css('width', totalLength);
-        }
-      }
+      this.setCanvasBounds(boxOffset, i);
     }
     this.moving = false;
   }
+
+  setBuildDirection(box, boxOffset) {
+    if (!this.horizontalBuild) {
+      box.css("top", boxOffset + "px");
+    } else {
+      box.css("top", "100px");
+      box.css("left", boxOffset + "px");
+    }
+  }
+
+  setExitPosition(box, exitOffset) {
+    if (!box.hasClass('exit')) {
+      this.modifyFlow('drag', {
+        name: box[0].lastChild.firstElementChild.textContent,
+        x: box.css("left"),
+        y: box.css("top")
+      });
+    } else {
+      exitOffset += 250;
+      this.modifyFlow('dragExit', {
+        name: box[0].lastChild.firstElementChild.textContent,
+        x: parseInt(box.css("left").replace('px', '')) + exitOffset + 'px',
+        y: box.css("top")
+      });
+    }
+  }
+
+  setCanvasBounds(boxOffset, i) {
+    let totalLength, windowLength;
+    if (!this.horizontalBuild) {
+      totalLength = boxOffset + ((64 * i) - 1450);
+      windowLength = parseInt($('#canvas').css('height').replace('px', ''));
+      if (totalLength > windowLength) {
+        $('#canvas').css('height', totalLength);
+      }
+    } else {
+      totalLength = boxOffset + ((64 * i) - 1000);
+      windowLength = parseInt($('#canvas').css('width').replace('px', ''));
+      if (totalLength > windowLength && !this.customWidth) {
+        $('#canvas').css('width', totalLength);
+      }
+    }
+  }
+
+
 
   generateFlow() {
     this.notifyListeners({
@@ -256,10 +266,16 @@ export default class FlowView {
     $('#canvas').empty();
     $('#canvas').css('display', 'none');
     $('.customErrorMessage').remove();
-    $('#flowContainer').append(
-      $("<h1></h1>").text('Configuration is incorrect, please check your xml.').addClass('customErrorMessage'),
-      $('<p></p>').text(' \n\n\n your error: \n' + this.flowModel.getTransformedXml()).addClass('customErrorMessage')
-    );
+    if (e == "dupplicate") {
+      $('#flowContainer').append(
+        $("<h1></h1>").text('Duplicate pipe, please remove any duplicates.').addClass('customErrorMessage'),
+      );
+    } else {
+      $('#flowContainer').append(
+        $("<h1></h1>").text('Configuration is incorrect, please check your xml.').addClass('customErrorMessage'),
+        $('<p></p>').text(' \n\n\n your error: \n' + this.flowModel.getTransformedXml()).addClass('customErrorMessage')
+      );
+    }
     console.log('error: ', e, this.flowModel.getTransformedXml())
   }
 }
