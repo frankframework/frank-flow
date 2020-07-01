@@ -174,7 +174,7 @@ export default class PipeInfoController {
         cur.addParameter(parameterName);
       }
     })
-    $('#parametersInfo .parameterContent button').on('click', function(e) {
+    $('#parametersInfo #parameterDelete').on('click', function(e) {
       let parameterName = $(this).attr('name');
       cur.deleteParameter(parameterName);
     })

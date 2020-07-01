@@ -11,7 +11,18 @@
   margin-left: 10%;
 }
 
-ul {
+.fileBox {
+  width: 100%;
+  height: 10%;
+  display: none;
+}
+
+.wrapper:hover ~ .fileBox {
+  display: flex;
+  justify-content: start;
+}
+
+/* ul {
   display: inline;
   margin: 0;
   padding: 0;
@@ -49,4 +60,4 @@ ul li ul li:hover {
 
 .selectedItem {
   background: #555;
-}
+} */
