@@ -136,7 +136,7 @@ export default class FlowView {
 
     return {
       type: "changeAddPipe",
-      name: newPipe,
+      name: name,
       possitions: {
         x: xpos,
         y: ypos
@@ -175,7 +175,7 @@ export default class FlowView {
   }
 
   addPipe(name, possitions, extra, isExit) {
-    return this.flowGenerator.pipeGenerator.addPipe(name, possitions, extra, isExit);
+    //return this.flowGenerator.pipeGenerator.addPipe(name, possitions, extra, isExit);
   }
 
   getTypes() {
