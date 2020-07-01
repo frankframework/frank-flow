@@ -30,8 +30,8 @@ export default class PaletteView {
         cur.flowView.modifyFlow("add", {
           name: "new" + name,
           className: name,
-          xpos: e.finalPos[0] - 500,
-          ypos: e.finalPos[1]
+          xpos: 500,
+          ypos: 500
         });
       }
     }
