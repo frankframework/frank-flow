@@ -12,11 +12,6 @@ export default class PipeGenerator {
         this.customElementGenerator = new CustomElementGenerator(flowView);
     }
 
-    // addPipe(name = "pipe" + (this.flowView.windows), positions, extra = "", isExit, descText) {
-    //     return this.pipeView.addPipe(name, possitions, extra, isExit, descText);
-
-    // }
-
     generateAllPipes(transformedXml) {
         if (transformedXml.Adapter.Pipeline.pipe != null) {
             $('#canvas').text("Adapter: " + transformedXml.Adapter['@name'] + ' ');
@@ -87,7 +82,7 @@ export default class PipeGenerator {
             extraText = this.createExtraText(pipe, p);
             docText = this.createDocText(pipe, p);
 
-            //this.addPipe(name, positions, extraText, null, docText);
+
             new PipeBuilder(this.flowView, name)
                 .withPositions(possitions)
                 .withExtra(extraText)
@@ -165,7 +160,6 @@ export default class PipeGenerator {
 
     generateSinglePipe(pipe, forwards) {
         let name = pipe['@name'];
-        //this.addPipe(name);
         new PipeBuilder(this.flowView, name)
         .build()
 

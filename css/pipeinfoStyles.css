@@ -89,6 +89,10 @@
   width: 30%;
 }
 
+.tabs {
+  width: 100%;
+}
+
 #parameterDelete {
   margin-left: 58%;
   margin-top: .5%;
