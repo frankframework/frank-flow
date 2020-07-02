@@ -42,8 +42,15 @@ export default class PipeGenerator {
             }
 
             if (transformedXml.Adapter.Receiver != null) {
-                let forwardData = this.customElementGenerator.addReceiver(transformedXml, forwards[0].sourcePipe);
-                forwards.push(forwardData);
+                let receiver = transformedXml.Adapter.Receiver;
+                if(Array.isArray(receiver)) {
+                    let cur = this;
+                    receiver.forEach(function(item, index) {
+                        forwards.push(cur.customElementGenerator.addReceiver(item, forwards[0].sourcePipe))
+                    })
+                } else {
+                    forwards.push(this.customElementGenerator.addReceiver(receiver, forwards[0].sourcePipe));
+                }
             }
 
             this.forwardGenerator.generateForwards(forwards);

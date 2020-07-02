@@ -5,25 +5,20 @@ export default class CustomElementGenerator {
         this.flowView = flowView;
     }
 
-    addReceiver(transformedXml, target) {
+    addReceiver(receiver, target) {
         let xCord,
             yCord,
             prependText = '(receiver): ';
 
-        if (transformedXml.Adapter.Receiver['@x'] != null && transformedXml.Adapter.Receiver['@y'] != null) {
-            xCord = transformedXml.Adapter.Receiver['@x'];
-            yCord = transformedXml.Adapter.Receiver['@y']
+        if (receiver['@x'] != null && receiver['@y'] != null) {
+            xCord = receiver['@x'];
+            yCord = receiver['@y']
         } else {
             xCord = 600;
             yCord = 400;
         }
 
-        // this.pipeGenerator.addPipe(prependText + transformedXml.Adapter.Receiver['@name'], {
-        //     x: xCord,
-        //     y: yCord
-        // });
-
-        let name = prependText + transformedXml.Adapter.Receiver['@name'],
+        let name = prependText + receiver['@name'],
             positions = {
                 x: xCord,
                 y: yCord
@@ -33,7 +28,7 @@ export default class CustomElementGenerator {
             .build();
 
         return {
-            sourcePipe: prependText + transformedXml.Adapter.Receiver['@name'],
+            sourcePipe: prependText + receiver['@name'],
             targetPipe: target,
             name: 'request'
         };
@@ -63,7 +58,6 @@ export default class CustomElementGenerator {
                         y: ypos
                     }
                 }
-                // cur.pipeGenerator.addPipe(name, positions, "", true);
                 new PipeBuilder(cur.flowView, name)
                     .withPositions(positions)
                     .isExit(true)
@@ -79,7 +73,6 @@ export default class CustomElementGenerator {
                     y: ypos
                 }
             }
-            // this.pipeGenerator.addPipe(name, positions, "", true);
             new PipeBuilder(this.flowView, name)
             .withPositions(positions)
             .isExit(true)

@@ -104,6 +104,10 @@ export default class FlowController {
             window.console && console.log(m) || alert(m); 
         },
         items: {
+            "tibcoMode": {name: "Tibco mode", icon: "fas fa-globe-americas",
+            callback: function() {
+              return true;
+            }},
             "curve": {name: "Toggle curve", icon: "fas fa-ruler-combined",
             callback: function() {
               cur.flowView.toggleConnectorType(cur.flowView);
