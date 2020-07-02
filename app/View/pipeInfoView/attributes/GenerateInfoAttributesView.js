@@ -22,5 +22,6 @@ export default class GenerateInfoAttributesView {
             $('#attributesInfo').append(attrWrapper);
           }
         }
+        new SimpleBar($('#attributesInfo')[0]);
       }
 }

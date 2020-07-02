@@ -14,6 +14,7 @@ export default class GenerateInfoParametersView {
             parameterBox.append(buttons.deleteButton);
             $('#parametersInfo').append(parameterBox, parameterToolbox);
           });
+          new SimpleBar($('#parametersInfo')[0]);
         }
       }
     

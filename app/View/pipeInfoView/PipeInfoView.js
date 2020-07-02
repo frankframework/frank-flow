@@ -10,6 +10,7 @@ export default class PipeInfoView {
     this.setPipeName(this.pipeName);
     this.generatePipeForwards();
     $('.pipeInfo').tabs();
+    new SimpleBar($('#pipeNameTypeInfo')[0]);
   }
 
   setPipeName(name) {

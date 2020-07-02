@@ -43,5 +43,7 @@ export default class PaletteView {
       palette.append(toolBox);
       instance.draggable(toolBox, dragData);
     });
+
+    new SimpleBar($('#palette')[0]);
   }
 }
