@@ -12,6 +12,7 @@ export default class FlowController {
     this.paletteView.addListener(this);
     this.hoverSourceWindow = false;
     this.initHandlers();
+    localStorage.setItem("tibcoMode", false);
   }
 
   notify(data) {
@@ -85,9 +86,9 @@ export default class FlowController {
 
   setTheme() {
     let theme = prompt('choose your theme!');
-    if(theme.match(/theme/gi) == null) return;
+    if (theme.match(/theme/gi) == null) return;
 
-    if(this.currentTheme !== null) {
+    if (this.currentTheme !== null) {
       $('#canvas').removeClass(this.currentTheme);
     }
     this.currentTheme = theme;
@@ -96,56 +97,75 @@ export default class FlowController {
 
   initHandlers() {
     let cur = this;
-      $.contextMenu({
-        selector: '.context-menu-one',
-        zIndex: 3001,
-        callback: function(key, options) {
-            var m = "clicked: " + key;
-            window.console && console.log(m) || alert(m); 
+    $.contextMenu({
+      selector: '.context-menu-one',
+      zIndex: 3001,
+      callback: function (key, options) {
+        var m = "clicked: " + key;
+        window.console && console.log(m) || alert(m);
+      },
+      items: {
+        "tibcoMode": {
+          name: "Tibco mode", icon: "fas fa-globe-americas",
+          callback: function () {
+            if (localStorage.getItem("tibcoMode") == "false") {
+              localStorage.setItem("tibcoMode", "true");
+            } else {
+              localStorage.setItem("tibcoMode", "false");
+            }
+            return true;
+          }
         },
-        items: {
-            "tibcoMode": {name: "Tibco mode", icon: "fas fa-globe-americas",
-            callback: function() {
-              return true;
-            }},
-            "curve": {name: "Toggle curve", icon: "fas fa-ruler-combined",
-            callback: function() {
-              cur.flowView.toggleConnectorType(cur.flowView);
-              return true;
-            }},
-            "horizontal": {name: "Toggle horizontal", icon: "fas fa-ruler-horizontal",
-              callback: function() {
-                cur.toggleHorizontal();
-                return true;
-            }},
-            "xsd": {name: "Run XSD", icon: "fas fa-play-circle"},
-            "download": {name: "Export SVG", icon: "paste",
-              callback: function() {
-                cur.flowView.getImage();
-                return true;
-              }},
-            "theme": {name: "Set theme", icon: "fas fa-adjust",
-              callback: function() {
-                cur.setTheme();
-              }},
-            "sep1": "---------",
-            "flow": {name: "Flow fullscreen", icon: "fas fa-compress",
-              callback: function() {
-                cur.setFullFlow();
-              }},
-            "hybrid": {name: "Hybrid", icon: "fas fa-window-restore",
-              callback: function() {
-                cur.setHybrid();
-              }},
-            // "editor": {name: "Editor", icon: "fas fa-file-code",
-            //   callback: function() {
-            //     cur.setFullEditor();
-            //   }}
-        }
+        "curve": {
+          name: "Toggle curve", icon: "fas fa-ruler-combined",
+          callback: function () {
+            cur.flowView.toggleConnectorType(cur.flowView);
+            return true;
+          }
+        },
+        "horizontal": {
+          name: "Toggle horizontal", icon: "fas fa-ruler-horizontal",
+          callback: function () {
+            cur.toggleHorizontal();
+            return true;
+          }
+        },
+        "xsd": { name: "Run XSD", icon: "fas fa-play-circle" },
+        "download": {
+          name: "Export SVG", icon: "paste",
+          callback: function () {
+            cur.flowView.getImage();
+            return true;
+          }
+        },
+        "theme": {
+          name: "Set theme", icon: "fas fa-adjust",
+          callback: function () {
+            cur.setTheme();
+          }
+        },
+        "sep1": "---------",
+        "flow": {
+          name: "Flow fullscreen", icon: "fas fa-compress",
+          callback: function () {
+            cur.setFullFlow();
+          }
+        },
+        "hybrid": {
+          name: "Hybrid", icon: "fas fa-window-restore",
+          callback: function () {
+            cur.setHybrid();
+          }
+        },
+        // "editor": {name: "Editor", icon: "fas fa-file-code",
+        //   callback: function() {
+        //     cur.setFullEditor();
+        //   }}
+      }
     });
 
     //rename a pipe
-    $("#canvas").on('dblclick', '#strong', function(e) {
+    $("#canvas").on('dblclick', '#strong', function (e) {
       e.stopPropagation();
       console.log("dblclick!");
       if (this.innerHTML !== "EXIT") {
@@ -155,16 +175,16 @@ export default class FlowController {
 
 
 
-    jsPlumb.on($('#canvas'), "mouseover", ".sourceWindow, .description", function() {
+    jsPlumb.on($('#canvas'), "mouseover", ".sourceWindow, .description", function () {
       $panzoom.panzoom("disable");
     });
 
-    jsPlumb.on($('#canvas'), "mouseout", ".sourceWindow, .description", function() {
+    jsPlumb.on($('#canvas'), "mouseout", ".sourceWindow, .description", function () {
       $panzoom.panzoom("enable");
       $('#flowContainer').attr('style', '');
     });
 
-    $('#canvas').on("click", ".sourceWindow", function(e) {
+    $('#canvas').on("click", ".sourceWindow", function (e) {
       e.preventDefault();
       cur.mainController.modifyCode("undoDecorations");
       cur.mainController.modifyCode("selectPipe", {
@@ -175,12 +195,12 @@ export default class FlowController {
 
 
     //make the bottom container draggable with mouseover
-    jsPlumb.on($('#canvas'), "mouseover", ".bottomContainer", function() {
+    jsPlumb.on($('#canvas'), "mouseover", ".bottomContainer", function () {
       let sourceDiv = this.parentElement;
       let dragData = {
         disabled: false,
         containment: '#canvas',
-        drag: function() {
+        drag: function () {
           cur.flowView.moving = true;
           let dragObj = {
             x: $(sourceDiv).css('left'),
@@ -193,7 +213,7 @@ export default class FlowController {
             cur.flowView.modifyFlow('drag', dragObj);
           }
         },
-        stop: function(event, ui) {
+        stop: function (event, ui) {
           cur.flowView.moving = false;
         }
       }
@@ -206,7 +226,7 @@ export default class FlowController {
 
 
     //when leaving container not draggable
-    jsPlumb.on($('#canvas'), "mouseout", ".bottomContainer", function() {
+    jsPlumb.on($('#canvas'), "mouseout", ".bottomContainer", function () {
       let sourceDiv = this.parentElement;
       instance.draggable(sourceDiv, {
         disabled: true
@@ -226,11 +246,11 @@ export default class FlowController {
     });
 
     //make sure panzoom doesn't leave the container.
-    $panzoom.on('panzoomend', function(e) {
+    $panzoom.on('panzoomend', function (e) {
       var current_pullY = parseInt($('#canvas').css('transform').split(',')[5]);
       var current_pullX = parseInt($('#canvas').css('transform').split(',')[4]);
       if (current_pullX >= 0) {
-         $panzoom.panzoom('pan', 0, current_pullY);
+        $panzoom.panzoom('pan', 0, current_pullY);
       }
       if (current_pullY <= -Math.abs($('#canvas').css('height').replace('px', '')) + 1000) {
         $panzoom.panzoom('pan', current_pullX, -Math.abs($('#canvas').css('height').replace('px', '')) + 1000);
@@ -248,27 +268,27 @@ export default class FlowController {
     });
 
     function calculateCanvasBorder(direction) {
-        $('#canvas').css('min-width', '+=500');
-        let centerX = parseInt($('#canvas').css('min-width').replace('px', '')) / 2;
-        console.log('centerX: ' + centerX);
-        $('.sourceWindow').each((index, element) => {
-          $(element).css('left', '+=250')
-          let pipe = {
-            x: $(element).css('left'),
-            y: $(element).css('top'),
-            name: element.lastElementChild.firstElementChild.innerHTML
-          }
-          if ($(element).hasClass('exit')) {
-            cur.flowView.modifyFlow('dragExit', pipe);
-          } else {
-            cur.flowView.modifyFlow('drag', pipe);
-          }
-        });
-        console.log('x> 0', $('#canvas').css('min-width'));
+      $('#canvas').css('min-width', '+=500');
+      let centerX = parseInt($('#canvas').css('min-width').replace('px', '')) / 2;
+      console.log('centerX: ' + centerX);
+      $('.sourceWindow').each((index, element) => {
+        $(element).css('left', '+=250')
+        let pipe = {
+          x: $(element).css('left'),
+          y: $(element).css('top'),
+          name: element.lastElementChild.firstElementChild.innerHTML
+        }
+        if ($(element).hasClass('exit')) {
+          cur.flowView.modifyFlow('dragExit', pipe);
+        } else {
+          cur.flowView.modifyFlow('drag', pipe);
+        }
+      });
+      console.log('x> 0', $('#canvas').css('min-width'));
     }
 
     //make zoom possible
-    $panzoom.parent().on('mousewheel.focal', function(e) {
+    $panzoom.parent().on('mousewheel.focal', function (e) {
       if (!e.shiftKey) return;
       e.preventDefault();
       var delta = e.delta || e.originalEvent.wheelDelta;
@@ -279,7 +299,7 @@ export default class FlowController {
       });
     });
 
-    $('#slider').on('input', function(e) {
+    $('#slider').on('input', function (e) {
       $panzoom.panzoom("enable");
       let zoom = $('#slider').val();
       let plus = true;

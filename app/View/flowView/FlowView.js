@@ -129,11 +129,6 @@ export default class FlowView {
   }
 
   addCustomPipe(name, className, xpos, ypos) {
-    let newPipe = this.addPipe(name, {
-      x: xpos,
-      y: ypos
-    });
-
     return {
       type: "changeAddPipe",
       name: name,
@@ -172,10 +167,6 @@ export default class FlowView {
       cur.connectorType = "Flowchart";
     }
     cur.generateFlow();
-  }
-
-  addPipe(name, possitions, extra, isExit) {
-    //return this.flowGenerator.pipeGenerator.addPipe(name, possitions, extra, isExit);
   }
 
   getTypes() {

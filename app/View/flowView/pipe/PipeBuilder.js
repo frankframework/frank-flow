@@ -5,7 +5,6 @@ export default class PipeBuilder {
     constructor(flowView, name) {
         this.flowView = flowView;
         this.name = name;
-        this.activityTest = new ActivityPipeView();
     }
 
     withPositions(positions) {
@@ -42,7 +41,11 @@ export default class PipeBuilder {
         }
 
         if (this.name != null && this.flowView != null) {
-            return new PipeView(this.flowView, this.name, this.positions, this.extra, this.exit, this.descText);
+            if (localStorage.getItem("tibcoMode") == "true") {
+                return new ActivityPipeView(this.flowView, this.name, this.positions, this.extra, this.exit, this.descText);
+            } else {
+                return new PipeView(this.flowView, this.name, this.positions, this.extra, this.exit, this.descText);
+            }
         }
     }
 }

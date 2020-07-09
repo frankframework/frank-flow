@@ -1,14 +1,19 @@
 {
-    "pipe": {
-        "name": "FilePipe",
-        "activities": [
-            "FilePoller",
-            "ListFiles",
-            "ReadFile",
-            "RenameFile",
-            "CopyFile",
-            "RemoveFile"
-        ]
-    }
-    
+    "pipe": [
+        {
+            "name": "FilePipe",
+            "activities": [
+                "WriteFile",
+                "Write_appendFile",
+                "DeleteFile",
+                "Read_deleteFile",
+                "EncodeFile",
+                "DecodeFile",
+                "ListFile",
+                "InfoFile",
+                "ReadFile"
+            ],
+            "keyword": "actions"
+        }
+    ]
 }

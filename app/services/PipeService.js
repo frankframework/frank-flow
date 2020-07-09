@@ -5,11 +5,11 @@ export default class PipeService {
     }
 
     getPipeWithActivity() {
-        fetch('./app/pipeWithActivity.json', {method: 'GET'}).then(response => {
+        return fetch('./app/pipeWithActivity.json', {method: 'GET'}).then(response => {
             return response.json();
         })
         .then(data => {
-            console.log(data)
+            return data;
         })
         .catch(e => {
             console.log(e);
