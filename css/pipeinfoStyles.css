@@ -11,7 +11,7 @@
 .pipeInfoWrapper {
   height: 100%;
   width: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   background: #F3F3F4;
 }
 
@@ -41,7 +41,7 @@
   padding: 15px 20px;
   background: #FFFFFF;
   box-shadow: 2px 2px 1px rgba(103, 106, 108, 0.4), inset 0px 3px 0px #E7EAEC;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .pipeNameTypeInfo label, select, input {

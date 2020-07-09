@@ -1,5 +1,5 @@
-import DescriptionView from './DescriptionView.js';
-import TypeImageView from './TypeImageView.js';
+import DescriptionView from '../DescriptionView.js';
+import TypeImageView from '../TypeImageView.js';
 
 export default class PipeView {
 
@@ -10,21 +10,15 @@ export default class PipeView {
 
     this.name = name;
 
-    //possitions is description positions??
     this.possitions = possitions;
     this.extra = extra;
     this.isExit = isExit;
     this.descText = descText;
 
+    if(this.flowView != null) {
     this.addPipe();
+    }
   }
-
-  /*
-  # function to manually add a Pipe/Exit
-  # increment windows and create div
-  # make element a source and a target
-  # bind to connection
-  */
 
   addPipe() {
     this.types = this.flowView.getTypes();

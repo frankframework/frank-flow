@@ -1,4 +1,8 @@
 export default class GenerateInfoParametersView {
+    constructor() {
+      this.bar = false;
+    }
+
     generatePipeParameters(parameters) {
         if (parameters.length !== 0) {
           parameters.forEach((param, i) => {
@@ -14,7 +18,6 @@ export default class GenerateInfoParametersView {
             parameterBox.append(buttons.deleteButton);
             $('#parametersInfo').append(parameterBox, parameterToolbox);
           });
-          new SimpleBar($('#parametersInfo')[0]);
         }
       }
     

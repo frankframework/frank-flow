@@ -1,4 +1,4 @@
-import PipeView from '../flowView/PipeView.js';
+import PipeView from '../flowView/pipe/PipeView.js';
 
 
 export default class PaletteView {

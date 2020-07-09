@@ -1,5 +1,5 @@
-import PipeView from '../PipeView.js';
-import PipeBuilder from '../PipeBuilder.js'
+import PipeView from '../pipe/PipeView.js';
+import PipeBuilder from '../pipe/PipeBuilder.js'
 import ForwardGenerator from './ForwardGenerator.js';
 import CustomElementGenerator from './CustomElementGenerator.js';
 

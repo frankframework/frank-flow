@@ -1,4 +1,4 @@
-import PipeBuilder from '../PipeBuilder.js'
+import PipeBuilder from '../pipe/PipeBuilder.js'
 
 export default class CustomElementGenerator {
     constructor(flowView) {

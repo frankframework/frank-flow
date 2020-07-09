@@ -1,4 +1,4 @@
-import PipeView from '../PipeView.js';
+import PipeView from '../pipe/PipeView.js';
 import ConsoleColorPick from '../../ConsoleColorPick.js';
 import PipeGenerator from './PipeGenerator.js';
 

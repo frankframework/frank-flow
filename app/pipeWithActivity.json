@@ -1,0 +1,14 @@
+{
+    "pipe": {
+        "name": "FilePipe",
+        "activities": [
+            "FilePoller",
+            "ListFiles",
+            "ReadFile",
+            "RenameFile",
+            "CopyFile",
+            "RemoveFile"
+        ]
+    }
+    
+}

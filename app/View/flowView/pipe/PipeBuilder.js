@@ -1,9 +1,11 @@
 import PipeView from './PipeView.js';
+import ActivityPipeView from './ActivityPipeView.js';
 
 export default class PipeBuilder {
     constructor(flowView, name) {
         this.flowView = flowView;
         this.name = name;
+        this.activityTest = new ActivityPipeView();
     }
 
     withPositions(positions) {
