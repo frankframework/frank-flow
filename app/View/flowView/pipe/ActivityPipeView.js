@@ -13,16 +13,18 @@ export default class ActivityPipeView extends PipeView {
     async getPipes() {
         let data = await this.pipeService.getPipeWithActivity();
         this.generateActivities(data)
-        console.log(this.name)
 
     }
 
     generateActivities(data) {
+        let name = this.name;
         let types = this.flowView.getTypes();
-        console.log(types[this.name])
+        console.log(name, types[this.name])
+        console.log(this.flowView.notifyListeners({type: "getPipeAttributes", name: name, pipeModel: this.pipeModel}));
+        console.log(this.pipeModel.attributes)
 
         data.pipe.forEach(function(item, index) {
-            console.log(item);
+            //console.log(item);
         })
     }
 }

@@ -45,6 +45,10 @@ export default class FlowController {
       case "delete":
         this.mainController.modifyCode("deleteForward", data);
         break;
+        case "getPipeAttributes":
+        let attr = this.mainController.modifyCode("getAttributes", data);
+        data.pipeModel.attributes = attr;
+        break;
     }
   }
 

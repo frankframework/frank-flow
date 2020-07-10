@@ -2,8 +2,9 @@ import ToBeautifulSyntax from '../View/codeView/ToBeautifulSyntax.js';
 
 
 export default class CodeService {
-    constructor(codeView, ibisdocModel, mainController) {
+    constructor(codeView, ibisdocModel, xsdModel, mainController) {
         this.ibisdocModel = ibisdocModel;
+        this.xsdModel = xsdModel;
         this.codeView = codeView;
         this.mainController = mainController;
         this.toBeautiful = new ToBeautifulSyntax();
@@ -64,7 +65,7 @@ export default class CodeService {
                 return response.text()
             })
             .then(data => {
-                localStorage.setItem("ibisdocXsd", data);
+                this.xsdModel.xsd = data;
                 console.log("xsd is loaded!, here");
             })
             .catch(err => {
@@ -81,7 +82,7 @@ export default class CodeService {
                 return response.text()
             })
             .then(data => {
-                localStorage.setItem("ibisdocXsd", data);
+                this.xsdModel.xsd = data;
                 console.log("xsd is loaded!, here");
             })
             .catch(err => {

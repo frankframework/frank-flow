@@ -1,5 +1,6 @@
 import DescriptionView from '../DescriptionView.js';
 import TypeImageView from '../TypeImageView.js';
+import PipeModel from '../../../Model/PipeModel.js';
 
 export default class PipeView {
 
@@ -7,9 +8,9 @@ export default class PipeView {
     this.flowView = flowView;
     this.descriptionView = new DescriptionView();
     this.typeImageView = new TypeImageView(flowView);
+    this.pipeModel = new PipeModel(name, possitions, extra, isExit, descText)
 
     this.name = name;
-
     this.possitions = possitions;
     this.extra = extra;
     this.isExit = isExit;
