@@ -8,7 +8,11 @@ export default class PipeView {
     this.flowView = flowView;
     this.descriptionView = new DescriptionView();
     this.typeImageView = new TypeImageView(flowView);
-    this.pipeModel = new PipeModel(name, possitions, extra, isExit, descText)
+    this.types = this.flowView.getTypes();
+
+    this.pipeModel = new PipeModel(name, possitions, extra, isExit, descText, this.types[name])
+
+    this.flowView.notifyListeners({ type: "getPipeAttributes", name: name, pipeModel: this.pipeModel });
 
     this.name = name;
     this.possitions = possitions;
@@ -22,7 +26,6 @@ export default class PipeView {
   }
 
   addPipe() {
-    this.types = this.flowView.getTypes();
     let flowView = this.flowView,
       id = flowView.windows += 1,
       canvas = $('#canvas'),

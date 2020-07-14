@@ -1,5 +1,5 @@
 export default class PipeModel {
-    constructor(name, possitions, extra, isExit, descText) {
+    constructor(name, possitions, extra, isExit, descText, type) {
         this.attributes = {};
         this.parameters = {};
         this.name = name;
@@ -7,6 +7,6 @@ export default class PipeModel {
         this.extra = extra;
         this.isExit = isExit;
         this.descText = descText
-        this.type = "";
+        this.type = type;
     }
 }

@@ -10,6 +10,7 @@ export default class PipeGenerator {
         this.flowView = flowView;
         this.forwardGenerator = new ForwardGenerator(flowModel, flowView);
         this.customElementGenerator = new CustomElementGenerator(flowView);
+        this.pipeDict = {};
     }
 
     generateAllPipes(transformedXml) {
@@ -50,6 +51,7 @@ export default class PipeGenerator {
 
             this.forwardGenerator.generateForwards(forwards);
         }
+        return this.pipeDict;
     }
 
     generateMultiplePipes(pipe, forwards, possitions) {
@@ -83,11 +85,12 @@ export default class PipeGenerator {
             docText = this.createDocText(pipe, p);
 
 
-            new PipeBuilder(this.flowView, name)
+            this.pipeDict[name] = new PipeBuilder(this.flowView, name)
                 .withPositions(possitions)
                 .withExtra(extraText)
                 .withDescText(docText)
-                .build();
+                .build()
+                .pipeModel;
 
             if (pipe[p].Forward != null) {
                 forwards = this.createPipeForward(pipe, name, p, forwards);
@@ -160,8 +163,9 @@ export default class PipeGenerator {
 
     generateSinglePipe(pipe, forwards) {
         let name = pipe['@name'];
-        new PipeBuilder(this.flowView, name)
+        this.pipeDict[name] = new PipeBuilder(this.flowView, name)
         .build()
+        .pipeModel
 
         if (pipe.Forward != null) {
             let forwardData = null;

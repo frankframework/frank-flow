@@ -55,7 +55,7 @@ class MainController {
         break;
       case "selectPipe":
         codeController.selectPipe(obj.name);
-        this.pipeInfoController.selectPipe(obj.name, obj.type);
+        this.pipeInfoController.selectPipe(this.flowController.flowView.flowGenerator.pipes[obj.name]);
         break;
       case "changePipeType":
         codeController.changePipeType(obj.name, obj.type, obj.oldType);
