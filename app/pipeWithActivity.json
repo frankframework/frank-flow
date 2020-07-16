@@ -11,9 +11,16 @@
                 "DecodeFile",
                 "ListFile",
                 "InfoFile",
-                "ReadFile"
+                "read"
             ],
             "keyword": "actions"
+        },
+        {
+            "name": "Receiver",
+            "activities": [
+                "Receiver"
+            ],
+            "keyword": "name"
         }
     ]
 }

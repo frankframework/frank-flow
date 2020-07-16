@@ -2,7 +2,7 @@ import CodeModel from '../Model/CodeModel.js';
 import CodeView from '../View/codeView/CodeView.js';
 import JSZip from '../../node_modules/jszip/dist/jszip.js';
 import FileTreeView from '../View/codeView/FileTreeView.js';
-import CodeService from '../services/CodeService.js';
+import CodeService from '../Services/CodeService.js';
 import XsdModel from '../Model/XsdModel';
 import {
   saveAs

@@ -20,6 +20,8 @@ export default class PipeView {
     this.isExit = isExit;
     this.descText = descText;
 
+    this.element = null;
+
     if(this.flowView != null) {
     this.addPipe();
     }
@@ -38,7 +40,7 @@ export default class PipeView {
     canvas.append(el);
 
     this.connectDescription(id);
-    return name;
+    //return name;
   }
 
   checkForExitOrReceiver(el, bottomContainer) {
@@ -54,6 +56,12 @@ export default class PipeView {
       el.append(bottomContainer);
     } else {
       el.append(typeWindow, bottomContainer);
+    }
+
+    if(this.isExit) {
+      this.pipeModel.type = "Exit";
+    } else if (this.types['receiver ' + this.name.replace('(receiver): ', '')] == "Receiver") {
+      this.pipeModel.type = "Receiver";
     }
 
     return el;

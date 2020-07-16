@@ -9,8 +9,8 @@ export default class PipeGenerator {
         this.flowModel = flowModel;
         this.flowView = flowView;
         this.forwardGenerator = new ForwardGenerator(flowModel, flowView);
-        this.customElementGenerator = new CustomElementGenerator(flowView);
         this.pipeDict = {};
+        this.customElementGenerator = new CustomElementGenerator(flowView, this.pipeDict);
     }
 
     generateAllPipes(transformedXml) {

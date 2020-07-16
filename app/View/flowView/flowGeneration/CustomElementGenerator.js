@@ -1,8 +1,9 @@
 import PipeBuilder from '../pipe/PipeBuilder.js'
 
 export default class CustomElementGenerator {
-    constructor(flowView) {
+    constructor(flowView, pipeDict) {
         this.flowView = flowView;
+        this.pipeDict = pipeDict;
     }
 
     addReceiver(receiver, target) {
@@ -23,7 +24,7 @@ export default class CustomElementGenerator {
                 x: xCord,
                 y: yCord
             }
-        new PipeBuilder(this.flowView, name)
+        this.pipeDict[name] = new PipeBuilder(this.flowView, name)
             .withPositions(positions)
             .build();
 
@@ -58,7 +59,7 @@ export default class CustomElementGenerator {
                         y: ypos
                     }
                 }
-                new PipeBuilder(cur.flowView, name)
+                cur.pipeDict[name] = new PipeBuilder(cur.flowView, name)
                     .withPositions(positions)
                     .isExit(true)
                     .build();
@@ -73,7 +74,7 @@ export default class CustomElementGenerator {
                     y: ypos
                 }
             }
-            new PipeBuilder(this.flowView, name)
+            this.pipeDict[name] = new PipeBuilder(this.flowView, name)
             .withPositions(positions)
             .isExit(true)
             .build();
