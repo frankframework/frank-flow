@@ -3,24 +3,23 @@ export default class TypeImageView {
     this.flowView = flowView;
   }
 
-  getTypeImage(name, type) {
-    let types = type,
-      img,
+  getTypeImage(type) {
+    let img,
       testImage = new Image(),
       url;
 
-    if (types == null) {
-      types = this.flowView.getTypes();
+    if (type == null) {
+      type = "basicPipe"
     }
-    if (types[name] != null && types[name].match('Sender') != null) {
-      types[name] = 'SenderPipe';
+    if (type != null && type.match('Sender') != null) {
+      type = 'SenderPipe';
     }
-    url = 'media/images/' + types[name] + '.png';
+    url = 'media/images/' + type+ '.png';
     if (url != null) {
       img = $('<img></img>').attr({
         src: url,
-        alt: types[name],
-        title: types[name]
+        alt: type,
+        title: type
       }).addClass("typeImg");
       testImage.src = url;
       testImage.onerror = function () {

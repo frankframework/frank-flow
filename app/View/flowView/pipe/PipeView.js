@@ -123,6 +123,6 @@ export default class PipeView {
   }
 
   getTypeImage() {
-    return this.typeImageView.getTypeImage(this.name, this.types);
+    return this.typeImageView.getTypeImage(this.pipeModel.type);
   }
 }
