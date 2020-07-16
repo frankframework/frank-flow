@@ -54,6 +54,7 @@ export default class CodeController {
       var input = event.target;
       console.log(input.files);
       cur.fileTreeView.makeTree(input, cur.editor);
+      $('#adapterSelect').css('display', 'none');
     });
 
 

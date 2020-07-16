@@ -254,6 +254,7 @@ export default class FlowView {
 
   displayError(e) {
     instance.reset();
+    console.log(typeof(this.flowModel.getTransformedXml()))
     $('#canvas').empty();
     $('#canvas').css('display', 'none');
     $('.customErrorMessage').remove();
@@ -261,10 +262,15 @@ export default class FlowView {
       $('#flowContainer').append(
         $("<h1></h1>").text('Duplicate pipe, please remove any duplicates.').addClass('customErrorMessage'),
       );
-    } else {
+    } else if(typeof(this.flowModel.getTransformedXml()) == "string"){
       $('#flowContainer').append(
         $("<h1></h1>").text('Configuration is incorrect, please check your xml.').addClass('customErrorMessage'),
         $('<p></p>').text(' \n\n\n your error: \n' + this.flowModel.getTransformedXml()).addClass('customErrorMessage')
+      );
+    } else {
+      $('#flowContainer').append(
+        $("<h1></h1>").text('Configuration is incorrect, please check your xml.').addClass('customErrorMessage'),
+        $('<p></p>').text(' \n\n\n your error: \n' + e).addClass('customErrorMessage')
       );
     }
     console.log('error: ', e, this.flowModel.getTransformedXml())
