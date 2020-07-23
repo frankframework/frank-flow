@@ -17,10 +17,35 @@ module.exports = function(config) {
       // list of files / patterns to load in the browser
       files: [
         // 'test/**/*.js',
+
+
+        'node_modules/jquery/dist/jquery.min.js',
+        'node_modules/jquery-ui-dist/jquery-ui.min.js',
+        'fileTree/dist/js/file-tree.min.js',
+
+      	// 'node_modules/monaco-editor/min/vs/loader.js',
+        // 'node_modules/monaco-editor/min/vs/editor/editor.main.nls.js',
+        // 'node_modules/monaco-editor/min/vs/editor/editor.main.js',
+        'index.html',
+        //'dist/*.js',
   
         'test/*.[sS]pec.js',
         // 'dist/*.js',
       ],
+
+      html2JsPreprocessor: {
+        // strip this from the file path
+        stripPrefix: 'public/',
+  
+        // prepend this to the file path
+        prependPrefix: 'served/',
+  
+        // or define a custom transform function
+        processPath: function(filePath) {
+          // Drop the file extension
+          return filePath.replace(/\.html$/, '');
+        }
+      },
   
   
       // list of files to exclude
@@ -34,6 +59,7 @@ module.exports = function(config) {
       preprocessors: {
         'dist/*.js': ['coverage'],
         'test/**/*.[sS]pec.js': ['webpack'],
+        '**/*.html': ['html2js'],
       },
       // test results reporter to use
       // possible values: 'dots', 'progress'
