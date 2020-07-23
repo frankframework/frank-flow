@@ -9,7 +9,8 @@ module.exports = function(config) {
   
       // frameworks to use
       // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-      frameworks: ['jasmine'],
+      frameworks: ['jasmine', 'jasmine-jquery'],
+      plugins: ['@metahub/karma-jasmine-jquery', 'karma-*'],
   
   
   
@@ -17,7 +18,7 @@ module.exports = function(config) {
       files: [
         // 'test/**/*.js',
   
-        'test/**/*.[sS]pec.js',
+        'test/*.[sS]pec.js',
         // 'dist/*.js',
       ],
   

@@ -14,7 +14,6 @@
     "dom-to-image": "^2.6.0",
     "file-saver": "^2.0.2",
     "html-to-image": "^0.1.1",
-    "jasmine-core": "^3.5.0",
     "jquery": "^3.4.1",
     "jquery-contextmenu": "^2.9.1",
     "jquery-ui-dist": "^1.12.1",
@@ -22,10 +21,8 @@
     "jquery.panzoom": "^3.2.3",
     "jsplumb": "^2.11.2",
     "jszip": "^3.2.2",
-    "karma": "^5.1.0",
     "karma-chrome-launcher": "^3.1.0",
     "karma-coverage": "^2.0.2",
-    "karma-jasmine": "^3.3.1",
     "karma-webpack": "^4.0.2",
     "monaco-editor": "^0.18.1",
     "nodejs": "0.0.0",
@@ -34,6 +31,11 @@
     "xmllint": "^0.1.1"
   },
   "devDependencies": {
+    "@metahub/karma-jasmine-jquery": "^4.0.1",
+    "jasmine-core": "^3.5.0",
+    "jasmine-jquery": "^2.1.1",
+    "karma": "^5.1.0",
+    "karma-jasmine": "^3.3.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
   }
