@@ -1,5 +1,3 @@
-import PipeView from '../PipeView.js';
-import ConsoleColorPick from '../../ConsoleColorPick.js';
 import PipeGenerator from './PipeGenerator.js';
 
 export default class FlowGenerator {
@@ -7,7 +5,7 @@ export default class FlowGenerator {
     this.flowModel = flowModel;
     this.flowView = flowView;
     this.pipeGenerator = new PipeGenerator(flowModel, flowView);
-    this.consoleColor = new ConsoleColorPick();
+    this.pipes = {};
   }
 
   /*
@@ -26,7 +24,7 @@ export default class FlowGenerator {
 
       instance.reset();
       $('#canvas').empty();
-      this.pipeGenerator.generateAllPipes(transformedXml); 
+      this.pipes = this.pipeGenerator.generateAllPipes(transformedXml);
     } else {
       this.flowView.displayError(transformedXml);
     }

@@ -1,5 +1,6 @@
-import DescriptionView from './DescriptionView.js';
-import TypeImageView from './TypeImageView.js';
+import DescriptionView from '../DescriptionView.js';
+import TypeImageView from '../TypeImageView.js';
+import PipeModel from '../../../Model/PipeModel.js';
 
 export default class PipeView {
 
@@ -7,27 +8,26 @@ export default class PipeView {
     this.flowView = flowView;
     this.descriptionView = new DescriptionView();
     this.typeImageView = new TypeImageView(flowView);
+    this.types = this.flowView.getTypes();
+
+    this.pipeModel = new PipeModel(name, possitions, extra, isExit, descText, this.types[name])
+
+    this.flowView.notifyListeners({ type: "getPipeAttributes", name: name, pipeModel: this.pipeModel });
 
     this.name = name;
-
-    //possitions is description positions??
     this.possitions = possitions;
     this.extra = extra;
     this.isExit = isExit;
     this.descText = descText;
 
+    this.element = null;
+
+    if(this.flowView != null) {
     this.addPipe();
+    }
   }
 
-  /*
-  # function to manually add a Pipe/Exit
-  # increment windows and create div
-  # make element a source and a target
-  # bind to connection
-  */
-
   addPipe() {
-    this.types = this.flowView.getTypes();
     let flowView = this.flowView,
       id = flowView.windows += 1,
       canvas = $('#canvas'),
@@ -40,7 +40,7 @@ export default class PipeView {
     canvas.append(el);
 
     this.connectDescription(id);
-    return name;
+    //return name;
   }
 
   checkForExitOrReceiver(el, bottomContainer) {
@@ -56,6 +56,12 @@ export default class PipeView {
       el.append(bottomContainer);
     } else {
       el.append(typeWindow, bottomContainer);
+    }
+
+    if(this.isExit) {
+      this.pipeModel.type = "Exit";
+    } else if (this.types['receiver ' + this.name.replace('(receiver): ', '')] == "Receiver") {
+      this.pipeModel.type = "Receiver";
     }
 
     return el;
@@ -117,6 +123,6 @@ export default class PipeView {
   }
 
   getTypeImage() {
-    return this.typeImageView.getTypeImage(this.name, this.types);
+    return this.typeImageView.getTypeImage(this.pipeModel.type);
   }
 }

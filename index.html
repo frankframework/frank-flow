@@ -7,7 +7,9 @@
 	<link rel="stylesheet" data-name="vs/editor/editor.main" href="node_modules/monaco-editor/min/vs/editor/editor.main.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link href="fileTree/dist/css/file-tree.min.css" rel="stylesheet">
+	<link href="node_modules/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet">
 	<link href="node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css" rel="stylesheet">
+	<link href="node_modules/simplebar/dist/simplebar.css" rel="stylesheet">
 	<link rel="stylesheet" href="media/fontawesome/css/all.css">
 	<link rel="stylesheet" href="css/app.css">
 	<link rel="stylesheet" href="css/flowThemes.css">
@@ -25,7 +27,7 @@
 
 	<div class="tools-editors-wrapper">
 		<div class="top-wrapper">
-			<p class="wrapper">File</p>
+			<input type="file" accept="application/x-zip-compressed" id="fileReader">
 			<select id="adapterSelect">
 			</select>
 		</div>
@@ -49,13 +51,21 @@
 		</div>
 		<div class="pipeInfoWrapper">
 			<div class="pipeInfo">
-				<h2 id="pipeInfoNameTitle"><span id="pipeInfoTitleName"></span> - <span id="pipeInfoTitleType">CheckEmptyMessage</span></h2>
+
+				<ul class="tabs">
+					<li><a href="#pipeNameTypeInfo">Pipe info</a></li>
+					<li><a href="#forwardsInfo">Forwards</a></li>
+					<li><a href="#attributesInfo">Attributes</a></li>
+					<li><a href="#parametersInfo">Parameters</a></li>
+				  </ul>
+
+				<!-- <h2 id="pipeInfoNameTitle"><span id="pipeInfoTitleName"></span> - <span id="pipeInfoTitleType">CheckEmptyMessage</span></h2> -->
 				<div id="pipeNameTypeInfo" class="pipeNameTypeInfo">
 					<h4>Pipe info</h4>
 					<hr>
 					<label for="name">Name: </label>
 					<input type="text" id="pipeInfoName" placeholder="pipe name" />
-
+					<br>
 					<label for="type">Type: </label>
 					<select id="typeSelect">
 
@@ -101,6 +111,7 @@
 
 
 	<script src="node_modules/vkbeautify/index.js" type="text/javascript"></script>
+	<script src="node_modules/simplebar/dist/simplebar.min.js" type="text/javascript"></script>
 	<script src="node_modules/xmllint/xmllint.js" type="text/javascript"></script>
 	<script src="node_modules/dom-to-image/src/dom-to-image.js" type="text/javascript"></script>
 	<script src="node_modules/jsplumb/dist/js/jsplumb.min.js"></script>

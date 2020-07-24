@@ -1,14 +1,15 @@
 export default class ValidateConfigurationView {
 
-  constructor(editor) {
+  constructor(editor, xsdModel) {
     this.editor = editor
+    this.xsdModel = xsdModel;
   }
   //validate the configuration.
   validateConfiguration() {
     let cur = this;
     let validate = xmllint.validateXML({
       xml: cur.editor.getValue().replace(/\sx=".*?"/g, '').replace(/\sy=".*?"/g, ''),
-      schema: localStorage.getItem("ibisdocXsd"),
+      schema: cur.xsdModel.xsd,
       TOTAL_MEMORY: 16777217
     });
     return validate;

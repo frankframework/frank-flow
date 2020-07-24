@@ -14,16 +14,16 @@ export default class PipeInfoController {
     this.pipeInfoView.generateTypes(data);
   }
 
-  selectPipe(name, type) {
-    this.oldName = name;
-    this.oldType = type;
-    this.pipeInfoView.setPipeName(name);
-    this.pipeInfoView.setPipeType(type);
+  selectPipe(pipe) {
+    this.oldName = pipe.name;
+    this.oldType = pipe.type;
+    this.pipeInfoView.setPipeName(pipe.name);
+    this.pipeInfoView.setPipeType(pipe.type);
     let attributes = this.mainController.modifyCode("getAttributes", {
-        name: name
+        name: pipe.name
       }),
       parameters = this.mainController.modifyCode("getParameters", {
-        name: name
+        name: pipe.name
       });
     this.pipeInfoView.generatePipeAttributes(attributes);
     this.pipeInfoView.generatePipeParameters(parameters);

@@ -1,4 +1,4 @@
-import PipeView from '../flowView/PipeView.js';
+import PipeView from '../flowView/pipe/PipeView.js';
 
 
 export default class PaletteView {
@@ -30,8 +30,8 @@ export default class PaletteView {
         cur.flowView.modifyFlow("add", {
           name: "new" + name,
           className: name,
-          xpos: e.finalPos[0] - 500,
-          ypos: e.finalPos[1]
+          xpos: 500,
+          ypos: 500
         });
       }
     }
@@ -43,5 +43,7 @@ export default class PaletteView {
       palette.append(toolBox);
       instance.draggable(toolBox, dragData);
     });
+
+    new SimpleBar($('#palette')[0]);
   }
 }

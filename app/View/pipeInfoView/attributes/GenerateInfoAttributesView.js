@@ -4,6 +4,8 @@ export default class GenerateInfoAttributesView {
           delete attributes.x;
           delete attributes.y;
         }
+
+        console.log(attributes)
         for (let key in attributes) {
           if (key != "name") {
             let attrWrapper = $('<div></div>').addClass('attributeWrapper'),
@@ -15,7 +17,8 @@ export default class GenerateInfoAttributesView {
               .addClass('deleteButton'),
               attrInput = $('<input></input>').attr({
                 type: 'input',
-                name: key
+                name: key,
+                id: 'attributeVal'
               }).val(attributes[key]);
     
             attrWrapper.append(attrLabel, attrInput, deleteButton);

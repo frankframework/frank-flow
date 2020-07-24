@@ -90,6 +90,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 10px 40px 0 #B0C1D9;
 }
 
 .description {
