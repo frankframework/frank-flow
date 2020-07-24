@@ -1,10 +1,12 @@
 {
-  "name": "GrafischeDesigner",
+  "name": "Frank!Flow",
   "version": "1.0.0",
   "description": "dev tool to work with the Frank framework",
   "main": "Controller/MainController.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "unit": "karma start karma.conf.js ",
+    "test": "npm run unit",
+    "test-cover": "istanbul cover --include-all-sources test/pipeInfoTest.spec.js && istanbul check-coverage"
   },
   "proxy": "http://localhost:8000",
   "author": "ruben",
@@ -13,6 +15,7 @@
     "dom-to-image": "^2.6.0",
     "file-saver": "^2.0.2",
     "html-to-image": "^0.1.1",
+    "istanbul": "^0.4.5",
     "jquery": "^3.4.1",
     "jquery-contextmenu": "^2.9.1",
     "jquery-ui-dist": "^1.12.1",
@@ -20,12 +23,22 @@
     "jquery.panzoom": "^3.2.3",
     "jsplumb": "^2.11.2",
     "jszip": "^3.2.2",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-coverage": "^2.0.2",
+    "karma-webpack": "^4.0.2",
     "monaco-editor": "^0.18.1",
     "nodejs": "0.0.0",
+    "simplebar": "^5.2.1",
     "vkbeautify": "^0.99.3",
     "xmllint": "^0.1.1"
   },
   "devDependencies": {
+    "@metahub/karma-jasmine-jquery": "^4.0.1",
+    "jasmine-core": "^3.5.0",
+    "jasmine-jquery": "^2.1.1",
+    "karma": "^5.1.0",
+    "karma-html2js-preprocessor": "^1.1.0",
+    "karma-jasmine": "^3.3.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
   }

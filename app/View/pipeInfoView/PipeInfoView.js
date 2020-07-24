@@ -9,6 +9,7 @@ export default class PipeInfoView {
     this.pipeType = "CheckEmptyMessage";
     this.setPipeName(this.pipeName);
     this.generatePipeForwards();
+    $('.pipeInfo').tabs();
   }
 
   setPipeName(name) {

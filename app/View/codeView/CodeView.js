@@ -12,8 +12,9 @@ export const logColor = 'background: #222; color: #bada55';
 
 export default class CodeView {
 
-  constructor() {
+  constructor(xsdModel) {
     this.listeners = [];
+    this.xsdModel = xsdModel;
     this.ibisdocJson = null;
     this.decorations = null;
     this.decorations = null;
@@ -45,7 +46,7 @@ export default class CodeView {
 
     this.setGlobalVariables()
 
-    this.validateConfigurationView = new ValidateConfigurationView(this.editor);
+    this.validateConfigurationView = new ValidateConfigurationView(this.editor, this.xsdModel);
     this.codeEditView = new CodeEditView(this.editor);
     this.codePipeView = new CodePipeView(this.editor);
     this.optionView = new OptionView(this.editor);

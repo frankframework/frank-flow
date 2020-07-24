@@ -1,10 +1,8 @@
 import JSZip from '../../../node_modules/jszip/dist/jszip.js';
-import ConsoleColorPick from '../ConsoleColorPick.js';
 
 export default class FileTreeView {
   constructor(editor) {
     this.editor = editor;
-    this.colorPick = new ConsoleColorPick();
   }
 
   makeTree(input) {
@@ -14,7 +12,6 @@ export default class FileTreeView {
     let cur = this;
     var f,
       fileTree = [];
-    //loop through all files
     for (var i = 0; i < input.files.length; i++) {
       f = input.files[i];
       //load file in async

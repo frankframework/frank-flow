@@ -17,8 +17,13 @@
   display: none;
 }
 
-.wrapper:hover ~ .fileBox {
+.wrapper:hover {
+  background-color: green;;
+}
+
+.top-wrapper .wrapper:hover~.fileBox {
   display: flex;
+  background-color: black;
   justify-content: start;
 }
 

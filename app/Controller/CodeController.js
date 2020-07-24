@@ -2,7 +2,8 @@ import CodeModel from '../Model/CodeModel.js';
 import CodeView from '../View/codeView/CodeView.js';
 import JSZip from '../../node_modules/jszip/dist/jszip.js';
 import FileTreeView from '../View/codeView/FileTreeView.js';
-import CodeService from '../services/CodeService.js';
+import CodeService from '../Services/CodeService.js';
+import XsdModel from '../Model/XsdModel';
 import {
   saveAs
 } from 'file-saver';
@@ -11,10 +12,11 @@ export default class CodeController {
   constructor(mainController, ibisdocModel) {
     this.mainController = mainController;
     this.codeModel = new CodeModel();
+    this.XsdModel = new XsdModel();
     this.ibisdocModel = ibisdocModel;
-    this.codeView = new CodeView();
+    this.codeView = new CodeView(this.XsdModel);
     this.codeView.addListener(this);
-    this.codeService = new CodeService(this.codeView, ibisdocModel, mainController);
+    this.codeService = new CodeService(this.codeView, ibisdocModel, this.XsdModel, mainController);
     this.codeView.makeEditor();
     this.editor = this.codeView.editor;
     this.fileTreeView = new FileTreeView(this.editor);
@@ -52,6 +54,7 @@ export default class CodeController {
       var input = event.target;
       console.log(input.files);
       cur.fileTreeView.makeTree(input, cur.editor);
+      $('#adapterSelect').css('display', 'none');
     });
 
 

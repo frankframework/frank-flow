@@ -1,5 +1,10 @@
 export default class GenerateInfoParametersView {
+    constructor() {
+      this.bar = false;
+    }
+
     generatePipeParameters(parameters) {
+
         if (parameters.length !== 0) {
           parameters.forEach((param, i) => {
             let parameterBox = $('<div></div>').addClass('parameterContent'),

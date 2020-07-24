@@ -1,4 +1,5 @@
 import PipeView from './PipeView.js';
+import ActivityPipeView from './ActivityPipeView.js';
 
 export default class PipeBuilder {
     constructor(flowView, name) {
@@ -40,7 +41,11 @@ export default class PipeBuilder {
         }
 
         if (this.name != null && this.flowView != null) {
-            return new PipeView(this.flowView, this.name, this.positions, this.extra, this.exit, this.descText);
+            if (localStorage.getItem("tibcoMode") == "true") {
+                return new ActivityPipeView(this.flowView, this.name, this.positions, this.extra, this.exit, this.descText);
+            } else {
+                return new PipeView(this.flowView, this.name, this.positions, this.extra, this.exit, this.descText);
+            }
         }
     }
 }
