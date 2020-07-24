@@ -11,8 +11,8 @@ module.exports = function(config) {
       // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
       frameworks: ['jasmine', 'jasmine-jquery'],
       plugins: ['@metahub/karma-jasmine-jquery', 'karma-*'],
-  
-  
+
+
   
       // list of files / patterns to load in the browser
       files: [
@@ -57,7 +57,7 @@ module.exports = function(config) {
       // preprocess matching files before serving them to the browser
       // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
       preprocessors: {
-        'dist/*.js': ['coverage'],
+        './app/**/*.js': ['coverage'],
         'test/**/*.[sS]pec.js': ['webpack'],
         '**/*.html': ['html2js'],
       },
@@ -106,11 +106,12 @@ module.exports = function(config) {
       // how many browser should be started simultaneous
       concurrency: Infinity,
       coverageReporter: {
-        dir: './coverage',
+        includeAllSources: true,
+        dir: 'coverage/',
         reporters: [
-          { type: 'lcov', subdir: '.' },
-          { type: 'text-summary' }
+            { type: "html", subdir: "html" },
+            { type: 'text-summary' }
         ]
-      }
+    }
     })
   }

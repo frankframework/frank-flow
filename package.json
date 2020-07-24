@@ -5,7 +5,8 @@
   "main": "Controller/MainController.js",
   "scripts": {
     "unit": "karma start karma.conf.js ",
-    "test": "npm run unit"
+    "test": "npm run unit",
+    "test-cover": "istanbul cover --include-all-sources test/pipeInfoTest.spec.js && istanbul check-coverage"
   },
   "proxy": "http://localhost:8000",
   "author": "ruben",
@@ -14,6 +15,7 @@
     "dom-to-image": "^2.6.0",
     "file-saver": "^2.0.2",
     "html-to-image": "^0.1.1",
+    "istanbul": "^0.4.5",
     "jquery": "^3.4.1",
     "jquery-contextmenu": "^2.9.1",
     "jquery-ui-dist": "^1.12.1",
