@@ -2,6 +2,9 @@ import PipeInfoView from "../app/View/pipeInfoView/PipeInfoView.js"
 import FlowModelMock from "./Mock/FlowModelMock.js";
 
 let mockPipeInfoView = new PipeInfoView(new FlowModelMock());
+let FIXEDRESULT = "FixedResult";
+let CHECKEMPTYMESSAGE = "CheckEmptyMessage";
+let APIPRINCIPALPIPE = "ApiPrincipalPipe";
 
 beforeEach(() => {
    document.body.innerHTML = window.__html__['index'];
@@ -9,12 +12,12 @@ beforeEach(() => {
 
 describe("check default values", () => {
 
-   it("check pipe name", () => {
-      expect(mockPipeInfoView.pipeName).toBe("FixedResult");
+   it("check pipe name, should be FixedResult", () => {
+      expect(mockPipeInfoView.pipeName).toBe(FIXEDRESULT);
    })
 
-   it("check pipe type", () => {
-      expect(mockPipeInfoView.pipeType).toBe("CheckEmptyMessage");
+   it("check pipe type, should be CheckEmptyMessage", () => {
+      expect(mockPipeInfoView.pipeType).toBe(CHECKEMPTYMESSAGE);
    })
 })
 
@@ -38,7 +41,7 @@ describe("test generation of the tab menu", () => {
       mockPipeInfoView.generateTypes(mockIbisDoc);
 
       //assert
-      expect($('#typeSelect').val()).toBe('ApiPrincipalPipe');
+      expect($('#typeSelect').val()).toBe(APIPRINCIPALPIPE);
    })
 
    it("when generating parameters, should be userAgent", () => {
@@ -54,7 +57,7 @@ describe("test generation of the tab menu", () => {
       mockPipeInfoView.generatePipeParameters(mockParams);
 
       //assert
-      expect($('#name').val()).toBe('userAgent');
+      expect($('#name').val()).toBe(mockParams[0].name);
    })
 
    it("when generating attributes, should be ShowConfigurationStatus/xsl/ShowConfigurationStatus.xsl", () => {
@@ -69,6 +72,6 @@ describe("test generation of the tab menu", () => {
       console.log("input: ", $('#attributeVal').val());
 
       //assert
-      expect($('#attributeVal').val()).toBe('ShowConfigurationStatus/xsl/ShowConfigurationStatus.xsl');
+      expect($('#attributeVal').val()).toBe(mockAttributes.styleSheetName);
    })
 })
