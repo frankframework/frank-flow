@@ -42,7 +42,7 @@ Now all of the node modules will be installed.
   </li>
   <br>
   <li>
-  The hamburger menu has some functionalities:
+  The right click menu has some functionalities:
   </li>
   <li>
   change lines: change the connection type between your pipes.
@@ -57,7 +57,7 @@ Now all of the node modules will be installed.
   beautify: beautify your code.
   </li>
   <li>
-  download: download your flowchart as an svg.
+  export svg: download your flowchart as an svg.
   </li>
 
   # FileTree
@@ -80,7 +80,7 @@ Now all of the node modules will be installed.
 
   
   # Autocomplete
-  The editor also supports autocomplete. (WARNING: this feature is not complete yet)
+  In the future this feature will be implemented.
   
   # IMPORTANT
   Your configuration must be in beautiful syntax, otherwise it may not load. 
