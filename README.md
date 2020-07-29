@@ -17,22 +17,21 @@ Now all of the node modules will be installed.
 
 
 # To integrate the frank-flow: 
-  <li>
+
   Clone this project and place it inside your own Frank project.
-  </li>
-  <li>
+
   Put the files inside of the folder webapp/ROOT (or just webapps in case you have no ROOT folder).
   If you have multiple webapp folders then place the frank-flow in the src/main/webapp folder.
-  </li>
+
   <img src="media/images/frankflowDownloadTut.png" />
-  <li>
+
   Start your Frank.
-  </li>
-  <li>
+
+
   Navigate to the url http://localhost/ibis/frank-flow/.
   If the url isn't working check your file structure.
   The url depends on your map structure.
-  </li>
+
   <img src="media/images/frank-flow-huidig.png" />
 
 # How to use the frank-flow
