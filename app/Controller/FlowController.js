@@ -168,16 +168,6 @@ export default class FlowController {
       }
     });
 
-    //rename a pipe
-    $("#canvas").on('dblclick', '#strong', function (e) {
-      e.stopPropagation();
-      console.log("dblclick!");
-      if (this.innerHTML !== "EXIT") {
-        cur.flowView.modifyFlow('edit', this);
-      }
-    });
-
-
 
     jsPlumb.on($('#canvas'), "mouseover", ".sourceWindow, .description", function () {
       $panzoom.panzoom("disable");
@@ -241,7 +231,7 @@ export default class FlowController {
       $(this).removeClass("element-disabled");
     });
 
-    //contain canvas to container.
+    //set canvas bounded to container.
     var minScaleX = $('#flowContainer').innerWidth();
     var minScaleY = $('#flowContainer').innerHeight();
     let $panzoom = $('#canvas').panzoom({
@@ -300,26 +290,6 @@ export default class FlowController {
       $panzoom.panzoom('zoom', zoomOut, {
         increment: 0.1,
         focal: e
-      });
-    });
-
-    $('#slider').on('input', function (e) {
-      $panzoom.panzoom("enable");
-      let zoom = $('#slider').val();
-      let plus = true;
-      if (cur.prevZoom) {
-        if (cur.prevZoom < zoom && zoom != 10 && zoom != 9) {
-          plus = false;
-        } else if (zoom == 10) {
-          plus = false;
-        }
-      } else {
-        cur.prevZoom = zoom;
-      }
-      cur.prevZoom = zoom;
-      $panzoom.panzoom('zoom', plus, {
-        increment: 0.1,
-        step: 0.1
       });
     });
   }

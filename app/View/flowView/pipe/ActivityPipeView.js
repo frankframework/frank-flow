@@ -11,7 +11,7 @@ export default class ActivityPipeView extends PipeView {
     async getPipes() {
         this.pipeService = new PipeService()
         let data = await this.pipeService.getPipeWithActivity();
-        let activity = this.generateActivities(data)
+        this.generateActivities(data)
 
 
     }
@@ -75,7 +75,6 @@ export default class ActivityPipeView extends PipeView {
             this.pipeModel.type = "Exit";
             this.createTibcoImage("Exit")
           } else if (this.name.match(/\(receiver\):/g)) {
-            console.log(this.name + ' is a receiver')
             this.pipeModel.type = "Receiver";
             this.createTibcoImage("Receiver")
           }

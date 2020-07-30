@@ -5,7 +5,6 @@ export default class GenerateInfoAttributesView {
           delete attributes.y;
         }
 
-        console.log(attributes)
         for (let key in attributes) {
           if (key != "name") {
             let attrWrapper = $('<div></div>').addClass('attributeWrapper'),

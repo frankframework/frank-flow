@@ -80,8 +80,10 @@ export default class CodeController {
       let adapters = textPossition.match(/<Adapter[^]*?name=".*?">/g);
       if (adapters != null) {
         let adapterName = adapters[adapters.length - 1].match(/name="[^]*?"/g)[0].match(/"[^]*?"/g)[0].replace(/"/g, '');
-        localStorage.setItem("currentAdapter", adapterName);
-        cur.quickGenerate();
+        if (localStorage.getItem("currentAdapter") != adapterName) {
+          localStorage.setItem("currentAdapter", adapterName);
+          cur.quickGenerate();
+        }
       }
     })
 
