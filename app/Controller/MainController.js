@@ -1,4 +1,4 @@
-import ConfigurationConverter from '../Model/ConfigurationConverter.js';
+import ConfigurationConverter from '../Converter/ConfigurationConverter.js';
 import CodeController from './CodeController.js';
 import FlowController from './FlowController.js';
 import PipeInfoController from './PipeInfoController';

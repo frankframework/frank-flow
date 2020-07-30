@@ -1,4 +1,3 @@
-import CodeModel from '../Model/CodeModel.js';
 import CodeView from '../View/codeView/CodeView.js';
 import JSZip from '../../node_modules/jszip/dist/jszip.js';
 import FileTreeView from '../View/codeView/FileTreeView.js';
@@ -7,11 +6,12 @@ import XsdModel from '../Model/XsdModel';
 import {
   saveAs
 } from 'file-saver';
+
+
 export default class CodeController {
 
   constructor(mainController, ibisdocModel) {
     this.mainController = mainController;
-    this.codeModel = new CodeModel();
     this.XsdModel = new XsdModel();
     this.ibisdocModel = ibisdocModel;
     this.codeView = new CodeView(this.XsdModel);

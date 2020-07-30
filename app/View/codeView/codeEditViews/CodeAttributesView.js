@@ -38,7 +38,7 @@ export default class CodeAttributesView extends CodeEditView {
     let returnObj = {},
         matches = this._getPipe(pipeName),
         pipe = this.editor.getModel().getValueInRange(matches[0].range),
-        attr = pipe.match(attribute + '="[^]*?"'),         //this hold the entire attribute.
+        attr = pipe.match(attribute + '="[^]*?"'),         //this holds the entire attribute.
         changedAttributeValue = attr[0].replace(/"[^]*?"/g, '"' + attributeValue + '"')         //this holds the entire attribute with an new value.;
 
       //swap the old with the changed attribute.
