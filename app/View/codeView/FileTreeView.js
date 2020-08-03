@@ -3,9 +3,12 @@ import JSZip from '../../../node_modules/jszip/dist/jszip.js';
 export default class FileTreeView {
   constructor(editor) {
     this.editor = editor;
+    this.fileData = null;
+    this.addedFileCounter = 0;
   }
 
   makeTree(input) {
+    console.log("input", input)
     localStorage.removeItem('changedFiles');
     localStorage.removeItem('currentFile');
     $('#fileTreeItems').empty();
@@ -17,28 +20,13 @@ export default class FileTreeView {
       //load file in async
       JSZip.loadAsync(f) // 1) read the Blob
         .then(function (zip) {
-          //loop through file, if file is not a folder then put the data in local storage.
           zip.folder(f.name.replace('.zip', ''), '');
-          zip.forEach(function (relativePath, zipEntry) { // 2) print entries
-            fileTree.push(zipEntry);
-            if (!zipEntry.dir) {
-              zip.file(zipEntry.name).async("string").then(function (data) {
-                localStorage.setItem(zipEntry.name, data);
-              });
-            }
-          });
-
-          /*
-          switch the last element in the fileTree with the first element.
-          TODO: make a more efficient method that inserts the last element
-          at possition 0 and shift the entire array.
-          */
-          let temp = fileTree[0];
-          fileTree[0] = fileTree[fileTree.length - 1];
-          fileTree[fileTree.length - 1] = temp;
+          cur.prepareFileTree(zip, fileTree);
 
           //save zip file in this class.
           cur.zip = zip;
+
+          console.log("zip", zip)
 
           cur.generateTree(fileTree);
           localStorage.setItem("changedFiles", JSON.stringify([]))
@@ -49,6 +37,26 @@ export default class FileTreeView {
           console.log("error", e);
         });
     }
+  }
+
+  prepareFileTree(zip, fileTree) {
+    //loop through file, if file is not a folder then put the data in local storage.
+    zip.forEach(function (relativePath, zipEntry) { // 2) print entries
+      fileTree.push(zipEntry);
+      if (!zipEntry.dir) {
+        zip.file(zipEntry.name).async("string").then(function (data) {
+          localStorage.setItem(zipEntry.name, data);
+        });
+      }
+    });
+    /*
+    switch the last element in the fileTree with the first element.
+    TODO: make a more efficient method that inserts the last element
+    at possition 0 and shift the entire array.
+    */
+    let temp = fileTree[0];
+    fileTree[0] = fileTree[fileTree.length - 1];
+    fileTree[fileTree.length - 1] = temp;
   }
 
   setSaveFileEventListener() {
@@ -97,6 +105,9 @@ export default class FileTreeView {
 
     data = this.mapFileTree(data, path);
 
+    console.log("file data", data)
+    this.fileData = data;
+
     //generate the tree.
     $('#fileTreeItems').fileTree({
       data: data,
@@ -109,6 +120,60 @@ export default class FileTreeView {
 
     //make the file tree resizable.
     this.makeFileTreeResizeable()
+    this.addFile()
+  }
+
+  addFile() {
+    const defaultConfig = '<Configuration name="Example1">\n' +
+      '\t<Adapter name="Example1Adapter"> \n' +
+      '\t\t<Receiver name="Example1Receiver"> \n' +
+      '\t\t\t<JavaListener name="Example1" serviceName="Example1" />\n' +
+      '\t\t</Receiver>\n' +
+      '\t\t<Pipeline firstPipe="Example">\n' +
+      '\t\t\t<FixedResultPipe name="Example" returnString="Hello World1">\n' +
+      '\t\t\t\t<Forward name="success" path="EXIT"/> \n' +
+      '\t\t\t</FixedResultPipe> \n' +
+      '\t\t\t<Exit path="EXIT" state="success" /> \n' +
+      '\t\t</Pipeline> \n' +
+      '\t</Adapter>\n' +
+      '</Configuration>\n';
+
+    let addedFileCounter = this.addedFileCounter;
+
+    let obj = {
+      id: 'newFile' + addedFileCounter, //TODO: add custom id
+      name: ("FrankConfiguration/newFile" + addedFileCounter),
+      type: 'file'
+    }
+
+    this.fileData[0].children.push(obj);
+    let data = this.fileData;
+
+    this.reloadTree(data)
+
+    localStorage.setItem(("FrankConfiguration/newFile" + addedFileCounter), defaultConfig)
+    this.zip.file(("FrankConfiguration/newFile" + addedFileCounter), defaultConfig);
+    this.setSaveFileEventListener();
+    this.addedFileCounter++;
+  }
+
+  reloadTree(data) {
+    $('#fileTreeItems').empty();
+
+    $('#fileTreeItems').fileTree({
+      data: data,
+      sortable: false,
+      selectable: true
+    });
+  }
+
+
+  renameFile(path, newPath) {
+    const fileData = localStorage.getItem(path);
+    let prependedPath = path.match(/[^]+\/+/g)[0];
+    this.zip.remove(path);
+    this.zip.file(prependedPath + newPath, fileData);
+    this.reloadTree(this.fileData);
   }
 
   makeFileTreeResizeable() {

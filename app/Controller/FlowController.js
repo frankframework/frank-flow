@@ -15,6 +15,8 @@ export default class FlowController {
     localStorage.setItem("tibcoMode", false);
   }
 
+  //_______________Observer_______________
+  
   notify(data) {
     if (data == null) {
       return;
@@ -51,6 +53,8 @@ export default class FlowController {
         break;
     }
   }
+
+  //_______________Methods to be called from handlers_______________
 
   toggleHorizontal() {
     let horizontalBuild = this.flowView.horizontalBuild;
@@ -98,6 +102,8 @@ export default class FlowController {
     this.currentTheme = theme;
     $('#canvas').addClass(theme);
   }
+
+  //_______________Event handlers_______________
 
   initHandlers() {
     let cur = this;

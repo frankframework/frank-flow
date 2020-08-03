@@ -20,6 +20,15 @@
   margin-left: 5%;
 }
 
-.add-file {
+.fileButton {
   margin-left: 5%;
+  margin-bottom: 1%;
+}
+.fileButton :last-of-type {
+  margin-left: 1%;
+}
+
+.icons {
+  width: 100%;
+  height: auto;
 }

@@ -1,6 +1,7 @@
 .nav-header {
     padding: 5px 5px;
     background: url("../media/images/header-profile.png") no-repeat;
+    width: 17%;
 }
 
 .nav-header a {
@@ -19,7 +20,7 @@
 }
 
 #logo {
-    width: 100px;
+    width: 50%;
 }
 
 .profile-element p {

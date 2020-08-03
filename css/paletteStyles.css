@@ -2,7 +2,9 @@
   width: 15%;
   height: 100%;
   background: #F3F3F4;
+  background: url("../media/images/header-profile.png") repeat;
   box-shadow: inset 3px 0px 0px #DDDDDD;
+  color: white;
   /* overflow-y: scroll;
   overflow-x: hidden; */
   overflow: auto;
@@ -39,6 +41,7 @@
   overflow: hidden;
   display: block;
   text-align: left;
+  color: black;
   margin: 5px;
 }
 

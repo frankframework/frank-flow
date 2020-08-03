@@ -4,7 +4,8 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  background-color: #ECECEC;
+  background: url("../media/images/header-profile.png") repeat;
+  color: white;
 }
 
 .top-wrapper h2 {

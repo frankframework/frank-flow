@@ -23,20 +23,49 @@ export default class CodeController {
     this.initListeners();
   }
 
-
-  saveFile() {
-    let zip = this.fileTreeView.zip;
-    var FileSaver = require('file-saver');
-    zip.generateAsync({
-      type: "blob"
-    }).then(function (blob) {
-      FileSaver.saveAs(blob, "FrankConfiguration");
-    })
-  }
-
+//_______________Event handlers_______________
 
   initListeners() {
     let cur = this;
+
+    $.contextMenu({
+      selector: '.folder',
+      zIndex: 3001,
+      callback: function (key, options) {
+        var m = "clicked: " + key;
+        window.console && console.log(m) || alert(m);
+      },
+      items: {
+        "addFile": {
+          name: "Add file", icon: "fas fa-file",
+          callback: function () {
+            cur.fileTreeView.addFile();
+            return true;
+          }
+        }
+      }
+    });
+
+    $.contextMenu({
+      selector: '.file',
+      zIndex: 3001,
+      callback: function (key, options) {
+        var m = "clicked: " + key;
+        window.console && console.log(m) || alert(m);
+      },
+      items: {
+        "rename": {
+          name: "Rename file", icon: "fas fa-file",
+          callback: function () {
+            console.log($(this).attr('data-name'));
+            let path = $(this).attr('data-name');
+            let newPath = prompt("new name");
+            cur.fileTreeView.renameFile(path, newPath);
+            return true;
+          }
+        }
+      }
+    });
 
     $('#adapterSelect').on('change', function (e) {
       let adapter = $('#adapterSelect').val();
@@ -58,7 +87,7 @@ export default class CodeController {
     });
 
 
-    $('#uploadFile').on('click', function (e) {
+    $('#saveFile').on('click', function (e) {
       cur.saveFile();
     })
 
@@ -71,6 +100,11 @@ export default class CodeController {
       let prettyXML = beautify.xml(cur.editor.getValue(), 4);
       cur.editor.getModel().setValue(prettyXML);
     });
+
+    $('#addFile').click(function() {
+      console.log('add a file!');
+      cur.fileTreeView.addFile();
+    })
 
 
     cur.editor.onMouseDown(function (e) {
@@ -88,23 +122,7 @@ export default class CodeController {
     })
 
 
-    function debounce(func, wait, immediate) {
-      var timeout;
-      return function () {
-        var context = this,
-          args = arguments;
-        var later = function () {
-          timeout = null;
-          if (!immediate) func.apply(context, args);
-        };
-        var callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
-      };
-    };
-
-    this.editor.getModel().onDidChangeContent(debounce(function () {
+    this.editor.getModel().onDidChangeContent(cur.debounce(function () {
       cur.quickGenerate()
     }, 250))
 
@@ -122,6 +140,8 @@ export default class CodeController {
     })
   }
 
+  //_______________Custom methods to be called from handlers_______________
+
   quickGenerate() {
     let cur = this;
     if (!cur.mainController.flowController.flowView.moving && !cur.mainController.flowController.flowView.adding) {
@@ -135,6 +155,34 @@ export default class CodeController {
       }
     }
   }
+
+  debounce(func, wait, immediate) {
+    var timeout;
+    return function () {
+      var context = this,
+        args = arguments;
+      var later = function () {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  };
+
+  saveFile() {
+    let zip = this.fileTreeView.zip;
+    var FileSaver = require('file-saver');
+    zip.generateAsync({
+      type: "blob"
+    }).then(function (blob) {
+      FileSaver.saveAs(blob, "FrankConfiguration");
+    })
+  }
+
+  //_______________Methods for modifying the editor_______________
 
   selectPipe(name) {
     this.codeView.selectPipe(name);

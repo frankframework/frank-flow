@@ -4,8 +4,10 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-	<link rel="stylesheet" data-name="vs/editor/editor.main" href="node_modules/monaco-editor/min/vs/editor/editor.main.css">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" data-name="vs/editor/editor.main"
+		href="node_modules/monaco-editor/min/vs/editor/editor.main.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link href="fileTree/dist/css/file-tree.min.css" rel="stylesheet">
 	<link href="node_modules/jquery-ui-dist/jquery-ui.min.css" rel="stylesheet">
 	<link href="node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css" rel="stylesheet">
@@ -50,8 +52,11 @@
 		</div>
 		<div class="monaco-flow-wrapper">
 			<div id="fileTree" class="fileTree">
-				<h2>file tree</h2>
-				<i class="fas fa-plus-circle add-file"></i>
+				<h2>Explorer</h2>
+				<div class="icons">
+					<i class="fas fa-plus-circle fileButton" id="addFile"></i>
+					<i class="fas fa-save fileButton" id="saveFile"></i>
+				</div>
 				<div id="fileTreeItems">
 				</div>
 			</div>
@@ -72,7 +77,7 @@
 					<li><a href="#forwardsInfo">Forwards</a></li>
 					<li><a href="#attributesInfo">Attributes</a></li>
 					<li><a href="#parametersInfo">Parameters</a></li>
-				  </ul>
+				</ul>
 
 				<!-- <h2 id="pipeInfoNameTitle"><span id="pipeInfoTitleName"></span> - <span id="pipeInfoTitleType">CheckEmptyMessage</span></h2> -->
 				<div id="pipeNameTypeInfo" class="pipeNameTypeInfo">
@@ -117,10 +122,14 @@
 
 	<script language="JavaScript" type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
 	<script language="JavaScript" type="text/javascript" src="node_modules/jquery-ui-dist/jquery-ui.min.js"></script>
-	<script language="JavaScript" type="text/javascript" src="node_modules/jquery.mousewheel/jquery.mousewheel.js"></script>
-	<script language="JavaScript" type="text/javascript" src="node_modules/jquery.panzoom/dist/jquery.panzoom.min.js"></script>
-	<script language="JavaScript" type="text/javascript" src="node_modules/jquery-contextmenu/dist/jquery.contextMenu.js"></script>
-	<script language="JavaScript" type="text/javascript" src="node_modules/jquery-contextmenu/dist/jquery.ui.position.min.js"></script>
+	<script language="JavaScript" type="text/javascript"
+		src="node_modules/jquery.mousewheel/jquery.mousewheel.js"></script>
+	<script language="JavaScript" type="text/javascript"
+		src="node_modules/jquery.panzoom/dist/jquery.panzoom.min.js"></script>
+	<script language="JavaScript" type="text/javascript"
+		src="node_modules/jquery-contextmenu/dist/jquery.contextMenu.js"></script>
+	<script language="JavaScript" type="text/javascript"
+		src="node_modules/jquery-contextmenu/dist/jquery.ui.position.min.js"></script>
 	<script src="fileTree/dist/js/file-tree.min.js"></script>
 
 
