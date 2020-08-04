@@ -8,7 +8,6 @@ export default class FileTreeView {
   }
 
   makeTree(input) {
-    console.log("input", input)
     localStorage.removeItem('changedFiles');
     localStorage.removeItem('currentFile');
     $('#fileTreeItems').empty();
@@ -25,8 +24,6 @@ export default class FileTreeView {
 
           //save zip file in this class.
           cur.zip = zip;
-
-          console.log("zip", zip)
 
           cur.generateTree(fileTree);
           localStorage.setItem("changedFiles", JSON.stringify([]))
@@ -104,8 +101,6 @@ export default class FileTreeView {
     });
 
     data = this.mapFileTree(data, path);
-
-    console.log("file data", data)
     this.fileData = data;
 
     //generate the tree.
@@ -120,10 +115,9 @@ export default class FileTreeView {
 
     //make the file tree resizable.
     this.makeFileTreeResizeable()
-    this.addFile()
   }
 
-  addFile() {
+  addFile(path) {
     const defaultConfig = '<Configuration name="Example1">\n' +
       '\t<Adapter name="Example1Adapter"> \n' +
       '\t\t<Receiver name="Example1Receiver"> \n' +
@@ -141,8 +135,8 @@ export default class FileTreeView {
     let addedFileCounter = this.addedFileCounter;
 
     let obj = {
-      id: 'newFile' + addedFileCounter, //TODO: add custom id
-      name: ("FrankConfiguration/newFile" + addedFileCounter),
+      id: path + 'newFile' + addedFileCounter, //TODO: add custom id
+      name: (path + "newFile" + addedFileCounter),
       type: 'file'
     }
 
@@ -151,8 +145,8 @@ export default class FileTreeView {
 
     this.reloadTree(data)
 
-    localStorage.setItem(("FrankConfiguration/newFile" + addedFileCounter), defaultConfig)
-    this.zip.file(("FrankConfiguration/newFile" + addedFileCounter), defaultConfig);
+    localStorage.setItem((path + "newFile" + addedFileCounter), defaultConfig)
+    this.zip.file((path + "newFile" + addedFileCounter), defaultConfig);
     this.setSaveFileEventListener();
     this.addedFileCounter++;
   }
@@ -169,11 +163,54 @@ export default class FileTreeView {
 
 
   renameFile(path, newPath) {
+    let currentFile = localStorage.getItem("currentFile");
+    if (currentFile != null) {
+      let arr = JSON.parse(localStorage.getItem("changedFiles"));
+      let index = arr.indexOf(currentFile);
+      console.log("rename", index, currentFile, arr);
+      if (index > -1) {
+        arr.splice(index, 1);
+      }
+      localStorage.setItem("changedFiles", JSON.stringify(arr));
+    }
+    localStorage.setItem("currentFile", newPath);
+
     const fileData = localStorage.getItem(path);
     let prependedPath = path.match(/[^]+\/+/g)[0];
+    console.log(prependedPath, newPath)
     this.zip.remove(path);
     this.zip.file(prependedPath + newPath, fileData);
-    this.reloadTree(this.fileData);
+
+    localStorage.removeItem(path);
+    localStorage.setItem(prependedPath + newPath, fileData);
+
+    let fileTree = []
+    this.prepareFileTree(this.zip, fileTree);
+    $('#fileTreeItems').empty();
+    this.generateTree(fileTree);
+    this.setSaveFileEventListener();
+  }
+
+  deleteFile(path) {
+    if (path != null) {
+      let arr = JSON.parse(localStorage.getItem("changedFiles"));
+      let index = arr.indexOf(path);
+      console.log('delete', index, path)
+      if (index > -1) {
+        arr.splice(index, 1);
+      }
+      localStorage.setItem("changedFiles", JSON.stringify(arr));
+    }
+
+    localStorage.removeItem(path);
+    this.zip.remove(path);
+
+    let fileTree = []
+    this.prepareFileTree(this.zip, fileTree);
+    $('#fileTreeItems').empty();
+    this.generateTree(fileTree);
+    this.setSaveFileEventListener();
+
   }
 
   makeFileTreeResizeable() {

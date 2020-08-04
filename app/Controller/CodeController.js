@@ -34,12 +34,15 @@ export default class CodeController {
       callback: function (key, options) {
         var m = "clicked: " + key;
         window.console && console.log(m) || alert(m);
+        return true;
       },
       items: {
         "addFile": {
           name: "Add file", icon: "fas fa-file",
           callback: function () {
-            cur.fileTreeView.addFile();
+            let path = $(this).attr('data-name');
+            console.log('add path: ', path)
+            cur.fileTreeView.addFile(path);
             return true;
           }
         }
@@ -52,6 +55,7 @@ export default class CodeController {
       callback: function (key, options) {
         var m = "clicked: " + key;
         window.console && console.log(m) || alert(m);
+        return true;
       },
       items: {
         "rename": {
@@ -61,6 +65,14 @@ export default class CodeController {
             let path = $(this).attr('data-name');
             let newPath = prompt("new name");
             cur.fileTreeView.renameFile(path, newPath);
+            return true;
+          }
+        },
+        "delete": {
+          name: "Delete file", icon: "fas fa-trash",
+          callback: function() {
+            let path = $(this).attr('data-name');
+            cur.fileTreeView.deleteFile(path);
             return true;
           }
         }
@@ -103,7 +115,7 @@ export default class CodeController {
 
     $('#addFile').click(function() {
       console.log('add a file!');
-      cur.fileTreeView.addFile();
+      cur.fileTreeView.addFile("FrankConfiguration/");
     })
 
 
