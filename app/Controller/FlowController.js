@@ -12,7 +12,7 @@ export default class FlowController {
     this.paletteView.addListener(this);
     this.hoverSourceWindow = false;
     this.initHandlers();
-    localStorage.setItem("tibcoMode", false);
+    localStorage.setItem("activityMode", false);
   }
 
   //_______________Observer_______________
@@ -115,13 +115,13 @@ export default class FlowController {
         window.console && console.log(m) || alert(m);
       },
       items: {
-        "tibcoMode": {
-          name: "Tibco mode", icon: "fas fa-globe-americas",
+        "ActivityMode": {
+          name: "Activity mode", icon: "fas fa-globe-americas",
           callback: function () {
-            if (localStorage.getItem("tibcoMode") == "false") {
-              localStorage.setItem("tibcoMode", "true");
+            if (localStorage.getItem("activityMode") == "false") {
+              localStorage.setItem("activityMode", "true");
             } else {
-              localStorage.setItem("tibcoMode", "false");
+              localStorage.setItem("activityMode", "false");
             }
             return true;
           }
