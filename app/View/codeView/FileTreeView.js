@@ -14,12 +14,13 @@ export default class FileTreeView {
     let cur = this;
     var f,
       fileTree = [];
-    for (var i = 0; i < input.files.length; i++) {
-      f = input.files[i];
+    //for (var i = 0; i < input.files.length; i++) {
+      f = input;
       //load file in async
       JSZip.loadAsync(f) // 1) read the Blob
         .then(function (zip) {
-          zip.folder(f.name.replace('.zip', ''), '');
+          console.log(zip)
+          //zip.folder(f.name.replace('.zip', ''), '');
           cur.prepareFileTree(zip, fileTree);
 
           //save zip file in this class.
@@ -33,7 +34,7 @@ export default class FileTreeView {
         }, function (e) {
           console.log("error", e);
         });
-    }
+    //}
   }
 
   prepareFileTree(zip, fileTree) {

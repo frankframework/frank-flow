@@ -18,7 +18,7 @@ export default class CodeController {
     this.initListeners();
   }
 
-//_______________Event handlers_______________
+  //_______________Event handlers_______________
 
   initListeners() {
     let cur = this;
@@ -65,7 +65,7 @@ export default class CodeController {
         },
         "delete": {
           name: "Delete file", icon: "fas fa-trash",
-          callback: function() {
+          callback: function () {
             let path = $(this).attr('data-name');
             cur.fileTreeView.deleteFile(path);
             return true;
@@ -108,7 +108,7 @@ export default class CodeController {
       cur.editor.getModel().setValue(prettyXML);
     });
 
-    $('#addFile').click(function() {
+    $('#addFile').click(function () {
       console.log('add a file!');
       cur.fileTreeView.addFile("FrankConfiguration/");
     })
@@ -184,8 +184,53 @@ export default class CodeController {
     var FileSaver = require('file-saver');
     zip.generateAsync({
       type: "blob"
-    }).then(function (blob) {
-      FileSaver.saveAs(blob, "FrankConfiguration");
+    }).then(function (myzip) {
+      //FileSaver.saveAs(blob, "FrankConfiguration");
+      console.log(myzip);
+      var fileName = 'configuration.zip';
+      var fd = new FormData();
+      const finalurl = 'http://localhost/iaf/api/configurations';
+      fd.append("realm", 'jdbc');
+      fd.append("name", "PROJECTNAME");
+      fd.append("version", 1);
+      fd.append("encoding", 'utf-8');
+      fd.append("multiple_configs", false);
+      fd.append("activate_config", true);
+      fd.append("automatic_reload", true);
+      fd.append('Content-Type', 'application/zip');
+      fd.append('Content-disposition', 'form-data; name="aFile"; filename="avatar.png" ')
+      fd.append("file", myzip, fileName);
+      
+      console.log(fd);
+
+
+      // return new Promise(function (resolve, reject) {
+      //   console.log("posting to iaf", myzip);
+      //   return $http({ method: 'POST', url: finalurl, data: fd, headers: { 'Content-type': undefined } }
+      //   ).then(function succes(response) {
+      //     console.info("returning from backend", response);
+      //     resolve(response);
+      //   }, function failure(response) {
+      //     console.info("returning error from backend", response);
+      //     reject(response);
+      //   });
+      // });
+
+      fetch(finalurl, {
+        method: 'POST',
+        body: fd,
+        headers: { 'ContentType': 'application/zip'}
+      }).then(res => {
+        console.log(res)
+        return res.json();
+      }).then(re => {
+        console.log(re)
+      })
+      
+      .catch(e => {
+        console.log(e)
+      })
+
     })
   }
 

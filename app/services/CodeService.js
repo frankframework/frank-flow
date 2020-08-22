@@ -1,4 +1,5 @@
 import ToBeautifulSyntax from '../View/codeView/ToBeautifulSyntax.js';
+import JSZip from '../../node_modules/jszip/dist/jszip.js';
 
 
 export default class CodeService {
@@ -130,6 +131,9 @@ export default class CodeService {
                 return response;
             })
             .then(data => {
+                console.log("data: ", data[3])
+                name = data[3].match(/<Configuration[^]*?name=".*?"/g);
+                cur.loadZip(name);
                 cur.codeView.addOptions(data);
             })
             .catch(err => {
@@ -140,5 +144,34 @@ export default class CodeService {
                     //cur.getConfigurations(true);
                 }
             })
+    }
+
+    loadZip(configurationName) {
+        configurationName = configurationName.match(/".*?"/g)[0].replace(/"/g, '');
+        console.log(configurationName)
+        const versionPath = 'http://localhost/iaf/api/configurations/' + configurationName + '/versions';
+        const options = {
+            headers: {
+                'Content-disposition': 'attachment; filename="filename.jpg"'
+            },
+            method: 'GET'
+        }
+        fetch(versionPath, options)
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            if(data) {
+                const zipPath = 'http://localhost/iaf/api/configurations/' + configurationName + '/versions/' + data[0].version + '/download';
+                fetch(zipPath, {method: 'GET'}).then(response => {
+                    return response.blob();
+                })
+                .then(zipFile => {
+                    console.log(zipFile)
+                    this.mainController.codeController.fileTreeView.makeTree(zipFile);                    
+                })
+            }
+        })
     }
 }
