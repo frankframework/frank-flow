@@ -188,20 +188,19 @@ export default class CodeController {
       //FileSaver.saveAs(blob, "FrankConfiguration");
       console.log(myzip);
       var fileName = 'configuration.zip';
+
       var fd = new FormData();
       const finalurl = 'http://localhost/iaf/api/configurations';
-      fd.append("realm", 'jdbc');
+      fd.append("datasource", 'jdbc/frank2manual');
       fd.append("name", "PROJECTNAME");
-      fd.append("version", 1);
+      fd.append("version", '5');
       fd.append("encoding", 'utf-8');
       fd.append("multiple_configs", false);
       fd.append("activate_config", true);
       fd.append("automatic_reload", true);
-      fd.append('Content-Type', 'application/zip');
-      fd.append('Content-disposition', 'form-data; name="aFile"; filename="avatar.png" ')
       fd.append("file", myzip, fileName);
       
-      console.log(fd);
+      console.log(...fd);
 
 
       // return new Promise(function (resolve, reject) {
@@ -217,16 +216,14 @@ export default class CodeController {
       // });
 
       fetch(finalurl, {
-        method: 'POST',
+        method: 'post',
         body: fd,
-        headers: { 'ContentType': 'application/zip'}
       }).then(res => {
         console.log(res)
-        return res.json();
+        return res.text();
       }).then(re => {
         console.log(re)
-      })
-      
+      })      
       .catch(e => {
         console.log(e)
       })

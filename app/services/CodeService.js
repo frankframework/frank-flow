@@ -131,7 +131,6 @@ export default class CodeService {
                 return response;
             })
             .then(data => {
-                console.log("data: ", data[3])
                 name = data[3].match(/<Configuration[^]*?name=".*?"/g);
                 cur.loadZip(name);
                 cur.codeView.addOptions(data);
@@ -163,7 +162,17 @@ export default class CodeService {
         .then(data => {
             console.log(data);
             if(data) {
-                const zipPath = 'http://localhost/iaf/api/configurations/' + configurationName + '/versions/' + data[0].version + '/download';
+                let version = prompt('please enter a version number');
+                let ver = data[0].version;
+
+                data.forEach(function(item, i) {
+                    console.log(item)
+                    
+                    if(item.version.match(version + '(?=_)')) {
+                        ver = item.version;
+                    }
+                })
+                let zipPath = 'http://localhost/iaf/api/configurations/' + configurationName + '/versions/' + ver + '/download';
                 fetch(zipPath, {method: 'GET'}).then(response => {
                     return response.blob();
                 })
