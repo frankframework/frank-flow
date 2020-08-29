@@ -32,3 +32,7 @@
   width: 100%;
   height: auto;
 }
+
+div.icons #addFile:hover {
+  background-color: red;
+}

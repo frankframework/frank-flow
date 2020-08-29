@@ -75,33 +75,23 @@ export default class CodeController {
     });
 
     $('#adapterSelect').on('change', function (e) {
-      let adapter = $('#adapterSelect').val();
-      let textConfig = localStorage.getItem(adapter);
-      cur.editor.getModel().setValue(textConfig);
-      let adapters = textConfig.match(/<Adapter[^]*?name=".*?">/g);
-      if (adapters != null) {
-        let adapterName = adapters[0].match(/name="[^]*?"/g)[0].match(/"[^]*?"/g)[0].replace(/"/g, '');
-        localStorage.setItem("currentAdapter", adapterName);
-        cur.quickGenerate();
-      }
+      let adapterName = $('#adapterSelect').val();
+      localStorage.setItem('currentAdapter', adapterName)
+      cur.quickGenerate();
+
     });
 
-    $('#fileReader').on('change', function (e) {
-      var input = event.target;
-      console.log(input.files);
-      cur.fileTreeView.makeTree(input, cur.editor);
-      $('#adapterSelect').css('display', 'none');
-    });
+    // $('#fileReader').on('change', function (e) {
+    //   var input = event.target;
+    //   console.log(input.files);
+    //   cur.fileTreeView.makeTree(input, cur.editor);
+    //   $('#adapterSelect').css('display', 'none');
+    // });
 
 
     $('#saveFile').on('click', function (e) {
       cur.saveFile();
     })
-
-    $('#adapterSelect').on('click', function (e) {
-      let adapter = $('#adapterSelect').val();
-      localStorage.setItem(adapter, cur.editor.getModel().getValue());
-    });
 
     $('#beautify').click(function () {
       let prettyXML = beautify.xml(cur.editor.getValue(), 4);

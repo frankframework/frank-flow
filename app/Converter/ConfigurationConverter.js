@@ -11,11 +11,17 @@ export default class ConfigurationConverter {
     var getXml = new DOMParser();
     let xml = getXml.parseFromString(value, "text/xml");
 
-    //check for parse error. if(childnodes > 1) it means
+    //check for parse error. if(childnodes > 1) it is a parse error.
     if(xml.childNodes.length > 1) {
       return xml.lastElementChild.firstChild.textContent;
     }
     let transformedXml = JSON.parse(this.xml2json(xml).replace('undefined', ''));
+
+    if(transformedXml.Configuration == null && transformedXml.Module != null) {
+      let module = transformedXml.Module;
+      transformedXml = {};
+      transformedXml.Configuration = module;
+    }
 
     if (transformedXml.Configuration.Module == null && transformedXml.Configuration.Adapter != null) {
       transformedXml.Adapter = transformedXml.Configuration.Adapter;

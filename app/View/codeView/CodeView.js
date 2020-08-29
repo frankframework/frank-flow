@@ -49,7 +49,7 @@ export default class CodeView {
     this.validateConfigurationView = new ValidateConfigurationView(this.editor, this.xsdModel);
     this.codeEditView = new CodeEditView(this.editor);
     this.codePipeView = new CodePipeView(this.editor);
-    this.optionView = new OptionView(this.editor);
+//    this.optionView = new OptionView(this.editor);
     this.typesView = new CodeTypesView(this.editor);
     this.exitPipeView = new ExitPipeView(this.editor);
     this.codeAttributesView = new CodeAttributesView(this.editor);
@@ -62,9 +62,9 @@ export default class CodeView {
     }
   }
 
-  addOptions(adapters) {
-    this.optionView.addOptions(adapters);
-  }
+  // addOptions(adapters) {
+  //   this.optionView.addOptions(adapters);
+  // }
 
   selectPipe(name) {
     this.codePipeView.selectPipe(name);

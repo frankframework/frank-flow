@@ -115,6 +115,19 @@ export default class FlowController {
         window.console && console.log(m) || alert(m);
       },
       items: {
+        "flow": {
+          name: "Flow fullscreen", icon: "fas fa-compress",
+          callback: function () {
+            cur.setFullFlow();
+          }
+        },
+        "hybrid": {
+          name: "Hybrid", icon: "fas fa-window-restore",
+          callback: function () {
+            cur.setHybrid();
+          }
+        },
+        "sep1": "---------",
         "ActivityMode": {
           name: "Activity mode", icon: "fas fa-globe-americas",
           callback: function () {
@@ -152,19 +165,6 @@ export default class FlowController {
           name: "Set theme", icon: "fas fa-adjust",
           callback: function () {
             cur.setTheme();
-          }
-        },
-        "sep1": "---------",
-        "flow": {
-          name: "Flow fullscreen", icon: "fas fa-compress",
-          callback: function () {
-            cur.setFullFlow();
-          }
-        },
-        "hybrid": {
-          name: "Hybrid", icon: "fas fa-window-restore",
-          callback: function () {
-            cur.setHybrid();
           }
         },
         // "editor": {name: "Editor", icon: "fas fa-file-code",

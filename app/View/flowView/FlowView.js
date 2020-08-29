@@ -249,12 +249,11 @@ export default class FlowView {
     this.notifyListeners({
       type: "convertConfiguration"
     });
-    this.flowGenerator.generateFlow(this.windows);
+    this.flowGenerator.generateFlow();
   }
 
   displayError(e) {
     instance.reset();
-    console.log(typeof(this.flowModel.getTransformedXml()))
     $('#canvas').empty();
     $('#canvas').css('display', 'none');
     $('.customErrorMessage').remove();

@@ -124,7 +124,7 @@ export default class CodeService {
                         }
                         response[index] = cur.toBeautiful.toBeautifulSyntax(item);
                     } else {
-                        localStorage.setItem(index, item);
+                        //localStorage.setItem(index, item);
                     }
 
                 });
@@ -133,7 +133,7 @@ export default class CodeService {
             .then(data => {
                 name = data[3].match(/<Configuration[^]*?name=".*?"/g);
                 cur.loadZip(name);
-                cur.codeView.addOptions(data);
+                //cur.codeView.addOptions(data);
             })
             .catch(err => {
                 if (secondTry) {
@@ -160,14 +160,11 @@ export default class CodeService {
             return response.json();
         })
         .then(data => {
-            console.log(data);
             if(data) {
                 let version = prompt('please enter a version number');
                 let ver = data[0].version;
 
-                data.forEach(function(item, i) {
-                    console.log(item)
-                    
+                data.forEach(function(item, i) {               
                     if(item.version.match(version + '(?=_)')) {
                         ver = item.version;
                     }
@@ -177,7 +174,6 @@ export default class CodeService {
                     return response.blob();
                 })
                 .then(zipFile => {
-                    console.log(zipFile)
                     this.mainController.codeController.fileTreeView.makeTree(zipFile);                    
                 })
             }

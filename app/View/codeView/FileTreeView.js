@@ -1,10 +1,12 @@
 import JSZip from '../../../node_modules/jszip/dist/jszip.js';
+import OptionView from './codeEditViews/OptionView.js';
 
 export default class FileTreeView {
   constructor(editor) {
     this.editor = editor;
     this.fileData = null;
     this.addedFileCounter = 0;
+    this.optionView = new OptionView(this.editor);
   }
 
   makeTree(input) {
@@ -14,27 +16,21 @@ export default class FileTreeView {
     let cur = this;
     var f,
       fileTree = [];
-    //for (var i = 0; i < input.files.length; i++) {
-      f = input;
-      //load file in async
-      JSZip.loadAsync(f) // 1) read the Blob
-        .then(function (zip) {
-          console.log(zip)
-          //zip.folder(f.name.replace('.zip', ''), '');
-          cur.prepareFileTree(zip, fileTree);
+    f = input;
+    //load file in async
+    JSZip.loadAsync(f) // 1) read the Blob
+      .then(function (zip) {
+        cur.prepareFileTree(zip, fileTree);
 
-          //save zip file in this class.
-          cur.zip = zip;
+        cur.zip = zip;
 
-          cur.generateTree(fileTree);
-          localStorage.setItem("changedFiles", JSON.stringify([]))
+        cur.generateTree(fileTree);
+        localStorage.setItem("changedFiles", JSON.stringify([]))
 
-          //when click event on file, save the current file.
-          cur.setSaveFileEventListener();
-        }, function (e) {
-          console.log("error", e);
-        });
-    //}
+        cur.setSaveFileEventListener();
+      }, function (e) {
+        console.log("error", e);
+      });
   }
 
   prepareFileTree(zip, fileTree) {
@@ -47,6 +43,7 @@ export default class FileTreeView {
         });
       }
     });
+
     /*
     switch the last element in the fileTree with the first element.
     TODO: make a more efficient method that inserts the last element
@@ -72,7 +69,17 @@ export default class FileTreeView {
       }
       localStorage.setItem("currentFile", path)
       cur.editor.setValue(localStorage.getItem(path))
+      cur.generateAdapters();
     });
+  }
+
+  generateAdapters() {
+    let currentConfig = localStorage.getItem("currentFile");
+    currentConfig = localStorage.getItem(currentConfig)
+
+    let adapters = currentConfig.match(/<Adapter[^]*?>[^]*?<\/Adapter>/g);
+
+    this.optionView.addOptions(adapters);
   }
 
   //create file objects, sort them with the map method and then generate file tree
