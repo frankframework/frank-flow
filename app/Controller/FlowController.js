@@ -139,6 +139,12 @@ export default class FlowController {
             return true;
           }
         },
+        "realign": {
+          name: 'Realign flow', icon: "fas fa-outdent",
+          callback: function() {
+            cur.flowView.realignFlow();
+          }
+        },
         "curve": {
           name: "Toggle curve", icon: "fas fa-ruler-combined",
           callback: function () {

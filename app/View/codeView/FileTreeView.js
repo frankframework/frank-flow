@@ -223,21 +223,21 @@ export default class FileTreeView {
 
   makeFileTreeResizeable() {
     let cur = this;
-    $('#fileTree').mousedown(function (e) {
+    $('#fileWrapperPalette').mousedown(function (e) {
       if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
         cur.resize = true;
       }
     });
 
-    $('#fileTree').mouseup(function (e) {
+    $('#fileWrapperPalette').mouseup(function (e) {
       cur.resize = false;
     })
 
-    $('#fileTree').mousemove(function (e) {
+    $('#fileWrapperPalette').mousemove(function (e) {
       if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
-        $('#fileTree').css('cursor', 'e-resize');
+        $('#fileWrapperPalette').css('cursor', 'e-resize');
       } else {
-        $('#fileTree').css('cursor', 'auto');
+        $('#fileWrapperPalette').css('cursor', 'auto');
       }
 
       if (cur.resize) {

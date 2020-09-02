@@ -81,12 +81,12 @@ export default class CodeController {
 
     });
 
-    // $('#fileReader').on('change', function (e) {
-    //   var input = event.target;
-    //   console.log(input.files);
-    //   cur.fileTreeView.makeTree(input, cur.editor);
-    //   $('#adapterSelect').css('display', 'none');
-    // });
+    $('#fileReader').on('change', function (e) {
+      var input = event.target;
+      console.log(input, input.webkitEntries);
+      cur.fileTreeView.makeTree(input, cur.editor);
+      $('#adapterSelect').css('display', 'none');
+    });
 
 
     $('#saveFile').on('click', function (e) {
@@ -189,21 +189,6 @@ export default class CodeController {
       fd.append("activate_config", true);
       fd.append("automatic_reload", true);
       fd.append("file", myzip, fileName);
-      
-      console.log(...fd);
-
-
-      // return new Promise(function (resolve, reject) {
-      //   console.log("posting to iaf", myzip);
-      //   return $http({ method: 'POST', url: finalurl, data: fd, headers: { 'Content-type': undefined } }
-      //   ).then(function succes(response) {
-      //     console.info("returning from backend", response);
-      //     resolve(response);
-      //   }, function failure(response) {
-      //     console.info("returning error from backend", response);
-      //     reject(response);
-      //   });
-      // });
 
       fetch(finalurl, {
         method: 'post',
