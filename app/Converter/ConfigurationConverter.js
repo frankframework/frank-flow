@@ -9,7 +9,9 @@ export default class ConfigurationConverter {
     value = value.replace(/<[\/][\S]*?[^"\/]Pipe/g, "</pipe").replace(/&/g, '');
     value = value.replace(/<!--[^]*?-->/g, '')
     var getXml = new DOMParser();
+
     let xml = getXml.parseFromString(value, "text/xml");
+
 
     //check for parse error. if(childnodes > 1) it is a parse error.
     if(xml.childNodes.length > 1) {

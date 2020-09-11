@@ -1,5 +1,6 @@
-import JSZip from '../../../node_modules/jszip/dist/jszip.js';
+import JSZip from 'jszip';
 import OptionView from './codeEditViews/OptionView.js';
+import fileTree from '../../../fileTree/dist/js/file-tree.min.js';
 
 export default class FileTreeView {
   constructor(editor) {
@@ -223,21 +224,21 @@ export default class FileTreeView {
 
   makeFileTreeResizeable() {
     let cur = this;
-    $('#fileWrapperPalette').mousedown(function (e) {
+    $('#filePaletteWrapper').mousedown(function (e) {
       if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
         cur.resize = true;
       }
     });
 
-    $('#fileWrapperPalette').mouseup(function (e) {
+    $('#filePaletteWrapper').mouseup(function (e) {
       cur.resize = false;
     })
 
-    $('#fileWrapperPalette').mousemove(function (e) {
+    $('#filePaletteWrapper').mousemove(function (e) {
       if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
-        $('#fileWrapperPalette').css('cursor', 'e-resize');
+        $('#filePaletteWrapper').css('cursor', 'e-resize');
       } else {
-        $('#fileWrapperPalette').css('cursor', 'auto');
+        $('#filePaletteWrapper').css('cursor', 'auto');
       }
 
       if (cur.resize) {

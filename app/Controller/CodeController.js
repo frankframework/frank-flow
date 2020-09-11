@@ -2,6 +2,7 @@ import CodeView from '../View/codeView/CodeView.js';
 import FileTreeView from '../View/codeView/FileTreeView.js';
 import CodeService from '../Services/CodeService.js';
 import XsdModel from '../Model/XsdModel';
+import * as beautify from 'vkbeautify';
 
 export default class CodeController {
 

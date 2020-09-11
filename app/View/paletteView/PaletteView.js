@@ -1,5 +1,4 @@
-import PipeView from '../flowView/pipe/PipeView.js';
-import SimpleBar from '../../../node_modules/simplebar/dist/simplebar.js'
+import SimpleBar from 'simplebar';
 
 export default class PaletteView {
   constructor(flowController) {

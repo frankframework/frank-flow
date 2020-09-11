@@ -27,7 +27,8 @@
     "karma-chrome-launcher": "^3.1.0",
     "karma-coverage": "^2.0.2",
     "karma-webpack": "^4.0.2",
-    "monaco-editor": "^0.18.1",
+    "monaco-editor": "^0.20.0",
+    "monaco-editor-webpack-plugin": "^1.9.0",
     "nodejs": "0.0.0",
     "simplebar": "^5.2.1",
     "vkbeautify": "^0.99.3",
@@ -35,11 +36,17 @@
   },
   "devDependencies": {
     "@metahub/karma-jasmine-jquery": "^4.0.1",
+    "css-loader": "^4.3.0",
+    "expose-loader": "^1.0.0",
+    "file-loader": "^6.1.0",
+    "image-webpack-loader": "^7.0.0",
     "jasmine-core": "^3.5.0",
     "jasmine-jquery": "^2.1.1",
     "karma": "^5.1.0",
     "karma-html2js-preprocessor": "^1.1.0",
     "karma-jasmine": "^3.3.1",
+    "mini-css-extract-plugin": "^0.11.1",
+    "style-loader": "^1.2.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
   }

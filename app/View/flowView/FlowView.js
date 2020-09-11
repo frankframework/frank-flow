@@ -1,4 +1,6 @@
 import FlowGenerator from './flowGeneration/FlowGenerator.js'
+import domtoimage from 'dom-to-image';
+import jsplumb from 'jsplumb';
 export default class FlowView {
 
   constructor(flowModel) {

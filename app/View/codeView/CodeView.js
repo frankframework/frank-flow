@@ -7,6 +7,7 @@ import CodeTypesView from './codeEditViews/CodeTypesView.js';
 import ExitPipeView from './codeEditViews/ExitPipeView.js';
 import CodeAttributesView from './codeEditViews/CodeAttributesView.js';
 import CodeParametersView from './codeEditViews/CodeParametersView.js';
+import * as monaco from 'monaco-editor'
 
 export const logColor = 'background: #222; color: #bada55';
 
