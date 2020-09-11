@@ -148,7 +148,7 @@ export default class CodeService {
     loadZip(configurationName) {
         configurationName = configurationName.match(/".*?"/g)[0].replace(/"/g, '');
         console.log(configurationName)
-        const versionPath = 'http://localhost/iaf/api/configurations/' + configurationName + '/versions';
+        const versionPath = '../iaf/api/configurations/' + configurationName + '/versions';
         const options = {
             headers: {
                 'Content-disposition': 'attachment; filename="filename.jpg"'
@@ -169,7 +169,7 @@ export default class CodeService {
                         ver = item.version;
                     }
                 })
-                let zipPath = 'http://localhost/iaf/api/configurations/' + configurationName + '/versions/' + ver + '/download';
+                let zipPath = '../iaf/api/configurations/' + configurationName + '/versions/' + ver + '/download';
                 fetch(zipPath, {method: 'GET'}).then(response => {
                     return response.blob();
                 })
