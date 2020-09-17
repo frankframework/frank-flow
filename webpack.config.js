@@ -12,6 +12,7 @@ module.exports = {
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/dist/'
   },
   module: {
     rules: [
@@ -23,7 +24,7 @@ module.exports = {
     //   ]
     // }, 
     {
-      test: /\.ttf$/,
+      test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
       use: ['file-loader']
     },
     {
