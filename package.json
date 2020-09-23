@@ -12,6 +12,10 @@
   "author": "ruben",
   "license": "ISC",
   "dependencies": {
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/preset-env": "^7.11.5",
+    "babel-loader": "^8.1.0",
     "dom-to-image": "^2.6.0",
     "download.js": "^1.0.0",
     "file-saver": "^2.0.2",
@@ -48,6 +52,9 @@
     "mini-css-extract-plugin": "^0.11.1",
     "style-loader": "^1.2.1",
     "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "turndown": "^6.0.0",
+    "xmldom": "^0.3.0",
+    "xpath": "0.0.29"
   }
 }

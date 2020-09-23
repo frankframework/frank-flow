@@ -1,12 +1,12 @@
 import ValidateConfigurationView from './ValidateConfigurationView.js';
-import CodeCompletionView from './codeCompletion/CodeCompletionView.js';
 import CodeEditView from './codeEditViews/CodeEditView.js';
-import OptionView from './codeEditViews/OptionView.js';
+// import OptionView from './codeEditViews/OptionView.js';
 import CodePipeView from './codeEditViews/CodePipeView.js';
 import CodeTypesView from './codeEditViews/CodeTypesView.js';
 import ExitPipeView from './codeEditViews/ExitPipeView.js';
 import CodeAttributesView from './codeEditViews/CodeAttributesView.js';
 import CodeParametersView from './codeEditViews/CodeParametersView.js';
+import XSDCodeCompletionView from './codeCompletion/XSDCodeCompletionView.js';
 import * as monaco from 'monaco-editor'
 
 export const logColor = 'background: #222; color: #bada55';
@@ -20,7 +20,6 @@ export default class CodeView {
     this.decorations = null;
     this.decorations = null;
     this.validateConfigurationView;
-    this.CodeCompletionView = new CodeCompletionView(this);
   }
 
   addListener(listener) {
@@ -55,6 +54,7 @@ export default class CodeView {
     this.exitPipeView = new ExitPipeView(this.editor);
     this.codeAttributesView = new CodeAttributesView(this.editor);
     this.codeParametersView = new CodeParametersView(this.editor);
+    this.CodeCompletionView = new XSDCodeCompletionView(monaco, this.xsdModel);
   }
 
   setGlobalVariables() {
