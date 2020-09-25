@@ -92,57 +92,57 @@ export default class CodeService {
     }
 
     getConfigurations(secondTry) {
-        let cur = this,
-            path = '../iaf/api/configurations';
-        if (secondTry) {
-            path = '../' + path;
-        }
-        fetch(path, {
-            method: 'GET'
-        })
-            .then(response => {
-                return response.text();
-            })
-            .then(response => {
-                let configurations = [],
-                    dom, obj;
-                response.match(/<[cC]onfiguration[^]*?>[^]*?<\/[cC]onfiguration>|<IOS-Adaptering[^]*?>[^]*?<\/IOS-Adaptering>/g).forEach(function (item, index) {
-                    if (item != null) {
-                        configurations.push(item);
-                    } else {
-                        console.log('unknown configuration encountered');
-                    }
-                })
+        // let cur = this,
+        //     path = '../iaf/api/configurations';
+        // if (secondTry) {
+        //     path = '../' + path;
+        // }
+        // fetch(path, {
+        //     method: 'GET'
+        // })
+        //     .then(response => {
+        //         return response.text();
+        //     })
+        //     .then(response => {
+        //         let configurations = [],
+        //             dom, obj;
+        //         response.match(/<[cC]onfiguration[^]*?>[^]*?<\/[cC]onfiguration>|<IOS-Adaptering[^]*?>[^]*?<\/IOS-Adaptering>/g).forEach(function (item, index) {
+        //             if (item != null) {
+        //                 configurations.push(item);
+        //             } else {
+        //                 console.log('unknown configuration encountered');
+        //             }
+        //         })
 
-                return configurations;
-            })
-            .then(response => {
-                response.forEach(function (item, index) {
-                    if (item.match(/<Configuration/g) == null) {
-                        if (item.match(/IOS-Adaptering/g) != null) {
-                            item = item.replace(/IOS-Adaptering/g, 'Configuration');
-                        }
-                        response[index] = cur.toBeautiful.toBeautifulSyntax(item);
-                    } else {
-                        //localStorage.setItem(index, item);
-                    }
+        //         return configurations;
+        //     })
+        //     .then(response => {
+        //         response.forEach(function (item, index) {
+        //             if (item.match(/<Configuration/g) == null) {
+        //                 if (item.match(/IOS-Adaptering/g) != null) {
+        //                     item = item.replace(/IOS-Adaptering/g, 'Configuration');
+        //                 }
+        //                 response[index] = cur.toBeautiful.toBeautifulSyntax(item);
+        //             } else {
+        //                 //localStorage.setItem(index, item);
+        //             }
 
-                });
-                return response;
-            })
-            .then(data => {
-                name = data[3].match(/<Configuration[^]*?name=".*?"/g);
-                cur.loadZip(name);
-                //cur.codeView.addOptions(data);
-            })
-            .catch(err => {
-                if (secondTry) {
-                    console.log('couldnt load configurations', err)
-                } else {
-                    console.log("configurations path was incorrect, trying other path now...", err);
-                    //cur.getConfigurations(true);
-                }
-            })
+        //         });
+        //         return response;
+        //     })
+        //     .then(data => {
+        //         name = data[3].match(/<Configuration[^]*?name=".*?"/g);
+        //         cur.loadZip(name);
+        //         //cur.codeView.addOptions(data);
+        //     })
+        //     .catch(err => {
+        //         if (secondTry) {
+        //             console.log('couldnt load configurations', err)
+        //         } else {
+        //             console.log("configurations path was incorrect, trying other path now...", err);
+        //             //cur.getConfigurations(true);
+        //         }
+        //     })
     }
 
     loadZip(configurationName) {
