@@ -16,40 +16,39 @@ module.exports = {
   },
   module: {
     rules: [
-    //   {
-    //   test: /\.css$/,
-    //   use: [
-    //     {loader: 'css-loader', options: {import: true}},
-    //     'style-loader',
-    //   ]
-    // }, 
-    {
-      test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
-      use: ['file-loader']
-    },
-    {
-      test: /\.css$/,
-      use: [
-        MiniCssExtractPlugin.loader, // instead of style-loader
-        'css-loader',
-      ],
-    },
-    {
-      test: /\.(jpe?g|png|gif|svg)$/i,
-      loaders: [
-        'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
-        'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
-      ]
-    },
+      {
+        test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9=&.]+)?$/,
+        use: ['file-loader']
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader, // instead of style-loader
+          'css-loader',
+        ],
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loaders: [
+          'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+          'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
+        ]
+      },
+      {
+        test: /\.m?js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+        },
+      },
     ]
   },
   plugins: [
     new MonacoWebpackPlugin(),
     new MiniCssExtractPlugin(),
-    // new webpack.ProvidePlugin({
-    //   $: 'jquery',
-    //   jQuery: 'jquery'
-    // })
   ],
   devtool: "inline-source-map",
   target: "web",

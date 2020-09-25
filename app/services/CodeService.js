@@ -66,7 +66,7 @@ export default class CodeService {
                 return response.text()
             })
             .then(data => {
-                this.xsdModel.xsd = data;
+                this.xsdModel.setXsd(data);
                 console.log("xsd is loaded!, here");
             })
             .catch(err => {
