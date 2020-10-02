@@ -43,8 +43,9 @@
   },
   "devDependencies": {
     "@metahub/karma-jasmine-jquery": "^4.0.1",
-    "css-loader": "^4.3.0",
+    "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^6.1.1",
+    "css-loader": "^4.3.0",
     "expose-loader": "^1.0.0",
     "file-loader": "^6.1.0",
     "image-webpack-loader": "^7.0.0",
@@ -55,9 +56,9 @@
     "karma-jasmine": "^3.3.1",
     "mini-css-extract-plugin": "^0.11.1",
     "style-loader": "^1.2.1",
+    "turndown": "^6.0.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
-    "turndown": "^6.0.0",
     "xmldom": "^0.3.0",
     "xpath": "0.0.29"
   }
