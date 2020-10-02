@@ -15,7 +15,7 @@ export default class CodeController {
     this.codeService = new CodeService(this.codeView, ibisdocModel, this.XsdModel, mainController);
     this.codeView.makeEditor();
     this.editor = this.codeView.editor;
-    this.fileTreeView = new FileTreeView(this.editor);
+    this.fileTreeView = new FileTreeView(this.editor, this.codeService);
     this.initListeners();
   }
 
@@ -208,6 +208,10 @@ export default class CodeController {
   }
 
   //_______________Methods for modifying the editor_______________
+
+  setEditorValue(value) {
+    this.codeView.setEditorValue(value);
+  }
 
   selectPipe(name) {
     this.codeView.selectPipe(name);

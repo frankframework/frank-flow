@@ -67,6 +67,10 @@ export default class CodeView {
   //   this.optionView.addOptions(adapters);
   // }
 
+  setEditorValue(value) {
+    this.editor.setValue(value);
+  }
+
   selectPipe(name) {
     this.codePipeView.selectPipe(name);
   }

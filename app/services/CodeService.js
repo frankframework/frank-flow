@@ -116,11 +116,25 @@ export default class CodeService {
         }).then(response => {
             return response.json();
         }).then(data => {
-            console.log(data);
-            cur.mainController.codeController.fileTreeView.makeTree(zipFile);
+            cur.mainController.codeController.fileTreeView.makeTree(data._files);
         }).catch(e => {
             console.log('error getting configs: ' + e);
         })
+    }
+
+    getSingleFile(name) {
+        let cur = this,
+        path = './api/configurations/NewHorizons/files/?path=' + name;
+
+    fetch(path, {
+        method: 'GET'
+    }).then(response => {
+        return response.text();
+    }).then(data => {
+        cur.mainController.codeController.setEditorValue(data);
+    }).catch(e => {
+        console.log('error getting configs: ' + e);
+    })
     }
 
     loadZip(configurationName) {
