@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -49,6 +50,13 @@ module.exports = {
   plugins: [
     new MonacoWebpackPlugin(),
     new MiniCssExtractPlugin(),
+    new CopyPlugin({
+      patterns: [
+        { from: 'index.html', to: path.resolve(__dirname, '../main/resources/frontend') },
+        { from: 'media', to: path.resolve(__dirname, '../main/resources/frontend/media') },
+        { from: 'jquery.contextMenu.min.css', to: path.resolve(__dirname, '../main/resources/frontend') },
+      ],
+    }),
   ],
   devtool: "inline-source-map",
   target: "web",

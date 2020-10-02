@@ -6,7 +6,10 @@
   "scripts": {
     "unit": "karma start karma.conf.js ",
     "test": "npm run unit",
-    "test-cover": "istanbul cover --include-all-sources test/pipeInfoTest.spec.js && istanbul check-coverage"
+    "test-cover": "istanbul cover --include-all-sources test/pipeInfoTest.spec.js && istanbul check-coverage",
+    "build": "webpack",
+    "watch": "webpack --watch --mode development",
+    "start": "webpack-dev-server --mode development"
   },
   "proxy": "http://localhost:8000",
   "author": "ruben",
@@ -41,6 +44,7 @@
   "devDependencies": {
     "@metahub/karma-jasmine-jquery": "^4.0.1",
     "css-loader": "^4.3.0",
+    "copy-webpack-plugin": "^6.1.1",
     "expose-loader": "^1.0.0",
     "file-loader": "^6.1.0",
     "image-webpack-loader": "^7.0.0",
