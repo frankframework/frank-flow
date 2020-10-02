@@ -19,6 +19,7 @@ hr {
   height: 70%;
   display: flex;
   flex-direction: row;
+  overflow: visible;
 }
 
 .tools-editors-wrapper {

@@ -10,6 +10,8 @@ export default class CodeService {
         this.mainController = mainController;
         this.toBeautiful = new ToBeautifulSyntax();
 
+        this.deployableUnit = null;
+
         this.getXsd();
         this.getIbisdoc();
         this.getConfigurations();
@@ -111,6 +113,7 @@ export default class CodeService {
         let cur = this,
             path = './api/configurations/' + name;
 
+        this.deployableUnit = name;
         fetch(path, {
             method: 'GET'
         }).then(response => {
@@ -124,7 +127,7 @@ export default class CodeService {
 
     getSingleFile(name) {
         let cur = this,
-        path = './api/configurations/NewHorizons/files/?path=' + name;
+        path = './api/configurations/' + this.deployableUnit + '/files/?path=' + name;
 
     fetch(path, {
         method: 'GET'
