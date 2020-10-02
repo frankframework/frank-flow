@@ -41,7 +41,7 @@ export default class PipeBuilder {
         }
 
         if (this.name != null && this.flowView != null) {
-            if (localStorage.getItem("tibcoMode") == "true") {
+            if (localStorage.getItem("activityMode") == "true") {
                 return new ActivityPipeView(this.flowView, this.name, this.positions, this.extra, this.exit, this.descText);
             } else {
                 return new PipeView(this.flowView, this.name, this.positions, this.extra, this.exit, this.descText);

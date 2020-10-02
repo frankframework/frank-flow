@@ -15,7 +15,7 @@ export default class FlowGenerator {
   # push all forwards to the forwards array and generate the forwards
   */
 
-  generateFlow(windows) {
+  generateFlow() {
     this.flowView.resetWindows();
     let transformedXml = this.flowModel.getTransformedXml();
 

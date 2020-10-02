@@ -13,14 +13,14 @@ export default class OptionView extends CodeEditView {
     let select = $('#adapterSelect'),
       option,
       name;
+
+    $(select).empty();
     adapters.forEach(function(item, index) {
-      name = item.match(/<Configuration[^]*?name=".*?"/g);
+      name = item.match(/<Adapter[^]*?name=".*?"/g);
       if (name != null) {
         name = name[0].match(/".*?"/g)[0].replace(/"/g, '');
         option = $('<option></option>').attr('value', name).text(name);
         $(select).append(option);
-
-        localStorage.setItem(name, item);
       }
     });
 
@@ -43,8 +43,8 @@ export default class OptionView extends CodeEditView {
       this.focusLine('<Adapter[^]*? name=' + urlParams.get('adapter') + '[^]*?>');
       this.stripFlow()
     } else {
-      localStorage.setItem('currentAdapter', 'WebControlShowConfigurationStatus');
-      this.editor.setValue(localStorage.getItem("IAF_WebControl"));
+      // localStorage.setItem('currentAdapter', 'WebControlShowConfigurationStatus');
+      // this.editor.setValue(localStorage.getItem("IAF_WebControl"));
     }
   }
 

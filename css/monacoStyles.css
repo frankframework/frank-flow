@@ -16,7 +16,7 @@
   background: red;
 }
 
-.myContentClass {
+.highlightColor {
   background: yellow;
-  opacity: 0.4;
+  background: rgba(71, 111, 48, 0.5); 
 }

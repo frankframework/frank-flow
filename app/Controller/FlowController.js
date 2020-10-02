@@ -12,9 +12,11 @@ export default class FlowController {
     this.paletteView.addListener(this);
     this.hoverSourceWindow = false;
     this.initHandlers();
-    localStorage.setItem("tibcoMode", false);
+    localStorage.setItem("activityMode", false);
   }
 
+  //_______________Observer_______________
+  
   notify(data) {
     if (data == null) {
       return;
@@ -51,6 +53,8 @@ export default class FlowController {
         break;
     }
   }
+
+  //_______________Methods to be called from handlers_______________
 
   toggleHorizontal() {
     let horizontalBuild = this.flowView.horizontalBuild;
@@ -99,6 +103,8 @@ export default class FlowController {
     $('#canvas').addClass(theme);
   }
 
+  //_______________Event handlers_______________
+
   initHandlers() {
     let cur = this;
     $.contextMenu({
@@ -109,15 +115,34 @@ export default class FlowController {
         window.console && console.log(m) || alert(m);
       },
       items: {
-        "tibcoMode": {
-          name: "Tibco mode", icon: "fas fa-globe-americas",
+        "flow": {
+          name: "Flow fullscreen", icon: "fas fa-compress",
           callback: function () {
-            if (localStorage.getItem("tibcoMode") == "false") {
-              localStorage.setItem("tibcoMode", "true");
+            cur.setFullFlow();
+          }
+        },
+        "hybrid": {
+          name: "Hybrid", icon: "fas fa-window-restore",
+          callback: function () {
+            cur.setHybrid();
+          }
+        },
+        "sep1": "---------",
+        "ActivityMode": {
+          name: "Activity mode", icon: "fas fa-globe-americas",
+          callback: function () {
+            if (localStorage.getItem("activityMode") == "false") {
+              localStorage.setItem("activityMode", "true");
             } else {
-              localStorage.setItem("tibcoMode", "false");
+              localStorage.setItem("activityMode", "false");
             }
             return true;
+          }
+        },
+        "realign": {
+          name: 'Realign flow', icon: "fas fa-outdent",
+          callback: function() {
+            cur.flowView.realignFlow();
           }
         },
         "curve": {
@@ -148,35 +173,12 @@ export default class FlowController {
             cur.setTheme();
           }
         },
-        "sep1": "---------",
-        "flow": {
-          name: "Flow fullscreen", icon: "fas fa-compress",
-          callback: function () {
-            cur.setFullFlow();
-          }
-        },
-        "hybrid": {
-          name: "Hybrid", icon: "fas fa-window-restore",
-          callback: function () {
-            cur.setHybrid();
-          }
-        },
         // "editor": {name: "Editor", icon: "fas fa-file-code",
         //   callback: function() {
         //     cur.setFullEditor();
         //   }}
       }
     });
-
-    //rename a pipe
-    $("#canvas").on('dblclick', '#strong', function (e) {
-      e.stopPropagation();
-      console.log("dblclick!");
-      if (this.innerHTML !== "EXIT") {
-        cur.flowView.modifyFlow('edit', this);
-      }
-    });
-
 
 
     jsPlumb.on($('#canvas'), "mouseover", ".sourceWindow, .description", function () {
@@ -241,7 +243,7 @@ export default class FlowController {
       $(this).removeClass("element-disabled");
     });
 
-    //contain canvas to container.
+    //set canvas bounded to container.
     var minScaleX = $('#flowContainer').innerWidth();
     var minScaleY = $('#flowContainer').innerHeight();
     let $panzoom = $('#canvas').panzoom({
@@ -300,26 +302,6 @@ export default class FlowController {
       $panzoom.panzoom('zoom', zoomOut, {
         increment: 0.1,
         focal: e
-      });
-    });
-
-    $('#slider').on('input', function (e) {
-      $panzoom.panzoom("enable");
-      let zoom = $('#slider').val();
-      let plus = true;
-      if (cur.prevZoom) {
-        if (cur.prevZoom < zoom && zoom != 10 && zoom != 9) {
-          plus = false;
-        } else if (zoom == 10) {
-          plus = false;
-        }
-      } else {
-        cur.prevZoom = zoom;
-      }
-      cur.prevZoom = zoom;
-      $panzoom.panzoom('zoom', plus, {
-        increment: 0.1,
-        step: 0.1
       });
     });
   }

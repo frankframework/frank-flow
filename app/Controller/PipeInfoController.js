@@ -137,7 +137,7 @@ export default class PipeInfoController {
       cur.changeType(type);
     });
 
-    //_______________Attribute listeners_______________
+    //_______________Attributes_______________
 
     $('#attributesInfo input').on('change', function(e) {
       let attributeValue = $(e.currentTarget).val(),
@@ -157,7 +157,7 @@ export default class PipeInfoController {
       cur.deleteAttribute(attribute);
     });
 
-    //_______________Parameter listeners_______________
+    //_______________Parameters_______________
 
     $('.parameterContent').on('click', function(e) {
       let toolbox = e.currentTarget.nextElementSibling;

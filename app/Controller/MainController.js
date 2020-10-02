@@ -1,10 +1,24 @@
-import ConfigurationConverter from '../Model/ConfigurationConverter.js';
+import ConfigurationConverter from '../Converter/ConfigurationConverter.js';
 import CodeController from './CodeController.js';
 import FlowController from './FlowController.js';
 import PipeInfoController from './PipeInfoController';
 import IbisdocModel from '../Model/IbisdocModel.js'
 import FlowModel from '../Model/FlowModel.js';
 import CodeFacade from '../Facade/CodeFacade.js';
+
+// import './../../css/app.css';
+// import './../../css/fileTreeStyles.css';
+// import './../../css/flowStyles.css';
+// import './../../css/flowThemes.css';
+// import './../../css/headerStyles.css';
+// import './../../css/JsPlumbStyles.css';
+// import './../../css/logo.css';
+// import './../../css/monacoStyles.css';
+// import './../../css/paletteStyles.css';
+// import './../../css/pipeinfoStyles.css';
+// import './../../css/sliderStyles.css';
+
+import '../../css/bundle.css';
 
 
 class MainController {

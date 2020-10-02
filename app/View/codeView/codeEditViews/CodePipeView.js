@@ -50,7 +50,7 @@ export default class CodePipeView extends CodeEditView {
     this.decorations = this.editor.deltaDecorations([], [{
       range: selectPipe,
       options: {
-        inlineClassName: 'myContentClass'
+        inlineClassName: 'highlightColor'
       }
     }]);
   }

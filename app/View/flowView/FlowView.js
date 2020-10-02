@@ -1,4 +1,6 @@
 import FlowGenerator from './flowGeneration/FlowGenerator.js'
+import domtoimage from 'dom-to-image';
+import jsplumb from 'jsplumb';
 export default class FlowView {
 
   constructor(flowModel) {
@@ -176,7 +178,46 @@ export default class FlowView {
     return this.types;
   }
 
-  setOffsets(possitions) {
+  realignFlow() {
+    let pipes = $('.window'),
+    exitOffset = 0,
+    boxOffset = 0,
+    receiverOffset = 0;
+
+    for (let i in pipes) {
+      let box = $(pipes[i]);
+      
+      if(box[0].lastChild == null) {
+        return;
+      }
+
+      boxOffset += 250;
+      if (!box.hasClass('exit') && !box[0].innerHTML.match(/\(receiver\)/g)) {
+        this.modifyFlow('drag', {
+          name: box[0].lastChild.firstElementChild.textContent,
+          x: '100',
+          y: '' + boxOffset
+        });
+      } else if (box[0].innerHTML.match(/\(receiver\)/g)) {
+        receiverOffset += 250;
+        this.modifyFlow('drag', {
+          name: box[0].lastChild.firstElementChild.textContent,
+          x: '500',
+          y: '' + receiverOffset
+        });
+      } else {
+        exitOffset += 250;
+        this.modifyFlow('dragExit', {
+          name: box[0].lastChild.firstElementChild.textContent,
+          x: exitOffset + 'px',
+          y: '' + boxOffset
+        });
+      }
+    }
+    this.setCanvasBounds(boxOffset, pipe.le)
+  }
+
+  setOffsets(hasPossitions) {
     let boxOffset = 0,
       exitOffset = 0;
 
@@ -186,14 +227,14 @@ export default class FlowView {
       if (!$('#sourceWindow' + (i - 1)).hasClass('exit')) {
         boxOffset += 250;
       }
-      if (!possitions) {
+      if (!hasPossitions) {
         let box = $('#sourceWindow' + i);
         this.setBuildDirection(box, boxOffset);
         if (this.windows == 2) {
           this.moving = false;
           return;
         }
-        this.setExitPosition(box, exitOffset);
+        this.setElementPosition(box, exitOffset);
       }
       this.setCanvasBounds(boxOffset, i);
     }
@@ -209,7 +250,7 @@ export default class FlowView {
     }
   }
 
-  setExitPosition(box, exitOffset) {
+  setElementPosition(box, exitOffset) {
     if (!box.hasClass('exit')) {
       this.modifyFlow('drag', {
         name: box[0].lastChild.firstElementChild.textContent,
@@ -249,12 +290,11 @@ export default class FlowView {
     this.notifyListeners({
       type: "convertConfiguration"
     });
-    this.flowGenerator.generateFlow(this.windows);
+    this.flowGenerator.generateFlow();
   }
 
   displayError(e) {
     instance.reset();
-    console.log(typeof(this.flowModel.getTransformedXml()))
     $('#canvas').empty();
     $('#canvas').css('display', 'none');
     $('.customErrorMessage').remove();
@@ -262,7 +302,7 @@ export default class FlowView {
       $('#flowContainer').append(
         $("<h1></h1>").text('Duplicate pipe, please remove any duplicates.').addClass('customErrorMessage'),
       );
-    } else if(typeof(this.flowModel.getTransformedXml()) == "string"){
+    } else if (typeof (this.flowModel.getTransformedXml()) == "string") {
       $('#flowContainer').append(
         $("<h1></h1>").text('Configuration is incorrect, please check your xml.').addClass('customErrorMessage'),
         $('<p></p>').text(' \n\n\n your error: \n' + this.flowModel.getTransformedXml()).addClass('customErrorMessage')

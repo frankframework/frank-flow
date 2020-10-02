@@ -1,3 +1,5 @@
+//import * as xmllint from 'xmllint';
+
 export default class ValidateConfigurationView {
 
   constructor(editor, xsdModel) {

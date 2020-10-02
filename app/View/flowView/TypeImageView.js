@@ -40,7 +40,6 @@ export default class TypeImageView {
     }
 
     url = 'media/tibcoMode/' + name + '.png';
-    console.log(url);
 
     if (url != null) {
       img = $('<img></img>').attr({
@@ -52,7 +51,6 @@ export default class TypeImageView {
       testImage.onerror = function () {
         img.attr('src', 'media/images/basicPipe.png');
       }
-      console.log(img)
       return img;
     }
   }
