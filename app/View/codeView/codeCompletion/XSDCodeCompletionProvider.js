@@ -78,7 +78,7 @@ export default class XSDCodeCompletionProvider {
     getTagsFromText = (text) => {
         const regexForTags = /(?<=<|<\/)[^\s|/>]+(?!.+\/>)/g
         const matches = text.match(regexForTags)
-        if (matches) return [...matches]
+        return [...matches || []]
     }
 
     getCompletionType = (model, position) => {

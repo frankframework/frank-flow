@@ -91,58 +91,36 @@ export default class CodeService {
             })
     }
 
-    getConfigurations(secondTry) {
-        // let cur = this,
-        //     path = '../iaf/api/configurations';
-        // if (secondTry) {
-        //     path = '../' + path;
-        // }
-        // fetch(path, {
-        //     method: 'GET'
-        // })
-        //     .then(response => {
-        //         return response.text();
-        //     })
-        //     .then(response => {
-        //         let configurations = [],
-        //             dom, obj;
-        //         response.match(/<[cC]onfiguration[^]*?>[^]*?<\/[cC]onfiguration>|<IOS-Adaptering[^]*?>[^]*?<\/IOS-Adaptering>/g).forEach(function (item, index) {
-        //             if (item != null) {
-        //                 configurations.push(item);
-        //             } else {
-        //                 console.log('unknown configuration encountered');
-        //             }
-        //         })
+    getConfigurations() {
+        let cur = this,
+            path = './api/configurations';
 
-        //         return configurations;
-        //     })
-        //     .then(response => {
-        //         response.forEach(function (item, index) {
-        //             if (item.match(/<Configuration/g) == null) {
-        //                 if (item.match(/IOS-Adaptering/g) != null) {
-        //                     item = item.replace(/IOS-Adaptering/g, 'Configuration');
-        //                 }
-        //                 response[index] = cur.toBeautiful.toBeautifulSyntax(item);
-        //             } else {
-        //                 //localStorage.setItem(index, item);
-        //             }
+        fetch(path, {
+            method: 'GET'
+        }).then(response => {
+            return response.json();
+        }).then(data => {
+            console.log(data[0]);
+            cur.getDeployableUnit(data[0]);
+        }).catch(e => {
+            console.log('error getting configs: ' + e);
+        })
+    }
 
-        //         });
-        //         return response;
-        //     })
-        //     .then(data => {
-        //         name = data[3].match(/<Configuration[^]*?name=".*?"/g);
-        //         cur.loadZip(name);
-        //         //cur.codeView.addOptions(data);
-        //     })
-        //     .catch(err => {
-        //         if (secondTry) {
-        //             console.log('couldnt load configurations', err)
-        //         } else {
-        //             console.log("configurations path was incorrect, trying other path now...", err);
-        //             //cur.getConfigurations(true);
-        //         }
-        //     })
+    getDeployableUnit(name) {
+        let cur = this,
+            path = './api/configurations/' + name;
+
+        fetch(path, {
+            method: 'GET'
+        }).then(response => {
+            return response.json();
+        }).then(data => {
+            console.log(data);
+            cur.mainController.codeController.fileTreeView.makeTree(zipFile);
+        }).catch(e => {
+            console.log('error getting configs: ' + e);
+        })
     }
 
     loadZip(configurationName) {
@@ -156,27 +134,27 @@ export default class CodeService {
             method: 'GET'
         }
         fetch(versionPath, options)
-        .then(response => {
-            return response.json();
-        })
-        .then(data => {
-            if(data) {
-                let version = prompt('please enter a version number');
-                let ver = data[0].version;
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data) {
+                    let version = prompt('please enter a version number');
+                    let ver = data[0].version;
 
-                data.forEach(function(item, i) {               
-                    if(item.version.match(version + '(?=_)')) {
-                        ver = item.version;
-                    }
-                })
-                let zipPath = '../iaf/api/configurations/' + configurationName + '/versions/' + ver + '/download';
-                fetch(zipPath, {method: 'GET'}).then(response => {
-                    return response.blob();
-                })
-                .then(zipFile => {
-                    this.mainController.codeController.fileTreeView.makeTree(zipFile);                    
-                })
-            }
-        })
+                    data.forEach(function (item, i) {
+                        if (item.version.match(version + '(?=_)')) {
+                            ver = item.version;
+                        }
+                    })
+                    let zipPath = '../iaf/api/configurations/' + configurationName + '/versions/' + ver + '/download';
+                    fetch(zipPath, { method: 'GET' }).then(response => {
+                        return response.blob();
+                    })
+                        .then(zipFile => {
+                            this.mainController.codeController.fileTreeView.makeTree(zipFile);
+                        })
+                }
+            })
     }
 }
