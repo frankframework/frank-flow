@@ -3,17 +3,14 @@ const webpack = require('webpack');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-  mode: 'development',
-  watch: true,
   entry: [
     './app/Controller/MainController.js',
   ],
   output: {
     filename: 'main.js',
-    path: path.resolve(__dirname, '../main/resources/frontend'),
+    path: path.resolve(__dirname, '../../target/frontend'),
     // publicPath: '/dist/'
   },
   module: {
@@ -49,14 +46,13 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new MonacoWebpackPlugin(),
     new MiniCssExtractPlugin(),
     new CopyPlugin({
       patterns: [
-        { from: 'index.html', to: path.resolve(__dirname, '../main/resources/frontend') },
-        { from: 'media', to: path.resolve(__dirname, '../main/resources/frontend/media') },
-        { from: 'jquery.contextMenu.min.css', to: path.resolve(__dirname, '../main/resources/frontend') },
+        { from: 'index.html', to: path.resolve(__dirname, '../../target/frontend') },
+        { from: 'media', to: path.resolve(__dirname, '../../target/frontend/media') },
+        { from: 'jquery.contextMenu.min.css', to: path.resolve(__dirname, '../../target/frontend') },
       ],
     }),
   ],

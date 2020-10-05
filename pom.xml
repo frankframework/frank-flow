@@ -128,6 +128,22 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>ApiContext.xml</include>
+					<include>mediaType.mapping</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>target/frontend</directory>
+				<includes>
+					<include>**/**</include>
+				</includes>
+				<targetPath>frontend</targetPath>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
@@ -174,7 +190,7 @@
 					</execution>
 				</executions>
 			</plugin>
-	
+		
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
@@ -239,8 +255,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			
-           
 		</plugins>
 	</build>
 </project>
