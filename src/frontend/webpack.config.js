@@ -5,6 +5,17 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+  optimization: {
+    splitChunks: {
+        cacheGroups: {
+            monacoCommon: {
+                test: /[\\/]node_modules[\\/]monaco\-editor/,
+                name: 'monaco-editor-common',
+                chunks: 'async'
+            }
+        }
+    }
+  },
   entry: [
     './app/Controller/MainController.js',
   ],
