@@ -8,7 +8,7 @@
     "test": "npm run unit",
     "test-cover": "istanbul cover --include-all-sources test/pipeInfoTest.spec.js && istanbul check-coverage",
     "build": "webpack",
-    "watch": "webpack --watch --mode development",
+    "watch": "webpack --config ./webpackDev.config.js",
     "start": "webpack-dev-server --mode development"
   },
   "proxy": "http://localhost:8000",

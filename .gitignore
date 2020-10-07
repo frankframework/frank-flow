@@ -3,3 +3,4 @@ node
 coverage/*
 dist/*
 /target/
+.settings
