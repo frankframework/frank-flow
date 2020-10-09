@@ -4,7 +4,7 @@
   background-color: #1e1e1e;
   color: white;
   overflow: auto;
-  display: none;
+  display: flex;
   align-items: flex-start;
   flex-direction: column;
   box-shadow: #000000 -6px 0 6px -6px inset;

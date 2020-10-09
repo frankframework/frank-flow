@@ -15,7 +15,7 @@
 
 	<div class="tools-editors-wrapper">
 		<div class="top-wrapper">
-			<select id="adapterSelect">
+			<select id="adapterSelect" class="adapter-select">
 			</select>
 			<div class="nav-header">
 
@@ -31,65 +31,76 @@
 				</div>
 			</div>
 		</div>
-		<div class="monaco-flow-wrapper">
-			<div id="filePaletteWrapper" class="filePaletteWrapper">
-				<div id="fileTree" class="fileTree">
-					<h2>Explorer</h2>
-					<div class="icons">
-						<i class="fas fa-plus-circle fileButton" id="addFile"></i>
-						<i class="fas fa-save fileButton" id="saveFile"></i>
+		
+
+		<div class="main-container">
+			<div class="menu-wrapper">
+				<div id="filePaletteWrapper" class="filePaletteWrapper">
+					<div id="fileTree" class="fileTree">
+						<h2>Explorer</h2>
+						<div class="icons">
+							<i class="fas fa-plus-circle fileButton" id="addFile"></i>
+							<i class="fas fa-save fileButton" id="saveFile"></i>
+						</div>
+						<div id="fileTreeItems">
+						</div>
 					</div>
-					<div id="fileTreeItems">
+					<div id="palette" class="palette">
+						<h2>Palette</h2>
 					</div>
-				</div>
-				<div id="palette" class="palette">
-					<h2>Palette</h2>
 				</div>
 			</div>
-			<div id="monacoContainer" class="monacoContainer"></div>
-			<div id="flowContainer" class="flowContainer" tabindex="0">
-				<div class="jtk-demo-canvas source-target-demo normalTheme context-menu-one" id="canvas">
-				</div>
-			</div>
 
-		</div>
-		<div class="pipeInfoWrapper">
-			<div class="pipeInfo">
+			<div class="monaco-pipeinfo-container-wrapper">
 
-				<ul class="tabs">
-					<li><a href="#pipeNameTypeInfo">Pipe info</a></li>
-					<li><a href="#forwardsInfo">Forwards</a></li>
-					<li><a href="#attributesInfo">Attributes</a></li>
-					<li><a href="#parametersInfo">Parameters</a></li>
-				</ul>
-
-				<!-- <h2 id="pipeInfoNameTitle"><span id="pipeInfoTitleName"></span> - <span id="pipeInfoTitleType">CheckEmptyMessage</span></h2> -->
-				<div id="pipeNameTypeInfo" class="pipeNameTypeInfo">
-					<h4>Pipe info</h4>
-					<hr>
-					<label for="name">Name: </label>
-					<input type="text" id="pipeInfoName" placeholder="pipe name" />
-					<br>
-					<label for="type">Type: </label>
-					<select id="typeSelect">
-
-					</select>
-				</div>
-				<div id="forwardsInfo" class="pipeNameTypeInfo">
-					<h4>Forwards</h4>
-					<hr>
+				<div class="monaco-flow-wrapper">
+					<div id="monacoContainer" class="monacoContainer"></div>
+					<div id="flowContainer" class="flowContainer" tabindex="0">
+						<div class="jtk-demo-canvas source-target-demo normalTheme context-menu-one" id="canvas">
+						</div>
+					</div>
 				</div>
 
-				<div id="attributesInfo" class="pipeNameTypeInfo">
-					<h4>Attributes</h4>
-					<hr>
-					<button id="addAttribute">Add a new attribute</button>
-				</div>
 
-				<div id="parametersInfo" class="pipeNameTypeInfo">
-					<h4>Parameters</h4>
-					<hr>
-					<button id="addParameter">Add a new parameter</button>
+				<div class="pipeInfoWrapper">
+					<div class="pipeInfo">
+
+						<ul class="tabs">
+							<li><a href="#pipeNameTypeInfo">Pipe info</a></li>
+							<li><a href="#forwardsInfo">Forwards</a></li>
+							<li><a href="#attributesInfo">Attributes</a></li>
+							<li><a href="#parametersInfo">Parameters</a></li>
+						</ul>
+
+						<!-- <h2 id="pipeInfoNameTitle"><span id="pipeInfoTitleName"></span> - <span id="pipeInfoTitleType">CheckEmptyMessage</span></h2> -->
+						<div id="pipeNameTypeInfo" class="pipeNameTypeInfo">
+							<h4>Pipe info</h4>
+							<hr>
+							<label for="name">Name: </label>
+							<input type="text" id="pipeInfoName" placeholder="pipe name" />
+							<br>
+							<label for="type">Type: </label>
+							<select id="typeSelect">
+
+							</select>
+						</div>
+						<div id="forwardsInfo" class="pipeNameTypeInfo">
+							<h4>Forwards</h4>
+							<hr>
+						</div>
+
+						<div id="attributesInfo" class="pipeNameTypeInfo">
+							<h4>Attributes</h4>
+							<hr>
+							<button id="addAttribute">Add a new attribute</button>
+						</div>
+
+						<div id="parametersInfo" class="pipeNameTypeInfo">
+							<h4>Parameters</h4>
+							<hr>
+							<button id="addParameter">Add a new parameter</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

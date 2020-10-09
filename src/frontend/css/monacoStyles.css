@@ -4,6 +4,7 @@
   border: 1px solid grey;
   resize: horizontal;
   overflow: auto;
+  overflow-y: hidden;
   display: none;
 }
 

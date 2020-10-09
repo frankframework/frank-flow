@@ -35,10 +35,7 @@ export default class FileTreeView {
       sortable: false,
       selectable: true
     });
-
-    //after generating the tree, display the tree.
-    $('#fileTree').css('display', 'flex');
-
+    
     //make the file tree resizable.
     this.makeFileTreeResizeable()
     this.setSaveFileEventListener();
