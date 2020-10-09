@@ -1,0 +1,71 @@
+.palette {
+  width: 100%;
+  height: 50%;
+  background: #F3F3F4;
+  background: url("../media/images/header-profile.png") repeat;
+  box-shadow: inset 3px 0px 0px #DDDDDD;
+  color: white;
+  /* overflow-y: scroll;
+  overflow-x: hidden; */
+  overflow: auto;
+  border: 1px solid grey;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 5%;
+}
+
+.palette h2 {
+  width: 100%;
+  margin-bottom: 10%;
+  display: block;
+}
+
+.content {
+  padding: 0 18px;
+  display: block;
+  background-color: #FFFFFF;
+  border: 1px solid grey;
+  width: 100%;
+  height: 10%;
+  margin: 3%;
+}
+.content:last-child {
+  margin-bottom: 15%;
+}
+
+.content p {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  display: block;
+  text-align: left;
+  color: black;
+  margin: 5px;
+}
+
+.buttonText {
+  overflow: hidden;
+  white-space: nowrap;
+  display: block;
+  text-overflow: ellipsis;
+}
+
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  font-size: 23px;
+  width: 100%;
+  text-align: center;
+  outline: none;
+  font-size: 15px;
+  text-overflow: ellipsis;
+}
+
+.listItem {
+  width: 100%;
+  height: 7%;
+  background-color: lightgrey;
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link href="jquery.contextMenu.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="media/fontawesome/css/all.css">
+	<link href="main.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<div class="tools-editors-wrapper">
+		<div class="top-wrapper">
+			<select id="adapterSelect" class="adapter-select">
+			</select>
+			<div class="nav-header">
+
+				<div class="profile-element">
+					<object data="media/images/frank-framework-logo.svg" id="logo" type="image/svg+xml">
+						<img src="media/images/frank-framework-logo.svg" alt="Logo">
+					</object>
+				</div>
+				<div class="logo-element">
+					<object data="media/images/frank-exclamation.svg" id="logo" type="image/svg+xml">
+						<img src="media/images/frank-exclamation.svg" alt="Logo">
+					</object>
+				</div>
+			</div>
+		</div>
+		
+
+		<div class="main-container">
+			<div class="menu-wrapper">
+				<div id="filePaletteWrapper" class="filePaletteWrapper">
+					<div id="fileTree" class="fileTree">
+						<h2>Explorer</h2>
+						<div class="icons">
+							<i class="fas fa-plus-circle fileButton" id="addFile"></i>
+							<i class="fas fa-save fileButton" id="saveFile"></i>
+						</div>
+						<div id="fileTreeItems">
+						</div>
+					</div>
+					<div id="palette" class="palette">
+						<h2>Palette</h2>
+					</div>
+				</div>
+			</div>
+
+			<div class="monaco-pipeinfo-container-wrapper">
+
+				<div class="monaco-flow-wrapper">
+					<div id="monacoContainer" class="monacoContainer"></div>
+					<div id="flowContainer" class="flowContainer" tabindex="0">
+						<div class="jtk-demo-canvas source-target-demo normalTheme context-menu-one" id="canvas">
+						</div>
+					</div>
+				</div>
+
+
+				<div class="pipeInfoWrapper">
+					<div class="pipeInfo">
+
+						<ul class="tabs">
+							<li><a href="#pipeNameTypeInfo">Pipe info</a></li>
+							<li><a href="#forwardsInfo">Forwards</a></li>
+							<li><a href="#attributesInfo">Attributes</a></li>
+							<li><a href="#parametersInfo">Parameters</a></li>
+						</ul>
+
+						<!-- <h2 id="pipeInfoNameTitle"><span id="pipeInfoTitleName"></span> - <span id="pipeInfoTitleType">CheckEmptyMessage</span></h2> -->
+						<div id="pipeNameTypeInfo" class="pipeNameTypeInfo">
+							<h4>Pipe info</h4>
+							<hr>
+							<label for="name">Name: </label>
+							<input type="text" id="pipeInfoName" placeholder="pipe name" />
+							<br>
+							<label for="type">Type: </label>
+							<select id="typeSelect">
+
+							</select>
+						</div>
+						<div id="forwardsInfo" class="pipeNameTypeInfo">
+							<h4>Forwards</h4>
+							<hr>
+						</div>
+
+						<div id="attributesInfo" class="pipeNameTypeInfo">
+							<h4>Attributes</h4>
+							<hr>
+							<button id="addAttribute">Add a new attribute</button>
+						</div>
+
+						<div id="parametersInfo" class="pipeNameTypeInfo">
+							<h4>Parameters</h4>
+							<hr>
+							<button id="addParameter">Add a new parameter</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js" integrity="sha512-rCjfoab9CVKOH/w/T6GbBxnAH5Azhy4+q1EXW5XEURefHbIkRbQ++ZR+GBClo3/d3q583X/gO4FKmOFuhkKrdA==" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.panzoom/3.2.3/jquery.panzoom.js" integrity="sha512-cY2lQHYUbJbv7phuZYDe1uAJfbuNPgl/qANxb+XWheng3urrXGPHNWqgzAASUwagi0YGfMwmHtbQ7RjA5ZJIUQ==" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.9.2/jquery.contextMenu.min.js" integrity="sha512-kvg/Lknti7OoAw0GqMBP8B+7cGHvp4M9O9V6nAYG91FZVDMW3Xkkq5qrdMhrXiawahqU7IZ5CNsY/wWy1PpGTQ==" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/regenerator-runtime@0.13.1/runtime.js"></script>
+	<script src="main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+package org.ibissource.frankflow.util;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.ws.rs.core.MediaType;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public abstract class MimeTypeUtil {
+
+	private static Map<String, MediaType> mediaTypeMap;
+	private static final Logger log = LogManager.getLogger(MimeTypeUtil.class);
+
+	private static synchronized Map<String, MediaType> getMimeTypeMap() throws IOException {
+		if(mediaTypeMap == null) {
+			mediaTypeMap = new HashMap<>();
+			Properties properties = new Properties();
+			URL mappingFile = MimeTypeUtil.class.getResource("/mediaType.mapping");
+			if(mappingFile == null) {
+				throw new IOException("unable to open mediaType mapping file");
+			}
+	
+			properties.load(mappingFile.openStream());
+			for(String key : properties.stringPropertyNames()) {
+				String value = properties.getProperty(key);
+				mediaTypeMap.put(key, MediaType.valueOf(value));
+			}
+		}
+
+		return mediaTypeMap;
+	}
+
+	public static MediaType determineFromPathMimeType(String path) throws IOException {
+		int i = path.lastIndexOf(".");
+		String extension = path.substring(i+1); //Get the extension
+		int p = extension.indexOf("?");
+		if(p > -1) {
+			extension = extension.substring(0, p); //String all parameters
+		}
+
+		log.debug("extruded extension ["+extension+"] from path ["+path+"]");
+		return findMediaType(extension);
+	}
+
+	public static MediaType findMediaType(String extension) throws IOException {
+		log.debug("trying to find MimeType for extension ["+extension+"]");
+
+		MediaType type = getMimeTypeMap().get(extension);
+		if(type == null) {
+			log.warn("unable to find MimeType for extension ["+extension+"] using default [application/octet-stream]");
+			type = MediaType.APPLICATION_OCTET_STREAM_TYPE;
+		} else {
+			log.debug("determined MimeType ["+type+"] for extension ["+extension+"]");
+		}
+		return type;
+	}
+
+}

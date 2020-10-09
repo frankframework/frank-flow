@@ -1,0 +1,48 @@
+.nav-header {
+    padding: 5px 5px;
+    background: url("../media/images/header-profile.png") no-repeat;
+    width: 17%;
+}
+
+.nav-header a {
+    color: #DFE4ED;
+}
+
+.nav-header .text-muted {
+    color: #8095a8;
+}
+
+.profile-element {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+}
+
+#logo {
+    width: 50%;
+}
+
+.profile-element p {
+    margin-bottom: 0px;
+}
+
+.profile-element span {
+    font-weight: normal;
+}
+
+body.canvas-menu .profile-element {
+    display: block;
+}
+
+.logo-element {
+    display: none;
+    height: 60px;
+    padding: 15px;
+    text-align: center;
+}
+
+.logo-element object {
+    max-height: 100%;
+    max-width: 100%;
+}

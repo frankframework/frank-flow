@@ -1,0 +1,26 @@
+{
+    "pipe": [
+        {
+            "name": "FilePipe",
+            "activities": [
+                "WriteFile",
+                "Write_appendFile",
+                "DeleteFile",
+                "Read_deleteFile",
+                "EncodeFile",
+                "DecodeFile",
+                "ListFile",
+                "InfoFile",
+                "read"
+            ],
+            "keyword": "actions"
+        },
+        {
+            "name": "Receiver",
+            "activities": [
+                "Receiver"
+            ],
+            "keyword": "name"
+        }
+    ]
+}
