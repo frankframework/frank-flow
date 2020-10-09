@@ -107,6 +107,7 @@ export default class FlowController {
 
   initHandlers() {
     let cur = this;
+    let fullscreen = true;
     $.contextMenu({
       selector: '.context-menu-one',
       zIndex: 3001,
@@ -116,15 +117,14 @@ export default class FlowController {
       },
       items: {
         "flow": {
-          name: "Switch to flow fullscreen", icon: "fas fa-compress",
+          name: "Toggle fullscreen", icon: "fas fa-compress",
           callback: function () {
-            cur.setFullFlow();
-          }
-        },
-        "hybrid": {
-          name: "Switch to hybrid", icon: "fas fa-window-restore",
-          callback: function () {
-            cur.setHybrid();
+            if(fullscreen) {
+              cur.setHybrid();
+            } else {
+              cur.setFullFlow();
+            }
+            fullscreen = !fullscreen;
           }
         },
         "sep1": "---------",
