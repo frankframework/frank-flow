@@ -21,6 +21,15 @@
 .fileTree li {
   font-size: 10px;
   padding: 50px;
+  margin-left: 7%;
+}
+
+.fileTree span {
+  display: none;
+}
+
+#fileTreeItems{
+  padding-left: 7%;
 }
 
 .fileTree h2 {
