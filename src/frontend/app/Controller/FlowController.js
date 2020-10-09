@@ -129,13 +129,14 @@ export default class FlowController {
         },
         "sep1": "---------",
         "ActivityMode": {
-          name: "Activity mode", icon: "fas fa-globe-americas",
+          name: "Toggle activity mode", icon: "fas fa-globe-americas",
           callback: function () {
             if (localStorage.getItem("activityMode") == "false") {
               localStorage.setItem("activityMode", "true");
             } else {
               localStorage.setItem("activityMode", "false");
             }
+            cur.mainController.generateFlow();
             return true;
           }
         },
