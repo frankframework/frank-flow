@@ -68,6 +68,7 @@ module.exports = {
         { from: 'index.html', to: path.resolve(__dirname, '../main/resources/frontend') },
         { from: 'media', to: path.resolve(__dirname, '../main/resources/frontend/media') },
         { from: 'jquery.contextMenu.min.css', to: path.resolve(__dirname, '../main/resources/frontend') },
+        { from: 'app/pipeWithActivity.json', to: path.resolve(__dirname, '../main/resources/frontend') },
       ],
     }),
   ],
