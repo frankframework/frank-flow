@@ -108,6 +108,12 @@ export default class FlowController {
   initHandlers() {
     let cur = this;
     let fullscreen = true;
+    let $panzoom = $('#canvas').panzoom({
+      minScale: 0.5,
+      increment: 0.2
+    });
+
+
     $.contextMenu({
       selector: '.context-menu-one',
       zIndex: 3001,
@@ -154,16 +160,18 @@ export default class FlowController {
           }
         },
         "horizontal": {
-          name: "Toggle horizontal", icon: "fas fa-ruler-horizontal",
+          name: "Toggle flow direction", icon: "fas fa-ruler-horizontal",
           callback: function () {
             cur.toggleHorizontal();
+            cur.flowView.realignFlow();
             return true;
           }
         },
-        "xsd": { name: "Run XSD", icon: "fas fa-play-circle" },
         "download": {
-          name: "Export SVG", icon: "paste",
+          name: "Export SVG", icon: "fas fa-file-export",
           callback: function () {
+            $panzoom.panzoom('pan', 0, 0);
+            $panzoom.panzoom('zoom', 0, 0);
             cur.flowView.getImage();
             return true;
           }
@@ -247,10 +255,7 @@ export default class FlowController {
     //set canvas bounded to container.
     var minScaleX = $('#flowContainer').innerWidth();
     var minScaleY = $('#flowContainer').innerHeight();
-    let $panzoom = $('#canvas').panzoom({
-      minScale: 0.5,
-      increment: 0.2
-    });
+
 
     //make sure panzoom doesn't leave the container.
     $panzoom.on('panzoomend', function (e) {

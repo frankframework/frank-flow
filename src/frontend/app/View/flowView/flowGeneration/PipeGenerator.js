@@ -32,11 +32,8 @@ export default class PipeGenerator {
                 return;
             }
             else if (possitions == null) {
-                this.flowView.setOffsets(false);
-            } else {
-                this.flowView.setOffsets(true);
+                this.flowView.realignFlow();
             }
-
             if (transformedXml.Adapter.Receiver != null) {
                 let receiver = transformedXml.Adapter.Receiver;
                 if(Array.isArray(receiver)) {
