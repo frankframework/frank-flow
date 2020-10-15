@@ -108,10 +108,13 @@ export default class FlowController {
   initHandlers() {
     let cur = this;
     let fullscreen = true;
+    let themeSwitch = false;
     let $panzoom = $('#canvas').panzoom({
       minScale: 0.5,
       increment: 0.2
     });
+
+
 
 
     $.contextMenu({
@@ -177,9 +180,15 @@ export default class FlowController {
           }
         },
         "theme": {
-          name: "Set theme", icon: "fas fa-adjust",
+          name: "Switch theme", icon: "fas fa-adjust",
           callback: function () {
-            cur.setTheme();
+            if(!themeSwitch) {
+            $('#canvas').css('background-color', '#1e1e1e');
+            } else {
+              $('#canvas').css('background-color', 'white');
+            }
+            themeSwitch = !themeSwitch;
+            //cur.setTheme();
           }
         },
         // "editor": {name: "Editor", icon: "fas fa-file-code",

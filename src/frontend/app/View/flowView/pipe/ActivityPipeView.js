@@ -57,7 +57,7 @@ export default class ActivityPipeView extends PipeView {
             $(el).css({
                 width: 'auto',
                 height: 'auto',
-                border: 'none'
+                border: '1px solid black'
             })
 
         } else {
@@ -66,7 +66,7 @@ export default class ActivityPipeView extends PipeView {
             $(el).css({
                 width: 'auto',
                 height: 'auto',
-                border: 'none'
+                border: '1px solid black'
             })
         }
         this.element = el;
