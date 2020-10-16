@@ -179,22 +179,10 @@ export default class FlowController {
             return true;
           }
         },
-        "theme": {
-          name: "Switch theme", icon: "fas fa-adjust",
-          callback: function () {
-            if(!themeSwitch) {
-            $('#canvas').css('background-color', '#1e1e1e');
-            } else {
-              $('#canvas').css('background-color', 'white');
-            }
-            themeSwitch = !themeSwitch;
-            //cur.setTheme();
-          }
-        },
         // "editor": {name: "Editor", icon: "fas fa-file-code",
         //   callback: function() {
         //     cur.setFullEditor();
-        //   }}
+        //   }} 
       }
     });
 
