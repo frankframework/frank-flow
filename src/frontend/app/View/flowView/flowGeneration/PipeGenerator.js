@@ -159,8 +159,14 @@ export default class PipeGenerator {
     }
 
     generateSinglePipe(pipe, forwards) {
-        let name = pipe['@name'];
+        let name = pipe['@name'],
+        xpos = pipe['@x'],
+        ypos = pipe['@y'];
+
+        let possitions = this.checkPossitions(xpos, ypos);
+
         this.pipeDict[name] = new PipeBuilder(this.flowView, name)
+        .withPositions(possitions)
         .build()
         .pipeModel
 
