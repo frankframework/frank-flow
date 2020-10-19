@@ -3,8 +3,7 @@
   height: 100%;
   border: 1px solid grey;
   resize: horizontal;
-  overflow: auto;
-  overflow-y: hidden;
+  overflow: visible;
   display: none;
 }
 

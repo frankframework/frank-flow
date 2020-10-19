@@ -1,6 +1,5 @@
-import XSDParser from './XSDParser.js'
-// import * as monaco from 'monaco-editor'
-import XSDCodeCompletion from './XSDCodeCompletionProvider'
+import XSDParser from 'monaco-xsd-code-completion/lib/XSDParser';
+import XSDCodeCompletionProvider from 'monaco-xsd-code-completion/lib/XSDCodeCompletionProvider';
 
 export default class XSDCodeCompletionView {
 
@@ -12,7 +11,7 @@ export default class XSDCodeCompletionView {
     notify(data) {
         console.log(data);
         const ibisdoc = new XSDParser(data)
-        const xsdCodeCompletion = new XSDCodeCompletion(ibisdoc)
+        const xsdCodeCompletion = new XSDCodeCompletionProvider(ibisdoc)
         this.monaco.languages.registerCompletionItemProvider('xml', xsdCodeCompletion.provider())
     }
 

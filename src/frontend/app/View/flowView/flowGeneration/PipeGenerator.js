@@ -32,11 +32,8 @@ export default class PipeGenerator {
                 return;
             }
             else if (possitions == null) {
-                this.flowView.setOffsets(false);
-            } else {
-                this.flowView.setOffsets(true);
+                this.flowView.realignFlow();
             }
-
             if (transformedXml.Adapter.Receiver != null) {
                 let receiver = transformedXml.Adapter.Receiver;
                 if(Array.isArray(receiver)) {
@@ -162,8 +159,14 @@ export default class PipeGenerator {
     }
 
     generateSinglePipe(pipe, forwards) {
-        let name = pipe['@name'];
+        let name = pipe['@name'],
+        xpos = pipe['@x'],
+        ypos = pipe['@y'];
+
+        let possitions = this.checkPossitions(xpos, ypos);
+
         this.pipeDict[name] = new PipeBuilder(this.flowView, name)
+        .withPositions(possitions)
         .build()
         .pipeModel
 
