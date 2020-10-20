@@ -4,3 +4,4 @@ coverage/*
 dist/*
 /target/
 .settings
+bin
