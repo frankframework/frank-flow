@@ -136,6 +136,7 @@ export default class CodeService {
         return response.text();
     }).then(data => {
         cur.mainController.codeController.setEditorValue(data);
+        cur.mainController.generateFlow();
     }).catch(e => {
         console.log('error getting configs: ' + e);
     })
