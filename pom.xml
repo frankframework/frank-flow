@@ -1,14 +1,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-
 	<modelVersion>4.0.0</modelVersion>
-	<packaging>jar</packaging>
 
 	<groupId>org.ibissource</groupId>
 	<artifactId>frank-flow</artifactId>
-
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	
+	<name>Frank!Flow</name>
+	<description>Graphical flow editor for Frank configurations</description>
+	<url>https://github.com/ibissource/frank-flow</url>
+
+	<organization>
+		<name>Ibissource.org</name>
+		<url>https://ibissource.org</url>
+	</organization>
+	
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>manual</distribution>
+		</license>
+	</licenses>
 
 	<properties>
 		<spring.version>4.3.25.RELEASE</spring.version>
@@ -100,7 +115,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>4.13.1</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -257,4 +272,38 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+
+		<profile>
+			<id>ibissource</id>
+			<distributionManagement>
+				<repository>
+					<id>ibissource</id>
+					<url>https://nexus.ibissource.org/content/repositories/releases</url>
+				</repository>
+				<snapshotRepository>
+					<id>ibissource</id>
+					<url>https://nexus.ibissource.org/content/repositories/snapshots</url>
+				</snapshotRepository>
+				<site>
+					<id>www.ibissource.org</id>
+					<url>file:target/site-deploy</url>
+				</site>
+			</distributionManagement>
+			<repositories>
+				<repository>
+					<id>ibissource</id>
+					<url>https://nexus.ibissource.org/content/groups/public</url>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
+
+	<scm>
+		<url>https://github.com/ibissource/frank-flow.git</url>
+		<connection>scm:git:https://github.com/ibissource/frank-flow.git</connection>
+		<developerConnection>scm:git:https://github.com/ibissource/frank-flow.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
 </project>
