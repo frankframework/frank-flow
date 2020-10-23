@@ -9,7 +9,7 @@ module.exports = {
     splitChunks: {
         cacheGroups: {
             monacoCommon: {
-                test: /[\\/]node_modules[\\/]monaco\-editor/,
+                test: /[\\/]node_modules[\\/]monaco-editor/,
                 name: 'monaco-editor-common',
                 chunks: 'async'
             }
@@ -39,10 +39,15 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
-        loaders: [
-          'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
-          'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
-        ]
+        use: [
+          'file-loader',
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              disable: true,
+            },
+          },
+        ],
       },
       {
         test: /\.m?js$/,
