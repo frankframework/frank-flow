@@ -126,7 +126,7 @@ export default class FlowController {
       },
       items: {
         "flow": {
-          name: "Toggle fullscreen", icon: "fas fa-compress",
+          name: "Toggle editor", icon: "fas fa-compress",
           callback: function () {
             if(fullscreen) {
               cur.setHybrid();
