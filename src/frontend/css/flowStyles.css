@@ -3,7 +3,7 @@
   height: 100%;
   border: 1px solid grey;
   position: relative;
-  background-color: white;
+  background-color: grey;
   overflow: scroll;
 }
 

@@ -4,6 +4,9 @@ import PaletteView from '../View/paletteView/PaletteView.js';
 export default class FlowController {
 
   constructor(mainController, flowModel) {
+    this.canvasMarginX = 0;
+    this.canvasMarginY = 0;
+
     this.mainController = mainController;
     this.flowModel = flowModel;
     this.flowView = new FlowView(flowModel);
@@ -12,6 +15,8 @@ export default class FlowController {
     this.paletteView.addListener(this);
     this.hoverSourceWindow = false;
     this.initHandlers();
+
+
     localStorage.setItem("activityMode", false);
   }
 
@@ -276,11 +281,29 @@ export default class FlowController {
       $('#flowContainer').attr('style', '');
     });
 
+    /*
+    save canvas size and update positions in generation.
+
+
+    int canvasSizeX = 0;
+    int canvasSizeY = 0;
+
+    canvasSizeX = 500;
+    canvasSizeY = 200;
+
+    left += canvasSizeX;
+    top += cansSizeY;
+
+    */
+
     function calculateCanvasBorder(direction) {
       $('#canvas').css('min-width', '+=500');
       let centerX = parseInt($('#canvas').css('min-width').replace('px', '')) / 2;
       console.log('centerX: ' + centerX);
+
       $('.sourceWindow').each((index, element) => {
+
+        
         $(element).css('left', '+=250')
         let pipe = {
           x: $(element).css('left'),
