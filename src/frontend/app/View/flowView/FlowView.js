@@ -66,7 +66,6 @@ export default class FlowView {
         stub: [40, 60],
         gap: 10,
         cornerRadius: 5,
-        alwaysRespectStubs: true
       }]
     }
     this.instance.registerConnectionType("basic", basicType);

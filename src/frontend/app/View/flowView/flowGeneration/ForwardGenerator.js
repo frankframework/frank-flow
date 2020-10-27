@@ -121,7 +121,6 @@ export default class ForwardGenerator {
             stub: [40, 60],
             gap: 10,
             cornerRadius: 5,
-            alwaysRespectStubs: true,
             midpoint: 0.0001
           }]
         });
