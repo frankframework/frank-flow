@@ -304,17 +304,18 @@ export default class FlowView {
     $('.customErrorMessage').remove();
     if (e == "dupplicate") {
       $('#flowContainer').append(
-        $("<h1></h1>").text('Duplicate pipe, please remove any duplicates.').addClass('customErrorMessage'),
+        $("<h1></h1>").text('Can\'t generate Flow.Duplicate pipe, please remove any duplicates.').addClass('customErrorMessage'),
       );
-    } else if (typeof (this.flowModel.getTransformedXml()) == "string") {
+    } 
+    // else if (typeof (this.flowModel.getTransformedXml()) == "string") {
+    //   $('#flowContainer').append(
+    //     $("<h1></h1>").text('Configuration is incorrect, please check your xml.').addClass('customErrorMessage'),
+    //     $('<p></p>').text(' \n\n\n your error: \n' + this.flowModel.getTransformedXml()).addClass('customErrorMessage')
+    //   );
+    // } 
+    else {
       $('#flowContainer').append(
-        $("<h1></h1>").text('Configuration is incorrect, please check your xml.').addClass('customErrorMessage'),
-        $('<p></p>').text(' \n\n\n your error: \n' + this.flowModel.getTransformedXml()).addClass('customErrorMessage')
-      );
-    } else {
-      $('#flowContainer').append(
-        $("<h1></h1>").text('Configuration is incorrect, please check your xml.').addClass('customErrorMessage'),
-        $('<p></p>').text(' \n\n\n your error: \n' + e).addClass('customErrorMessage')
+        $("<h1></h1>").text('Can\'t generate Flow, please check your xml.').addClass('customErrorMessage'),
       );
     }
     console.log('error: ', e, this.flowModel.getTransformedXml())
