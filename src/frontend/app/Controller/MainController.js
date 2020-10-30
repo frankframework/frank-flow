@@ -50,7 +50,7 @@ class MainController {
     this.flowController.flowView.modifyFlow("generate");
   }
   setPipes(data) {
-    this.flowController.paletteView.generatePalettePipes(data[2].classes);
+    this.flowController.paletteView.generatePalettePipes(data);
   }
 }
 

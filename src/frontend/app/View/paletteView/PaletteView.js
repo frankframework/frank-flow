@@ -1,10 +1,12 @@
 import SimpleBar from 'simplebar';
+// import TypeImageView from '../TypeImageView.js';
 
 export default class PaletteView {
   constructor(flowController) {
     this.listeners = [];
     this.pipes = null;
     this.flowView = flowController.flowView;
+    // this.typeImageView = new TypeImageView(this.flowView);
   }
 
   addListener(listener) {
@@ -15,10 +17,42 @@ export default class PaletteView {
     this.listeners.forEach(l => l.notify(data));
   }
 
-  generatePalettePipes(pipes) {
-    let cur = this,
-      palette = $('#palette');
+  generatePalettePipes(data) {
+    let groups = [{name:'Pipes', pipes:[]},{name:'Other', pipes:[]}];
 
+    data.forEach(function(item, index) {
+      groups.forEach((group, i) => {
+        let re = new RegExp(group.name, 'g');
+
+        if(item.name.match(re)){
+          group.pipes.push(...item.classes);
+        }
+      })
+    });
+
+    this.createGroupElements(groups);
+    new SimpleBar($('#palette')[0]);
+  }
+
+  createGroupElements(groups) {
+    let cur = this;
+    let groupContainer = $('#groups');
+    groups.forEach((group, i) => {
+      let toolBox = $('<div></div>').addClass('content-group');
+      let text = $('<p></p>').text(group.name);
+      toolBox.append(text);
+      toolBox.click(() => {
+        cur.setPipeElement(group);
+      });
+      groupContainer.append(toolBox);
+    });
+  }
+
+  setPipeElement(group) {
+    let pipes = $('#pipes');
+    pipes.empty();
+
+    let cur = this;
     let dragData = {
       disabled: false,
       drag: function(e) {
@@ -35,14 +69,17 @@ export default class PaletteView {
       }
     }
 
-    pipes.forEach(function(item, index) {
+    group.pipes.forEach((pipe, i) => {
       let toolBox = $('<div></div>').addClass('content');
-      let text = $('<p></p>').text(item.name);
+      let text = $('<p></p>').text(pipe.name);
       toolBox.append(text);
-      palette.append(toolBox);
+      pipes.append(toolBox);
       instance.draggable(toolBox, dragData);
     });
 
-    new SimpleBar($('#palette')[0]);
   }
+
+  // getTypeImage(type) {
+  //   return this.typeImageView.getTypeImage(type);
+  // }
 }
