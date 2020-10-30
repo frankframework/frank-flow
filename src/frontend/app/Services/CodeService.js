@@ -56,7 +56,6 @@ export default class CodeService {
             .catch(err => {
                 alert("couldn't load pipe palette");
                 console.log(err);
-
             })
     }
 
@@ -142,38 +141,39 @@ export default class CodeService {
     })
     }
 
-    loadZip(configurationName) {
-        configurationName = configurationName.match(/".*?"/g)[0].replace(/"/g, '');
-        console.log(configurationName)
-        const versionPath = '../iaf/api/configurations/' + configurationName + '/versions';
-        const options = {
-            headers: {
-                'Content-disposition': 'attachment; filename="filename.jpg"'
-            },
-            method: 'GET'
-        }
-        fetch(versionPath, options)
-            .then(response => {
-                return response.json();
-            })
-            .then(data => {
-                if (data) {
-                    let version = prompt('please enter a version number');
-                    let ver = data[0].version;
+    // TODO remove after saving file works
+    // loadZip(configurationName) {
+    //     configurationName = configurationName.match(/".*?"/g)[0].replace(/"/g, '');
+    //     console.log(configurationName)
+    //     const versionPath = '../iaf/api/configurations/' + configurationName + '/versions';
+    //     const options = {
+    //         headers: {
+    //             'Content-disposition': 'attachment; filename="filename.jpg"'
+    //         },
+    //         method: 'GET'
+    //     }
+    //     fetch(versionPath, options)
+    //         .then(response => {
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             if (data) {
+    //                 let version = prompt('please enter a version number');
+    //                 let ver = data[0].version;
 
-                    data.forEach(function (item, i) {
-                        if (item.version.match(version + '(?=_)')) {
-                            ver = item.version;
-                        }
-                    })
-                    let zipPath = '../iaf/api/configurations/' + configurationName + '/versions/' + ver + '/download';
-                    fetch(zipPath, { method: 'GET' }).then(response => {
-                        return response.blob();
-                    })
-                        .then(zipFile => {
-                            this.mainController.codeController.fileTreeView.makeTree(zipFile);
-                        })
-                }
-            })
-    }
+    //                 data.forEach(function (item, i) {
+    //                     if (item.version.match(version + '(?=_)')) {
+    //                         ver = item.version;
+    //                     }
+    //                 })
+    //                 let zipPath = '../iaf/api/configurations/' + configurationName + '/versions/' + ver + '/download';
+    //                 fetch(zipPath, { method: 'GET' }).then(response => {
+    //                     return response.blob();
+    //                 })
+    //                     .then(zipFile => {
+    //                         this.mainController.codeController.fileTreeView.makeTree(zipFile);
+    //                     })
+    //             }
+    //         })
+    // }
 }

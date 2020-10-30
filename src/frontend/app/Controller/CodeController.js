@@ -170,42 +170,42 @@ export default class CodeController {
     };
   };
 
-  saveFile() {
-    let zip = this.fileTreeView.zip;
-    var FileSaver = require('file-saver');
-    zip.generateAsync({
-      type: "blob"
-    }).then(function (myzip) {
-      //FileSaver.saveAs(blob, "FrankConfiguration");
-      console.log(myzip);
-      var fileName = 'configuration.zip';
+  // saveFile() {
+  //   let zip = this.fileTreeView.zip;
+  //   var FileSaver = require('file-saver');
+  //   zip.generateAsync({
+  //     type: "blob"
+  //   }).then(function (myzip) {
+  //     //FileSaver.saveAs(blob, "FrankConfiguration");
+  //     console.log(myzip);
+  //     var fileName = 'configuration.zip';
 
-      var fd = new FormData();
-      const finalurl = 'http://localhost/iaf/api/configurations';
-      fd.append("datasource", 'jdbc/frank2manual');
-      fd.append("name", "PROJECTNAME");
-      fd.append("version", '5');
-      fd.append("encoding", 'utf-8');
-      fd.append("multiple_configs", false);
-      fd.append("activate_config", true);
-      fd.append("automatic_reload", true);
-      fd.append("file", myzip, fileName);
+  //     var fd = new FormData();
+  //     const finalurl = 'http://localhost/iaf/api/configurations';
+  //     fd.append("datasource", 'jdbc/frank2manual');
+  //     fd.append("name", "PROJECTNAME");
+  //     fd.append("version", '5');
+  //     fd.append("encoding", 'utf-8');
+  //     fd.append("multiple_configs", false);
+  //     fd.append("activate_config", true);
+  //     fd.append("automatic_reload", true);
+  //     fd.append("file", myzip, fileName);
 
-      fetch(finalurl, {
-        method: 'post',
-        body: fd,
-      }).then(res => {
-        console.log(res)
-        return res.text();
-      }).then(re => {
-        console.log(re)
-      })      
-      .catch(e => {
-        console.log(e)
-      })
+  //     fetch(finalurl, {
+  //       method: 'post',
+  //       body: fd,
+  //     }).then(res => {
+  //       console.log(res)
+  //       return res.text();
+  //     }).then(re => {
+  //       console.log(re)
+  //     })      
+  //     .catch(e => {
+  //       console.log(e)
+  //     })
 
-    })
-  }
+  //   })
+  // }
 
   //_______________Methods for modifying the editor_______________
 
