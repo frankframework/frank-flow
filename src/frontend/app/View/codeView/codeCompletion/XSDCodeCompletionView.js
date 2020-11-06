@@ -10,7 +10,7 @@ export default class XSDCodeCompletionView {
 
     notify(data) {
       const xsdManager = new XsdManager()
-
+      
       // TODO: Use the real path as used in the configurations.
       //  This should be loaded dynamically. (xsdManager.update())
       xsdManager.set({
@@ -20,12 +20,6 @@ export default class XSDCodeCompletionView {
       })
 
       const xsdFeatures = new XsdFeatures(xsdManager, monaco)
-
       xsdFeatures.addCompletion()
     }
-
-
-
 }
-
-
