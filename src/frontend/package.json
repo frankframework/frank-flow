@@ -37,7 +37,7 @@
     "jszip": "^3.2.2",
     "monaco-editor": "^0.20.0",
     "monaco-editor-webpack-plugin": "^1.9.0",
-    "monaco-xsd-code-completion": "^0.2.3",
+    "monaco-xsd-code-completion": "^0.6.1",
     "dom-to-image": "^2.6.0",
     "html-to-image": "^0.1.1",
     "download.js": "^1.0.0",
