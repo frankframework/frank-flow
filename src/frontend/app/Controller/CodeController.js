@@ -1,6 +1,6 @@
 import CodeView from '../View/codeView/CodeView.js';
 import FileTreeView from '../View/codeView/FileTreeView.js';
-import CodeService from '../Services/CodeService.js';
+import FileService from '../services/FileService.js';
 import XsdModel from '../Model/XsdModel';
 import * as beautify from 'vkbeautify';
 import XsdService from '../services/XsdService.js';
@@ -16,7 +16,7 @@ export default class CodeController {
     this.codeView = new CodeView(this.XsdModel);
     this.codeView.addListener(this);
 
-    this.codeService = new CodeService(this);
+    this.codeService = new FileService(this);
     this.xsdService = new XsdService(this.XsdModel);
     this.ibisdocService = new IbisdocService(this.ibisdocModel, this.codeView);
 

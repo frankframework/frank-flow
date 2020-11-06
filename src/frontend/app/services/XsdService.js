@@ -4,7 +4,7 @@ export default class XsdService {
     }
 
     getXsd() {
-        fetch('../rest/ibisdoc/ibisdoc.xsd', {
+        fetch('./media/ibisdoc.xsd', {
             method: 'GET'
         })
             .then(response => {

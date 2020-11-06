@@ -1,8 +1,8 @@
 import ToBeautifulSyntax from '../View/codeView/ToBeautifulSyntax.js';
-import JSZip from '../../node_modules/jszip/dist/jszip.js';
+import JSZip from 'jszip/dist/jszip';
 
 
-export default class CodeService {
+export default class FileService {
     constructor(codeController) {
         this.codeController = codeController;
 

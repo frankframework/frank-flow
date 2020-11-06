@@ -8,7 +8,7 @@ export default class IbisdocService {
     getIbisdoc() {
 
         let cur = this;
-        fetch('../rest/ibisdoc/ibisdoc.json', {
+        fetch('./media/ibisdoc.json', {
             method: 'GET'
         })
             .then(response => {
