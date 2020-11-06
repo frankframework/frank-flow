@@ -5,31 +5,36 @@ import XsdModel from '../Model/XsdModel';
 import * as beautify from 'vkbeautify';
 import XsdService from '../services/XsdService.js';
 import IbisdocService from '../services/IbisdocService.js';
+import FileModel from '../Model/FileModel.js';
 
 export default class CodeController {
 
   constructor(mainController, ibisdocModel) {
     this.mainController = mainController;
 
-    this.XsdModel = new XsdModel();
+    this.xsdModel = new XsdModel();
     this.ibisdocModel = ibisdocModel;
-    this.codeView = new CodeView(this.XsdModel);
+    this.fileModel = new FileModel();
+
+    this.codeView = new CodeView(this.xsdModel);
+    this.fileModel.addListener(this)
     this.codeView.addListener(this);
 
-    this.codeService = new FileService(this);
-    this.xsdService = new XsdService(this.XsdModel);
+    this.fileService = new FileService(this);
+    this.xsdService = new XsdService(this.xsdModel);
     this.ibisdocService = new IbisdocService(this.ibisdocModel, this.codeView);
 
-    this.codeService.getConfigurations();
+    this.fileService.getConfigurations();
     this.xsdService.getXsd();
     this.ibisdocService.getIbisdoc();
 
     this.codeView.makeEditor();
     this.editor = this.codeView.editor;
 
-    this.fileTreeView = new FileTreeView(this.editor, this.codeService);
+    this.fileTreeView = new FileTreeView(this.editor, this.fileService);
     this.initListeners();
   }
+
 
   //_______________Event handlers_______________
 
