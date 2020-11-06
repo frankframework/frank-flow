@@ -4,6 +4,9 @@ import PaletteView from '../View/paletteView/PaletteView.js';
 export default class FlowController {
 
   constructor(mainController, flowModel) {
+    this.canvasMarginX = 0;
+    this.canvasMarginY = 0;
+
     this.mainController = mainController;
     this.flowModel = flowModel;
     this.flowView = new FlowView(flowModel);
@@ -12,6 +15,8 @@ export default class FlowController {
     this.paletteView.addListener(this);
     this.hoverSourceWindow = false;
     this.initHandlers();
+
+
     localStorage.setItem("activityMode", false);
   }
 
@@ -108,6 +113,15 @@ export default class FlowController {
   initHandlers() {
     let cur = this;
     let fullscreen = true;
+    let themeSwitch = false;
+    let $panzoom = $('#canvas').panzoom({
+      minScale: 0.5,
+      increment: 0.2
+    });
+
+
+
+
     $.contextMenu({
       selector: '.context-menu-one',
       zIndex: 3001,
@@ -117,7 +131,7 @@ export default class FlowController {
       },
       items: {
         "flow": {
-          name: "Toggle fullscreen", icon: "fas fa-compress",
+          name: "Toggle editor", icon: "fas fa-compress",
           callback: function () {
             if(fullscreen) {
               cur.setHybrid();
@@ -154,30 +168,26 @@ export default class FlowController {
           }
         },
         "horizontal": {
-          name: "Toggle horizontal", icon: "fas fa-ruler-horizontal",
+          name: "Toggle flow direction", icon: "fas fa-ruler-horizontal",
           callback: function () {
             cur.toggleHorizontal();
+            cur.flowView.realignFlow();
             return true;
           }
         },
-        "xsd": { name: "Run XSD", icon: "fas fa-play-circle" },
         "download": {
-          name: "Export SVG", icon: "paste",
+          name: "Export SVG", icon: "fas fa-file-export",
           callback: function () {
+            $panzoom.panzoom('pan', 0, 0);
+            $panzoom.panzoom('zoom', 0, 0);
             cur.flowView.getImage();
             return true;
-          }
-        },
-        "theme": {
-          name: "Set theme", icon: "fas fa-adjust",
-          callback: function () {
-            cur.setTheme();
           }
         },
         // "editor": {name: "Editor", icon: "fas fa-file-code",
         //   callback: function() {
         //     cur.setFullEditor();
-        //   }}
+        //   }} 
       }
     });
 
@@ -247,10 +257,7 @@ export default class FlowController {
     //set canvas bounded to container.
     var minScaleX = $('#flowContainer').innerWidth();
     var minScaleY = $('#flowContainer').innerHeight();
-    let $panzoom = $('#canvas').panzoom({
-      minScale: 0.5,
-      increment: 0.2
-    });
+
 
     //make sure panzoom doesn't leave the container.
     $panzoom.on('panzoomend', function (e) {
@@ -274,11 +281,29 @@ export default class FlowController {
       $('#flowContainer').attr('style', '');
     });
 
+    /*
+    save canvas size and update positions in generation.
+
+
+    int canvasSizeX = 0;
+    int canvasSizeY = 0;
+
+    canvasSizeX = 500;
+    canvasSizeY = 200;
+
+    left += canvasSizeX;
+    top += cansSizeY;
+
+    */
+
     function calculateCanvasBorder(direction) {
       $('#canvas').css('min-width', '+=500');
       let centerX = parseInt($('#canvas').css('min-width').replace('px', '')) / 2;
       console.log('centerX: ' + centerX);
+
       $('.sourceWindow').each((index, element) => {
+
+        
         $(element).css('left', '+=250')
         let pipe = {
           x: $(element).css('left'),

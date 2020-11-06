@@ -115,7 +115,6 @@ export default class PipeView {
           stub: [40, 60],
           gap: 10,
           cornerRadius: 5,
-          alwaysRespectStubs: true,
           midpoint: 0.0001
         }]
       });

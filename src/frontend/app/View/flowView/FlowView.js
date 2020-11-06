@@ -66,7 +66,6 @@ export default class FlowView {
         stub: [40, 60],
         gap: 10,
         cornerRadius: 5,
-        alwaysRespectStubs: true
       }]
     }
     this.instance.registerConnectionType("basic", basicType);
@@ -179,13 +178,18 @@ export default class FlowView {
   }
 
   realignFlow() {
-    let pipes = $('.window'),
-    exitOffset = 0,
-    boxOffset = 0,
-    receiverOffset = 0;
+    const pipes = $('.window');
+    let exitOffset = 0,
+        boxOffset = 0,
+        receiverOffset = 0,
+        x = '0',
+        y = '0',
+        exit = false;;
+
 
     for (let i in pipes) {
       let box = $(pipes[i]);
+      exit = false;
       
       if(box[0].lastChild == null) {
         return;
@@ -193,78 +197,51 @@ export default class FlowView {
 
       boxOffset += 250;
       if (!box.hasClass('exit') && !box[0].innerHTML.match(/\(receiver\)/g)) {
-        this.modifyFlow('drag', {
-          name: box[0].lastChild.firstElementChild.textContent,
-          x: '100',
-          y: '' + boxOffset
-        });
+        if(this.horizontalBuild) {
+          x = '' + (boxOffset + 250);
+          y = '450';
+        } else {
+          x = '100';
+          y = '' + boxOffset;
+        }
       } else if (box[0].innerHTML.match(/\(receiver\)/g)) {
         receiverOffset += 250;
+        if(this.horizontalBuild) {
+          x = '100';
+          y = '' + (receiverOffset - 100);
+        } else {
+          x = '500';
+          y = '' + receiverOffset;
+        }
+      } else {
+        exit = true;
+        exitOffset += 250;
+        if(this.horizontalBuild) {
+          x = '' + (boxOffset + 250);
+          y = (exitOffset + 450) + 'px';
+        } else {
+          x = exitOffset = 'px';
+          y = '' + boxOffset;
+        }
+      }
+
+
+      if(!exit) {
         this.modifyFlow('drag', {
           name: box[0].lastChild.firstElementChild.textContent,
-          x: '500',
-          y: '' + receiverOffset
+          x: x,
+          y: y
         });
       } else {
-        exitOffset += 250;
         this.modifyFlow('dragExit', {
           name: box[0].lastChild.firstElementChild.textContent,
-          x: exitOffset + 'px',
-          y: '' + boxOffset
+          x: x,
+          y: y
         });
       }
+      
     }
-    this.setCanvasBounds(boxOffset, pipe.le)
-  }
-
-  setOffsets(hasPossitions) {
-    let boxOffset = 0,
-      exitOffset = 0;
-
-    this.moving = true;
-    for (let i = 1; i <= this.windows; i++) {
-
-      if (!$('#sourceWindow' + (i - 1)).hasClass('exit')) {
-        boxOffset += 250;
-      }
-      if (!hasPossitions) {
-        let box = $('#sourceWindow' + i);
-        this.setBuildDirection(box, boxOffset);
-        if (this.windows == 2) {
-          this.moving = false;
-          return;
-        }
-        this.setElementPosition(box, exitOffset);
-      }
-      this.setCanvasBounds(boxOffset, i);
-    }
-    this.moving = false;
-  }
-
-  setBuildDirection(box, boxOffset) {
-    if (!this.horizontalBuild) {
-      box.css("top", boxOffset + "px");
-    } else {
-      box.css("top", "100px");
-      box.css("left", boxOffset + "px");
-    }
-  }
-
-  setElementPosition(box, exitOffset) {
-    if (!box.hasClass('exit')) {
-      this.modifyFlow('drag', {
-        name: box[0].lastChild.firstElementChild.textContent,
-        x: box.css("left"),
-        y: box.css("top")
-      });
-    } else {
-      exitOffset += 250;
-      this.modifyFlow('dragExit', {
-        name: box[0].lastChild.firstElementChild.textContent,
-        x: parseInt(box.css("left").replace('px', '')) + exitOffset + 'px',
-        y: box.css("top")
-      });
-    }
+    this.setCanvasBounds(boxOffset, pipes.length);
   }
 
   setCanvasBounds(boxOffset, i) {
@@ -293,6 +270,8 @@ export default class FlowView {
     this.flowGenerator.generateFlow();
   }
 
+
+  // TODO: make an exception class to handle exceptions thrown in flow module.
   displayError(e) {
     instance.reset();
     $('#canvas').empty();
