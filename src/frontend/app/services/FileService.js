@@ -13,7 +13,7 @@ export default class FileService {
 
     getConfigurations() {
         let cur = this,
-            path = './api/configurations';
+            path = './api/configurations'; 
 
         fetch(path, {
             method: 'GET'
