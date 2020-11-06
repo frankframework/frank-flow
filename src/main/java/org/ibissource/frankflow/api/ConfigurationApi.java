@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 import org.ibissource.frankflow.util.FileUtils;
 
 @Path("/configurations")
-public class Configurations {
+public class ConfigurationApi {
 
 	@GET
 	@Path("/")
@@ -39,7 +39,7 @@ public class Configurations {
 	public Response getConfigurations(@PathParam("name") String configurationName) {
 		File dir = FileUtils.getDir(configurationName);
 
-		//Todo fix this build.tostring thing
+		//TODO fix this build.tostring thing
 		return Response.status(Response.Status.OK).entity(readDirectory(dir).build().toString()).build();
 	}
 
