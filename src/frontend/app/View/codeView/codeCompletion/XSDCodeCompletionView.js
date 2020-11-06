@@ -1,5 +1,5 @@
-import XSDParser from 'monaco-xsd-code-completion/lib/XSDParser';
-import XSDCodeCompletionProvider from 'monaco-xsd-code-completion/lib/XSDCodeCompletionProvider';
+import XsdManager from 'monaco-xsd-code-completion/esm/XsdManager'
+import XsdFeatures from 'monaco-xsd-code-completion/esm/XsdFeatures'
 
 export default class XSDCodeCompletionView {
 
@@ -9,10 +9,19 @@ export default class XSDCodeCompletionView {
     }
 
     notify(data) {
-        console.log(data);
-        const ibisdoc = new XSDParser(data)
-        const xsdCodeCompletion = new XSDCodeCompletionProvider(ibisdoc)
-        this.monaco.languages.registerCompletionItemProvider('xml', xsdCodeCompletion.provider())
+      const xsdManager = new XsdManager()
+
+      // TODO: Use the real path as used in the configurations.
+      //  This should be loaded dynamically. (xsdManager.update())
+      xsdManager.set({
+        path: '../../../ibisdoc.xsd',
+        value: data,
+        namespace: 'xs',
+      })
+
+      const xsdFeatures = new XsdFeatures(xsdManager, monaco)
+
+      xsdFeatures.addCompletion()
     }
 
 
