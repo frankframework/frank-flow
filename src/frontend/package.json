@@ -16,7 +16,10 @@
   "proxy": "http://localhost:8000",
   "author": "ruben",
   "license": "Apache 2.0",
-  "dependencies": {},
+  "dependencies": {
+    "esdoc": "^1.1.0",
+    "esdoc-standard-plugin": "^1.0.0"
+  },
   "devDependencies": {
     "@metahub/karma-jasmine-jquery": "^4.0.1",
     "istanbul": "^0.4.5",

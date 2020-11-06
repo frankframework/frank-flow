@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">app/View/flowView/FlowView.js | Frank!Flow</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="dev tool to work with the Frank framework"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="Frank!Flow"><meta property="twitter:description" content="dev tool to work with the Frank framework"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#controller">Controller</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Controller/CodeController.js~CodeController.html">CodeController</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Controller/FlowController.js~FlowController.html">FlowController</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Controller/PipeInfoController.js~PipeInfoController.html">PipeInfoController</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">Converter</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Converter/ConfigurationConverter.js~ConfigurationConverter.html">ConfigurationConverter</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#facade">Facade</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Facade/CodeFacade.js~CodeFacade.html">CodeFacade</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#model">Model</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Model/FileModel.js~FileModel.html">FileModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Model/FlowModel.js~FlowModel.html">FlowModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Model/IbisdocModel.js~IbisdocModel.html">IbisdocModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Model/PipeModel.js~PipeModel.html">PipeModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Model/XsdModel.js~XsdModel.html">XsdModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-codeview">View/codeView</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/CodeView.js~CodeView.html">CodeView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/FileTreeView.js~FileTreeView.html">FileTreeView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/ToBeautifulSyntax.js~ToBeautifulSyntax.html">ToBeautifulSyntax</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/ValidateConfigurationView.js~ValidateConfigurationView.html">ValidateConfigurationView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-logColor">logColor</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-codeview-codecompletion">View/codeView/codeCompletion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeCompletion/XSDCodeCompletionView.js~XSDCodeCompletionView.html">XSDCodeCompletionView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-codeview-codeeditviews">View/codeView/codeEditViews</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeEditViews/CodeAttributesView.js~CodeAttributesView.html">CodeAttributesView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeEditViews/CodeEditView.js~CodeEditView.html">CodeEditView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeEditViews/CodeParametersView.js~CodeParametersView.html">CodeParametersView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeEditViews/CodePipeView.js~CodePipeView.html">CodePipeView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeEditViews/CodeTypesView.js~CodeTypesView.html">CodeTypesView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeEditViews/ExitPipeView.js~ExitPipeView.html">ExitPipeView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeEditViews/OptionView.js~OptionView.html">OptionView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-flowview">View/flowView</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/DescriptionView.js~DescriptionView.html">DescriptionView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/FlowView.js~FlowView.html">FlowView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/TypeImageView.js~TypeImageView.html">TypeImageView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-flowview-flowgeneration">View/flowView/flowGeneration</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/flowGeneration/CustomElementGenerator.js~CustomElementGenerator.html">CustomElementGenerator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/flowGeneration/FlowGenerator.js~FlowGenerator.html">FlowGenerator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/flowGeneration/ForwardGenerator.js~ForwardGenerator.html">ForwardGenerator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/flowGeneration/PipeGenerator.js~PipeGenerator.html">PipeGenerator</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-flowview-pipe">View/flowView/pipe</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/pipe/ActivityPipeView.js~ActivityPipeView.html">ActivityPipeView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/pipe/PipeBuilder.js~PipeBuilder.html">PipeBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/pipe/PipeView.js~PipeView.html">PipeView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-paletteview">View/paletteView</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/paletteView/PaletteView.js~PaletteView.html">PaletteView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-pipeinfoview">View/pipeInfoView</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/pipeInfoView/PipeInfoView.js~PipeInfoView.html">PipeInfoView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-pipeinfoview-specialpipes">View/pipeInfoView/SpecialPipes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/pipeInfoView/SpecialPipes/XsltInfoView.js~XsltInfoView.html">XsltInfoView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-pipeinfoview-attributes">View/pipeInfoView/attributes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/pipeInfoView/attributes/GenerateInfoAttributesView.js~GenerateInfoAttributesView.html">GenerateInfoAttributesView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-pipeinfoview-parameters">View/pipeInfoView/parameters</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/pipeInfoView/parameters/GenerateInfoParametersView.js~GenerateInfoParametersView.html">GenerateInfoParametersView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#services">services</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/services/FileService.js~FileService.html">FileService</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/services/IbisdocService.js~IbisdocService.html">IbisdocService</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/services/PipeService.js~PipeService.html">PipeService</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/services/XsdService.js~XsdService.html">XsdService</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">app/View/flowView/FlowView.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import FlowGenerator from &apos;./flowGeneration/FlowGenerator.js&apos;
+import domtoimage from &apos;dom-to-image&apos;;
+import jsplumb from &apos;jsplumb&apos;;
+export default class FlowView {
+
+  constructor(flowModel) {
+    this.transformedXml = null;
+    this.flowModel = flowModel;
+    this.types = [];
+    this.listeners = [];
+    this.windows = 0;
+    this.moving = false;
+    this.adding = false;
+    this.connectorType = &quot;Flowchart&quot;;
+    this.horizontalBuild = false;
+    this.flowGenerator = new FlowGenerator(this, flowModel);
+    this.getInstance();
+  }
+  addListener(listener) {
+    this.listeners.push(listener);
+  }
+
+  notifyListeners(data) {
+    this.listeners.forEach(l =&gt; l.notify(data));
+  }
+
+  resetWindows() {
+    this.windows = 0;
+  }
+
+  getInstance() {
+    this.sourceAnchors = [
+      &quot;Top&quot;, &quot;Right&quot;, &quot;Left&quot;,
+      [0.25, 1, 0, 1],
+      [0.5, 1, 0, 1],
+      [0.75, 1, 0, 1],
+      [1, 1, 0, 1]
+    ],
+      this.instance = window.instance = jsPlumb.getInstance({
+        DragOptions: {
+          cursor: &quot;pointer&quot;,
+          zIndex: 2000
+        },
+        PaintStyle: {
+          stroke: &quot;#000000&quot;,
+          strokeWidth: 3
+        },
+        ConnectionOverlays: [
+          [&quot;Arrow&quot;, {
+            location: 1,
+            visible: true,
+            id: &quot;ARROW&quot;,
+            zIndex: 1000
+          }]
+        ],
+        Container: &quot;canvas&quot;
+      });
+
+    this.setBasicType();
+
+  }
+
+  setBasicType() {
+    let basicType = {
+      connector: [&quot;StateMachine&quot;, {
+        stub: [40, 60],
+        gap: 10,
+        cornerRadius: 5,
+      }]
+    }
+    this.instance.registerConnectionType(&quot;basic&quot;, basicType);
+  }
+
+  modifyFlow(change, obj) {
+    switch (change) {
+      case &quot;generate&quot;:
+        this.generateFlow();
+        break;
+      case &apos;add&apos;:
+        if (obj.xpos == null || obj.ypos == null) {
+          obj.xpos = 100;
+          obj.ypos = 100;
+        }
+        this.notifyListeners(this.addCustomPipe(obj.name, obj.className, obj.xpos, obj.ypos));
+        break;
+      case &apos;edit&apos;:
+        obj = this.editTitle(obj);
+        obj.type = &quot;changeName&quot;;
+        this.notifyListeners(obj);
+        break;
+      case &apos;connection&apos;:
+        this.adding = true;
+        obj.type = &quot;changeAddForward&quot;;
+        this.notifyListeners(obj);
+        this.adding = false;
+        break;
+      case &apos;drag&apos;:
+        obj = this.cleanPossitions(obj);
+        obj.type = &quot;drag&quot;;
+        this.notifyListeners(obj);
+        break;
+      case &apos;dragExit&apos;:
+        obj = this.cleanPossitions(obj);
+        obj.type = &quot;dragExit&quot;;
+        this.notifyListeners(obj);
+        break;
+      case &apos;delete&apos;:
+        obj.type = &quot;delete&quot;;
+        this.notifyListeners(obj);
+        break;
+      case &quot;error&quot;:
+        this.displayError(obj);
+        break;
+    }
+  }
+
+  getImage() {
+    var node = document.getElementById(&apos;canvas&apos;);
+
+    domtoimage.toSvg(node)
+      .then(function (dataUrl) {
+        var link = document.createElement(&apos;a&apos;);
+        link.download = localStorage.getItem(&apos;currentAdapter&apos;) + &apos;.svg&apos;;
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch(function (error) {
+        console.error(&apos;oops, something went wrong!&apos;, error);
+      });
+  }
+
+  addCustomPipe(name, className, xpos, ypos) {
+    return {
+      type: &quot;changeAddPipe&quot;,
+      name: name,
+      possitions: {
+        x: xpos,
+        y: ypos
+      },
+      className: className
+    }
+  }
+
+  cleanPossitions(obj) {
+    obj.x = obj.x.replace(/px/, &apos;&apos;);
+    obj.y = obj.y.replace(/px/, &apos;&apos;);
+    return obj;
+  }
+
+  editTitle(pipe) {
+    let oldTitle = pipe.innerHTML;
+    let newTitle = prompt(&quot;What is the new Title?&quot;, oldTitle);
+    if (newTitle != null) {
+      pipe.innerHTML = newTitle;
+      return {
+        oldTitle: oldTitle,
+        newTitle: newTitle
+      }
+    }
+    return null;
+  }
+
+
+  toggleConnectorType(cur) {
+    if (cur.connectorType === &quot;Flowchart&quot;) {
+      cur.connectorType = &quot;StateMachine&quot;;
+    } else {
+      cur.connectorType = &quot;Flowchart&quot;;
+    }
+    cur.generateFlow();
+  }
+
+  getTypes() {
+    this.notifyListeners({
+      type: &quot;getTypes&quot;
+    });
+    return this.types;
+  }
+
+  realignFlow() {
+    const pipes = $(&apos;.window&apos;);
+    let exitOffset = 0,
+        boxOffset = 0,
+        receiverOffset = 0,
+        x = &apos;0&apos;,
+        y = &apos;0&apos;,
+        exit = false;;
+
+
+    for (let i in pipes) {
+      let box = $(pipes[i]);
+      exit = false;
+      
+      if(box[0].lastChild == null) {
+        return;
+      }
+
+      boxOffset += 250;
+      if (!box.hasClass(&apos;exit&apos;) &amp;&amp; !box[0].innerHTML.match(/\(receiver\)/g)) {
+        if(this.horizontalBuild) {
+          x = &apos;&apos; + (boxOffset + 250);
+          y = &apos;450&apos;;
+        } else {
+          x = &apos;100&apos;;
+          y = &apos;&apos; + boxOffset;
+        }
+      } else if (box[0].innerHTML.match(/\(receiver\)/g)) {
+        receiverOffset += 250;
+        if(this.horizontalBuild) {
+          x = &apos;100&apos;;
+          y = &apos;&apos; + (receiverOffset - 100);
+        } else {
+          x = &apos;500&apos;;
+          y = &apos;&apos; + receiverOffset;
+        }
+      } else {
+        exit = true;
+        exitOffset += 250;
+        if(this.horizontalBuild) {
+          x = &apos;&apos; + (boxOffset + 250);
+          y = (exitOffset + 450) + &apos;px&apos;;
+        } else {
+          x = exitOffset = &apos;px&apos;;
+          y = &apos;&apos; + boxOffset;
+        }
+      }
+
+
+      if(!exit) {
+        this.modifyFlow(&apos;drag&apos;, {
+          name: box[0].lastChild.firstElementChild.textContent,
+          x: x,
+          y: y
+        });
+      } else {
+        this.modifyFlow(&apos;dragExit&apos;, {
+          name: box[0].lastChild.firstElementChild.textContent,
+          x: x,
+          y: y
+        });
+      }
+      
+    }
+    this.setCanvasBounds(boxOffset, pipes.length);
+  }
+
+  setCanvasBounds(boxOffset, i) {
+    let totalLength, windowLength;
+    if (!this.horizontalBuild) {
+      totalLength = boxOffset + ((64 * i) - 1450);
+      windowLength = parseInt($(&apos;#canvas&apos;).css(&apos;height&apos;).replace(&apos;px&apos;, &apos;&apos;));
+      if (totalLength &gt; windowLength) {
+        $(&apos;#canvas&apos;).css(&apos;height&apos;, totalLength);
+      }
+    } else {
+      totalLength = boxOffset + ((64 * i) - 1000);
+      windowLength = parseInt($(&apos;#canvas&apos;).css(&apos;width&apos;).replace(&apos;px&apos;, &apos;&apos;));
+      if (totalLength &gt; windowLength &amp;&amp; !this.customWidth) {
+        $(&apos;#canvas&apos;).css(&apos;width&apos;, totalLength);
+      }
+    }
+  }
+
+
+
+  generateFlow() {
+    this.notifyListeners({
+      type: &quot;convertConfiguration&quot;
+    });
+    this.flowGenerator.generateFlow();
+  }
+
+
+  // TODO: make an exception class to handle exceptions thrown in flow module.
+  displayError(e) {
+    instance.reset();
+    $(&apos;#canvas&apos;).empty();
+    $(&apos;#canvas&apos;).css(&apos;display&apos;, &apos;none&apos;);
+    $(&apos;.customErrorMessage&apos;).remove();
+    if (e == &quot;dupplicate&quot;) {
+      $(&apos;#flowContainer&apos;).append(
+        $(&quot;&lt;h1&gt;&lt;/h1&gt;&quot;).text(&apos;Duplicate pipe, please remove any duplicates.&apos;).addClass(&apos;customErrorMessage&apos;),
+      );
+    } else if (typeof (this.flowModel.getTransformedXml()) == &quot;string&quot;) {
+      $(&apos;#flowContainer&apos;).append(
+        $(&quot;&lt;h1&gt;&lt;/h1&gt;&quot;).text(&apos;Configuration is incorrect, please check your xml.&apos;).addClass(&apos;customErrorMessage&apos;),
+        $(&apos;&lt;p&gt;&lt;/p&gt;&apos;).text(&apos; \n\n\n your error: \n&apos; + this.flowModel.getTransformedXml()).addClass(&apos;customErrorMessage&apos;)
+      );
+    } else {
+      $(&apos;#flowContainer&apos;).append(
+        $(&quot;&lt;h1&gt;&lt;/h1&gt;&quot;).text(&apos;Configuration is incorrect, please check your xml.&apos;).addClass(&apos;customErrorMessage&apos;),
+        $(&apos;&lt;p&gt;&lt;/p&gt;&apos;).text(&apos; \n\n\n your error: \n&apos; + e).addClass(&apos;customErrorMessage&apos;)
+      );
+    }
+    console.log(&apos;error: &apos;, e, this.flowModel.getTransformedXml())
+  }
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
