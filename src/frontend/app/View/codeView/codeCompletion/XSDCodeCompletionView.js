@@ -9,7 +9,6 @@ export default class XSDCodeCompletionView {
     }
 
     notify(data) {
-        console.log(data);
         const ibisdoc = new XSDParser(data)
         const xsdCodeCompletion = new XSDCodeCompletionProvider(ibisdoc)
         this.monaco.languages.registerCompletionItemProvider('xml', xsdCodeCompletion.provider())

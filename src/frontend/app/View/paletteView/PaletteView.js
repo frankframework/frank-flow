@@ -5,7 +5,9 @@ export default class PaletteView {
   constructor(flowController) {
     this.listeners = [];
     this.pipes = null;
+    this.currentGroup = null;
     this.flowView = flowController.flowView;
+    this.setEventListeners();
     // this.typeImageView = new TypeImageView(this.flowView);
   }
 
@@ -49,34 +51,45 @@ export default class PaletteView {
   }
 
   setPipeElement(group) {
+    this.currentGroup = group;
     let pipes = $('#pipes');
     pipes.empty();
-
-    let cur = this;
-    let dragData = {
-      disabled: false,
-      drag: function(e) {
-
-      },
-      stop: function(e) {
-        let name = e.el.firstChild.innerHTML;
-        cur.flowView.modifyFlow("add", {
-          name: "new" + name,
-          className: name,
-          xpos: 500,
-          ypos: 500
-        });
-      }
-    }
 
     group.pipes.forEach((pipe, i) => {
       let toolBox = $('<div></div>').addClass('content');
       let text = $('<p></p>').text(pipe.name);
       toolBox.append(text);
       pipes.append(toolBox);
-      instance.draggable(toolBox, dragData);
     });
+  }
 
+  filterPipes(input) {
+    let tempPipes = this.currentGroup;
+    let pipes = $('#pipes');
+    let re = new RegExp(input, 'gi');
+
+    pipes.empty();
+
+    tempPipes.pipes.forEach((pipe, i) => {
+      if(pipe.name.match(re)){
+
+        let toolBox = $('<div></div>').addClass('content');
+        let text = $('<p></p>').text(pipe.name);
+        toolBox.append(text);
+        pipes.append(toolBox);
+      }
+    });
+    console.log(this.currentGroup);
+
+  }
+
+  setEventListeners() {
+    let cur = this;
+
+    $('#searchBar').on('change', function() {
+      let searchTerm = $(this).val();
+      cur.filterPipes(searchTerm);
+    });
   }
 
   // getTypeImage(type) {
