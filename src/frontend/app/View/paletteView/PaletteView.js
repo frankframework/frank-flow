@@ -34,6 +34,7 @@ export default class PaletteView {
 
     this.createGroupElements(groups);
     new SimpleBar($('#palette')[0]);
+    this.setLaterEventListeners();
   }
 
   createGroupElements(groups) {
@@ -52,12 +53,22 @@ export default class PaletteView {
 
   setPipeElement(group) {
     this.currentGroup = group;
+    let cur = this;
     let pipes = $('#pipes');
     pipes.empty();
 
     group.pipes.forEach((pipe, i) => {
       let toolBox = $('<div></div>').addClass('content');
       let text = $('<p></p>').text(pipe.name);
+
+      toolBox.on('click', function() {
+        cur.flowView.modifyFlow("add", {
+          name: "new" + pipe.name,
+          className: pipe.name,
+          xpos: 500,
+          ypos: 500
+        })
+      });
       toolBox.append(text);
       pipes.append(toolBox);
     });
@@ -79,8 +90,6 @@ export default class PaletteView {
         pipes.append(toolBox);
       }
     });
-    console.log(this.currentGroup);
-
   }
 
   setEventListeners() {
@@ -89,6 +98,13 @@ export default class PaletteView {
     $('#searchBar').on('keydown', function() {
       let searchTerm = $(this).val();
       cur.filterPipes(searchTerm);
+    });
+  }
+
+  setLaterEventListeners() {
+    $('.content-group').on('click', function() {
+      $('.selected').removeClass('selected');
+      $(this).addClass('selected');
     });
   }
 
