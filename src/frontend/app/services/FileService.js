@@ -11,20 +11,33 @@ export default class FileService {
 
 
 
-    getConfigurations() {
+    async getConfigurations() {
         let cur = this,
-            path = './api/configurations'; 
+            path = './api/configurations';
 
         fetch(path, {
             method: 'GET'
         }).then(response => {
             return response.json();
         }).then(data => {
-            console.log(data[0]);
-            cur.getDeployableUnit(data[0]);
+
+            let fileTree = [];
+
+            data.forEach(async function (item, index) {
+                let obj = await cur.getDeployableUnit(item);
+                console.log("object: ", obj);
+                fileTree.push(obj);
+
+                if (fileTree.length == data.length) {
+                    cur.codeController.fileTreeView.makeTree(fileTree);
+                    return fileTree;
+                }
+            })
+
+
         }).catch(e => {
             alert('Please check if your ibis started up correctly or if the property Configurations.directory is set correctly')
-            console.log('error asjdhajhkdb getting configs: ' + e);
+            console.log('error getting configs: ' + e);
         })
     }
 
@@ -33,12 +46,16 @@ export default class FileService {
             path = './api/configurations/' + name;
 
         this.deployableUnit = name;
-        fetch(path, {
+        return fetch(path, {
             method: 'GET'
         }).then(response => {
             return response.json();
-        }).then(data => {
-            cur.codeController.fileTreeView.makeTree(data._files);
+        }).then(fileList => {
+            let directoryObject = {
+                name: name,
+                files: [...fileList._files]
+            };
+            return directoryObject;
         }).catch(e => {
             console.log('error getting configs: ' + e);
         })
@@ -46,18 +63,18 @@ export default class FileService {
 
     getSingleFile(name) {
         let cur = this,
-        path = './api/configurations/' + this.deployableUnit + '/files/?path=' + name;
+            path = './api/configurations/' + this.deployableUnit + '/files/?path=' + name;
 
-    fetch(path, {
-        method: 'GET'
-    }).then(response => {
-        return response.text();
-    }).then(data => {
-        cur.codeController.setEditorValue(data);
-        cur.codeController.quickGenerate();
-    }).catch(e => {
-        console.log('error getting configs: ' + e);
-    })
+        fetch(path, {
+            method: 'GET'
+        }).then(response => {
+            return response.text();
+        }).then(data => {
+            cur.codeController.setEditorValue(data);
+            cur.codeController.quickGenerate();
+        }).catch(e => {
+            console.log('error getting configs: ' + e);
+        })
     }
 
     // loadZip(configurationName) {

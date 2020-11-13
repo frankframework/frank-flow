@@ -20,13 +20,32 @@ export default class FileTreeView {
 
     let structure = [];
 
+    console.log("length: " + input.length);
+    console.log(input[0]);
+
     input.forEach((item, index) => {
-      let obj = {
+
+      let directoryName = item.name;
+      console.log(directoryName);
+      let treeDirectoryObject = {
         id: 'dir' + index,
-        name: item,
-        type: 'file'
+        name: directoryName,
+        type: 'dir',
+        children: []
       }
-      structure.push(obj);
+
+      item.files.forEach((file, fileIndex) => {
+        let treeFileObject = {
+          id: 'file' + file,
+          name: file,
+          type: 'file'
+        }
+        //structure.push(treeFileObject);
+        treeDirectoryObject.children.push(treeFileObject);
+      });
+
+
+      structure.push(treeDirectoryObject);
     });
 
     //generate the tree.
