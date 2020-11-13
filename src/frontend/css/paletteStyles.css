@@ -5,8 +5,8 @@
   background: url("../media/images/header-profile.png") repeat;
   box-shadow: inset 3px 0px 0px #DDDDDD;
   color: white;
-  /* overflow-y: scroll;
-  overflow-x: hidden; */
+  /* overflow-y: scroll; */
+  overflow-x: hidden;
   overflow: auto;
   border: 1px solid grey;
   display: flex;
@@ -17,9 +17,9 @@
 
 .palette h2 {
   width: 100%;
-  margin-bottom: 4%;
+  padding-bottom: 4%;
   display: block;
-  margin-left: 5%;
+  padding-left: 5%;
 }
 
 .content {
@@ -35,7 +35,7 @@
   padding: 0 8px;
   display: block;
   background-color: #FFFFFF;
-  border: 1px solid grey;
+  border: 2px solid grey;
   width: 44%;
   height: 10%;
   margin: 3%;
@@ -56,12 +56,17 @@
   margin: 5px;
 }
 
+.selected {
+  border: #007bff 2px solid;
+}
+
 .buttonText {
   overflow: hidden;
   white-space: nowrap;
   display: block;
   text-overflow: ellipsis;
 }
+
 
 .collapsible {
   background-color: #777;
