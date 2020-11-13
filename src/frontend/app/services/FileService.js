@@ -71,6 +71,12 @@ export default class FileService {
             return response.text();
         }).then(data => {
             cur.codeController.setEditorValue(data);
+
+            let adapterName = data.match(/<Adapter[^]*?name=".*?"/g);
+            adapterName = adapterName[0].match(/".*?"/g)[0].replace(/"/g, '');
+
+            localStorage.setItem('currentAdapter', adapterName);
+
             cur.codeController.quickGenerate();
         }).catch(e => {
             console.log('error getting configs: ' + e);
