@@ -86,7 +86,7 @@ export default class PaletteView {
   setEventListeners() {
     let cur = this;
 
-    $('#searchBar').on('change', function() {
+    $('#searchBar').on('keydown', function() {
       let searchTerm = $(this).val();
       cur.filterPipes(searchTerm);
     });
