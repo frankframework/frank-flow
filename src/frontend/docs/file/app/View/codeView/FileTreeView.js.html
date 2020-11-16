@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">app/View/codeView/FileTreeView.js | Frank!Flow</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="dev tool to work with the Frank framework"><meta property="twitter:card" content="summary"><meta property="twitter:title" content="Frank!Flow"><meta property="twitter:description" content="dev tool to work with the Frank framework"></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#controller">Controller</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Controller/CodeController.js~CodeController.html">CodeController</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Controller/FlowController.js~FlowController.html">FlowController</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Controller/PipeInfoController.js~PipeInfoController.html">PipeInfoController</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#converter">Converter</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Converter/ConfigurationConverter.js~ConfigurationConverter.html">ConfigurationConverter</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#facade">Facade</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Facade/CodeFacade.js~CodeFacade.html">CodeFacade</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#model">Model</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Model/FileModel.js~FileModel.html">FileModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Model/FlowModel.js~FlowModel.html">FlowModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Model/IbisdocModel.js~IbisdocModel.html">IbisdocModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Model/PipeModel.js~PipeModel.html">PipeModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/Model/XsdModel.js~XsdModel.html">XsdModel</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-codeview">View/codeView</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/CodeView.js~CodeView.html">CodeView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/FileTreeView.js~FileTreeView.html">FileTreeView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/ToBeautifulSyntax.js~ToBeautifulSyntax.html">ToBeautifulSyntax</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/ValidateConfigurationView.js~ValidateConfigurationView.html">ValidateConfigurationView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-logColor">logColor</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-codeview-codecompletion">View/codeView/codeCompletion</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeCompletion/XSDCodeCompletionView.js~XSDCodeCompletionView.html">XSDCodeCompletionView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-codeview-codeeditviews">View/codeView/codeEditViews</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeEditViews/CodeAttributesView.js~CodeAttributesView.html">CodeAttributesView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeEditViews/CodeEditView.js~CodeEditView.html">CodeEditView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeEditViews/CodeParametersView.js~CodeParametersView.html">CodeParametersView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeEditViews/CodePipeView.js~CodePipeView.html">CodePipeView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeEditViews/CodeTypesView.js~CodeTypesView.html">CodeTypesView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeEditViews/ExitPipeView.js~ExitPipeView.html">ExitPipeView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/codeView/codeEditViews/OptionView.js~OptionView.html">OptionView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-flowview">View/flowView</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/DescriptionView.js~DescriptionView.html">DescriptionView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/FlowView.js~FlowView.html">FlowView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/TypeImageView.js~TypeImageView.html">TypeImageView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-flowview-flowgeneration">View/flowView/flowGeneration</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/flowGeneration/CustomElementGenerator.js~CustomElementGenerator.html">CustomElementGenerator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/flowGeneration/FlowGenerator.js~FlowGenerator.html">FlowGenerator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/flowGeneration/ForwardGenerator.js~ForwardGenerator.html">ForwardGenerator</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/flowGeneration/PipeGenerator.js~PipeGenerator.html">PipeGenerator</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-flowview-pipe">View/flowView/pipe</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/pipe/ActivityPipeView.js~ActivityPipeView.html">ActivityPipeView</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/pipe/PipeBuilder.js~PipeBuilder.html">PipeBuilder</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/flowView/pipe/PipeView.js~PipeView.html">PipeView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-paletteview">View/paletteView</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/paletteView/PaletteView.js~PaletteView.html">PaletteView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-pipeinfoview">View/pipeInfoView</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/pipeInfoView/PipeInfoView.js~PipeInfoView.html">PipeInfoView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-pipeinfoview-specialpipes">View/pipeInfoView/SpecialPipes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/pipeInfoView/SpecialPipes/XsltInfoView.js~XsltInfoView.html">XsltInfoView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-pipeinfoview-attributes">View/pipeInfoView/attributes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/pipeInfoView/attributes/GenerateInfoAttributesView.js~GenerateInfoAttributesView.html">GenerateInfoAttributesView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#view-pipeinfoview-parameters">View/pipeInfoView/parameters</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/View/pipeInfoView/parameters/GenerateInfoParametersView.js~GenerateInfoParametersView.html">GenerateInfoParametersView</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#services">services</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/services/FileService.js~FileService.html">FileService</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/services/IbisdocService.js~IbisdocService.html">IbisdocService</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/services/PipeService.js~PipeService.html">PipeService</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/app/services/XsdService.js~XsdService.html">XsdService</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">app/View/codeView/FileTreeView.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import JSZip from &apos;jszip&apos;;
+import OptionView from &apos;./codeEditViews/OptionView.js&apos;;
+import fileTree from &apos;../../../fileTree/dist/js/file-tree.min.js&apos;;
+
+export default class FileTreeView {
+  constructor(editor, codeService) {
+    this.editor = editor;
+    this.codeService = codeService;
+    this.fileData = null;
+    this.addedFileCounter = 0;
+    this.optionView = new OptionView(this.editor);
+  }
+
+  makeTree(input) {
+    localStorage.removeItem(&apos;changedFiles&apos;);
+    localStorage.removeItem(&apos;currentFile&apos;);
+    $(&apos;#fileTreeItems&apos;).empty();
+
+    console.log(input)
+
+    let structure = [];
+
+    input.forEach((item, index) =&gt; {
+      let obj = {
+        id: &apos;dir&apos; + index,
+        name: item,
+        type: &apos;file&apos;
+      }
+      structure.push(obj);
+    });
+
+    //generate the tree.
+    $(&apos;#fileTreeItems&apos;).fileTree({
+      data: structure,
+      sortable: false,
+      selectable: true
+    });
+    
+    //make the file tree resizable.
+    this.makeFileTreeResizeable()
+    this.setSaveFileEventListener();
+  }
+
+  setSaveFileEventListener() {
+    let cur = this;
+    $(&apos;.file&apos;).on(&quot;click&quot;, function (e) {
+      let path = e.delegateTarget.attributes[3].nodeValue;
+      console.log(&quot;path to single file: &quot; + path);
+      cur.codeService.getSingleFile(path);
+    });
+  }
+
+  generateAdapters() {
+    let currentConfig = localStorage.getItem(&quot;currentFile&quot;);
+    currentConfig = localStorage.getItem(currentConfig)
+
+    let adapters = currentConfig.match(/&lt;Adapter[^]*?&gt;[^]*?&lt;\/Adapter&gt;/g);
+
+    this.optionView.addOptions(adapters);
+  }
+
+
+  addFile(path) {
+    const defaultConfig = &apos;&lt;Configuration name=&quot;Example1&quot;&gt;\n&apos; +
+      &apos;\t&lt;Adapter name=&quot;Example1Adapter&quot;&gt; \n&apos; +
+      &apos;\t\t&lt;Receiver name=&quot;Example1Receiver&quot;&gt; \n&apos; +
+      &apos;\t\t\t&lt;JavaListener name=&quot;Example1&quot; serviceName=&quot;Example1&quot; /&gt;\n&apos; +
+      &apos;\t\t&lt;/Receiver&gt;\n&apos; +
+      &apos;\t\t&lt;Pipeline firstPipe=&quot;Example&quot;&gt;\n&apos; +
+      &apos;\t\t\t&lt;FixedResultPipe name=&quot;Example&quot; returnString=&quot;Hello World1&quot;&gt;\n&apos; +
+      &apos;\t\t\t\t&lt;Forward name=&quot;success&quot; path=&quot;EXIT&quot;/&gt; \n&apos; +
+      &apos;\t\t\t&lt;/FixedResultPipe&gt; \n&apos; +
+      &apos;\t\t\t&lt;Exit path=&quot;EXIT&quot; state=&quot;success&quot; /&gt; \n&apos; +
+      &apos;\t\t&lt;/Pipeline&gt; \n&apos; +
+      &apos;\t&lt;/Adapter&gt;\n&apos; +
+      &apos;&lt;/Configuration&gt;\n&apos;;
+
+    let addedFileCounter = this.addedFileCounter;
+
+    let obj = {
+      id: path + &apos;newFile&apos; + addedFileCounter, //TODO: add custom id
+      name: (path + &quot;newFile&quot; + addedFileCounter),
+      type: &apos;file&apos;
+    }
+
+    this.fileData[0].children.push(obj);
+    let data = this.fileData;
+
+    this.reloadTree(data)
+
+    localStorage.setItem((path + &quot;newFile&quot; + addedFileCounter), defaultConfig)
+    this.zip.file((path + &quot;newFile&quot; + addedFileCounter), defaultConfig);
+    this.setSaveFileEventListener();
+    this.addedFileCounter++;
+  }
+
+  reloadTree(data) {
+    $(&apos;#fileTreeItems&apos;).empty();
+
+    $(&apos;#fileTreeItems&apos;).fileTree({
+      data: data,
+      sortable: false,
+      selectable: true
+    });
+  }
+
+
+  renameFile(path, newPath) {
+    let currentFile = localStorage.getItem(&quot;currentFile&quot;);
+    if (currentFile != null) {
+      let arr = JSON.parse(localStorage.getItem(&quot;changedFiles&quot;));
+      let index = arr.indexOf(currentFile);
+      console.log(&quot;rename&quot;, index, currentFile, arr);
+      if (index &gt; -1) {
+        arr.splice(index, 1);
+      }
+      localStorage.setItem(&quot;changedFiles&quot;, JSON.stringify(arr));
+    }
+    localStorage.setItem(&quot;currentFile&quot;, newPath);
+
+    const fileData = localStorage.getItem(path);
+    let prependedPath = path.match(/[^]+\/+/g)[0];
+    console.log(prependedPath, newPath)
+    this.zip.remove(path);
+    this.zip.file(prependedPath + newPath, fileData);
+
+    localStorage.removeItem(path);
+    localStorage.setItem(prependedPath + newPath, fileData);
+
+    let fileTree = []
+    this.prepareFileTree(this.zip, fileTree);
+    $(&apos;#fileTreeItems&apos;).empty();
+    this.generateTree(fileTree);
+    this.setSaveFileEventListener();
+  }
+
+  deleteFile(path) {
+    if (path != null) {
+      let arr = JSON.parse(localStorage.getItem(&quot;changedFiles&quot;));
+      let index = arr.indexOf(path);
+      console.log(&apos;delete&apos;, index, path)
+      if (index &gt; -1) {
+        arr.splice(index, 1);
+      }
+      localStorage.setItem(&quot;changedFiles&quot;, JSON.stringify(arr));
+    }
+
+    localStorage.removeItem(path);
+    this.zip.remove(path);
+
+    let fileTree = []
+    this.prepareFileTree(this.zip, fileTree);
+    $(&apos;#fileTreeItems&apos;).empty();
+    this.generateTree(fileTree);
+    this.setSaveFileEventListener();
+
+  }
+
+  makeFileTreeResizeable() {
+    let cur = this;
+    $(&apos;#filePaletteWrapper&apos;).mousedown(function (e) {
+      if (parseInt($(this).css(&apos;width&apos;)) - 10 &lt;= e.offsetX) {
+        cur.resize = true;
+      }
+    });
+
+    $(&apos;#filePaletteWrapper&apos;).mouseup(function (e) {
+      cur.resize = false;
+    })
+
+    $(&apos;#filePaletteWrapper&apos;).mousemove(function (e) {
+      if (parseInt($(this).css(&apos;width&apos;)) - 10 &lt;= e.offsetX) {
+        $(&apos;#filePaletteWrapper&apos;).css(&apos;cursor&apos;, &apos;e-resize&apos;);
+      } else {
+        $(&apos;#filePaletteWrapper&apos;).css(&apos;cursor&apos;, &apos;auto&apos;);
+      }
+
+      if (cur.resize) {
+        $(this).css(&apos;width&apos;, e.offsetX);
+      }
+    });
+  }
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

@@ -1,23 +1,40 @@
 import CodeView from '../View/codeView/CodeView.js';
 import FileTreeView from '../View/codeView/FileTreeView.js';
-import CodeService from '../Services/CodeService.js';
+import FileService from '../services/FileService.js';
 import XsdModel from '../Model/XsdModel';
 import * as beautify from 'vkbeautify';
+import XsdService from '../services/XsdService.js';
+import IbisdocService from '../services/IbisdocService.js';
+import FileModel from '../Model/FileModel.js';
 
 export default class CodeController {
 
   constructor(mainController, ibisdocModel) {
     this.mainController = mainController;
-    this.XsdModel = new XsdModel();
+
+    this.xsdModel = new XsdModel();
     this.ibisdocModel = ibisdocModel;
-    this.codeView = new CodeView(this.XsdModel);
+    this.fileModel = new FileModel();
+
+    this.codeView = new CodeView(this.xsdModel);
+    this.fileModel.addListener(this)
     this.codeView.addListener(this);
-    this.codeService = new CodeService(this.codeView, ibisdocModel, this.XsdModel, mainController);
+
+    this.fileService = new FileService(this);
+    this.xsdService = new XsdService(this.xsdModel);
+    this.ibisdocService = new IbisdocService(this.ibisdocModel, this.codeView);
+
+    this.fileService.getConfigurations();
+    this.xsdService.getXsd();
+    this.ibisdocService.getIbisdoc();
+
     this.codeView.makeEditor();
     this.editor = this.codeView.editor;
-    this.fileTreeView = new FileTreeView(this.editor, this.codeService);
+
+    this.fileTreeView = new FileTreeView(this.editor, this.fileService);
     this.initListeners();
   }
+
 
   //_______________Event handlers_______________
 

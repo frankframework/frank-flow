@@ -16,8 +16,6 @@ export default class CodeView {
   constructor(xsdModel) {
     this.listeners = [];
     this.xsdModel = xsdModel;
-    this.ibisdocJson = null;
-    this.decorations = null;
     this.decorations = null;
     this.validateConfigurationView;
   }
