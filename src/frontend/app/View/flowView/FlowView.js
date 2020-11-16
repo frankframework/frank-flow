@@ -304,7 +304,7 @@ export default class FlowView {
     $('.customErrorMessage').remove();
     if (e == "dupplicate") {
       $('#flowContainer').append(
-        $("<h1></h1>").text('Can\'t generate Flow.Duplicate pipe, please remove any duplicates.').addClass('customErrorMessage'),
+        $("<h1></h1>").text('Can\'t generate Flow. Duplicate pipe, please remove any duplicates.').addClass('customErrorMessage'),
       );
     } 
     // else if (typeof (this.flowModel.getTransformedXml()) == "string") {
