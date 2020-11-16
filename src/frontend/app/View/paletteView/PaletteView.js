@@ -49,6 +49,7 @@ export default class PaletteView {
       });
       groupContainer.append(toolBox);
     });
+    cur.setPipeElement(groups[0]);
   }
 
   setPipeElement(group) {
