@@ -28,6 +28,30 @@ export default class FlowView {
     this.windows = 0;
   }
 
+  setFullFlow() {
+    $('#flowContainer').addClass('fullFlowContainer');
+    $('#flowContainer').css('display', 'flex');
+    $('#monacoContainer').css('display', 'none');
+    $('#palette').css('display', 'flex');
+    $('.monaco-flow-wrapper').css('justify-content', 'flex-end');
+    this.customWidth = true;
+  }
+
+  setFullEditor() {
+    $('#monacoContainer').addClass('fullMonacoContainer');
+    $('#monacoContainer').css('display', 'flex');
+    $('#flowContainer').css('display', 'none');
+    $('#palette').css('display', 'none');
+  }
+
+  setHybrid() {
+    $('#monacoContainer').removeClass('fullMonacoContainer');
+    $('#flowContainer').removeClass('fullFlowContainer');
+    $('#palette').css('display', 'flex');
+    $('#monacoContainer').css('display', 'flex');
+    $('#flowContainer').css('display', 'flex');
+  }
+
   getInstance() {
     this.sourceAnchors = [
       "Top", "Right", "Left",
@@ -273,23 +297,25 @@ export default class FlowView {
 
   // TODO: make an exception class to handle exceptions thrown in flow module.
   displayError(e) {
+    this.setHybrid();
     instance.reset();
     $('#canvas').empty();
     $('#canvas').css('display', 'none');
     $('.customErrorMessage').remove();
     if (e == "dupplicate") {
       $('#flowContainer').append(
-        $("<h1></h1>").text('Duplicate pipe, please remove any duplicates.').addClass('customErrorMessage'),
+        $("<h1></h1>").text('Can\'t generate Flow. Duplicate pipe, please remove any duplicates.').addClass('customErrorMessage'),
       );
-    } else if (typeof (this.flowModel.getTransformedXml()) == "string") {
+    } 
+    // else if (typeof (this.flowModel.getTransformedXml()) == "string") {
+    //   $('#flowContainer').append(
+    //     $("<h1></h1>").text('Configuration is incorrect, please check your xml.').addClass('customErrorMessage'),
+    //     $('<p></p>').text(' \n\n\n your error: \n' + this.flowModel.getTransformedXml()).addClass('customErrorMessage')
+    //   );
+    // } 
+    else {
       $('#flowContainer').append(
-        $("<h1></h1>").text('Configuration is incorrect, please check your xml.').addClass('customErrorMessage'),
-        $('<p></p>').text(' \n\n\n your error: \n' + this.flowModel.getTransformedXml()).addClass('customErrorMessage')
-      );
-    } else {
-      $('#flowContainer').append(
-        $("<h1></h1>").text('Configuration is incorrect, please check your xml.').addClass('customErrorMessage'),
-        $('<p></p>').text(' \n\n\n your error: \n' + e).addClass('customErrorMessage')
+        $("<h1></h1>").text('Can\'t generate Flow, please check your xml.').addClass('customErrorMessage'),
       );
     }
     console.log('error: ', e, this.flowModel.getTransformedXml())

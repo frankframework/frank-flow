@@ -73,30 +73,6 @@ export default class FlowController {
     this.flowView.generateFlow(this.flowView);
   }
 
-  setFullFlow() {
-    $('#flowContainer').addClass('fullFlowContainer');
-    $('#flowContainer').css('display', 'flex');
-    $('#monacoContainer').css('display', 'none');
-    $('#palette').css('display', 'flex');
-    $('.monaco-flow-wrapper').css('justify-content', 'flex-end');
-    this.flowView.customWidth = true;
-  }
-
-  setFullEditor() {
-    $('#monacoContainer').addClass('fullMonacoContainer');
-    $('#monacoContainer').css('display', 'flex');
-    $('#flowContainer').css('display', 'none');
-    $('#palette').css('display', 'none');
-  }
-
-  setHybrid() {
-    $('#monacoContainer').removeClass('fullMonacoContainer');
-    $('#flowContainer').removeClass('fullFlowContainer');
-    $('#palette').css('display', 'flex');
-    $('#monacoContainer').css('display', 'flex');
-    $('#flowContainer').css('display', 'flex');
-  }
-
   setTheme() {
     let theme = prompt('choose your theme!');
     if (theme.match(/theme/gi) == null) return;
@@ -134,9 +110,9 @@ export default class FlowController {
           name: "Toggle editor", icon: "fas fa-compress",
           callback: function () {
             if(fullscreen) {
-              cur.setHybrid();
+              cur.flowView.setHybrid();
             } else {
-              cur.setFullFlow();
+              cur.flowView.setFullFlow();
             }
             fullscreen = !fullscreen;
           }

@@ -36,8 +36,6 @@ export default class FileTreeView {
       selectable: true
     });
     
-    //make the file tree resizable.
-    this.makeFileTreeResizeable()
     this.setSaveFileEventListener();
   }
 
@@ -155,29 +153,29 @@ export default class FileTreeView {
     this.setSaveFileEventListener();
 
   }
+  // TODO make resisable or not?? 
+  // makeFileTreeResizeable() {
+  //   let cur = this;
+  //   $('#filePaletteWrapper').mousedown(function (e) {
+  //     if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
+  //       cur.resize = true;
+  //     }
+  //   });
 
-  makeFileTreeResizeable() {
-    let cur = this;
-    $('#filePaletteWrapper').mousedown(function (e) {
-      if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
-        cur.resize = true;
-      }
-    });
+  //   $('#filePaletteWrapper').mouseup(function (e) {
+  //     cur.resize = false;
+  //   })
 
-    $('#filePaletteWrapper').mouseup(function (e) {
-      cur.resize = false;
-    })
+  //   $('#filePaletteWrapper').mousemove(function (e) {
+  //     if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
+  //       $('#filePaletteWrapper').css('cursor', 'e-resize');
+  //     } else {
+  //       $('#filePaletteWrapper').css('cursor', 'auto');
+  //     }
 
-    $('#filePaletteWrapper').mousemove(function (e) {
-      if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
-        $('#filePaletteWrapper').css('cursor', 'e-resize');
-      } else {
-        $('#filePaletteWrapper').css('cursor', 'auto');
-      }
-
-      if (cur.resize) {
-        $(this).css('width', e.offsetX);
-      }
-    });
-  }
+  //     if (cur.resize) {
+  //       $(this).css('width', e.offsetX);
+  //     }
+  //   });
+  // }
 }
