@@ -29,6 +29,7 @@
   border: 1px solid grey;
   height: 10%;
   margin: 3%;
+  cursor: pointer;
 }
 
 .content-group {
@@ -39,6 +40,7 @@
   width: 44%;
   height: 10%;
   margin: 3%;
+  cursor: pointer;
 }
 
 .content:last-child {
