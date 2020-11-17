@@ -42,6 +42,9 @@ class MainController {
   setPipes(data) {
     this.flowController.paletteView.generatePalettePipes(data);
   }
+  notify(data) {
+    this.flowController.paletteView.generatePalettePipes(data);
+  }
 }
 
 let mainController = new MainController();
