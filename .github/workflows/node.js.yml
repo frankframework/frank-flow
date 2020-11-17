@@ -39,5 +39,5 @@ jobs:
         run: npm ci
       - name: Build the frontend
         run: npm run build-dev
-      - name: Run tests
-        run: npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+#      - name: Run tests
+#        run: npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
