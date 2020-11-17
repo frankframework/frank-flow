@@ -40,4 +40,4 @@ jobs:
       - name: Build the frontend
         run: npm run build --if-present
       - name: Run tests
-        run: npm test
+        run: npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
