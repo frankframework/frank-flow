@@ -58,7 +58,6 @@ export default class PipeGenerator {
         sortedPipe.forEach((currentPipe, index) => {
             if (sortedPipe[index + 1] != null) {
                 if (sortedPipe[index + 1]['@name'] === currentPipe['@name']) {
-                    console.log('duplicate: ', currentPipe);
                     error = true;
                 }
             }
@@ -151,7 +150,6 @@ export default class PipeGenerator {
         let docText = null;
 
         if (pipe[p].Documentation != null) {
-            console.log(pipe[p].Documentation);
             docText = pipe[p].Documentation;
         }
 

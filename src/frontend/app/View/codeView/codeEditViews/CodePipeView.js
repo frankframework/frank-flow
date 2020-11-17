@@ -61,8 +61,6 @@ export default class CodePipeView extends CodeEditView {
       attributeObjectRegex = '<[\\S]*?[^"/][pP]ipe[\\s\\t\\n][^]*?>[^]*?<[/][\\S]*?[^"/]Pipe>',
       selectPipe = null,
       matches = this.editor.getModel().findMatches(attributeObjectRegex, false, true, false, false);
-    
-      console.log(name, type, oldType)
 
     matches.forEach(function(item, index) {
       let pipe = cur.editor.getModel().getValueInRange(item.range);

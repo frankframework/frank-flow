@@ -20,7 +20,6 @@ export default class FileService {
         }).then(response => {
             return response.json();
         }).then(data => {
-            console.log(data[0]);
             cur.getDeployableUnit(data[0]);
         }).catch(e => {
             alert('Please check if your ibis started up correctly or if the property Configurations.directory is set correctly')

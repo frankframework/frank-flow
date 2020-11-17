@@ -35,7 +35,6 @@ export default class FlowController {
         break;
       case "changeName":
         this.mainController.modifyCode("changeName", data);
-        console.log("name changer")
         break;
       case "changeAddPipe":
         this.mainController.modifyCode("changeAddPipe", data);
@@ -103,7 +102,7 @@ export default class FlowController {
       zIndex: 3001,
       callback: function (key, options) {
         var m = "clicked: " + key;
-        window.console && console.log(m) || alert(m);
+        alert(m);
       },
       items: {
         "flow": {
@@ -244,15 +243,12 @@ export default class FlowController {
       }
       if (current_pullY <= -Math.abs($('#canvas').css('height').replace('px', '')) + 1000) {
         $panzoom.panzoom('pan', current_pullX, -Math.abs($('#canvas').css('height').replace('px', '')) + 1000);
-        console.log('y< 1000');
       }
       if (current_pullX <= -1540) {
         $panzoom.panzoom('pan', -1540, current_pullY);
-        console.log('x< 1540');
       }
       if (current_pullY >= 0) {
         $panzoom.panzoom('pan', current_pullX, 0);
-        console.log('y> 0');
       }
       $('#flowContainer').attr('style', '');
     });
@@ -275,7 +271,6 @@ export default class FlowController {
     function calculateCanvasBorder(direction) {
       $('#canvas').css('min-width', '+=500');
       let centerX = parseInt($('#canvas').css('min-width').replace('px', '')) / 2;
-      console.log('centerX: ' + centerX);
 
       $('.sourceWindow').each((index, element) => {
 
@@ -292,7 +287,6 @@ export default class FlowController {
           cur.flowView.modifyFlow('drag', pipe);
         }
       });
-      console.log('x> 0', $('#canvas').css('min-width'));
     }
 
     //make zoom possible
