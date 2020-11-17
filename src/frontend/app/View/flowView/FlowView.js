@@ -15,7 +15,18 @@ export default class FlowView {
     this.horizontalBuild = false;
     this.flowGenerator = new FlowGenerator(this, flowModel);
     this.getInstance();
+    this.fullscreen = true;
   }
+
+  toggleEditor(){
+    if(this.fullscreen) {
+      this.setHybrid();
+    } else {
+      this.setFullFlow();
+    }
+    this.fullscreen = !this.fullscreen;
+  };
+
   addListener(listener) {
     this.listeners.push(listener);
   }
@@ -81,7 +92,6 @@ export default class FlowView {
       });
 
     this.setBasicType();
-
   }
 
   setBasicType() {
@@ -295,6 +305,7 @@ export default class FlowView {
   // TODO: make an exception class to handle exceptions thrown in flow module.
   displayError(e) {
     this.setHybrid();
+    this.fullscreen = true;
     instance.reset();
     $('#canvas').empty();
     $('#canvas').css('display', 'none');
