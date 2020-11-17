@@ -15,8 +15,6 @@ export default class PipeInfoController {
   }
 
   selectPipe(pipe) {
-    console.log(pipe);
-    console.log(this.oldName, this.oldType);
     console.trace()
     this.oldName = pipe.name;
     this.oldType = pipe.type;

@@ -285,15 +285,12 @@ export default class FlowView {
     }
   }
 
-
-
   generateFlow() {
     this.notifyListeners({
       type: "convertConfiguration"
     });
     this.flowGenerator.generateFlow();
   }
-
 
   // TODO: make an exception class to handle exceptions thrown in flow module.
   displayError(e) {
@@ -318,6 +315,5 @@ export default class FlowView {
         $("<h1></h1>").text('Can\'t generate Flow, please check your xml.').addClass('customErrorMessage'),
       );
     }
-    console.log('error: ', e, this.flowModel.getTransformedXml())
   }
 }

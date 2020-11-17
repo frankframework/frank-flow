@@ -18,7 +18,6 @@ export default class IbisdocService {
                 cur.ibisdocModel.setIbisdoc(data);
             })
             .catch(err => {
-                console.log("couldn't load ibisdoc, now switching to default ibisdoc", err);
                 this.getDefaultIbisdoc();
             })
 
@@ -30,7 +29,6 @@ export default class IbisdocService {
             method: 'GET'
         })
             .then(response => {
-                console.log(response)
                 return response.json()
             })
             .then(data => {
@@ -39,7 +37,6 @@ export default class IbisdocService {
             .catch(err => {
                 alert("couldn't load pipe palette");
                 console.log(err);
-
             })
     }
 }
