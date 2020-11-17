@@ -56,7 +56,6 @@ export default class PipeInfoView {
 
   generateTypes(data) {
     let option;
-    console.log(data)
     data[2].classes.forEach(function(item, index) {
       option = $('<option></option>').attr('value', item.name).text(item.name);
       $('#typeSelect').append(option);

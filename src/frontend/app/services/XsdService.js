@@ -12,7 +12,6 @@ export default class XsdService {
             })
             .then(data => {
                 this.xsdModel.setXsd(data);
-                console.log("xsd is loaded!, here");
             })
             .catch(err => {
                 console.log("couldn't load xsd, now loading deafult xsd", err);
@@ -29,7 +28,6 @@ export default class XsdService {
             })
             .then(data => {
                 this.xsdModel.setXsd(data);
-                console.log("xsd is loaded!, here");
             })
             .catch(err => {
                 console.log("not loaded xsd", err);

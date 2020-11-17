@@ -1,19 +1,94 @@
 import ToBeautifulSyntax from '../View/codeView/ToBeautifulSyntax.js';
-import JSZip from 'jszip/dist/jszip';
+import JSZip from '../../node_modules/jszip/dist/jszip.js';
 
 
-export default class FileService {
-    constructor(codeController) {
-        this.codeController = codeController;
+export default class CodeService {
+    constructor(codeView, ibisdocModel, xsdModel, mainController) {
+        this.ibisdocModel = ibisdocModel;
+        this.xsdModel = xsdModel;
+        this.codeView = codeView;
+        this.mainController = mainController;
+        this.toBeautiful = new ToBeautifulSyntax();
 
         this.deployableUnit = null;
+
+        this.getXsd();
+        this.getIbisdoc();
+        this.getConfigurations();
     }
 
+    getIbisdoc() {
+        let cur = this;
+        fetch('../rest/ibisdoc/ibisdoc.json', {
+            method: 'GET'
+        })
+            .then(response => {
+                return response.json()
+            })
+            .then(data => {
+                cur.codeView.ibisdocJson = data;
+                cur.ibisdocModel.setIbisdoc(data);
+                cur.mainController.setPipes(data);
+            })
+            .catch(err => {
+                this.getDefaultIbisdoc();
+            })
 
+    }
+
+    getDefaultIbisdoc() {
+        let cur = this;
+        fetch('https://cors-anywhere.herokuapp.com/https://ibis4example.ibissource.org/rest/ibisdoc/ibisdoc.json', {
+            method: 'GET'
+        })
+            .then(response => {
+                return response.json()
+            })
+            .then(data => {
+                cur.codeView.ibisdocJson = data;
+                cur.ibisdocModel.setIbisdoc(data);
+                cur.mainController.setPipes(data);
+            })
+            .catch(err => {
+                alert("couldn't load pipe palette");
+                console.log(err);
+            })
+    }
+
+    getXsd() {
+        fetch('../rest/ibisdoc/ibisdoc.xsd', {
+            method: 'GET'
+        })
+            .then(response => {
+                return response.text()
+            })
+            .then(data => {
+                this.xsdModel.setXsd(data);
+            })
+            .catch(err => {
+                console.log("couldn't load xsd, now loading deafult xsd", err);
+                this.getDefaultXsd();
+            })
+    }
+
+    getDefaultXsd() {
+        fetch('https://cors-anywhere.herokuapp.com/https://ibis4example.ibissource.org/rest/ibisdoc/ibisdoc.xsd', {
+            method: 'GET'
+        })
+            .then(response => {
+                return response.text()
+            })
+            .then(data => {
+                this.xsdModel.xsd = data;
+            })
+            .catch(err => {
+                console.log("not loaded xsd", err);
+            })
+    }
 
     getConfigurations() {
         let cur = this,
-            path = './api/configurations'; 
+            path = './api/configurations';
 
         fetch(path, {
             method: 'GET'
@@ -37,7 +112,7 @@ export default class FileService {
         }).then(response => {
             return response.json();
         }).then(data => {
-            cur.codeController.fileTreeView.makeTree(data._files);
+            cur.mainController.codeController.fileTreeView.makeTree(data._files);
         }).catch(e => {
             console.log('error getting configs: ' + e);
         })
@@ -52,13 +127,14 @@ export default class FileService {
     }).then(response => {
         return response.text();
     }).then(data => {
-        cur.codeController.setEditorValue(data);
-        cur.codeController.quickGenerate();
+        cur.mainController.codeController.setEditorValue(data);
+        cur.mainController.generateFlow();
     }).catch(e => {
         console.log('error getting configs: ' + e);
     })
     }
 
+    // TODO remove after saving file works
     // loadZip(configurationName) {
     //     configurationName = configurationName.match(/".*?"/g)[0].replace(/"/g, '');
     //     console.log(configurationName)
