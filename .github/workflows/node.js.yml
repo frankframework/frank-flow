@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    name: Build the Frank!Flow front-end
+    name: Build and test front-end
 
     runs-on: ubuntu-latest
 
