@@ -38,6 +38,6 @@ jobs:
       - name: Install dependencies from package-lock
         run: npm ci
       - name: Build the frontend
-        run: npm run build --if-present
+        run: npm run build-dev
       - name: Run tests
         run: npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
