@@ -52,16 +52,14 @@ The editor can be opened by right-clicking the canvas and selecting “toggle ed
 The editor has some special features:
 
 * The editor has autocompletion for the pipes.
-
 * The editor can highlight the selected pipe on the canvas.
-
 * Errors will be shown with red lines and messages in the editor.
 
 #### Autocompletion
 
-The XML autocompletion is custom made for the Frank!Flow and is made available for everybody that wants XML completion with the Monaco-editor. Like this project it is open-source and to be found on Github:  https://github.com/philipsens/monaco-xsd-code-completion
+The XML autocompletion is custom made for the Frank!Flow and is made available for everybody that wants XML completion based on XSD’s for the Monaco Editor. Like this project, it is open-source and can be found [here on Github](https://github.com/philipsens/monaco-xsd-code-completion).
 
-The autocompletion has support for multiple XSD’s, namespaces and isn’t just limited to the ibisdoc. Just place the XSD in the configuration folder and reference it in the configuration to add autocompletion.
+The autocompletion has support for multiple XSD’s, namespaces and isn’t just limited to the IbisDoc. Just place the XSD in the configuration folder and reference it in the configuration to add autocompletion.
 
 #### Validation
 
@@ -71,7 +69,7 @@ The editor will show errors and validate your configuration in the future.
 
 ### Frank!Runner
 
-The easiest way to get started with the Frank!Flow is with help of the Frank!Runner. Look here to get up and started with the Frank!Runner: https://github.com/ibissource/frank-runner. You can skip this if you already have a Frank!Runner.
+The easiest way to get started with the Frank!Flow is with help of the [Frank!Runner](https://github.com/ibissource/frank-runner). You can skip this if you already have a Frank!Runner.
 
 ### Frank2Frank!Flow
 
@@ -156,9 +154,9 @@ If you’d like to develop the Frank!Flow it would be handy to store the Frank!F
 </project>
 ```
 
-You should edit `PATH_TO_YOUR_FRANK-FLOW_PROJECT` to the correct location. As you can see, the rest of the path contains the location to the frontend dist folder.
+You should edit `PATH_TO_YOUR_FRANK-FLOW_PROJECT` to the correct location. As you can see, the rest of the path contains the location to the frontend distribution folder.
 
-### Restart
+#### Restart
 
 The last file is optional, because it is up to you how you restart your Frank!Runner. Some people like to use the build in Task Manager of there IDE, which will have a restart task because of the build.xml.
 
@@ -173,5 +171,50 @@ if [%arg0:~2,1%]==[:] if not [%TERM_PROGRAM%] == [vscode] pause
 :end
 ```
 
+### Frank!Flow
 
+Clone this repository (or a fork) to start developing the Frank!Flow. This project consists of two main parts: The JavaScript frontend and the Java backend.
+
+#### Requirements
+
+There are some basic requirements that are needed to test or develop the Frank!Flow application. These requirements are:
+
+* [Java](https://www.java.com/nl/download/)
+* [Node.js](https://nodejs.org/en/)
+* [Maven](http://maven.apache.org/)
+
+#### Frontend
+
+The code for the frontend is located at `frank-flow/src/forntend`. The most important files in this folder are the index.html which bootstraps the application and the app folder which contains all the logic off the application. Some other notable folders are: css for the stylesheets, media for images and recourses and test for the Karma tests.
+
+##### Developing the frontend
+
+Start by installing the node modules with the command `npm install`. This will download the required packages that the Frank!Flow depends on. Some of these packages are: jsPlumb for the flow canvas and Monaco-editor for the build in editor.
+
+After installing the node_modules you can start coding! You can automatically build the files while you are editing by using the command `npm run watch`, however you will need to refresh the browser yourself.
+
+##### Building the frontend
+
+There are two ways to build the application, for development and for production. The difference lays in the build target and build mode.
+
+The development build points to the `frank-flow/src/main/resources/frontend` folder. This folder can then be used by Frank2Frank!Flow to serve the frontend. The code won’t be minified which will make it easier to debug. The development build with also contain a stats.json which contains information about the build files and their size. You can make a development build by running the command `npm run build-dev` or `npm run watch`. After running this command you can use `npm run bundle-report` to get a tree view diagram of the bundled files.
+
+The production build points to the `frank-flow/target/frontend` folder. This folder will contain minified files to lower the size of the build. This folder will be used when building the whole application (backend and frontend) and will be included in the frank-flow.jar. You can make a production build by running the command `npm run build` or by [building the whole application](#building-the-whole-application).
+
+#### Backend
+
+The backend is used to serve the frontend and as an API for getting files from the filesystem. The code is located at `frank-flow/main/java`.
+
+##### Building the whole application
+
+There are two simple ways to build the backend, for local and server use.
+
+The easiest option while developing is to just run `mvn install`. This will install some plugins and bundle the files into the Jar. This command will also copy the frontend into the Jar if ran the [build command](#building-the-frontend). While technically you could build the Jar without the frontend, there really isn’t a reason not to, apart from testing the API only. Copying the frontend will be close to instant after the first build, as long as the build folder doesn’t change, because the target folder is cached.
+
+The other option is mend for a production setting. This is because the Maven will also install Node.js and NPM for building the frontend. This way is compatible with the Jenkins automation server. The build can be started by running `mvn install -P frontend`.
+
+## Other projects
+
+* [Frank!Runner](https://github.com/ibissource/frank-runner)
+* [XSD code completion for the Monaco Editor](https://github.com/philipsens/monaco-xsd-code-completion)
 
