@@ -2,10 +2,14 @@ name: Java CI
 
 on:
   push:
-    branches: [ master, development, feature/github-actions ]
+    branches:
+      - master
+      - development
 
   pull_request:
-    branches: [ master, development ]
+    branches:
+      - master
+      - development
 
 jobs:
   build:
