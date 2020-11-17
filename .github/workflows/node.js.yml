@@ -5,14 +5,18 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, development, feature/github-actions ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, development ]
 
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
 
     env:
       CI: true
@@ -21,8 +25,9 @@ jobs:
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
-        node-version: '10.x'
+        node-version: ${{ matrix.node-version }}
     - run: cd src/frontend
-    - run: npm ci
+    - name: Install dependencies from package-lock
+      run: npm ci
     - run: npm run build --if-present
     - run: npm test
