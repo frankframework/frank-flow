@@ -197,7 +197,7 @@ After installing the node_modules you can start coding! You can automatically bu
 
 There are two ways to build the application, for development and for production. The difference lays in the build target and build mode.
 
-The development build points to the `frank-flow/src/main/resources/frontend` folder. This folder can then be used by Frank2Frank!Flow to serve the frontend. The code won’t be minified which will make it easier to debug. The development build with also contain a stats.json which contains information about the build files and their size. You can make a development build by running the command `npm run build-dev` or `npm run watch`. After running this command you can use `npm run bundle-report` to get a tree view diagram of the bundled files.
+The development build points to the `frank-flow/src/main/resources/frontend` folder. This folder can then be used by Frank2Frank!Flow to serve the frontend. The code won’t be minified which will make it easier to debug. The development build will also contain a stats.json which contains information about the build files and their size. You can make a development build by running the command `npm run build-dev` or `npm run watch`. After running this command you can use `npm run bundle-report` to get a tree view diagram of the bundled files.
 
 The production build points to the `frank-flow/target/frontend` folder. This folder will contain minified files to lower the size of the build. This folder will be used when building the whole application (backend and frontend) and will be included in the frank-flow.jar. You can make a production build by running the command `npm run build` or by [building the whole application](#building-the-whole-application).
 
@@ -211,7 +211,7 @@ There are two simple ways to build the backend, for local and server use.
 
 The easiest option while developing is to just run `mvn install`. This will install some plugins and bundle the files into the Jar. This command will also copy the frontend into the Jar if ran the [build command](#building-the-frontend). While technically you could build the Jar without the frontend, there really isn’t a reason not to, apart from testing the API only. Copying the frontend will be close to instant after the first build, as long as the build folder doesn’t change, because the target folder is cached.
 
-The other option is mend for a production setting. This is because the Maven will also install Node.js and NPM for building the frontend. This way is compatible with the Jenkins automation server. The build can be started by running `mvn install -P frontend`.
+The other option is meant for a production setting. This is because Maven will also install Node.js and NPM for building the frontend. This way is compatible with the Jenkins automation server. The build can be started by running `mvn install -P frontend`.
 
 ## Other projects
 
