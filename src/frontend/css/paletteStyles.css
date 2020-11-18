@@ -58,7 +58,7 @@
   margin: 5px;
 }
 
-.selected {
+.content-group.selected {
   border: #007bff 2px solid;
 }
 

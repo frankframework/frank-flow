@@ -104,7 +104,7 @@ export default class PaletteView {
 
   setLaterEventListeners() {
     $('.content-group').on('click', function() {
-      $('.selected').removeClass('selected');
+      $('.content-group.selected').removeClass('selected');
       $(this).addClass('selected');
     });
   }
