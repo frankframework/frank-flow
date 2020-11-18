@@ -9,8 +9,12 @@
   background-color: #233448;
 }
 
+.header-title {
+  white-space: nowrap;
+}
+
 .top-wrapper h2 {
-  margin-left: 10%;
+  margin-left: 15px;
 }
 
 .adapter-select{

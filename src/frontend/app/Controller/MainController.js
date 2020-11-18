@@ -1,13 +1,13 @@
 import ConfigurationConverter from '../Converter/ConfigurationConverter.js';
 import CodeController from './CodeController.js';
 import FlowController from './FlowController.js';
-import PipeInfoController from './PipeInfoController';
+import PipeInfoController from './PipeInfoController.js';
+import PageController from './PageController.js';
 import IbisdocModel from '../Model/IbisdocModel.js'
 import FlowModel from '../Model/FlowModel.js';
 import CodeFacade from '../Facade/CodeFacade.js';
 
 import '../../css/bundle.css';
-
 
 class MainController {
 
@@ -19,9 +19,9 @@ class MainController {
     this.codeController = new CodeController(this, this.ibisdocModel);
     this.flowController = new FlowController(this, this.flowModel);
     this.codeFacade = new CodeFacade(this.codeController, this.pipeInfoController, this.flowController);
+    this.PageController = new PageController();
 
     this.ibisdocModel.addListener(this);
-
   }
 
   //_______________CRUD methods for the code view_______________
@@ -45,6 +45,7 @@ class MainController {
   notify(data) {
     this.flowController.paletteView.generatePalettePipes(data);
   }
+  
 }
 
 let mainController = new MainController();
