@@ -5,3 +5,4 @@ dist/*
 /target/
 .settings
 bin
+.idea/

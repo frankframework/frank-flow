@@ -16,8 +16,6 @@ export default class FileTreeView {
     localStorage.removeItem('currentFile');
     $('#fileTreeItems').empty();
 
-    console.log(input)
-
     let structure = [];
 
     console.log("length: " + input.length);
@@ -55,8 +53,6 @@ export default class FileTreeView {
       selectable: true
     });
     
-    //make the file tree resizable.
-    this.makeFileTreeResizeable()
     this.setSaveFileEventListener();
   }
 
@@ -64,7 +60,6 @@ export default class FileTreeView {
     let cur = this;
     $('.file').on("click", function (e) {
       let path = e.delegateTarget.attributes[3].nodeValue;
-      console.log("path to single file: " + path);
       cur.codeService.getSingleFile(path);
     });
   }
@@ -129,7 +124,6 @@ export default class FileTreeView {
     if (currentFile != null) {
       let arr = JSON.parse(localStorage.getItem("changedFiles"));
       let index = arr.indexOf(currentFile);
-      console.log("rename", index, currentFile, arr);
       if (index > -1) {
         arr.splice(index, 1);
       }
@@ -139,7 +133,6 @@ export default class FileTreeView {
 
     const fileData = localStorage.getItem(path);
     let prependedPath = path.match(/[^]+\/+/g)[0];
-    console.log(prependedPath, newPath)
     this.zip.remove(path);
     this.zip.file(prependedPath + newPath, fileData);
 
@@ -157,7 +150,6 @@ export default class FileTreeView {
     if (path != null) {
       let arr = JSON.parse(localStorage.getItem("changedFiles"));
       let index = arr.indexOf(path);
-      console.log('delete', index, path)
       if (index > -1) {
         arr.splice(index, 1);
       }
@@ -174,29 +166,29 @@ export default class FileTreeView {
     this.setSaveFileEventListener();
 
   }
+  // TODO make resisable or not?? 
+  // makeFileTreeResizeable() {
+  //   let cur = this;
+  //   $('#filePaletteWrapper').mousedown(function (e) {
+  //     if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
+  //       cur.resize = true;
+  //     }
+  //   });
 
-  makeFileTreeResizeable() {
-    let cur = this;
-    $('#filePaletteWrapper').mousedown(function (e) {
-      if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
-        cur.resize = true;
-      }
-    });
+  //   $('#filePaletteWrapper').mouseup(function (e) {
+  //     cur.resize = false;
+  //   })
 
-    $('#filePaletteWrapper').mouseup(function (e) {
-      cur.resize = false;
-    })
+  //   $('#filePaletteWrapper').mousemove(function (e) {
+  //     if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
+  //       $('#filePaletteWrapper').css('cursor', 'e-resize');
+  //     } else {
+  //       $('#filePaletteWrapper').css('cursor', 'auto');
+  //     }
 
-    $('#filePaletteWrapper').mousemove(function (e) {
-      if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
-        $('#filePaletteWrapper').css('cursor', 'e-resize');
-      } else {
-        $('#filePaletteWrapper').css('cursor', 'auto');
-      }
-
-      if (cur.resize) {
-        $(this).css('width', e.offsetX);
-      }
-    });
-  }
+  //     if (cur.resize) {
+  //       $(this).css('width', e.offsetX);
+  //     }
+  //   });
+  // }
 }
