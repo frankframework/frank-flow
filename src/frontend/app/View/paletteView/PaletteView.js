@@ -2,33 +2,33 @@ import SimpleBar from 'simplebar';
 // import TypeImageView from '../TypeImageView.js';
 
 export default class PaletteView {
-  constructor(flowController) {
+  constructor(flowController, ibisdocModel) {
+    this.ibisdocModel = ibisdocModel;
     this.listeners = [];
     this.pipes = null;
     this.currentGroup = null;
     this.flowView = flowController.flowView;
+
+    this.ibisdocModel.addListener(this);
+
     this.setEventListeners();
-    // this.typeImageView = new TypeImageView(this.flowView);
   }
 
-  addListener(listener) {
-    this.listeners.push(listener);
+  notify(data) {
+    this.generatePalettePipes(data);
   }
 
-  notifyListeners(data) {
-    this.listeners.forEach(l => l.notify(data));
-  }
+  generatePalettePipes(ibisdocData) {
+    const groups = [{name:'Pipes', pipes:[]},{name:'Other', pipes:[]}];
 
-  generatePalettePipes(data) {
-    let groups = [{name:'Pipes', pipes:[]},{name:'Other', pipes:[]}];
-
-    data.forEach(function(item, index) {
+    ibisdocData.forEach((item, index) => {
       groups.forEach((group, i) => {
-        let re = new RegExp(group.name, 'g');
+        const groupRegex = new RegExp(group.name, 'g');
 
-        if(item.name.match(re)){
+        if(item.name.match(groupRegex)){
           group.pipes.push(...item.classes);
         }
+
       })
     });
 
@@ -38,74 +38,81 @@ export default class PaletteView {
   }
 
   createGroupElements(groups) {
-    let cur = this;
-    let groupContainer = $('#groups');
+    const cur = this,
+          groupContainer = $('#groups');
+
     groups.forEach((group, i) => {
-      let toolBox = $('<div></div>').addClass('content-group');
-      let text = $('<p></p>').text(group.name);
+      const toolBox = $('<div></div>').addClass('content-group'),
+            text = $('<p></p>').text(group.name);
+
       toolBox.append(text);
+
       toolBox.click(() => {
         cur.setPipeElement(group);
       });
+
       groupContainer.append(toolBox);
     });
+
     cur.setPipeElement(groups[0]);
   }
 
   setPipeElement(group) {
     this.currentGroup = group;
-    let cur = this;
-    let pipes = $('#pipes');
+    const cur = this,
+          pipes = $('#pipes');
+
     pipes.empty();
 
     group.pipes.forEach((pipe, i) => {
-      let toolBox = $('<div></div>').addClass('content');
-      let text = $('<p></p>').text(pipe.name);
+      const toolBox = $('<div></div>').addClass('content'),
+            text = $('<p></p>').text(pipe.name);
 
-      toolBox.on('click', function() {
-        cur.flowView.modifyFlow("add", {
-          name: "new" + pipe.name,
-          className: pipe.name,
-          xpos: 500,
-          ypos: 500
-        })
-      });
+      cur.setPipeClickEventListener(toolBox, pipe);
+
       toolBox.append(text);
       pipes.append(toolBox);
     });
   }
 
   filterPipes(input) {
-    let tempPipes = this.currentGroup;
-    let pipes = $('#pipes');
-    let re = new RegExp(input, 'gi');
-    let cur = this;
+    const pipes = $('#pipes'),
+          pipeRegex = new RegExp(input, 'gi'),
+          cur = this;
 
     pipes.empty();
 
-    tempPipes.pipes.forEach((pipe, i) => {
-      if(pipe.name.match(re)){
+    this.currentGroup.pipes.forEach((pipe, i) => {
+      
+      if(pipe.name.match(pipeRegex)){
 
-        let toolBox = $('<div></div>').addClass('content');
-        let text = $('<p></p>').text(pipe.name);
+        const toolBox = $('<div></div>').addClass('content'),
+              text = $('<p></p>').text(pipe.name);
+
         toolBox.append(text);
 
-        toolBox.on('click', function() {
-          cur.flowView.modifyFlow("add", {
-            name: "new" + pipe.name,
-            className: pipe.name,
-            xpos: 500,
-            ypos: 500
-          })
-        });
+        cur.setPipeClickEventListener(toolBox, pipe);
 
         pipes.append(toolBox);
       }
     });
   }
 
+  setPipeClickEventListener(toolBox, pipe) {
+    const cur = this;
+
+    toolBox.on('click', function() {
+      cur.flowView.modifyFlow("add", {
+        name: "new" + pipe.name,
+        className: pipe.name,
+        xpos: 500,
+        ypos: 500
+      })
+    });
+  }
+
   setEventListeners() {
-    let cur = this;
+    const cur = this;
 
     $('#searchBar').on('keydown', function() {
       let searchTerm = $(this).val();
@@ -120,7 +127,4 @@ export default class PaletteView {
     });
   }
 
-  // getTypeImage(type) {
-  //   return this.typeImageView.getTypeImage(type);
-  // }
 }
