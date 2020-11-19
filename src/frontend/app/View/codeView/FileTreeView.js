@@ -66,8 +66,10 @@ export default class FileTreeView {
       if(currentFile != null && currentFileRoot != null) {
         cur.codeService.addFile(currentFileRoot, currentFile, cur.editor.getValue());
       }
+
       let path = e.delegateTarget.attributes[3].nodeValue,
-      deployableUnit =  e.delegateTarget.attributes[1].nodeValue
+      deployableUnit = e.delegateTarget.attributes[1].nodeValue;
+      
       console.log(deployableUnit, path);
       localStorage.setItem('currentFile', path);
       localStorage.setItem('currentFileRoot', deployableUnit);

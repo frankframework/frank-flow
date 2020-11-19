@@ -79,6 +79,7 @@ export default class PaletteView {
     let tempPipes = this.currentGroup;
     let pipes = $('#pipes');
     let re = new RegExp(input, 'gi');
+    let cur = this;
 
     pipes.empty();
 
@@ -88,6 +89,16 @@ export default class PaletteView {
         let toolBox = $('<div></div>').addClass('content');
         let text = $('<p></p>').text(pipe.name);
         toolBox.append(text);
+
+        toolBox.on('click', function() {
+          cur.flowView.modifyFlow("add", {
+            name: "new" + pipe.name,
+            className: pipe.name,
+            xpos: 500,
+            ypos: 500
+          })
+        });
+
         pipes.append(toolBox);
       }
     });

@@ -12,6 +12,9 @@ import '../../css/bundle.css';
 class MainController {
 
   constructor() {
+
+    localStorage.clear();
+
     this.configurationConverter = new ConfigurationConverter();
     this.ibisdocModel = new IbisdocModel();
     this.flowModel = new FlowModel();
