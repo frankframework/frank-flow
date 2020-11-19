@@ -25,7 +25,6 @@ export default class FileService {
 
             data.forEach(async function (item, index) {
                 let obj = await cur.getDeployableUnit(item);
-                console.log("object: ", obj);
                 fileTree.push(obj);
 
                 if (fileTree.length == data.length) {
@@ -37,7 +36,7 @@ export default class FileService {
 
         }).catch(e => {
             alert('Please check if your ibis started up correctly or if the property Configurations.directory is set correctly')
-            console.log('error getting configs: ' + e);
+            console.log('error getting configs: ', e);
         })
     }
 
@@ -57,13 +56,13 @@ export default class FileService {
             };
             return directoryObject;
         }).catch(e => {
-            console.log('error getting configs: ' + e);
+            console.log('error getting configs: ', e);
         })
     }
 
-    getSingleFile(name) {
+    getSingleFile(deployableUnit, name) {
         let cur = this,
-            path = './api/configurations/' + this.deployableUnit + '/files/?path=' + name;
+            path = './api/configurations/' + deployableUnit + '/files/?path=' + name;
 
         fetch(path, {
             method: 'GET'
@@ -72,6 +71,7 @@ export default class FileService {
         }).then(data => {
             cur.codeController.setEditorValue(data);
 
+
             let adapterName = data.match(/<Adapter[^]*?name=".*?"/g);
             adapterName = adapterName[0].match(/".*?"/g)[0].replace(/"/g, '');
 
@@ -79,42 +79,43 @@ export default class FileService {
 
             cur.codeController.quickGenerate();
         }).catch(e => {
-            console.log('error getting configs: ' + e);
+            console.log('error getting configs: ', e);
         })
     }
 
-    // loadZip(configurationName) {
-    //     configurationName = configurationName.match(/".*?"/g)[0].replace(/"/g, '');
-    //     console.log(configurationName)
-    //     const versionPath = '../iaf/api/configurations/' + configurationName + '/versions';
-    //     const options = {
-    //         headers: {
-    //             'Content-disposition': 'attachment; filename="filename.jpg"'
-    //         },
-    //         method: 'GET'
-    //     }
-    //     fetch(versionPath, options)
-    //         .then(response => {
-    //             return response.json();
-    //         })
-    //         .then(data => {
-    //             if (data) {
-    //                 let version = prompt('please enter a version number');
-    //                 let ver = data[0].version;
+    deleteFile(deployableUnit, name) {
+        let cur = this,
+            path = './api/configurations/' + deployableUnit + '/files/?path=' + name;
 
-    //                 data.forEach(function (item, i) {
-    //                     if (item.version.match(version + '(?=_)')) {
-    //                         ver = item.version;
-    //                     }
-    //                 })
-    //                 let zipPath = '../iaf/api/configurations/' + configurationName + '/versions/' + ver + '/download';
-    //                 fetch(zipPath, { method: 'GET' }).then(response => {
-    //                     return response.blob();
-    //                 })
-    //                     .then(zipFile => {
-    //                         this.mainController.codeController.fileTreeView.makeTree(zipFile);
-    //                     })
-    //             }
-    //         })
-    // }
+        fetch(path, {
+            method: 'DELETE'
+        }).then(response => {
+            return response.text();
+        }).then(data => {
+            console.log(data);
+        }).catch(e => {
+            console.log('error getting configs: ', e);
+        })
+    }
+
+    addFile(deployableUnit, name, config) {
+
+        let formData = new FormData();
+
+        formData.append('file', config);
+
+        let cur = this,
+            path = './api/configurations/' + deployableUnit + '/files/?path=' + name;
+
+        fetch(path, {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            return response.text();
+        }).then(data => {
+            console.log(data);
+        }).catch(e => {
+            console.log('error getting configs: ', e);
+        })
+    }
 }

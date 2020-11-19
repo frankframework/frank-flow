@@ -21,9 +21,9 @@ export default class FileTreeView {
     console.log("length: " + input.length);
     console.log(input[0]);
 
-    input.forEach((item, index) => {
+    input.forEach((dir, index) => {
 
-      let directoryName = item.name;
+      let directoryName = dir.name;
       console.log(directoryName);
       let treeDirectoryObject = {
         id: 'dir' + index,
@@ -32,9 +32,9 @@ export default class FileTreeView {
         children: []
       }
 
-      item.files.forEach((file, fileIndex) => {
+      dir.files.forEach((file, fileIndex) => {
         let treeFileObject = {
-          id: 'file' + file,
+          id: directoryName,
           name: file,
           type: 'file'
         }
@@ -45,6 +45,8 @@ export default class FileTreeView {
 
       structure.push(treeDirectoryObject);
     });
+
+    this.fileData = structure;
 
     //generate the tree.
     $('#fileTreeItems').fileTree({
@@ -59,8 +61,17 @@ export default class FileTreeView {
   setSaveFileEventListener() {
     let cur = this;
     $('.file').on("click", function (e) {
-      let path = e.delegateTarget.attributes[3].nodeValue;
-      cur.codeService.getSingleFile(path);
+      let currentFile = localStorage.getItem('currentFile'),
+          currentFileRoot = localStorage.getItem('currentFileRoot');
+      if(currentFile != null && currentFileRoot != null) {
+        cur.codeService.addFile(currentFileRoot, currentFile, cur.editor.getValue());
+      }
+      let path = e.delegateTarget.attributes[3].nodeValue,
+      deployableUnit =  e.delegateTarget.attributes[1].nodeValue
+      console.log(deployableUnit, path);
+      localStorage.setItem('currentFile', path);
+      localStorage.setItem('currentFileRoot', deployableUnit);
+      cur.codeService.getSingleFile(deployableUnit, path);
     });
   }
 
@@ -74,36 +85,49 @@ export default class FileTreeView {
   }
 
 
-  addFile(path) {
-    const defaultConfig = '<Configuration name="Example1">\n' +
-      '\t<Adapter name="Example1Adapter"> \n' +
-      '\t\t<Receiver name="Example1Receiver"> \n' +
-      '\t\t\t<JavaListener name="Example1" serviceName="Example1" />\n' +
+  addFile(root) {
+
+    const name = prompt("File name: ")
+    if(name == "") {
+      alert('Can\'t make empty file');
+      return;
+    }
+
+    const defaultConfig = '<Configuration name="' + name + '">\n' +
+      '\t<Adapter name="' + name + 'Adapter"> \n' +
+      '\t\t<Receiver name="' + name + 'Receiver" x="681" y="24"> \n' +
+      '\t\t\t<JavaListener name="' + name + 'Listener" serviceName="' + name + 'Service" />\n' +
       '\t\t</Receiver>\n' +
-      '\t\t<Pipeline firstPipe="Example">\n' +
-      '\t\t\t<FixedResultPipe name="Example" returnString="Hello World1">\n' +
+      '\t\t<Pipeline firstPipe="' + name + 'Pipe">\n' +
+      '\t\t\t<FixedResultPipe name="' + name + 'Pipe" returnString="Hello World">\n' +
       '\t\t\t\t<Forward name="success" path="EXIT"/> \n' +
       '\t\t\t</FixedResultPipe> \n' +
-      '\t\t\t<Exit path="EXIT" state="success" /> \n' +
+      '\t\t\t<Exit path="EXIT" state="success" x="223" y="425"/> \n' +
       '\t\t</Pipeline> \n' +
       '\t</Adapter>\n' +
       '</Configuration>\n';
 
-    let addedFileCounter = this.addedFileCounter;
+    const addedFileCounter = this.addedFileCounter,
+          newFileName = name;
+      
 
     let obj = {
-      id: path + 'newFile' + addedFileCounter, //TODO: add custom id
-      name: (path + "newFile" + addedFileCounter),
+      id: root, //TODO: add custom id
+      name: newFileName,
       type: 'file'
     }
+    console.log("ADD FILE: ", root)
 
-    this.fileData[0].children.push(obj);
+    this.fileData.forEach((dir, index) => {
+      if(dir.name == root) {
+        dir.children.push(obj);
+      }
+    })
     let data = this.fileData;
 
     this.reloadTree(data)
 
-    localStorage.setItem((path + "newFile" + addedFileCounter), defaultConfig)
-    this.zip.file((path + "newFile" + addedFileCounter), defaultConfig);
+    this.codeService.addFile(root, newFileName, defaultConfig);
     this.setSaveFileEventListener();
     this.addedFileCounter++;
   }
@@ -146,49 +170,30 @@ export default class FileTreeView {
     this.setSaveFileEventListener();
   }
 
-  deleteFile(path) {
-    if (path != null) {
-      let arr = JSON.parse(localStorage.getItem("changedFiles"));
-      let index = arr.indexOf(path);
-      if (index > -1) {
-        arr.splice(index, 1);
+  deleteFile(root, path) {
+
+    console.log(path, this.fileData);
+    this.codeService.deleteFile(root, path);
+
+    let newFileData = [];
+
+    this.fileData.forEach((dir, index) => {
+      newFileData.push(dir);
+      if(root == dir.name) {
+        dir.children = dir.children.filter((file) => {
+          console.log(file.name != path);
+          return file.name != path;
+        })
       }
-      localStorage.setItem("changedFiles", JSON.stringify(arr));
-    }
+    })
 
-    localStorage.removeItem(path);
-    this.zip.remove(path);
-
-    let fileTree = []
-    this.prepareFileTree(this.zip, fileTree);
     $('#fileTreeItems').empty();
-    this.generateTree(fileTree);
+    $('#fileTreeItems').fileTree({
+      data: this.fileData,
+      sortable: false,
+      selectable: true
+    });
     this.setSaveFileEventListener();
 
   }
-  // TODO make resisable or not?? 
-  // makeFileTreeResizeable() {
-  //   let cur = this;
-  //   $('#filePaletteWrapper').mousedown(function (e) {
-  //     if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
-  //       cur.resize = true;
-  //     }
-  //   });
-
-  //   $('#filePaletteWrapper').mouseup(function (e) {
-  //     cur.resize = false;
-  //   })
-
-  //   $('#filePaletteWrapper').mousemove(function (e) {
-  //     if (parseInt($(this).css('width')) - 10 <= e.offsetX) {
-  //       $('#filePaletteWrapper').css('cursor', 'e-resize');
-  //     } else {
-  //       $('#filePaletteWrapper').css('cursor', 'auto');
-  //     }
-
-  //     if (cur.resize) {
-  //       $(this).css('width', e.offsetX);
-  //     }
-  //   });
-  // }
 }

@@ -82,8 +82,10 @@ export default class CodeController {
         "delete": {
           name: "Delete file", icon: "fas fa-trash",
           callback: function () {
-            let path = $(this).attr('data-name');
-            cur.fileTreeView.deleteFile(path);
+            let path = $(this).attr('data-name'),
+                root = $(this).attr('data-id');
+            console.log(this);
+            cur.fileTreeView.deleteFile(root, path);
             return true;
           }
         }
