@@ -13,6 +13,7 @@ export default class ToBeautifulSyntax {
       console.log("matches", matches);
     if (matches == null) return xml;
 
+    alert('Detected ugly syntax, now converting to beautifull...');
     matches.forEach(function(item, index) {
 
       let oldPipe = item,

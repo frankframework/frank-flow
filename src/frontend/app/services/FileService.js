@@ -72,8 +72,6 @@ export default class FileService {
             let beautiful = this.toBeautifulSyntax.toBeautifulSyntax(data);
             data = beautiful;
 
-            alert('Detected ugly syntax, now converting to beautifull...');
-
             cur.codeController.setEditorValue(beautiful);
 
 
