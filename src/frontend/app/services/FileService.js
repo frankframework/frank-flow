@@ -70,9 +70,11 @@ export default class FileService {
         }).then(data => {
 
             let beautiful = this.toBeautifulSyntax.toBeautifulSyntax(data);
-            console.log(beautiful);
+            data = beautiful;
 
-            cur.codeController.setEditorValue(data);
+            alert('Detected ugly syntax, now converting to beautifull...');
+
+            cur.codeController.setEditorValue(beautiful);
 
 
             let adapterName = data.match(/<Adapter[^]*?name=".*?"/g);

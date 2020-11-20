@@ -48,6 +48,9 @@ export default class ToBeautifulSyntax {
     doc = doc.replace(/<Exits>[^]*?<\/Exits>/g, '')
       .replace(/<\/Pipeline>/g, exits + '\n \t\t</Pipeline>')
       .replace(/className=".*?"/g, "");
+
+    doc = doc.replace(/<Ibis>/g, '<Configuration>');
+    doc = doc.replace(/<\/Ibis>/g, '</Configuration>');
     
     return doc;
   }
