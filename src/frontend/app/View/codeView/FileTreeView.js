@@ -3,28 +3,23 @@ import OptionView from './codeEditViews/OptionView.js';
 import fileTree from '../../../fileTree/dist/js/file-tree.min.js';
 
 export default class FileTreeView {
-  constructor(editor, codeService) {
+  constructor(editor, fileService) {
     this.editor = editor;
-    this.codeService = codeService;
+    this.fileService = fileService;
     this.fileData = null;
-    this.addedFileCounter = 0;
     this.optionView = new OptionView(this.editor);
   }
 
   makeTree(input) {
     localStorage.removeItem('changedFiles');
     localStorage.removeItem('currentFile');
-    $('#fileTreeItems').empty();
 
-    let structure = [];
-
-    console.log("length: " + input.length);
-    console.log(input[0]);
+    const structure = [];
 
     input.forEach((dir, index) => {
 
-      let directoryName = dir.name;
-      console.log(directoryName);
+      const directoryName = dir.name;
+
       let treeDirectoryObject = {
         id: 'dir' + index,
         name: directoryName,
@@ -38,45 +33,41 @@ export default class FileTreeView {
           name: file,
           type: 'file'
         }
-        //structure.push(treeFileObject);
+
         treeDirectoryObject.children.push(treeFileObject);
       });
-
 
       structure.push(treeDirectoryObject);
     });
 
     this.fileData = structure;
-
-    //generate the tree.
-    $('#fileTreeItems').fileTree({
-      data: structure,
-      sortable: false,
-      selectable: true
-    });
-    
+    this.reloadTree(structure);
     this.setSaveFileEventListener();
   }
 
   setSaveFileEventListener() {
-    let cur = this;
+    const cur = this;
+
     $('.file').on("click", function (e) {
       let currentFile = localStorage.getItem('currentFile'),
           currentFileRoot = localStorage.getItem('currentFileRoot');
+
       if(currentFile != null && currentFileRoot != null) {
-        cur.codeService.addFile(currentFileRoot, currentFile, cur.editor.getValue());
+        cur.fileService.addFile(currentFileRoot, currentFile, cur.editor.getValue());
       }
 
-      let path = e.delegateTarget.attributes[3].nodeValue,
-      deployableUnit = e.delegateTarget.attributes[1].nodeValue;
-      
-      console.log(deployableUnit, path);
+      const path = e.delegateTarget.attributes[3].nodeValue,
+            deployableUnit = e.delegateTarget.attributes[1].nodeValue;
+
       localStorage.setItem('currentFile', path);
       localStorage.setItem('currentFileRoot', deployableUnit);
-      cur.codeService.getSingleFile(deployableUnit, path);
+
+      cur.fileService.getSingleFile(deployableUnit, path);
     });
+
   }
 
+  //TODO: add all adapters of current config to adapter select.
   generateAdapters() {
     let currentConfig = localStorage.getItem("currentFile");
     currentConfig = localStorage.getItem(currentConfig)
@@ -89,7 +80,8 @@ export default class FileTreeView {
 
   addFile(root) {
 
-    const name = prompt("File name: ")
+    const name = prompt("File name: ");
+
     if(name == "") {
       alert('Can\'t make empty file');
       return;
@@ -109,29 +101,25 @@ export default class FileTreeView {
       '\t</Adapter>\n' +
       '</Configuration>\n';
 
-    const addedFileCounter = this.addedFileCounter,
-          newFileName = name;
       
-
+    //Set object id to root in order to identify the parent folder of the file.
     let obj = {
-      id: root, //TODO: add custom id
-      name: newFileName,
+      id: root,
+      name: name,
       type: 'file'
-    }
-    console.log("ADD FILE: ", root)
+    };
 
     this.fileData.forEach((dir, index) => {
       if(dir.name == root) {
         dir.children.push(obj);
       }
-    })
+    });
     let data = this.fileData;
 
-    this.reloadTree(data)
+    this.reloadTree(data);
 
-    this.codeService.addFile(root, newFileName, defaultConfig);
+    this.fileService.addFile(root, name, defaultConfig);
     this.setSaveFileEventListener();
-    this.addedFileCounter++;
   }
 
   reloadTree(data) {
@@ -174,27 +162,19 @@ export default class FileTreeView {
 
   deleteFile(root, path) {
 
-    console.log(path, this.fileData);
-    this.codeService.deleteFile(root, path);
-
-    let newFileData = [];
+    this.fileService.deleteFile(root, path);
 
     this.fileData.forEach((dir, index) => {
-      newFileData.push(dir);
       if(root == dir.name) {
+
         dir.children = dir.children.filter((file) => {
-          console.log(file.name != path);
           return file.name != path;
         })
+
       }
     })
 
-    $('#fileTreeItems').empty();
-    $('#fileTreeItems').fileTree({
-      data: this.fileData,
-      sortable: false,
-      selectable: true
-    });
+    this.reloadTree(this.fileData);
     this.setSaveFileEventListener();
 
   }

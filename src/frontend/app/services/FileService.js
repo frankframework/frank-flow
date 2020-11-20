@@ -1,18 +1,18 @@
 import ToBeautifulSyntax from '../View/codeView/ToBeautifulSyntax.js';
-import JSZip from 'jszip/dist/jszip';
 
 
 export default class FileService {
     constructor(codeController) {
         this.codeController = codeController;
 
-        this.deployableUnit = null;
+        this.toBeautifulSyntax = new ToBeautifulSyntax();
+
     }
 
 
 
     async getConfigurations() {
-        let cur = this,
+        const cur = this,
             path = './api/configurations';
 
         fetch(path, {
@@ -21,7 +21,7 @@ export default class FileService {
             return response.json();
         }).then(data => {
 
-            let fileTree = [];
+            const fileTree = [];
 
             data.forEach(async function (item, index) {
                 let obj = await cur.getDeployableUnit(item);
@@ -36,15 +36,14 @@ export default class FileService {
 
         }).catch(e => {
             alert('Please check if your ibis started up correctly or if the property Configurations.directory is set correctly')
-            console.log('error getting configs: ', e);
+            console.log('Error getting configs: ', e);
         })
     }
 
     getDeployableUnit(name) {
-        let cur = this,
-            path = './api/configurations/' + name;
+        const path = './api/configurations/' + name;
 
-        this.deployableUnit = name;
+
         return fetch(path, {
             method: 'GET'
         }).then(response => {
@@ -56,19 +55,23 @@ export default class FileService {
             };
             return directoryObject;
         }).catch(e => {
-            console.log('error getting configs: ', e);
+            console.log('Error getting deployable unit: ' + name, e);
         })
     }
 
     getSingleFile(deployableUnit, name) {
-        let cur = this,
-            path = './api/configurations/' + deployableUnit + '/files/?path=' + name;
+        const cur = this,
+              path = './api/configurations/' + deployableUnit + '/files/?path=' + name;
 
         fetch(path, {
             method: 'GET'
         }).then(response => {
             return response.text();
         }).then(data => {
+
+            let beautiful = this.toBeautifulSyntax.toBeautifulSyntax(data);
+            console.log(beautiful);
+
             cur.codeController.setEditorValue(data);
 
 
@@ -79,33 +82,29 @@ export default class FileService {
 
             cur.codeController.quickGenerate();
         }).catch(e => {
-            console.log('error getting configs: ', e);
+            console.log('Error getting single file: ', e);
         })
     }
 
     deleteFile(deployableUnit, name) {
-        let cur = this,
-            path = './api/configurations/' + deployableUnit + '/files/?path=' + name;
+        const path = './api/configurations/' + deployableUnit + '/files/?path=' + name;
 
         fetch(path, {
             method: 'DELETE'
         }).then(response => {
             return response.text();
         }).then(data => {
-            console.log(data);
+            console.log("DEL: ", data);
         }).catch(e => {
-            console.log('error getting configs: ', e);
+            console.log('Error deleting file: ' + name, e);
         })
     }
 
     addFile(deployableUnit, name, config) {
-
-        let formData = new FormData();
+        const path = './api/configurations/' + deployableUnit + '/files/?path=' + name,
+              formData = new FormData();
 
         formData.append('file', config);
-
-        let cur = this,
-            path = './api/configurations/' + deployableUnit + '/files/?path=' + name;
 
         fetch(path, {
             method: 'POST',
@@ -115,7 +114,7 @@ export default class FileService {
         }).then(data => {
             console.log(data);
         }).catch(e => {
-            console.log('error getting configs: ', e);
+            console.log('Error adding file: ' + name, e);
         })
     }
 }

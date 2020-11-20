@@ -6,10 +6,11 @@ export default class ToBeautifulSyntax {
   //convert ugly ibis code to beautiful syntax.
   toBeautifulSyntax(xml) {
 
-    let matches = xml.match(/<pipe(\n\t*)?(\s\w*="(\s?\S)*"(\n\t*)?)*>[^]*?<\/pipe>/g),
+    let matches = xml.match(/<pipe[\s\n][^]*?>[^]*?<\/pipe>/g),
       doc = xml,
       exits;
 
+      console.log("matches", matches);
     if (matches == null) return xml;
 
     matches.forEach(function(item, index) {

@@ -73,18 +73,18 @@ export default class CodeController {
         "rename": {
           name: "Rename file", icon: "fas fa-file",
           callback: function () {
-            let path = $(this).attr('data-name');
-            let newPath = prompt("new name");
-            cur.fileTreeView.renameFile(path, newPath);
+            // const path = $(this).attr('data-name'),
+            //       root = $(this).attr('data-id'),
+            //       newPath = prompt("new name");
+            // cur.fileTreeView.renameFile(path, newPath);
             return true;
           }
         },
         "delete": {
           name: "Delete file", icon: "fas fa-trash",
           callback: function () {
-            let path = $(this).attr('data-name'),
-                root = $(this).attr('data-id');
-            console.log(this);
+            const path = $(this).attr('data-name'),
+                  root = $(this).attr('data-id');
             cur.fileTreeView.deleteFile(root, path);
             return true;
           }
@@ -93,16 +93,10 @@ export default class CodeController {
     });
 
     $('#adapterSelect').on('change', function (e) {
-      let adapterName = $('#adapterSelect').val();
+      const adapterName = $('#adapterSelect').val();
       localStorage.setItem('currentAdapter', adapterName)
       cur.quickGenerate();
 
-    });
-
-    $('#fileReader').on('change', function (e) {
-      var input = event.target;
-      cur.fileTreeView.makeTree(input, cur.editor);
-      $('#adapterSelect').css('display', 'none');
     });
 
 
@@ -116,17 +110,20 @@ export default class CodeController {
     });
 
     $('#addFile').click(function () {
-      cur.fileTreeView.addFile("FrankConfiguration/");
+      //cur.fileTreeView.addFile("FrankConfiguration/");
     })
 
 
     cur.editor.onMouseDown(function (e) {
       e.target.range.startLineNumber = 1;
       e.target.range.startColumn = 1;
-      let textPossition = cur.editor.getModel().getValueInRange(e.target.range);
-      let adapters = textPossition.match(/<Adapter[^]*?name=".*?">/g);
+
+      const textPossition = cur.editor.getModel().getValueInRange(e.target.range),
+            adapters = textPossition.match(/<Adapter[^]*?name=".*?">/g);
+
       if (adapters != null) {
         let adapterName = adapters[adapters.length - 1].match(/name="[^]*?"/g)[0].match(/"[^]*?"/g)[0].replace(/"/g, '');
+
         if (localStorage.getItem("currentAdapter") != adapterName) {
           localStorage.setItem("currentAdapter", adapterName);
           cur.quickGenerate();
@@ -183,41 +180,6 @@ export default class CodeController {
     };
   };
 
-  // saveFile() {
-  //   let zip = this.fileTreeView.zip;
-  //   var FileSaver = require('file-saver');
-  //   zip.generateAsync({
-  //     type: "blob"
-  //   }).then(function (myzip) {
-  //     //FileSaver.saveAs(blob, "FrankConfiguration");
-  //     var fileName = 'configuration.zip';
-
-  //     var fd = new FormData();
-  //     const finalurl = 'http://localhost/iaf/api/configurations';
-  //     fd.append("datasource", 'jdbc/frank2manual');
-  //     fd.append("name", "PROJECTNAME");
-  //     fd.append("version", '5');
-  //     fd.append("encoding", 'utf-8');
-  //     fd.append("multiple_configs", false);
-  //     fd.append("activate_config", true);
-  //     fd.append("automatic_reload", true);
-  //     fd.append("file", myzip, fileName);
-
-  //     fetch(finalurl, {
-  //       method: 'post',
-  //       body: fd,
-  //     }).then(res => {
-  //       console.log(res)
-  //       return res.text();
-  //     }).then(re => {
-  //       console.log(re)
-  //     })      
-  //     .catch(e => {
-  //       console.log(e)
-  //     })
-
-  //   })
-  // }
 
   //_______________Methods for modifying the editor_______________
 
