@@ -101,7 +101,8 @@ export default class CodeController {
 
 
     $('#saveFile').on('click', function (e) {
-      cur.saveFile();
+      cur.fileTreeView.saveFile();
+      alert('File was saved!');
     })
 
     $('#beautify').click(function () {
@@ -110,7 +111,8 @@ export default class CodeController {
     });
 
     $('#addFile').click(function () {
-      //cur.fileTreeView.addFile("FrankConfiguration/");
+      const currentFileRoot = localStorage.getItem('currentFileRoot');
+      cur.fileTreeView.addFile(currentFileRoot);
     })
 
 

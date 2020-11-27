@@ -43,19 +43,20 @@ export default class FileTreeView {
     this.fileData = structure;
     this.reloadTree(structure);
     this.setSaveFileEventListener();
+
+    this.fileService.getSingleFile(structure[0].name, structure[0].children[0].name);
+
+    localStorage.setItem('currentFileRoot', structure[0].name);
+    localStorage.setItem('currentFile', structure[0].children[0].name);
+
   }
 
   setSaveFileEventListener() {
     const cur = this;
 
     $('.file').on("click", function (e) {
-      let currentFile = localStorage.getItem('currentFile'),
-          currentFileRoot = localStorage.getItem('currentFileRoot');
 
-      if(currentFile != null && currentFileRoot != null) {
-        cur.fileService.addFile(currentFileRoot, currentFile, cur.editor.getValue());
-      }
-
+      cur.saveFile();
       const path = e.delegateTarget.attributes[3].nodeValue,
             deployableUnit = e.delegateTarget.attributes[1].nodeValue;
 
@@ -67,10 +68,19 @@ export default class FileTreeView {
 
   }
 
+  saveFile() {
+    const currentFile = localStorage.getItem('currentFile'),
+          currentFileRoot = localStorage.getItem('currentFileRoot');
+
+    if(currentFile != null && currentFileRoot != null) {
+      this.fileService.addFile(currentFileRoot, currentFile, this.editor.getValue());
+    }
+  }
+
   //TODO: add all adapters of current config to adapter select.
   generateAdapters() {
-    let currentConfig = localStorage.getItem("currentFile");
-    currentConfig = localStorage.getItem(currentConfig)
+    const currentConfig = localStorage.getItem("currentFile");
+          currentConfig = localStorage.getItem(currentConfig)
 
     let adapters = currentConfig.match(/<Adapter[^]*?>[^]*?<\/Adapter>/g);
 
@@ -134,30 +144,30 @@ export default class FileTreeView {
 
 
   renameFile(path, newPath) {
-    let currentFile = localStorage.getItem("currentFile");
-    if (currentFile != null) {
-      let arr = JSON.parse(localStorage.getItem("changedFiles"));
-      let index = arr.indexOf(currentFile);
-      if (index > -1) {
-        arr.splice(index, 1);
-      }
-      localStorage.setItem("changedFiles", JSON.stringify(arr));
-    }
-    localStorage.setItem("currentFile", newPath);
+    // let currentFile = localStorage.getItem("currentFile");
+    // if (currentFile != null) {
+    //   let arr = JSON.parse(localStorage.getItem("changedFiles"));
+    //   let index = arr.indexOf(currentFile);
+    //   if (index > -1) {
+    //     arr.splice(index, 1);
+    //   }
+    //   localStorage.setItem("changedFiles", JSON.stringify(arr));
+    // }
+    // localStorage.setItem("currentFile", newPath);
 
-    const fileData = localStorage.getItem(path);
-    let prependedPath = path.match(/[^]+\/+/g)[0];
-    this.zip.remove(path);
-    this.zip.file(prependedPath + newPath, fileData);
+    // const fileData = localStorage.getItem(path);
+    // let prependedPath = path.match(/[^]+\/+/g)[0];
+    // this.zip.remove(path);
+    // this.zip.file(prependedPath + newPath, fileData);
 
-    localStorage.removeItem(path);
-    localStorage.setItem(prependedPath + newPath, fileData);
+    // localStorage.removeItem(path);
+    // localStorage.setItem(prependedPath + newPath, fileData);
 
-    let fileTree = []
-    this.prepareFileTree(this.zip, fileTree);
-    $('#fileTreeItems').empty();
-    this.generateTree(fileTree);
-    this.setSaveFileEventListener();
+    // let fileTree = []
+    // this.prepareFileTree(this.zip, fileTree);
+    // $('#fileTreeItems').empty();
+    // this.generateTree(fileTree);
+    // this.setSaveFileEventListener();
   }
 
   deleteFile(root, path) {
