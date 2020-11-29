@@ -10,10 +10,9 @@ export default class ToBeautifulSyntax {
       doc = xml,
       exits;
 
-      console.log("matches", matches);
     if (matches == null) return xml;
 
-    alert('Detected ugly syntax, now converting to beautifull...');
+    alert('Detected old syntax, now converting to new...');
     matches.forEach(function(item, index) {
 
       let oldPipe = item,

@@ -17,8 +17,7 @@ export default class FileTreeView {
     const structure = [];
 
     input.forEach((dir, index) => {
-
-      const directoryName = dir.name;
+      const directoryName = '> ' + dir.name;
 
       let treeDirectoryObject = {
         id: 'dir' + index,
@@ -44,11 +43,22 @@ export default class FileTreeView {
     this.reloadTree(structure);
     this.setSaveFileEventListener();
 
-    this.fileService.getSingleFile(structure[0].name, structure[0].children[0].name);
+    this.getSingleFile(structure[0].name, structure[0].children[0].name);
 
     localStorage.setItem('currentFileRoot', structure[0].name);
     localStorage.setItem('currentFile', structure[0].children[0].name);
 
+  }
+
+  getSingleFile(root, file) {
+    root = this.replaceEncodings(root);
+    this.fileService.getSingleFile(root, file);
+  }
+
+  replaceEncodings(root) {
+    root = root.replace(/> /g, '');
+    root = root.replace(/\u2304 /g, '');
+    return root;
   }
 
   setSaveFileEventListener() {
@@ -57,20 +67,36 @@ export default class FileTreeView {
     $('.file').on("click", function (e) {
 
       cur.saveFile();
-      const path = e.delegateTarget.attributes[3].nodeValue,
-            deployableUnit = e.delegateTarget.attributes[1].nodeValue;
+      let path = e.delegateTarget.attributes[3].nodeValue,
+          deployableUnit = e.delegateTarget.attributes[1].nodeValue;
+
+      deployableUnit = cur.replaceEncodings(deployableUnit);
 
       localStorage.setItem('currentFile', path);
       localStorage.setItem('currentFileRoot', deployableUnit);
 
-      cur.fileService.getSingleFile(deployableUnit, path);
+      cur.getSingleFile(deployableUnit, path);
     });
+
+    $('.folder').on('click', function (e) {
+      const folderElement = $(e.currentTarget);
+      let text = $(e.currentTarget.firstElementChild).text();
+
+      if(folderElement.hasClass("mjs-nestedSortable-expanded")) {
+        text = text.replace(/> /g, '\u2304 ');
+      } else {
+        text = text.replace(/\u2304 /g, '> ');
+      }
+      $(e.currentTarget.firstElementChild).text(text);
+    })
 
   }
 
   saveFile() {
-    const currentFile = localStorage.getItem('currentFile'),
-          currentFileRoot = localStorage.getItem('currentFileRoot');
+    const currentFile = localStorage.getItem('currentFile');
+    let currentFileRoot = localStorage.getItem('currentFileRoot');
+
+    currentFileRoot = this.replaceEncodings(currentFileRoot);
 
     if(currentFile != null && currentFileRoot != null) {
       this.fileService.addFile(currentFileRoot, currentFile, this.editor.getValue());
@@ -89,7 +115,6 @@ export default class FileTreeView {
 
 
   addFile(root) {
-
     const name = prompt("File name: ");
 
     if(name == "") {
@@ -97,13 +122,15 @@ export default class FileTreeView {
       return;
     }
 
-    const defaultConfig = '<Configuration name="' + name + '">\n' +
-      '\t<Adapter name="' + name + 'Adapter"> \n' +
-      '\t\t<Receiver name="' + name + 'Receiver" x="681" y="24"> \n' +
-      '\t\t\t<JavaListener name="' + name + 'Listener" serviceName="' + name + 'Service" />\n' +
+    const displayName = name.replace(/\.[^]*/g, '');
+
+    const defaultConfig = '<Configuration name="' + displayName + '">\n' +
+      '\t<Adapter name="' + displayName + 'Adapter"> \n' +
+      '\t\t<Receiver name="' + displayName + 'Receiver" x="681" y="24"> \n' +
+      '\t\t\t<JavaListener name="' + displayName + 'Listener" serviceName="' + displayName + 'Service" />\n' +
       '\t\t</Receiver>\n' +
-      '\t\t<Pipeline firstPipe="' + name + 'Pipe">\n' +
-      '\t\t\t<FixedResultPipe name="' + name + 'Pipe" returnString="Hello World">\n' +
+      '\t\t<Pipeline firstPipe="' + displayName + 'Pipe">\n' +
+      '\t\t\t<FixedResultPipe name="' + displayName + 'Pipe" returnString="Hello World">\n' +
       '\t\t\t\t<Forward name="success" path="EXIT"/> \n' +
       '\t\t\t</FixedResultPipe> \n' +
       '\t\t\t<Exit path="EXIT" state="success" x="223" y="425"/> \n' +
@@ -126,6 +153,7 @@ export default class FileTreeView {
     });
     let data = this.fileData;
 
+    root = this.replaceEncodings(root);
     this.reloadTree(data);
 
     this.fileService.addFile(root, name, defaultConfig);
@@ -172,8 +200,6 @@ export default class FileTreeView {
 
   deleteFile(root, path) {
 
-    this.fileService.deleteFile(root, path);
-
     this.fileData.forEach((dir, index) => {
       if(root == dir.name) {
 
@@ -183,6 +209,12 @@ export default class FileTreeView {
 
       }
     })
+
+    root = this.replaceEncodings(root);
+
+    this.fileService.deleteFile(root, path);
+
+
 
     this.reloadTree(this.fileData);
     this.setSaveFileEventListener();

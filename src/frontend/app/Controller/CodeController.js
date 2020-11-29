@@ -70,16 +70,16 @@ export default class CodeController {
         return true;
       },
       items: {
-        "rename": {
-          name: "Rename file", icon: "fas fa-file",
-          callback: function () {
-            // const path = $(this).attr('data-name'),
-            //       root = $(this).attr('data-id'),
-            //       newPath = prompt("new name");
-            // cur.fileTreeView.renameFile(path, newPath);
-            return true;
-          }
-        },
+        // "rename": {
+        //   name: "Rename file", icon: "fas fa-file",
+        //   callback: function () {
+        //     // const path = $(this).attr('data-name'),
+        //     //       root = $(this).attr('data-id'),
+        //     //       newPath = prompt("new name");
+        //     // cur.fileTreeView.renameFile(path, newPath);
+        //     return true;
+        //   }
+        // },
         "delete": {
           name: "Delete file", icon: "fas fa-trash",
           callback: function () {
@@ -102,7 +102,6 @@ export default class CodeController {
 
     $('#saveFile').on('click', function (e) {
       cur.fileTreeView.saveFile();
-      alert('File was saved!');
     })
 
     $('#beautify').click(function () {
@@ -111,7 +110,7 @@ export default class CodeController {
     });
 
     $('#addFile').click(function () {
-      const currentFileRoot = localStorage.getItem('currentFileRoot');
+      const currentFileRoot = '> ' + localStorage.getItem('currentFileRoot');
       cur.fileTreeView.addFile(currentFileRoot);
     })
 

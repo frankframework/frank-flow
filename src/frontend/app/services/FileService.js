@@ -93,8 +93,6 @@ export default class FileService {
             method: 'DELETE'
         }).then(response => {
             return response.text();
-        }).then(data => {
-            console.log("DEL: ", data);
         }).catch(e => {
             console.log('Error deleting file: ' + name, e);
         })
@@ -111,8 +109,6 @@ export default class FileService {
             body: formData
         }).then(response => {
             return response.text();
-        }).then(data => {
-            console.log(data);
         }).catch(e => {
             console.log('Error adding file: ' + name, e);
         })
