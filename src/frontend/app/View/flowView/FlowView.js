@@ -116,7 +116,7 @@ export default class FlowView {
           obj.xpos = 100;
           obj.ypos = 100;
         }
-        let newPipe = this.addCustomPipe(obj.name, obj.className, obj.xpos, obj.ypos);
+        const newPipe = this.addCustomPipe(obj.name, obj.className, obj.xpos, obj.ypos);
         this.notifyListeners(newPipe);
         this.mainController.modifyCode("selectPipe", newPipe)
         break;
