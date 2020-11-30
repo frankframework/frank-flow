@@ -45,6 +45,7 @@
 .icons {
   width: 100%;
   height: auto;
+  cursor: pointer;
 }
 
 div.icons #addFile:hover {

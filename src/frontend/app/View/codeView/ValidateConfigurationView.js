@@ -1,4 +1,4 @@
-import * as xmllint from 'xmllint';
+//import * as xmllint from 'xmllint';
 
 export default class ValidateConfigurationView {
 
