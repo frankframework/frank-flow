@@ -98,7 +98,7 @@ export default class CodeService {
             cur.getDeployableUnit(data[0]);
         }).catch(e => {
             alert('Please check if your ibis started up correctly or if the property Configurations.directory is set correctly')
-            console.log('error asjdhajhkdb getting configs: ' + e);
+            console.log('error getting configs: ' + e);
         })
     }
 

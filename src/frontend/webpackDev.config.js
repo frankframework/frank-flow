@@ -7,6 +7,9 @@ const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
+  node: {
+    fs: 'empty'
+  },
   mode: 'development',
   optimization: {
     splitChunks: {

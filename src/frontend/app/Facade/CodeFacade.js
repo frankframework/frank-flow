@@ -40,7 +40,7 @@ export default class CodeFacade {
             break;
           case "selectPipe":
             codeController.selectPipe(obj.name);
-            this.pipeInfoController.selectPipe(this.flowController.flowView.flowGenerator.pipes[obj.name]);
+            this.pipeInfoController.selectPipe({name: obj.name, type: obj.className});
             break;
           case "changePipeType":
             codeController.changePipeType(obj.name, obj.type, obj.oldType);

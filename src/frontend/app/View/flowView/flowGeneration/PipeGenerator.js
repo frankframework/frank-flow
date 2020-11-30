@@ -27,13 +27,6 @@ export default class PipeGenerator {
             }
             this.customElementGenerator.addExits(transformedXml.Adapter.Pipeline.Exit);
 
-            if (possitions == "duplicate") {
-                this.flowView.displayError("dupplicate");
-                return;
-            }
-            else if (possitions == null) {
-                this.flowView.realignFlow();
-            }
             if (transformedXml.Adapter.Receiver != null) {
                 let receiver = transformedXml.Adapter.Receiver;
                 if(Array.isArray(receiver)) {
@@ -46,6 +39,14 @@ export default class PipeGenerator {
                 }
             }
 
+            if (possitions == "duplicate") {
+                this.flowView.displayError("dupplicate");
+                return;
+            }
+            else if (possitions == null) {
+                this.flowView.realignFlow();
+            }
+            
             this.forwardGenerator.generateForwards(forwards);
         }
         return this.pipeDict;
