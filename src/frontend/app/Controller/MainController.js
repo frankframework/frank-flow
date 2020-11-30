@@ -12,16 +12,18 @@ import '../../css/bundle.css';
 class MainController {
 
   constructor() {
+
+    localStorage.clear();
+
     this.configurationConverter = new ConfigurationConverter();
     this.ibisdocModel = new IbisdocModel();
     this.flowModel = new FlowModel();
     this.pipeInfoController = new PipeInfoController(this, this.ibisdocModel, this.flowModel);
     this.codeController = new CodeController(this, this.ibisdocModel);
-    this.flowController = new FlowController(this, this.flowModel);
+    this.flowController = new FlowController(this, this.flowModel, this.ibisdocModel);
     this.codeFacade = new CodeFacade(this.codeController, this.pipeInfoController, this.flowController);
     this.PageController = new PageController();
 
-    this.ibisdocModel.addListener(this);
   }
 
   //_______________CRUD methods for the code view_______________
@@ -39,13 +41,6 @@ class MainController {
   generateFlow() {
     this.flowController.flowView.modifyFlow("generate");
   }
-  setPipes(data) {
-    this.flowController.paletteView.generatePalettePipes(data);
-  }
-  notify(data) {
-    this.flowController.paletteView.generatePalettePipes(data);
-  }
-  
 }
 
 let mainController = new MainController();

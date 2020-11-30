@@ -3,7 +3,7 @@ import PaletteView from '../View/paletteView/PaletteView.js';
 
 export default class FlowController {
 
-  constructor(mainController, flowModel) {
+  constructor(mainController, flowModel, ibisdocModel) {
     this.canvasMarginX = 0;
     this.canvasMarginY = 0;
 
@@ -11,8 +11,7 @@ export default class FlowController {
     this.flowModel = flowModel;
     this.flowView = new FlowView(flowModel, mainController);
     this.flowView.addListener(this);
-    this.paletteView = new PaletteView(this);
-    this.paletteView.addListener(this);
+    this.paletteView = new PaletteView(this, ibisdocModel);
     this.hoverSourceWindow = false;
     this.initHandlers();
 

@@ -6,12 +6,13 @@ export default class ToBeautifulSyntax {
   //convert ugly ibis code to beautiful syntax.
   toBeautifulSyntax(xml) {
 
-    let matches = xml.match(/<pipe(\n\t*)?(\s\w*="(\s?\S)*"(\n\t*)?)*>[^]*?<\/pipe>/g),
+    let matches = xml.match(/<pipe[\s\n][^]*?>[^]*?<\/pipe>/g),
       doc = xml,
       exits;
 
     if (matches == null) return xml;
 
+    alert('Detected old syntax, now converting to new...');
     matches.forEach(function(item, index) {
 
       let oldPipe = item,
@@ -47,6 +48,9 @@ export default class ToBeautifulSyntax {
     doc = doc.replace(/<Exits>[^]*?<\/Exits>/g, '')
       .replace(/<\/Pipeline>/g, exits + '\n \t\t</Pipeline>')
       .replace(/className=".*?"/g, "");
+
+    doc = doc.replace(/<Ibis>/g, '<Configuration>');
+    doc = doc.replace(/<\/Ibis>/g, '</Configuration>');
     
     return doc;
   }

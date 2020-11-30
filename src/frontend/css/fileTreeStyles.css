@@ -48,5 +48,11 @@
 }
 
 div.icons #addFile:hover {
-  background-color: red;
+  background-color: #007bff;
+  opacity: 50%;
+}
+
+div.icons #saveFile:hover {
+  background-color: #007bff;
+  opacity: 50%;
 }
