@@ -7,7 +7,7 @@ export default class CodePipeView extends CodeEditView {
   }
   //change the name.
   changeName(oldWord, newWord) {
-    let changed = this.changeNameCode('<[\\S]*?[^"/][pP]ipe(\\n\\t*)?\\s?name="\\w*"', oldWord, newWord);
+    let changed = this.changeNameCode('<[\\S]*?[^"/][pP]ipe[^]*?name="\\w*"', oldWord, newWord);
     if (changed) {
       this.changeNameCode('<forward(\\n\\t*)?(\\s\\w*="(\\s?\\S)*"(\\n\\t*)?)*\\/>', oldWord, newWord);
     }
