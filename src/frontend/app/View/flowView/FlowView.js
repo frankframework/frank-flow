@@ -221,8 +221,7 @@ export default class FlowView {
         receiverOffset = 0,
         x = '0',
         y = '0',
-        exit = false;;
-
+        exit = false;
 
     for (let i in pipes) {
       let box = $(pipes[i]);
