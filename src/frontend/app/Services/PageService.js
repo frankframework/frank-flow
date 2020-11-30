@@ -1,4 +1,8 @@
 export default class IbisdocService {
+	constructor() {
+		
+	}
+
 	getServerInfo() {
 		const path = '/iaf/api/server/info';
 

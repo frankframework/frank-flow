@@ -1,12 +1,13 @@
 import HeaderView from '../View/pageView/HeaderView.js';
+import PageService from '../Services/PageService.js';
 export default class PageController {
 
 	constructor() {
-		this.PageService = new PageService();
+		this.pageService = new PageService();
 		this.setHeaderInfo();
 	}
 
 	setHeaderInfo() {
-		PageService.getServerInfo().then(serverInfo => HeaderView.setFrankName(serverInfo.instance.name))
+		this.pageService.getServerInfo().then(serverInfo => HeaderView.setFrankName(serverInfo.instance.name))
 	}
 }
