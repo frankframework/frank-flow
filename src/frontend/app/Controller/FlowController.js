@@ -9,7 +9,7 @@ export default class FlowController {
 
     this.mainController = mainController;
     this.flowModel = flowModel;
-    this.flowView = new FlowView(flowModel);
+    this.flowView = new FlowView(flowModel, mainController);
     this.flowView.addListener(this);
     this.paletteView = new PaletteView(this);
     this.paletteView.addListener(this);
@@ -264,7 +264,6 @@ export default class FlowController {
 
       $('.sourceWindow').each((index, element) => {
 
-        
         $(element).css('left', '+=250')
         let pipe = {
           x: $(element).css('left'),

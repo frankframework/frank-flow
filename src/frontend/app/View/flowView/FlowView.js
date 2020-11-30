@@ -3,8 +3,9 @@ import domtoimage from 'dom-to-image';
 import jsplumb from 'jsplumb';
 export default class FlowView {
 
-  constructor(flowModel) {
+  constructor(flowModel, mainController) {
     this.transformedXml = null;
+    this.mainController = mainController;
     this.flowModel = flowModel;
     this.types = [];
     this.listeners = [];
@@ -115,7 +116,9 @@ export default class FlowView {
           obj.xpos = 100;
           obj.ypos = 100;
         }
-        this.notifyListeners(this.addCustomPipe(obj.name, obj.className, obj.xpos, obj.ypos));
+        let newPipe = this.addCustomPipe(obj.name, obj.className, obj.xpos, obj.ypos);
+        this.notifyListeners(newPipe);
+        this.mainController.modifyCode("selectPipe", newPipe)
         break;
       case 'edit':
         obj = this.editTitle(obj);
