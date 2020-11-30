@@ -5,7 +5,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  mode: 'production',
+  node: {
+    fs: 'empty'
+  },
+
   optimization: {
     splitChunks: {
         cacheGroups: {
