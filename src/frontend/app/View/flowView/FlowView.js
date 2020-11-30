@@ -3,8 +3,9 @@ import domtoimage from 'dom-to-image';
 import jsplumb from 'jsplumb';
 export default class FlowView {
 
-  constructor(flowModel) {
+  constructor(flowModel, mainController) {
     this.transformedXml = null;
+    this.mainController = mainController;
     this.flowModel = flowModel;
     this.types = [];
     this.listeners = [];
@@ -15,7 +16,18 @@ export default class FlowView {
     this.horizontalBuild = false;
     this.flowGenerator = new FlowGenerator(this, flowModel);
     this.getInstance();
+    this.fullscreen = true;
   }
+
+  toggleEditor(){
+    if(this.fullscreen) {
+      this.setHybrid();
+    } else {
+      this.setFullFlow();
+    }
+    this.fullscreen = !this.fullscreen;
+  };
+
   addListener(listener) {
     this.listeners.push(listener);
   }
@@ -81,7 +93,6 @@ export default class FlowView {
       });
 
     this.setBasicType();
-
   }
 
   setBasicType() {
@@ -105,7 +116,9 @@ export default class FlowView {
           obj.xpos = 100;
           obj.ypos = 100;
         }
-        this.notifyListeners(this.addCustomPipe(obj.name, obj.className, obj.xpos, obj.ypos));
+        const newPipe = this.addCustomPipe(obj.name, obj.className, obj.xpos, obj.ypos);
+        this.notifyListeners(newPipe);
+        this.mainController.modifyCode("selectPipe", newPipe)
         break;
       case 'edit':
         obj = this.editTitle(obj);
@@ -208,8 +221,7 @@ export default class FlowView {
         receiverOffset = 0,
         x = '0',
         y = '0',
-        exit = false;;
-
+        exit = false;
 
     for (let i in pipes) {
       let box = $(pipes[i]);
@@ -295,6 +307,7 @@ export default class FlowView {
   // TODO: make an exception class to handle exceptions thrown in flow module.
   displayError(e) {
     this.setHybrid();
+    this.fullscreen = true;
     instance.reset();
     $('#canvas').empty();
     $('#canvas').css('display', 'none');

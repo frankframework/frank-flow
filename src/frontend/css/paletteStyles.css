@@ -12,6 +12,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
+  background-color: #233448;
   /* padding: 5%; */
 }
 
@@ -58,7 +59,7 @@
   margin: 5px;
 }
 
-.selected {
+.content-group.selected {
   border: #007bff 2px solid;
 }
 

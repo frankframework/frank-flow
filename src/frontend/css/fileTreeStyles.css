@@ -48,11 +48,11 @@
 }
 
 div.icons #addFile:hover {
-  background-color: #007bff;
   opacity: 50%;
+  cursor: pointer;
 }
 
 div.icons #saveFile:hover {
-  background-color: #007bff;
   opacity: 50%;
+  cursor: pointer;
 }

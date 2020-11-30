@@ -6,10 +6,15 @@
   width: 100%;
   background: url("../media/images/header-profile.png") repeat;
   color: white;
+  background-color: #233448;
+}
+
+.header-title {
+  white-space: nowrap;
 }
 
 .top-wrapper h2 {
-  margin-left: 10%;
+  margin-left: 15px;
 }
 
 .adapter-select{

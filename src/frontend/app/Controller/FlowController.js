@@ -9,7 +9,7 @@ export default class FlowController {
 
     this.mainController = mainController;
     this.flowModel = flowModel;
-    this.flowView = new FlowView(flowModel);
+    this.flowView = new FlowView(flowModel, mainController);
     this.flowView.addListener(this);
     this.paletteView = new PaletteView(this, ibisdocModel);
     this.hoverSourceWindow = false;
@@ -86,15 +86,10 @@ export default class FlowController {
 
   initHandlers() {
     let cur = this;
-    let fullscreen = true;
-    let themeSwitch = false;
     let $panzoom = $('#canvas').panzoom({
       minScale: 0.5,
       increment: 0.2
     });
-
-
-
 
     $.contextMenu({
       selector: '.context-menu-one',
@@ -107,12 +102,7 @@ export default class FlowController {
         "flow": {
           name: "Toggle editor", icon: "fas fa-compress",
           callback: function () {
-            if(fullscreen) {
-              cur.flowView.setHybrid();
-            } else {
-              cur.flowView.setFullFlow();
-            }
-            fullscreen = !fullscreen;
+            cur.flowView.toggleEditor();
           }
         },
         "sep1": "---------",
@@ -273,7 +263,6 @@ export default class FlowController {
 
       $('.sourceWindow').each((index, element) => {
 
-        
         $(element).css('left', '+=250')
         let pipe = {
           x: $(element).css('left'),

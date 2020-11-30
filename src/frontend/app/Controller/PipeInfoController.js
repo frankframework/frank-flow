@@ -15,7 +15,6 @@ export default class PipeInfoController {
   }
 
   selectPipe(pipe) {
-    console.trace()
     this.oldName = pipe.name;
     this.oldType = pipe.type;
     this.pipeInfoView.setPipeName(pipe.name);
