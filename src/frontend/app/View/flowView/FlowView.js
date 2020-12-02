@@ -307,7 +307,7 @@ export default class FlowView {
   // TODO: make an exception class to handle exceptions thrown in flow module.
   displayError(e) {
     this.setHybrid();
-    this.fullscreen = true;
+    this.fullscreen = false;
     instance.reset();
     $('#canvas').empty();
     $('#canvas').css('display', 'none');
