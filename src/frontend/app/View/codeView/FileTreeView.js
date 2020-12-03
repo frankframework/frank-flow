@@ -20,7 +20,7 @@ export default class FileTreeView {
       const directoryName = '> ' + dir.name;
 
       let treeDirectoryObject = {
-        id: 'dir' + index,
+        id: directoryName,
         name: directoryName,
         type: 'dir',
         children: []
@@ -35,6 +35,31 @@ export default class FileTreeView {
 
         treeDirectoryObject.children.push(treeFileObject);
       });
+
+      for(let key in dir) {
+        if(key != "files" && key != "name") {
+          let treeDirObject = {
+            id: key,
+            name: '> ' + key,
+            type: 'dir',
+            children: []
+          }
+
+          dir[key]._files.forEach(function(file, index) {
+            let treeFileObject = {
+              id: directoryName,
+              name: file,
+              type: 'file'
+            }
+
+            treeDirObject.children.push(treeFileObject);
+          });
+
+          treeDirectoryObject.children.push(treeDirObject);
+        }
+
+
+      }
 
       structure.push(treeDirectoryObject);
     });
@@ -68,9 +93,18 @@ export default class FileTreeView {
 
       cur.saveFile();
       let path = e.delegateTarget.attributes[3].nodeValue,
-          deployableUnit = e.delegateTarget.attributes[1].nodeValue;
+          deployableUnit = e.delegateTarget.attributes[1].nodeValue,
+          parent = e.delegateTarget.offsetParent.attributes[1].nodeValue;
+      
 
       deployableUnit = cur.replaceEncodings(deployableUnit);
+      parent = cur.replaceEncodings(parent);
+
+      console.log("Parent: ", parent, "Path: ", path, "deployable unit: ", deployableUnit);
+
+      if(parent != deployableUnit) {
+        path = parent + '/' + path;
+      }
 
       localStorage.setItem('currentFile', path);
       localStorage.setItem('currentFileRoot', deployableUnit);
@@ -114,8 +148,8 @@ export default class FileTreeView {
   }
 
 
-  addFile(root) {
-    const name = prompt("File name: ");
+  addFile(folder) {
+    let name = prompt("File name: ");
 
     if(name == "") {
       alert('Can\'t make empty file');
@@ -141,19 +175,24 @@ export default class FileTreeView {
       
     //Set object id to root in order to identify the parent folder of the file.
     let obj = {
-      id: root,
+      id: folder,
       name: name,
       type: 'file'
     };
 
     this.fileData.forEach((dir, index) => {
-      if(dir.name == root) {
+      if(dir.name == folder) {
         dir.children.push(obj);
-      }
+      } 
     });
     let data = this.fileData;
 
-    root = this.replaceEncodings(root);
+    folder = this.replaceEncodings(folder);
+    let root = localStorage.getItem('currentFileRoot');
+
+    if(folder != root) {
+      name = folder + '/' + name;
+    }
     this.reloadTree(data);
 
     this.fileService.addFile(root, name, defaultConfig);
@@ -168,6 +207,8 @@ export default class FileTreeView {
       sortable: false,
       selectable: true
     });
+
+    //$('.folder ol').addClass('folderStyle');
   }
 
 

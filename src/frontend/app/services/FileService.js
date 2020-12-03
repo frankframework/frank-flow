@@ -53,6 +53,11 @@ export default class FileService {
                 name: name,
                 files: [...fileList._files]
             };
+            for(let key in fileList) {
+                if(key != "_files") {
+                    directoryObject[key] = fileList[key];
+                }
+            }
             return directoryObject;
         }).catch(e => {
             console.log('Error getting deployable unit: ' + name, e);
@@ -60,6 +65,7 @@ export default class FileService {
     }
 
     getSingleFile(deployableUnit, name) {
+        //http://localhost/frank-flow/api/configurations/Example/files/?path=InnerExampleFolder/ConfigurationProcessDestination.xml
         const cur = this,
               path = './api/configurations/' + deployableUnit + '/files/?path=' + name;
 
