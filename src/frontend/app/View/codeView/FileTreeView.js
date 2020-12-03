@@ -201,8 +201,8 @@ export default class FileTreeView {
   deleteFile(root, path) {
 
     this.fileData.forEach((dir, index) => {
+      
       if(root == dir.name) {
-
         dir.children = dir.children.filter((file) => {
           return file.name != path;
         })
@@ -213,7 +213,8 @@ export default class FileTreeView {
     root = this.replaceEncodings(root);
 
     this.fileService.deleteFile(root, path);
-
+    localStorage.setItem('currentFile', "");
+    localStorage.setItem('currentFileRoot', "");
 
 
     this.reloadTree(this.fileData);
