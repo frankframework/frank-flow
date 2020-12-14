@@ -52,7 +52,7 @@ export default class CodeView {
     this.exitPipeView = new ExitPipeView(this.editor);
     this.codeAttributesView = new CodeAttributesView(this.editor);
     this.codeParametersView = new CodeParametersView(this.editor);
-    this.CodeCompletionView = new XSDCodeCompletionView(monaco, this.xsdModel);
+    this.CodeCompletionView = new XSDCodeCompletionView(monaco, this.editor, this.xsdModel);
   }
 
   setGlobalVariables() {
