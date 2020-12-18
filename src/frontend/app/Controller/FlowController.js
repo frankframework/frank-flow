@@ -6,7 +6,7 @@ export default class FlowController {
   constructor(mainController, flowModel, ibisdocModel) {
     this.canvasMarginX = 0;
     this.canvasMarginY = 0;
-
+    this.calculating = false;
     this.mainController = mainController;
     this.flowModel = flowModel;
     this.flowView = new FlowView(flowModel, mainController);
@@ -14,7 +14,6 @@ export default class FlowController {
     this.paletteView = new PaletteView(this, ibisdocModel);
     this.hoverSourceWindow = false;
     this.initHandlers();
-
 
     localStorage.setItem("activityMode", false);
   }
@@ -176,7 +175,7 @@ export default class FlowController {
 
 
     //make the bottom container draggable with mouseover
-    jsPlumb.on($('#canvas'), "mouseover", ".bottomContainer", function () {
+    $('#canvas').on("mouseover", ".bottomContainer" , function () {
       let sourceDiv = this.parentElement;
       let dragData = {
         disabled: false,
@@ -188,9 +187,29 @@ export default class FlowController {
             y: $(sourceDiv).css('top'),
             name: sourceDiv.lastElementChild.firstElementChild.innerHTML
           }
-          if ($(sourceDiv).hasClass('exit')) {
+          let isGenerating = false;
+          console.log(dragObj.x)
+          console.log(cur.calculating)
+          if (dragObj.x == "0px" && cur.calculating == false) {
+            cur.calculating = true;
+            isGenerating = true;
+            calculateCanvasBorder('left');
+            cur.flowView.generateFlow();
+            return false;
+          }
+          if (dragObj.y == "0px" && cur.calculating == false) {
+            cur.calculating = true;
+            calculateCanvasBorder('top');
+            cur.flowView.generateFlow();
+          }
+          // console.log(dragObj.x - 236);
+          // console.log($('#canvas').width());
+          // if ((dragObj.x - 236) == $('#canvas').width()) {
+          //   console.log(" ja man werkt")
+          // }
+          if ($(sourceDiv).hasClass('exit') && !isGenerating) {
             cur.flowView.modifyFlow('dragExit', dragObj);
-          } else {
+          } else if (!isGenerating) {
             cur.flowView.modifyFlow('drag', dragObj);
           }
         },
@@ -204,7 +223,6 @@ export default class FlowController {
       }
       $(this).addClass("element-disabled");
     });
-
 
     //when leaving container not draggable
     jsPlumb.on($('#canvas'), "mouseout", ".bottomContainer", function () {
@@ -258,12 +276,13 @@ export default class FlowController {
     */
 
     function calculateCanvasBorder(direction) {
+      console.log("trigger")
       $('#canvas').css('min-width', '+=500');
       let centerX = parseInt($('#canvas').css('min-width').replace('px', '')) / 2;
 
       $('.sourceWindow').each((index, element) => {
 
-        $(element).css('left', '+=250')
+        $(element).css(direction, '+=500')
         let pipe = {
           x: $(element).css('left'),
           y: $(element).css('top'),
@@ -274,7 +293,12 @@ export default class FlowController {
         } else {
           cur.flowView.modifyFlow('drag', pipe);
         }
-      });
+      })
+      
+      setTimeout(function () {
+        cur.calculating = false;
+        console.log("calculating done")
+      }, 3000);
     }
 
     //make zoom possible
