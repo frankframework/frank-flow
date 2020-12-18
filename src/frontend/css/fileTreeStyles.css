@@ -56,3 +56,9 @@ div.icons #saveFile:hover {
   opacity: 50%;
   cursor: pointer;
 }
+
+.filePaletteWrapper .file-tree ol.tree ol {
+  border-left: 1px solid gray;
+  margin-left: 1%;
+  padding-left: 10px;
+}
