@@ -25,5 +25,6 @@ export default class XSDCodeCompletionView {
       const xsdFeatures = new XsdFeatures(xsdManager, this.monaco, this.editor);
       xsdFeatures.addCompletion();
       xsdFeatures.addValidation();
+      xsdFeatures.addGenerateAction();
     }
 }
