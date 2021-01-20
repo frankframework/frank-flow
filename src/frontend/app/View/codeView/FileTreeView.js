@@ -149,7 +149,7 @@ export default class FileTreeView {
 
 
   addFile(folder) {
-    let name = prompt("File name: ");
+    const name = prompt("File name: ");
 
     if(name == "") {
       alert('Can\'t make empty file');
@@ -185,10 +185,10 @@ export default class FileTreeView {
         dir.children.push(obj);
       } 
     });
-    let data = this.fileData;
+    const data = this.fileData;
 
     folder = this.replaceEncodings(folder);
-    let root = localStorage.getItem('currentFileRoot');
+    const root = localStorage.getItem('currentFileRoot');
 
     if(folder != root) {
       name = folder + '/' + name;
