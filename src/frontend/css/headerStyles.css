@@ -7,6 +7,7 @@
   background: url("../media/images/header-profile.png") repeat;
   color: white;
   background-color: #233448;
+  height: 6vh;
 }
 
 .header-title {
