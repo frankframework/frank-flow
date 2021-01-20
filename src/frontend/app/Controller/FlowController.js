@@ -188,8 +188,6 @@ export default class FlowController {
             name: sourceDiv.lastElementChild.firstElementChild.innerHTML
           }
           let isGenerating = false;
-          console.log(dragObj.x)
-          console.log(cur.calculating)
           if (dragObj.x == "0px" && cur.calculating == false) {
             cur.calculating = true;
             isGenerating = true;
@@ -202,11 +200,6 @@ export default class FlowController {
             calculateCanvasBorder('top');
             cur.flowView.generateFlow();
           }
-          // console.log(dragObj.x - 236);
-          // console.log($('#canvas').width());
-          // if ((dragObj.x - 236) == $('#canvas').width()) {
-          //   console.log(" ja man werkt")
-          // }
           if ($(sourceDiv).hasClass('exit') && !isGenerating) {
             cur.flowView.modifyFlow('dragExit', dragObj);
           } else if (!isGenerating) {
@@ -276,7 +269,6 @@ export default class FlowController {
     */
 
     function calculateCanvasBorder(direction) {
-      console.log("trigger")
       $('#canvas').css('min-width', '+=500');
       let centerX = parseInt($('#canvas').css('min-width').replace('px', '')) / 2;
 
@@ -297,7 +289,6 @@ export default class FlowController {
       
       setTimeout(function () {
         cur.calculating = false;
-        console.log("calculating done")
       }, 3000);
     }
 
