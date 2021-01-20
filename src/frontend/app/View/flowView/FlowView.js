@@ -287,7 +287,6 @@ export default class FlowView {
     if (!this.horizontalBuild) {
       totalLength = boxOffset + ((64 * i) - 1450);
       windowLength = parseInt($('#canvas').css('height').replace('px', ''));
-      console.log(windowLength)
       if (totalLength > windowLength) {
         $('#canvas').css('height', totalLength);
         this.canvasHeight = totalLength;
