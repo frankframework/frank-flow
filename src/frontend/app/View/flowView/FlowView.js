@@ -17,6 +17,8 @@ export default class FlowView {
     this.flowGenerator = new FlowGenerator(this, flowModel);
     this.getInstance();
     this.fullscreen = true;
+    this.canvasWidth;
+    this.canvasHeight;
   }
 
   toggleEditor(){
@@ -287,12 +289,14 @@ export default class FlowView {
       windowLength = parseInt($('#canvas').css('height').replace('px', ''));
       if (totalLength > windowLength) {
         $('#canvas').css('height', totalLength);
+        this.canvasHeight = totalLength;
       }
     } else {
       totalLength = boxOffset + ((64 * i) - 1000);
       windowLength = parseInt($('#canvas').css('width').replace('px', ''));
       if (totalLength > windowLength && !this.customWidth) {
         $('#canvas').css('width', totalLength);
+        this.canvasWidth = totalLength;
       }
     }
   }
@@ -307,7 +311,7 @@ export default class FlowView {
   // TODO: make an exception class to handle exceptions thrown in flow module.
   displayError(e) {
     this.setHybrid();
-    this.fullscreen = true;
+    this.fullscreen = false;
     instance.reset();
     $('#canvas').empty();
     $('#canvas').css('display', 'none');
