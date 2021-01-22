@@ -39,7 +39,7 @@ export default class FileTreeView {
       for(let key in dir) {
         if(key != "files" && key != "name") {
           let treeDirObject = {
-            id: key,
+            id: directoryName + "/" + key,
             name: '> ' + key,
             type: 'dir',
             children: []
@@ -47,7 +47,7 @@ export default class FileTreeView {
 
           dir[key]._files.forEach(function(file, index) {
             let treeFileObject = {
-              id: directoryName,
+              id: directoryName + "/" + key,
               name: file,
               type: 'file'
             }
@@ -81,6 +81,7 @@ export default class FileTreeView {
   }
 
   replaceEncodings(root) {
+    console.log("Root: ", root);
     root = root.replace(/> /g, '');
     root = root.replace(/\u2304 /g, '');
     return root;
@@ -92,6 +93,8 @@ export default class FileTreeView {
     $('.file').on("click", function (e) {
 
       cur.saveFile();
+
+      //Todo: use jquery instead of getting nodeValue
       let path = e.delegateTarget.attributes[3].nodeValue,
           deployableUnit = e.delegateTarget.attributes[1].nodeValue,
           parent = e.delegateTarget.offsetParent.attributes[1].nodeValue;
@@ -102,14 +105,26 @@ export default class FileTreeView {
 
       console.log("Parent: ", parent, "Path: ", path, "deployable unit: ", deployableUnit);
 
-      if(parent != deployableUnit) {
-        path = parent + '/' + path;
-      }
+      // if(parent != deployableUnit) {
+      //   path = parent + '/' + path;
+      // }
+
 
       localStorage.setItem('currentFile', path);
       localStorage.setItem('currentFileRoot', deployableUnit);
 
-      cur.getSingleFile(deployableUnit, path);
+      let root = deployableUnit.match(/^[^]*?(?=\/)/g)
+
+      if(root == null) {
+        cur.getSingleFile(deployableUnit, path);
+      } else {
+        path = deployableUnit.replace(root, '') + '/' + path;
+        cur.getSingleFile(root[0], path);
+      }
+
+      console.log("\n\n\n Final root: ", root, "Final path: ", path);
+
+
     });
 
     $('.folder').on('click', function (e) {
@@ -122,6 +137,8 @@ export default class FileTreeView {
         text = text.replace(/\u2304 /g, '> ');
       }
       $(e.currentTarget.firstElementChild).text(text);
+      //console.log(text, e);
+      localStorage.setItem('currentFileRoot', text);
     })
 
   }
@@ -187,8 +204,14 @@ export default class FileTreeView {
     });
     let data = this.fileData;
 
-    folder = this.replaceEncodings(folder);
+    
     let root = localStorage.getItem('currentFileRoot');
+
+    root = this.replaceEncodings(root);
+    folder = this.replaceEncodings(folder);
+
+    
+    console.log("ADDING: ", folder, name, root);
 
     if(folder != root) {
       name = folder + '/' + name;
@@ -212,7 +235,7 @@ export default class FileTreeView {
   }
 
 
-  renameFile(path, newPath) {
+  renameFile(deployableUnit, oldName, newName) {
     // let currentFile = localStorage.getItem("currentFile");
     // if (currentFile != null) {
     //   let arr = JSON.parse(localStorage.getItem("changedFiles"));
@@ -230,13 +253,17 @@ export default class FileTreeView {
     // this.zip.file(prependedPath + newPath, fileData);
 
     // localStorage.removeItem(path);
-    // localStorage.setItem(prependedPath + newPath, fileData);
+    // localStorage.setItem(prependedPath + newPath, fileData);s
 
     // let fileTree = []
     // this.prepareFileTree(this.zip, fileTree);
     // $('#fileTreeItems').empty();
     // this.generateTree(fileTree);
     // this.setSaveFileEventListener();
+
+    this.fileService.renameFile(deployableUnit, oldName, newName);
+
+    this.fileService.getConfigurations();
   }
 
   deleteFile(root, path) {

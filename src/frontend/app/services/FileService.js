@@ -53,8 +53,8 @@ export default class FileService {
                 name: name,
                 files: [...fileList._files]
             };
-            for(let key in fileList) {
-                if(key != "_files") {
+            for (let key in fileList) {
+                if (key != "_files") {
                     directoryObject[key] = fileList[key];
                 }
             }
@@ -67,7 +67,7 @@ export default class FileService {
     getSingleFile(deployableUnit, name) {
         //http://localhost/frank-flow/api/configurations/Example/files/?path=InnerExampleFolder/ConfigurationProcessDestination.xml
         const cur = this,
-              path = './api/configurations/' + deployableUnit + '/files/?path=' + name;
+            path = './api/configurations/' + deployableUnit + '/files/?path=' + name;
 
         fetch(path, {
             method: 'GET'
@@ -106,7 +106,7 @@ export default class FileService {
 
     addFile(deployableUnit, name, config) {
         const path = './api/configurations/' + deployableUnit + '/files/?path=' + name,
-              formData = new FormData();
+            formData = new FormData();
 
         formData.append('file', config);
 
@@ -117,6 +117,22 @@ export default class FileService {
             return response.text();
         }).catch(e => {
             console.log('Error adding file: ' + name, e);
+        })
+    }
+
+    renameFile(deployableUnit, name, newName) {
+        const path = './api/configurations/' + deployableUnit + '/files/?path=' + name,
+            cur = this;
+
+
+        fetch(path, {
+            method: 'GET'
+        }).then(response => {
+            return response.text()
+        }).then(text => {
+            cur.deleteFile(deployableUnit, name);
+            cur.addFile(deployableUnit, newName, text);
+            return;
         })
     }
 }
