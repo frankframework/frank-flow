@@ -82,7 +82,9 @@ export default class FileService {
 
 
             let adapterName = data.match(/<Adapter[^]*?name=".*?"/g);
+            console.log(adapterName);
             adapterName = adapterName[0].match(/".*?"/g)[0].replace(/"/g, '');
+            console.log(adapterName);
 
             localStorage.setItem('currentAdapter', adapterName);
 
