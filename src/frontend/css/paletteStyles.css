@@ -5,20 +5,22 @@
   background: url("../media/images/header-profile.png") repeat;
   box-shadow: inset 3px 0px 0px #DDDDDD;
   color: white;
-  /* overflow-y: scroll;
-  overflow-x: hidden; */
+  /* overflow-y: scroll; */
+  overflow-x: hidden;
   overflow: auto;
   border: 1px solid grey;
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 5%;
+  background-color: #233448;
+  /* padding: 5%; */
 }
 
 .palette h2 {
   width: 100%;
-  margin-bottom: 10%;
+  padding-bottom: 4%;
   display: block;
+  padding-left: 5%;
 }
 
 .content {
@@ -26,15 +28,27 @@
   display: block;
   background-color: #FFFFFF;
   border: 1px solid grey;
-  width: 100%;
   height: 10%;
   margin: 3%;
+  cursor: pointer;
 }
+
+.content-group {
+  padding: 0 8px;
+  display: block;
+  background-color: #FFFFFF;
+  border: 2px solid grey;
+  width: 44%;
+  height: 10%;
+  margin: 3%;
+  cursor: pointer;
+}
+
 .content:last-child {
   margin-bottom: 15%;
 }
 
-.content p {
+.content p, .content-group p {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
@@ -45,12 +59,17 @@
   margin: 5px;
 }
 
+.content-group.selected {
+  border: #007bff 2px solid;
+}
+
 .buttonText {
   overflow: hidden;
   white-space: nowrap;
   display: block;
   text-overflow: ellipsis;
 }
+
 
 .collapsible {
   background-color: #777;
@@ -68,4 +87,21 @@
   width: 100%;
   height: 7%;
   background-color: lightgrey;
+}
+
+.groups {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.pipes {
+  width: 100%;
+  height: 50%;
+}
+
+.searchBar {
+  width: 94%;
+  margin: 0 3%;
 }

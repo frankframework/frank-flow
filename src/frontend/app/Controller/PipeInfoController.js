@@ -56,7 +56,7 @@ export default class PipeInfoController {
       pipeName: cur.oldName,
       attribute: attribute
     });
-    this.selectPipe(this.oldName, this.oldType);
+    this.mainController.modifyCode("selectPipe", {name: cur.oldName});
   }
 
   changeAttribute(attribute, attributeValue) {
@@ -66,7 +66,6 @@ export default class PipeInfoController {
       attribute: attribute,
       attributeValue: attributeValue
     })
-    this.selectPipe(this.oldName, this.oldType);
   }
 
   deleteAttribute(attribute) {
@@ -75,7 +74,7 @@ export default class PipeInfoController {
       pipeName: cur.oldName,
       attribute: attribute
     });
-    this.selectPipe(this.oldName, this.oldType);
+    this.mainController.modifyCode("selectPipe", {name: cur.oldName});
   }
 
   addParameter(parameter) {
@@ -84,7 +83,7 @@ export default class PipeInfoController {
       pipeName: cur.oldName,
       paramName: parameter
     })
-    this.selectPipe(this.oldName, this.oldType);
+    this.mainController.modifyCode("selectPipe", {name: cur.oldName});
   }
 
   deleteParameter(parameter) {
@@ -93,7 +92,7 @@ export default class PipeInfoController {
       pipeName: cur.oldName,
       paramName: parameter
     })
-    this.selectPipe(this.oldName, this.oldType);
+    this.mainController.modifyCode("selectPipe", {name: cur.oldName});
   }
 
   addParameterAttribute(parameter, attribute) {
@@ -105,7 +104,7 @@ export default class PipeInfoController {
         attributeName: attribute
       }
     )
-    this.selectPipe(this.oldName, this.oldType);
+    this.mainController.modifyCode("selectPipe", {name: cur.oldName});
   }
 
 
@@ -117,7 +116,6 @@ export default class PipeInfoController {
       attributeName: attribute,
       value: value
     })
-    this.selectPipe(this.oldName, this.oldType);
   }
 
   //_______________event listeners_______________

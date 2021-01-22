@@ -27,16 +27,6 @@ export default class PipeGenerator {
             }
             this.customElementGenerator.addExits(transformedXml.Adapter.Pipeline.Exit);
 
-            if (possitions == "duplicate") {
-                this.flowView.displayError("dupplicate");
-                return;
-            }
-            else if (possitions == null) {
-                this.flowView.setOffsets(false);
-            } else {
-                this.flowView.setOffsets(true);
-            }
-
             if (transformedXml.Adapter.Receiver != null) {
                 let receiver = transformedXml.Adapter.Receiver;
                 if(Array.isArray(receiver)) {
@@ -49,6 +39,14 @@ export default class PipeGenerator {
                 }
             }
 
+            if (possitions == "duplicate") {
+                this.flowView.displayError("dupplicate");
+                return;
+            }
+            else if (possitions == null) {
+                this.flowView.realignFlow();
+            }
+            
             this.forwardGenerator.generateForwards(forwards);
         }
         return this.pipeDict;
@@ -61,7 +59,6 @@ export default class PipeGenerator {
         sortedPipe.forEach((currentPipe, index) => {
             if (sortedPipe[index + 1] != null) {
                 if (sortedPipe[index + 1]['@name'] === currentPipe['@name']) {
-                    console.log('duplicate: ', currentPipe);
                     error = true;
                 }
             }
@@ -154,7 +151,6 @@ export default class PipeGenerator {
         let docText = null;
 
         if (pipe[p].Documentation != null) {
-            console.log(pipe[p].Documentation);
             docText = pipe[p].Documentation;
         }
 
@@ -162,8 +158,14 @@ export default class PipeGenerator {
     }
 
     generateSinglePipe(pipe, forwards) {
-        let name = pipe['@name'];
+        let name = pipe['@name'],
+        xpos = pipe['@x'],
+        ypos = pipe['@y'];
+
+        let possitions = this.checkPossitions(xpos, ypos);
+
         this.pipeDict[name] = new PipeBuilder(this.flowView, name)
+        .withPositions(possitions)
         .build()
         .pipeModel
 

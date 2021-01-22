@@ -1,18 +1,21 @@
 const path = require('path');
 const webpack = require('webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
+  node: {
+    fs: 'empty'
+  },
   mode: 'development',
-  watch: true,
   optimization: {
     splitChunks: {
         cacheGroups: {
             monacoCommon: {
-                test: /[\\/]node_modules[\\/]monaco\-editor/,
+                test: /[\\/]node_modules[\\/]monaco-editor/,
                 name: 'monaco-editor-common',
                 chunks: 'async'
             }
@@ -42,20 +45,15 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
-        loaders: [
-          'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
-          'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
-        ]
-      },
-      {
-        test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
+        use: [
+          'file-loader',
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              disable: true,
+            },
           },
-        },
+        ],
       },
     ]
   },
@@ -63,6 +61,11 @@ module.exports = {
     new CleanWebpackPlugin(),
     new MonacoWebpackPlugin(),
     new MiniCssExtractPlugin(),
+    new BundleAnalyzerPlugin({
+        analyzerMode: 'disabled',
+        generateStatsFile: true,
+        statsOptions: { source: false }
+    }),
     new CopyPlugin({
       patterns: [
         { from: 'index.html', to: path.resolve(__dirname, '../main/resources/frontend') },

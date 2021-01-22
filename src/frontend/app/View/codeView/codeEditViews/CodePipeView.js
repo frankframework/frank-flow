@@ -7,7 +7,7 @@ export default class CodePipeView extends CodeEditView {
   }
   //change the name.
   changeName(oldWord, newWord) {
-    let changed = this.changeNameCode('<[\\S]*?[^"/][pP]ipe(\\n\\t*)?\\s?name="\\w*"', oldWord, newWord);
+    let changed = this.changeNameCode('<[\\S]*?[^"/][pP]ipe[^]*?name="\\w*"', oldWord, newWord);
     if (changed) {
       this.changeNameCode('<forward(\\n\\t*)?(\\s\\w*="(\\s?\\S)*"(\\n\\t*)?)*\\/>', oldWord, newWord);
     }
@@ -61,8 +61,6 @@ export default class CodePipeView extends CodeEditView {
       attributeObjectRegex = '<[\\S]*?[^"/][pP]ipe[\\s\\t\\n][^]*?>[^]*?<[/][\\S]*?[^"/]Pipe>',
       selectPipe = null,
       matches = this.editor.getModel().findMatches(attributeObjectRegex, false, true, false, false);
-    
-      console.log(name, type, oldType)
 
     matches.forEach(function(item, index) {
       let pipe = cur.editor.getModel().getValueInRange(item.range);

@@ -36,7 +36,6 @@ export default class OptionView extends CodeEditView {
     */
 
     if (urlParams.has('configuration') && urlParams.has('adapter')) {
-      console.log(urlParams.get('configuration').replace(/"/g, ''), urlParams.get('adapter'));
       this.editor.setValue(localStorage.getItem("IAF_WebControl"));
       this.editor.setValue(localStorage.getItem(urlParams.get('configuration').replace(/"/g, '')));
       localStorage.setItem('currentAdapter', urlParams.get('adapter').replace(/"/g, ''));

@@ -5,7 +5,7 @@ export default class PipeService {
     }
 
     getPipeWithActivity() {
-        return fetch('./app/pipeWithActivity.json', {method: 'GET'}).then(response => {
+        return fetch('./media/pipeWithActivity.json', {method: 'GET'}).then(response => {
             return response.json();
         })
         .then(data => {

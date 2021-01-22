@@ -15,8 +15,9 @@
 
 	<div class="tools-editors-wrapper">
 		<div class="top-wrapper">
-			<select id="adapterSelect" class="adapter-select">
-			</select>
+			<div id="header-title" class="header-title"><h2>Frank!Flow </h2></div>
+			<!-- <select id="adapterSelect" class="adapter-select">
+			</select> -->
 			<div class="nav-header">
 
 				<div class="profile-element">
@@ -25,14 +26,13 @@
 					</object>
 				</div>
 				<div class="logo-element">
-					<object data="media/images/frank-exclamation.svg" id="logo" type="image/svg+xml">
+					<object data="media/images/frank-exclamation.svg" id="logo!" type="image/svg+xml">
 						<img src="media/images/frank-exclamation.svg" alt="Logo">
 					</object>
 				</div>
 			</div>
 		</div>
 		
-
 		<div class="main-container">
 			<div class="menu-wrapper">
 				<div id="filePaletteWrapper" class="filePaletteWrapper">
@@ -47,6 +47,9 @@
 					</div>
 					<div id="palette" class="palette">
 						<h2>Palette</h2>
+						<div id="groups" class="groups"></div>
+						<input id="searchBar" class="searchBar" type="text" placeholder="Search">
+						<div id="pipes" class="pipes"></div>
 					</div>
 				</div>
 			</div>
@@ -76,10 +79,10 @@
 						<div id="pipeNameTypeInfo" class="pipeNameTypeInfo">
 							<h4>Pipe info</h4>
 							<hr>
-							<label for="name">Name: </label>
+							<label for="pipeInfoName">Name: </label>
 							<input type="text" id="pipeInfoName" placeholder="pipe name" />
 							<br>
-							<label for="type">Type: </label>
+							<label for="typeSelect">Type: </label>
 							<select id="typeSelect">
 
 							</select>

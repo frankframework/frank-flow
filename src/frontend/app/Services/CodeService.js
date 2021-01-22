@@ -23,7 +23,6 @@ export default class CodeService {
             method: 'GET'
         })
             .then(response => {
-                console.log("get the docs!")
                 return response.json()
             })
             .then(data => {
@@ -32,7 +31,6 @@ export default class CodeService {
                 cur.mainController.setPipes(data);
             })
             .catch(err => {
-                console.log("couldn't load ibisdoc, now switching to default ibisdoc", err);
                 this.getDefaultIbisdoc();
             })
 
@@ -44,11 +42,9 @@ export default class CodeService {
             method: 'GET'
         })
             .then(response => {
-                console.log(response)
                 return response.json()
             })
             .then(data => {
-                console.log(data)
                 cur.codeView.ibisdocJson = data;
                 cur.ibisdocModel.setIbisdoc(data);
                 cur.mainController.setPipes(data);
@@ -56,7 +52,6 @@ export default class CodeService {
             .catch(err => {
                 alert("couldn't load pipe palette");
                 console.log(err);
-
             })
     }
 
@@ -69,7 +64,6 @@ export default class CodeService {
             })
             .then(data => {
                 this.xsdModel.setXsd(data);
-                console.log("xsd is loaded!, here");
             })
             .catch(err => {
                 console.log("couldn't load xsd, now loading deafult xsd", err);
@@ -86,7 +80,6 @@ export default class CodeService {
             })
             .then(data => {
                 this.xsdModel.xsd = data;
-                console.log("xsd is loaded!, here");
             })
             .catch(err => {
                 console.log("not loaded xsd", err);
@@ -102,9 +95,9 @@ export default class CodeService {
         }).then(response => {
             return response.json();
         }).then(data => {
-            console.log(data[0]);
             cur.getDeployableUnit(data[0]);
         }).catch(e => {
+            alert('Please check if your ibis started up correctly or if the property "configurations.directory" is set correctly')
             console.log('error getting configs: ' + e);
         })
     }
@@ -135,43 +128,45 @@ export default class CodeService {
         return response.text();
     }).then(data => {
         cur.mainController.codeController.setEditorValue(data);
+        cur.mainController.generateFlow();
     }).catch(e => {
         console.log('error getting configs: ' + e);
     })
     }
 
-    loadZip(configurationName) {
-        configurationName = configurationName.match(/".*?"/g)[0].replace(/"/g, '');
-        console.log(configurationName)
-        const versionPath = '../iaf/api/configurations/' + configurationName + '/versions';
-        const options = {
-            headers: {
-                'Content-disposition': 'attachment; filename="filename.jpg"'
-            },
-            method: 'GET'
-        }
-        fetch(versionPath, options)
-            .then(response => {
-                return response.json();
-            })
-            .then(data => {
-                if (data) {
-                    let version = prompt('please enter a version number');
-                    let ver = data[0].version;
+    // TODO remove after saving file works
+    // loadZip(configurationName) {
+    //     configurationName = configurationName.match(/".*?"/g)[0].replace(/"/g, '');
+    //     console.log(configurationName)
+    //     const versionPath = '../iaf/api/configurations/' + configurationName + '/versions';
+    //     const options = {
+    //         headers: {
+    //             'Content-disposition': 'attachment; filename="filename.jpg"'
+    //         },
+    //         method: 'GET'
+    //     }
+    //     fetch(versionPath, options)
+    //         .then(response => {
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             if (data) {
+    //                 let version = prompt('please enter a version number');
+    //                 let ver = data[0].version;
 
-                    data.forEach(function (item, i) {
-                        if (item.version.match(version + '(?=_)')) {
-                            ver = item.version;
-                        }
-                    })
-                    let zipPath = '../iaf/api/configurations/' + configurationName + '/versions/' + ver + '/download';
-                    fetch(zipPath, { method: 'GET' }).then(response => {
-                        return response.blob();
-                    })
-                        .then(zipFile => {
-                            this.mainController.codeController.fileTreeView.makeTree(zipFile);
-                        })
-                }
-            })
-    }
+    //                 data.forEach(function (item, i) {
+    //                     if (item.version.match(version + '(?=_)')) {
+    //                         ver = item.version;
+    //                     }
+    //                 })
+    //                 let zipPath = '../iaf/api/configurations/' + configurationName + '/versions/' + ver + '/download';
+    //                 fetch(zipPath, { method: 'GET' }).then(response => {
+    //                     return response.blob();
+    //                 })
+    //                     .then(zipFile => {
+    //                         this.mainController.codeController.fileTreeView.makeTree(zipFile);
+    //                     })
+    //             }
+    //         })
+    // }
 }

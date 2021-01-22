@@ -3,15 +3,19 @@ import PaletteView from '../View/paletteView/PaletteView.js';
 
 export default class FlowController {
 
-  constructor(mainController, flowModel) {
+  constructor(mainController, flowModel, ibisdocModel) {
+    this.canvasMarginX = 0;
+    this.canvasMarginY = 0;
+
     this.mainController = mainController;
     this.flowModel = flowModel;
-    this.flowView = new FlowView(flowModel);
+    this.flowView = new FlowView(flowModel, mainController);
     this.flowView.addListener(this);
-    this.paletteView = new PaletteView(this);
-    this.paletteView.addListener(this);
+    this.paletteView = new PaletteView(this, ibisdocModel);
     this.hoverSourceWindow = false;
     this.initHandlers();
+
+
     localStorage.setItem("activityMode", false);
   }
 
@@ -30,7 +34,6 @@ export default class FlowController {
         break;
       case "changeName":
         this.mainController.modifyCode("changeName", data);
-        console.log("name changer")
         break;
       case "changeAddPipe":
         this.mainController.modifyCode("changeAddPipe", data);
@@ -68,30 +71,6 @@ export default class FlowController {
     this.flowView.generateFlow(this.flowView);
   }
 
-  setFullFlow() {
-    $('#flowContainer').addClass('fullFlowContainer');
-    $('#flowContainer').css('display', 'flex');
-    $('#monacoContainer').css('display', 'none');
-    $('#palette').css('display', 'flex');
-    $('.monaco-flow-wrapper').css('justify-content', 'flex-end');
-    this.flowView.customWidth = true;
-  }
-
-  setFullEditor() {
-    $('#monacoContainer').addClass('fullMonacoContainer');
-    $('#monacoContainer').css('display', 'flex');
-    $('#flowContainer').css('display', 'none');
-    $('#palette').css('display', 'none');
-  }
-
-  setHybrid() {
-    $('#monacoContainer').removeClass('fullMonacoContainer');
-    $('#flowContainer').removeClass('fullFlowContainer');
-    $('#palette').css('display', 'flex');
-    $('#monacoContainer').css('display', 'flex');
-    $('#flowContainer').css('display', 'flex');
-  }
-
   setTheme() {
     let theme = prompt('choose your theme!');
     if (theme.match(/theme/gi) == null) return;
@@ -107,24 +86,23 @@ export default class FlowController {
 
   initHandlers() {
     let cur = this;
-    let fullscreen = true;
+    let $panzoom = $('#canvas').panzoom({
+      minScale: 0.5,
+      increment: 0.2
+    });
+
     $.contextMenu({
       selector: '.context-menu-one',
       zIndex: 3001,
       callback: function (key, options) {
         var m = "clicked: " + key;
-        window.console && console.log(m) || alert(m);
+        alert(m);
       },
       items: {
         "flow": {
-          name: "Toggle fullscreen", icon: "fas fa-compress",
+          name: "Toggle editor", icon: "fas fa-compress",
           callback: function () {
-            if(fullscreen) {
-              cur.setHybrid();
-            } else {
-              cur.setFullFlow();
-            }
-            fullscreen = !fullscreen;
+            cur.flowView.toggleEditor();
           }
         },
         "sep1": "---------",
@@ -154,30 +132,26 @@ export default class FlowController {
           }
         },
         "horizontal": {
-          name: "Toggle horizontal", icon: "fas fa-ruler-horizontal",
+          name: "Toggle flow direction", icon: "fas fa-ruler-horizontal",
           callback: function () {
             cur.toggleHorizontal();
+            cur.flowView.realignFlow();
             return true;
           }
         },
-        "xsd": { name: "Run XSD", icon: "fas fa-play-circle" },
         "download": {
-          name: "Export SVG", icon: "paste",
+          name: "Export SVG", icon: "fas fa-file-export",
           callback: function () {
+            $panzoom.panzoom('pan', 0, 0);
+            $panzoom.panzoom('zoom', 0, 0);
             cur.flowView.getImage();
             return true;
-          }
-        },
-        "theme": {
-          name: "Set theme", icon: "fas fa-adjust",
-          callback: function () {
-            cur.setTheme();
           }
         },
         // "editor": {name: "Editor", icon: "fas fa-file-code",
         //   callback: function() {
         //     cur.setFullEditor();
-        //   }}
+        //   }} 
       }
     });
 
@@ -247,10 +221,7 @@ export default class FlowController {
     //set canvas bounded to container.
     var minScaleX = $('#flowContainer').innerWidth();
     var minScaleY = $('#flowContainer').innerHeight();
-    let $panzoom = $('#canvas').panzoom({
-      minScale: 0.5,
-      increment: 0.2
-    });
+
 
     //make sure panzoom doesn't leave the container.
     $panzoom.on('panzoomend', function (e) {
@@ -261,24 +232,37 @@ export default class FlowController {
       }
       if (current_pullY <= -Math.abs($('#canvas').css('height').replace('px', '')) + 1000) {
         $panzoom.panzoom('pan', current_pullX, -Math.abs($('#canvas').css('height').replace('px', '')) + 1000);
-        console.log('y< 1000');
       }
       if (current_pullX <= -1540) {
         $panzoom.panzoom('pan', -1540, current_pullY);
-        console.log('x< 1540');
       }
       if (current_pullY >= 0) {
         $panzoom.panzoom('pan', current_pullX, 0);
-        console.log('y> 0');
       }
       $('#flowContainer').attr('style', '');
     });
 
+    /*
+    save canvas size and update positions in generation.
+
+
+    int canvasSizeX = 0;
+    int canvasSizeY = 0;
+
+    canvasSizeX = 500;
+    canvasSizeY = 200;
+
+    left += canvasSizeX;
+    top += cansSizeY;
+
+    */
+
     function calculateCanvasBorder(direction) {
       $('#canvas').css('min-width', '+=500');
       let centerX = parseInt($('#canvas').css('min-width').replace('px', '')) / 2;
-      console.log('centerX: ' + centerX);
+
       $('.sourceWindow').each((index, element) => {
+
         $(element).css('left', '+=250')
         let pipe = {
           x: $(element).css('left'),
@@ -291,7 +275,6 @@ export default class FlowController {
           cur.flowView.modifyFlow('drag', pipe);
         }
       });
-      console.log('x> 0', $('#canvas').css('min-width'));
     }
 
     //make zoom possible
