@@ -159,7 +159,7 @@ export default class PipeInfoController {
 
     $('.parameterContent').on('click', function(e) {
       let toolbox = e.currentTarget.nextElementSibling;
-      if ($(toolbox).css('display') == 'none') {
+      if ($(toolbox).css('display') === 'none') {
         $(toolbox).css('display', 'block')
       } else {
         $(toolbox).css('display', 'none')

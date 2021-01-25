@@ -38,7 +38,7 @@ export default class PipeInfoView {
     let cur = this;
     this.flowModel.getForwards().forEach(function(item, index) {
 
-      if (item.sourcePipe == cur.pipeName) {
+      if (item.sourcePipe === cur.pipeName) {
         $('#forwardsInfo').append($('<p></p>').text(item.targetPipe + ' - ' + item.name).addClass('forwardInfo'));
       }
     })

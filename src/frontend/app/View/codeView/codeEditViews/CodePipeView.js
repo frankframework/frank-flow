@@ -81,12 +81,12 @@ export default class CodePipeView extends CodeEditView {
       let pipe = cur.editor.getModel().getValueInRange(item.range);
       if (pipe.match('name="' + name + '"')) {
         let newPipe = "";
-        if (pipe.split(/[\s=]/).find(word => word == 'x')) {
+        if (pipe.split(/[\s=]/).find(word => word === 'x')) {
           pipe = pipe.replace(new RegExp('x="[0-9]*"', 'g'), 'x="' + newX + '"');
           pipe = pipe.replace(new RegExp('y="[0-9]*"', 'g'), 'y="' + newY + '"');
         } else {
           let str = ' x="' + newX + '" y="' + newY + '"';
-          if (pipe.indexOf('/>') != -1) {
+          if (pipe.indexOf('/>') !== -1) {
             pipe = pipe.slice(0, pipe.indexOf('/')) + str + pipe.slice(pipe.indexOf('/'));
           } else {
             pipe = pipe.slice(0, pipe.indexOf('>')) + str + pipe.slice(pipe.indexOf('>'));
@@ -126,7 +126,7 @@ export default class CodePipeView extends CodeEditView {
     matches.forEach(function(item, index) {
       let pipe = cur.editor.getModel().getValueInRange(item.range);
       if (pipe.split(/[\s>]/).find(word => word === 'name="' + name + '"')) {
-        path.toLowerCase() == "exit" ? path = "Exit" : path = path;
+        path = path.toLowerCase() === "exit" ? "Exit" : path;
         let newPipe = pipe.replace(new RegExp('<Forward[^/]*?path="' + path + '"[^]*?/>', 'gi'), "");
         cur.edit(item.range, newPipe);
       }
