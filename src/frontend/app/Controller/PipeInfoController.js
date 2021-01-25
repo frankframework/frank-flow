@@ -123,7 +123,7 @@ export default class PipeInfoController {
   setEventListeners() {
     let cur = this;
 
-    $('#pipeInfoName').on('change', function() {
+    $('#pipeInfoName').on('keyup', function() {
       let newName = $(this).val();
       cur.pipeInfoView.setPipeName(newName);
       cur.changeName(cur.oldName, newName);
@@ -137,7 +137,7 @@ export default class PipeInfoController {
 
     //_______________Attributes_______________
 
-    $('#attributesInfo input').on('change', function(e) {
+    $('#attributesInfo input').on('keyup', function(e) {
       let attributeValue = $(e.currentTarget).val(),
       attribute = $(e.currentTarget).attr('name');
 
@@ -184,7 +184,7 @@ export default class PipeInfoController {
       cur.addParameterAttribute(parameterName, attributeName);
     })
 
-    $('#parametersInfo .paramAttributeWrapper input').on('change', function(e) {
+    $('#parametersInfo .paramAttributeWrapper input').on('keyup', function(e) {
       let parameterName = $(this.parentElement).attr('name'),
       attributeName = $(this).attr('id'),
       value = $(this).val();
