@@ -13,7 +13,7 @@ export default class FlowView {
     this.moving = false;
     this.adding = false;
     this.connectorType = "Flowchart";
-    this.horizontalBuild = false;
+    this.horizontalBuild = true;
     this.flowGenerator = new FlowGenerator(this, flowModel);
     this.getInstance();
     this.fullscreen = true;
