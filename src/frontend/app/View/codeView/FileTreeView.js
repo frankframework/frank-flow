@@ -16,6 +16,8 @@ export default class FileTreeView {
 
     const structure = [];
 
+    console.log(input);
+
     input.forEach((dir, index) => {
       const directoryName = '> ' + dir.name;
 
@@ -288,5 +290,9 @@ export default class FileTreeView {
     this.reloadTree(this.fileData);
     this.setSaveFileEventListener();
 
+  }
+
+  addFolder(root, path) {
+    this.fileService.addFolder(root, path);
   }
 }

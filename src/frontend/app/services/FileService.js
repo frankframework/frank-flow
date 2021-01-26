@@ -53,6 +53,7 @@ export default class FileService {
                 name: name,
                 files: [...fileList._files]
             };
+            //sconsole.log(directoryObject)
             for (let key in fileList) {
                 if (key != "_files") {
                     directoryObject[key] = fileList[key];
@@ -82,9 +83,7 @@ export default class FileService {
 
 
             let adapterName = data.match(/<Adapter[^]*?name=".*?"/g);
-            console.log(adapterName);
             adapterName = adapterName[0].match(/".*?"/g)[0].replace(/"/g, '');
-            console.log(adapterName);
 
             localStorage.setItem('currentAdapter', adapterName);
 
@@ -111,6 +110,22 @@ export default class FileService {
             formData = new FormData();
 
         formData.append('file', config);
+
+        fetch(path, {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            return response.text();
+        }).catch(e => {
+            console.log('Error adding file: ' + name, e);
+        })
+    }
+
+    addFolder(deployableUnit, name) {
+        const path = './api/configurations/' + deployableUnit + '/files/?path=' + name,
+            formData = new FormData();
+
+        //formData.append('file', config);
 
         fetch(path, {
             method: 'POST',

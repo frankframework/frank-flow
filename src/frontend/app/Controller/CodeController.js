@@ -51,20 +51,24 @@ export default class CodeController {
       },
       items: {
         "addFile": {
-          name: "Add file", icon: "fas fa-file",
+          name: "Add a file", icon: "fas fa-file",
           callback: function () {
-            let path = $(this).attr('data-name');
+            const path = $(this).attr('data-name');
             cur.fileTreeView.addFile(path);
             return true;
-          },
-          "addFolder": {
+          }
+        },
+        "addFolder": {
             name: "Add folder", icon: "fas fa-folder",
             callback: function() {
-              let name = prompt("Folder name");
-              console.log("Add a folder", name);
+              const name = prompt("Folder name");
+              const root = $(this).attr('data-name');
+              console.log("Add a folder", root + "/" + name);
+
+              cur.fileTreeView.addFolder(root, name);
+              return true;
             }
           }
-        }
       }
     });
 
