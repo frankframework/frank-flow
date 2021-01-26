@@ -19,8 +19,11 @@ export default class FileTreeView {
     console.log(input);
 
     input.forEach((dir, index) => {
+
+      //Name of the deployable unit
       const directoryName = '> ' + dir.name;
 
+      //Object for file tree representation of deployable unit directory.
       let treeDirectoryObject = {
         id: directoryName,
         name: directoryName,
@@ -28,6 +31,7 @@ export default class FileTreeView {
         children: []
       }
 
+      //Objects for file in deployable unit.
       dir.files.forEach((file, fileIndex) => {
         let treeFileObject = {
           id: directoryName,
@@ -38,31 +42,52 @@ export default class FileTreeView {
         treeDirectoryObject.children.push(treeFileObject);
       });
 
-      for(let key in dir) {
-        if(key != "files" && key != "name") {
-          let treeDirObject = {
-            id: directoryName + "/" + key,
-            name: '> ' + key,
-            type: 'dir',
-            children: []
-          }
 
-          dir[key]._files.forEach(function(file, index) {
-            let treeFileObject = {
+      //Make objects for inner directories of deployable unit.
+      for (let key in dir) {
+
+        //If the key is not 'files' or 'name' then it is a inner folder.
+        if (key != "files" && key != "name") {
+
+          //Save path and parent dir.
+          let path = "";
+          let parentDir = dir;
+
+          //At the end of while loop make the inner directory the new parentDir
+          while (parentDir) {
+
+            //Make object for dir
+            let treeDirObject = {
               id: directoryName + "/" + key,
-              name: file,
-              type: 'file'
+              name: '> ' + key,
+              type: 'dir',
+              children: []
             }
 
-            treeDirObject.children.push(treeFileObject);
-          });
+            //Fill dir object with files.
+            dir[key]._files.forEach(function (file, index) {
+              let treeFileObject = {
+                id: directoryName + "/" + key,
+                name: file,
+                type: 'file'
+              }
+
+              treeDirObject.children.push(treeFileObject);
+            });
+
+            //Set here the new parent dir
+            for (let key in parentDir) {
+              if (key != "files" && key != "name") {
+                parentDir = parentDir[key];
+              }
+            }
+          }
 
           treeDirectoryObject.children.push(treeDirObject);
         }
 
 
       }
-
       structure.push(treeDirectoryObject);
     });
 
@@ -98,9 +123,9 @@ export default class FileTreeView {
 
       //Todo: use jquery instead of getting nodeValue
       let path = e.delegateTarget.attributes[3].nodeValue,
-          deployableUnit = e.delegateTarget.attributes[1].nodeValue,
-          parent = e.delegateTarget.offsetParent.attributes[1].nodeValue;
-      
+        deployableUnit = e.delegateTarget.attributes[1].nodeValue,
+        parent = e.delegateTarget.offsetParent.attributes[1].nodeValue;
+
 
       deployableUnit = cur.replaceEncodings(deployableUnit);
       parent = cur.replaceEncodings(parent);
@@ -117,7 +142,7 @@ export default class FileTreeView {
 
       let root = deployableUnit.match(/^[^]*?(?=\/)/g)
 
-      if(root == null) {
+      if (root == null) {
         cur.getSingleFile(deployableUnit, path);
       } else {
         path = deployableUnit.replace(root, '') + '/' + path;
@@ -133,7 +158,7 @@ export default class FileTreeView {
       const folderElement = $(e.currentTarget);
       let text = $(e.currentTarget.firstElementChild).text();
 
-      if(folderElement.hasClass("mjs-nestedSortable-expanded")) {
+      if (folderElement.hasClass("mjs-nestedSortable-expanded")) {
         text = text.replace(/> /g, '\u2304 ');
       } else {
         text = text.replace(/\u2304 /g, '> ');
@@ -151,7 +176,7 @@ export default class FileTreeView {
 
     currentFileRoot = this.replaceEncodings(currentFileRoot);
 
-    if(currentFile != null && currentFileRoot != null) {
+    if (currentFile != null && currentFileRoot != null) {
       this.fileService.addFile(currentFileRoot, currentFile, this.editor.getValue());
     }
   }
@@ -159,7 +184,7 @@ export default class FileTreeView {
   //TODO: add all adapters of current config to adapter select.
   generateAdapters() {
     const currentConfig = localStorage.getItem("currentFile");
-          currentConfig = localStorage.getItem(currentConfig)
+    currentConfig = localStorage.getItem(currentConfig)
 
     let adapters = currentConfig.match(/<Adapter[^]*?>[^]*?<\/Adapter>/g);
 
@@ -170,7 +195,7 @@ export default class FileTreeView {
   addFile(folder) {
     let name = prompt("File name: ");
 
-    if(name == "") {
+    if (name == "") {
       alert('Can\'t make empty file');
       return;
     }
@@ -191,7 +216,7 @@ export default class FileTreeView {
       '\t</Adapter>\n' +
       '</Configuration>\n';
 
-      
+
     //Set object id to root in order to identify the parent folder of the file.
     let obj = {
       id: folder,
@@ -200,22 +225,22 @@ export default class FileTreeView {
     };
 
     this.fileData.forEach((dir, index) => {
-      if(dir.name == folder) {
+      if (dir.name == folder) {
         dir.children.push(obj);
-      } 
+      }
     });
     let data = this.fileData;
 
-    
+
     let root = localStorage.getItem('currentFileRoot');
 
     root = this.replaceEncodings(root);
     folder = this.replaceEncodings(folder);
 
-    
+
     console.log("ADDING: ", folder, name, root);
 
-    if(folder != root) {
+    if (folder != root) {
       name = folder + '/' + name;
     }
     this.reloadTree(data);
@@ -271,8 +296,8 @@ export default class FileTreeView {
   deleteFile(root, path) {
 
     this.fileData.forEach((dir, index) => {
-      
-      if(root == dir.name) {
+
+      if (root == dir.name) {
         dir.children = dir.children.filter((file) => {
           return file.name != path;
         })
