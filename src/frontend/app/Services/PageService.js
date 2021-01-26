@@ -12,7 +12,7 @@ export default class IbisdocService {
 		.then(response => response.json())
 		.catch(e => {
 			alert('Please check if your ibis started up correctly or if the property "configurations.directory" is set correctly')
-			console.log('error getting server info: ' + e);
+			console.error('Error getting server info: ' + e);
 		})
 	}
 }

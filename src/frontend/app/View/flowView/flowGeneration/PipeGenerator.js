@@ -53,8 +53,8 @@ export default class PipeGenerator {
                 }
             }
 
-            if (possitions == "duplicate") {
-                this.flowView.displayError("dupplicate");
+            if (possitions === "duplicate") {
+                this.flowView.displayError("duplicate");
                 return;
             }
             else if (possitions == null) {

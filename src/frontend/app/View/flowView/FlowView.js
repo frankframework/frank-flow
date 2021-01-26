@@ -316,7 +316,7 @@ export default class FlowView {
     $('#canvas').empty();
     $('#canvas').css('display', 'none');
     $('.customErrorMessage').remove();
-    if (e == "dupplicate") {
+    if (e === "duplicate") {
       $('#flowContainer').append(
         $("<h1></h1>").text('Can\'t generate Flow. Duplicate pipe, please remove any duplicates.').addClass('customErrorMessage'),
       );

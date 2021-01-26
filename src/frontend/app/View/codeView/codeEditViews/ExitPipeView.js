@@ -15,8 +15,8 @@ export default class ExitPipeView extends CodeEditView {
     matches.forEach(function(item, index) {
       let exit = cur.editor.getModel().getValueInRange(item.range);
       exit = exit.match('<Exit [^>]*?path="' + name + '"[^]*?\\/>')[0];
-      if (exit.indexOf('path="' + name + '"') != -1) {
-        if (exit.indexOf('x="') != -1) {
+      if (exit.indexOf('path="' + name + '"') !== -1) {
+        if (exit.indexOf('x="') !== -1) {
           exit = '\t\t' + exit.replace(/x="[0-9]*?"/g, 'x="' + newX + '"')
             .replace(/y="[0-9]*?"/g, 'y="' + newY + '"');
         } else {

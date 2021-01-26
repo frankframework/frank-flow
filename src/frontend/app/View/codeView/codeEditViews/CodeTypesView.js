@@ -20,7 +20,7 @@ export default class CodeTypesView {
     occurences.forEach(function(item, index) {
       item = item.replace(/</g, '')
       if (item.search(/[^/][\S]*?[^"/]Pipe[^]*?name=".*?"/) > -1) {
-        if (item.charAt(0) != '/') {
+        if (item.charAt(0) !== '/') {
           let tag = item.slice(item.search(/[^/][\S]*?[^"/]Pipe[^]*?name=".*?"/));
           if (tag.match(/name=".*?"/) != null) {
             name = tag.match(/name=".*?"/)[0].match(/".*?"/)[0].replace(/"/g, '');

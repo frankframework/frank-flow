@@ -52,7 +52,7 @@ export default class PipeView {
 
     this.isExit ? bottomContainer.append(nameText, extraText) : bottomContainer.append(nameText, hr, extraText);
 
-    if (this.isExit | this.types['receiver ' + this.name.replace('(receiver): ', '')] == "Receiver") {
+    if (this.isExit | this.types['receiver ' + this.name.replace('(receiver): ', '')] === "Receiver") {
       el.append(bottomContainer);
     } else {
       el.append(typeWindow, bottomContainer);
@@ -60,7 +60,7 @@ export default class PipeView {
 
     if(this.isExit) {
       this.pipeModel.type = "Exit";
-    } else if (this.types['receiver ' + this.name.replace('(receiver): ', '')] == "Receiver") {
+    } else if (this.types['receiver ' + this.name.replace('(receiver): ', '')] === "Receiver") {
       this.pipeModel.type = "Receiver";
     }
 

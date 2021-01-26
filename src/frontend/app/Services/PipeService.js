@@ -12,7 +12,7 @@ export default class PipeService {
             return data;
         })
         .catch(e => {
-            console.log(e);
+            console.error('Error getting pipe with activity: ' + e);
         })
     }
 }

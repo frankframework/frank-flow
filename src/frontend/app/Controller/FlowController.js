@@ -15,7 +15,7 @@ export default class FlowController {
     this.hoverSourceWindow = false;
     this.initHandlers();
 
-    localStorage.setItem("activityMode", false);
+    localStorage.setItem("activityMode", "false");
   }
 
   //_______________Observer_______________
@@ -23,7 +23,7 @@ export default class FlowController {
   notify(data) {
     if (data == null) {
       return;
-    };
+    }
     switch (data.type) {
       case "convertConfiguration":
         this.flowModel.setTransformedXml(this.mainController.convertConfiguration());
@@ -108,7 +108,7 @@ export default class FlowController {
         "ActivityMode": {
           name: "Toggle activity mode", icon: "fas fa-globe-americas",
           callback: function () {
-            if (localStorage.getItem("activityMode") == "false") {
+            if (localStorage.getItem("activityMode") === "false") {
               localStorage.setItem("activityMode", "true");
             } else {
               localStorage.setItem("activityMode", "false");
@@ -188,14 +188,14 @@ export default class FlowController {
             name: sourceDiv.lastElementChild.firstElementChild.innerHTML
           }
           let isGenerating = false;
-          if (dragObj.x == "0px" && cur.calculating == false) {
+          if (dragObj.x === "0px" && cur.calculating === false) {
             cur.calculating = true;
             isGenerating = true;
             calculateCanvasBorder('left');
             cur.flowView.generateFlow();
             return false;
           }
-          if (dragObj.y == "0px" && cur.calculating == false) {
+          if (dragObj.y === "0px" && cur.calculating === false) {
             cur.calculating = true;
             calculateCanvasBorder('top');
             cur.flowView.generateFlow();

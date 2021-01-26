@@ -14,7 +14,7 @@ export default class XsdService {
                 this.xsdModel.setXsd(data);
             })
             .catch(err => {
-                console.log("couldn't load xsd, now loading deafult xsd", err);
+                console.warning("Couldn't load local XSD, now loading ibis4example XSD: ", err);
                 this.getDefaultXsd();
             })
     }
@@ -30,7 +30,7 @@ export default class XsdService {
                 this.xsdModel.setXsd(data);
             })
             .catch(err => {
-                console.log("not loaded xsd", err);
+                console.error("Error loading ibis4example XSD: ", err);
             })
     }
 }

@@ -25,7 +25,7 @@ export default class ForwardGenerator {
     instance.bind("connection", function (i, c) {
       let counter = 0;
       instance.getAllConnections().forEach(function (conn) {
-        if (conn.sourceId == i.connection.sourceId && conn.targetId == i.connection.targetId) {
+        if (conn.sourceId === i.connection.sourceId && conn.targetId === i.connection.targetId) {
           if (counter < 2) {
             counter++;
           }
@@ -48,7 +48,7 @@ export default class ForwardGenerator {
       //connection already exists so delete the first connection.
       if (counter > 1) {
         instance.getAllConnections().some(function (conn) {
-          if (conn.sourceId == i.connection.sourceId && conn.targetId == i.connection.targetId) {
+          if (conn.sourceId === i.connection.sourceId && conn.targetId === i.connection.targetId) {
             instance.deleteConnection(conn);
             return true;
           }
@@ -82,9 +82,9 @@ export default class ForwardGenerator {
       $(".sourceWindow").each(function (i, element) {
         var $element = $(element)[0];
         let refactoredText = $element.lastChild.firstChild.innerHTML;
-        if (refactoredText == f.sourcePipe) {
+        if (refactoredText === f.sourcePipe) {
           sourcePipe = $($element).attr('id');
-        } else if (refactoredText == f.targetPipe) {
+        } else if (refactoredText === f.targetPipe) {
           targetPipe = $($element).attr('id');
         }
       });
@@ -95,15 +95,15 @@ export default class ForwardGenerator {
       }
 
 
-      if (f.name == 'failure' || f.name == 'exception') {
+      if (f.name === 'failure' || f.name === 'exception') {
         paintStyle.stroke = "#FF0000";
-      } else if (f.name == 'success') {
+      } else if (f.name === 'success') {
         paintStyle.stroke = "#22bb33"
-      } else if (f.name == "request" || f.name == 'response') {
+      } else if (f.name === "request" || f.name === 'response') {
         paintStyle.dashstyle = "2 4";
       }
 
-      if (sourcePipe != "" && targetPipe != "") {
+      if (sourcePipe !== "" && targetPipe !== "") {
 
         instance.connect({
           source: sourcePipe,
