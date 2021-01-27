@@ -32,15 +32,29 @@ export default class PipeGenerator {
                 if(Array.isArray(receiver)) {
                     let cur = this;
                     receiver.forEach(function(item, index) {
-                        forwards.push(cur.customElementGenerator.addReceiver(item, forwards[0].sourcePipe))
+                        if(transformedXml.Adapter.Pipeline['@firstPipe'] != null) {
+                            forwards.push(this.customElementGenerator.addReceiver(receiver, transformedXml.Adapter.Pipeline['@firstPipe']));
+                        } else if (transformedXml.Adapter.Pipeline['@FirstPipe'] != null) {
+                            forwards.push(this.customElementGenerator.addReceiver(receiver, transformedXml.Adapter.Pipeline['@FirstPipe']));
+                        }
+                        else{
+                            forwards.push(this.customElementGenerator.addReceiver(receiver, forwards[0].sourcePipe));
+                        }
                     })
                 } else {
-                    forwards.push(this.customElementGenerator.addReceiver(receiver, forwards[0].sourcePipe));
+                    if(transformedXml.Adapter.Pipeline['@firstPipe'] != null) {
+                        forwards.push(this.customElementGenerator.addReceiver(receiver, transformedXml.Adapter.Pipeline['@firstPipe']));
+                    } else if (transformedXml.Adapter.Pipeline['@FirstPipe'] != null) {
+                        forwards.push(this.customElementGenerator.addReceiver(receiver, transformedXml.Adapter.Pipeline['@FirstPipe']));
+                    }
+                    else{
+                        forwards.push(this.customElementGenerator.addReceiver(receiver, forwards[0].sourcePipe));
+                    }
                 }
             }
 
-            if (possitions == "duplicate") {
-                this.flowView.displayError("dupplicate");
+            if (possitions === "duplicate") {
+                this.flowView.displayError("duplicate");
                 return;
             }
             else if (possitions == null) {

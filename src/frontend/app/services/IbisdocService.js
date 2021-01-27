@@ -18,7 +18,8 @@ export default class IbisdocService {
                 cur.ibisdocModel.setIbisdoc(data);
             })
             .catch(err => {
-                this.getDefaultIbisdoc();
+              console.warn('Couldn\'t load pipe palette from local ibisdoc: ' + err);
+              this.getDefaultIbisdoc();
             })
 
     }
@@ -35,8 +36,8 @@ export default class IbisdocService {
                 cur.ibisdocModel.setIbisdoc(data);
             })
             .catch(err => {
-                alert("couldn't load pipe palette");
-                console.log(err);
+              alert("Couldn't load pipe palette");
+              console.error('Couldn\'t load pipe palette from ibis4example: ' + err);
             })
     }
 }

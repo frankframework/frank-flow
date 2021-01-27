@@ -6,7 +6,7 @@ export default class GenerateInfoAttributesView {
         }
 
         for (let key in attributes) {
-          if (key != "name") {
+          if (key !== "name") {
             let attrWrapper = $('<div></div>').addClass('attributeWrapper'),
               attrLabel = $('<label></label>').text(key + ': ').addClass('forwardInfo'),
               deleteButton = $('<button></button>').text('Delete').attr({

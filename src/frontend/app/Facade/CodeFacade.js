@@ -10,10 +10,8 @@ export default class CodeFacade {
         switch (type) {
           case "getTypes":
             return codeController.getTypes();
-            break;
           case "validateConfiguration":
             return codeController.validateConfiguration();
-            break;
           case "decorateLine":
             codeController.decorateLine(obj.line);
             break;
@@ -47,10 +45,8 @@ export default class CodeFacade {
             break;
           case "getAttributes":
             return codeController.getAttributes(obj.name);
-            break;
           case "getParameters":
             return codeController.getParameters(obj.name);
-            break;
           case "changeAttribute":
             codeController.changeAttribute(obj.pipeName, obj.attribute, obj.attributeValue);
             break;

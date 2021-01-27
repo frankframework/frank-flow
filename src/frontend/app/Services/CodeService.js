@@ -28,10 +28,10 @@ export default class CodeService {
             .then(data => {
                 cur.codeView.ibisdocJson = data;
                 cur.ibisdocModel.setIbisdoc(data);
-                cur.mainController.setPipes(data);
             })
             .catch(err => {
-                this.getDefaultIbisdoc();
+              console.warn('Couldn\'t load pipe palette from local ibisdoc: ' + err);
+              this.getDefaultIbisdoc();
             })
 
     }
@@ -47,11 +47,10 @@ export default class CodeService {
             .then(data => {
                 cur.codeView.ibisdocJson = data;
                 cur.ibisdocModel.setIbisdoc(data);
-                cur.mainController.setPipes(data);
             })
             .catch(err => {
-                alert("couldn't load pipe palette");
-                console.log(err);
+                alert("Couldn't load pipe palette");
+                console.error('Couldn\'t load pipe palette from ibis4example: ' + err);
             })
     }
 
@@ -66,7 +65,7 @@ export default class CodeService {
                 this.xsdModel.setXsd(data);
             })
             .catch(err => {
-                console.log("couldn't load xsd, now loading deafult xsd", err);
+                console.warning("Couldn't load local XSD, now loading ibis4example XSD: ", err);
                 this.getDefaultXsd();
             })
     }
@@ -82,7 +81,7 @@ export default class CodeService {
                 this.xsdModel.xsd = data;
             })
             .catch(err => {
-                console.log("not loaded xsd", err);
+                console.error("Error loading ibis4example XSD: ", err);
             })
     }
 
@@ -97,8 +96,8 @@ export default class CodeService {
         }).then(data => {
             cur.getDeployableUnit(data[0]);
         }).catch(e => {
-            alert('Please check if your ibis started up correctly or if the property Configurations.directory is set correctly')
-            console.log('error getting configs: ' + e);
+            alert('Please check if your ibis started up correctly or if the property "configurations.directory" is set correctly')
+            console.error('Error getting configurations: ' + e);
         })
     }
 
@@ -114,7 +113,7 @@ export default class CodeService {
         }).then(data => {
             cur.mainController.codeController.fileTreeView.makeTree(data._files);
         }).catch(e => {
-            console.log('error getting configs: ' + e);
+            console.error('Error getting configurations: ' + e);
         })
     }
 
@@ -130,43 +129,7 @@ export default class CodeService {
         cur.mainController.codeController.setEditorValue(data);
         cur.mainController.generateFlow();
     }).catch(e => {
-        console.log('error getting configs: ' + e);
+        console.error('Error getting configurations: ' + e);
     })
     }
-
-    // TODO remove after saving file works
-    // loadZip(configurationName) {
-    //     configurationName = configurationName.match(/".*?"/g)[0].replace(/"/g, '');
-    //     console.log(configurationName)
-    //     const versionPath = '../iaf/api/configurations/' + configurationName + '/versions';
-    //     const options = {
-    //         headers: {
-    //             'Content-disposition': 'attachment; filename="filename.jpg"'
-    //         },
-    //         method: 'GET'
-    //     }
-    //     fetch(versionPath, options)
-    //         .then(response => {
-    //             return response.json();
-    //         })
-    //         .then(data => {
-    //             if (data) {
-    //                 let version = prompt('please enter a version number');
-    //                 let ver = data[0].version;
-
-    //                 data.forEach(function (item, i) {
-    //                     if (item.version.match(version + '(?=_)')) {
-    //                         ver = item.version;
-    //                     }
-    //                 })
-    //                 let zipPath = '../iaf/api/configurations/' + configurationName + '/versions/' + ver + '/download';
-    //                 fetch(zipPath, { method: 'GET' }).then(response => {
-    //                     return response.blob();
-    //                 })
-    //                     .then(zipFile => {
-    //                         this.mainController.codeController.fileTreeView.makeTree(zipFile);
-    //                     })
-    //             }
-    //         })
-    // }
 }

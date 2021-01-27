@@ -151,7 +151,7 @@ export default class CodeController {
       if (adapters != null) {
         let adapterName = adapters[adapters.length - 1].match(/name="[^]*?"/g)[0].match(/"[^]*?"/g)[0].replace(/"/g, '');
 
-        if (localStorage.getItem("currentAdapter") != adapterName) {
+        if (localStorage.getItem("currentAdapter") !== adapterName) {
           localStorage.setItem("currentAdapter", adapterName);
           cur.quickGenerate();
         }

@@ -27,7 +27,7 @@ export default class FileService {
                 let obj = await cur.getDeployableUnit(item);
                 fileTree.push(obj);
 
-                if (fileTree.length == data.length) {
+                if (fileTree.length === data.length) {
                     cur.codeController.fileTreeView.makeTree(fileTree);
                     return fileTree;
                 }
@@ -35,8 +35,8 @@ export default class FileService {
 
 
         }).catch(e => {
-            alert('Please check if your ibis started up correctly or if the property Configurations.directory is set correctly')
-            console.log('Error getting configs: ', e);
+            alert('Please check if your ibis started up correctly or if the property "configurations.directory" is set correctly')
+            console.error('Error getting configurations: ', e);
         })
     }
 
@@ -61,7 +61,7 @@ export default class FileService {
             }
             return directoryObject;
         }).catch(e => {
-            console.log('Error getting deployable unit: ' + name, e);
+            console.error('Error getting deployable unit: ' + name, e);
         })
     }
 
@@ -89,7 +89,7 @@ export default class FileService {
 
             cur.codeController.quickGenerate();
         }).catch(e => {
-            console.log('Error getting single file: ', e);
+            console.error('Error getting single file: ', e);
         })
     }
 
@@ -101,7 +101,7 @@ export default class FileService {
         }).then(response => {
             return response.text();
         }).catch(e => {
-            console.log('Error deleting file: ' + name, e);
+            console.error('Error deleting file: ' + name, e);
         })
     }
 
@@ -117,7 +117,7 @@ export default class FileService {
         }).then(response => {
             return response.text();
         }).catch(e => {
-            console.log('Error adding file: ' + name, e);
+            console.error('Error adding file: ' + name, e);
         })
     }
 
