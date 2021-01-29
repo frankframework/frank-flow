@@ -50,39 +50,60 @@ export default class FileTreeView {
         if (key != "files" && key != "name") {
 
           //Save path and parent dir.
-          let path = "";
-          let parentDir = dir;
+          let path = directoryName + "/" + key;
 
+          let previousTreeDirObject = treeDirectoryObject;
+
+          let currentDir = dir;
+          let currentName = key;
+
+          let counter = 0;
           //At the end of while loop make the inner directory the new parentDir
-          while (parentDir) {
+          let treeDirObject;
+          while (currentDir) {
+            counter++;
 
             //Make object for dir
-            let treeDirObject = {
-              id: directoryName + "/" + key,
-              name: '> ' + key,
+            treeDirObject = {
+              id: path,
+              name: '> ' + currentName,
               type: 'dir',
               children: []
             }
 
+            console.log(currentDir);
             //Fill dir object with files.
-            dir[key]._files.forEach(function (file, index) {
+            currentDir[currentName]._files.forEach(function (file, index) {
               let treeFileObject = {
-                id: directoryName + "/" + key,
+                id: path,
                 name: file,
                 type: 'file'
               }
+            
 
               treeDirObject.children.push(treeFileObject);
             });
 
+            console.log(treeDirObject);
+
+            previousTreeDirObject.children.push(treeDirObject);
             //Set here the new parent dir
-            for (let key in parentDir) {
-              if (key != "files" && key != "name") {
-                parentDir = parentDir[key];
+            console.log(currentDir);
+            for (let obj in currentDir) {
+              if (obj != "files" && obj != "name" && obj != "_files") {
+                console.log(obj);
+                previousTreeDirObject = treeDirObject;
+                currentDir = currentDir[obj];
+                path += "/" + obj;
+                currentName = obj;
               }
             }
-          }
 
+            if(counter == 5) {
+              currentDir = null;
+              break;
+            }
+          }
           treeDirectoryObject.children.push(treeDirObject);
         }
 
