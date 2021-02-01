@@ -107,7 +107,6 @@ export default class FileTreeView {
           treeDirectoryObject.children.push(treeDirObject);
         }
 
-
       }
       structure.push(treeDirectoryObject);
     });
