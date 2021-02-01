@@ -94,7 +94,8 @@
 }
 
 .element-disabled {
-  outline: 2px solid lightblue;
+  border: 2px solid lightblue;
+  margin: calc(0.5em - 2px);
   border-radius: 10px;
 }
 
