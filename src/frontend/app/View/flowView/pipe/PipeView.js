@@ -48,11 +48,11 @@ export default class PipeView {
         typeWindow = $('<div></div>').addClass("typeWindow").append(this.getTypeImage(), typeText),
         nameText = $("<strong></strong>").attr("id", "strong").text(this.name),
         hr = $('<hr>'),
-        extraText = $("<strong></strong>").attr("id", "strong").text(this.extra);
+        extraText = this.extra ? $("<strong></strong>").attr("id", "strong").text(this.extra) : null;
 
     this.isExit ? bottomContainer.append(nameText, extraText) : bottomContainer.append(nameText, hr, extraText);
 
-    if (this.isExit | this.types['receiver ' + this.name.replace('(receiver): ', '')] === "Receiver") {
+    if (this.isExit || this.types['receiver ' + this.name.replace('(receiver): ', '')] === "Receiver") {
       el.append(bottomContainer);
     } else {
       el.append(typeWindow, bottomContainer);

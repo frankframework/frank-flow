@@ -54,7 +54,7 @@
     "mini-css-extract-plugin": "^0.11.1",
     "monaco-editor": "^0.20.0",
     "monaco-editor-webpack-plugin": "^1.9.0",
-    "monaco-xsd-code-completion": "^0.9.0",
+    "monaco-xsd-code-completion": "^0.10.0",
     "simplebar": "^5.2.1",
     "style-loader": "^1.2.1",
     "thread-loader": "^3.0.1",
