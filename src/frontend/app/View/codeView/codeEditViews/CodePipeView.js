@@ -4,6 +4,7 @@ export default class CodePipeView extends CodeEditView {
 
   constructor(editor) {
     super(editor);
+    this.setEventListeners();
   }
   //change the name.
   changeName(oldWord, newWord) {
@@ -152,6 +153,34 @@ export default class CodePipeView extends CodeEditView {
       let newPipe = '\t\t\t<' + className + ' name="' + name + '" x="' + possitions.x + '" y="' + possitions.y + '">\n\n\t\t\t</' + className + '>\n';
       cur.edit(range, newPipe);
       return true;
+    });
+  }
+
+  //delete a pipe
+  deletePipe() {
+    console.log("starting");
+    let cur = this;
+    let attributeObjectRegex = '<[\\S]*?[^"/][pP]ipe[\\s\\t\\n][^]*?>[^]*?<[/][\\S]*?[^"/][pP]ipe>';
+    let matches = this.editor.getModel().findMatches(attributeObjectRegex, false, true, false, false);
+    let name = localStorage.getItem("activePipe");
+    console.log(name);
+    matches.forEach(function(item, index) {
+      let pipe = cur.editor.getModel().getValueInRange(item.range);
+      if (pipe.split(/[\s>]/).find(word => word === 'name="' + name + '"')) {
+        console.log("starting if ");
+        let newPipe = '';
+        cur.edit(item.range, newPipe);
+      }
+    });
+  }
+
+  setEventListeners() {
+    const cur = this;
+    $(document).keydown(function(e){
+      if(e.keyCode == 'delete' || 'Delete') {
+        console.log('key pressed', e);
+        cur.deletePipe();
+      }
     });
   }
 }
