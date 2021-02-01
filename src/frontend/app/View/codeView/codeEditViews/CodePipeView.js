@@ -158,16 +158,13 @@ export default class CodePipeView extends CodeEditView {
 
   //delete a pipe
   deletePipe() {
-    console.log("starting");
     let cur = this;
     let attributeObjectRegex = '<[\\S]*?[^"/][pP]ipe[\\s\\t\\n][^]*?>[^]*?<[/][\\S]*?[^"/][pP]ipe>';
     let matches = this.editor.getModel().findMatches(attributeObjectRegex, false, true, false, false);
     let name = localStorage.getItem("activePipe");
-    console.log(name);
     matches.forEach(function(item, index) {
       let pipe = cur.editor.getModel().getValueInRange(item.range);
       if (pipe.split(/[\s>]/).find(word => word === 'name="' + name + '"')) {
-        console.log("starting if ");
         let newPipe = '';
         cur.edit(item.range, newPipe);
       }
@@ -177,7 +174,7 @@ export default class CodePipeView extends CodeEditView {
   setEventListeners() {
     const cur = this;
     $(document).keydown(function(e){
-      if(e.keyCode == 'delete' || 'Delete') {
+      if(e.keyCode == 46) {
         console.log('key pressed', e);
         cur.deletePipe();
       }
