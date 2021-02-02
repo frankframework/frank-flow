@@ -11,7 +11,7 @@ export default class XSDCodeCompletionView {
     }
 
     notify(data) {
-      const xsdManager = new XsdManager();
+      const xsdManager = new XsdManager(this.editor);
 
       // TODO: Use the real path as used in the configurations.
       //  This should be loaded dynamically. (xsdManager.update())
@@ -20,6 +20,7 @@ export default class XSDCodeCompletionView {
         value: data,
         namespace: 'xs',
         nonStrictPath: true,
+        includeIfRootTag: ['Configuration', 'Module', 'Adapter'],
       });
 
       const xsdFeatures = new XsdFeatures(xsdManager, this.monaco, this.editor);
