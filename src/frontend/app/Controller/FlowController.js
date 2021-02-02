@@ -90,6 +90,10 @@ export default class FlowController {
       increment: 0.2
     });
 
+    $('#canvas').panzoom("option", {
+      $reset: $('.reset-panzoom')
+    });
+
     $.contextMenu({
       selector: '.context-menu-one',
       zIndex: 3001,
@@ -244,8 +248,8 @@ export default class FlowController {
       if (current_pullY <= -Math.abs($('#canvas').css('height').replace('px', '')) + 1000) {
         $panzoom.panzoom('pan', current_pullX, -Math.abs($('#canvas').css('height').replace('px', '')) + 1000);
       }
-      if (current_pullX <= -1540) {
-        $panzoom.panzoom('pan', -1540, current_pullY);
+      if (current_pullX <= -Math.abs($('#canvas').css('width').replace('px', '')) + 1000) {
+        $panzoom.panzoom('pan', -Math.abs($('#canvas').css('width').replace('px', '')) + 1000, current_pullY);
       }
       if (current_pullY >= 0) {
         $panzoom.panzoom('pan', current_pullX, 0);
