@@ -104,7 +104,9 @@ export default class FlowController {
       panzoom.zoomWithWheel(event)
     })
 
-    document.getElementById('reset-panzoom').addEventListener('click', panzoom.reset)
+    document.getElementById('panzoom-reset').addEventListener('click', panzoom.reset)
+    document.getElementById('panzoom-zoom-in').addEventListener('click', panzoom.zoomIn)
+    document.getElementById('panzoom-zoom-out').addEventListener('click', panzoom.zoomOut)
 
     $.contextMenu({
       selector: '.context-menu-one',

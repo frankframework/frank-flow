@@ -17,11 +17,19 @@
   position: absolute;
 }
 
-.floating-button {
+.floating-button-bar {
   position: absolute;
   top: 50px;
   right: 50px;
+  display: flex;
+  gap: 1em;
+}
+
+.floating-button {
   padding: 0.5em;
+  height: 42px;
+  min-width: 42px;
+  text-align: center;
   background-color: #233448;
   color: white;
   font-weight: bold;
