@@ -75,11 +75,10 @@ export default class FileTreeView {
                 type: 'file'
               }
 
-
               treeDirObject.children.push(treeFileObject);
             });
 
-            console.log(treeDirObject);
+            console.log("push ", treeDirObject, "to ", previousTreeDirObject);
 
             previousTreeDirObject.children.push(treeDirObject);
             //Set here the new parent dir
@@ -151,7 +150,7 @@ export default class FileTreeView {
       deployableUnit = cur.replaceEncodings(deployableUnit);
       parent = cur.replaceEncodings(parent);
 
-      console.log("Parent: ", parent, "Path: ", path, "deployable unit: ", deployableUnit);
+      //console.log("Parent: ", parent, "Path: ", path, "deployable unit: ", deployableUnit);
 
       // if(parent != deployableUnit) {
       //   path = parent + '/' + path;
@@ -170,7 +169,7 @@ export default class FileTreeView {
         cur.getSingleFile(root[0], path);
       }
 
-      console.log("\n\n\n Final root: ", root, "Final path: ", path);
+      //console.log("\n\n\n Final root: ", root, "Final path: ", path);
 
 
     });
