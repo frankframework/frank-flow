@@ -90,6 +90,10 @@ export default class FlowController {
       increment: 0.2
     });
 
+    $('#canvas').panzoom("option", {
+      $reset: $('.reset-panzoom')
+    });
+
     $.contextMenu({
       selector: '.context-menu-one',
       zIndex: 3001,

@@ -18,6 +18,24 @@
   position: absolute;
 }
 
+.floating-button {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  padding: 0.5em;
+  background-color: #233448;
+  color: white;
+  font-weight: bold;
+  border: 1px solid #333;
+  box-shadow: 0 0 15px #333;
+  border-radius: 10px;
+}
+
+.floating-button:hover {
+  background-color: #374c66;
+  box-shadow: 0 0 15px black;
+}
+
 .source-target-demo .window {
   display: flex;
   flex-direction: column;
