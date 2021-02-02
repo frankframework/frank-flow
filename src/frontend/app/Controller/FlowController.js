@@ -97,6 +97,7 @@ export default class FlowController {
     })
 
     canvas.addEventListener('wheel', panzoom.zoomWithWheel)
+    document.getElementById('reset-panzoom').addEventListener('click', panzoom.reset)
 
     $.contextMenu({
       selector: '.context-menu-one',
@@ -149,8 +150,8 @@ export default class FlowController {
         "download": {
           name: "Export SVG", icon: "fas fa-file-export",
           callback: function () {
-            // $panzoom.panzoom('pan', 0, 0);
-            // $panzoom.panzoom('zoom', 0, 0);
+            panzoom.pan(0, 0);
+            panzoom.zoom(0);
             cur.flowView.getImage();
             return true;
           }
