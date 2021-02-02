@@ -97,11 +97,11 @@ export default class FlowController {
     })
 
     canvas.addEventListener('wheel', (event) => {
-      if (!event.shiftKey) return
+      if (!event.shiftKey) {
+        panzoom.pan(-event.deltaX * 10, -event.deltaY * 10, {relative: true})
+        return
+      }
       panzoom.zoomWithWheel(event)
-    })
-    canvas.addEventListener('wheel', (event) => {
-      panzoom.pan(-event.deltaX * 10, -event.deltaY * 10, {relative: true})
     })
 
     document.getElementById('reset-panzoom').addEventListener('click', panzoom.reset)
