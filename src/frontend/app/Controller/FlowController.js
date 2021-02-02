@@ -96,7 +96,14 @@ export default class FlowController {
       contain: 'outside'
     })
 
-    canvas.addEventListener('wheel', panzoom.zoomWithWheel)
+    canvas.addEventListener('wheel', (event) => {
+      if (!event.shiftKey) return
+      panzoom.zoomWithWheel(event)
+    })
+    canvas.addEventListener('wheel', (event) => {
+      panzoom.pan(-event.deltaX * 10, -event.deltaY * 10, {relative: true})
+    })
+
     document.getElementById('reset-panzoom').addEventListener('click', panzoom.reset)
 
     $.contextMenu({
