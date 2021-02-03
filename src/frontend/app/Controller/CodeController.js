@@ -148,12 +148,6 @@ export default class CodeController {
         });
       }
     })
-
-    $(document).keydown(function(e){
-      if(e.keyCode == 46) {
-        cur.codeView.codePipeView.deletePipe()
-      }
-    });
   }
 
   //_______________Custom methods to be called from handlers_______________
@@ -260,5 +254,7 @@ export default class CodeController {
   changeParameterAttribute(pipeName, paramName, attribute, value) {
     this.codeView.changeParameterAttribute(pipeName, paramName, attribute, value);
   }
-
+  deletePipe() {
+    this.codeView.codePipeView.deletePipe()
+  }
 }
