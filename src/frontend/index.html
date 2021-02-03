@@ -32,7 +32,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="main-container">
 			<div class="menu-wrapper">
 				<div id="filePaletteWrapper" class="filePaletteWrapper">
@@ -61,8 +61,16 @@
 					<div id="flowContainer" class="flowContainer" tabindex="0">
 						<div class="jtk-demo-canvas source-target-demo normalTheme context-menu-one" id="canvas">
 						</div>
-            <div class="floating-button reset-panzoom">
-              Reset zoom
+            <div class="floating-button-bar">
+              <div class="floating-button" id="panzoom-zoom-out">
+                <i class="fa fa-minus" aria-hidden="true"></i>
+              </div>
+              <div class="floating-button" id="panzoom-zoom-in">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+              </div>
+            <div class="floating-button" id="panzoom-reset">
+                <i class="fa fa-compass" aria-hidden="true"></i>
+            </div>
             </div>
 					</div>
 				</div>
@@ -113,7 +121,7 @@
 	</div>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
-	
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js" integrity="sha512-rCjfoab9CVKOH/w/T6GbBxnAH5Azhy4+q1EXW5XEURefHbIkRbQ++ZR+GBClo3/d3q583X/gO4FKmOFuhkKrdA==" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.panzoom/3.2.3/jquery.panzoom.js" integrity="sha512-cY2lQHYUbJbv7phuZYDe1uAJfbuNPgl/qANxb+XWheng3urrXGPHNWqgzAASUwagi0YGfMwmHtbQ7RjA5ZJIUQ==" crossorigin="anonymous"></script>
