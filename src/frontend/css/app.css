@@ -7,13 +7,6 @@ hr {
   border: 1px solid black;
 }
 
-#strong {
-  width: 100%;
-  white-space: normal;
-  word-break: break-all;
-  text-align: center;
-}
-
 .main-container {
   height: 100%;
   width: 100%;
