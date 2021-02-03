@@ -41,7 +41,6 @@ export default class FileTreeView {
       });
 
 
-      //Make objects for inner directories of deployable unit.
       for (let key in dir) {
 
         //If the key is not 'files' or 'name' then it is a inner folder.
@@ -51,14 +50,10 @@ export default class FileTreeView {
           let previousTreeDirObject = treeDirectoryObject;
           let currentDir = dir[key];
           let currentName = key;
-          let counter = 0;
           let treeDirObject;
 
-          //At the end of while loop make the inner directory the new parentDir
           while (currentDir) {
-            counter++;
 
-            //Make object for dir
             treeDirObject = {
               id: path,
               name: '> ' + currentName,
@@ -66,7 +61,6 @@ export default class FileTreeView {
               children: []
             }
 
-            console.log(currentDir, currentName);
             //Fill dir object with files.
             currentDir._files.forEach(function (file, index) {
               let treeFileObject = {
@@ -81,8 +75,6 @@ export default class FileTreeView {
             console.log("push ", treeDirObject, "to ", previousTreeDirObject);
 
             previousTreeDirObject.children.push(treeDirObject);
-            //Set here the new parent dir
-            console.log(currentDir, "size: ", Object.keys(currentDir).length);
 
             if (Object.keys(currentDir).length == 1) {
               currentDir = null;
@@ -90,7 +82,6 @@ export default class FileTreeView {
             } else {
               for (let obj in currentDir) {
                 if (obj != "files" && obj != "name" && obj != "_files") {
-                  console.log(obj);
                   previousTreeDirObject = treeDirObject;
                   currentDir = currentDir[obj];
                   path += "/" + obj;
@@ -99,14 +90,7 @@ export default class FileTreeView {
               }
             }
 
-
-            // if(counter == 2) {
-            //   currentDir = null;
-            //   break;
-            // }
           }
-          // SEARCH HERE!
-          //treeDirectoryObject.children.push(treeDirObject);
         }
 
       }
@@ -153,11 +137,6 @@ export default class FileTreeView {
 
       //console.log("Parent: ", parent, "Path: ", path, "deployable unit: ", deployableUnit);
 
-      // if(parent != deployableUnit) {
-      //   path = parent + '/' + path;
-      // }
-
-
       localStorage.setItem('currentFile', path);
       localStorage.setItem('currentFileRoot', deployableUnit);
 
@@ -169,9 +148,6 @@ export default class FileTreeView {
         path = deployableUnit.replace(root, '') + '/' + path;
         cur.getSingleFile(root[0], path);
       }
-
-      //console.log("\n\n\n Final root: ", root, "Final path: ", path);
-
 
     });
 
@@ -185,7 +161,7 @@ export default class FileTreeView {
         text = text.replace(/\u2304 /g, '> ');
       }
       $(e.currentTarget.firstElementChild).text(text);
-      //console.log(text, e);
+
       localStorage.setItem('currentFileRoot', text);
     })
 
@@ -193,9 +169,9 @@ export default class FileTreeView {
 
   saveFile() {
     const currentFile = localStorage.getItem('currentFile');
+    
     let currentFileRoot = localStorage.getItem('currentFileRoot');
-
-    currentFileRoot = this.replaceEncodings(currentFileRoot);
+        currentFileRoot = this.replaceEncodings(currentFileRoot);
 
     if (currentFile != null && currentFileRoot != null) {
       this.fileService.addFile(currentFileRoot, currentFile, this.editor.getValue());
@@ -204,8 +180,8 @@ export default class FileTreeView {
 
   //TODO: add all adapters of current config to adapter select.
   generateAdapters() {
-    const currentConfig = localStorage.getItem("currentFile");
-    currentConfig = localStorage.getItem(currentConfig)
+    let currentConfig = localStorage.getItem("currentFile");
+        currentConfig = localStorage.getItem(currentConfig)
 
     let adapters = currentConfig.match(/<Adapter[^]*?>[^]*?<\/Adapter>/g);
 
@@ -214,14 +190,16 @@ export default class FileTreeView {
 
 
   addFile(folder) {
+
     const name = prompt("File name: ");
+    const displayName = name.replace(/\.[^]*/g, '');
 
     if (name == "") {
       alert('Can\'t make empty file');
       return;
     }
 
-    const displayName = name.replace(/\.[^]*/g, '');
+
 
     const defaultConfig = '<Configuration name="' + displayName + '">\n' +
       '\t<Adapter name="' + displayName + 'Adapter"> \n' +
@@ -250,22 +228,18 @@ export default class FileTreeView {
         dir.children.push(obj);
       }
     });
+
     const data = this.fileData;
-
-
     const root = localStorage.getItem('currentFileRoot');
 
     root = this.replaceEncodings(root);
     folder = this.replaceEncodings(folder);
 
-
-    console.log("ADDING: ", folder, name, root);
-
     if (folder != root) {
       name = folder + '/' + name;
     }
-    this.reloadTree(data);
 
+    this.reloadTree(data);
     this.fileService.addFile(root, name, defaultConfig);
     this.setSaveFileEventListener();
   }
