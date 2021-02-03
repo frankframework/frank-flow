@@ -238,6 +238,7 @@ export default class FlowView {
         if(this.horizontalBuild) {
           x = '' + (boxOffset + 250);
           y = '450';
+          boxOffset += (parseInt(box.css('width').replace('px', ''))) - 220;
         } else {
           x = '100';
           y = '' + boxOffset;

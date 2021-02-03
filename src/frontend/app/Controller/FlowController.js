@@ -181,6 +181,12 @@ export default class FlowController {
       })
     })
 
+    $(document).keydown(function(e){
+      if(e.keyCode == 46) {
+        cur.mainController.modifyCode("deletePipe");
+      }
+    });
+
     //make the bottom container draggable with mouseover
     $('#canvas').on("mouseover", ".bottomContainer" , function () {
       let sourceDiv = this.parentElement;

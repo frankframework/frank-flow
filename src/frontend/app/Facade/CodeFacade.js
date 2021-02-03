@@ -68,6 +68,9 @@ export default class CodeFacade {
           case "changeParameterAttribute":
             codeController.changeParameterAttribute(obj.pipeName, obj.paramName, obj.attributeName, obj.value);   
             break;
+          case "deletePipe":
+            codeController.deletePipe();
+            break;
         }
     }
 }

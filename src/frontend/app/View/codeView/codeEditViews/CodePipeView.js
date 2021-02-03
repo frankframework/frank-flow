@@ -133,6 +133,20 @@ export default class CodePipeView extends CodeEditView {
     });
   }
 
+  //delete all forwards
+  deleteAllForwards(path){
+    let cur = this;
+    let attributeObjectRegex = '<[^"\/\s]*Forward(\\n|[^])*?\/>';
+    let matches = this.editor.getModel().findMatches(attributeObjectRegex, false, true, false, false);
+    matches.forEach(function(item, index) {
+      let forward = cur.editor.getModel().getValueInRange(item.range);
+      if (forward.match('<[^"\\/\\s]*Forward(\\n|[^>])*?path="' + path + '"*')) {
+        let newForward = "";
+        cur.edit(item.range, newForward);
+      }
+    });
+  }
+
   // a method to add a pipe by hand.
   changeAddPipe(name, possitions, className = "customPipe") {
     let cur = this;
@@ -152,6 +166,22 @@ export default class CodePipeView extends CodeEditView {
       let newPipe = '\t\t\t<' + className + ' name="' + name + '" x="' + possitions.x + '" y="' + possitions.y + '">\n\n\t\t\t</' + className + '>\n';
       cur.edit(range, newPipe);
       return true;
+    });
+  }
+
+  //delete a pipe
+  deletePipe() {
+    let cur = this;
+    let attributeObjectRegex = '<[\\S]*?[^"/][pP]ipe[\\s\\t\\n][^]*?>[^]*?<[/][\\S]*?[^"/][pP]ipe>';
+    let matches = this.editor.getModel().findMatches(attributeObjectRegex, false, true, false, false);
+    let name = localStorage.getItem("activePipe");
+    matches.forEach(function(item, index) {
+      let pipe = cur.editor.getModel().getValueInRange(item.range);
+      if (pipe.match('<[^"\\/\\s]*Pipe(\\n|[^>])*?name="' + name + '"*') && window.confirm("Are you sure you want to delete this pipe")) {
+        let newPipe = "";
+        cur.edit(item.range, newPipe);
+        cur.deleteAllForwards(name);
+      }
     });
   }
 }
