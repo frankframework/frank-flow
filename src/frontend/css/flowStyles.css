@@ -4,7 +4,7 @@
   border: 1px solid grey;
   position: relative;
   background-color: grey;
-  overflow: scroll;
+  overflow: hidden;
 }
 
 .fullFlowContainer {
@@ -18,12 +18,29 @@
   position: absolute;
 }
 
+.floating-button {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  padding: 0.5em;
+  background-color: #233448;
+  color: white;
+  font-weight: bold;
+  border: 1px solid #333;
+  box-shadow: 0 0 15px #333;
+  border-radius: 10px;
+}
+
+.floating-button:hover {
+  background-color: #374c66;
+  box-shadow: 0 0 15px black;
+}
+
 .source-target-demo .window {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  padding: 0.5em;
 }
 
 /** ENABLE/DISABLE LINK **/
@@ -39,30 +56,51 @@
   color: orange;
 }
 
-.bottomContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  height: 50%;
-  margin-bottom: 10%;
-}
-
-.typeImg {
-  width: 40px;
-  height: 40px;
+.sourceWindow {
+  margin: 0.5em;
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  border-radius: 10px;
+  min-width: 220px;
+  min-height: 100px;
+  z-index: 3000;
 }
 
 .typeWindow {
+  height: 32px;
+  line-height: 32px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
   width: 100%;
-  height: 20%;
-  position: relative;
-  bottom: 0%;
-  overflow: visible;
+  margin: 0.5em;
+}
+
+.typeImg {
+  height: 32px;
+}
+
+.bottomContainer {
+  margin: 0.5em;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.bottomContainer strong {
+  word-break: break-word;
+}
+
+.bottomContainer hr {
+  border: 1px dashed gray;
+  margin: 1px;
+}
+
+.bottomContainer hr:last-child {
+  display: none;
 }
 
 .enableDisableTarget {
@@ -74,22 +112,9 @@
 }
 
 .element-disabled {
-  outline: 2px solid lightblue;
-}
-
-.sourceWindow {
-  background-color: white;
-  border: 1px solid black;
-  color: black;
+  border: 2px solid lightblue;
+  margin: calc(0.5em - 2px);
   border-radius: 10px;
-  left: 14em;
-  min-width: 220px;
-  width: auto;
-  height: 190px;
-  z-index: 3000;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .description {
@@ -123,14 +148,8 @@
 .exit {
   border-radius: 50%;
   height: 100px;
-  width: 100px;
-  text-align: center;
-}
-
-.exit strong {
-  margin-top: 8%;
-}
-
-.exit .typeWindow {
-  bottom: 70%;
+  width: 100px!important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
