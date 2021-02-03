@@ -105,7 +105,8 @@ export default class FileTreeView {
             //   break;
             // }
           }
-          treeDirectoryObject.children.push(treeDirObject);
+          // SEARCH HERE!
+          //treeDirectoryObject.children.push(treeDirObject);
         }
 
       }
