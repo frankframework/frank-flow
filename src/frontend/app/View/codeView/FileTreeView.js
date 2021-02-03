@@ -41,9 +41,11 @@ export default class FileTreeView {
       });
 
 
+      //TODO: make this for loop a different function.
       for (let key in dir) {
 
         //If the key is not 'files' or 'name' then it is a inner folder.
+        //TODO: make a positive return statement.
         if (key != "files" && key != "name") {
 
           let path = directoryName + "/" + key;
@@ -101,10 +103,12 @@ export default class FileTreeView {
     this.reloadTree(structure);
     this.setSaveFileEventListener();
 
-    this.getSingleFile(structure[0].name, structure[0].children[0].name);
+    const root = structure[0].name;
+    const file = structure[0].children[0].name;
 
-    localStorage.setItem('currentFileRoot', structure[0].name);
-    localStorage.setItem('currentFile', structure[0].children[0].name);
+    this.getSingleFile(root, file);
+    localStorage.setItem('currentFileRoot', root);
+    localStorage.setItem('currentFile', file);
 
   }
 
@@ -169,7 +173,7 @@ export default class FileTreeView {
 
   saveFile() {
     const currentFile = localStorage.getItem('currentFile');
-    
+
     let currentFileRoot = localStorage.getItem('currentFileRoot');
         currentFileRoot = this.replaceEncodings(currentFileRoot);
 
