@@ -14,11 +14,12 @@
   white-space: nowrap;
   display: flex;
   flex-direction: row;
-  padding-left: 5px;
+  padding-left: 15px;
 }
 
 .top-wrapper h2 {
   margin-left: 15px;
+  margin-bottom: 0px;
 }
 
 .adapter-select{
