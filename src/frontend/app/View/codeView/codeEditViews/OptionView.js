@@ -50,10 +50,7 @@ export default class OptionView extends CodeEditView {
   stripFlow() {
     $('.top-wrapper').css('display', 'none');
     $('#palette').css('display', 'none');
-    $('.pipeInfoWrapper').css('display', 'none')
-    $('.monaco-flow-wrapper').css('height', '100%')
-    $('#canvas').panzoom("zoom", true, 1);
-    $('#canvas').panzoom("zoom", true, 1);
-    $('#canvas').panzoom("pan", -500, -300);
+    $('.pipeInfoWrapper').css('display', 'none');
+    $('.monaco-flow-wrapper').css('height', '100%');
   }
 }
