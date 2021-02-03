@@ -32,12 +32,12 @@ export default class ConfigurationConverter {
 	      transformedXml.Configuration.Module.forEach(function(item, index) {
 	        if (Array.isArray(item.Adapter)) {
 	          item.Adapter.forEach(function(item, index) {
-	            if (item["@name"] != null && item["@name"] == localStorage.getItem("currentAdapter")) {
+	            if (item["@name"] != null && item["@name"] === localStorage.getItem("currentAdapter")) {
 	              transformedXml.Adapter = item;
 	            }
 	          })
 	        } else {
-	          if (item.Adapter != null && item.Adapter["@name"] != null && item.Adapter["@name"] == localStorage.getItem("currentAdapter")) {
+	          if (item.Adapter != null && item.Adapter["@name"] != null && item.Adapter["@name"] === localStorage.getItem("currentAdapter")) {
 	            transformedXml = item;
 	          }
 	        }

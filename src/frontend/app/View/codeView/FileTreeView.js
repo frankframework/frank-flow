@@ -17,8 +17,11 @@ export default class FileTreeView {
     const structure = [];
 
     input.forEach((dir, index) => {
+
+      //Name of the deployable unit
       const directoryName = '> ' + dir.name;
 
+      //Object for file tree representation of deployable unit directory.
       let treeDirectoryObject = {
         id: directoryName,
         name: directoryName,
@@ -26,6 +29,7 @@ export default class FileTreeView {
         children: []
       }
 
+      //Objects for file in deployable unit.
       dir.files.forEach((file, fileIndex) => {
         let treeFileObject = {
           id: directoryName,
@@ -36,31 +40,60 @@ export default class FileTreeView {
         treeDirectoryObject.children.push(treeFileObject);
       });
 
-      for(let key in dir) {
-        if(key != "files" && key != "name") {
-          let treeDirObject = {
-            id: key,
-            name: '> ' + key,
-            type: 'dir',
-            children: []
-          }
 
-          dir[key]._files.forEach(function(file, index) {
-            let treeFileObject = {
-              id: directoryName,
-              name: file,
-              type: 'file'
+      //TODO: make this for loop a different function.
+      for (let key in dir) {
+
+        //If the key is not 'files' or 'name' then it is a inner folder.
+        //TODO: make a positive return statement.
+        if (key != "files" && key != "name") {
+
+          let path = directoryName + "/" + key;
+          let previousTreeDirObject = treeDirectoryObject;
+          let currentDir = dir[key];
+          let currentName = key;
+          let treeDirObject;
+
+          while (currentDir) {
+
+            treeDirObject = {
+              id: path,
+              name: '> ' + currentName,
+              type: 'dir',
+              children: []
             }
 
-            treeDirObject.children.push(treeFileObject);
-          });
+            //Fill dir object with files.
+            currentDir._files.forEach(function (file, index) {
+              let treeFileObject = {
+                id: path,
+                name: file,
+                type: 'file'
+              }
 
-          treeDirectoryObject.children.push(treeDirObject);
+              treeDirObject.children.push(treeFileObject);
+            });
+
+            previousTreeDirObject.children.push(treeDirObject);
+
+            if (Object.keys(currentDir).length == 1) {
+              currentDir = null;
+              break;
+            } else {
+              for (let obj in currentDir) {
+                if (obj != "files" && obj != "name" && obj != "_files") {
+                  previousTreeDirObject = treeDirObject;
+                  currentDir = currentDir[obj];
+                  path += "/" + obj;
+                  currentName = obj;
+                }
+              }
+            }
+
+          }
         }
 
-
       }
-
       structure.push(treeDirectoryObject);
     });
 
@@ -68,10 +101,12 @@ export default class FileTreeView {
     this.reloadTree(structure);
     this.setSaveFileEventListener();
 
-    this.getSingleFile(structure[0].name, structure[0].children[0].name);
+    const root = structure[0].name;
+    const file = structure[0].children[0].name;
 
-    localStorage.setItem('currentFileRoot', structure[0].name);
-    localStorage.setItem('currentFile', structure[0].children[0].name);
+    this.getSingleFile(root, file);
+    localStorage.setItem('currentFileRoot', root);
+    localStorage.setItem('currentFile', file);
 
   }
 
@@ -92,55 +127,61 @@ export default class FileTreeView {
     $('.file').on("click", function (e) {
 
       cur.saveFile();
+
+      //Todo: use jquery instead of getting nodeValue
       let path = e.delegateTarget.attributes[3].nodeValue,
-          deployableUnit = e.delegateTarget.attributes[1].nodeValue,
-          parent = e.delegateTarget.offsetParent.attributes[1].nodeValue;
-      
+        deployableUnit = e.delegateTarget.attributes[1].nodeValue,
+        parent = e.delegateTarget.offsetParent.attributes[1].nodeValue;
+
 
       deployableUnit = cur.replaceEncodings(deployableUnit);
       parent = cur.replaceEncodings(parent);
 
-      console.log("Parent: ", parent, "Path: ", path, "deployable unit: ", deployableUnit);
-
-      if(parent != deployableUnit) {
-        path = parent + '/' + path;
-      }
-
       localStorage.setItem('currentFile', path);
       localStorage.setItem('currentFileRoot', deployableUnit);
 
-      cur.getSingleFile(deployableUnit, path);
+      let root = deployableUnit.match(/^[^]*?(?=\/)/g)
+
+      if (root == null) {
+        cur.getSingleFile(deployableUnit, path);
+      } else {
+        path = deployableUnit.replace(root, '') + '/' + path;
+        cur.getSingleFile(root[0], path);
+      }
+
     });
 
     $('.folder').on('click', function (e) {
       const folderElement = $(e.currentTarget);
       let text = $(e.currentTarget.firstElementChild).text();
 
-      if(folderElement.hasClass("mjs-nestedSortable-expanded")) {
+      if (folderElement.hasClass("mjs-nestedSortable-expanded")) {
         text = text.replace(/> /g, '\u2304 ');
       } else {
         text = text.replace(/\u2304 /g, '> ');
       }
       $(e.currentTarget.firstElementChild).text(text);
+
+      localStorage.setItem('currentFileRoot', text);
     })
 
   }
 
   saveFile() {
     const currentFile = localStorage.getItem('currentFile');
+
     let currentFileRoot = localStorage.getItem('currentFileRoot');
+        currentFileRoot = this.replaceEncodings(currentFileRoot);
 
-    currentFileRoot = this.replaceEncodings(currentFileRoot);
-
-    if(currentFile != null && currentFileRoot != null) {
+    if (currentFile != null && currentFileRoot != null) {
       this.fileService.addFile(currentFileRoot, currentFile, this.editor.getValue());
     }
   }
 
   //TODO: add all adapters of current config to adapter select.
   generateAdapters() {
-    const currentConfig = localStorage.getItem("currentFile");
-          currentConfig = localStorage.getItem(currentConfig)
+    let currentConfig = localStorage.getItem("currentFile");
+        currentConfig = localStorage.getItem(currentConfig)
 
     let adapters = currentConfig.match(/<Adapter[^]*?>[^]*?<\/Adapter>/g);
 
@@ -149,14 +190,16 @@ export default class FileTreeView {
 
 
   addFile(folder) {
-    const name = prompt("File name: ");
 
-    if(name == "") {
+    const name = prompt("File name: ");
+    const displayName = name.replace(/\.[^]*/g, '');
+
+    if (name == "") {
       alert('Can\'t make empty file');
       return;
     }
 
-    const displayName = name.replace(/\.[^]*/g, '');
+
 
     const defaultConfig = '<Configuration name="' + displayName + '">\n' +
       '\t<Adapter name="' + displayName + 'Adapter"> \n' +
@@ -172,7 +215,7 @@ export default class FileTreeView {
       '\t</Adapter>\n' +
       '</Configuration>\n';
 
-      
+
     //Set object id to root in order to identify the parent folder of the file.
     let obj = {
       id: folder,
@@ -181,20 +224,22 @@ export default class FileTreeView {
     };
 
     this.fileData.forEach((dir, index) => {
-      if(dir.name == folder) {
+      if (dir.name == folder) {
         dir.children.push(obj);
-      } 
+      }
     });
-    const data = this.fileData;
 
-    folder = this.replaceEncodings(folder);
+    const data = this.fileData;
     const root = localStorage.getItem('currentFileRoot');
 
-    if(folder != root) {
+    root = this.replaceEncodings(root);
+    folder = this.replaceEncodings(folder);
+
+    if (folder != root) {
       name = folder + '/' + name;
     }
-    this.reloadTree(data);
 
+    this.reloadTree(data);
     this.fileService.addFile(root, name, defaultConfig);
     this.setSaveFileEventListener();
   }
@@ -212,38 +257,17 @@ export default class FileTreeView {
   }
 
 
-  renameFile(path, newPath) {
-    // let currentFile = localStorage.getItem("currentFile");
-    // if (currentFile != null) {
-    //   let arr = JSON.parse(localStorage.getItem("changedFiles"));
-    //   let index = arr.indexOf(currentFile);
-    //   if (index > -1) {
-    //     arr.splice(index, 1);
-    //   }
-    //   localStorage.setItem("changedFiles", JSON.stringify(arr));
-    // }
-    // localStorage.setItem("currentFile", newPath);
+  renameFile(deployableUnit, oldName, newName) {
+    this.fileService.renameFile(deployableUnit, oldName, newName);
 
-    // const fileData = localStorage.getItem(path);
-    // let prependedPath = path.match(/[^]+\/+/g)[0];
-    // this.zip.remove(path);
-    // this.zip.file(prependedPath + newPath, fileData);
-
-    // localStorage.removeItem(path);
-    // localStorage.setItem(prependedPath + newPath, fileData);
-
-    // let fileTree = []
-    // this.prepareFileTree(this.zip, fileTree);
-    // $('#fileTreeItems').empty();
-    // this.generateTree(fileTree);
-    // this.setSaveFileEventListener();
+    this.fileService.getConfigurations();
   }
 
   deleteFile(root, path) {
 
     this.fileData.forEach((dir, index) => {
-      
-      if(root == dir.name) {
+
+      if (root == dir.name) {
         dir.children = dir.children.filter((file) => {
           return file.name != path;
         })
@@ -261,5 +285,9 @@ export default class FileTreeView {
     this.reloadTree(this.fileData);
     this.setSaveFileEventListener();
 
+  }
+
+  addFolder(root, path) {
+    this.fileService.addFolder(root, path);
   }
 }

@@ -27,7 +27,7 @@ export default class FileService {
                 let obj = await cur.getDeployableUnit(item);
                 fileTree.push(obj);
 
-                if (fileTree.length == data.length) {
+                if (fileTree.length === data.length) {
                     cur.codeController.fileTreeView.makeTree(fileTree);
                     return fileTree;
                 }
@@ -36,7 +36,7 @@ export default class FileService {
 
         }).catch(e => {
             alert('Please check if your ibis started up correctly or if the property "configurations.directory" is set correctly')
-            console.log('Error getting configs: ', e);
+            console.error('Error getting configurations: ', e);
         })
     }
 
@@ -53,21 +53,22 @@ export default class FileService {
                 name: name,
                 files: [...fileList._files]
             };
-            for(let key in fileList) {
-                if(key != "_files") {
+            //sconsole.log(directoryObject)
+            for (let key in fileList) {
+                if (key != "_files") {
                     directoryObject[key] = fileList[key];
                 }
             }
             return directoryObject;
         }).catch(e => {
-            console.log('Error getting deployable unit: ' + name, e);
+            console.error('Error getting deployable unit: ' + name, e);
         })
     }
 
     getSingleFile(deployableUnit, name) {
         //http://localhost/frank-flow/api/configurations/Example/files/?path=InnerExampleFolder/ConfigurationProcessDestination.xml
         const cur = this,
-              path = './api/configurations/' + deployableUnit + '/files/?path=' + name;
+            path = './api/configurations/' + deployableUnit + '/files/?path=' + name;
 
         fetch(path, {
             method: 'GET'
@@ -88,7 +89,7 @@ export default class FileService {
 
             cur.codeController.quickGenerate();
         }).catch(e => {
-            console.log('Error getting single file: ', e);
+            console.error('Error getting single file: ', e);
         })
     }
 
@@ -100,13 +101,13 @@ export default class FileService {
         }).then(response => {
             return response.text();
         }).catch(e => {
-            console.log('Error deleting file: ' + name, e);
+            console.error('Error deleting file: ' + name, e);
         })
     }
 
     addFile(deployableUnit, name, config) {
         const path = './api/configurations/' + deployableUnit + '/files/?path=' + name,
-              formData = new FormData();
+            formData = new FormData();
 
         formData.append('file', config);
 
@@ -116,7 +117,39 @@ export default class FileService {
         }).then(response => {
             return response.text();
         }).catch(e => {
+            console.error('Error adding file: ' + name, e);
+        })
+    }
+
+    addFolder(deployableUnit, name) {
+        const path = './api/configurations/' + deployableUnit + '/files/?path=' + name,
+            formData = new FormData();
+
+        //formData.append('file', config);
+
+        fetch(path, {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            return response.text();
+        }).catch(e => {
             console.log('Error adding file: ' + name, e);
+        })
+    }
+
+    renameFile(deployableUnit, name, newName) {
+        const path = './api/configurations/' + deployableUnit + '/files/?path=' + name,
+            cur = this;
+
+
+        fetch(path, {
+            method: 'GET'
+        }).then(response => {
+            return response.text()
+        }).then(text => {
+            cur.deleteFile(deployableUnit, name);
+            cur.addFile(deployableUnit, newName, text);
+            return;
         })
     }
 }

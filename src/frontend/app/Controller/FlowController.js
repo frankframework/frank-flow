@@ -1,5 +1,6 @@
 import FlowView from '../View/flowView/FlowView.js';
 import PaletteView from '../View/paletteView/PaletteView.js';
+import Panzoom from '@panzoom/panzoom'
 
 export default class FlowController {
 
@@ -15,7 +16,7 @@ export default class FlowController {
     this.hoverSourceWindow = false;
     this.initHandlers();
 
-    localStorage.setItem("activityMode", false);
+    localStorage.setItem("activityMode", "false");
   }
 
   //_______________Observer_______________
@@ -23,7 +24,7 @@ export default class FlowController {
   notify(data) {
     if (data == null) {
       return;
-    };
+    }
     switch (data.type) {
       case "convertConfiguration":
         this.flowModel.setTransformedXml(this.mainController.convertConfiguration());
@@ -85,10 +86,27 @@ export default class FlowController {
 
   initHandlers() {
     let cur = this;
-    let $panzoom = $('#canvas').panzoom({
-      minScale: 0.5,
-      increment: 0.2
-    });
+
+    const canvas = document.getElementById('canvas')
+    const panzoom = Panzoom(canvas, {
+      minScale: 0.05,
+      maxScale: 5,
+      step: 0.2,
+      excludeClass: 'window',
+      contain: 'outside'
+    })
+
+    canvas.addEventListener('wheel', (event) => {
+      if (!event.shiftKey) {
+        panzoom.pan(-event.deltaX * 10, -event.deltaY * 10, {relative: true})
+        return
+      }
+      panzoom.zoomWithWheel(event)
+    })
+
+    document.getElementById('panzoom-reset').addEventListener('click', panzoom.reset)
+    document.getElementById('panzoom-zoom-in').addEventListener('click', panzoom.zoomIn)
+    document.getElementById('panzoom-zoom-out').addEventListener('click', panzoom.zoomOut)
 
     $.contextMenu({
       selector: '.context-menu-one',
@@ -108,7 +126,7 @@ export default class FlowController {
         "ActivityMode": {
           name: "Toggle activity mode", icon: "fas fa-globe-americas",
           callback: function () {
-            if (localStorage.getItem("activityMode") == "false") {
+            if (localStorage.getItem("activityMode") === "false") {
               localStorage.setItem("activityMode", "true");
             } else {
               localStorage.setItem("activityMode", "false");
@@ -141,8 +159,8 @@ export default class FlowController {
         "download": {
           name: "Export SVG", icon: "fas fa-file-export",
           callback: function () {
-            $panzoom.panzoom('pan', 0, 0);
-            $panzoom.panzoom('zoom', 0, 0);
+            panzoom.pan(0, 0);
+            panzoom.zoom(0);
             cur.flowView.getImage();
             return true;
           }
@@ -154,16 +172,6 @@ export default class FlowController {
       }
     });
 
-
-    jsPlumb.on($('#canvas'), "mouseover", ".sourceWindow, .description", function () {
-      $panzoom.panzoom("disable");
-    });
-
-    jsPlumb.on($('#canvas'), "mouseout", ".sourceWindow, .description", function () {
-      $panzoom.panzoom("enable");
-      $('#flowContainer').attr('style', '');
-    });
-
     $('#canvas').on("click", ".sourceWindow", function (e) {
       e.preventDefault();
       cur.mainController.modifyCode("undoDecorations");
@@ -173,6 +181,11 @@ export default class FlowController {
       })
     })
 
+    $(document).keydown(function(e){
+      if(e.keyCode == 46) {
+        cur.mainController.modifyCode("deletePipe");
+      }
+    });
 
     //make the bottom container draggable with mouseover
     $('#canvas').on("mouseover", ".bottomContainer" , function () {
@@ -188,14 +201,14 @@ export default class FlowController {
             name: sourceDiv.lastElementChild.firstElementChild.innerHTML
           }
           let isGenerating = false;
-          if (dragObj.x == "0px" && cur.calculating == false) {
+          if (dragObj.x === "0px" && cur.calculating === false) {
             cur.calculating = true;
             isGenerating = true;
             calculateCanvasBorder('left');
             cur.flowView.generateFlow();
             return false;
           }
-          if (dragObj.y == "0px" && cur.calculating == false) {
+          if (dragObj.y === "0px" && cur.calculating === false) {
             cur.calculating = true;
             calculateCanvasBorder('top');
             cur.flowView.generateFlow();
@@ -232,26 +245,6 @@ export default class FlowController {
     //set canvas bounded to container.
     var minScaleX = $('#flowContainer').innerWidth();
     var minScaleY = $('#flowContainer').innerHeight();
-
-
-    //make sure panzoom doesn't leave the container.
-    $panzoom.on('panzoomend', function (e) {
-      var current_pullY = parseInt($('#canvas').css('transform').split(',')[5]);
-      var current_pullX = parseInt($('#canvas').css('transform').split(',')[4]);
-      if (current_pullX >= 0) {
-        $panzoom.panzoom('pan', 0, current_pullY);
-      }
-      if (current_pullY <= -Math.abs($('#canvas').css('height').replace('px', '')) + 1000) {
-        $panzoom.panzoom('pan', current_pullX, -Math.abs($('#canvas').css('height').replace('px', '')) + 1000);
-      }
-      if (current_pullX <= -1540) {
-        $panzoom.panzoom('pan', -1540, current_pullY);
-      }
-      if (current_pullY >= 0) {
-        $panzoom.panzoom('pan', current_pullX, 0);
-      }
-      $('#flowContainer').attr('style', '');
-    });
 
     /*
     save canvas size and update positions in generation.
@@ -291,17 +284,5 @@ export default class FlowController {
         cur.calculating = false;
       }, 3000);
     }
-
-    //make zoom possible
-    $panzoom.parent().on('mousewheel.focal', function (e) {
-      if (!e.shiftKey) return;
-      e.preventDefault();
-      var delta = e.delta || e.originalEvent.wheelDelta;
-      var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
-      $panzoom.panzoom('zoom', zoomOut, {
-        increment: 0.1,
-        focal: e
-      });
-    });
   }
 }

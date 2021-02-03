@@ -238,6 +238,7 @@ export default class FlowView {
         if(this.horizontalBuild) {
           x = '' + (boxOffset + 250);
           y = '450';
+          boxOffset += (parseInt(box.css('width').replace('px', ''))) - 220;
         } else {
           x = '100';
           y = '' + boxOffset;
@@ -316,7 +317,7 @@ export default class FlowView {
     $('#canvas').empty();
     $('#canvas').css('display', 'none');
     $('.customErrorMessage').remove();
-    if (e == "dupplicate") {
+    if (e === "duplicate") {
       $('#flowContainer').append(
         $("<h1></h1>").text('Can\'t generate Flow. Duplicate pipe, please remove any duplicates.').addClass('customErrorMessage'),
       );
