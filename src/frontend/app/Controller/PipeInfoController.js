@@ -27,6 +27,7 @@ export default class PipeInfoController {
       });
     this.pipeInfoView.generatePipeAttributes(attributes);
     this.pipeInfoView.generatePipeParameters(parameters);
+    localStorage.setItem('activePipe', pipe.name)
     this.setEventListeners();
   }
 

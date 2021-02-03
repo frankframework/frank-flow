@@ -254,5 +254,7 @@ export default class CodeController {
   changeParameterAttribute(pipeName, paramName, attribute, value) {
     this.codeView.changeParameterAttribute(pipeName, paramName, attribute, value);
   }
-
+  deletePipe() {
+    this.codeView.codePipeView.deletePipe()
+  }
 }
