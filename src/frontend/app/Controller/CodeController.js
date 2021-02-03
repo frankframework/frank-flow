@@ -148,6 +148,12 @@ export default class CodeController {
         });
       }
     })
+
+    $(document).keydown(function(e){
+      if(e.keyCode == 46) {
+        cur.codeView.codePipeView.deletePipe()
+      }
+    });
   }
 
   //_______________Custom methods to be called from handlers_______________

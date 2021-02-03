@@ -4,7 +4,6 @@ export default class CodePipeView extends CodeEditView {
 
   constructor(editor) {
     super(editor);
-    this.setEventListeners();
   }
   //change the name.
   changeName(oldWord, newWord) {
@@ -134,6 +133,20 @@ export default class CodePipeView extends CodeEditView {
     });
   }
 
+  //delete all forwards
+  deleteAllForwards(path){
+    let cur = this;
+    let attributeObjectRegex = '<[^"\/\s]*Forward(\\n|[^])*?\/>';
+    let matches = this.editor.getModel().findMatches(attributeObjectRegex, false, true, false, false);
+    matches.forEach(function(item, index) {
+      let forward = cur.editor.getModel().getValueInRange(item.range);
+      if (forward.match('<[^"\\/\\s]*Forward(\\n|[^>])*?path="' + path + '"*')) {
+        let newForward = "";
+        cur.edit(item.range, newForward);
+      }
+    });
+  }
+
   // a method to add a pipe by hand.
   changeAddPipe(name, possitions, className = "customPipe") {
     let cur = this;
@@ -164,19 +177,10 @@ export default class CodePipeView extends CodeEditView {
     let name = localStorage.getItem("activePipe");
     matches.forEach(function(item, index) {
       let pipe = cur.editor.getModel().getValueInRange(item.range);
-      if (pipe.split(/[\s>]/).find(word => word === 'name="' + name + '"')) {
-        let newPipe = '';
+      if (pipe.match('<[^"\\/\\s]*Pipe(\\n|[^>])*?name="' + name + '"*') && window.confirm("Are you sure you want to delete this pipe")) {
+        let newPipe = "";
         cur.edit(item.range, newPipe);
-      }
-    });
-  }
-
-  setEventListeners() {
-    const cur = this;
-    $(document).keydown(function(e){
-      if(e.keyCode == 46) {
-        console.log('key pressed', e);
-        cur.deletePipe();
+        cur.deleteAllForwards(name);
       }
     });
   }
