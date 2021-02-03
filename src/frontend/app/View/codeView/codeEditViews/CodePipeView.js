@@ -105,7 +105,7 @@ export default class CodePipeView extends CodeEditView {
     matches.forEach(function(item, index) {
       let pipe = cur.editor.getModel().getValueInRange(item.range);
       if (pipe.split(/[\s>]/).find(word => word === 'name="' + name + '"')) {
-        pipe = pipe.slice(0, pipe.search(/<[/][\S]*?[^"/]Pipe/)) + '\t<Forward name="success" path="' + path + '"/>';
+        pipe = pipe.slice(0, pipe.search(/  /)) + '\t<Forward name="success" path="' + path + '"/>';
         let newLineRange = {
           endColumn: 1,
           endLineNumber: item.range.endLineNumber,

@@ -19,8 +19,8 @@
 
 .floating-button-bar {
   position: absolute;
-  top: 50px;
-  right: 50px;
+  top: 25px;
+  right: 25px;
   display: flex;
   gap: 1em;
 }
@@ -34,7 +34,7 @@
   color: white;
   font-weight: bold;
   border: 1px solid #333;
-  box-shadow: 0 0 15px #333;
+  box-shadow: 0 0 10px #333;
   border-radius: 10px;
 }
 

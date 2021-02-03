@@ -25,7 +25,24 @@ export default class FlowGenerator {
       instance.reset();
       $('#canvas').empty();
       this.pipes = this.pipeGenerator.generateAllPipes(transformedXml);
+    } else if(Array.isArray(transformedXml.Adapter)) {
+      
+      let tempAdapter = null;
+      
+      transformedXml.Adapter.forEach(function(item, index) {
+        if(item['@name'] == localStorage.getItem('currentAdapter')) {
+          tempAdapter = item;
+        }
+      })
+      if(tempAdapter != null) {
+        transformedXml.Adapter = tempAdapter;
+      }
+
+      instance.reset();
+      $('#canvas').empty();
+      this.pipes = this.pipeGenerator.generateAllPipes(transformedXml);
     } else {
+      console.log("Error: ", transformedXml);
       this.flowView.displayError(transformedXml);
     }
   }
