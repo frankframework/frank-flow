@@ -89,8 +89,6 @@ export default class CodeController {
 
             let root = cur.fileTreeView.replaceEncodings($(this).attr('data-id'));
 
-            console.log("root: ", root);
-
             let innerRoot = root.match(/^[^]*?(?=\/)/g)
 
             if(innerRoot == null) {

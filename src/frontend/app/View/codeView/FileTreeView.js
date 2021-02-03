@@ -74,8 +74,6 @@ export default class FileTreeView {
               treeDirObject.children.push(treeFileObject);
             });
 
-            console.log("push ", treeDirObject, "to ", previousTreeDirObject);
-
             previousTreeDirObject.children.push(treeDirObject);
 
             if (Object.keys(currentDir).length == 1) {
@@ -138,8 +136,6 @@ export default class FileTreeView {
 
       deployableUnit = cur.replaceEncodings(deployableUnit);
       parent = cur.replaceEncodings(parent);
-
-      //console.log("Parent: ", parent, "Path: ", path, "deployable unit: ", deployableUnit);
 
       localStorage.setItem('currentFile', path);
       localStorage.setItem('currentFileRoot', deployableUnit);
