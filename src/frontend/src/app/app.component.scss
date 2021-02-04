@@ -1,0 +1,10 @@
+@import "~src/assets/styles/variables";
+
+app-header {
+  position: relative;
+  z-index: $z-index-header;
+}
+
+.main-container {
+  height: 100%;
+}
