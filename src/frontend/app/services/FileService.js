@@ -79,17 +79,19 @@ export default class FileService {
             let beautiful = this.toBeautifulSyntax.toBeautifulSyntax(data);
             data = beautiful;
 
-            cur.codeController.setEditorValue(beautiful);
-
-
             let adapterName = data.match(/<Adapter[^]*?name=".*?"/g);
+
+            if(adapterName == null) {
+                return;
+            }
+
             adapterName = adapterName[0].match(/".*?"/g)[0].replace(/"/g, '');
 
+            cur.codeController.setEditorValue(beautiful);
             localStorage.setItem('currentAdapter', adapterName);
-
             cur.codeController.quickGenerate();
         }).catch(e => {
-            console.error('Error getting single file: ', e);
+            console.error('Error getting file: ', e);
         })
     }
 

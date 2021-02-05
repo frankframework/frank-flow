@@ -130,12 +130,14 @@ export default class FileTreeView {
 
       //Todo: use jquery instead of getting nodeValue
       let path = e.delegateTarget.attributes[3].nodeValue,
-        deployableUnit = e.delegateTarget.attributes[1].nodeValue,
-        parent = e.delegateTarget.offsetParent.attributes[1].nodeValue;
-
+        deployableUnit = e.delegateTarget.attributes[1].nodeValue;
+  
+      if(path == null || deployableUnit == null) {
+        return;
+      }
+      console.log(path, deployableUnit);
 
       deployableUnit = cur.replaceEncodings(deployableUnit);
-      parent = cur.replaceEncodings(parent);
 
       localStorage.setItem('currentFile', path);
       localStorage.setItem('currentFileRoot', deployableUnit);
