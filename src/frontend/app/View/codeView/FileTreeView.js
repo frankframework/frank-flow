@@ -3,16 +3,19 @@ import OptionView from './codeEditViews/OptionView.js';
 import fileTree from '../../../fileTree/dist/js/file-tree.min.js';
 
 export default class FileTreeView {
-  constructor(editor, fileService) {
+  constructor(editor, fileService, xsdModel) {
     this.editor = editor;
     this.fileService = fileService;
     this.fileData = null;
     this.optionView = new OptionView(this.editor);
+    this.xsdModel = xsdModel;
   }
 
   makeTree(input) {
     localStorage.removeItem('changedFiles');
     localStorage.removeItem('currentFile');
+
+    let cur = this;
 
     const structure = [];
 
@@ -35,6 +38,11 @@ export default class FileTreeView {
           id: directoryName,
           name: file,
           type: 'file'
+        }
+
+        if(file.match(/.xsd$/g)) {
+          let fileData = cur.getSingleFile(directoryName, file);
+          cur.xsdModel.addXsd(file, fileData);
         }
 
         treeDirectoryObject.children.push(treeFileObject);
@@ -69,6 +77,11 @@ export default class FileTreeView {
                 id: path,
                 name: file,
                 type: 'file'
+              }
+
+              if(file.match(/.xsd$/g)) {
+                let fileData = cur.getSingleFile(directoryName, file);
+                cur.xsdModel.addXsd(path, fileData);
               }
 
               treeDirObject.children.push(treeFileObject);
@@ -232,7 +245,7 @@ export default class FileTreeView {
     });
 
     const data = this.fileData;
-    const root = localStorage.getItem('currentFileRoot');
+    let root = localStorage.getItem('currentFileRoot');
 
     root = this.replaceEncodings(root);
     folder = this.replaceEncodings(folder);

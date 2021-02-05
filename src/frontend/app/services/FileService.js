@@ -81,14 +81,12 @@ export default class FileService {
 
             let adapterName = data.match(/<Adapter[^]*?name=".*?"/g);
 
-            if(adapterName == null) {
-                return;
+            if(adapterName != null) {
+                adapterName = adapterName[0].match(/".*?"/g)[0].replace(/"/g, '');
+                localStorage.setItem('currentAdapter', adapterName);
             }
 
-            adapterName = adapterName[0].match(/".*?"/g)[0].replace(/"/g, '');
-
             cur.codeController.setEditorValue(beautiful);
-            localStorage.setItem('currentAdapter', adapterName);
             cur.codeController.quickGenerate();
         }).catch(e => {
             console.error('Error getting file: ', e);

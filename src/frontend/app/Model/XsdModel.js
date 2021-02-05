@@ -12,6 +12,11 @@ export default class XsdModel {
         this.listeners.forEach(l => l.notify(data));
     }
 
+    addXsd(path, data) {
+        console.log("Added XSD ", path, data);
+        this.notifyListeners(path, data);
+    }
+
     setXsd(data) {
         this.xsd = data;
         this.notifyListeners(data);

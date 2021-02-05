@@ -8,25 +8,28 @@ export default class XSDCodeCompletionView {
         xsdModel.addListener(this);
         this.monaco = monaco;
         this.editor = editor;
+
+        this.xsdManager = new XsdManager(this.editor);
+
+        this.xsdFeatures = new XsdFeatures(this.xsdManager, this.monaco, this.editor);
+        this.xsdFeatures.addCompletion();
+        this.xsdFeatures.addValidation();
+        this.xsdFeatures.addGenerateAction();
+        this.xsdFeatures.addReformatAction();
     }
 
-    notify(data) {
-      const xsdManager = new XsdManager(this.editor);
+    notify(path, data) {
 
       // TODO: Use the real path as used in the configurations.
       //  This should be loaded dynamically. (xsdManager.update())
-      xsdManager.set({
-        path: 'ibisdoc.xsd',
+      this.xsdManager.set({
+        path: path,
         value: data,
         namespace: 'xs',
         nonStrictPath: true,
         includeIfRootTag: ['Configuration', 'Module', 'Adapter'],
       });
 
-      const xsdFeatures = new XsdFeatures(xsdManager, this.monaco, this.editor);
-      xsdFeatures.addCompletion();
-      xsdFeatures.addValidation();
-      xsdFeatures.addGenerateAction();
-      xsdFeatures.addReformatAction();
+
     }
 }
