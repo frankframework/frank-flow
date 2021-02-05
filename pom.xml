@@ -228,7 +228,7 @@
 	</build>
 
 	<profiles>
-		<profile>
+		<!-- <profile>
 			<id>frontend</id>
 			<build>
 				<plugins>
@@ -279,7 +279,7 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
+		</profile> -->
 		<profile>
 			<id>ibissource</id>
 			<distributionManagement>
