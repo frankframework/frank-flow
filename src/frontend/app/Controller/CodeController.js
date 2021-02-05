@@ -85,10 +85,13 @@ export default class CodeController {
           name: "Rename file", icon: "fas fa-file",
           callback: function () {
             const name = $(this).attr('data-name'),
-                  newName = prompt('Rename file');
+                  newName = prompt('Rename file', name);
 
+            if(newName == "" || newName == null) {
+              return;
+            }
+            
             let root = cur.fileTreeView.replaceEncodings($(this).attr('data-id'));
-
             let innerRoot = root.match(/^[^]*?(?=\/)/g)
 
             if(innerRoot == null) {
