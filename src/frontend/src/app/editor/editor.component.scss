@@ -1,0 +1,21 @@
+@import "~src/assets/styles/variables";
+
+.container {
+  display: grid;
+  grid-template-columns: 256px auto;
+  height: 100%;
+  width: 100%;
+
+  app-explorer {
+    background-color: $background-color-darker;
+  }
+
+  ngx-monaco-editor {
+    height: 100%;
+
+    .editor-container {
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
