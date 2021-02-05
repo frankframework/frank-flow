@@ -1,0 +1,19 @@
+@import "~src/assets/styles/variables";
+
+app-header {
+  position: relative;
+  z-index: $z-index-header;
+}
+
+.main-container {
+  height: 100%;
+  display: flex;
+
+  app-editor {
+    flex-basis: 100%;
+  }
+
+  app-flow{
+    flex-basis: 100%;
+  }
+}
