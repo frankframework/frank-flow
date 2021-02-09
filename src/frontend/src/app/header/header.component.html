@@ -3,20 +3,19 @@
     <img src="assets/images/frank-flow-logo.svg" />
   </div>
   <div class="header__actions">
-    <app-button color="dark"><fa-icon icon="file"></fa-icon></app-button>
-    <app-button color="dark"><fa-icon icon="folder"></fa-icon></app-button>
+    <app-button color="dark">
+      <fa-icon icon="file"></fa-icon>
+    </app-button>
+    <app-button color="dark">
+      <fa-icon icon="folder"></fa-icon>
+    </app-button>
     <select>
       <option disabled selected>Choose a configuration</option>
       <option>Config 1</option>
     </select>
-    <app-button color="dark"><fa-icon icon="save"></fa-icon></app-button>
+    <app-button color="dark">
+      <fa-icon icon="save"></fa-icon>
+    </app-button>
   </div>
-  <div class="header__modes">
-    <app-button [selected]="codeMode" (click)="codeMode = !codeMode"
-      ><fa-icon icon="code"></fa-icon
-    ></app-button>
-    <app-button [selected]="flowMode" (click)="flowMode = !flowMode"
-      ><fa-icon icon="project-diagram"></fa-icon
-    ></app-button>
-  </div>
+  <app-modes></app-modes>
 </div>

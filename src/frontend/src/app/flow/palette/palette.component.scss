@@ -1,6 +1,6 @@
 @import '~src/assets/styles/variables';
 
-.container {
+:host {
   height: 100%;
   width: 100%;
   background-color: $background-color;

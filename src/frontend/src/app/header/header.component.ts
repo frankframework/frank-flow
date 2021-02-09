@@ -14,9 +14,6 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  codeMode = true;
-  flowMode = true;
-
   constructor(library: FaIconLibrary) {
     library.addIcons(faFile, faFolder, faSave, faCode, faProjectDiagram);
   }
