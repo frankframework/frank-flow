@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header.component';
 import { SharedModule } from '../shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { ModesComponent } from './modes/modes.component';
+import { ModeComponent } from './modes/mode.component';
 
 @NgModule({
-  declarations: [HeaderComponent, ModesComponent],
+  declarations: [HeaderComponent, ModeComponent],
   exports: [HeaderComponent],
   imports: [CommonModule, SharedModule, FontAwesomeModule],
 })

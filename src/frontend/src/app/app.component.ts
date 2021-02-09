@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Modes } from './header/modes/modes';
-import { ModesService } from './header/modes/modes.service';
+import { Mode } from './header/modes/mode';
+import { ModeService } from './header/modes/mode.service';
+import { ModeType } from './header/modes/modeType';
 
 @Component({
   selector: 'app-root',
@@ -8,16 +9,16 @@ import { ModesService } from './header/modes/modes.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  modes!: Modes;
+  modeType = ModeType;
+  mode!: Mode;
 
-  constructor(private modesService: ModesService) {}
+  constructor(private modesService: ModeService) {}
 
   ngOnInit(): void {
     this.getModes();
   }
 
   getModes(): void {
-    this.modesService.getModes().subscribe((modes) => (this.modes = modes));
-    console.log(this.modes);
+    this.modesService.getMode().subscribe((mode) => (this.mode = mode));
   }
 }

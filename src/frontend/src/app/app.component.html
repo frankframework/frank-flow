@@ -1,5 +1,9 @@
 <app-header></app-header>
 <div class="main-container">
-  <app-editor *ngIf="modes.editorMode"></app-editor>
-  <app-flow *ngIf="modes.flowMode"></app-flow>
+  <app-editor
+    *ngIf="mode.is(modeType.editorMode) || mode.is(modeType.hybridMode)"
+  ></app-editor>
+  <app-flow
+    *ngIf="mode.is(modeType.flowMode) || mode.is(modeType.hybridMode)"
+  ></app-flow>
 </div>

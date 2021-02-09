@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
   faCode,
+  faColumns,
   faFile,
   faFolder,
   faProjectDiagram,
@@ -15,7 +16,14 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 })
 export class HeaderComponent implements OnInit {
   constructor(library: FaIconLibrary) {
-    library.addIcons(faFile, faFolder, faSave, faCode, faProjectDiagram);
+    library.addIcons(
+      faFile,
+      faFolder,
+      faSave,
+      faCode,
+      faProjectDiagram,
+      faColumns
+    );
   }
 
   ngOnInit(): void {}
