@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EditorModule } from './editor/editor.module';
-import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { HeaderModule } from './header/header.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TreeviewModule } from 'ngx-treeview';
@@ -16,7 +15,6 @@ import { FlowModule } from './flow/flow.module';
     BrowserModule,
     AppRoutingModule,
     EditorModule,
-    MonacoEditorModule.forRoot(),
     HeaderModule,
     FontAwesomeModule,
     TreeviewModule.forRoot(),

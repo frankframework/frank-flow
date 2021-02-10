@@ -29,9 +29,10 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/assets/images",
               {
                 "glob": "**/*",
-                "input": "node_modules/ngx-monaco-editor/assets/monaco",
+                "input": "node_modules/monaco-editor/min",
                 "output": "./assets/monaco/"
               }
             ],
@@ -95,9 +96,10 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/assets/images",
               {
                 "glob": "**/*",
-                "input": "node_modules/ngx-monaco-editor/assets/monaco",
+                "input": "node_modules/monaco-editor/min",
                 "output": "./assets/monaco/"
               }
             ],

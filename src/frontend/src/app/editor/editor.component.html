@@ -1,5 +1,5 @@
-<app-explorer></app-explorer>
-<ngx-monaco-editor
-  [options]="editorOptions"
-  [(ngModel)]="code"
-></ngx-monaco-editor>
+<app-explorer #explorerComponent></app-explorer>
+<app-monaco-editor
+  #monacoEditorComponent
+  [(code)]="initCode"
+></app-monaco-editor>

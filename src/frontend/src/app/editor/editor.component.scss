@@ -1,16 +1,6 @@
 :host {
-  flex-basis: 100%;
   display: grid;
   grid-template-columns: 256px auto;
   height: 100%;
   width: 100%;
-
-  ngx-monaco-editor {
-    height: 100%;
-
-    .editor-container {
-      height: 100%;
-      width: 100%;
-    }
-  }
 }

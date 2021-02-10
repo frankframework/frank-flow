@@ -12,13 +12,13 @@ export class AppComponent implements OnInit {
   modeType = ModeType;
   mode!: Mode;
 
-  constructor(private modesService: ModeService) {}
+  constructor(private modeService: ModeService) {}
 
   ngOnInit(): void {
     this.getModes();
   }
 
   getModes(): void {
-    this.modesService.getMode().subscribe((mode) => (this.mode = mode));
+    this.modeService.getMode().subscribe((mode) => (this.mode = mode));
   }
 }
