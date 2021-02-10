@@ -5,7 +5,7 @@
 
 	<groupId>org.ibissource</groupId>
 	<artifactId>frank-flow</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>Frank!Flow</name>
@@ -28,7 +28,7 @@
 	<properties>
 		<spring.version>4.3.25.RELEASE</spring.version>
 		<cxf.version>3.1.18</cxf.version>
-		<tomcat.version>8.5.23</tomcat.version>
+		<tomcat.version>9.0.38</tomcat.version>
 	</properties>
 
 	<dependencies>
