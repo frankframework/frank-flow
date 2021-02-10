@@ -143,7 +143,6 @@
 	</dependencies>
 
 	<build>
-		<finalName>${finalName}</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
