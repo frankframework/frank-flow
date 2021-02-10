@@ -41,8 +41,12 @@ export default class FileTreeView {
         }
 
         if(file.match(/.xsd$/g)) {
-          let fileData = cur.getSingleFile(directoryName, file);
-          cur.xsdModel.addXsd(file, fileData);
+          const cleanDirectoryName = this.replaceEncodings(directoryName);
+          let fileData = cur.fileService.getFile(cleanDirectoryName, file);
+          fileData.then(fileData => {
+            cur.xsdModel.addXsd(file, fileData);
+          })
+
         }
 
         treeDirectoryObject.children.push(treeFileObject);
@@ -80,8 +84,12 @@ export default class FileTreeView {
               }
 
               if(file.match(/.xsd$/g)) {
-                let fileData = cur.getSingleFile(directoryName, file);
-                cur.xsdModel.addXsd(path, fileData);
+                //make method async
+                const cleanDirectoryName = this.replaceEncodings(directoryName);
+                let fileData = cur.fileService.getFile(cleanDirectoryName, file);
+                fileData.then(fileData => {
+                  cur.xsdModel.addXsd(file, fileData);
+                })
               }
 
               treeDirObject.children.push(treeFileObject);

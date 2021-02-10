@@ -18,14 +18,15 @@ export default class XSDCodeCompletionView {
         this.xsdFeatures.addReformatAction();
     }
 
-    notify(path, data) {
+    notify(data) {
 
       // TODO: Use the real path as used in the configurations.
       //  This should be loaded dynamically. (xsdManager.update())
+      let namespace = data.fileData.match(/\w*?(?=:schema)/g);
       this.xsdManager.set({
-        path: path,
-        value: data,
-        namespace: 'xs',
+        path: data.path,
+        value: data.fileData,
+        namespace: namespace[0],
         nonStrictPath: true,
         includeIfRootTag: ['Configuration', 'Module', 'Adapter'],
       });

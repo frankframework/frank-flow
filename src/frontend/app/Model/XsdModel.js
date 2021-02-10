@@ -13,13 +13,11 @@ export default class XsdModel {
     }
 
     addXsd(path, data) {
-        console.log("Added XSD ", path, data);
-        this.notifyListeners(path, data);
-    }
-
-    setXsd(data) {
-        this.xsd = data;
-        this.notifyListeners(data);
+        let xsdData = {
+            path: path,
+            fileData: data
+        };
+        this.notifyListeners(xsdData);
     }
 
     getXsd() {

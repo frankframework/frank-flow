@@ -81,7 +81,7 @@ export default class FileService {
 
             let adapterName = data.match(/<Adapter[^]*?name=".*?"/g);
 
-            if(adapterName != null) {
+            if (adapterName != null) {
                 adapterName = adapterName[0].match(/".*?"/g)[0].replace(/"/g, '');
                 localStorage.setItem('currentAdapter', adapterName);
             }
@@ -91,6 +91,21 @@ export default class FileService {
         }).catch(e => {
             console.error('Error getting file: ', e);
         })
+    }
+
+    getFile(deployableUnit, name) {
+        //http://localhost/frank-flow/api/configurations/Example/files/?path=InnerExampleFolder/ConfigurationProcessDestination.xml
+        const cur = this,
+            path = './api/configurations/' + deployableUnit + '/files/?path=' + name;
+
+        return fetch(path, {
+            method: 'GET'
+        }).then(response => {
+            return response.text();
+        }).catch(e => {
+            console.error('Error getting file: ', e);
+        })
+
     }
 
     deleteFile(deployableUnit, name) {
