@@ -1,15 +1,9 @@
 name: Java CI
 
 on:
-  push:
-    branches:
-      - master
-      - development
-
   pull_request:
     branches:
-      - master
-      - development
+      - 1.*
 
 jobs:
   build:

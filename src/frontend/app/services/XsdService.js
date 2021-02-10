@@ -11,7 +11,7 @@ export default class XsdService {
                 return response.text()
             })
             .then(data => {
-                this.xsdModel.setXsd(data);
+                this.xsdModel.addXsd('ibisdoc.xsd', data);
             })
             .catch(err => {
                 console.warning("Couldn't load local XSD, now loading ibis4example XSD: ", err);
@@ -27,7 +27,7 @@ export default class XsdService {
                 return response.text()
             })
             .then(data => {
-                this.xsdModel.setXsd(data);
+                this.xsdModel.addXsd('ibisdoc.xsd', data);
             })
             .catch(err => {
                 console.error("Error loading ibis4example XSD: ", err);

@@ -12,9 +12,12 @@ export default class XsdModel {
         this.listeners.forEach(l => l.notify(data));
     }
 
-    setXsd(data) {
-        this.xsd = data;
-        this.notifyListeners(data);
+    addXsd(path, data) {
+        let xsdData = {
+            path: path,
+            fileData: data
+        };
+        this.notifyListeners(xsdData);
     }
 
     getXsd() {

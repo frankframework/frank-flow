@@ -31,7 +31,7 @@ export default class CodeController {
     this.codeView.makeEditor();
     this.editor = this.codeView.editor;
 
-    this.fileTreeView = new FileTreeView(this.editor, this.fileService);
+    this.fileTreeView = new FileTreeView(this.editor, this.fileService, this.xsdModel);
     this.initListeners();
   }
 
@@ -85,10 +85,13 @@ export default class CodeController {
           name: "Rename file", icon: "fas fa-file",
           callback: function () {
             const name = $(this).attr('data-name'),
-                  newName = prompt('Rename file');
+                  newName = prompt('Rename file', name);
+
+            if(newName == "" || newName == null) {
+              return;
+            }
 
             let root = cur.fileTreeView.replaceEncodings($(this).attr('data-id'));
-
             let innerRoot = root.match(/^[^]*?(?=\/)/g)
 
             if(innerRoot == null) {
