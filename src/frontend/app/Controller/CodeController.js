@@ -18,7 +18,6 @@ export default class CodeController {
 
     this.codeView = new CodeView(this.xsdModel);
     this.fileModel.addListener(this)
-    this.codeView.addListener(this);
 
     this.fileService = new FileService(this);
     this.xsdService = new XsdService(this.xsdModel);

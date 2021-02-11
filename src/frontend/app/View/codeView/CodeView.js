@@ -20,15 +20,6 @@ export default class CodeView {
     this.validateConfigurationView;
   }
 
-  addListener(listener) {
-    this.listeners.push(listener);
-  }
-
-  notifyListeners(data) {
-    this.listeners.forEach(l => l.notify(data));
-  }
-
-  //make the editor.
   makeEditor(adapter) {
     this.editor = monaco.editor.create(document.getElementById('monacoContainer'), {
       value: adapter,
