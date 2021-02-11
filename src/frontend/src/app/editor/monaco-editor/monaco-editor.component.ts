@@ -32,17 +32,24 @@ export class MonacoEditorComponent
 
   constructor(private monacoElement: ElementRef) {}
 
+  ngAfterViewInit(): void {
+    this.loadMonaco();
+  }
+
   ngOnChanges(): void {
     if (this.codeEditorInstance) {
       this.codeEditorInstance.setValue(this.code);
     }
   }
 
-  ngAfterViewInit(): void {
+  ngOnDestroy(): void {
+    clearInterval(this.resizeInterval);
+  }
+
+  loadMonaco(): void {
     if (loadedMonaco) {
-      // Wait until monaco editor is available
       loadPromise.then(() => {
-        this.initMonaco();
+        this.initializeMonaco();
       });
     } else {
       loadedMonaco = true;
@@ -51,17 +58,15 @@ export class MonacoEditorComponent
           resolve();
           return;
         }
-        const onAmdLoader: any = () => {
-          // Load monaco
-          (window as any).require.config({ paths: { vs: 'assets/monaco/vs' } });
 
+        const onAmdLoader: any = () => {
+          (window as any).require.config({ paths: { vs: 'assets/monaco/vs' } });
           (window as any).require(['vs/editor/editor.main'], () => {
-            this.initMonaco();
+            this.initializeMonaco();
             resolve();
           });
         };
 
-        // Load AMD loader if necessary
         if (!(window as any).require) {
           const loaderScript: HTMLScriptElement = document.createElement(
             'script'
@@ -77,11 +82,13 @@ export class MonacoEditorComponent
     }
   }
 
-  ngOnDestroy(): void {
-    clearInterval(this.resizeInterval);
+  initializeMonaco(): void {
+    this.initializeEditor();
+    this.initializeTwoWayBinding();
+    this.initializeResizeInterval();
   }
 
-  initMonaco(): void {
+  initializeEditor(): void {
     this.codeEditorInstance = editor.create(
       this.editorContainer.nativeElement,
       {
@@ -90,15 +97,19 @@ export class MonacoEditorComponent
         theme: 'vs-dark',
       }
     );
+  }
 
-    this.resizeInterval = setInterval(() => this.onResize(), 100);
-
+  initializeTwoWayBinding(): void {
     const model = this.codeEditorInstance.getModel();
     if (model) {
       model.onDidChangeContent((e) => {
         this.codeChange.emit(this.codeEditorInstance.getValue());
       });
     }
+  }
+
+  initializeResizeInterval(): void {
+    this.resizeInterval = setInterval(() => this.onResize(), 100);
   }
 
   onResize(): void {
