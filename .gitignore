@@ -1,8 +1,2 @@
-node_modules
-node
-coverage/*
-dist/*
-/target/
 .settings
-bin
 .idea/
