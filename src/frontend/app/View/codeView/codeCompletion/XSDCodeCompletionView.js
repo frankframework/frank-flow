@@ -22,14 +22,16 @@ export default class XSDCodeCompletionView {
 
       // TODO: Use the real path as used in the configurations.
       //  This should be loaded dynamically. (xsdManager.update())
+      
       const namespace = data.fileData.match(/\w*?(?=:schema)/);
       let ifRootTag = [];
+
       if(namespace[0] == 'xs') {
         ifRootTag = ['Configuration', 'Module', 'Adapter'];
       }
 
       console.log(data.path, data.fileData, namespace[0]);
-      
+
       this.xsdManager.set({
         path: data.path,
         value: data.fileData,
