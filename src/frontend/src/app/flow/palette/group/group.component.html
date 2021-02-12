@@ -1,0 +1,7 @@
+<div [className]="'group group--' + border">
+  <div class="group__header">
+    <div>Group</div>
+    <fa-icon [icon]="foldArrow()" (click)="toggleFold()"></fa-icon>
+  </div>
+  <div class="group__list" [hidden]="foldGroup">List</div>
+</div>

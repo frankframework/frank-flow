@@ -1,8 +1,6 @@
-node_modules
-node
-coverage/*
-dist/*
-/target/
+# IDE
 .settings
-bin
 .idea/
+
+# Maven build
+/target

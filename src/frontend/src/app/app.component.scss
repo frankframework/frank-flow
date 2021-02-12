@@ -1,0 +1,12 @@
+.main-container {
+  height: 100%;
+  display: flex;
+
+  .useAllSpace {
+    width: 100%;
+  }
+
+  .shareSpace {
+    width: 50%;
+  }
+}

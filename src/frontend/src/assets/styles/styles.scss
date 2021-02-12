@@ -1,0 +1,15 @@
+@import 'variables';
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  color: $text-color;
+  font-family: 'Open Sans', sans-serif;
+}

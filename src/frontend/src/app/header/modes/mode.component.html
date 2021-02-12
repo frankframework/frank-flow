@@ -1,0 +1,18 @@
+<app-button
+  [selected]="mode.is(modeType.editorMode)"
+  (click)="setMode(modeType.editorMode)"
+>
+  <fa-icon icon="code"></fa-icon>
+</app-button>
+<app-button
+  [selected]="mode.is(modeType.hybridMode)"
+  (click)="setMode(modeType.hybridMode)"
+>
+  <fa-icon icon="columns"></fa-icon>
+</app-button>
+<app-button
+  [selected]="mode.is(modeType.flowMode)"
+  (click)="setMode(modeType.flowMode)"
+>
+  <fa-icon icon="project-diagram"></fa-icon>
+</app-button>

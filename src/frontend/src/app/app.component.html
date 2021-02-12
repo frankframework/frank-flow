@@ -1,0 +1,13 @@
+<app-header></app-header>
+<div class="main-container">
+  <app-editor
+    [class.useAllSpace]="mode.is(modeType.editorMode)"
+    [class.shareSpace]="mode.is(modeType.hybridMode)"
+    *ngIf="mode.is(modeType.editorMode) || mode.is(modeType.hybridMode)"
+  ></app-editor>
+  <app-flow
+    [class.useAllSpace]="mode.is(modeType.flowMode)"
+    [class.shareSpace]="mode.is(modeType.hybridMode)"
+    *ngIf="mode.is(modeType.flowMode) || mode.is(modeType.hybridMode)"
+  ></app-flow>
+</div>

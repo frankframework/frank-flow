@@ -1,0 +1,42 @@
+@import '~src/assets/styles/variables';
+
+.group {
+  width: 100%;
+  background-color: white;
+
+  &--primary {
+    border-top: 2px solid $primary-color;
+  }
+
+  &--accent {
+    border-top: 2px solid $accent-color;
+  }
+
+  &--success {
+    border-top: 2px solid $success-color;
+  }
+
+  &--info {
+    border-top: 2px solid $info-color;
+  }
+
+  &--warning {
+    border-top: 2px solid $warning-color;
+  }
+
+  &--danger {
+    border-top: 2px solid $danger-color;
+  }
+
+  &__header {
+    padding: 16px;
+    border-bottom: 2px solid $border-color;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__list {
+    padding: 16px;
+    border-bottom: 2px solid $border-color;
+  }
+}
