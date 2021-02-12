@@ -24,7 +24,8 @@ export class FlowComponent implements OnInit {
     {"id":"JavaListener","top":41,"left":158}],
     "connections":[
     {"uuids":["Transform_bottom","FixedResultPipe_top"]},
-    {"uuids":["JavaListener_bottom","Transform_top"]}]}`;
+    {"uuids":["JavaListener_bottom","Transform_top"]}
+    ]}`;
     const data = JSON.parse(json);
 
     this.nodes = data.nodes;
