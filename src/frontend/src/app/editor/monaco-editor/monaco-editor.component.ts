@@ -1,3 +1,4 @@
+/// <reference path="../../../../node_modules/monaco-editor/monaco.d.ts" />
 import {
   AfterViewInit,
   Component,
@@ -9,8 +10,6 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { editor } from 'monaco-editor';
-import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -27,7 +26,7 @@ export class MonacoEditorComponent
   @Input() code = '';
   @Output() codeChange = new EventEmitter<string>();
 
-  codeEditorInstance!: IStandaloneCodeEditor;
+  codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
   resizeInterval!: number;
 
   constructor(private monacoElement: ElementRef) {}
@@ -89,7 +88,7 @@ export class MonacoEditorComponent
   }
 
   initializeEditor(): void {
-    this.codeEditorInstance = editor.create(
+    this.codeEditorInstance = monaco.editor.create(
       this.editorContainer.nativeElement,
       {
         value: this.code,
