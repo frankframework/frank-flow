@@ -1,2 +1,6 @@
+# IDE
 .settings
 .idea/
+
+# Maven build
+/target

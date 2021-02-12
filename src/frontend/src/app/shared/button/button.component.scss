@@ -4,7 +4,6 @@
   height: 32px;
   min-width: 32px;
   border: 2px solid $border-color;
-  // TODO: Better alignment
   line-height: 24px;
   padding: 4px;
   text-align: center;
@@ -12,11 +11,22 @@
   &--light {
     background-color: white;
     color: $text-color;
+
+    &:hover {
+      background-color: $primary-color;
+      border-color: $primary-color;
+    }
   }
 
   &--dark {
     background: $background-color-dark;
     color: white;
+
+    &:hover {
+      background-color: $primary-color;
+      border-color: $primary-color;
+      color: $text-color;
+    }
   }
 }
 
