@@ -1,3 +1,9 @@
+# Frank!Flow 2.0!
+
+The Frank!Flow application is currently undergoing a renovation. The application will mostly be rewritten to Angular for a better User Experience and a stable product.
+
+The current version of this application is considered a Work In Progress.
+
 # Frank!Flow
 
 _Graphical flow editor for Frank configurations._
@@ -12,7 +18,7 @@ The project has been tested in Mozilla Firefox and Google Chrome, other browsers
 
 The explorer is presented on the left side of the window. The explorer will help you to browse configurations, add, rename and delete them. The file-tree is a representation of the file system where your configurations are located.
 
-There are two buttons located above the file-tree. The first one is for adding a new configuration and the second one is to save the current selected configuration. 
+There are two buttons located above the file-tree. The first one is for adding a new configuration and the second one is to save the current selected configuration.
 
 You can select a configuration by clicking on it. The flow will be loaded on the white canvas. Two additional options will be provided by right-clicking a file: Rename and delete.
 
@@ -26,16 +32,16 @@ The pipe will be added to the canvas by clicking on it.
 
 The flow is the main attraction of the application and has a lot of hidden features. There are a number of ways to manipulate the flow:
 
-* You can move the pipes by dragging them around.
-* A forward can be created by dragging from the edge of the first pipe, to the edge of the second pipe. While dragging you can see an arrow, pointing in the direction of the forward.
+- You can move the pipes by dragging them around.
+- A forward can be created by dragging from the edge of the first pipe, to the edge of the second pipe. While dragging you can see an arrow, pointing in the direction of the forward.
 
 Besides dragging and clicking the pipes, there are some additional options in the right-click menu:
 
-* Toggle activity mode: The pipes will change to a simpler and compacter appearance by clicking this option.
-* Realign flow: You can reset the flow to a generated flow.
-* Toggle curve: Change the angled lines to curves.
-* Toggle flow direction: Change to flow from vertical to horizontal mode.
-* Export SVG: This option will export an SVG image of the part of the canvas you are looking at.
+- Toggle activity mode: The pipes will change to a simpler and compacter appearance by clicking this option.
+- Realign flow: You can reset the flow to a generated flow.
+- Toggle curve: Change the angled lines to curves.
+- Toggle flow direction: Change to flow from vertical to horizontal mode.
+- Export SVG: This option will export an SVG image of the part of the canvas you are looking at.
 
 There are two more options that will be discussed in the further chapters.
 
@@ -51,9 +57,9 @@ The editor can be opened by right-clicking the canvas and selecting “toggle ed
 
 The editor has some special features:
 
-* The editor has autocompletion for the pipes.
-* The editor can highlight the selected pipe on the canvas.
-* Errors will be shown with red lines and messages in the editor.
+- The editor has autocompletion for the pipes.
+- The editor can highlight the selected pipe on the canvas.
+- Errors will be shown with red lines and messages in the editor.
 
 #### Autocompletion
 
@@ -63,7 +69,7 @@ The autocompletion has support for multiple XSD’s, namespaces and isn’t just
 
 #### Validation
 
-The editor will show errors and validate your configuration in the future.  
+The editor will show errors and validate your configuration in the future.
 
 ## Testing and Developing
 
@@ -73,7 +79,7 @@ The easiest way to get started with the Frank!Flow is with help of the [Frank!Ru
 
 ### Frank2Frank!Flow
 
-Create a new frank folder next to the frank-runner folder. Following the name convention this should be called `frank2frank-flow`. This folder will contain three main files and an optional file to restart the runner. 
+Create a new frank folder next to the frank-runner folder. Following the name convention this should be called `frank2frank-flow`. This folder will contain three main files and an optional file to restart the runner.
 
 #### POM
 
@@ -119,7 +125,7 @@ The POM will tell the Frank!Runner which extra dependencies you want to download
 
 #### Frank!Runner properties
 
-To tell the Frank!Runner we want to download extra dependencies with maven, we have to create a new file called `frank-runner.properties` with the content: `maven=true`. 
+To tell the Frank!Runner we want to download extra dependencies with maven, we have to create a new file called `frank-runner.properties` with the content: `maven=true`.
 
 #### Build
 
@@ -160,7 +166,7 @@ You should edit `PATH_TO_YOUR_FRANK-FLOW_PROJECT` to the correct location. As yo
 
 The last file is optional, because it is up to you how you restart your Frank!Runner. Some people like to use the build in Task Manager of there IDE, which will have a restart task because of the build.xml.
 
-You could also create an additional `restart.bat` so it can be called via the command line interface (or double click). This file should contain: 
+You could also create an additional `restart.bat` so it can be called via the command line interface (or double click). This file should contain:
 
 ```bash
 call ..\frank-runner\ant.bat
@@ -179,9 +185,9 @@ Clone this repository (or a fork) to start developing the Frank!Flow. This proje
 
 There are some basic requirements that are needed to test or develop the Frank!Flow application. These requirements are:
 
-* [Java](https://www.java.com/nl/download/)
-* [Node.js](https://nodejs.org/en/)
-* [Maven](http://maven.apache.org/)
+- [Java](https://www.java.com/nl/download/)
+- [Node.js](https://nodejs.org/en/)
+- [Maven](http://maven.apache.org/)
 
 #### Frontend
 
@@ -215,6 +221,5 @@ The other option is meant for a production setting. This is because Maven will a
 
 ## Other projects
 
-* [Frank!Runner](https://github.com/ibissource/frank-runner)
-* [XSD code completion for the Monaco Editor](https://github.com/philipsens/monaco-xsd-code-completion)
-
+- [Frank!Runner](https://github.com/ibissource/frank-runner)
+- [XSD code completion for the Monaco Editor](https://github.com/philipsens/monaco-xsd-code-completion)

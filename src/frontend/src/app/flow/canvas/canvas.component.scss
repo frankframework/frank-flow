@@ -1,5 +1,5 @@
-$transparent-color-dark: rgba(0, 0, 0, 0.05);
-$transparent-color-light: rgba(0, 0, 0, 0.04);
+$transparent-color-dark: rgba(0, 0, 0, 0.02);
+$transparent-color-light: rgba(0, 0, 0, 0.05);
 
 :host {
   width: 100%;
@@ -12,16 +12,7 @@ $transparent-color-light: rgba(0, 0, 0, 0.04);
     linear-gradient($transparent-color-dark 1px, transparent 1px),
     linear-gradient(-90deg, $transparent-color-light 1px, transparent 1px),
     linear-gradient($transparent-color-light 1px, transparent 1px),
-    linear-gradient(transparent 3px, #fff 3px, #fff 78px, transparent 78px),
-    linear-gradient(-90deg, #aaa 1px, transparent 1px),
-    linear-gradient(
-      -90deg,
-      transparent 3px,
-      #fff 3px,
-      #fff 78px,
-      transparent 78px
-    ),
-    linear-gradient(#aaa 1px, transparent 1px), #f2f2f2;
+    linear-gradient(transparent 3px, #fff 3px, #fff 78px, transparent 78px);
   background-size: 4px 4px, 4px 4px, 80px 80px, 80px 80px, 80px 80px, 80px 80px,
     80px 80px, 80px 80px;
 }
