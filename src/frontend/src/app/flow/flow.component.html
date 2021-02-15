@@ -1,6 +1,9 @@
-<app-canvas
-  #nodeContainer
-  [nodes]="nodes"
-  [connections]="connections"
-></app-canvas>
-<app-palette></app-palette>
+<div class="flowContainer">
+  <app-canvas
+    #nodeContainer
+    [nodes]="nodes"
+    [connections]="connections"
+  ></app-canvas>
+  <app-palette></app-palette>
+</div>
+<app-options></app-options>

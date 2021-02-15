@@ -2,12 +2,10 @@ import {
   AfterViewInit,
   Component,
   Input,
-  OnInit,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
-import { Node } from '../node/node';
 
 @Component({
   selector: 'app-canvas',
@@ -50,13 +48,11 @@ export class CanvasComponent implements AfterViewInit {
     const container = this.viewContainerRef.element.nativeElement.parentNode;
     const nodes = Array.from(
       container.querySelectorAll('.node') as HTMLDivElement[]
-    ).map((node: HTMLDivElement) => {
-      return {
-        id: node.id,
-        top: node.offsetTop,
-        left: node.offsetLeft,
-      };
-    });
+    ).map((node: HTMLDivElement) => ({
+      id: node.id,
+      top: node.offsetTop,
+      left: node.offsetLeft,
+    }));
 
     const connections = (this.nodeService.jsPlumbInstance.getAllConnections() as any[]).map(
       (conn) => ({ uuids: conn.getUuids() })

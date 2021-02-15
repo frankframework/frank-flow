@@ -6,9 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements OnInit {
-  constructor() {}
-
   initCode = '<root></root>';
+
+  constructor() {}
   // Either you can use the two-way binding and abstraction or
   // you can directly access the monaco-editor instance in your parent class.
   // @ViewChild('MonacoEditorComponent')

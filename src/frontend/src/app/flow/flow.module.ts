@@ -4,10 +4,23 @@ import { FlowComponent } from './flow.component';
 import { CanvasComponent } from './canvas/canvas.component';
 import { PaletteModule } from './palette/palette.module';
 import { NodeComponent } from './node/node.component';
+import { OptionsComponent } from './options/options.component';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  declarations: [FlowComponent, CanvasComponent, NodeComponent],
+  declarations: [
+    FlowComponent,
+    CanvasComponent,
+    NodeComponent,
+    OptionsComponent,
+  ],
   exports: [FlowComponent],
-  imports: [CommonModule, PaletteModule],
+  imports: [
+    CommonModule,
+    PaletteModule,
+    NgxSmartModalModule.forChild(),
+    SharedModule,
+  ],
 })
 export class FlowModule {}
