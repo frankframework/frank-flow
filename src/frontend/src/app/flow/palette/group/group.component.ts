@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   selector: 'app-group',
@@ -10,9 +9,9 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 export class GroupComponent implements OnInit {
   @Input() foldGroup = false;
   @Input() border = 'primary';
-  foldArrow = () => (this.foldGroup ? faChevronDown : faChevronUp);
-
   constructor() {}
+
+  foldArrow = () => (this.foldGroup ? faChevronDown : faChevronUp);
 
   ngOnInit(): void {}
 

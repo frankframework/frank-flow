@@ -26,6 +26,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "jsplumb": "^2.15.5",
     "monaco-editor": "^0.22.3",
+    "ngx-smart-modal": "^7.4.1",
     "ngx-treeview": "^10.0.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
