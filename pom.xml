@@ -228,7 +228,7 @@
 	</build>
 
 	<profiles>
-		<!-- <profile>
+		<profile>
 			<id>frontend</id>
 			<build>
 				<plugins>
@@ -266,12 +266,12 @@
 
 							<execution>
 								<phase>generate-resources</phase>
-								<id>webpack build</id>
+								<id>Angular build production</id>
 								<goals>
-									<goal>webpack</goal>
+									<goal>npm</goal>
 								</goals>
-
 								<configuration>
+									<arguments>run build:prod</arguments>
 									<workingDirectory>src/frontend</workingDirectory>
 								</configuration>
 							</execution>
@@ -279,7 +279,7 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile> -->
+		</profile>
 		<profile>
 			<id>ibissource</id>
 			<distributionManagement>

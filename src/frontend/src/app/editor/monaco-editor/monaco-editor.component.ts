@@ -1,3 +1,4 @@
+/// <reference path="../../../../node_modules/monaco-editor/monaco.d.ts" />
 import {
   AfterViewInit,
   Component,
@@ -9,8 +10,6 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { editor } from 'monaco-editor';
-import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -27,10 +26,14 @@ export class MonacoEditorComponent
   @Input() code = '';
   @Output() codeChange = new EventEmitter<string>();
 
-  codeEditorInstance!: IStandaloneCodeEditor;
+  codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
   resizeInterval!: number;
 
   constructor(private monacoElement: ElementRef) {}
+
+  ngAfterViewInit(): void {
+    this.loadMonaco();
+  }
 
   ngOnChanges(): void {
     if (this.codeEditorInstance) {
@@ -38,11 +41,14 @@ export class MonacoEditorComponent
     }
   }
 
-  ngAfterViewInit(): void {
+  ngOnDestroy(): void {
+    clearInterval(this.resizeInterval);
+  }
+
+  loadMonaco(): void {
     if (loadedMonaco) {
-      // Wait until monaco editor is available
       loadPromise.then(() => {
-        this.initMonaco();
+        this.initializeMonaco();
       });
     } else {
       loadedMonaco = true;
@@ -51,17 +57,15 @@ export class MonacoEditorComponent
           resolve();
           return;
         }
-        const onAmdLoader: any = () => {
-          // Load monaco
-          (window as any).require.config({ paths: { vs: 'assets/monaco/vs' } });
 
+        const onAmdLoader: any = () => {
+          (window as any).require.config({ paths: { vs: 'assets/monaco/vs' } });
           (window as any).require(['vs/editor/editor.main'], () => {
-            this.initMonaco();
+            this.initializeMonaco();
             resolve();
           });
         };
 
-        // Load AMD loader if necessary
         if (!(window as any).require) {
           const loaderScript: HTMLScriptElement = document.createElement(
             'script'
@@ -77,12 +81,14 @@ export class MonacoEditorComponent
     }
   }
 
-  ngOnDestroy(): void {
-    clearInterval(this.resizeInterval);
+  initializeMonaco(): void {
+    this.initializeEditor();
+    this.initializeTwoWayBinding();
+    this.initializeResizeInterval();
   }
 
-  initMonaco(): void {
-    this.codeEditorInstance = editor.create(
+  initializeEditor(): void {
+    this.codeEditorInstance = monaco.editor.create(
       this.editorContainer.nativeElement,
       {
         value: this.code,
@@ -90,15 +96,19 @@ export class MonacoEditorComponent
         theme: 'vs-dark',
       }
     );
+  }
 
-    this.resizeInterval = setInterval(() => this.onResize(), 100);
-
+  initializeTwoWayBinding(): void {
     const model = this.codeEditorInstance.getModel();
     if (model) {
       model.onDidChangeContent((e) => {
         this.codeChange.emit(this.codeEditorInstance.getValue());
       });
     }
+  }
+
+  initializeResizeInterval(): void {
+    this.resizeInterval = setInterval(() => this.onResize(), 100);
   }
 
   onResize(): void {

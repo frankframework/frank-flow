@@ -1,0 +1,10 @@
+<ngx-smart-modal
+  customClass="nsm-centered modal"
+  #optionsModal
+  identifier="optionsModal"
+>
+  <div *ngIf="optionsModal.hasData()">
+    <pre>{{ optionsModal.getData() | json }}</pre>
+  </div>
+  <app-button (click)="optionsModal.close()">Close</app-button>
+</ngx-smart-modal>
