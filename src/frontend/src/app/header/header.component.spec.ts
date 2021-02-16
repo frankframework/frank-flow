@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ToastContainerModule, ToastrModule } from 'ngx-toastr';
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
@@ -9,6 +9,7 @@ describe('HeaderComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [HeaderComponent],
+      imports: [ToastrModule.forRoot(), ToastContainerModule],
     }).compileComponents();
   });
 

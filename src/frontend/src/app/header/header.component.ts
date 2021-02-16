@@ -8,6 +8,7 @@ import {
   faSave,
 } from '@fortawesome/free-solid-svg-icons';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +16,7 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  constructor(library: FaIconLibrary) {
+  constructor(library: FaIconLibrary , private toastr: ToastrService) {
     library.addIcons(
       faFile,
       faFolder,
@@ -24,6 +25,11 @@ export class HeaderComponent implements OnInit {
       faProjectDiagram,
       faColumns
     );
+  }
+
+  // TODO remove later example for toaster
+  showSuccess(): void {
+    this.toastr.success('File saved!', 'Your file has been saved succesfully!');
   }
 
   ngOnInit(): void {}
