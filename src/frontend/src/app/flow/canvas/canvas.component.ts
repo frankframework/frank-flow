@@ -27,6 +27,17 @@ export class CanvasComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
 
+    if (typeof Worker !== 'undefined') {
+      const flowGenerator = new Worker('./flow-generator.worker', {
+        type: 'module',
+      });
+
+      flowGenerator.onmessage = ({ data }) => {
+        console.log(`page got message: ${data}`);
+      };
+      flowGenerator.postMessage('hello');
+    }
+
     this.nodes.forEach((node) => {
       this.nodeService.addDynamicNode(node);
     });
