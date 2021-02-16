@@ -3,7 +3,6 @@
   min-width: 200px;
   min-height: 100px;
   padding: 1em;
-  box-shadow: 5px 5px 0 0 #aca9f1;
   border: 2px solid #5452f6;
   border-radius: 10px;
   display: flex;
@@ -11,4 +10,13 @@
   justify-content: center;
   background: #eeeeff;
   color: #5452f6;
+
+  &:hover {
+    cursor: grab;
+  }
+
+  &.jtk-drag {
+    box-shadow: 5px 5px 0 0 #aca9f199;
+    cursor: grabbing;
+  }
 }

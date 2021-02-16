@@ -16,7 +16,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  constructor(library: FaIconLibrary , private toastr: ToastrService) {
+  constructor(library: FaIconLibrary, private toastr: ToastrService) {
     library.addIcons(
       faFile,
       faFolder,
@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit {
 
   // TODO remove later example for toaster
   showSuccess(): void {
-    this.toastr.success('File saved!', 'Your file has been saved succesfully!');
+    this.toastr.success('Your file has been saved succesfully.', 'File saved!');
   }
 
   ngOnInit(): void {}
