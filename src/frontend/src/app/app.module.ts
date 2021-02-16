@@ -8,6 +8,8 @@ import { HeaderModule } from './header/header.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TreeviewModule } from 'ngx-treeview';
 import { FlowModule } from './flow/flow.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,6 +21,18 @@ import { FlowModule } from './flow/flow.module';
     FontAwesomeModule,
     TreeviewModule.forRoot(),
     FlowModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right',
+      progressBar: true,
+      extendedTimeOut: 2000,
+      maxOpened: 10,
+      autoDismiss: true,
+      preventDuplicates: true,
+      countDuplicates: true,
+      resetTimeoutOnDuplicate: true,
+      includeTitleDuplicates: true,
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],
