@@ -1,9 +1,4 @@
-export class Settings {
+export interface Settings {
   darkmode: boolean;
   showPopups: boolean;
-
-  constructor() {
-    this.darkmode = false;
-    this.showPopups = true;
-  }
 }

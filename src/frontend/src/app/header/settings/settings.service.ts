@@ -7,9 +7,10 @@ import { Observable, of } from 'rxjs';
 })
 export class SettingsService {
   settings: Settings;
+  defaultSettings = { darkmode: false, showPopups: true };
 
   constructor() {
-    this.settings = new Settings();
+    this.settings = this.getSettingsLocalStorage();
   }
 
   setSettings(settings: Settings): void {
@@ -19,5 +20,10 @@ export class SettingsService {
 
   getSettings(): Observable<Settings> {
     return of(this.settings);
+  }
+
+  getSettingsLocalStorage(): Settings {
+    const settings = localStorage.getItem('settings');
+    return settings ? JSON.parse(settings) : this.defaultSettings;
   }
 }

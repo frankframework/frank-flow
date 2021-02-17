@@ -22,7 +22,8 @@ export class SettingsComponent implements OnInit {
       .subscribe((settings) => (this.settings = settings));
   }
 
-  setSettings(settings: Settings): void {
+  setSettings(): void {
+    console.log(this.settings);
     this.settingsService.setSettings(this.settings);
   }
 }
