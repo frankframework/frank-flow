@@ -1,6 +1,14 @@
 /// <reference lib="webworker" />
+import { Parser } from 'xml2js';
+
+let parser = new Parser();
 
 addEventListener('message', ({ data }) => {
-  const response = `worker response to ${data}`;
-  postMessage(response);
+  let parsedXml;
+
+  parser.parseString(data, function (_err: any, result: any) {
+    parsedXml = data;
+  });
+
+  postMessage(parsedXml);
 });

@@ -27,7 +27,7 @@ export class MonacoEditorComponent
   @Output() codeChange = new EventEmitter<string>();
 
   codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
-  resizeInterval!: number;
+  resizeInterval!: any;
 
   constructor(private monacoElement: ElementRef) {}
 

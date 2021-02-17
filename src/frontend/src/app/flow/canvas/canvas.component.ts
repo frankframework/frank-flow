@@ -35,7 +35,9 @@ export class CanvasComponent implements AfterViewInit {
       flowGenerator.onmessage = ({ data }) => {
         console.log(`page got message: ${data}`);
       };
-      flowGenerator.postMessage('hello');
+
+      let xml = '<root>Hello xml2js!</root>';
+      flowGenerator.postMessage(xml);
     }
 
     this.nodes.forEach((node) => {
