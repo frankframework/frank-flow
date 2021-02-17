@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SettingsComponent } from './settings.component';
+import { NgxSmartModalComponent, NgxSmartModalModule } from 'ngx-smart-modal';
 
 describe('SettingsComponent', () => {
   let component: SettingsComponent;
@@ -8,7 +9,8 @@ describe('SettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SettingsComponent],
+      declarations: [SettingsComponent, NgxSmartModalComponent],
+      imports: [NgxSmartModalModule.forChild()],
     }).compileComponents();
   });
 
