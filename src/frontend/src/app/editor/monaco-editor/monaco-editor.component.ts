@@ -11,6 +11,8 @@ import {
   ViewChild,
 } from '@angular/core';
 
+import { CodeService } from '../../services/code.service';
+
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
 
@@ -29,7 +31,11 @@ export class MonacoEditorComponent
   codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
   resizeInterval!: any;
 
-  constructor(private monacoElement: ElementRef) {}
+  codeService: CodeService;
+
+  constructor(private monacoElement: ElementRef, codeService: CodeService) {
+    this.codeService = codeService;
+  }
 
   ngAfterViewInit(): void {
     this.loadMonaco();
@@ -96,6 +102,7 @@ export class MonacoEditorComponent
         theme: 'vs-dark',
       }
     );
+    this.codeService.setEditor(this.codeEditorInstance);
   }
 
   initializeTwoWayBinding(): void {
