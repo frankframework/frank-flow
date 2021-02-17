@@ -31,5 +31,13 @@
       //height: 32px;
       border: 1px solid $border-color;
     }
+
+    &--right {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 16px;
+      width: 224px;
+    }
   }
 }

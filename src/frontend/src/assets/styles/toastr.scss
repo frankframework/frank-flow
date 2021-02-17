@@ -1,0 +1,28 @@
+@import 'variables';
+@import '~ngx-toastr/toastr';
+
+.toast-container .ngx-toastr {
+  border-radius: 0;
+  background-position: 15px center;
+  box-shadow: 5px 5px 0 $shadow-color;
+
+  &:hover {
+    box-shadow: 5px 5px 0 $shadow-color;
+  }
+}
+
+.toast-success {
+  background-color: $success-color;
+}
+
+.toast-error {
+  background-color: $danger-color;
+}
+
+.toast-info {
+  background-color: $info-color;
+}
+
+.toast-warning {
+  background-color: $warning-color;
+}

@@ -7,6 +7,8 @@ import { NodeComponent } from './node/node.component';
 import { OptionsComponent } from './options/options.component';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { SharedModule } from '../shared/shared.module';
+import { FormsModule } from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { SharedModule } from '../shared/shared.module';
     PaletteModule,
     NgxSmartModalModule.forChild(),
     SharedModule,
+    FormsModule,
+    FontAwesomeModule,
   ],
 })
 export class FlowModule {}
