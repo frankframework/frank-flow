@@ -1,8 +1,4 @@
-@import '~src/assets/styles/variables';
-
 ::ng-deep .nsm-content {
-  box-shadow: 5px 5px 0 0 $shadow-color;
-  padding: 1em;
-  border: 2px solid $border-color;
-  border-radius: 0;
+  width: 30vw;
+  height: 30vh;
 }

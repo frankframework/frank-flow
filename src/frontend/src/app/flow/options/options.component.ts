@@ -1,12 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { NgxSmartModalService } from 'ngx-smart-modal';
 
 @Component({
   selector: 'app-options',
   templateUrl: './options.component.html',
   styleUrls: ['./options.component.scss'],
 })
-export class OptionsComponent implements OnInit {
-  constructor() {}
+export class OptionsComponent {
+  node = { name: '' };
+  toggle = false;
 
-  ngOnInit(): void {}
+  constructor(private ngxSmartModalService: NgxSmartModalService) {}
+
+  onDataAdded(): void {
+    this.node = this.ngxSmartModalService.getModalData('optionsModal');
+  }
 }
