@@ -74,4 +74,11 @@ public abstract class FileUtils {
 
 		return absPath;
 	}
+
+	public static boolean createDir(File file) {
+		if(!file.exists()) {
+			return file.mkdirs();
+		}
+		return false;
+	}
 }
