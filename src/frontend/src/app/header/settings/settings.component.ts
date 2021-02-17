@@ -23,7 +23,6 @@ export class SettingsComponent implements OnInit {
   }
 
   setSettings(): void {
-    console.log(this.settings);
     this.settingsService.setSettings(this.settings);
   }
 }

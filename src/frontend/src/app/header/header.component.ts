@@ -29,7 +29,6 @@ export class HeaderComponent implements OnInit {
   }
 
   openSettings(): void {
-    console.log('testing');
     this.ngxSmartModalService.getModal('settingsModal').open();
   }
 
