@@ -64,6 +64,5 @@ export class NodeComponent implements AfterViewInit {
       .getModal('optionsModal')
       .setData(this.node, true)
       .open();
-    console.log(this.node);
   }
 }

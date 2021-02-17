@@ -1,6 +1,7 @@
 @import 'variables';
 @import 'toastr';
-@import '~ngx-smart-modal/ngx-smart-modal';
+@import 'ngx-smart-modal';
+@import 'inputs';
 
 * {
   box-sizing: border-box;

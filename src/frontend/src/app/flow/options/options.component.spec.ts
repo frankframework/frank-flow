@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OptionsComponent } from './options.component';
-import { NgxSmartModalComponent } from 'ngx-smart-modal';
+import { NgxSmartModalComponent, NgxSmartModalModule } from 'ngx-smart-modal';
 
 describe('OptionsComponent', () => {
   let component: OptionsComponent;
@@ -10,6 +10,7 @@ describe('OptionsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [OptionsComponent, NgxSmartModalComponent],
+      imports: [NgxSmartModalModule.forChild()],
     }).compileComponents();
   });
 
