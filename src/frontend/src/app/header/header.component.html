@@ -19,8 +19,9 @@
   </div>
   <div class="header__actions--right">
     <app-modes></app-modes>
-    <app-button color="dark">
+    <app-button (click)="openSettings()" color="dark">
       <fa-icon icon="cog" transform="down-1"></fa-icon>
     </app-button>
   </div>
 </div>
+<app-settings></app-settings>

@@ -1,0 +1,12 @@
+<ngx-smart-modal
+  customClass="nsm-centered modal"
+  #settingsModal
+  identifier="settingsModal"
+>
+  <div>
+    {{settings.darkmode}}
+  </div>
+
+
+  <app-button (click)="settingsModal.close()">Close</app-button>
+</ngx-smart-modal>
