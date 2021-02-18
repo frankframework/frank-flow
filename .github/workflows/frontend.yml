@@ -41,4 +41,4 @@ jobs:
       - name: Run unit tests
         run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
       - name: Run end-to-end tests
-        run: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
+        run: npm run e2e -- --protractor-config=e2e/protractor.conf.js
