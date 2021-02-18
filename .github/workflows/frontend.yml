@@ -5,13 +5,20 @@ on:
     branches:
       - master
       - feature/CI
+    paths:
+      - 'src/frontend/**'
   pull_request:
     branches:
       - master
+    paths:
+      - 'src/frontend/**'
+
+defaults:
+  run:
+    working-directory: src/frontend
 
 jobs:
   build:
-    working_directory: ~/src/frontend
     runs-on: ubuntu-lastest
     steps:
       - uses: actions/checkout@v2
