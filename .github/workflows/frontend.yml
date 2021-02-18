@@ -5,13 +5,9 @@ on:
     branches:
       - master
       - feature/CI
-    paths:
-      - 'frank-flow/src/frontend/**'
   pull_request:
     branches:
       - master
-    paths:
-      - 'frank-flow/src/frontend/**'
 
 defaults:
   run:
