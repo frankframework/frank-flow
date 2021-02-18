@@ -7,7 +7,11 @@ addEventListener('message', ({ data }) => {
   let parsedXml;
 
   parser.parseString(data, (err: any, result: any) => {
-    parsedXml = data;
+    parsedXml = result;
+
+    if(err != null) {
+      console.error(err);
+    }
   });
 
   postMessage(parsedXml);

@@ -28,7 +28,6 @@ export class NodeService {
     (component.instance as any).node = node;
     (component.instance as any).jsPlumbInstance = this.jsPlumbInstance;
     this.rootViewContainer.insert(component.hostView);
-    console.log('in NodeService..', component.instance);
   }
 
   addConnection(connection: ConnectParams): void {

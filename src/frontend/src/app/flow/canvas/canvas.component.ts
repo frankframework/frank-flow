@@ -8,12 +8,23 @@ import {
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
 import { Node } from '../node/node';
+import { CodeService } from '../../services/code.service';
 
 @Component({
   selector: 'app-canvas',
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.scss'],
 })
+
+// export enum FileType {
+//   JSON,
+//   XML
+// }
+
+// export interface ICovertertable {
+//   type: FileType;
+//   data: string;
+// }
 export class CanvasComponent implements AfterViewInit {
   @Input() nodes = [];
 
@@ -22,7 +33,10 @@ export class CanvasComponent implements AfterViewInit {
   @ViewChild('nodes', { read: ViewContainerRef })
   viewContainerRef!: ViewContainerRef;
 
-  constructor(private nodeService: NodeService) {}
+  constructor(
+    private nodeService: NodeService,
+    private codeService: CodeService
+  ) {}
 
   ngAfterViewInit(): void {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
@@ -33,10 +47,10 @@ export class CanvasComponent implements AfterViewInit {
       });
 
       flowGenerator.onmessage = ({ data }) => {
-        console.log(`page got message: ${data}`);
+        console.log(`page got message: `, data);
       };
 
-      const xml = '<root>Hello xml2js!</root>';
+      const xml = this.codeService.getCurrentFile();
       flowGenerator.postMessage(xml);
     }
 
