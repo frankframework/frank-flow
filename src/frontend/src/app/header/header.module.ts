@@ -4,10 +4,12 @@ import { HeaderComponent } from './header.component';
 import { SharedModule } from '../shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ModeComponent } from './modes/mode.component';
+import { SettingsComponent } from './settings/settings.component';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 @NgModule({
-  declarations: [HeaderComponent, ModeComponent],
+  declarations: [HeaderComponent, ModeComponent, SettingsComponent],
   exports: [HeaderComponent],
-  imports: [CommonModule, SharedModule, FontAwesomeModule],
+  imports: [CommonModule, SharedModule, FontAwesomeModule, NgxSmartModalModule],
 })
 export class HeaderModule {}

@@ -41,7 +41,7 @@ export class CanvasComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
 
-    if (typeof Worker !== 'undefined') {
+    if (Worker) {
       const flowGenerator = new Worker('./flow-generator.worker', {
         type: 'module',
       });
@@ -77,13 +77,11 @@ export class CanvasComponent implements AfterViewInit {
     const container = this.viewContainerRef.element.nativeElement.parentNode;
     const nodes = Array.from(
       container.querySelectorAll('.node') as HTMLDivElement[]
-    ).map((node: HTMLDivElement) => {
-      return {
-        id: node.id,
-        top: node.offsetTop,
-        left: node.offsetLeft,
-      };
-    });
+    ).map((node: HTMLDivElement) => ({
+      id: node.id,
+      top: node.offsetTop,
+      left: node.offsetLeft,
+    }));
 
     const connections = (this.nodeService.jsPlumbInstance.getAllConnections() as any[]).map(
       (conn) => ({ uuids: conn.getUuids() })

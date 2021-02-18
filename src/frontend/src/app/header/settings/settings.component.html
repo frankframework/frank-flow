@@ -1,0 +1,25 @@
+<ngx-smart-modal
+  class="settingsModal"
+  customClass="nsm-centered"
+  #settingsModal
+  identifier="settingsModal"
+>
+  <div>
+    <h1>Settings</h1>
+    <div class="input-row">
+      <label>Darkmode {{ settings.darkmode }}</label>
+      <app-toggle
+        [(state)]="settings.darkmode"
+        (stateChange)="setSettings()"
+      ></app-toggle>
+    </div>
+    <div class="input-row">
+      <label>Show confirm popups {{ settings.showPopups }}</label>
+      <app-toggle
+        [(state)]="settings.showPopups"
+        (stateChange)="setSettings()"
+      ></app-toggle>
+    </div>
+  </div>
+  <app-button (click)="settingsModal.close()">Close</app-button>
+</ngx-smart-modal>

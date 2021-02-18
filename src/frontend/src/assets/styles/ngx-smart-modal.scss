@@ -1,0 +1,22 @@
+@import '~src/assets/styles/variables';
+@import '~ngx-smart-modal/ngx-smart-modal';
+
+.nsm-dialog {
+  max-width: fit-content;
+
+  .nsm-content {
+    box-shadow: 5px 5px 0 0 $shadow-color;
+    padding: 1em;
+    border: 2px solid $border-color;
+    border-radius: 0;
+
+    overflow: auto;
+
+    .nsm-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+  }
+}

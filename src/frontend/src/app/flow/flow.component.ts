@@ -19,9 +19,9 @@ export class FlowComponent implements OnInit {
 
   fillFromJson(): void {
     const json = `{"nodes":[
-    {"id":"Transform","top":177,"left":146},
-    {"id":"FixedResultPipe","top":302,"left":130},
-    {"id":"JavaListener","top":41,"left":158}],
+    {"id":"Transform","name":"Transform","top":177,"left":146},
+    {"id":"FixedResultPipe","name":"FixedResultPipe","top":302,"left":130},
+    {"id":"JavaListener","name":"JavaListener","top":41,"left":158}],
     "connections":[
     {"uuids":["Transform_bottom","FixedResultPipe_top"]},
     {"uuids":["JavaListener_bottom","Transform_top"]}

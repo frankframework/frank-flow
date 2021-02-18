@@ -25,6 +25,7 @@ import java.nio.file.StandardCopyOption;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -78,6 +79,27 @@ public class FileApi {
 		} catch (IOException e) {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
+	}
+
+	@PUT
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createFolder(@PathParam("name") String configurationName, @QueryParam("path") String path) {
+		File rootFolder = FileUtils.getDir(configurationName);
+		File file = getFile(rootFolder, path);
+		if(file.exists()) {
+			if(file.isDirectory()) {
+				throw new ApiException("directory already exists", Response.Status.CONFLICT);
+			} else {
+				throw new ApiException("path is a file", Response.Status.CONFLICT);
+			}
+		}
+
+		if(FileUtils.createDir(file)) {
+			return Response.status(Response.Status.CREATED).build();
+		}
+
+		return Response.status(Response.Status.OK).build();
 	}
 
 	@POST

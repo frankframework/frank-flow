@@ -9,7 +9,7 @@ addEventListener('message', ({ data }) => {
   parser.parseString(data, (err: any, result: any) => {
     parsedXml = result;
 
-    if(err != null) {
+    if (err) {
       console.error(err);
     }
   });

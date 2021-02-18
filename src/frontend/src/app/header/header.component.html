@@ -4,18 +4,24 @@
   </div>
   <div class="header__actions">
     <app-button color="dark">
-      <fa-icon icon="file"></fa-icon>
+      <fa-icon icon="file" transform="down-1"></fa-icon>
     </app-button>
     <app-button color="dark">
-      <fa-icon icon="folder"></fa-icon>
+      <fa-icon icon="folder" transform="down-1"></fa-icon>
     </app-button>
     <select>
       <option disabled selected>Choose a configuration</option>
       <option>Config 1</option>
     </select>
-    <app-button color="dark">
-      <fa-icon icon="save"></fa-icon>
+    <app-button (click)="showSuccess()" color="dark">
+      <fa-icon icon="save" transform="down-1"></fa-icon>
     </app-button>
   </div>
-  <app-modes></app-modes>
+  <div class="header__actions--right">
+    <app-modes></app-modes>
+    <app-button (click)="openSettings()" color="dark">
+      <fa-icon icon="cog" transform="down-1"></fa-icon>
+    </app-button>
+  </div>
 </div>
+<app-settings></app-settings>

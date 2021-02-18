@@ -1,0 +1,24 @@
+<ngx-smart-modal
+  class="optionsModal"
+  customClass="nsm-centered"
+  #optionsModal
+  identifier="optionsModal"
+  (onDataAdded)="onDataAdded()"
+>
+  <div>
+    <h1>
+      {{ node?.name }}
+    </h1>
+    <div class="input-row">
+      <label for="name">Name:</label>
+      <input type="text" id="name" [(ngModel)]="node.name" />
+    </div>
+    <div class="input-row">
+      <label for="toggle">Test toggle = {{ toggle }}:</label>
+      <app-toggle id="toggle" [(state)]="toggle"></app-toggle>
+    </div>
+  </div>
+  <div>
+    <app-button (click)="optionsModal.close()">Close</app-button>
+  </div>
+</ngx-smart-modal>

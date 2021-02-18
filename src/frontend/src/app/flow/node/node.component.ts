@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, Input } from '@angular/core';
 import { Node } from './node';
 import { EndpointOptions, jsPlumbInstance } from 'jsplumb';
+import { NgxSmartModalService } from 'ngx-smart-modal';
 
 @Component({
   selector: 'app-node',
@@ -10,6 +11,8 @@ import { EndpointOptions, jsPlumbInstance } from 'jsplumb';
 export class NodeComponent implements AfterViewInit {
   @Input() node!: Node;
   @Input() jsPlumbInstance!: jsPlumbInstance;
+
+  constructor(public ngxSmartModalService: NgxSmartModalService) {}
 
   ngAfterViewInit(): void {
     const dropOptions = {
@@ -54,5 +57,12 @@ export class NodeComponent implements AfterViewInit {
       topEndpointOptions
     );
     this.jsPlumbInstance.draggable(id);
+  }
+
+  openOptions(): void {
+    this.ngxSmartModalService
+      .getModal('optionsModal')
+      .setData(this.node, true)
+      .open();
   }
 }

@@ -2,6 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Mode } from './mode';
 import { ModeService } from './mode.service';
 import { ModeType } from './modeType';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import {
+  faCode,
+  faColumns,
+  faProjectDiagram,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-modes',
@@ -12,7 +18,9 @@ export class ModeComponent implements OnInit {
   modeType = ModeType;
   mode!: Mode;
 
-  constructor(private modeService: ModeService) {}
+  constructor(private modeService: ModeService, library: FaIconLibrary) {
+    library.addIcons(faCode, faProjectDiagram, faColumns);
+  }
 
   ngOnInit(): void {
     this.getMode();
