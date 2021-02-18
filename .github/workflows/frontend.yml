@@ -40,6 +40,3 @@ jobs:
         run: npm ci
       - name: Run unit tests
         run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-      - run: npx webdriver-manager update --versions.chrome 88.0.4324.96
-      - name: Run end-to-end tests
-        run: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
