@@ -48,6 +48,26 @@ export class CanvasComponent implements AfterViewInit {
 
       flowGenerator.onmessage = ({ data }) => {
         console.log(`page got message: `, data);
+
+        console.log(Object.keys(data)[0]);
+        const root = Object.keys(data)[0];
+        if (
+          data[root] &&
+          data[root].Adapter &&
+          data[root].Adapter[0].Pipeline
+        ) {
+          const pipeline = data[root].Adapter[0].Pipeline[0];
+          const firstPipe = pipeline['"$"']?.firstPipe;
+          console.log('pipes: ', pipeline);
+
+          for (const key in pipeline) {
+            // node;
+
+            if (key !== '"$"') {
+              console.log(pipeline[key][0]);
+            }
+          }
+        }
       };
 
       const xml = this.codeService.getCurrentFile();

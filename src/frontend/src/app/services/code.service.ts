@@ -14,7 +14,14 @@ export class CodeService {
 		<Pipeline firstPipe="ddPipe">
 			<FixedResultPipe name="ddPipe" returnString="Hello World">
 				<Forward name="success" path="EXIT"/> 
-			</FixedResultPipe> 
+			</FixedResultPipe>
+      <FixedResultPipe name="otherPipe" returnString="Hello World">
+        <Forward name="success" path="EXIT"/> 
+      </FixedResultPipe> 
+      <XmlSwitchPipe name="switchXML">
+        <Forward name="success" path="EXIT"/>
+        <Forward name="error" path="err"/>
+      </XmlSwitchPipe>
 			<Exit path="EXIT" state="success" x="223" y="425"/> 
 		</Pipeline> 
 	</Adapter>
