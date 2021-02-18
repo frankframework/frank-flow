@@ -6,12 +6,12 @@ on:
       - master
       - feature/CI
     paths:
-      - 'src/frontend/**'
+      - 'frank-flow/src/frontend/**'
   pull_request:
     branches:
       - master
     paths:
-      - 'src/frontend/**'
+      - 'frank-flow/src/frontend/**'
 
 defaults:
   run:
