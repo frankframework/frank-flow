@@ -12,13 +12,13 @@ export class CodeService {
 			<JavaListener name="ddListener" serviceName="ddService" />
 		</Receiver>
 		<Pipeline firstPipe="ddPipe">
-			<FixedResultPipe name="ddPipe" returnString="Hello World">
+			<FixedResultPipe name="ddPipe" returnString="Hello World" x="681" y="224">
 				<Forward name="success" path="EXIT"/> 
 			</FixedResultPipe>
       <FixedResultPipe name="otherPipe" returnString="Hello World">
         <Forward name="success" path="EXIT"/> 
       </FixedResultPipe> 
-      <XmlSwitchPipe name="switchXML">
+      <XmlSwitchPipe name="switchXML"  x="381" y="224">
         <Forward name="success" path="EXIT"/>
         <Forward name="error" path="err"/>
       </XmlSwitchPipe>

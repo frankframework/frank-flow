@@ -46,6 +46,8 @@ export class CanvasComponent implements AfterViewInit {
         type: 'module',
       });
 
+      const cur = this;
+
       flowGenerator.onmessage = ({ data }) => {
         console.log(`page got message: `, data);
 
@@ -57,16 +59,34 @@ export class CanvasComponent implements AfterViewInit {
           data[root].Adapter[0].Pipeline
         ) {
           const pipeline = data[root].Adapter[0].Pipeline[0];
-          const firstPipe = pipeline['"$"']?.firstPipe;
-          console.log('pipes: ', pipeline);
+          const firstPipe = pipeline.$?.firstPipe;
 
-          for (const key in pipeline) {
-            // node;
+          let idCounter = 0;
+          for (const key of Object.keys(pipeline)) {
+            let node;
+            if (key !== '$') {
+              const pipe = pipeline[key][0].$;
+              node = {
+                id: 'stepId_' + idCounter++,
+                name: pipe.name ?? pipe.path,
+                top: pipe.y,
+                left: pipe.x,
+              };
 
-            if (key !== '"$"') {
-              console.log(pipeline[key][0]);
+              cur.nodeService.addDynamicNode(node);
             }
           }
+
+          setTimeout(() => {
+            for (let i = 0; i < idCounter; i++) {
+              this.nodeService.addConnection({
+                uuids: [
+                  'stepId_' + i + '_bottom',
+                  'stepId_' + (i + 1) + '_top',
+                ],
+              });
+            }
+          });
         }
       };
 
@@ -74,15 +94,15 @@ export class CanvasComponent implements AfterViewInit {
       flowGenerator.postMessage(xml);
     }
 
-    this.nodes.forEach((node) => {
-      this.nodeService.addDynamicNode(node);
-    });
+    // this.nodes.forEach((node) => {
+    //   this.nodeService.addDynamicNode(node);
+    // });
 
-    setTimeout(() => {
-      this.connections.forEach((connection) => {
-        this.nodeService.addConnection(connection);
-      });
-    });
+    // setTimeout(() => {
+    //   this.connections.forEach((connection) => {
+    //     this.nodeService.addConnection(connection);
+    //   });
+    // });
   }
 
   addNode(): void {
