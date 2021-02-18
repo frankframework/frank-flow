@@ -4,16 +4,13 @@ on:
   push:
     branches:
       - master
-      - feature/CI
     paths:
       - 'src/frontend/**'
-      - '.github/workflows/**'
   pull_request:
     branches:
       - master
     paths:
       - 'src/frontend/**'
-      - '.github/workflows/**'
 
 defaults:
   run:
