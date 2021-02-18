@@ -1,16 +1,37 @@
 version: 2
+
+name: Angular CI
+
+on:
+  push:
+    branches:
+      - master
+      - feature/CI
+  pull_request:
+    branches:
+      - master
+
 jobs:
   build:
     working_directory: ~/src/frontend
-    docker:
-      - image: circleci/node:10-browsers
+    runs-on: ubuntu-lastest
     steps:
-      - restore_cache:
-          key: frank-flow-{{ .Branch }}-{{ checksum "package-lock.json" }}
-      - run: npm install
-      - save_cache:
-          key: frank-flow-{{ .Branch }}-{{ checksum "package-lock.json" }}
-          paths:
-            - "node_modules"
-      - run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-      - run: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
+      - uses: actions/checkout@v2
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+          with:
+            node-version: 12.x
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+      - name: Install dependencies
+        run: npm ci
+      - name: Run unit tests
+        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+      - name: Run end-to-end tests
+        run: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
