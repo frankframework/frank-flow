@@ -32,7 +32,10 @@ export class CodeService {
 
   setEditor(editor: monaco.editor.IStandaloneCodeEditor): void {
     this.editor = editor;
+    editor.setValue(this.currentFile);
   }
+
+  setChangeListener(): void {}
 
   getCurrentFile(): string {
     return this.currentFile;
