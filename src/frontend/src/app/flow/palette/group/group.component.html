@@ -1,7 +1,18 @@
-<div [className]="'group group--' + border">
+<div [className]="'group group--' + color">
   <div class="group__header">
-    <div>Group</div>
+    <div><ng-content></ng-content></div>
     <fa-icon [icon]="foldArrow()" (click)="toggleFold()"></fa-icon>
   </div>
-  <div class="group__list" [hidden]="foldGroup">List</div>
+  <div class="group__list" [hidden]="foldGroup">
+    <ng-container *ngIf="items != undefined; else emptyGroup">
+      <app-item
+        [color]="color"
+        *ngFor="let item of items"
+        [node]="item"
+      ></app-item>
+    </ng-container>
+  </div>
 </div>
+<ng-template #emptyGroup>
+  <p>This group is empty.</p>
+</ng-template>

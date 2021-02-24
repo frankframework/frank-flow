@@ -1,12 +1,17 @@
 .main-container {
-  height: 100%;
+  height: calc(100% - 64px);
   display: flex;
 
-  .useAllSpace {
-    width: 100%;
-  }
+  .main-container {
+    height: 100%;
+    display: flex;
 
-  .shareSpace {
-    width: 50%;
+    .useAllSpace {
+      width: 100%;
+    }
+
+    .shareSpace {
+      width: 50%;
+    }
   }
 }

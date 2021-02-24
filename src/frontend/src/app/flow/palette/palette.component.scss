@@ -1,9 +1,7 @@
-@import '~src/assets/styles/variables';
-
 :host {
   height: 100%;
   width: 100%;
-  background-color: $background-color;
+  background: var(--bg-color-muted);
   padding: 16px;
   display: flex;
   flex-direction: column;

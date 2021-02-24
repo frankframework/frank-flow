@@ -3,6 +3,7 @@
 .group {
   width: 100%;
   background-color: white;
+  overflow-y: auto;
 
   &--primary {
     border-top: 2px solid $primary-color;
@@ -30,13 +31,17 @@
 
   &__header {
     padding: 16px;
-    border-bottom: 2px solid $border-color;
+    border-bottom: 2px solid var(--border-color);
     display: flex;
     justify-content: space-between;
   }
 
   &__list {
-    padding: 16px;
     border-bottom: 2px solid $border-color;
+    padding: 8px 0;
+
+    p {
+      margin: 4px 16px;
+    }
   }
 }

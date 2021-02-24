@@ -4,17 +4,17 @@
   #settingsModal
   identifier="settingsModal"
 >
-  <div>
+  <div class="settings-container">
     <h1>Settings</h1>
     <div class="input-row">
-      <label>Darkmode {{ settings.darkmode }}</label>
+      <label>Darkmode</label>
       <app-toggle
         [(state)]="settings.darkmode"
         (stateChange)="setSettings()"
       ></app-toggle>
     </div>
     <div class="input-row">
-      <label>Show confirm popups {{ settings.showPopups }}</label>
+      <label>Show confirm popups</label>
       <app-toggle
         [(state)]="settings.showPopups"
         (stateChange)="setSettings()"
