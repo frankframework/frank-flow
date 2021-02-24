@@ -15,6 +15,7 @@ describe('ItemComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ItemComponent);
     component = fixture.componentInstance;
+    component.node = { id: 'test', name: 'TestName' };
     fixture.detectChanges();
   });
 
