@@ -20,8 +20,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: $border-color;
-  -webkit-transition: 0.4s;
+  background-color: var(--border-color);
   transition: 0.4s;
 
   &:before {
@@ -31,8 +30,7 @@
     width: 29px;
     left: 4px;
     bottom: 4px;
-    background-color: white;
-    -webkit-transition: 0.4s;
+    background-color: var(--bg-color);
     transition: 0.4s;
   }
 
@@ -49,8 +47,6 @@ input:checked + .slider {
   background-color: $primary-color;
 
   &:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
     transform: translateX(26px);
   }
 }

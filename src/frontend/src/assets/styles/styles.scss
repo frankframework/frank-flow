@@ -2,9 +2,11 @@
 @import 'toastr';
 @import 'ngx-smart-modal';
 @import 'inputs';
+@import 'theme';
 
 * {
   box-sizing: border-box;
+  transition: background-color 0.4s;
 }
 
 html,

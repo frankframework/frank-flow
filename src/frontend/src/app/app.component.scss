@@ -1,12 +1,17 @@
-.main-container {
+.root {
   height: 100%;
-  display: flex;
+  width: 100%;
 
-  .useAllSpace {
-    width: 100%;
-  }
+  .main-container {
+    height: 100%;
+    display: flex;
 
-  .shareSpace {
-    width: 50%;
+    .useAllSpace {
+      width: 100%;
+    }
+
+    .shareSpace {
+      width: 50%;
+    }
   }
 }
