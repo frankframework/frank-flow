@@ -2,8 +2,8 @@
 
 .group {
   width: 100%;
-  background-color: white;
-  overflow-y: auto;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 
   &--primary {
     border-top: 2px solid $primary-color;
@@ -37,7 +37,7 @@
   }
 
   &__list {
-    border-bottom: 2px solid $border-color;
+    border-bottom: 2px solid var(--border-color);
     padding: 8px 0;
 
     p {

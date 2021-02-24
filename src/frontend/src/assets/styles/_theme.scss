@@ -1,0 +1,65 @@
+@import 'variables';
+
+$themes: (
+  'light': (
+    'colors': (
+      'primary': $primary-color,
+      'secondary': #43bccd,
+    ),
+    'shades': (
+      'shade-0': #ffffff,
+      'shade-1': #f3f3f3,
+      'shade-2': #c3c3c3,
+      'shade-3': #969696,
+      'shade-4': #6b6b6b,
+      'shade-5': #424242,
+      'shade-6': #1e1e1e,
+    ),
+  ),
+  'dark': (
+    'colors': (
+      'primary': $primary-color,
+      'secondary': #db5375,
+    ),
+    'shades': (
+      'shade-0': #1e1e1e,
+      'shade-1': #424242,
+      'shade-2': #6b6b6b,
+      'shade-3': #969696,
+      'shade-4': #c3c3c3,
+      'shade-5': #f3f3f3,
+      'shade-6': #ffffff,
+    ),
+  ),
+);
+
+@each $theme-name, $theme-vars in $themes {
+  $shades: map-get($theme-vars, 'shades');
+  $colors: map-get($theme-vars, 'colors');
+
+  $theme: (
+    'bg-color': map-get($shades, 'shade-0'),
+    'bg-color-muted': map-get($shades, 'shade-1'),
+    'border-color': map-get($shades, 'shade-2'),
+    'text-color': map-get($shades, 'shade-4'),
+  );
+
+  .root.#{$theme-name} {
+    // define a css variable for each shade
+    @each $name, $color in $shades {
+      --#{$name}: #{$color};
+    }
+
+    // define a css variable for each color
+    @each $name, $color in $colors {
+      --#{$name}: #{$color};
+      --#{$name}-dark: #{darken($color, 10%)};
+      --#{$name}-darker: #{darken($color, 20%)};
+    }
+
+    // define a css variable for each theme color
+    @each $name, $color in $theme {
+      --#{$name}: #{$color};
+    }
+  }
+}
