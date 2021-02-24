@@ -1,0 +1,44 @@
+@import '~src/assets/styles/variables';
+
+:host {
+  display: grid;
+  grid-template-columns: 20px auto;
+  gap: 8px;
+  padding: 4px 16px;
+
+  &:hover {
+    background-color: var(--bg-color-muted);
+  }
+
+  .name {
+    width: 100%;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .primary {
+    color: $primary-color;
+  }
+
+  .accent {
+    color: $accent-color;
+  }
+
+  .success {
+    color: $success-color;
+  }
+
+  .info {
+    color: $info-color;
+  }
+
+  .warning {
+    color: $warning-color;
+  }
+
+  .danger {
+    color: $danger-color;
+  }
+}
