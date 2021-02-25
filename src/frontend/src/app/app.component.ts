@@ -21,11 +21,11 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getModes();
+    this.getMode();
     this.getSettings();
   }
 
-  getModes(): void {
+  getMode(): void {
     this.modeService.getMode().subscribe((mode) => (this.mode = mode));
   }
 

@@ -1,5 +1,3 @@
-@import '~src/assets/styles/variables';
-
 :host {
   display: grid;
   grid-template-columns: 20px auto;
@@ -19,26 +17,26 @@
   }
 
   .primary {
-    color: $primary-color;
+    color: var(--primary);
   }
 
   .accent {
-    color: $accent-color;
+    color: var(--accent);
   }
 
   .success {
-    color: $success-color;
+    color: var(--success);
   }
 
   .info {
-    color: $info-color;
+    color: var(--info);
   }
 
   .warning {
-    color: $warning-color;
+    color: var(--warning);
   }
 
   .danger {
-    color: $danger-color;
+    color: var(--danger);
   }
 }

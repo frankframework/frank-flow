@@ -1,5 +1,3 @@
-@import '~src/assets/styles/variables';
-
 :host {
-  background-color: $background-color-darker;
+  background-color: var(--bg-color);
 }

@@ -1,18 +1,9 @@
-$transparent-color-dark: rgba(0, 0, 0, 0.02);
-$transparent-color-light: rgba(0, 0, 0, 0.05);
-
 :host {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-      -90deg,
-      $transparent-color-dark 1px,
-      transparent 1px
-    ),
-    linear-gradient($transparent-color-dark 1px, transparent 1px),
-    linear-gradient(-90deg, $transparent-color-light 1px, transparent 1px),
-    linear-gradient($transparent-color-light 1px, transparent 1px),
-    linear-gradient(transparent 3px, #fff 3px, #fff 78px, transparent 78px);
-  background-size: 4px 4px, 4px 4px, 80px 80px, 80px 80px, 80px 80px, 80px 80px,
-    80px 80px, 80px 80px;
+  background-color: var(--bg-color);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
+  background-image: -webkit-linear-gradient(var(--shade-1) 1px, transparent 1px),
+    -webkit-linear-gradient(0, var(--shade-1) 1px, transparent 1px),
+    -webkit-linear-gradient(var(--shade-1-shadow) 1px, transparent 1px),
+    -webkit-linear-gradient(0, var(--shade-1-shadow) 1px, transparent 1px);
 }
