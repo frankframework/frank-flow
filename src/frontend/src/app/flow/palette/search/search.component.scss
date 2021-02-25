@@ -1,9 +1,7 @@
-@import '~src/assets/styles/variables';
-
 .search-box {
   background-color: var(--bg-color);
   color: var(--text-color);
   padding: 16px;
-  border-top: 2px solid $primary-color;
+  border-top: 2px solid var(--primary);
   border-bottom: 2px solid var(--border-color);
 }

@@ -4,7 +4,12 @@ $themes: (
   'light': (
     'colors': (
       'primary': $primary-color,
-      'secondary': #43bccd,
+      'accent': $accent-color,
+      'success': $success-color,
+      'info': $info-color,
+      'warning': $warning-color,
+      'danger': $danger-color,
+      'dark-cyan': $dark-cyan,
     ),
     'shades': (
       'shade-0': #ffffff,
@@ -19,7 +24,12 @@ $themes: (
   'dark': (
     'colors': (
       'primary': $primary-color,
-      'secondary': #db5375,
+      'accent': $accent-color,
+      'success': $success-color,
+      'info': $info-color,
+      'warning': $warning-color,
+      'danger': $danger-color,
+      'dark-cyan': $dark-cyan,
     ),
     'shades': (
       'shade-0': #1e1e1e,
@@ -48,6 +58,7 @@ $themes: (
     // define a css variable for each shade
     @each $name, $color in $shades {
       --#{$name}: #{$color};
+      --#{$name}-shadow: #{transparentize($color, 0.5)};
     }
 
     // define a css variable for each color
@@ -55,6 +66,11 @@ $themes: (
       --#{$name}: #{$color};
       --#{$name}-dark: #{darken($color, 10%)};
       --#{$name}-darker: #{darken($color, 20%)};
+      --#{$name}-blacken: #{darken($color, 50%)};
+      --#{$name}-light: #{lighten($color, 10%)};
+      --#{$name}-lighter: #{lighten($color, 20%)};
+      --#{$name}-whiten: #{lighten($color, 50%)};
+      --#{$name}-shadow: #{transparentize($color, 0.5)};
     }
 
     // define a css variable for each theme color

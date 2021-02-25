@@ -1,32 +1,30 @@
-@import '~src/assets/styles/variables';
-
 .group {
   width: 100%;
   background-color: var(--bg-color);
   color: var(--text-color);
 
   &--primary {
-    border-top: 2px solid $primary-color;
+    border-top: 2px solid var(--primary);
   }
 
   &--accent {
-    border-top: 2px solid $accent-color;
+    border-top: 2px solid var(--accent);
   }
 
   &--success {
-    border-top: 2px solid $success-color;
+    border-top: 2px solid var(--success);
   }
 
   &--info {
-    border-top: 2px solid $info-color;
+    border-top: 2px solid var(--info);
   }
 
   &--warning {
-    border-top: 2px solid $warning-color;
+    border-top: 2px solid var(--warning);
   }
 
   &--danger {
-    border-top: 2px solid $danger-color;
+    border-top: 2px solid var(--danger);
   }
 
   &__header {

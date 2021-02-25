@@ -1,5 +1,3 @@
-@import '~src/assets/styles/variables';
-
 .switch {
   position: relative;
   display: inline-block;
@@ -44,7 +42,7 @@
 }
 
 input:checked + .slider {
-  background-color: $primary-color;
+  background-color: var(--primary);
 
   &:before {
     transform: translateX(26px);
