@@ -94,6 +94,28 @@ export class MonacoEditorComponent
   }
 
   initializeEditor(): void {
+    this.code = `<Configuration name="dd">
+    <Adapter name="ddAdapter"> 
+      <Receiver name="ddReceiver" x="681" y="24"> 
+        <JavaListener name="ddListener" serviceName="ddService" />
+      </Receiver>
+      <Pipeline firstPipe="ddPipe">
+        <FixedResultPipe name="ddPipe" returnString="Hello World" x="681" y="224">
+          <Forward name="success" path="EXIT"/> 
+        </FixedResultPipe>
+        <FixedResultPipe name="otherPipe" returnString="Hello World">
+          <Forward name="success" path="EXIT"/> 
+        </FixedResultPipe> 
+        <XmlSwitchPipe name="switchXML"  x="381" y="224">
+          <Forward name="success" path="EXIT"/>
+          <Forward name="error" path="err"/>
+        </XmlSwitchPipe>
+        <Exit path="EXIT" state="success" x="223" y="425"/> 
+      </Pipeline> 
+    </Adapter>
+  </Configuration>
+  `;
+
     this.codeEditorInstance = monaco.editor.create(
       this.editorContainer.nativeElement,
       {
@@ -106,12 +128,40 @@ export class MonacoEditorComponent
   }
 
   initializeTwoWayBinding(): void {
+    const cur = this;
     const model = this.codeEditorInstance.getModel();
     if (model) {
-      model.onDidChangeContent((e) => {
-        this.codeChange.emit(this.codeEditorInstance.getValue());
-      });
+      model.onDidChangeContent(
+        cur.debounce(
+          () => {
+            console.log('generate!');
+            cur.codeService.setCurrentFile(cur.codeEditorInstance.getValue());
+          },
+          250,
+          true
+        )
+      );
     }
+  }
+
+  debounce(func: any, wait: any, immediate: boolean): any {
+    let timeout: any;
+    return () => {
+      const context = this;
+      const args = arguments;
+      const later = () => {
+        timeout = null;
+        if (!immediate) {
+          func.apply(context, args);
+        }
+      };
+      const callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) {
+        func.apply(context, args);
+      }
+    };
   }
 
   initializeResizeInterval(): void {

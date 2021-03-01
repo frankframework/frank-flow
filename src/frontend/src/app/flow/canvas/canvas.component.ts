@@ -9,6 +9,7 @@ import {
 import { NodeService } from '../node/node.service';
 import { Node } from '../node/node';
 import { CodeService } from '../../services/code.service';
+import { jsPlumbInstance, jsPlumb } from 'jsplumb';
 
 @Component({
   selector: 'app-canvas',
@@ -30,16 +31,20 @@ export class CanvasComponent implements AfterViewInit {
 
   @Input() connections = [];
 
-  @ViewChild('nodes', { read: ViewContainerRef })
+  @ViewChild('canvas', { read: ViewContainerRef })
   viewContainerRef!: ViewContainerRef;
+  jsPlumbInstance!: jsPlumbInstance;
 
   constructor(
     private nodeService: NodeService,
     private codeService: CodeService
-  ) {}
+  ) {
+    this.jsPlumbInstance = jsPlumb.getInstance();
+  }
 
   ngAfterViewInit(): void {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
+    this.jsPlumbInstance.setContainer('canvas');
 
     if (Worker) {
       const flowGenerator = new Worker('./flow-generator.worker', {
@@ -47,62 +52,59 @@ export class CanvasComponent implements AfterViewInit {
       });
 
       const cur = this;
+      let xml;
+
+      this.codeService.curFileObservable.subscribe({
+        next(data): void {
+          console.log('subscribed: ', data);
+          xml = data;
+          flowGenerator.postMessage(xml);
+        },
+      });
 
       flowGenerator.onmessage = ({ data }) => {
-        console.log(`page got message: `, data);
+        cur.generateFlow(data);
+      };
+    }
+  }
 
-        console.log(Object.keys(data)[0]);
-        const root = Object.keys(data)[0];
-        if (
-          data[root] &&
-          data[root].Adapter &&
-          data[root].Adapter[0].Pipeline
-        ) {
-          const pipeline = data[root].Adapter[0].Pipeline[0];
-          const firstPipe = pipeline.$?.firstPipe;
+  generateFlow(data: any): void {
+    console.log(`page got message: `, data);
 
-          let idCounter = 0;
-          for (const key of Object.keys(pipeline)) {
-            let node;
-            if (key !== '$') {
-              const pipe = pipeline[key][0].$;
-              node = {
-                id: 'stepId_' + idCounter++,
-                name: pipe.name ?? pipe.path,
-                top: pipe.y,
-                left: pipe.x,
-              };
+    this.jsPlumbInstance.deleteEveryEndpoint();
+    this.jsPlumbInstance.deleteEveryConnection();
+    this.jsPlumbInstance.reset();
 
-              cur.nodeService.addDynamicNode(node);
-            }
-          }
+    console.log(Object.keys(data)[0]);
+    const root = Object.keys(data)[0];
+    if (data[root] && data[root].Adapter && data[root].Adapter[0].Pipeline) {
+      const pipeline = data[root].Adapter[0].Pipeline[0];
+      const firstPipe = pipeline.$?.firstPipe;
 
-          setTimeout(() => {
-            for (let i = 0; i < idCounter; i++) {
-              this.nodeService.addConnection({
-                uuids: [
-                  'stepId_' + i + '_bottom',
-                  'stepId_' + (i + 1) + '_top',
-                ],
-              });
-            }
+      let idCounter = 0;
+      for (const key of Object.keys(pipeline)) {
+        let node;
+        if (key !== '$') {
+          const pipe = pipeline[key][0].$;
+          node = {
+            id: 'stepId_' + idCounter++,
+            name: pipe.name ?? pipe.path,
+            top: pipe.y,
+            left: pipe.x,
+          };
+          console.log('add node!', node);
+          this.nodeService.addDynamicNode(node);
+        }
+      }
+
+      setTimeout(() => {
+        for (let i = 0; i < idCounter; i++) {
+          this.nodeService.addConnection({
+            uuids: ['stepId_' + i + '_bottom', 'stepId_' + (i + 1) + '_top'],
           });
         }
-      };
-
-      const xml = this.codeService.getCurrentFile();
-      flowGenerator.postMessage(xml);
+      });
     }
-
-    // this.nodes.forEach((node) => {
-    //   this.nodeService.addDynamicNode(node);
-    // });
-
-    // setTimeout(() => {
-    //   this.connections.forEach((connection) => {
-    //     this.nodeService.addConnection(connection);
-    //   });
-    // });
   }
 
   addNode(): void {

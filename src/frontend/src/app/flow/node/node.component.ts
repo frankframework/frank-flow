@@ -20,6 +20,9 @@ export class NodeComponent implements AfterViewInit {
       hoverClass: 'dropHover',
       activeClass: 'dragActive',
     };
+    const dragOptions = {
+      containment: '#canvas',
+    };
     const bottomEndpointOptions: EndpointOptions = {
       endpoint: ['Dot', { radius: 7 }],
       paintStyle: { fill: '#99cb3a' },
@@ -56,7 +59,8 @@ export class NodeComponent implements AfterViewInit {
       { anchor: 'Top', uuid: id + '_top', maxConnections: 1 },
       topEndpointOptions
     );
-    this.jsPlumbInstance.draggable(id);
+    console.log('IDDDD: ', id);
+    this.jsPlumbInstance.draggable(id, dragOptions);
   }
 
   openOptions(): void {
