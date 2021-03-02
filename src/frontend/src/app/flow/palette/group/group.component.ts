@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
-import { Node } from '../../node/node';
 
 @Component({
   selector: 'app-group',
@@ -10,7 +9,7 @@ import { Node } from '../../node/node';
 export class GroupComponent implements OnInit {
   @Input() foldGroup = false;
   @Input() color = 'primary';
-  @Input() items!: Node[];
+  @Input() items!: any[] | undefined;
 
   constructor() {}
 

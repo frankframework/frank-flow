@@ -1,25 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Settings } from './settings';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SettingsService {
-  settings: Settings;
+  settings: BehaviorSubject<Settings>;
   defaultSettings = { darkmode: false, showPopups: true };
 
   constructor() {
-    this.settings = this.getSettingsLocalStorage();
+    const localStorageSettings = this.getSettingsLocalStorage();
+    this.settings = new BehaviorSubject<Settings>(localStorageSettings);
   }
 
   setSettings(settings: Settings): void {
-    this.settings = settings;
+    this.settings.next(settings);
     localStorage.setItem('settings', JSON.stringify(settings));
   }
 
   getSettings(): Observable<Settings> {
-    return of(this.settings);
+    return this.settings.asObservable();
   }
 
   getSettingsLocalStorage(): Settings {

@@ -10,6 +10,9 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { ModeService } from '../../header/modes/mode.service';
+import { SettingsService } from '../../header/settings/settings.service';
+import { Settings } from '../../header/settings/settings';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -29,7 +32,11 @@ export class MonacoEditorComponent
   codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
   resizeInterval!: number;
 
-  constructor(private monacoElement: ElementRef) {}
+  constructor(
+    private monacoElement: ElementRef,
+    private modeService: ModeService,
+    private settingsService: SettingsService
+  ) {}
 
   ngAfterViewInit(): void {
     this.loadMonaco();
@@ -84,7 +91,8 @@ export class MonacoEditorComponent
   initializeMonaco(): void {
     this.initializeEditor();
     this.initializeTwoWayBinding();
-    this.initializeResizeInterval();
+    this.initializeResizeObserver();
+    this.initializeThemeObserver();
   }
 
   initializeEditor(): void {
@@ -107,18 +115,38 @@ export class MonacoEditorComponent
     }
   }
 
-  initializeResizeInterval(): void {
-    this.resizeInterval = setInterval(() => this.onResize(), 100);
+  initializeResizeObserver(): void {
+    this.modeService.getMode().subscribe({
+      next: () => {
+        this.onResize();
+      },
+    });
   }
 
   onResize(): void {
     const parentElement = this.monacoElement.nativeElement.parentElement;
     if (parentElement) {
-      this.codeEditorInstance.layout({
-        height: parentElement.offsetHeight,
-        width:
-          parentElement.offsetWidth - parentElement.children[0].offsetWidth,
-      });
+      setTimeout(() => {
+        this.codeEditorInstance.layout({
+          height: parentElement.offsetHeight,
+          width:
+            parentElement.offsetWidth - parentElement.children[0].offsetWidth,
+        });
+      }, 10);
     }
+  }
+
+  initializeThemeObserver(): void {
+    this.settingsService.getSettings().subscribe({
+      next: (settings) => {
+        this.onThemeChange(settings);
+      },
+    });
+  }
+
+  onThemeChange(settings: Settings): void {
+    this.codeEditorInstance.updateOptions({
+      theme: settings.darkmode ? 'vs-dark' : 'vs-light',
+    });
   }
 }

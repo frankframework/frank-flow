@@ -1,5 +1,13 @@
-<app-search></app-search>
-<app-group>Empty group</app-group>
-<app-group color="info" [items]="listeners">Listeners</app-group>
-<app-group color="accent" [items]="pipes">Pipes</app-group>
-<app-group color="danger" [items]="exits">Exits</app-group>
+<app-search [(term)]="search"></app-search>
+<app-group color="info" [items]="data?.get('Listeners') | filter: search"
+  >Listeners</app-group
+>
+<app-group color="accent" [items]="data?.get('Pipes') | filter: search"
+  >Pipes</app-group
+>
+<app-group color="success" [items]="data?.get('Senders') | filter: search"
+  >Senders</app-group
+>
+<app-group color="danger" [items]="data?.get('Other') | filter: search"
+  >Other</app-group
+>

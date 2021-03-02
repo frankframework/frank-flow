@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Mode } from './mode';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { ModeType } from './modeType';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ModeService {
-  mode: Mode;
+  mode: BehaviorSubject<Mode>;
 
   constructor() {
-    this.mode = new Mode(ModeType.flowMode);
+    this.mode = new BehaviorSubject(new Mode(ModeType.flowMode));
   }
 
   setMode(mode: Mode): void {
-    this.mode = mode;
+    this.mode.next(mode);
   }
 
   getMode(): Observable<Mode> {
-    return of(this.mode);
+    return this.mode.asObservable();
   }
 }
