@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Node } from '../../node/node';
 import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -11,7 +10,7 @@ export class ItemComponent implements OnInit {
   cloud = faCloudDownloadAlt;
 
   @Input() color!: string;
-  @Input() node!: Node;
+  @Input() name!: string;
 
   constructor() {}
 

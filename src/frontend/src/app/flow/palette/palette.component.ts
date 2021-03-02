@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Node } from '../node/node';
+import { environment } from '../../../environments/environment';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-palette',
@@ -7,39 +8,30 @@ import { Node } from '../node/node';
   styleUrls: ['./palette.component.scss'],
 })
 export class PaletteComponent implements OnInit {
-  listeners = [
-    { id: '1', name: 'ApiListener' },
-    { id: '1', name: 'ApiListener' },
-    { id: '1', name: 'ApiListener' },
-    { id: '1', name: 'ApiListener' },
-    { id: '1', name: 'ApiListener' },
-    { id: '1', name: 'ApiListener' },
-    { id: '1', name: 'ApiListener' },
-    { id: '1', name: 'ApiListener' },
-  ] as Node[];
-  pipes = [
-    { id: '2', name: 'FixedResultPipe' },
-    { id: '2', name: 'FixedResultPipe' },
-    { id: '2', name: 'FixedResultPipe' },
-    { id: '2', name: 'FixedResultPipe' },
-    { id: '2', name: 'FixedResultPipe' },
-    { id: '2', name: 'FixedResultPipe' },
-    { id: '2', name: 'FixedResultPipe' },
-    { id: '2', name: 'FixedResultPipe' },
-    { id: '2', name: 'FixedResultPipe' },
-    { id: '2', name: 'FixedResultPipe' },
-    { id: '2', name: 'FixedResultPipe' },
-    { id: '2', name: 'FixedResultPipe' },
-    { id: '2', name: 'FixedResultPipe' },
-    { id: '2', name: 'FixedResultPipe' },
-  ] as Node[];
-  exits = [
-    { id: '3', name: 'Exit' },
-    { id: '3', name: 'Exit' },
-    { id: '3', name: 'Exit' },
-  ] as Node[];
+  data: Map<string, any[]> = new Map<string, any[]>();
+  search!: string;
 
-  constructor() {}
+  constructor(private toastr: ToastrService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    fetch(environment.runnerUri + environment.ibisdocJsonPath, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    })
+      .then((result) => result.json())
+      .then((data) =>
+        data.forEach((group: any) => {
+          this.data.set(group.name, group.classes);
+        })
+      )
+      .catch((error) => {
+        this.toastr.error(
+          'The ibisdoc cant be loaded from the Frank!Runner',
+          'Loading error'
+        );
+        console.error(error);
+      });
+  }
 }

@@ -4,6 +4,9 @@
 
 export const environment = {
   production: false,
+  runnerUri:
+    'https://cors-anywhere.herokuapp.com/https://ibis4example.ibissource.org/',
+  ibisdocJsonPath: 'rest/ibisdoc/ibisdoc.json',
 };
 
 /*
