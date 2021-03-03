@@ -9,7 +9,7 @@ import {
 import { NodeService } from '../node/node.service';
 import { Node } from '../node/node';
 import { CodeService } from '../../services/code.service';
-import { jsPlumbInstance, jsPlumb } from 'jsplumb';
+import { jsPlumbInstance, jsPlumb, Connection } from 'jsplumb';
 
 @Component({
   selector: 'app-canvas',
@@ -33,25 +33,28 @@ export class CanvasComponent implements AfterViewInit {
 
   @ViewChild('canvas', { read: ViewContainerRef })
   viewContainerRef!: ViewContainerRef;
+  @ViewChild('container', { read: ViewContainerRef })
+  canvasContainerRef!: ViewContainerRef;
   jsPlumbInstance!: jsPlumbInstance;
 
   constructor(
     private nodeService: NodeService,
     private codeService: CodeService
   ) {
-    this.jsPlumbInstance = jsPlumb.getInstance();
+    this.jsPlumbInstance = this.nodeService.getInstance();
   }
 
   ngAfterViewInit(): void {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
-    this.jsPlumbInstance.setContainer('canvas');
+    this.jsPlumbInstance.ready(() => {
+      this.jsPlumbInstance.setContainer('canvas');
+    });
 
     if (Worker) {
       const flowGenerator = new Worker('./flow-generator.worker', {
         type: 'module',
       });
 
-      const cur = this;
       let xml;
 
       this.codeService.curFileObservable.subscribe({
@@ -63,17 +66,24 @@ export class CanvasComponent implements AfterViewInit {
       });
 
       flowGenerator.onmessage = ({ data }) => {
-        cur.generateFlow(data);
+        this.generateFlow(data);
       };
     }
   }
 
+  deletus(): void {
+    this.jsPlumbInstance.ready(() => {
+      this.jsPlumbInstance.reset();
+      this.viewContainerRef.clear();
+    });
+  }
+
   generateFlow(data: any): void {
     console.log(`page got message: `, data);
-
-    this.jsPlumbInstance.deleteEveryEndpoint();
-    this.jsPlumbInstance.deleteEveryConnection();
-    this.jsPlumbInstance.reset();
+    this.jsPlumbInstance.ready(() => {
+      this.jsPlumbInstance.reset();
+      this.viewContainerRef.clear();
+    });
 
     console.log(Object.keys(data)[0]);
     const root = Object.keys(data)[0];
@@ -111,26 +121,5 @@ export class CanvasComponent implements AfterViewInit {
     const node = { id: 'Step id_' + [Math.random().toString(16).slice(2, 8)] };
 
     this.nodeService.addDynamicNode(node);
-  }
-
-  saveNodeJson(): void {
-    // Save element position on Canvas and node connections
-
-    const container = this.viewContainerRef.element.nativeElement.parentNode;
-    const nodes = Array.from(
-      container.querySelectorAll('.node') as HTMLDivElement[]
-    ).map((node: HTMLDivElement) => ({
-      id: node.id,
-      top: node.offsetTop,
-      left: node.offsetLeft,
-    }));
-
-    const connections = (this.nodeService.jsPlumbInstance.getAllConnections() as any[]).map(
-      (conn) => ({ uuids: conn.getUuids() })
-    );
-
-    const json = JSON.stringify({ nodes, connections });
-
-    console.log(json);
   }
 }

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input } from '@angular/core';
+import { AfterViewInit, Component, Input, HostBinding } from '@angular/core';
 import { Node } from './node';
 import { EndpointOptions, jsPlumbInstance } from 'jsplumb';
 import { NgxSmartModalService } from 'ngx-smart-modal';
@@ -11,6 +11,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 export class NodeComponent implements AfterViewInit {
   @Input() node!: Node;
   @Input() jsPlumbInstance!: jsPlumbInstance;
+  @HostBinding('class') public cssClass: any;
 
   constructor(public ngxSmartModalService: NgxSmartModalService) {}
 
@@ -21,7 +22,7 @@ export class NodeComponent implements AfterViewInit {
       activeClass: 'dragActive',
     };
     const dragOptions = {
-      containment: '#canvas',
+      containment: 'canvas',
     };
     const bottomEndpointOptions: EndpointOptions = {
       endpoint: ['Dot', { radius: 7 }],
