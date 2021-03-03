@@ -15,6 +15,13 @@ import { SettingsService } from '../../header/settings/settings.service';
 import { Settings } from '../../header/settings/settings';
 
 import { CodeService } from '../../services/code.service';
+import {
+  FunctionCall,
+  FunctionExpr,
+  InvokeFunctionExpr,
+  InvokeMethodExpr,
+  TypeofExpr,
+} from '@angular/compiler';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -32,7 +39,6 @@ export class MonacoEditorComponent
   @Output() codeChange = new EventEmitter<string>();
 
   codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
-  resizeInterval!: any;
 
   constructor(
     private monacoElement: ElementRef,
@@ -51,9 +57,7 @@ export class MonacoEditorComponent
     }
   }
 
-  ngOnDestroy(): void {
-    clearInterval(this.resizeInterval);
-  }
+  ngOnDestroy(): void {}
 
   loadMonaco(): void {
     if (loadedMonaco) {
@@ -133,13 +137,12 @@ export class MonacoEditorComponent
   }
 
   initializeTwoWayBinding(): void {
-    const cur = this;
     const model = this.codeEditorInstance.getModel();
     if (model) {
       model.onDidChangeContent(
-        cur.debounce(
+        this.debounce(
           () => {
-            cur.codeService.setCurrentFile(cur.codeEditorInstance.getValue());
+            this.codeService.setCurrentFile(this.codeEditorInstance.getValue());
           },
           250,
           true
@@ -148,8 +151,8 @@ export class MonacoEditorComponent
     }
   }
 
-  debounce(func: any, wait: any, immediate: boolean): any {
-    let timeout: any;
+  debounce(func: any, wait: number, immediate: boolean): any {
+    let timeout: ReturnType<typeof setTimeout> | null;
     return () => {
       const context = this;
       const args = arguments;
@@ -160,7 +163,9 @@ export class MonacoEditorComponent
         }
       };
       const callNow = immediate && !timeout;
-      clearTimeout(timeout);
+      if (timeout) {
+        clearTimeout(timeout);
+      }
       timeout = setTimeout(later, wait);
       if (callNow) {
         func.apply(context, args);

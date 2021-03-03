@@ -15,7 +15,6 @@ export class NodeService {
   jsPlumbInstance!: jsPlumbInstance;
 
   constructor(private factoryResolver: ComponentFactoryResolver) {
-    // Only one jsplumb instance can exist at all times.
     this.jsPlumbInstance = jsPlumb.getInstance({ Container: 'canvas' });
   }
 

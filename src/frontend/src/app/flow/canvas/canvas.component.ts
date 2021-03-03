@@ -40,12 +40,9 @@ export class CanvasComponent implements AfterViewInit {
         type: 'module',
       });
 
-      let xml;
-
       this.codeService.curFileObservable.subscribe({
         next(data): void {
-          xml = data;
-          flowGenerator.postMessage(xml);
+          flowGenerator.postMessage(data);
         },
       });
 
@@ -68,10 +65,9 @@ export class CanvasComponent implements AfterViewInit {
 
       let idCounter = 0;
       for (const key of Object.keys(pipeline)) {
-        let node;
         if (key !== '$') {
           const pipe = pipeline[key][0].$;
-          node = {
+          const node = {
             id: 'stepId_' + idCounter++,
             name: pipe.name ?? pipe.path,
             top: pipe.y,

@@ -30,8 +30,6 @@
     "ngx-toastr": "^13.2.0",
     "ngx-treeview": "^10.0.2",
     "rxjs": "~6.6.0",
-    "stream": "0.0.2",
-    "timers": "^0.1.1",
     "tslib": "^2.0.0",
     "zone.js": "^0.11.4"
   },
