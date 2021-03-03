@@ -13,14 +13,25 @@ import { Settings } from './header/settings/settings';
 export class AppComponent implements OnInit {
   modeType = ModeType;
   mode!: Mode;
+  settings!: Settings;
 
-  constructor(private modeService: ModeService) {}
+  constructor(
+    private modeService: ModeService,
+    private settingsService: SettingsService
+  ) {}
 
   ngOnInit(): void {
-    this.getModes();
+    this.getMode();
+    this.getSettings();
   }
 
-  getModes(): void {
+  getMode(): void {
     this.modeService.getMode().subscribe((mode) => (this.mode = mode));
+  }
+
+  getSettings(): void {
+    this.settingsService
+      .getSettings()
+      .subscribe((settings) => (this.settings = settings));
   }
 }

@@ -15,6 +15,7 @@ export class NodeService {
   jsPlumbInstance!: jsPlumbInstance;
 
   constructor(private factoryResolver: ComponentFactoryResolver) {
+    // Only one jsplumb instance can exist at all times.
     this.jsPlumbInstance = jsPlumb.getInstance({ Container: 'canvas' });
   }
 
@@ -26,7 +27,6 @@ export class NodeService {
     this.rootViewContainer = viewContainerRef;
     this.jsPlumbInstance.ready(() => {
       this.jsPlumbInstance.setContainer('canvas');
-      console.log(this.rootViewContainer.length);
     });
   }
 
@@ -42,6 +42,7 @@ export class NodeService {
 
       component.instance.cssClass = 'node';
       component.location.nativeElement.id = node.id;
+
       this.rootViewContainer.insert(component.hostView);
     });
   }

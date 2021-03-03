@@ -1,0 +1,42 @@
+:host {
+  display: grid;
+  grid-template-columns: 20px auto;
+  gap: 8px;
+  padding: 4px 16px;
+
+  &:hover {
+    background-color: var(--bg-color-muted);
+  }
+
+  .name {
+    width: 100%;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .primary {
+    color: var(--primary);
+  }
+
+  .accent {
+    color: var(--accent);
+  }
+
+  .success {
+    color: var(--success);
+  }
+
+  .info {
+    color: var(--info);
+  }
+
+  .warning {
+    color: var(--warning);
+  }
+
+  .danger {
+    color: var(--danger);
+  }
+}

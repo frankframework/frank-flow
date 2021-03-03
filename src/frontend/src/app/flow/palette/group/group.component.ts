@@ -8,7 +8,9 @@ import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 })
 export class GroupComponent implements OnInit {
   @Input() foldGroup = false;
-  @Input() border = 'primary';
+  @Input() color = 'primary';
+  @Input() items!: any[] | undefined;
+
   constructor() {}
 
   foldArrow = () => (this.foldGroup ? faChevronDown : faChevronUp);

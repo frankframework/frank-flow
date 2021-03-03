@@ -1,42 +1,45 @@
-@import '~src/assets/styles/variables';
-
 .group {
   width: 100%;
-  background-color: white;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 
   &--primary {
-    border-top: 2px solid $primary-color;
+    border-top: 2px solid var(--primary);
   }
 
   &--accent {
-    border-top: 2px solid $accent-color;
+    border-top: 2px solid var(--accent);
   }
 
   &--success {
-    border-top: 2px solid $success-color;
+    border-top: 2px solid var(--success);
   }
 
   &--info {
-    border-top: 2px solid $info-color;
+    border-top: 2px solid var(--info);
   }
 
   &--warning {
-    border-top: 2px solid $warning-color;
+    border-top: 2px solid var(--warning);
   }
 
   &--danger {
-    border-top: 2px solid $danger-color;
+    border-top: 2px solid var(--danger);
   }
 
   &__header {
     padding: 16px;
-    border-bottom: 2px solid $border-color;
+    border-bottom: 2px solid var(--border-color);
     display: flex;
     justify-content: space-between;
   }
 
   &__list {
-    padding: 16px;
-    border-bottom: 2px solid $border-color;
+    border-bottom: 2px solid var(--border-color);
+    padding: 8px 0;
+
+    p {
+      margin: 4px 16px;
+    }
   }
 }

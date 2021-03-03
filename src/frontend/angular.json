@@ -36,7 +36,7 @@
                 "output": "./assets/monaco/"
               }
             ],
-            "styles": ["src/assets/styles/styles.scss"],
+            "styles": ["src/assets/styles/_globals.scss"],
             "scripts": [],
             "webWorkerTsConfig": "tsconfig.worker.json"
           },
@@ -106,7 +106,7 @@
                 "output": "./assets/monaco/"
               }
             ],
-            "styles": ["src/assets/styles/styles.scss"],
+            "styles": ["src/assets/styles/_globals.scss"],
             "scripts": []
           }
         },

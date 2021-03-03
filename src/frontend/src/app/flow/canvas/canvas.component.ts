@@ -16,16 +16,6 @@ import { jsPlumbInstance, jsPlumb, Connection } from 'jsplumb';
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.scss'],
 })
-
-// export enum FileType {
-//   JSON,
-//   XML
-// }
-
-// export interface ICovertertable {
-//   type: FileType;
-//   data: string;
-// }
 export class CanvasComponent implements AfterViewInit {
   @Input() nodes = [];
 
@@ -33,8 +23,6 @@ export class CanvasComponent implements AfterViewInit {
 
   @ViewChild('canvas', { read: ViewContainerRef })
   viewContainerRef!: ViewContainerRef;
-  @ViewChild('container', { read: ViewContainerRef })
-  canvasContainerRef!: ViewContainerRef;
   jsPlumbInstance!: jsPlumbInstance;
 
   constructor(
@@ -46,9 +34,6 @@ export class CanvasComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
-    this.jsPlumbInstance.ready(() => {
-      this.jsPlumbInstance.setContainer('canvas');
-    });
 
     if (Worker) {
       const flowGenerator = new Worker('./flow-generator.worker', {
@@ -59,7 +44,6 @@ export class CanvasComponent implements AfterViewInit {
 
       this.codeService.curFileObservable.subscribe({
         next(data): void {
-          console.log('subscribed: ', data);
           xml = data;
           flowGenerator.postMessage(xml);
         },
@@ -71,21 +55,12 @@ export class CanvasComponent implements AfterViewInit {
     }
   }
 
-  deletus(): void {
-    this.jsPlumbInstance.ready(() => {
-      this.jsPlumbInstance.reset();
-      this.viewContainerRef.clear();
-    });
-  }
-
   generateFlow(data: any): void {
-    console.log(`page got message: `, data);
     this.jsPlumbInstance.ready(() => {
       this.jsPlumbInstance.reset();
       this.viewContainerRef.clear();
     });
 
-    console.log(Object.keys(data)[0]);
     const root = Object.keys(data)[0];
     if (data[root] && data[root].Adapter && data[root].Adapter[0].Pipeline) {
       const pipeline = data[root].Adapter[0].Pipeline[0];
@@ -102,7 +77,6 @@ export class CanvasComponent implements AfterViewInit {
             top: pipe.y,
             left: pipe.x,
           };
-          console.log('add node!', node);
           this.nodeService.addDynamicNode(node);
         }
       }
@@ -115,11 +89,5 @@ export class CanvasComponent implements AfterViewInit {
         }
       });
     }
-  }
-
-  addNode(): void {
-    const node = { id: 'Step id_' + [Math.random().toString(16).slice(2, 8)] };
-
-    this.nodeService.addDynamicNode(node);
   }
 }

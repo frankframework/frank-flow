@@ -5,11 +5,12 @@
   max-width: fit-content;
 
   .nsm-content {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 2px solid var(--border-color);
     box-shadow: 5px 5px 0 0 $shadow-color;
     padding: 1em;
-    border: 2px solid $border-color;
     border-radius: 0;
-
     overflow: auto;
 
     .nsm-body {
@@ -17,6 +18,17 @@
       flex-direction: column;
       justify-content: space-between;
       gap: 16px;
+    }
+
+    .nsm-dialog-btn-close {
+      color: var(--text-color);
+      top: 16px;
+      right: 16px;
+      padding: 0;
+
+      &:focus {
+        outline: none;
+      }
     }
   }
 }
