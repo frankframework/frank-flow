@@ -1,62 +1,60 @@
-import { Component, OnInit } from '@angular/core';
-import { TreeviewConfig, TreeviewItem } from 'ngx-treeview';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { jqxTreeComponent } from 'jqwidgets-ng/jqxtree';
+import TreeOptions = jqwidgets.TreeOptions;
 
 @Component({
   selector: 'app-explorer',
   templateUrl: './explorer.component.html',
   styleUrls: ['./explorer.component.scss'],
 })
-export class ExplorerComponent implements OnInit {
-  treeviewConfig = TreeviewConfig.create({
-    hasAllCheckBox: false,
-    hasFilter: true,
-    hasCollapseExpand: true,
-    decoupleChildFromParent: false,
-    maxHeight: -1,
-  });
+export class ExplorerComponent implements AfterViewInit {
+  @ViewChild('treeReference', { static: false }) tree!: jqxTreeComponent;
+  searchTerm!: string;
 
-  items = [
-    new TreeviewItem({
-      text: 'IT',
-      value: 9,
-      children: [
+  treeSource: any[] = [
+    {
+      icon: '../images/mailIcon.png',
+      label: 'Mail',
+      expanded: true,
+      items: [
+        { icon: '../images/calendarIcon.png', label: 'Calendar' },
         {
-          text: 'Programming',
-          value: 91,
-          children: [
-            {
-              text: 'Frontend',
-              value: 911,
-              children: [
-                { text: 'Angular 1', value: 9111 },
-                { text: 'Angular 2', value: 9112 },
-                { text: 'ReactJS', value: 9113 },
-              ],
-            },
-            {
-              text: 'Backend',
-              value: 912,
-              children: [
-                { text: 'C#', value: 9121 },
-                { text: 'Java', value: 9122 },
-                { text: 'Python', value: 9123, checked: false },
-              ],
-            },
-          ],
-        },
-        {
-          text: 'Networking',
-          value: 92,
-          children: [
-            { text: 'Internet', value: 921 },
-            { text: 'Security', value: 922 },
-          ],
+          icon: '../images/contactsIcon.png',
+          label: 'Contacts',
+          selected: true,
         },
       ],
-    }),
+    },
+    {
+      icon: '../images/folder.png',
+      label: 'Inbox',
+      expanded: true,
+      items: [
+        { icon: '../images/folder.png', label: 'Admin' },
+        { icon: '../images/folder.png', label: 'Corporate' },
+        { icon: '../images/folder.png', label: 'Finance' },
+        { icon: '../images/folder.png', label: 'Other' },
+      ],
+    },
+    { icon: '../images/recycle.png', label: 'Deleted Items' },
+    { icon: '../images/notesIcon.png', label: 'Notes' },
+    { iconsize: 14, icon: '../images/settings.png', label: 'Settings' },
+    { icon: '../images/favorites.png', label: 'Favorites' },
   ];
 
-  constructor() {}
+  treeSettings: TreeOptions = {
+    allowDrag: false,
+    allowDrop: false,
+  };
 
-  ngOnInit(): void {}
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.tree.selectItem(null);
+      this.tree.setOptions(this.treeSettings);
+    });
+  }
+
+  onItemClick(event: Event): void {
+    console.log(event);
+  }
 }

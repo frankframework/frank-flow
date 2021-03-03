@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ExplorerComponent } from './explorer.component';
+import { jqxTreeModule } from 'jqwidgets-ng/jqxtree';
 
 describe('ExplorerComponent', () => {
   let component: ExplorerComponent;
@@ -9,6 +10,7 @@ describe('ExplorerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ExplorerComponent],
+      imports: [jqxTreeModule],
     }).compileComponents();
   });
 

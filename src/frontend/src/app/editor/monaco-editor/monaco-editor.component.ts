@@ -132,7 +132,7 @@ export class MonacoEditorComponent
           width:
             parentElement.offsetWidth - parentElement.children[0].offsetWidth,
         });
-      }, 10);
+      });
     }
   }
 
