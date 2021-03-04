@@ -13,33 +13,28 @@ export class ExplorerComponent implements AfterViewInit {
 
   treeSource: any[] = [
     {
-      icon: '../images/mailIcon.png',
-      label: 'Mail',
+      // icon: '../images/folder.png',
+      label: 'Frank2Test',
       expanded: true,
       items: [
-        { icon: '../images/calendarIcon.png', label: 'Calendar' },
-        {
-          icon: '../images/contactsIcon.png',
-          label: 'Contacts',
-          selected: true,
-        },
+        { label: 'Test.xsd' },
+        { label: 'Test2.xml' },
+        { label: 'Test3.xml' },
+        { label: 'Test4.xml' },
       ],
     },
     {
-      icon: '../images/folder.png',
-      label: 'Inbox',
+      // icon: '../images/folder.png',
+      label: 'TestConfig',
       expanded: true,
       items: [
-        { icon: '../images/folder.png', label: 'Admin' },
-        { icon: '../images/folder.png', label: 'Corporate' },
-        { icon: '../images/folder.png', label: 'Finance' },
-        { icon: '../images/folder.png', label: 'Other' },
+        { label: 'Test.xsd' },
+        { label: 'Test2.xml' },
+        { label: 'Test3.xml' },
+        { label: 'Test4.xml' },
       ],
     },
-    { icon: '../images/recycle.png', label: 'Deleted Items' },
-    { icon: '../images/notesIcon.png', label: 'Notes' },
-    { iconsize: 14, icon: '../images/settings.png', label: 'Settings' },
-    { icon: '../images/favorites.png', label: 'Favorites' },
+    { label: 'ibisdoc.xsd' },
   ];
 
   treeSettings: TreeOptions = {
