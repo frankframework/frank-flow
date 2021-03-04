@@ -24,6 +24,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-regular-svg-icons": "^5.15.2",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "fuse.js": "^6.4.6",
     "jqwidgets-ng": "^12.0.0",
     "jsplumb": "^2.15.5",
     "monaco-editor": "^0.22.3",

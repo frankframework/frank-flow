@@ -6,7 +6,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class FilterPipe implements PipeTransform {
   transform(items: any[] | undefined, term: string): any[] | undefined {
     return term
-      ? items?.filter((item: any) => item.name?.includes(term))
+      ? items?.filter((item: any) =>
+          item.name?.toLowerCase().includes(term.toLowerCase())
+        )
       : items;
   }
 }
