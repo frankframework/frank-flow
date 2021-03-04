@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Mode } from './mode';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ModeType } from './modeType';
 
 @Injectable({
