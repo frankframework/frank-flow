@@ -15,24 +15,41 @@ export class NodeService {
   jsPlumbInstance!: jsPlumbInstance;
 
   constructor(private factoryResolver: ComponentFactoryResolver) {
-    this.jsPlumbInstance = jsPlumb.getInstance();
+    this.jsPlumbInstance = jsPlumb.getInstance({ Container: 'canvas' });
+  }
+
+  getInstance(): jsPlumbInstance {
+    return this.jsPlumbInstance;
   }
 
   setRootViewContainerRef(viewContainerRef: ViewContainerRef): void {
     this.rootViewContainer = viewContainerRef;
+    this.jsPlumbInstance.ready(() => {
+      this.jsPlumbInstance.setContainer('canvas');
+    });
   }
 
   addDynamicNode(node: Node): void {
-    const factory = this.factoryResolver.resolveComponentFactory(NodeComponent);
-    const component = factory.create(this.rootViewContainer.injector);
-    (component.instance as any).node = node;
-    (component.instance as any).jsPlumbInstance = this.jsPlumbInstance;
-    this.rootViewContainer.insert(component.hostView);
-    console.log('in NodeService..', component.instance);
+    this.jsPlumbInstance.ready(() => {
+      const factory = this.factoryResolver.resolveComponentFactory(
+        NodeComponent
+      );
+      const component = factory.create(this.rootViewContainer.injector);
+
+      (component.instance as any).node = node;
+      (component.instance as any).jsPlumbInstance = this.jsPlumbInstance;
+
+      component.instance.cssClass = 'node';
+      component.location.nativeElement.id = node.id;
+
+      this.rootViewContainer.insert(component.hostView);
+    });
   }
 
   addConnection(connection: ConnectParams): void {
-    this.jsPlumbInstance.connect({ uuids: connection.uuids });
+    this.jsPlumbInstance.ready(() => {
+      this.jsPlumbInstance.connect({ uuids: connection.uuids });
+    });
   }
 
   clear(): void {

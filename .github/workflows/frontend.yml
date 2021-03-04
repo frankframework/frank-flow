@@ -5,12 +5,12 @@ on:
     branches:
       - master
     paths:
-      - 'src/frontend/**'
+      - "src/frontend/**"
   pull_request:
     branches:
       - master
     paths:
-      - 'src/frontend/**'
+      - "src/frontend/**"
 
 defaults:
   run:

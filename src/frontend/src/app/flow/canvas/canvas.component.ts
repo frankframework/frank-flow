@@ -2,10 +2,14 @@ import {
   AfterViewInit,
   Component,
   Input,
+  OnInit,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
+import { Node } from '../node/node';
+import { CodeService } from '../../services/code.service';
+import { jsPlumbInstance, jsPlumb, Connection } from 'jsplumb';
 
 @Component({
   selector: 'app-canvas',
@@ -17,49 +21,69 @@ export class CanvasComponent implements AfterViewInit {
 
   @Input() connections = [];
 
-  @ViewChild('nodes', { read: ViewContainerRef })
+  @ViewChild('canvas', { read: ViewContainerRef })
   viewContainerRef!: ViewContainerRef;
+  jsPlumbInstance!: jsPlumbInstance;
 
-  constructor(private nodeService: NodeService) {}
+  constructor(
+    private nodeService: NodeService,
+    private codeService: CodeService
+  ) {
+    this.jsPlumbInstance = this.nodeService.getInstance();
+  }
 
   ngAfterViewInit(): void {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
 
-    this.nodes.forEach((node) => {
-      this.nodeService.addDynamicNode(node);
-    });
-
-    setTimeout(() => {
-      this.connections.forEach((connection) => {
-        this.nodeService.addConnection(connection);
+    if (Worker) {
+      const flowGenerator = new Worker('./flow-generator.worker', {
+        type: 'module',
       });
+
+      this.codeService.curFileObservable.subscribe({
+        next(data): void {
+          flowGenerator.postMessage(data);
+        },
+      });
+
+      flowGenerator.onmessage = ({ data }) => {
+        this.generateFlow(data);
+      };
+    }
+  }
+
+  generateFlow(data: any): void {
+    this.jsPlumbInstance.ready(() => {
+      this.jsPlumbInstance.reset();
+      this.viewContainerRef.clear();
     });
-  }
 
-  addNode(): void {
-    const node = { id: 'Step id_' + [Math.random().toString(16).slice(2, 8)] };
+    const root = Object.keys(data)[0];
+    if (data[root] && data[root].Adapter && data[root].Adapter[0].Pipeline) {
+      const pipeline = data[root].Adapter[0].Pipeline[0];
+      const firstPipe = pipeline.$?.firstPipe;
 
-    this.nodeService.addDynamicNode(node);
-  }
+      let idCounter = 0;
+      for (const key of Object.keys(pipeline)) {
+        if (key !== '$') {
+          const pipe = pipeline[key][0].$;
+          const node = {
+            id: 'stepId_' + idCounter++,
+            name: pipe.name ?? pipe.path,
+            top: pipe.y,
+            left: pipe.x,
+          };
+          this.nodeService.addDynamicNode(node);
+        }
+      }
 
-  saveNodeJson(): void {
-    // Save element position on Canvas and node connections
-
-    const container = this.viewContainerRef.element.nativeElement.parentNode;
-    const nodes = Array.from(
-      container.querySelectorAll('.node') as HTMLDivElement[]
-    ).map((node: HTMLDivElement) => ({
-      id: node.id,
-      top: node.offsetTop,
-      left: node.offsetLeft,
-    }));
-
-    const connections = (this.nodeService.jsPlumbInstance.getAllConnections() as any[]).map(
-      (conn) => ({ uuids: conn.getUuids() })
-    );
-
-    const json = JSON.stringify({ nodes, connections });
-
-    console.log(json);
+      setTimeout(() => {
+        for (let i = 0; i < idCounter; i++) {
+          this.nodeService.addConnection({
+            uuids: ['stepId_' + i + '_bottom', 'stepId_' + (i + 1) + '_top'],
+          });
+        }
+      });
+    }
   }
 }
