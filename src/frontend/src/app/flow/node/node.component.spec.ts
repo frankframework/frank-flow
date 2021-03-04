@@ -19,8 +19,11 @@ describe('NodeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NodeComponent);
     component = fixture.componentInstance;
+
     component.node = { id: 'TestNode', top: 0, left: 20 } as Node;
+    fixture.elementRef.nativeElement.id = component.node.id;
     component.jsPlumbInstance = jsPlumb.getInstance();
+
     fixture.detectChanges();
   });
 
