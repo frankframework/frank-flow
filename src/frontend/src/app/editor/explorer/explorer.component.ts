@@ -13,18 +13,16 @@ export class ExplorerComponent implements AfterViewInit {
 
   treeSource: any[] = [
     {
-      // icon: '../images/folder.png',
       label: 'Frank2Test',
       expanded: true,
       items: [
         { label: 'Test.xsd' },
-        { label: 'Test2.xml' },
+        { label: 'Test2.xml', selected: true },
         { label: 'Test3.xml' },
         { label: 'Test4.xml' },
       ],
     },
     {
-      // icon: '../images/folder.png',
       label: 'TestConfig',
       expanded: true,
       items: [
@@ -44,7 +42,6 @@ export class ExplorerComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      this.tree.selectItem(null);
       this.tree.setOptions(this.treeSettings);
     });
   }
