@@ -14,6 +14,10 @@ export class PaletteComponent implements OnInit {
   constructor(private toastr: ToastrService) {}
 
   ngOnInit(): void {
+    this.getData();
+  }
+
+  getData(): void {
     fetch(environment.runnerUri + environment.ibisdocJsonPath, {
       method: 'GET',
       headers: {

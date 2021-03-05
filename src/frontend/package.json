@@ -24,11 +24,11 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-regular-svg-icons": "^5.15.2",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "jqwidgets-ng": "^12.0.0",
     "jsplumb": "^2.15.5",
     "monaco-editor": "^0.22.3",
     "ngx-smart-modal": "^7.4.1",
     "ngx-toastr": "^13.2.0",
-    "ngx-treeview": "^10.0.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "^0.11.4"

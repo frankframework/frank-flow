@@ -1,3 +1,7 @@
 :host {
-  background-color: var(--bg-color);
+  background: var(--bg-color);
+}
+
+.search-box {
+  padding: 16px;
 }

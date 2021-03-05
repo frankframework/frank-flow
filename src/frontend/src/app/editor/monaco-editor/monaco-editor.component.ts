@@ -15,13 +15,6 @@ import { SettingsService } from '../../header/settings/settings.service';
 import { Settings } from '../../header/settings/settings';
 
 import { CodeService } from '../../services/code.service';
-import {
-  FunctionCall,
-  FunctionExpr,
-  InvokeFunctionExpr,
-  InvokeMethodExpr,
-  TypeofExpr,
-} from '@angular/compiler';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -104,23 +97,23 @@ export class MonacoEditorComponent
 
   initializeEditor(): void {
     this.code = `<Configuration name="dd">
-    <Adapter name="ddAdapter"> 
-      <Receiver name="ddReceiver" x="681" y="24"> 
+    <Adapter name="ddAdapter">
+      <Receiver name="ddReceiver" x="681" y="24">
         <JavaListener name="ddListener" serviceName="ddService" />
       </Receiver>
       <Pipeline firstPipe="ddPipe">
         <FixedResultPipe name="ddPipe" returnString="Hello World" x="681" y="224">
-          <Forward name="success" path="EXIT"/> 
+          <Forward name="success" path="EXIT"/>
         </FixedResultPipe>
         <FixedResultPipe name="otherPipe" returnString="Hello World">
-          <Forward name="success" path="EXIT"/> 
-        </FixedResultPipe> 
+          <Forward name="success" path="EXIT"/>
+        </FixedResultPipe>
         <XmlSwitchPipe name="switchXML"  x="381" y="224">
           <Forward name="success" path="EXIT"/>
           <Forward name="error" path="err"/>
         </XmlSwitchPipe>
-        <Exit path="EXIT" state="success" x="223" y="425"/> 
-      </Pipeline> 
+        <Exit path="EXIT" state="success" x="223" y="425"/>
+      </Pipeline>
     </Adapter>
   </Configuration>
   `;
@@ -141,35 +134,21 @@ export class MonacoEditorComponent
     if (model) {
       model.onDidChangeContent(
         this.debounce(
-          () => {
-            this.codeService.setCurrentFile(this.codeEditorInstance.getValue());
-          },
-          250,
-          true
+          () =>
+            this.codeService.setCurrentFile(this.codeEditorInstance.getValue()),
+          500
         )
       );
     }
   }
 
-  debounce(func: any, wait: number, immediate: boolean): any {
+  debounce(func: any, wait: number): any {
     let timeout: ReturnType<typeof setTimeout> | null;
     return () => {
-      const context = this;
-      const args = arguments;
-      const later = () => {
-        timeout = null;
-        if (!immediate) {
-          func.apply(context, args);
-        }
-      };
-      const callNow = immediate && !timeout;
       if (timeout) {
         clearTimeout(timeout);
       }
-      timeout = setTimeout(later, wait);
-      if (callNow) {
-        func.apply(context, args);
-      }
+      timeout = setTimeout(() => func.apply(this, arguments), wait);
     };
   }
 
@@ -184,13 +163,13 @@ export class MonacoEditorComponent
   onResize(): void {
     const parentElement = this.monacoElement.nativeElement.parentElement;
     if (parentElement) {
-      setTimeout(() => {
+      setTimeout(() =>
         this.codeEditorInstance.layout({
           height: parentElement.offsetHeight,
           width:
             parentElement.offsetWidth - parentElement.children[0].offsetWidth,
-        });
-      }, 10);
+        })
+      );
     }
   }
 

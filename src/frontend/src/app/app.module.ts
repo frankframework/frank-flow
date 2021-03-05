@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { EditorModule } from './editor/editor.module';
 import { HeaderModule } from './header/header.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { TreeviewModule } from 'ngx-treeview';
 import { FlowModule } from './flow/flow.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
@@ -31,7 +30,6 @@ const toastrConfig = {
     EditorModule,
     HeaderModule,
     FontAwesomeModule,
-    TreeviewModule.forRoot(),
     FlowModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(toastrConfig),
