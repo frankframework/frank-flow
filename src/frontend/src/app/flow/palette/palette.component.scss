@@ -3,8 +3,8 @@
   width: 100%;
   background: var(--bg-color-muted);
   padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  overflow-y: auto;
+  display: grid;
+  overflow: hidden;
+  align-content: start;
+  grid-row-gap: 16px;
 }
