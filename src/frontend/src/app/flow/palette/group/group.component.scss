@@ -43,7 +43,7 @@
   &__list {
     border-bottom: 2px solid var(--border-color);
     padding: 8px 0;
-    overflow-y: scroll;
+    overflow-y: auto;
 
     p {
       margin: 4px 16px;
