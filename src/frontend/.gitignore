@@ -8,6 +8,7 @@
 /bazel-out
 
 # dependencies
+yarn.lock
 /node_modules
 /node
 
