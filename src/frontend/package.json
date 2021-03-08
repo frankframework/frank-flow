@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "build:prod": "ng build --prod",
+    "build:analyze": "ng build --prod --stats-json && webpack-bundle-analyzer ../../target/frontend/stats.json",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -55,7 +56,8 @@
     "ts-node": "^9.1.1",
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "4.1.5"
+    "typescript": "4.1.5",
+    "webpack-bundle-analyzer": "^4.4.0"
   },
   "husky": {
     "hooks": {
