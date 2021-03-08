@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NodeComponent } from './node.component';
-import { Node } from './node';
+import { Node } from './Nodes/node';
 import { jsPlumb } from 'jsplumb';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 

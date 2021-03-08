@@ -105,21 +105,21 @@ export class MonacoEditorComponent
   initializeEditor(): void {
     this.code = `<Configuration name="dd">
     <Adapter name="ddAdapter"> 
-      <Receiver name="ddReceiver" x="681" y="24"> 
-        <JavaListener name="ddListener" serviceName="ddService" />
+      <Receiver name="ddReceiver"> 
+        <JavaListener name="ddListener" serviceName="ddService"  x="681" y="24" />
       </Receiver>
       <Pipeline firstPipe="ddPipe">
-        <FixedResultPipe name="ddPipe" returnString="Hello World" x="681" y="224">
+        <FixedResultPipe name="ddPipe" returnString="Hello World" x="100" y="50">
           <Forward name="success" path="EXIT"/> 
         </FixedResultPipe>
-        <FixedResultPipe name="otherPipe" returnString="Hello World">
+        <DelayPipe name="otherPipe" returnString="Hello World" x="100" y="250">
           <Forward name="success" path="EXIT"/> 
-        </FixedResultPipe> 
-        <XmlSwitchPipe name="switchXML"  x="381" y="224">
+        </DelayPipe> 
+        <XmlSwitchPipe name="switchXML" x="100" y="450">
           <Forward name="success" path="EXIT"/>
           <Forward name="error" path="err"/>
         </XmlSwitchPipe>
-        <Exit path="EXIT" state="success" x="223" y="425"/> 
+        <Exit path="EXIT" state="success" x="223" y="625"/> 
       </Pipeline> 
     </Adapter>
   </Configuration>

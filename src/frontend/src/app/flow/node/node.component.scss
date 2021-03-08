@@ -19,4 +19,12 @@
     box-shadow: 5px 5px 0 0 var(--accent-shadow);
     cursor: grabbing;
   }
+
+  &.listener {
+    background-color: blue;
+  }
+
+  &.exit {
+    background-color: purple;
+  }
 }

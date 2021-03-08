@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import { ConnectParams, jsPlumb, jsPlumbInstance } from 'jsplumb';
 import { NodeComponent } from './node.component';
-import { Node } from './node';
+import { Node } from './Nodes/node';
 
 @Injectable({
   providedIn: 'root',
@@ -30,20 +30,28 @@ export class NodeService {
   }
 
   addDynamicNode(node: Node): void {
-    this.jsPlumbInstance.ready(() => {
-      const factory = this.factoryResolver.resolveComponentFactory(
-        NodeComponent
-      );
-      const component = factory.create(this.rootViewContainer.injector);
+    // this.jsPlumbInstance.ready(() => {
+    //   const factory = this.factoryResolver.resolveComponentFactory(
+    //     NodeComponent
+    //   );
+    //   const component = factory.create(this.rootViewContainer.injector);
 
-      (component.instance as any).node = node;
-      (component.instance as any).jsPlumbInstance = this.jsPlumbInstance;
+    //   (component.instance as any).node = node;
+    //   (component.instance as any).jsPlumbInstance = this.jsPlumbInstance;
 
-      component.instance.cssClass = 'node';
-      component.location.nativeElement.id = node.id;
+    //   const style = "left: " + node.left + "px;  top: " + node.top + "px;"
+    //   component.instance.cssClass = 'node';
+    //   component.instance.style = style;
+    //   component.location.nativeElement.id = node.id;
 
-      this.rootViewContainer.insert(component.hostView);
-    });
+    //   this.rootViewContainer.insert(component.hostView);
+    // });
+
+    node.generateNode(
+      this.rootViewContainer,
+      this.factoryResolver,
+      this.jsPlumbInstance
+    );
   }
 
   addConnection(connection: ConnectParams): void {

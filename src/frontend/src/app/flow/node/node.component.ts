@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input, HostBinding } from '@angular/core';
-import { Node } from './node';
+import { Node } from './Nodes/node';
 import { EndpointOptions, jsPlumbInstance } from 'jsplumb';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 
@@ -12,6 +12,7 @@ export class NodeComponent implements AfterViewInit {
   @Input() node!: Node;
   @Input() jsPlumbInstance!: jsPlumbInstance;
   @HostBinding('class') public cssClass: any;
+  @HostBinding('style') public style: any;
 
   constructor(public ngxSmartModalService: NgxSmartModalService) {}
 
@@ -49,7 +50,7 @@ export class NodeComponent implements AfterViewInit {
   };
 
   ngAfterViewInit(): void {
-    const { id } = this.node;
+    const id = this.node.getId();
 
     this.jsPlumbInstance.addEndpoint(
       id,
