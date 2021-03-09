@@ -2,7 +2,7 @@
 
 The Frank!Flow application is currently undergoing a renovation. The application will mostly be rewritten to Angular for a better User Experience and a stable product.
 
-The current version of this application is considered a Work In Progress. Go to the [1.0.x](https://github.com/ibissource/frank-flow/tree/1.0.x) branch if you want to use the sable release.
+The current version of this application is considered a Work In Progress. Go to the [1.0.x](https://github.com/ibissource/frank-flow/tree/1.0.x) branch if you want to use the stable release.
 
 # Frank!Flow
 
@@ -191,7 +191,7 @@ There are some basic requirements that are needed to test or develop the Frank!F
 
 #### Frontend
 
-The code for the frontend is located at `frank-flow/src/forntend`. The most important files in this folder are the index.html which bootstraps the application and the app folder which contains all the logic off the application. Some other notable folders are: css for the stylesheets, media for images and recourses and test for the Karma tests.
+The code for the frontend is located at `frank-flow/src/frontend`. The most important files in this folder are the index.html which bootstraps the application and the app folder which contains all the logic of the application. Some other notable folders are: css for the stylesheets, media for images and resources and test for the Karma tests.
 
 ##### Developing the frontend
 

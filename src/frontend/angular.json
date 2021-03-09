@@ -27,13 +27,12 @@
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": [
-              "src/favicon.ico",
               "src/assets",
               "src/assets/images",
               {
                 "glob": "**/*",
                 "input": "node_modules/monaco-editor/min",
-                "output": "./assets/monaco/"
+                "output": "/assets/monaco/"
               }
             ],
             "styles": ["src/assets/styles/_globals.scss"],
@@ -61,7 +60,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -103,11 +102,12 @@
               {
                 "glob": "**/*",
                 "input": "node_modules/monaco-editor/min",
-                "output": "./assets/monaco/"
+                "output": "/assets/monaco/"
               }
             ],
             "styles": ["src/assets/styles/_globals.scss"],
-            "scripts": []
+            "scripts": [],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           }
         },
         "lint": {

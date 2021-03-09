@@ -1,6 +1,6 @@
 /// <reference path="../../../node_modules/monaco-editor/monaco.d.ts" />
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

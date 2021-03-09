@@ -2,17 +2,15 @@ import {
   AfterViewInit,
   Component,
   Input,
-  OnInit,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
-import { Node } from '../node/Nodes/node';
 import Pipe from '../node/Nodes/pipe';
 import Listener from '../node/Nodes/listener';
 import Exit from '../node/Nodes/exit';
 import { CodeService } from '../../services/code.service';
-import { jsPlumbInstance, jsPlumb, Connection } from 'jsplumb';
+import { jsPlumbInstance } from 'jsplumb';
 
 @Component({
   selector: 'app-canvas',
