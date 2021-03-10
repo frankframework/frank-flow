@@ -16,8 +16,7 @@ export default class Exit extends Node {
       (component.instance as any).node = this;
       (component.instance as any).jsPlumbInstance = plumbInstance;
 
-      const style =
-        'left: ' + this.getLeft() + 'px;  top: ' + this.getTop() + 'px;';
+      const style = `left: ${this.getLeft()}px; top: ${this.getTop()}px;`;
       component.instance.cssClass = 'shape--round color--danger';
       component.instance.style = style;
       component.location.nativeElement.id = this.getId();

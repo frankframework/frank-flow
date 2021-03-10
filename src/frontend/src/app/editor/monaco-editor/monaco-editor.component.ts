@@ -102,7 +102,6 @@ export class MonacoEditorComponent
     this.codeEditorInstance = monaco.editor.create(
       this.editorContainer.nativeElement,
       {
-        value: '',
         language: 'xml',
         theme: 'vs-dark',
       }
@@ -111,7 +110,7 @@ export class MonacoEditorComponent
 
   initializeTwoWayBinding(): void {
     const model = this.codeEditorInstance.getModel();
-    const cur = this;
+
     if (model) {
       model.onDidChangeContent(
         this.debounce(() => {
@@ -126,13 +125,13 @@ export class MonacoEditorComponent
       );
     }
     this.codeService.curFileObservable.subscribe({
-      next(file): void {
-        if (file.data && !cur.fileObservableUpdate) {
-          cur.fileObservableUpdate = true;
+      next: (file) => {
+        if (file.data && !this.fileObservableUpdate) {
+          this.fileObservableUpdate = true;
           model?.setValue(file.data);
-          cur.curFile = file;
-        } else if (cur.fileObservableUpdate) {
-          cur.fileObservableUpdate = false;
+          this.curFile = file;
+        } else if (this.fileObservableUpdate) {
+          this.fileObservableUpdate = false;
         }
       },
     });

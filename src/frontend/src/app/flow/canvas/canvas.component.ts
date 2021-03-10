@@ -6,9 +6,9 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
-import Pipe from '../node/nodes/pipe';
-import Listener from '../node/nodes/listener';
-import Exit from '../node/nodes/exit';
+import Pipe from '../node/Nodes/pipe';
+import Listener from '../node/Nodes/listener';
+import Exit from '../node/Nodes/exit';
 import { CodeService } from '../../shared/services/code.service';
 import { jsPlumbInstance } from 'jsplumb';
 import { File } from '../../shared/models/file.model';
@@ -55,7 +55,7 @@ export class CanvasComponent implements AfterViewInit {
         if (file.type === FileType.JSON && file.data) {
           this.generateFlow(file.data);
         } else {
-          // update XML here.
+          //  TODO: update XML here.
         }
       };
     }
