@@ -13,8 +13,8 @@ import {
 import { ModeService } from '../../header/modes/mode.service';
 import { SettingsService } from '../../header/settings/settings.service';
 import { Settings } from '../../header/settings/settings';
-
-import { CodeService } from '../../services/code.service';
+import { File } from '../../shared/models/file.model';
+import { CodeService } from '../../shared/services/code.service';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -32,6 +32,8 @@ export class MonacoEditorComponent
   @Output() codeChange = new EventEmitter<string>();
 
   codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
+  curFile = new File();
+  fileObservableUpdate = false;
 
   constructor(
     private monacoElement: ElementRef,
@@ -91,55 +93,49 @@ export class MonacoEditorComponent
   initializeMonaco(): void {
     this.initializeEditor();
     this.initializeTwoWayBinding();
+    this.codeService.setEditor(this.codeEditorInstance);
     this.initializeResizeObserver();
     this.initializeThemeObserver();
   }
 
   initializeEditor(): void {
-    this.code = `<Configuration name="dd">
-    <Adapter name="ddAdapter"> 
-      <Receiver name="ddReceiver"> 
-        <JavaListener name="ddListener" serviceName="ddService"  x="681" y="24" />
-      </Receiver>
-      <Pipeline firstPipe="ddPipe">
-        <FixedResultPipe name="ddPipe" returnString="Hello World" x="100" y="50">
-          <Forward name="success" path="EXIT"/> 
-        </FixedResultPipe>
-        <DelayPipe name="otherPipe" returnString="Hello World" x="100" y="250">
-          <Forward name="success" path="EXIT"/> 
-        </DelayPipe> 
-        <XmlSwitchPipe name="switchXML" x="100" y="450">
-          <Forward name="success" path="EXIT"/>
-          <Forward name="error" path="err"/>
-        </XmlSwitchPipe>
-        <Exit path="EXIT" state="success" x="223" y="625"/> 
-      </Pipeline> 
-    </Adapter>
-  </Configuration>
-  `;
-
     this.codeEditorInstance = monaco.editor.create(
       this.editorContainer.nativeElement,
       {
-        value: this.code,
+        value: '',
         language: 'xml',
         theme: 'vs-dark',
       }
     );
-    this.codeService.setEditor(this.codeEditorInstance);
   }
 
   initializeTwoWayBinding(): void {
     const model = this.codeEditorInstance.getModel();
+    const cur = this;
     if (model) {
       model.onDidChangeContent(
-        this.debounce(
-          () =>
-            this.codeService.setCurrentFile(this.codeEditorInstance.getValue()),
-          500
-        )
+        this.debounce(() => {
+          if (!this.fileObservableUpdate) {
+            this.fileObservableUpdate = true;
+            this.curFile.data = this.codeEditorInstance.getValue();
+            this.codeService.setCurrentFile(this.curFile);
+          } else {
+            this.fileObservableUpdate = false;
+          }
+        }, 500)
       );
     }
+    this.codeService.curFileObservable.subscribe({
+      next(file): void {
+        if (file.data && !cur.fileObservableUpdate) {
+          cur.fileObservableUpdate = true;
+          model?.setValue(file.data);
+          cur.curFile = file;
+        } else if (cur.fileObservableUpdate) {
+          cur.fileObservableUpdate = false;
+        }
+      },
+    });
   }
 
   debounce(func: any, wait: number): any {

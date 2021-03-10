@@ -6,11 +6,13 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
-import Pipe from '../node/Nodes/pipe';
-import Listener from '../node/Nodes/listener';
-import Exit from '../node/Nodes/exit';
-import { CodeService } from '../../services/code.service';
+import Pipe from '../node/nodes/pipe';
+import Listener from '../node/nodes/listener';
+import Exit from '../node/nodes/exit';
+import { CodeService } from '../../shared/services/code.service';
 import { jsPlumbInstance } from 'jsplumb';
+import { File } from '../../shared/models/file.model';
+import { FileType } from '../../shared/enums/file-type.enum';
 
 @Component({
   selector: 'app-canvas',
@@ -48,7 +50,13 @@ export class CanvasComponent implements AfterViewInit {
       });
 
       flowGenerator.onmessage = ({ data }) => {
-        this.generateFlow(data);
+        const file = data as File;
+
+        if (file.type === FileType.JSON && file.data) {
+          this.generateFlow(file.data);
+        } else {
+          // update XML here.
+        }
       };
     }
   }
@@ -69,8 +77,6 @@ export class CanvasComponent implements AfterViewInit {
           const firstPipe = pipeline.$?.firstPipe;
           const receiver = data[root].Adapter[0].Receiver[0];
 
-          console.log(pipeline);
-
           let idCounter = 0;
 
           idCounter = this.generateReceiver(receiver, idCounter);
@@ -85,21 +91,18 @@ export class CanvasComponent implements AfterViewInit {
   generateReceiver(receiver: any, idCounter: number): number {
     for (const key of Object.keys(receiver)) {
       if (key !== '$') {
-        // if(receiver[key].length > 1) {
-        //   receiver[key].array.forEach(element => {
+        receiver[key].forEach((element: any) => {
+          const listenerInfo = this.getNodeInfo(element.$, idCounter);
+          idCounter = listenerInfo.idCounter;
+          const listenerNode = new Listener(
+            listenerInfo.id,
+            listenerInfo.name,
+            listenerInfo.top,
+            listenerInfo.left
+          );
 
-        //   });
-        // }
-        const listener = receiver[key][0].$;
-        console.log(listener);
-
-        const id = 'stepId_' + idCounter++;
-        const name = listener.name ?? listener.path;
-        const top = listener.y;
-        const left = listener.x;
-
-        const listenerNode = new Listener(id, name, top, left);
-        this.nodeService.addDynamicNode(listenerNode);
+          this.nodeService.addDynamicNode(listenerNode);
+        });
       }
     }
 
@@ -109,25 +112,41 @@ export class CanvasComponent implements AfterViewInit {
   generatePipeline(pipeline: any, idCounter: number): number {
     for (const key of Object.keys(pipeline)) {
       if (key !== '$') {
-        const pipe = pipeline[key][0].$;
+        pipeline[key].forEach((element: any) => {
+          const nodeInfo = this.getNodeInfo(element.$, idCounter);
+          idCounter = nodeInfo.idCounter;
+          let node;
 
-        const id = 'stepId_' + idCounter++;
-        const name = pipe.name ?? pipe.path;
-        const top = pipe.y;
-        const left = pipe.x;
+          if (key === 'Exit') {
+            node = new Exit(
+              nodeInfo.id,
+              nodeInfo.name,
+              nodeInfo.top,
+              nodeInfo.left
+            );
+          } else {
+            node = new Pipe(
+              nodeInfo.id,
+              nodeInfo.name,
+              nodeInfo.top,
+              nodeInfo.left
+            );
+          }
 
-        let node;
-
-        if (key === 'Exit') {
-          node = new Exit(id, name, top, left);
-        } else {
-          node = new Pipe(id, name, top, left);
-        }
-
-        this.nodeService.addDynamicNode(node);
+          this.nodeService.addDynamicNode(node);
+        });
       }
     }
     return idCounter;
+  }
+
+  getNodeInfo(element: any, idCounter: number): any {
+    const id = 'stepId_' + idCounter++;
+    const name = element.name ?? element.path;
+    const top = element.y;
+    const left = element.x;
+
+    return { id, name, top, left, idCounter };
   }
 
   connectAllNodes(idCounter: number): void {

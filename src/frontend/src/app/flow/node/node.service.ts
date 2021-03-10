@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import { ConnectParams, jsPlumb, jsPlumbInstance } from 'jsplumb';
 import { NodeComponent } from './node.component';
-import { Node } from './Nodes/node';
+import { Node } from './nodes/node';
 
 @Injectable({
   providedIn: 'root',
