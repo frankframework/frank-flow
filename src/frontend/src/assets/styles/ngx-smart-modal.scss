@@ -18,6 +18,10 @@
       flex-direction: column;
       justify-content: space-between;
       gap: 16px;
+
+      h1 {
+        word-wrap: anywhere;
+      }
     }
 
     .nsm-dialog-btn-close {
