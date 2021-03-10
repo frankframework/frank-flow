@@ -5,7 +5,7 @@ import {
   HostBinding,
   HostListener,
 } from '@angular/core';
-import { Node } from './Nodes/node';
+import { Node } from './nodes/node';
 import { EndpointOptions, jsPlumbInstance } from 'jsplumb';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 
