@@ -1,5 +1,11 @@
-import { AfterViewInit, Component, HostBinding, Input } from '@angular/core';
-import { Node } from './node';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  HostBinding,
+  HostListener,
+} from '@angular/core';
+import { Node } from './nodes/node';
 import { EndpointOptions, jsPlumbInstance } from 'jsplumb';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 
@@ -9,12 +15,6 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
   styleUrls: ['./node.component.scss'],
 })
 export class NodeComponent implements AfterViewInit {
-  @Input() node!: Node;
-  @Input() jsPlumbInstance!: jsPlumbInstance;
-  @HostBinding('class') public cssClass: any;
-
-  constructor(public ngxSmartModalService: NgxSmartModalService) {}
-
   private dropOptions = {
     tolerance: 'touch',
     hoverClass: 'dropHover',
@@ -48,8 +48,19 @@ export class NodeComponent implements AfterViewInit {
     dropOptions: this.dropOptions,
   };
 
+  @Input() node!: Node;
+  @Input() jsPlumbInstance!: jsPlumbInstance;
+  @HostBinding('class') public cssClass: any;
+  @HostBinding('style') public style: any;
+
+  @HostListener('dblclick') onDoubleClick(): void {
+    this.openOptions();
+  }
+
+  constructor(public ngxSmartModalService: NgxSmartModalService) {}
+
   ngAfterViewInit(): void {
-    const { id } = this.node;
+    const id = this.node.getId();
 
     this.jsPlumbInstance.addEndpoint(
       id,

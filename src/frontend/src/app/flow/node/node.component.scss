@@ -3,13 +3,13 @@
   min-width: 200px;
   min-height: 100px;
   padding: 1em;
-  border: 2px solid var(--accent-dark);
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--accent-whiten);
   color: var(--accent);
+  background: var(--accent-whiten);
+  border: 2px solid var(--accent-dark);
 
   &:hover {
     cursor: grab;
@@ -18,5 +18,71 @@
   &.jtk-drag {
     box-shadow: 5px 5px 0 0 var(--accent-shadow);
     cursor: grabbing;
+  }
+
+  &.shape--oval {
+    border-radius: 100%;
+  }
+
+  &.shape--square,
+  &.shape--round {
+    min-width: 100px;
+    min-height: 100px;
+    width: 100px;
+    height: 100px;
+  }
+
+  &.shape--round {
+    border-radius: 100%;
+  }
+
+  &.color--primary {
+    color: var(--primary);
+    background: var(--primary-whiten);
+    border: 2px solid var(--primary-dark);
+
+    &.jtk-drag {
+      box-shadow: 5px 5px 0 0 var(--primary-shadow);
+    }
+  }
+
+  &.color--info {
+    color: var(--info);
+    background: var(--info-whiten);
+    border: 2px solid var(--info-dark);
+
+    &.jtk-drag {
+      box-shadow: 5px 5px 0 0 var(--info-shadow);
+    }
+  }
+
+  &.color--success {
+    color: var(--success);
+    background: var(--success-whiten);
+    border: 2px solid var(--success-dark);
+
+    &.jtk-drag {
+      box-shadow: 5px 5px 0 0 var(--success-shadow);
+    }
+  }
+
+  &.color--warning {
+    color: var(--warning);
+    background: var(--warning-whiten);
+    border: 2px solid var(--warning-dark);
+
+    &.jtk-drag {
+      box-shadow: 5px 5px 0 0 var(--warning-shadow);
+    }
+  }
+
+  &.color--danger {
+    color: var(--danger);
+    background: var(--danger-whiten);
+    border: 2px solid var(--danger-dark);
+
+    &.jtk-drag {
+      box-shadow: 5px 5px 0 0 var(--danger-shadow);
+    }
   }
 }
