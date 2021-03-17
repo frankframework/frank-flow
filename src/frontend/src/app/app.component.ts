@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Mode } from './header/modes/mode';
+import { ModeModel } from './header/modes/mode.model';
 import { ModeService } from './header/modes/mode.service';
-import { ModeType } from './header/modes/modeType';
+import { ModeTypeEnum } from './header/modes/modeType.enum';
 import { SettingsService } from './header/settings/settings.service';
-import { Settings } from './header/settings/settings';
+import { SettingsModel } from './header/settings/settings.model';
 
 @Component({
   selector: 'app-root',
@@ -11,9 +11,9 @@ import { Settings } from './header/settings/settings';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  modeType = ModeType;
-  mode!: Mode;
-  settings!: Settings;
+  modeType = ModeTypeEnum;
+  mode!: ModeModel;
+  settings!: SettingsModel;
 
   constructor(
     private modeService: ModeService,

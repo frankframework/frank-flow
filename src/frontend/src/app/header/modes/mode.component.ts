@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Mode } from './mode';
+import { ModeModel } from './mode.model';
 import { ModeService } from './mode.service';
-import { ModeType } from './modeType';
+import { ModeTypeEnum } from './modeType.enum';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
   faCode,
@@ -15,8 +15,8 @@ import {
   styleUrls: ['./mode.component.scss'],
 })
 export class ModeComponent implements OnInit {
-  modeType = ModeType;
-  mode!: Mode;
+  modeType = ModeTypeEnum;
+  mode!: ModeModel;
 
   constructor(private modeService: ModeService, library: FaIconLibrary) {
     library.addIcons(faCode, faProjectDiagram, faColumns);
@@ -30,7 +30,7 @@ export class ModeComponent implements OnInit {
     this.modeService.getMode().subscribe((mode) => (this.mode = mode));
   }
 
-  setMode(modeType: ModeType): void {
+  setMode(modeType: ModeTypeEnum): void {
     this.mode.set(modeType);
     this.modeService.setMode(this.mode);
   }

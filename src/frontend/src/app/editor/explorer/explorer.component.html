@@ -3,9 +3,11 @@
 </div>
 <jqxTree
   #treeReference
-  [width]="'100%'"
+  [width]="256"
   [height]="'100%'"
   [source]="treeSource"
-  (onItemClick)="onItemClick($event)"
+  (onSelect)="onSelect($event)"
+  [allowDrag]="false"
+  [allowDrop]="false"
 >
 </jqxTree>

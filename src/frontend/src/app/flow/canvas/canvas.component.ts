@@ -6,9 +6,9 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
-import Pipe from '../node/nodes/pipe';
-import Listener from '../node/nodes/listener';
-import Exit from '../node/nodes/exit';
+import PipeModel from '../node/nodes/pipe.model';
+import ListenerModel from '../node/nodes/listener.model';
+import ExitModel from '../node/nodes/exit.model';
 import { CodeService } from '../../shared/services/code.service';
 import { jsPlumbInstance } from 'jsplumb';
 import { File } from '../../shared/models/file.model';
@@ -94,7 +94,7 @@ export class CanvasComponent implements AfterViewInit {
         receiver[key].forEach((element: any) => {
           const listenerInfo = this.getNodeInfo(element.$, idCounter);
           idCounter = listenerInfo.idCounter;
-          const listenerNode = new Listener(
+          const listenerNode = new ListenerModel(
             listenerInfo.id,
             listenerInfo.name,
             listenerInfo.top,
@@ -118,14 +118,14 @@ export class CanvasComponent implements AfterViewInit {
           let node;
 
           if (key === 'Exit') {
-            node = new Exit(
+            node = new ExitModel(
               nodeInfo.id,
               nodeInfo.name,
               nodeInfo.top,
               nodeInfo.left
             );
           } else {
-            node = new Pipe(
+            node = new PipeModel(
               nodeInfo.id,
               nodeInfo.name,
               nodeInfo.top,

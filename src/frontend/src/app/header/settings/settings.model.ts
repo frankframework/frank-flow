@@ -1,4 +1,4 @@
-export interface Settings {
+export interface SettingsModel {
   darkmode: boolean;
   showPopups: boolean;
 }

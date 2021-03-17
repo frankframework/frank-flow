@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import { ConnectParams, jsPlumb, jsPlumbInstance } from 'jsplumb';
 import { NodeComponent } from './node.component';
-import { Node } from './nodes/node';
+import { NodeModel } from './nodes/node.model';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +29,7 @@ export class NodeService {
     });
   }
 
-  addDynamicNode(node: Node): void {
+  addDynamicNode(node: NodeModel): void {
     node.generateNode(
       this.rootViewContainer,
       this.factoryResolver,

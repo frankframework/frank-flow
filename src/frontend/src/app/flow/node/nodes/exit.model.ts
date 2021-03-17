@@ -1,9 +1,9 @@
 import { ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { jsPlumbInstance } from 'jsplumb';
 import { NodeComponent } from '../node.component';
-import { Node } from './node';
+import { NodeModel } from './node.model';
 
-export default class Listener extends Node {
+export default class ExitModel extends NodeModel {
   generateNode(
     rootViewContainer: ViewContainerRef,
     factoryResolver: ComponentFactoryResolver,
@@ -17,7 +17,7 @@ export default class Listener extends Node {
       (component.instance as any).jsPlumbInstance = plumbInstance;
 
       const style = `left: ${this.getLeft()}px; top: ${this.getTop()}px;`;
-      component.instance.cssClass = 'shape--oval color--info';
+      component.instance.cssClass = 'shape--round color--danger';
       component.instance.style = style;
       component.location.nativeElement.id = this.getId();
 

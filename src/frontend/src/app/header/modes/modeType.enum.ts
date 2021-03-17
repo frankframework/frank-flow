@@ -1,4 +1,4 @@
-export enum ModeType {
+export enum ModeTypeEnum {
   editorMode,
   hybridMode,
   flowMode,

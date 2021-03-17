@@ -5,7 +5,7 @@ import {
   HostBinding,
   HostListener,
 } from '@angular/core';
-import { Node } from './nodes/node';
+import { NodeModel } from './nodes/node.model';
 import { EndpointOptions, jsPlumbInstance } from 'jsplumb';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 
@@ -48,7 +48,7 @@ export class NodeComponent implements AfterViewInit {
     dropOptions: this.dropOptions,
   };
 
-  @Input() node!: Node;
+  @Input() node!: NodeModel;
   @Input() jsPlumbInstance!: jsPlumbInstance;
   @HostBinding('class') public cssClass: any;
   @HostBinding('style') public style: any;
