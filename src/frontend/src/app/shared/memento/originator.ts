@@ -38,8 +38,5 @@ export class Originator {
     this.state.name = file.name;
     this.state.data = file.data;
     this.state.type = file.type;
-
-    // file.name = "dddFile";
-    // this.state = file;
   }
 }
