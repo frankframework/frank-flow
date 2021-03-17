@@ -54,6 +54,10 @@ export class MonacoEditorComponent
 
   ngOnDestroy(): void {}
 
+  public setObservableUpdate(value: boolean): void {
+    this.fileObservableUpdate = value;
+  }
+
   loadMonaco(): void {
     if (loadedMonaco) {
       loadPromise.then(() => {

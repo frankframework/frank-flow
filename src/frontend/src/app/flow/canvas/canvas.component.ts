@@ -4,6 +4,8 @@ import {
   Input,
   ViewChild,
   ViewContainerRef,
+  HostListener,
+  HostBinding,
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
 import Pipe from '../node/nodes/pipe';
@@ -27,6 +29,17 @@ export class CanvasComponent implements AfterViewInit {
   @ViewChild('canvas', { read: ViewContainerRef })
   viewContainerRef!: ViewContainerRef;
   jsPlumbInstance!: jsPlumbInstance;
+
+  @HostBinding('tabindex') tabindex = 1;
+
+  @HostListener('keyup', ['$event'])
+  onKeyUp(kbdEvent: KeyboardEvent): void {
+    if (kbdEvent.ctrlKey && kbdEvent.key === 'z') {
+      this.codeService.undo();
+    } else if (kbdEvent.ctrlKey && kbdEvent.key === 'y') {
+      this.codeService.redo();
+    }
+  }
 
   constructor(
     private nodeService: NodeService,
