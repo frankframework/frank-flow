@@ -60,7 +60,6 @@ export class ExplorerComponent implements AfterViewInit {
       } else {
         items.push({
           label: key,
-          isExpanded: true,
           items: this.parseFiles(configuration, content[key], key + '/'),
         });
       }
