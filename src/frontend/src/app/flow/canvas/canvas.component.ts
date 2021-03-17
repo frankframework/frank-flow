@@ -8,9 +8,9 @@ import {
   HostBinding,
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
-import Pipe from '../node/Nodes/pipe';
-import Listener from '../node/Nodes/listener';
-import Exit from '../node/Nodes/exit';
+import Pipe from '../node/nodes/pipe';
+import Listener from '../node/nodes/listener';
+import Exit from '../node/nodes/exit';
 import { CodeService } from '../../shared/services/code.service';
 import { jsPlumbInstance } from 'jsplumb';
 import { File } from '../../shared/models/file.model';
