@@ -12,9 +12,9 @@ export class Caretaker {
   }
 
   public save(): void {
-    const m = this.originator.save();
+    const memento = this.originator.save();
 
-    this.mementos.push(m);
+    this.mementos.push(memento);
   }
 
   public redo(): void {
