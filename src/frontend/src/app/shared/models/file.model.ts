@@ -1,7 +1,7 @@
 import { FileType } from '../enums/file-type.enum';
-import { ConvertibleModel } from '../interfaces/convertible.model';
+import { Convertible } from '../interfaces/convertible.model';
 
-export class File implements ConvertibleModel {
+export class File implements Convertible {
   name?: string;
   type?: FileType;
   data?: string;

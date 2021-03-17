@@ -1,9 +1,9 @@
 import { ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { jsPlumbInstance } from 'jsplumb';
 import { NodeComponent } from '../node.component';
-import { NodeModel } from './node.model';
+import { Node } from './node.model';
 
-export default class ListenerModel extends NodeModel {
+export default class Listener extends Node {
   generateNode(
     rootViewContainer: ViewContainerRef,
     factoryResolver: ComponentFactoryResolver,

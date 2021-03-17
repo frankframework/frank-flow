@@ -4,8 +4,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { ConnectParams, jsPlumb, jsPlumbInstance } from 'jsplumb';
-import { NodeComponent } from './node.component';
-import { NodeModel } from './nodes/node.model';
+import { Node } from './nodes/node.model';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +28,7 @@ export class NodeService {
     });
   }
 
-  addDynamicNode(node: NodeModel): void {
+  addDynamicNode(node: Node): void {
     node.generateNode(
       this.rootViewContainer,
       this.factoryResolver,

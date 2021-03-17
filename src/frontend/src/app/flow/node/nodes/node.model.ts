@@ -2,7 +2,7 @@ import { ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { jsPlumbInstance } from 'jsplumb';
 import { NodeComponent } from '../node.component';
 
-export abstract class NodeModel {
+export abstract class Node {
   private id: string;
   private name?: string | undefined;
   private top?: number | undefined;

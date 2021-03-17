@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from './settings.service';
-import { SettingsModel } from './settings.model';
+import { Settings } from './settings.model';
 
 @Component({
   selector: 'app-settings',
@@ -8,7 +8,7 @@ import { SettingsModel } from './settings.model';
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent implements OnInit {
-  settings!: SettingsModel;
+  settings!: Settings;
 
   constructor(private settingsService: SettingsService) {}
 

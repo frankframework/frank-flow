@@ -1,6 +1,6 @@
 import { FileType } from '../enums/file-type.enum';
 
-export interface ConvertibleModel {
+export interface Convertible {
   type?: FileType;
   data?: string;
 }

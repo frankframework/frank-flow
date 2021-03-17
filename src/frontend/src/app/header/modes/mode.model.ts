@@ -1,17 +1,17 @@
-import { ModeTypeEnum } from './modeType.enum';
+import { ModeType } from './modeType.enum';
 
-export class ModeModel {
-  current: ModeTypeEnum;
+export class Mode {
+  current: ModeType;
 
-  constructor(current: ModeTypeEnum) {
+  constructor(current: ModeType) {
     this.current = current;
   }
 
-  set(type: ModeTypeEnum): void {
+  set(type: ModeType): void {
     this.current = type;
   }
 
-  is(type: ModeTypeEnum): boolean {
+  is(type: ModeType): boolean {
     return this.current === type;
   }
 }

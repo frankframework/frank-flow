@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
-import { ModeModel } from './mode.model';
+import { Mode } from './mode.model';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ModeTypeEnum } from './modeType.enum';
+import { ModeType } from './modeType.enum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ModeService {
-  mode: BehaviorSubject<ModeModel>;
+  mode: BehaviorSubject<Mode>;
 
   constructor() {
-    this.mode = new BehaviorSubject(new ModeModel(ModeTypeEnum.flowMode));
+    this.mode = new BehaviorSubject(new Mode(ModeType.flowMode));
   }
 
-  setMode(mode: ModeModel): void {
+  setMode(mode: Mode): void {
     this.mode.next(mode);
   }
 
-  getMode(): Observable<ModeModel> {
+  getMode(): Observable<Mode> {
     return this.mode.asObservable();
   }
 }

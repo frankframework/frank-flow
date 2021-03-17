@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { ModeService } from '../../header/modes/mode.service';
 import { SettingsService } from '../../header/settings/settings.service';
-import { SettingsModel } from '../../header/settings/settings.model';
+import { Settings } from '../../header/settings/settings.model';
 import { File } from '../../shared/models/file.model';
 import { CodeService } from '../../shared/services/code.service';
 
@@ -176,7 +176,7 @@ export class MonacoEditorComponent
     });
   }
 
-  onThemeChange(settings: SettingsModel): void {
+  onThemeChange(settings: Settings): void {
     this.codeEditorInstance.updateOptions({
       theme: settings.darkmode ? 'vs-dark' : 'vs-light',
     });
