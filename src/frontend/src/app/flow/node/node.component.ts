@@ -67,14 +67,14 @@ export class NodeComponent implements AfterViewInit {
       {
         anchor: 'Bottom',
         uuid: id + '_bottom',
-        maxConnections: 1,
+        maxConnections: -1,
       },
       this.bottomEndpointOptions
     );
 
     this.jsPlumbInstance.addEndpoint(
       id,
-      { anchor: 'Top', uuid: id + '_top', maxConnections: 1 },
+      { anchor: 'Top', uuid: id + '_top', maxConnections: -1 },
       this.topEndpointOptions
     );
 
