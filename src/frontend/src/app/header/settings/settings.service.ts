@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Settings } from './settings';
+import { Settings } from './settings.model';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({

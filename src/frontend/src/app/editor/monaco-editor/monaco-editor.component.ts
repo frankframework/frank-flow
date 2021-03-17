@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { ModeService } from '../../header/modes/mode.service';
 import { SettingsService } from '../../header/settings/settings.service';
-import { Settings } from '../../header/settings/settings';
+import { Settings } from '../../header/settings/settings.model';
 import { File } from '../../shared/models/file.model';
 import { CodeService } from '../../shared/services/code.service';
 

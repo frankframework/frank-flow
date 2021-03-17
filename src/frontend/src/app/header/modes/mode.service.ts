@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Mode } from './mode';
+import { Mode } from './mode.model';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ModeType } from './modeType';
+import { ModeType } from './modeType.enum';
 
 @Injectable({
   providedIn: 'root',

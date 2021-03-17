@@ -4,8 +4,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { ConnectParams, jsPlumb, jsPlumbInstance } from 'jsplumb';
-import { NodeComponent } from './node.component';
-import { Node } from './nodes/node';
+import { Node } from './nodes/node.model';
 
 @Injectable({
   providedIn: 'root',

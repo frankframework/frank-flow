@@ -1,11 +1,11 @@
 import {
   AfterViewInit,
   Component,
-  Input,
   HostBinding,
   HostListener,
+  Input,
 } from '@angular/core';
-import { Node } from './nodes/node';
+import { Node } from './nodes/node.model';
 import { EndpointOptions, jsPlumbInstance } from 'jsplumb';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 

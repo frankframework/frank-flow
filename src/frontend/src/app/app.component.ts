@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Mode } from './header/modes/mode';
+import { Mode } from './header/modes/mode.model';
 import { ModeService } from './header/modes/mode.service';
-import { ModeType } from './header/modes/modeType';
+import { ModeType } from './header/modes/modeType.enum';
 import { SettingsService } from './header/settings/settings.service';
-import { Settings } from './header/settings/settings';
+import { Settings } from './header/settings/settings.model';
 
 @Component({
   selector: 'app-root',

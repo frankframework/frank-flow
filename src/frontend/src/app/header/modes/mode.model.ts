@@ -1,4 +1,4 @@
-import { ModeType } from './modeType';
+import { ModeType } from './modeType.enum';
 
 export class Mode {
   current: ModeType;
