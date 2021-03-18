@@ -24,8 +24,8 @@
       <label for="edit-mode">Default edit mode</label>
       <select
         id="edit-mode"
-        [(ngModel)]="mode.defaultMode"
-        (ngModelChange)="setDefaultMode()"
+        [(ngModel)]="settings.defaultMode"
+        (ngModelChange)="setSettings()"
       >
         <option [value]="modeType.flowMode">Flow</option>
         <option [value]="modeType.hybridMode">Hybrid</option>

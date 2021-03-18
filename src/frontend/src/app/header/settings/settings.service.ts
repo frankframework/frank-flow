@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Settings } from './settings.model';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { ModeType } from '../modes/modeType.enum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SettingsService {
   settings: BehaviorSubject<Settings>;
-  defaultSettings = { darkMode: false, showPopups: true };
+  defaultSettings = {
+    darkMode: false,
+    showPopups: true,
+    defaultMode: ModeType.flowMode,
+  };
 
   constructor() {
     const localStorageSettings = this.getSettingsLocalStorage();

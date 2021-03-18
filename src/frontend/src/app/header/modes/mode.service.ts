@@ -1,30 +1,29 @@
 import { Injectable } from '@angular/core';
 import { Mode } from './mode.model';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ModeType } from './modeType.enum';
+import { SettingsService } from '../settings/settings.service';
+import { Settings } from '../settings/settings.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ModeService {
   mode: BehaviorSubject<Mode>;
+  settings!: Settings;
 
-  constructor() {
-    const localStorageMode = this.getModeFromLocalStorage();
-    const mode = new Mode(+localStorageMode);
-    this.mode = new BehaviorSubject(mode);
+  constructor(private settingsService: SettingsService) {
+    this.getSettings();
+    this.mode = new BehaviorSubject(new Mode(+this.settings.defaultMode));
   }
 
-  getModeFromLocalStorage(): ModeType {
-    const defaultMode = localStorage.getItem('defaultMode');
-    return defaultMode
-      ? (JSON.parse(defaultMode) as ModeType)
-      : ModeType.flowMode;
+  getSettings(): void {
+    this.settingsService
+      .getSettings()
+      .subscribe((settings) => (this.settings = settings));
   }
 
   setMode(mode: Mode): void {
     this.mode.next(mode);
-    localStorage.setItem('defaultMode', JSON.stringify(mode.defaultMode));
   }
 
   getMode(): Observable<Mode> {
