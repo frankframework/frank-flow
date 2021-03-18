@@ -1,4 +1,4 @@
 export interface Settings {
-  darkmode: boolean;
+  darkMode: boolean;
   showPopups: boolean;
 }

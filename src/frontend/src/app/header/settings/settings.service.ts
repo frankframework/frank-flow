@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class SettingsService {
   settings: BehaviorSubject<Settings>;
-  defaultSettings = { darkmode: false, showPopups: true };
+  defaultSettings = { darkMode: false, showPopups: true };
 
   constructor() {
     const localStorageSettings = this.getSettingsLocalStorage();

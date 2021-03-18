@@ -10,11 +10,21 @@ export class ModeService {
   mode: BehaviorSubject<Mode>;
 
   constructor() {
-    this.mode = new BehaviorSubject(new Mode(ModeType.flowMode));
+    const localStorageMode = this.getModeFromLocalStorage();
+    const mode = new Mode(+localStorageMode);
+    this.mode = new BehaviorSubject(mode);
+  }
+
+  getModeFromLocalStorage(): ModeType {
+    const defaultMode = localStorage.getItem('defaultMode');
+    return defaultMode
+      ? (JSON.parse(defaultMode) as ModeType)
+      : ModeType.flowMode;
   }
 
   setMode(mode: Mode): void {
     this.mode.next(mode);
+    localStorage.setItem('defaultMode', JSON.stringify(mode.defaultMode));
   }
 
   getMode(): Observable<Mode> {

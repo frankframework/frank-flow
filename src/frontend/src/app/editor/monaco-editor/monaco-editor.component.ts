@@ -182,7 +182,7 @@ export class MonacoEditorComponent
 
   onThemeChange(settings: Settings): void {
     this.codeEditorInstance.updateOptions({
-      theme: settings.darkmode ? 'vs-dark' : 'vs-light',
+      theme: settings.darkMode ? 'vs-dark' : 'vs-light',
     });
   }
 }
