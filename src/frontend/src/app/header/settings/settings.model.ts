@@ -1,4 +1,7 @@
+import { ModeType } from '../modes/modeType.enum';
+
 export interface Settings {
-  darkmode: boolean;
+  darkMode: boolean;
   showPopups: boolean;
+  defaultMode: ModeType;
 }

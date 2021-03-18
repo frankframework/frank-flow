@@ -6,10 +6,17 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ModeComponent } from './modes/mode.component';
 import { SettingsComponent } from './settings/settings.component';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [HeaderComponent, ModeComponent, SettingsComponent],
   exports: [HeaderComponent],
-  imports: [CommonModule, SharedModule, FontAwesomeModule, NgxSmartModalModule],
+  imports: [
+    CommonModule,
+    SharedModule,
+    FontAwesomeModule,
+    NgxSmartModalModule,
+    FormsModule,
+  ],
 })
 export class HeaderModule {}

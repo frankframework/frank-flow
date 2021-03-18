@@ -7,18 +7,30 @@
   <div class="settings-container">
     <h1>Settings</h1>
     <div class="input-row">
-      <label>Darkmode</label>
+      <label>Enable dark mode</label>
       <app-toggle
-        [(state)]="settings.darkmode"
+        [(state)]="settings.darkMode"
         (stateChange)="setSettings()"
       ></app-toggle>
     </div>
     <div class="input-row">
-      <label>Show confirm popups</label>
+      <label>Show confirmation popups</label>
       <app-toggle
         [(state)]="settings.showPopups"
         (stateChange)="setSettings()"
       ></app-toggle>
+    </div>
+    <div class="input-row">
+      <label for="edit-mode">Default edit mode</label>
+      <select
+        id="edit-mode"
+        [(ngModel)]="settings.defaultMode"
+        (ngModelChange)="setSettings()"
+      >
+        <option [value]="modeType.flowMode">Flow</option>
+        <option [value]="modeType.hybridMode">Hybrid</option>
+        <option [value]="modeType.editorMode">Editor</option>
+      </select>
     </div>
   </div>
   <app-button (click)="settingsModal.close()">Close</app-button>

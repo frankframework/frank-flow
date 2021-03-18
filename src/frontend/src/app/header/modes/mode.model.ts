@@ -1,17 +1,17 @@
 import { ModeType } from './modeType.enum';
 
 export class Mode {
-  current: ModeType;
+  currentMode: ModeType;
 
   constructor(current: ModeType) {
-    this.current = current;
+    this.currentMode = current;
   }
 
   set(type: ModeType): void {
-    this.current = type;
+    this.currentMode = type;
   }
 
   is(type: ModeType): boolean {
-    return this.current === type;
+    return this.currentMode === type;
   }
 }
