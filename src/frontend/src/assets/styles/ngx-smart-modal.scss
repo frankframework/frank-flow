@@ -3,6 +3,7 @@
 
 .nsm-dialog {
   max-width: fit-content;
+  min-width: 400px;
 
   .nsm-content {
     background-color: var(--bg-color);
