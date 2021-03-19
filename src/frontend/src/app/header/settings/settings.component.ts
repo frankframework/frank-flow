@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from './settings.service';
 import { Settings } from './settings.model';
-import { Mode } from '../modes/mode.model';
-import { ModeService } from '../modes/mode.service';
 import { ModeType } from '../modes/modeType.enum';
 
 @Component({
@@ -12,17 +10,12 @@ import { ModeType } from '../modes/modeType.enum';
 })
 export class SettingsComponent implements OnInit {
   settings!: Settings;
-  mode!: Mode;
   modeType = ModeType;
 
-  constructor(
-    private settingsService: SettingsService,
-    private modeService: ModeService
-  ) {}
+  constructor(private settingsService: SettingsService) {}
 
   ngOnInit(): void {
     this.getSettings();
-    this.getMode();
   }
 
   getSettings(): void {
@@ -33,13 +26,5 @@ export class SettingsComponent implements OnInit {
 
   setSettings(): void {
     this.settingsService.setSettings(this.settings);
-  }
-
-  getMode(): void {
-    this.modeService.getMode().subscribe((mode) => (this.mode = mode));
-  }
-
-  setDefaultMode(): void {
-    this.modeService.setMode(this.mode);
   }
 }
