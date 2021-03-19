@@ -2,7 +2,7 @@
 
 The Frank!Flow application is currently undergoing a renovation. The application will mostly be rewritten to Angular for a better User Experience and a stable product.
 
-The current version of this application is considered a Work In Progress. Go to the [1.0.x](https://github.com/ibissource/frank-flow/tree/1.0.x) branch if you want to use the stable release.
+The current version of this application is considered a Work In Progress. Go to the [1.0.x](https://github.com/ibissource/frank-flow/tree/1.0.x) branch if you want to use the stable release. 
 
 # Frank!Flow
 
