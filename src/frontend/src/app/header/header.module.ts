@@ -7,9 +7,15 @@ import { ModeComponent } from './modes/mode.component';
 import { SettingsComponent } from './settings/settings.component';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { FormsModule } from '@angular/forms';
+import { SelectorComponent } from './selector/selector.component';
 
 @NgModule({
-  declarations: [HeaderComponent, ModeComponent, SettingsComponent],
+  declarations: [
+    HeaderComponent,
+    ModeComponent,
+    SettingsComponent,
+    SelectorComponent,
+  ],
   exports: [HeaderComponent],
   imports: [
     CommonModule,

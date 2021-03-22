@@ -3,8 +3,8 @@ import { jqxTreeComponent } from 'jqwidgets-ng/jqxtree';
 import { FileService } from '../../shared/services/file.service';
 import { CodeService } from '../../shared/services/code.service';
 import { FileType } from '../../shared/enums/file-type.enum';
-import TreeItem = jqwidgets.TreeItem;
 import { Configuration } from '../../shared/models/configuration.model';
+import TreeItem = jqwidgets.TreeItem;
 
 @Component({
   selector: 'app-explorer',
@@ -26,9 +26,9 @@ export class ExplorerComponent implements AfterViewInit {
   }
 
   getFiles(): void {
-    this.fileService
-      .getConfigurationsWithFiles()
-      .then((result) => this.addFilesToTree(result));
+    this.fileService.getFiles().subscribe({
+      next: (configurationFiles) => this.addFilesToTree(configurationFiles),
+    });
   }
 
   addFilesToTree(configurationFiles: any): void {

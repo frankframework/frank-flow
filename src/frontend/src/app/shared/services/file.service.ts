@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Configuration } from '../models/configuration.model';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FileService {
   BASE_PATH = environment.runnerUri + 'frank-flow/api/configurations';
+  configurationFiles = new BehaviorSubject<Configuration[]>([]);
 
-  constructor() {}
+  constructor() {
+    this.updateFiles();
+  }
 
   getConfigurations(): Promise<string[]> {
     return fetch(this.BASE_PATH)
@@ -41,5 +45,15 @@ export class FileService {
     return fetch(`${this.BASE_PATH}/${configuration}/files/?path=${path}`)
       .then((result) => result.text())
       .catch((error) => console.error(error));
+  }
+
+  updateFiles(): void {
+    this.getConfigurationsWithFiles().then((configurationFiles) =>
+      this.configurationFiles.next(configurationFiles)
+    );
+  }
+
+  getFiles(): Observable<any> {
+    return this.configurationFiles.asObservable();
   }
 }
