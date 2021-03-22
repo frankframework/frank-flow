@@ -5,6 +5,7 @@ import { CodeService } from '../../shared/services/code.service';
 import { FileType } from '../../shared/enums/file-type.enum';
 import { Configuration } from '../../shared/models/configuration.model';
 import TreeItem = jqwidgets.TreeItem;
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-explorer',
@@ -18,7 +19,8 @@ export class ExplorerComponent implements AfterViewInit {
 
   constructor(
     private fileService: FileService,
-    private codeService: CodeService
+    private codeService: CodeService,
+    private toastr: ToastrService
   ) {}
 
   ngAfterViewInit(): void {
@@ -83,6 +85,10 @@ export class ExplorerComponent implements AfterViewInit {
               data: file,
             });
           }
+        })
+        .catch((error) => {
+          console.error(error);
+          this.toastr.error(error, `File can't be fetched`);
         });
     }
   }

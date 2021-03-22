@@ -1,6 +1,15 @@
-<select>
-  <option disabled selected>Choose a configuration</option>
-  <option *ngFor="let option of options" [value]="option?.value">
-    {{ option?.text }}
-  </option>
-</select>
+<jqxDropDownButton #dropDownButtonReference [width]="'100%'" [height]="32">
+  <jqxTree
+    class="root"
+    [ngClass]="{
+      light: !settings?.darkMode,
+      dark: settings?.darkMode
+    }"
+    #treeReference
+    (onSelect)="onSelect($event)"
+    [source]="treeSource"
+    [width]="dropDownButtonReference.elementRef?.nativeElement.offsetWidth"
+    [height]="512"
+  >
+  </jqxTree>
+</jqxDropDownButton>

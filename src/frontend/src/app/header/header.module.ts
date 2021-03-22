@@ -8,6 +8,8 @@ import { SettingsComponent } from './settings/settings.component';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { FormsModule } from '@angular/forms';
 import { SelectorComponent } from './selector/selector.component';
+import { jqxTreeModule } from 'jqwidgets-ng/jqxtree';
+import { jqxDropDownButtonModule } from 'jqwidgets-ng/jqxdropdownbutton';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { SelectorComponent } from './selector/selector.component';
     FontAwesomeModule,
     NgxSmartModalModule,
     FormsModule,
+    jqxTreeModule,
+    jqxDropDownButtonModule,
   ],
 })
 export class HeaderModule {}
