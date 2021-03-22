@@ -15,6 +15,8 @@ export class CodeService {
 
   public curFileObservable = this.curFile.asObservable();
 
+  private defaultFile = new File();
+
   private originator?: Originator;
   private caretaker?: Caretaker;
 
@@ -42,22 +44,33 @@ export class CodeService {
 </Configuration>
 `;
 
-  constructor() {}
+  constructor() {
+    this.defaultFile.name = 'Default config';
+    this.defaultFile.type = FileType.XML;
+    this.defaultFile.data = this.code;
+
+    console.log('create');
+
+    this.originator = new Originator(this.defaultFile);
+    this.caretaker = new Caretaker(this.originator);
+  }
 
   setEditor(editor: monaco.editor.IStandaloneCodeEditor): void {
+    let file: File | undefined;
+
+    if (!this.editor) {
+      file = this.defaultFile;
+    } else {
+      file = this.originator?.getState();
+    }
+
     this.editor = editor;
-
-    const defaultFile = new File();
-
-    defaultFile.name = 'Default config';
-    defaultFile.type = FileType.XML;
-    defaultFile.data = this.code;
-
-    this.originator = new Originator(defaultFile);
-    this.caretaker = new Caretaker(this.originator);
-
     this.createActions();
-    this.setCurrentFile(defaultFile);
+
+    if (file) {
+      this.redoAction = true;
+      this.setCurrentFile(file);
+    }
   }
 
   createActions(): void {
