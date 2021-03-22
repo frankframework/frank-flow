@@ -4,8 +4,8 @@ import { FileService } from '../../shared/services/file.service';
 import { CodeService } from '../../shared/services/code.service';
 import { FileType } from '../../shared/enums/file-type.enum';
 import { Configuration } from '../../shared/models/configuration.model';
-import TreeItem = jqwidgets.TreeItem;
 import { ToastrService } from 'ngx-toastr';
+import TreeItem = jqwidgets.TreeItem;
 
 @Component({
   selector: 'app-explorer',
@@ -24,14 +24,14 @@ export class ExplorerComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.getFiles();
-    });
+    this.getFiles();
   }
 
   getFiles(): void {
-    this.fileService.getFiles().subscribe({
-      next: (configurationFiles) => this.addFilesToTree(configurationFiles),
+    setTimeout(() => {
+      this.fileService.getFiles().subscribe({
+        next: (configurationFiles) => this.addFilesToTree(configurationFiles),
+      });
     });
   }
 

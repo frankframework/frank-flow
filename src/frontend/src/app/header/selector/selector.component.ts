@@ -1,4 +1,4 @@
-import { AfterViewInit, OnInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { FileService } from '../../shared/services/file.service';
 import { Configuration } from '../../shared/models/configuration.model';
 import { jqxTreeComponent } from 'jqwidgets-ng/jqxtree';
@@ -9,11 +9,6 @@ import { Settings } from '../settings/settings.model';
 import { jqxDropDownButtonComponent } from 'jqwidgets-ng/jqxdropdownbutton';
 import { ToastrService } from 'ngx-toastr';
 import TreeItem = jqwidgets.TreeItem;
-
-interface Option {
-  text: string;
-  value: string;
-}
 
 @Component({
   selector: 'app-selector',
@@ -36,17 +31,17 @@ export class SelectorComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.getSettings();
-    });
+    this.getSettings();
     this.getFiles();
     this.getCurrentFile();
   }
 
   getSettings(): void {
-    this.settingsService
-      .getSettings()
-      .subscribe((settings) => (this.settings = settings));
+    setTimeout(() => {
+      this.settingsService
+        .getSettings()
+        .subscribe((settings) => (this.settings = settings));
+    });
   }
 
   getCurrentFile(): void {
@@ -70,7 +65,6 @@ export class SelectorComponent implements AfterViewInit {
   getFiles(): void {
     this.fileService.getFiles().subscribe({
       next: (configurationFiles) => {
-        console.log(configurationFiles);
         this.addFilesToTree(configurationFiles);
       },
     });
@@ -87,9 +81,7 @@ export class SelectorComponent implements AfterViewInit {
           })
         );
 
-        setTimeout(() => {
-          this.tree.refresh();
-        });
+        setTimeout(() => this.tree.refresh());
       }
     });
   }
