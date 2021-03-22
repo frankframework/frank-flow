@@ -24,7 +24,9 @@ export class ExplorerComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.getFiles();
+    setTimeout(() => {
+      this.getFiles();
+    });
   }
 
   getFiles(): void {
@@ -42,7 +44,7 @@ export class ExplorerComponent implements AfterViewInit {
       })
     );
 
-    this.tree.refresh();
+    this.tree?.refresh();
   }
 
   parseFiles(
