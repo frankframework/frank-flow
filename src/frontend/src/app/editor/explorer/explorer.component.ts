@@ -47,7 +47,7 @@ export class ExplorerComponent implements AfterViewInit {
       })
     );
 
-    this.tree?.refresh();
+    setTimeout(() => this.tree.refresh());
   }
 
   parseFiles(
