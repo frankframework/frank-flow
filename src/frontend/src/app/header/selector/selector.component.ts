@@ -86,7 +86,7 @@ export class SelectorComponent implements AfterViewInit {
           })
         );
 
-        setTimeout(() => this.tree.refresh());
+        setTimeout(() => this.tree?.refresh());
       }
     });
   }
@@ -119,7 +119,6 @@ export class SelectorComponent implements AfterViewInit {
   }
 
   onItemClick(event: any): void {
-    console.log(this.currentFile.saved);
     if (!this.currentFile.saved) {
       if (!confirm('Are you sure you want to switch files without saving?')) {
         return;
