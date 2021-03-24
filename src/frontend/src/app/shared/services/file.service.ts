@@ -11,19 +11,13 @@ export class FileService {
   configurationFiles = new BehaviorSubject<Configuration[]>([]);
 
   constructor() {
-    this.updateFiles();
+    this.fetchFiles();
   }
 
-  getConfigurations(): Promise<string[]> {
-    return fetch(this.BASE_PATH)
-      .then((result) => result.json())
-      .catch((error) => console.error(error));
-  }
-
-  getFilesForConfiguration(configuration: string): Promise<any> {
-    return fetch(`${this.BASE_PATH}/${configuration}`)
-      .then((result) => result.json())
-      .catch((error) => console.error(error));
+  fetchFiles(): void {
+    this.getConfigurationsWithFiles().then((configurationFiles) =>
+      this.configurationFiles.next(configurationFiles)
+    );
   }
 
   async getConfigurationsWithFiles(): Promise<Configuration[]> {
@@ -38,22 +32,44 @@ export class FileService {
     return configurationFiles;
   }
 
+  getConfigurations(): Promise<string[]> {
+    return fetch(this.BASE_PATH)
+      .then((response) => response.json())
+      .catch((error) => console.error(error));
+  }
+
+  getFilesForConfiguration(configuration: string): Promise<any> {
+    return fetch(`${this.BASE_PATH}/${configuration}`)
+      .then((response) => response.json())
+      .catch((error) => console.error(error));
+  }
+
+  getFiles(): Observable<any> {
+    return this.configurationFiles.asObservable();
+  }
+
   getFileFromConfiguration(
     configuration: string,
     path: string
   ): Promise<string | void> {
     return fetch(`${this.BASE_PATH}/${configuration}/files/?path=${path}`)
-      .then((result) => result.text())
+      .then((response) => response.text())
       .catch((error) => console.error(error));
   }
 
-  updateFiles(): void {
-    this.getConfigurationsWithFiles().then((configurationFiles) =>
-      this.configurationFiles.next(configurationFiles)
-    );
-  }
+  setFileForConfiguration(
+    configuration: string,
+    path: string,
+    content: string
+  ): Promise<boolean | void> {
+    const formData = new FormData();
+    formData.append('file', content);
 
-  getFiles(): Observable<any> {
-    return this.configurationFiles.asObservable();
+    return fetch(`${this.BASE_PATH}/${configuration}/files/?path=${path}`, {
+      method: 'POST',
+      body: formData,
+    })
+      .then((response) => response.ok)
+      .catch((error) => console.error(error));
   }
 }

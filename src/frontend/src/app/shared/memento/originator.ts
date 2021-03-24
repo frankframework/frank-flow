@@ -35,7 +35,7 @@ export class Originator {
   public setState(file: File): void {
     this.state = new File();
 
-    this.state.name = file.name;
+    this.state.path = file.path;
     this.state.data = file.data;
     this.state.type = file.type;
   }

@@ -10,7 +10,11 @@
       <fa-icon icon="folder" transform="down-1"></fa-icon>
     </app-button>
     <app-selector> </app-selector>
-    <app-button (click)="showSuccess()" color="dark">
+    <app-button
+      [selected]="!currentFile?.saved"
+      (click)="saveFile()"
+      color="dark"
+    >
       <fa-icon icon="save" transform="down-1"></fa-icon>
     </app-button>
   </div>

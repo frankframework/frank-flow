@@ -6,6 +6,7 @@ import { FileType } from '../../shared/enums/file-type.enum';
 import { Configuration } from '../../shared/models/configuration.model';
 import { ToastrService } from 'ngx-toastr';
 import TreeItem = jqwidgets.TreeItem;
+import { File } from '../../shared/models/file.model';
 
 @Component({
   selector: 'app-explorer',
@@ -16,6 +17,7 @@ export class ExplorerComponent implements AfterViewInit {
   @ViewChild('treeReference', { static: false }) tree!: jqxTreeComponent;
   searchTerm!: string;
   treeSource!: TreeItem[];
+  currentFile!: File;
 
   constructor(
     private fileService: FileService,
@@ -25,6 +27,7 @@ export class ExplorerComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.getFiles();
+    this.getCurrentFile();
   }
 
   getFiles(): void {
@@ -72,7 +75,19 @@ export class ExplorerComponent implements AfterViewInit {
     return items;
   }
 
-  onSelect(event: any): void {
+  getCurrentFile(): void {
+    this.codeService.curFileObservable.subscribe(
+      (currentFile) => (this.currentFile = currentFile)
+    );
+  }
+
+  onItemClick(event: any): void {
+    if (!this.currentFile.saved) {
+      if (!confirm('Are you sure you want to switch files without saving?')) {
+        return;
+      }
+    }
+
     const itemValue = this.tree.getItem(event?.args?.element).value;
     if (itemValue) {
       const item = JSON.parse(itemValue);
@@ -82,9 +97,11 @@ export class ExplorerComponent implements AfterViewInit {
         .then((file) => {
           if (file) {
             this.codeService.setCurrentFile({
-              name: item.path,
+              path: item.path,
               type: FileType.XML,
               data: file,
+              saved: true,
+              configuration: item.configuration,
             });
           }
         })

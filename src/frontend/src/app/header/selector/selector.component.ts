@@ -9,6 +9,7 @@ import { Settings } from '../settings/settings.model';
 import { jqxDropDownButtonComponent } from 'jqwidgets-ng/jqxdropdownbutton';
 import { ToastrService } from 'ngx-toastr';
 import TreeItem = jqwidgets.TreeItem;
+import { File } from '../../shared/models/file.model';
 
 @Component({
   selector: 'app-selector',
@@ -22,6 +23,7 @@ export class SelectorComponent implements AfterViewInit {
   searchTerm!: string;
   treeSource!: TreeItem[];
   settings!: Settings;
+  currentFile!: File;
 
   constructor(
     private settingsService: SettingsService,
@@ -47,8 +49,11 @@ export class SelectorComponent implements AfterViewInit {
   getCurrentFile(): void {
     this.codeService.curFileObservable.subscribe({
       next: (currentFile) => {
-        if (currentFile.name) {
-          this.setDropDownLabel(currentFile.name);
+        this.currentFile = currentFile;
+        if (currentFile.path) {
+          this.setDropDownLabel(
+            currentFile.configuration + ': ' + currentFile.path
+          );
         }
       },
     });
@@ -111,18 +116,28 @@ export class SelectorComponent implements AfterViewInit {
     return items;
   }
 
-  onSelect(event: any): void {
-    const item = this.tree.getItem(event?.args?.element);
-    if (item.value) {
-      const itemValue = JSON.parse(item.value);
+  onItemClick(event: any): void {
+    console.log(this.currentFile.saved);
+    if (!this.currentFile.saved) {
+      if (!confirm('Are you sure you want to switch files without saving?')) {
+        return;
+      }
+    }
+
+    const itemValue = this.tree.getItem(event?.args?.element).value;
+    if (itemValue) {
+      const item = JSON.parse(itemValue);
+
       this.fileService
-        .getFileFromConfiguration(itemValue.configuration, itemValue.path)
+        .getFileFromConfiguration(item.configuration, item.path)
         .then((file) => {
           if (file) {
             this.codeService.setCurrentFile({
-              name: itemValue.path,
+              path: item.path,
               type: FileType.XML,
               data: file,
+              saved: true,
+              configuration: item.configuration,
             });
           }
         })

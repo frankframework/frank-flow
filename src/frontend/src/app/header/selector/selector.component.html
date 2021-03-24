@@ -6,7 +6,7 @@
       dark: settings?.darkMode
     }"
     #treeReference
-    (onSelect)="onSelect($event)"
+    (onSelect)="onItemClick($event)"
     [source]="treeSource"
     [width]="dropDownButtonReference.elementRef?.nativeElement.offsetWidth"
     [height]="512"

@@ -15,6 +15,8 @@ import { SettingsService } from '../../header/settings/settings.service';
 import { Settings } from '../../header/settings/settings.model';
 import { File } from '../../shared/models/file.model';
 import { CodeService } from '../../shared/services/code.service';
+import { FileService } from '../../shared/services/file.service';
+import { ToastrService } from 'ngx-toastr';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -32,14 +34,16 @@ export class MonacoEditorComponent
   @Output() codeChange = new EventEmitter<string>();
 
   codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
-  curFile = new File();
+  currentFile = new File();
   fileObservableUpdate = false;
 
   constructor(
     private monacoElement: ElementRef,
     private modeService: ModeService,
     private settingsService: SettingsService,
-    private codeService: CodeService
+    private codeService: CodeService,
+    private fileService: FileService,
+    private toastr: ToastrService
   ) {}
 
   ngAfterViewInit(): void {
@@ -96,6 +100,7 @@ export class MonacoEditorComponent
 
   initializeMonaco(): void {
     this.initializeEditor();
+    this.initializeActions();
     this.initializeTwoWayBinding();
     this.codeService.setEditor(this.codeEditorInstance);
     this.initializeResizeObserver();
@@ -112,6 +117,48 @@ export class MonacoEditorComponent
     );
   }
 
+  initializeActions(): void {
+    this.codeEditorInstance.addAction({
+      id: 'file-save-action',
+      label: 'Save',
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
+      contextMenuGroupId: 'file',
+      contextMenuOrder: 3,
+      run: () => this.save(),
+    });
+  }
+
+  save(): void {
+    if (
+      this.currentFile.configuration &&
+      this.currentFile.path &&
+      this.currentFile.data &&
+      !this.currentFile.saved
+    ) {
+      this.fileService
+        .setFileForConfiguration(
+          this.currentFile.configuration,
+          this.currentFile.path,
+          this.currentFile.data
+        )
+        .then((response) => {
+          if (response) {
+            this.toastr.success(
+              `The file ${this.currentFile.path} has been saved.`,
+              'File saved!'
+            );
+            this.currentFile.saved = true;
+            this.codeService.setCurrentFile(this.currentFile);
+          } else {
+            this.toastr.error(
+              `The file ${this.currentFile.path} couldn't be saved.`,
+              'Error saving'
+            );
+          }
+        });
+    }
+  }
+
   initializeTwoWayBinding(): void {
     const model = this.codeEditorInstance.getModel();
 
@@ -120,8 +167,9 @@ export class MonacoEditorComponent
         this.debounce(() => {
           if (!this.fileObservableUpdate) {
             this.fileObservableUpdate = true;
-            this.curFile.data = this.codeEditorInstance.getValue();
-            this.codeService.setCurrentFile(this.curFile);
+            this.currentFile.data = this.codeEditorInstance.getValue();
+            this.currentFile.saved = false;
+            this.codeService.setCurrentFile(this.currentFile);
           } else {
             this.fileObservableUpdate = false;
           }
@@ -133,7 +181,7 @@ export class MonacoEditorComponent
         if (file.data && !this.fileObservableUpdate) {
           this.fileObservableUpdate = true;
           model?.setValue(file.data);
-          this.curFile = file;
+          this.currentFile = file;
         } else if (this.fileObservableUpdate) {
           this.fileObservableUpdate = false;
         }
