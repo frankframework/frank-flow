@@ -1,12 +1,17 @@
 @import '~jqwidgets-ng/jqwidgets/styles/jqx.base.css';
 
-.jqx-widget,
 .jqx-widget-content {
   color: var(--text-color);
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 16px;
   border: none;
   background: var(--bg-color);
+}
+
+.jqx-dropdownbutton-popup {
+  .jqx-widget-content {
+    background: var(--bg-color-muted);
+  }
 }
 
 .jqx-tree-item {
@@ -35,6 +40,10 @@
 
 .jqx-fill-state-pressed {
   background: var(--bg-color-muted);
+
+  &.jqx-tree-item {
+    background: none;
+  }
 }
 
 .jqx-rc-all {

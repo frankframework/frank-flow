@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MonacoEditorComponent } from './monaco-editor.component';
+import { SelectorComponent } from './selector.component';
 import { ToastrModule } from 'ngx-toastr';
 
-describe('MonacoEditorComponent', () => {
-  let component: MonacoEditorComponent;
-  let fixture: ComponentFixture<MonacoEditorComponent>;
+describe('SelectorComponent', () => {
+  let component: SelectorComponent;
+  let fixture: ComponentFixture<SelectorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MonacoEditorComponent],
+      declarations: [SelectorComponent],
       imports: [ToastrModule.forRoot()],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MonacoEditorComponent);
+    fixture = TestBed.createComponent(SelectorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
