@@ -1,9 +1,11 @@
 <div class="flowContainer">
-  <app-canvas
-    #nodeContainer
-    [nodes]="nodes"
-    [connections]="connections"
-  ></app-canvas>
+  <pan-zoom [config]="panzoomConfig">
+    <app-canvas
+      #nodeContainer
+      [nodes]="nodes"
+      [connections]="connections"
+    ></app-canvas>
+  </pan-zoom>
   <app-palette></app-palette>
 </div>
 <app-options></app-options>

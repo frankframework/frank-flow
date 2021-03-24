@@ -9,6 +9,7 @@ import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { SharedModule } from '../shared/components/shared.module';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgxPanZoomModule } from 'ngx-panzoom';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     SharedModule,
     FormsModule,
     FontAwesomeModule,
+    NgxPanZoomModule,
   ],
 })
 export class FlowModule {}
