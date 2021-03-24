@@ -99,12 +99,14 @@ export class SelectorComponent implements AfterViewInit {
     const items: any[] = [];
     Object.keys(content).map((key) => {
       if (key === '_files') {
-        content._files.forEach((file: string) =>
-          items.push({
-            label: file,
-            value: JSON.stringify({ configuration, path: path + file }),
-          })
-        );
+        content._files.forEach((file: string) => {
+          if (file.includes('.xml')) {
+            items.push({
+              label: file,
+              value: JSON.stringify({ configuration, path: path + file }),
+            });
+          }
+        });
       } else {
         items.push({
           label: key,
