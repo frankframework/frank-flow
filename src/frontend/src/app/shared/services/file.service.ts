@@ -57,7 +57,7 @@ export class FileService {
       .catch((error) => console.error(error));
   }
 
-  setFileForConfiguration(
+  updateFileForConfiguration(
     configuration: string,
     path: string,
     content: string

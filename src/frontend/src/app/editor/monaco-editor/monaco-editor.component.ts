@@ -101,8 +101,8 @@ export class MonacoEditorComponent
   initializeMonaco(): void {
     this.initializeEditor();
     this.initializeActions();
+    this.initializeFile();
     this.initializeTwoWayBinding();
-    this.codeService.setEditor(this.codeEditorInstance);
     this.initializeResizeObserver();
     this.initializeThemeObserver();
   }
@@ -119,6 +119,23 @@ export class MonacoEditorComponent
 
   initializeActions(): void {
     this.codeEditorInstance.addAction({
+      id: 'memento-undo-action',
+      label: 'Undo',
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_Z],
+      contextMenuGroupId: 'memento',
+      contextMenuOrder: 2,
+      run: () => this.setValue(this.codeService.undo()),
+    });
+
+    this.codeEditorInstance.addAction({
+      id: 'memento-redo-action',
+      label: 'Redo',
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_Y],
+      contextMenuGroupId: 'memento',
+      contextMenuOrder: 3,
+      run: () => this.setValue(this.codeService.redo()),
+    });
+    this.codeEditorInstance.addAction({
       id: 'file-save-action',
       label: 'Save',
       keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
@@ -129,33 +146,16 @@ export class MonacoEditorComponent
   }
 
   save(): void {
-    if (
-      this.currentFile.configuration &&
-      this.currentFile.path &&
-      this.currentFile.data &&
-      !this.currentFile.saved
-    ) {
-      this.fileService
-        .setFileForConfiguration(
-          this.currentFile.configuration,
-          this.currentFile.path,
-          this.currentFile.data
-        )
-        .then((response) => {
-          if (response) {
-            this.toastr.success(
-              `The file ${this.currentFile.path} has been saved.`,
-              'File saved!'
-            );
-            this.currentFile.saved = true;
-            this.codeService.setCurrentFile(this.currentFile);
-          } else {
-            this.toastr.error(
-              `The file ${this.currentFile.path} couldn't be saved.`,
-              'Error saving'
-            );
-          }
-        });
+    this.codeService.save();
+  }
+
+  initializeFile(): void {
+    this.setValue(this.codeService.getCurrentFile());
+  }
+
+  setValue(file: File | undefined): void {
+    if (file?.data) {
+      this.codeEditorInstance.setValue(file.data);
     }
   }
 

@@ -93,7 +93,7 @@ export class FileTreeComponent implements AfterViewInit {
   }
 
   onItemClick(event: any): void {
-    if (!this.currentFile.saved) {
+    if (!this.currentFile?.saved) {
       if (!confirm('Are you sure you want to switch files without saving?')) {
         return;
       }

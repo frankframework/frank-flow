@@ -5,4 +5,6 @@ import { Component } from '@angular/core';
   templateUrl: './explorer.component.html',
   styleUrls: ['./explorer.component.scss'],
 })
-export class ExplorerComponent {}
+export class ExplorerComponent {
+  searchTerm!: string;
+}
