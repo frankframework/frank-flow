@@ -5,6 +5,7 @@ import { File } from '../models/file.model';
 import { FileType } from '../enums/file-type.enum';
 import { Originator } from '../memento/originator';
 import { Caretaker } from '../memento/caretaker';
+import { FileService } from './file.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,33 +24,32 @@ export class CodeService {
   private redoAction = false;
 
   private code = `<Configuration name="dd">
-  <Adapter name="ddAdapter"> 
-    <Receiver name="ddReceiver"> 
+  <Adapter name="ddAdapter">
+    <Receiver name="ddReceiver">
       <JavaListener name="ddListener" serviceName="ddService"  x="681" y="24" />
     </Receiver>
     <Pipeline firstPipe="ddPipe">
       <FixedResultPipe name="ddPipe" returnString="Hello World" x="100" y="50">
-        <Forward name="success" path="EXIT"/> 
+        <Forward name="success" path="EXIT"/>
       </FixedResultPipe>
       <DelayPipe name="otherPipe" returnString="Hello World" x="100" y="250">
-        <Forward name="success" path="EXIT"/> 
-      </DelayPipe> 
+        <Forward name="success" path="EXIT"/>
+      </DelayPipe>
       <XmlSwitchPipe name="switchXML" x="100" y="450">
         <Forward name="success" path="EXIT"/>
         <Forward name="error" path="err"/>
       </XmlSwitchPipe>
-      <Exit path="EXIT" state="success" x="223" y="625"/> 
-    </Pipeline> 
+      <Exit path="EXIT" state="success" x="223" y="625"/>
+    </Pipeline>
   </Adapter>
 </Configuration>
 `;
 
   constructor() {
-    this.defaultFile.name = 'Default config';
+    this.defaultFile.path = 'sergiMaakGoeieKoffie/Default config';
     this.defaultFile.type = FileType.XML;
-    this.defaultFile.data = this.code;
-
-    console.log('create');
+    this.defaultFile.configuration = this.code;
+    this.defaultFile.saved = true;
 
     this.originator = new Originator(this.defaultFile);
     this.caretaker = new Caretaker(this.originator);
@@ -77,7 +77,7 @@ export class CodeService {
     this.editor.addAction({
       id: 'memento-undo-action',
       label: 'Undo',
-      keybindings: [monaco.KeyMod.CtrlCmd || monaco.KeyCode.KEY_Z],
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_Z],
       contextMenuGroupId: 'memento',
       contextMenuOrder: 2,
       run: () => this.undo(),
@@ -86,7 +86,7 @@ export class CodeService {
     this.editor.addAction({
       id: 'memento-redo-action',
       label: 'Redo',
-      keybindings: [monaco.KeyMod.CtrlCmd || monaco.KeyCode.KEY_Y],
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_Y],
       contextMenuGroupId: 'memento',
       contextMenuOrder: 3,
       run: () => this.redo(),
