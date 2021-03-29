@@ -7,31 +7,54 @@ import { Originator } from '../memento/originator';
 import { Caretaker } from '../memento/caretaker';
 import { FileService } from './file.service';
 import { ToastrService } from 'ngx-toastr';
+import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CodeService {
   private editor!: monaco.editor.IStandaloneCodeEditor;
-  private curFile = new Subject<File>();
-
-  public curFileObservable = this.curFile.asObservable();
-
-  private defaultFile = new File();
-
+  private currentFile = new Subject<File>();
+  public curFileObservable = this.currentFile.asObservable();
   private originator?: Originator;
   private caretaker?: Caretaker;
-
   private redoAction = false;
 
   constructor(private fileService: FileService, private toastr: ToastrService) {
-    // this.defaultFile.path = 'sergiMaakGoeieKoffie/Default config';
-    // this.defaultFile.type = FileType.XML;
-    // this.defaultFile.configuration = this.code;
-    // this.defaultFile.saved = true;
-
-    this.originator = new Originator(this.defaultFile);
+    this.originator = new Originator(new File());
     this.caretaker = new Caretaker(this.originator);
+    this.getFirstFile();
+  }
+
+  getFirstFile(): void {
+    const subscription = this.fileService.getFiles().subscribe({
+      next: (files) => {
+        console.log(files);
+
+        if (files.length > 0) {
+          const firstConfig = files[0];
+          const firstConfigFile = files[0].content._files.filter(
+            (file: string) => file.match(/.+\.xml$/)
+          )[0];
+          const firstFile = this.fileService.getFileFromConfiguration(
+            firstConfig.name,
+            firstConfigFile
+          );
+          firstFile.then((file) => {
+            if (file) {
+              this.setCurrentFile({
+                path: firstConfigFile,
+                type: FileType.XML,
+                configuration: firstConfig.name,
+                data: file,
+                saved: true,
+              });
+            }
+          });
+          subscription.unsubscribe();
+        }
+      },
+    });
   }
 
   undo(): File | undefined {
@@ -81,6 +104,10 @@ export class CodeService {
     }
   }
 
+  clearMementoHistory(): void {
+    this.caretaker?.clearMementoList();
+  }
+
   setCurrentFile(file: File): void {
     if (!this.redoAction) {
       this.caretaker?.clearRedoList();
@@ -90,7 +117,7 @@ export class CodeService {
     this.originator?.setState(file);
     this.caretaker?.save();
 
-    this.curFile.next(file);
+    this.currentFile.next(file);
   }
 
   getCurrentFile(): File | undefined {

@@ -29,6 +29,10 @@ export class Caretaker {
     this.redoMementos = [];
   }
 
+  public clearMementoList(): void {
+    this.mementos = [];
+  }
+
   public undo(): void {
     if (!this.mementos.length) {
       return;

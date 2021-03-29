@@ -20,7 +20,7 @@ export class SelectorComponent implements AfterViewInit {
   treeSource!: TreeItem[];
   settings!: Settings;
   currentFile!: File;
-  fileMatch = /^.+.xml$/g;
+  fileMatch = /^.+\.xml$/g;
 
   constructor(
     private settingsService: SettingsService,

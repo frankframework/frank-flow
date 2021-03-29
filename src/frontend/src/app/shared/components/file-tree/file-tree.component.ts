@@ -107,6 +107,7 @@ export class FileTreeComponent implements AfterViewInit {
         .getFileFromConfiguration(item.configuration, item.path)
         .then((file) => {
           if (file) {
+            this.codeService.clearMementoHistory();
             this.codeService.setCurrentFile({
               path: item.path,
               type: FileType.XML,
