@@ -39,8 +39,10 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
   ) {}
 
   ngAfterViewInit(): void {
-    this.getFiles();
-    this.getCurrentFile();
+    setTimeout(() => {
+      this.getFiles();
+      this.getCurrentFile();
+    })
   }
 
   ngOnDestroy(): void {
@@ -49,9 +51,9 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
   }
 
   getFiles(): void {
-    this.fileSubscription = this.fileService.getFiles().subscribe({
-      next: (configurationFiles) => this.addFilesToTree(configurationFiles),
-    });
+      this.fileSubscription = this.fileService.getFiles().subscribe({
+        next: (configurationFiles) => this.addFilesToTree(configurationFiles),
+      });
   }
 
   addFilesToTree(configurationFiles: any): void {
@@ -63,7 +65,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
       })
     );
 
-    this.tree?.refresh();
+    setTimeout(() => this.tree?.refresh());
   }
 
   parseFiles(

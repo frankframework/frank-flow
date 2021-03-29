@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 import { CanvasComponent } from './canvas.component';
 
@@ -9,6 +10,7 @@ describe('CanvasComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CanvasComponent],
+      imports: [ToastrModule.forRoot()],
     }).compileComponents();
   });
 
