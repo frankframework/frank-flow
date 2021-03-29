@@ -1,4 +1,4 @@
-import { File } from '../models/file.model';
+import { File } from './file.model';
 
 export interface Memento {
   getState(): File;

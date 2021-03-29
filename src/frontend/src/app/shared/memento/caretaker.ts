@@ -1,4 +1,4 @@
-import { Memento } from '../interfaces/memento';
+import { Memento } from '../models/memento.model';
 import { Originator } from './originator';
 
 export class Caretaker {

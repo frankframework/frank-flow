@@ -1,4 +1,4 @@
-import { Memento } from '../interfaces/memento';
+import { Memento } from '../models/memento.model';
 import { File } from '../models/file.model';
 
 export class FileMemento implements Memento {
