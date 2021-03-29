@@ -3,6 +3,7 @@ import {
   Component,
   Input,
   OnInit,
+  OnDestroy,
   ViewChild,
 } from '@angular/core';
 import { jqxTreeComponent } from 'jqwidgets-ng/jqxtree';
@@ -13,13 +14,14 @@ import { CodeService } from '../../services/code.service';
 import { FileService } from '../../services/file.service';
 import { File } from '../../models/file.model';
 import TreeItem = jqwidgets.TreeItem;
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-file-tree',
   templateUrl: './file-tree.component.html',
   styleUrls: ['./file-tree.component.scss'],
 })
-export class FileTreeComponent implements AfterViewInit {
+export class FileTreeComponent implements AfterViewInit, OnDestroy {
   @Input() width: string | number = '100%';
   @Input() height: string | number = '100%';
   @Input() fileMatch?: RegExp;
@@ -27,6 +29,8 @@ export class FileTreeComponent implements AfterViewInit {
   searchTerm!: string;
   treeSource!: TreeItem[];
   currentFile!: File;
+  currentFileSubscription!: Subscription;
+  fileSubscription!: Subscription;
 
   constructor(
     private fileService: FileService,
@@ -39,11 +43,14 @@ export class FileTreeComponent implements AfterViewInit {
     this.getCurrentFile();
   }
 
+  ngOnDestroy(): void {
+    this.currentFileSubscription.unsubscribe();
+    this.fileSubscription.unsubscribe();
+  }
+
   getFiles(): void {
-    setTimeout(() => {
-      this.fileService.getFiles().subscribe({
-        next: (configurationFiles) => this.addFilesToTree(configurationFiles),
-      });
+    this.fileSubscription = this.fileService.getFiles().subscribe({
+      next: (configurationFiles) => this.addFilesToTree(configurationFiles),
     });
   }
 
@@ -56,7 +63,7 @@ export class FileTreeComponent implements AfterViewInit {
       })
     );
 
-    setTimeout(() => this.tree?.refresh());
+    this.tree?.refresh();
   }
 
   parseFiles(
@@ -87,7 +94,11 @@ export class FileTreeComponent implements AfterViewInit {
   }
 
   getCurrentFile(): void {
-    this.codeService.curFileObservable.subscribe(
+    const initialCurrentFile = this.codeService.getCurrentFile();
+    if (initialCurrentFile) {
+      this.currentFile = initialCurrentFile;
+    }
+    this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
       (currentFile) => (this.currentFile = currentFile)
     );
   }
@@ -103,24 +114,29 @@ export class FileTreeComponent implements AfterViewInit {
     if (itemValue) {
       const item = JSON.parse(itemValue);
 
-      this.fileService
-        .getFileFromConfiguration(item.configuration, item.path)
-        .then((file) => {
-          if (file) {
-            this.codeService.clearMementoHistory();
-            this.codeService.setCurrentFile({
-              path: item.path,
-              type: FileType.XML,
-              data: file,
-              saved: true,
-              configuration: item.configuration,
-            });
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          this.toastr.error(error, `File can't be fetched`);
-        });
+      if (
+        this.currentFile.path !== item.path ||
+        this.currentFile.configuration !== item.configuration
+      ) {
+        this.fileService
+          .getFileFromConfiguration(item.configuration, item.path)
+          .then((file) => {
+            if (file) {
+              this.codeService.clearMementoHistory();
+              this.codeService.setCurrentFile({
+                path: item.path,
+                type: FileType.XML,
+                data: file,
+                saved: true,
+                configuration: item.configuration,
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            this.toastr.error(error, `File can't be fetched`);
+          });
+      }
     }
   }
 }

@@ -29,8 +29,6 @@ export class CodeService {
   getFirstFile(): void {
     const subscription = this.fileService.getFiles().subscribe({
       next: (files) => {
-        console.log(files);
-
         if (files.length > 0) {
           const firstConfig = files[0];
           const firstConfigFile = files[0].content._files.filter(
@@ -45,8 +43,8 @@ export class CodeService {
               this.setCurrentFile({
                 path: firstConfigFile,
                 type: FileType.XML,
-                configuration: firstConfig.name,
                 data: file,
+                configuration: firstConfig.name,
                 saved: true,
               });
             }
