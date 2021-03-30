@@ -6,6 +6,7 @@ import {
   ViewContainerRef,
   HostListener,
   HostBinding,
+  OnDestroy,
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
 import Pipe from '../node/nodes/pipe.model';
@@ -15,13 +16,14 @@ import { CodeService } from '../../shared/services/code.service';
 import { jsPlumbInstance } from 'jsplumb';
 import { File } from '../../shared/models/file.model';
 import { FileType } from '../../shared/enums/file-type.enum';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-canvas',
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.scss'],
 })
-export class CanvasComponent implements AfterViewInit {
+export class CanvasComponent implements AfterViewInit, OnDestroy {
   @Input() nodes = [];
 
   @Input() connections = [];
@@ -29,6 +31,8 @@ export class CanvasComponent implements AfterViewInit {
   @ViewChild('canvas', { read: ViewContainerRef })
   viewContainerRef!: ViewContainerRef;
   jsPlumbInstance!: jsPlumbInstance;
+
+  currentFileSubscription!: Subscription;
 
   @HostBinding('tabindex') tabindex = 1;
 
@@ -56,11 +60,19 @@ export class CanvasComponent implements AfterViewInit {
         type: 'module',
       });
 
-      this.codeService.curFileObservable.subscribe({
-        next(data): void {
-          flowGenerator.postMessage(data);
-        },
-      });
+      const initialCurrentFile = this.codeService.getCurrentFile();
+
+      if (initialCurrentFile) {
+        flowGenerator.postMessage(initialCurrentFile);
+      }
+
+      this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
+        {
+          next: (data): void => {
+            flowGenerator.postMessage(data);
+          },
+        }
+      );
 
       flowGenerator.onmessage = ({ data }) => {
         const file = data as File;
@@ -72,6 +84,12 @@ export class CanvasComponent implements AfterViewInit {
         }
       };
     }
+  }
+
+  ngOnDestroy(): void {
+    this.currentFileSubscription.unsubscribe();
+    this.jsPlumbInstance.reset();
+    this.viewContainerRef.clear();
   }
 
   generateFlow(data: any): void {

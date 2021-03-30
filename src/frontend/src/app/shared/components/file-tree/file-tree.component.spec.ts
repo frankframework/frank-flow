@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { ToastrModule } from 'ngx-toastr';
 
-import { CanvasComponent } from './canvas.component';
+import { FileTreeComponent } from './file-tree.component';
 
-describe('CanvasComponent', () => {
-  let component: CanvasComponent;
-  let fixture: ComponentFixture<CanvasComponent>;
+describe('FileTreeComponent', () => {
+  let component: FileTreeComponent;
+  let fixture: ComponentFixture<FileTreeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CanvasComponent],
+      declarations: [FileTreeComponent],
       imports: [ToastrModule.forRoot()],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CanvasComponent);
+    fixture = TestBed.createComponent(FileTreeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

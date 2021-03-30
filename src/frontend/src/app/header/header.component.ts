@@ -40,35 +40,8 @@ export class HeaderComponent implements OnInit {
     );
   }
 
-  saveFile(): void {
-    if (
-      this.currentFile.configuration &&
-      this.currentFile.path &&
-      this.currentFile.data &&
-      !this.currentFile.saved
-    ) {
-      this.fileService
-        .setFileForConfiguration(
-          this.currentFile.configuration,
-          this.currentFile.path,
-          this.currentFile.data
-        )
-        .then((response) => {
-          if (response) {
-            this.toastr.success(
-              `The file ${this.currentFile.path} has been saved.`,
-              'File saved!'
-            );
-            this.currentFile.saved = true;
-            this.codeService.setCurrentFile(this.currentFile);
-          } else {
-            this.toastr.error(
-              `The file ${this.currentFile.path} couldn't be saved.`,
-              'Error saving'
-            );
-          }
-        });
-    }
+  save(): void {
+    this.codeService.save();
   }
 
   openSettings(): void {

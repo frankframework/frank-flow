@@ -1,4 +1,5 @@
 /// <reference lib="webworker" />
+
 import { Parser } from 'xml2js';
 import { File } from '../../shared/models/file.model';
 import { FileType } from '../../shared/enums/file-type.enum';

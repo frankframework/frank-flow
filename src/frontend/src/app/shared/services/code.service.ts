@@ -6,102 +6,104 @@ import { FileType } from '../enums/file-type.enum';
 import { Originator } from '../memento/originator';
 import { Caretaker } from '../memento/caretaker';
 import { FileService } from './file.service';
+import { ToastrService } from 'ngx-toastr';
+import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CodeService {
   private editor!: monaco.editor.IStandaloneCodeEditor;
-  private curFile = new Subject<File>();
-
-  public curFileObservable = this.curFile.asObservable();
-
+  private currentFile = new Subject<File>();
+  public curFileObservable = this.currentFile.asObservable();
   private originator?: Originator;
   private caretaker?: Caretaker;
-
   private redoAction = false;
 
-  private code = `<Configuration name="dd">
-  <Adapter name="ddAdapter">
-    <Receiver name="ddReceiver">
-      <JavaListener name="ddListener" serviceName="ddService"  x="681" y="24" />
-    </Receiver>
-    <Pipeline firstPipe="ddPipe">
-      <FixedResultPipe name="ddPipe" returnString="Hello World" x="100" y="50">
-        <Forward name="success" path="EXIT"/>
-      </FixedResultPipe>
-      <DelayPipe name="otherPipe" returnString="Hello World" x="100" y="250">
-        <Forward name="success" path="EXIT"/>
-      </DelayPipe>
-      <XmlSwitchPipe name="switchXML" x="100" y="450">
-        <Forward name="success" path="EXIT"/>
-        <Forward name="error" path="err"/>
-      </XmlSwitchPipe>
-      <Exit path="EXIT" state="success" x="223" y="625"/>
-    </Pipeline>
-  </Adapter>
-</Configuration>
-`;
-
-  constructor() {}
-
-  setEditor(editor: monaco.editor.IStandaloneCodeEditor): void {
-    this.editor = editor;
-
-    const defaultFile = new File();
-
-    defaultFile.path = 'Default config';
-    defaultFile.type = FileType.XML;
-    defaultFile.data = this.code;
-    defaultFile.saved = true;
-
-    this.originator = new Originator(defaultFile);
+  constructor(private fileService: FileService, private toastr: ToastrService) {
+    this.originator = new Originator(new File());
     this.caretaker = new Caretaker(this.originator);
-
-    this.createActions();
-    this.setCurrentFile(defaultFile);
+    this.getFirstFile();
   }
 
-  createActions(): void {
-    this.editor.addAction({
-      id: 'memento-undo-action',
-      label: 'Undo',
-      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_Z],
-      contextMenuGroupId: 'memento',
-      contextMenuOrder: 2,
-      run: () => this.undo(),
-    });
-
-    this.editor.addAction({
-      id: 'memento-redo-action',
-      label: 'Redo',
-      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_Y],
-      contextMenuGroupId: 'memento',
-      contextMenuOrder: 3,
-      run: () => this.redo(),
+  getFirstFile(): void {
+    const subscription = this.fileService.getFiles().subscribe({
+      next: (files) => {
+        if (files.length > 0) {
+          const firstConfig = files[0];
+          const firstConfigFile = files[0].content._files.filter(
+            (file: string) => file.match(/.+\.xml$/)
+          )[0];
+          const firstFile = this.fileService.getFileFromConfiguration(
+            firstConfig.name,
+            firstConfigFile
+          );
+          firstFile.then((file) => {
+            if (file) {
+              this.setCurrentFile({
+                path: firstConfigFile,
+                type: FileType.XML,
+                data: file,
+                configuration: firstConfig.name,
+                saved: true,
+              });
+            }
+          });
+          subscription.unsubscribe();
+        }
+      },
     });
   }
 
-  public undo(): void {
+  undo(): File | undefined {
     this.redoAction = true;
     this.caretaker?.undo();
 
-    const value = this.originator?.getState().data;
-
-    if (value) {
-      this.editor.setValue(value);
-    }
+    return this.originator?.getState();
   }
 
-  public redo(): void {
+  redo(): File | undefined {
     this.redoAction = true;
     this.caretaker?.redo();
 
-    const value = this.originator?.getState().data;
+    return this.originator?.getState();
+  }
 
-    if (value) {
-      this.editor.setValue(value);
+  save(): void {
+    const currentFile = this.originator?.getState();
+    if (
+      currentFile &&
+      currentFile.configuration &&
+      currentFile.path &&
+      currentFile.data &&
+      !currentFile.saved
+    ) {
+      this.fileService
+        .updateFileForConfiguration(
+          currentFile.configuration,
+          currentFile.path,
+          currentFile.data
+        )
+        .then((response) => {
+          if (response) {
+            this.toastr.success(
+              `The file ${currentFile.path} has been saved.`,
+              'File saved!'
+            );
+            currentFile.saved = true;
+            this.setCurrentFile(currentFile);
+          } else {
+            this.toastr.error(
+              `The file ${currentFile.path} couldn't be saved.`,
+              'Error saving'
+            );
+          }
+        });
     }
+  }
+
+  clearMementoHistory(): void {
+    this.caretaker?.clearMementoList();
   }
 
   setCurrentFile(file: File): void {
@@ -113,6 +115,10 @@ export class CodeService {
     this.originator?.setState(file);
     this.caretaker?.save();
 
-    this.curFile.next(file);
+    this.currentFile.next(file);
+  }
+
+  getCurrentFile(): File | undefined {
+    return this.originator?.getState();
   }
 }

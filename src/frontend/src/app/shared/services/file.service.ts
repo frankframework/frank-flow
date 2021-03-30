@@ -23,10 +23,12 @@ export class FileService {
   async getConfigurationsWithFiles(): Promise<Configuration[]> {
     const configurationFiles: Configuration[] = [];
     await this.getConfigurations().then(async (configurations) => {
-      for (const configuration of configurations) {
-        await this.getFilesForConfiguration(configuration).then((files) =>
-          configurationFiles.push({ name: configuration, content: files })
-        );
+      if (configurations) {
+        for (const configuration of configurations) {
+          await this.getFilesForConfiguration(configuration).then((files) =>
+            configurationFiles.push({ name: configuration, content: files })
+          );
+        }
       }
     });
     return configurationFiles;
@@ -57,7 +59,7 @@ export class FileService {
       .catch((error) => console.error(error));
   }
 
-  setFileForConfiguration(
+  updateFileForConfiguration(
     configuration: string,
     path: string,
     content: string

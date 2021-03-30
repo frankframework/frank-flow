@@ -1,4 +1,4 @@
-import { Memento } from '../interfaces/memento';
+import { Memento } from '../models/memento.model';
 import { Originator } from './originator';
 
 export class Caretaker {
@@ -27,6 +27,10 @@ export class Caretaker {
 
   public clearRedoList(): void {
     this.redoMementos = [];
+  }
+
+  public clearMementoList(): void {
+    this.mementos = [];
   }
 
   public undo(): void {

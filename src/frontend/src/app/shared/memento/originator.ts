@@ -1,4 +1,4 @@
-import { Memento } from '../interfaces/memento';
+import { Memento } from '../models/memento.model';
 import { File } from '../models/file.model';
 import { FileMemento } from './file-memento';
 
@@ -38,5 +38,7 @@ export class Originator {
     this.state.path = file.path;
     this.state.data = file.data;
     this.state.type = file.type;
+    this.state.configuration = file.configuration;
+    this.state.saved = file.saved;
   }
 }

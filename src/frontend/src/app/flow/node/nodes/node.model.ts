@@ -1,12 +1,13 @@
 import { ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
-import { jsPlumbInstance } from 'jsplumb';
+import { jsPlumbInstance, jsPlumbUtil } from 'jsplumb';
 import { NodeComponent } from '../node.component';
 
-export abstract class Node {
+export class Node {
   private id: string;
   private name?: string | undefined;
   private top?: number | undefined;
   private left?: number | undefined;
+  protected classes = '';
 
   constructor(id: string, name?: string, top?: number, left?: number) {
     this.id = id;
@@ -28,9 +29,24 @@ export abstract class Node {
     return this.left;
   }
 
-  abstract generateNode(
+  generateNode(
     rootViewContainer: ViewContainerRef,
     factoryResolver: ComponentFactoryResolver,
-    jsPlumbInstance: jsPlumbInstance
-  ): void;
+    jsPlumb: jsPlumbInstance
+  ): void {
+    jsPlumb.ready(() => {
+      const factory = factoryResolver.resolveComponentFactory(NodeComponent);
+      const component = factory.create(rootViewContainer.injector);
+
+      (component.instance as any).node = this;
+      (component.instance as any).jsPlumbInstance = jsPlumb;
+
+      const style = `left: ${this.getLeft()}px; top: ${this.getTop()}px;`;
+      component.instance.cssClass = this.classes;
+      component.instance.style = style;
+      component.location.nativeElement.id = this.getId();
+
+      rootViewContainer.insert(component.hostView);
+    });
+  }
 }
