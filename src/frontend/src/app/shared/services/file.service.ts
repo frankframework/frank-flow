@@ -54,6 +54,7 @@ export class FileService {
     configuration: string,
     path: string
   ): Promise<string | void> {
+    console.log('get file: ', configuration, path);
     return fetch(`${this.BASE_PATH}/${configuration}/files/?path=${path}`)
       .then((response) => response.text())
       .catch((error) => console.error(error));

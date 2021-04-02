@@ -110,6 +110,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
   }
 
   onItemClick(event: any): void {
+    console.log('saved, ', this.currentFile?.saved);
     if (!this.currentFile?.saved) {
       if (!confirm('Are you sure you want to switch files without saving?')) {
         return;
