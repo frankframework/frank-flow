@@ -65,7 +65,11 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
       })
     );
 
-    setTimeout(() => this.tree?.refresh());
+    setTimeout(() => {
+      if (this.tree && this.tree.refresh) {
+        this.tree.refresh();
+      }
+    });
   }
 
   parseFiles(

@@ -42,6 +42,8 @@ export class MonacoEditorComponent
   modeSubscription!: Subscription;
   settingsSubscription!: Subscription;
 
+  updateQueue: File[] = [];
+
   constructor(
     private monacoElement: ElementRef,
     private modeService: ModeService,
@@ -65,10 +67,6 @@ export class MonacoEditorComponent
     this.currentFileSubscription.unsubscribe();
     this.modeSubscription.unsubscribe();
     this.settingsSubscription.unsubscribe();
-  }
-
-  public setObservableUpdate(value: boolean): void {
-    this.fileObservableUpdate = value;
   }
 
   loadMonaco(): void {
@@ -111,6 +109,7 @@ export class MonacoEditorComponent
     this.initializeEditor();
     this.initializeActions();
     this.initializeFile();
+    this.initUpdateQueue();
     this.initializeTwoWayBinding();
     this.initializeResizeObserver();
     this.initializeThemeObserver();
@@ -175,8 +174,7 @@ export class MonacoEditorComponent
     if (model) {
       model.onDidChangeContent(
         this.debounce(() => {
-          if (!this.fileObservableUpdate) {
-            this.fileObservableUpdate = true;
+          if (this.currentFile && !this.fileObservableUpdate) {
             this.currentFile.data = this.codeEditorInstance.getValue();
             this.currentFile.saved = false;
             this.codeService.setCurrentFile(this.currentFile);
@@ -189,16 +187,27 @@ export class MonacoEditorComponent
     this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
       {
         next: (file) => {
-          if (file.data && !this.fileObservableUpdate) {
-            this.fileObservableUpdate = true;
-            model?.setValue(file.data);
+          if (file.data) {
+            this.updateQueue.push(file);
             this.currentFile = file;
-          } else if (this.fileObservableUpdate) {
-            this.fileObservableUpdate = false;
           }
         },
       }
     );
+  }
+
+  initUpdateQueue(): void {
+    const model = this.codeEditorInstance.getModel();
+    setInterval(() => {
+      const file = this.updateQueue.shift();
+      if (file && file.data && !this.fileObservableUpdate) {
+        this.fileObservableUpdate = true;
+        model?.setValue(file.data);
+        this.currentFile = file;
+      } else if (file && this.fileObservableUpdate) {
+        this.fileObservableUpdate = false;
+      }
+    }, 510);
   }
 
   debounce(func: any, wait: number): any {
