@@ -200,11 +200,11 @@ export class MonacoEditorComponent
     const model = this.codeEditorInstance.getModel();
     setInterval(() => {
       const file = this.updateQueue.shift();
-      if (file !== undefined && file.data && !this.fileObservableUpdate) {
+      if (file && file.data && !this.fileObservableUpdate) {
         this.fileObservableUpdate = true;
         model?.setValue(file.data);
         this.currentFile = file;
-      } else if (file !== undefined && this.fileObservableUpdate) {
+      } else if (file && this.fileObservableUpdate) {
         this.fileObservableUpdate = false;
       }
     }, 510);
