@@ -17,6 +17,7 @@ import { jsPlumbInstance } from 'jsplumb';
 import { File } from '../../shared/models/file.model';
 import { FileType } from '../../shared/enums/file-type.enum';
 import { Subscription } from 'rxjs';
+import { FlowStructureService } from '../../shared/services/flow-structure.service';
 
 @Component({
   selector: 'app-canvas',
@@ -33,6 +34,9 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   jsPlumbInstance!: jsPlumbInstance;
 
   currentFileSubscription!: Subscription;
+  currentFile!: File;
+
+  flowUpdate = false;
 
   @HostBinding('tabindex') tabindex = 1;
 
@@ -47,7 +51,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private nodeService: NodeService,
-    private codeService: CodeService
+    private codeService: CodeService,
+    private flowStructureService: FlowStructureService
   ) {
     this.jsPlumbInstance = this.nodeService.getInstance();
   }
@@ -66,6 +71,27 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         flowGenerator.postMessage(initialCurrentFile);
       }
 
+      this.flowStructureService.structureObservable.subscribe({
+        next: (response) => {
+          if (
+            !this.flowUpdate &&
+            response != null &&
+            Object.keys(response).length !== 0
+          ) {
+            console.log('subscription: ', response);
+            this.currentFile.type = FileType.JSON;
+            this.currentFile.data = response;
+            flowGenerator.postMessage(this.currentFile);
+          }
+        },
+        error: (err) => {
+          console.error('Error: ' + err);
+        },
+        complete: () => {
+          console.log('Completed');
+        },
+      });
+
       this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
         {
           next: (data): void => {
@@ -76,11 +102,14 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
       flowGenerator.onmessage = ({ data }) => {
         const file = data as File;
-
+        this.currentFile = file;
         if (file.type === FileType.JSON && file.data) {
+          this.flowUpdate = true;
+          this.flowStructureService.setStructure(file.data);
+          this.flowUpdate = false;
           this.generateFlow(file.data);
-        } else {
-          //  TODO: update XML here.
+        } else if (file.type === FileType.XML && file.data) {
+          this.codeService.setCurrentFile(file);
         }
       };
     }

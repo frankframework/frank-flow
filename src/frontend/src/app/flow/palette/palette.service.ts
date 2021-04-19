@@ -20,11 +20,12 @@ export class PaletteService {
       },
     })
       .then((result) => result.json())
-      .then((data) =>
+      .then((data) => {
+        console.log(data);
         data.forEach((group: any) => {
           this.data.set(group.name, group.classes);
-        })
-      )
+        });
+      })
       .catch((error) => {
         this.toastr.error(
           'The ibisdoc cant be loaded from the Frank!Runner',

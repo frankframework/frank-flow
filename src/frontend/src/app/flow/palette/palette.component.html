@@ -1,21 +1,21 @@
 <app-search [(term)]="search"></app-search>
 <app-group
   color="info"
+  type="Listeners"
   [items]="paletteService.data?.get('Listeners') | filter: search"
-  >Listeners</app-group
->
+></app-group>
 <app-group
   color="accent"
+  type="Pipes"
   [items]="paletteService.data?.get('Pipes') | filter: search"
-  >Pipes</app-group
->
+></app-group>
 <app-group
   color="success"
+  type="Senders"
   [items]="paletteService.data?.get('Senders') | filter: search"
-  >Senders</app-group
->
+></app-group>
 <app-group
   color="danger"
+  type="other"
   [items]="paletteService.data?.get('Other') | filter: search"
-  >Other</app-group
->
+></app-group>

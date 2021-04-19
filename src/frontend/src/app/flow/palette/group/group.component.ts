@@ -1,5 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { NodeService } from '../../node/node.service';
+import { FlowStructureService } from '../../../shared/services/flow-structure.service';
+import Listener from '../../node/nodes/listener.model';
+import Pipe from '../../node/nodes/pipe.model';
+import Exit from '../../node/nodes/exit.model';
 
 @Component({
   selector: 'app-group',
@@ -9,9 +14,13 @@ import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 export class GroupComponent implements OnInit {
   @Input() foldGroup = false;
   @Input() color = 'primary';
+  @Input() type = 'default';
   @Input() items!: any[] | undefined;
 
-  constructor() {}
+  constructor(
+    private nodeService: NodeService,
+    private flowStructureService: FlowStructureService
+  ) {}
 
   foldArrow = () => (this.foldGroup ? faChevronDown : faChevronUp);
 
@@ -19,5 +28,19 @@ export class GroupComponent implements OnInit {
 
   toggleFold(): void {
     this.foldGroup = !this.foldGroup;
+  }
+
+  addNode(pipe: any): void {
+    console.log('add node: ', pipe, 'type: ', this.type);
+    if (this.type === 'Listeners') {
+      const listener = new Listener(pipe.name, pipe.name, 100, 100);
+      this.flowStructureService.addListener(listener);
+    } else if (this.type === 'Pipes') {
+      const newPipe = new Pipe(pipe.name, pipe.name, 100, 100);
+      this.flowStructureService.addPipe(newPipe);
+    } else if (this.type === 'other' && pipe.name === 'PipeLineExit') {
+      const exit = new Exit(pipe.name, 'Exit', 100, 100);
+      this.flowStructureService.addPipe(exit);
+    }
   }
 }
