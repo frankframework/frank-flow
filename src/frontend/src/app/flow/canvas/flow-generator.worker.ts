@@ -23,6 +23,7 @@ addEventListener('message', ({ data }) => {
     const xml = builder.buildObject(file.data);
 
     file.data = xml;
+    file.saved = false;
     file.type = FileType.XML;
   }
 

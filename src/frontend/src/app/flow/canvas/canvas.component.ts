@@ -18,6 +18,7 @@ import { File } from '../../shared/models/file.model';
 import { FileType } from '../../shared/enums/file-type.enum';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
+import { Forward } from './forward.model';
 
 @Component({
   selector: 'app-canvas',
@@ -78,7 +79,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
             response != null &&
             Object.keys(response).length !== 0
           ) {
-            console.log('subscription: ', response);
             this.currentFile.type = FileType.JSON;
             this.currentFile.data = response;
             flowGenerator.postMessage(this.currentFile);
@@ -137,18 +137,30 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
           const firstPipe = pipeline.$?.firstPipe;
           const receiver = data[root].Adapter[0].Receiver[0];
 
+          const forwards: Forward[] = [];
+
           let idCounter = 0;
 
-          idCounter = this.generateReceiver(receiver, idCounter);
-          idCounter = this.generatePipeline(pipeline, idCounter);
+          idCounter = this.generateReceiver(
+            receiver,
+            idCounter,
+            firstPipe,
+            forwards
+          );
+          idCounter = this.generatePipeline(pipeline, idCounter, forwards);
 
-          this.connectAllNodes(idCounter);
+          this.connectAllNodes(forwards);
         }
       });
     });
   }
 
-  generateReceiver(receiver: any, idCounter: number): number {
+  generateReceiver(
+    receiver: any,
+    idCounter: number,
+    firstPipe: string,
+    forwards: Forward[]
+  ): number {
     for (const key of Object.keys(receiver)) {
       if (key !== '$') {
         receiver[key].forEach((element: any) => {
@@ -157,9 +169,12 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
           const listenerNode = new Listener(
             listenerInfo.id,
             listenerInfo.name,
+            key,
             listenerInfo.top,
             listenerInfo.left
           );
+
+          forwards.push(new Forward(listenerInfo.name, firstPipe));
 
           this.nodeService.addDynamicNode(listenerNode);
         });
@@ -169,7 +184,11 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     return idCounter;
   }
 
-  generatePipeline(pipeline: any, idCounter: number): number {
+  generatePipeline(
+    pipeline: any,
+    idCounter: number,
+    forwards: Forward[]
+  ): number {
     for (const key of Object.keys(pipeline)) {
       if (key !== '$') {
         pipeline[key].forEach((element: any) => {
@@ -181,6 +200,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
             node = new Exit(
               nodeInfo.id,
               nodeInfo.name,
+              key,
               nodeInfo.top,
               nodeInfo.left
             );
@@ -188,9 +208,16 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
             node = new Pipe(
               nodeInfo.id,
               nodeInfo.name,
+              key,
               nodeInfo.top,
               nodeInfo.left
             );
+
+            if (element.Forward) {
+              element.Forward.forEach((pipeNode: { $: { path: string } }) => {
+                forwards.push(new Forward(nodeInfo.name, pipeNode.$.path));
+              });
+            }
           }
 
           this.nodeService.addDynamicNode(node);
@@ -201,7 +228,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   getNodeInfo(element: any, idCounter: number): any {
-    const id = 'stepId_' + idCounter++;
+    const id = element.name ?? element.path;
     const name = element.name ?? element.path;
     const top = element.y;
     const left = element.x;
@@ -209,13 +236,22 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     return { id, name, top, left, idCounter };
   }
 
-  connectAllNodes(idCounter: number): void {
+  connectAllNodes(forwards: Forward[]): void {
     setTimeout(() => {
-      for (let i = 0; i < idCounter - 1; i++) {
+      forwards.forEach((forward) => {
         this.nodeService.addConnection({
-          uuids: ['stepId_' + i + '_bottom', 'stepId_' + (i + 1) + '_top'],
+          uuids: [
+            forward.getSource() + '_bottom',
+            forward.getDestination() + '_top',
+          ],
         });
-      }
+      });
+
+      // for (let i = 0; i < idCounter - 1; i++) {
+      //   this.nodeService.addConnection({
+      //     uuids: ['stepId_' + i + '_bottom', 'stepId_' + (i + 1) + '_top'],
+      //   });
+      // }
     });
   }
 }

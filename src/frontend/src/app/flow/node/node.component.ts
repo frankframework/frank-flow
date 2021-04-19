@@ -4,10 +4,12 @@ import {
   HostBinding,
   HostListener,
   Input,
+  Pipe,
 } from '@angular/core';
 import { Node } from './nodes/node.model';
 import { EndpointOptions, jsPlumbInstance } from 'jsplumb';
 import { NgxSmartModalService } from 'ngx-smart-modal';
+import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 
 @Component({
   selector: 'app-node',
@@ -23,6 +25,29 @@ export class NodeComponent implements AfterViewInit {
 
   private dragOptions = {
     containment: 'canvas',
+    stop: (e: any) => {
+      const type = this.node.getType();
+
+      if (e.el.classList[0] === 'color--info') {
+        if (type) {
+          this.flowStructureService.editListenerPositions(
+            e.el.id,
+            type,
+            e.pos[0],
+            e.pos[1]
+          );
+        }
+      } else {
+        if (type) {
+          this.flowStructureService.editPipePositions(
+            e.el.id,
+            type,
+            e.pos[0],
+            e.pos[1]
+          );
+        }
+      }
+    },
   };
 
   private bottomEndpointOptions: EndpointOptions = {
@@ -57,7 +82,10 @@ export class NodeComponent implements AfterViewInit {
     this.openOptions();
   }
 
-  constructor(public ngxSmartModalService: NgxSmartModalService) {}
+  constructor(
+    public ngxSmartModalService: NgxSmartModalService,
+    public flowStructureService: FlowStructureService
+  ) {}
 
   ngAfterViewInit(): void {
     const id = this.node.getId();

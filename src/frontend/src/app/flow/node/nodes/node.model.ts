@@ -5,13 +5,21 @@ import { NodeComponent } from '../node.component';
 export class Node {
   private id: string;
   private name?: string | undefined;
+  private type?: string | undefined;
   private top?: number | undefined;
   private left?: number | undefined;
   protected classes = '';
 
-  constructor(id: string, name?: string, top?: number, left?: number) {
+  constructor(
+    id: string,
+    name?: string,
+    type?: string,
+    top?: number,
+    left?: number
+  ) {
     this.id = id;
     this.name = name;
+    this.type = type;
     this.top = top;
     this.left = left;
   }
@@ -21,6 +29,9 @@ export class Node {
   }
   getName(): string | undefined {
     return this.name;
+  }
+  getType(): string | undefined {
+    return this.type;
   }
   getTop(): number | undefined {
     return this.top;
@@ -38,8 +49,8 @@ export class Node {
       const factory = factoryResolver.resolveComponentFactory(NodeComponent);
       const component = factory.create(rootViewContainer.injector);
 
-      (component.instance as any).node = this;
-      (component.instance as any).jsPlumbInstance = jsPlumb;
+      (component.instance as NodeComponent).node = this;
+      (component.instance as NodeComponent).jsPlumbInstance = jsPlumb;
 
       const style = `left: ${this.getLeft()}px; top: ${this.getTop()}px;`;
       component.instance.cssClass = this.classes;
