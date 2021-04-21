@@ -32,10 +32,10 @@ export class FlowStructureService {
     const root = Object.keys(this.structure.value)[0];
     const receiver = this.structure.value[root].Adapter[0].Receiver[0];
 
-    if (receiver[pipeData.name] != null) {
-      receiver[pipeData.name] = this.generateNewNode(pipeData.name);
-    } else {
+    if (receiver[pipeData.name]) {
       receiver[pipeData.name].push(this.generateNewNode(pipeData.name));
+    } else {
+      receiver[pipeData.name] = this.generateNewNode(pipeData.name);
     }
 
     this.structure.next(this.structure.value);

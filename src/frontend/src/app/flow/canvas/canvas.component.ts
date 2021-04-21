@@ -89,9 +89,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         error: (err) => {
           console.error('Error: ' + err);
         },
-        complete: () => {
-          console.log('Completed');
-        },
       });
 
       this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
