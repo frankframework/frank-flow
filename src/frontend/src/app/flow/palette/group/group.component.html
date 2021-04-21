@@ -1,6 +1,6 @@
 <div [className]="'group group--' + color">
   <div class="group__header">
-    <div><ng-content></ng-content></div>
+    <div>{{ this.type }}</div>
     <fa-icon [icon]="foldArrow()" (click)="toggleFold()"></fa-icon>
   </div>
   <div class="group__list" [hidden]="foldGroup">
@@ -11,6 +11,7 @@
         [color]="color"
         *ngFor="let item of items"
         [name]="item.name"
+        (click)="addNode(item)"
       ></app-item>
     </ng-container>
   </div>
