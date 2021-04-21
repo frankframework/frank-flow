@@ -175,8 +175,10 @@ export class MonacoEditorComponent
       model.onDidChangeContent(
         this.debounce(() => {
           if (this.currentFile && !this.fileObservableUpdate) {
+            this.fileObservableUpdate = true;
             this.currentFile.data = this.codeEditorInstance.getValue();
             this.currentFile.saved = false;
+
             this.codeService.setCurrentFile(this.currentFile);
           } else {
             this.fileObservableUpdate = false;

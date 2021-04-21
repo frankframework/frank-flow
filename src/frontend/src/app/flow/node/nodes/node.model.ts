@@ -40,6 +40,14 @@ export class Node {
     return this.left;
   }
 
+  setTop(top: number): void {
+    this.top = top;
+  }
+
+  setLeft(left: number): void {
+    this.left = left;
+  }
+
   generateNode(
     rootViewContainer: ViewContainerRef,
     factoryResolver: ComponentFactoryResolver,

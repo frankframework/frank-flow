@@ -21,7 +21,6 @@ export class PaletteService {
     })
       .then((result) => result.json())
       .then((data) => {
-        console.log(data);
         data.forEach((group: any) => {
           this.data.set(group.name, group.classes);
         });
