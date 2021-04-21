@@ -31,7 +31,6 @@ export class GroupComponent implements OnInit {
   }
 
   addNode(pipe: any): void {
-    console.log('add node: ', pipe, 'type: ', this.type);
     if (this.type === 'Listeners') {
       const listener = new Listener(pipe.name, pipe.name, pipe.name, 100, 100);
       this.flowStructureService.addListener(listener);
