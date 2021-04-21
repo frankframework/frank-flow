@@ -19,7 +19,7 @@ export class FlowStructureService {
     const root = Object.keys(this.structure.value)[0];
     const pipeline = this.structure.value[root].Adapter[0].Pipeline[0];
 
-    if (pipeline[pipeData.name] != null) {
+    if (pipeline[pipeData.name]) {
       pipeline[pipeData.name].push(this.generateNewNode(pipeData.name));
     } else {
       pipeline[pipeData.name] = this.generateNewNode(pipeData.name);
@@ -33,9 +33,9 @@ export class FlowStructureService {
     const receiver = this.structure.value[root].Adapter[0].Receiver[0];
 
     if (receiver[pipeData.name] != null) {
-      receiver[pipeData.name].push(this.generateNewNode(pipeData.name));
-    } else {
       receiver[pipeData.name] = this.generateNewNode(pipeData.name);
+    } else {
+      receiver[pipeData.name].push(this.generateNewNode(pipeData.name));
     }
 
     this.structure.next(this.structure.value);
