@@ -13,7 +13,7 @@ export class FlowStructureService {
 
   structureObservable = this.structure.asObservable();
 
-  constructor(private codeService: CodeService) {}
+  constructor() {}
 
   setStructure(structure: any): void {
     this.structure.next(structure);

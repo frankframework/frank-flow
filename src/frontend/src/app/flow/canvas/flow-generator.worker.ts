@@ -31,7 +31,6 @@ addEventListener('message', ({ data }) => {
     setAttrCallback(tree);
 
     saxParser.write(file.data).close();
-    attrParser.write(file.data).close();
 
     postMessage(tree);
 
