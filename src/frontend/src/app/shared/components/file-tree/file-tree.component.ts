@@ -2,19 +2,21 @@ import {
   AfterViewInit,
   Component,
   Input,
-  OnInit,
   OnDestroy,
   ViewChild,
 } from '@angular/core';
 import { jqxTreeComponent } from 'jqwidgets-ng/jqxtree';
 import { ToastrService } from 'ngx-toastr';
-import { FileType } from '../../enums/file-type.enum';
 import { Configuration } from '../../models/configuration.model';
 import { CodeService } from '../../services/code.service';
 import { FileService } from '../../services/file.service';
 import { File } from '../../models/file.model';
-import TreeItem = jqwidgets.TreeItem;
 import { Subscription } from 'rxjs';
+import { NgxSmartModalService } from 'ngx-smart-modal';
+import { SettingsService } from '../../../header/settings/settings.service';
+import { Settings } from '../../../header/settings/settings.model';
+import { SwitchWithoutSavingOption } from '../../../header/settings/options/switch-without-saving-option';
+import TreeItem = jqwidgets.TreeItem;
 
 @Component({
   selector: 'app-file-tree',
@@ -31,10 +33,14 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
   currentFile!: File;
   currentFileSubscription!: Subscription;
   fileSubscription!: Subscription;
+  settings!: Settings;
+  settingsSubscription!: Subscription;
 
   constructor(
     private fileService: FileService,
     private codeService: CodeService,
+    private ngxSmartModalService: NgxSmartModalService,
+    private settingsService: SettingsService,
     private toastr: ToastrService
   ) {}
 
@@ -42,12 +48,14 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.getFiles();
       this.getCurrentFile();
+      this.getSettings();
     });
   }
 
   ngOnDestroy(): void {
     this.currentFileSubscription.unsubscribe();
     this.fileSubscription.unsubscribe();
+    this.settingsSubscription.unsubscribe();
   }
 
   getFiles(): void {
@@ -109,40 +117,39 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
     );
   }
 
-  onItemClick(event: any): void {
-    if (!this.currentFile?.saved) {
-      if (!confirm('Are you sure you want to switch files without saving?')) {
-        return;
-      }
-    }
+  getSettings(): void {
+    this.settingsSubscription = this.settingsService
+      .getSettings()
+      .subscribe((settings) => (this.settings = settings));
+  }
 
+  onItemClick(event: any): void {
     const itemValue = this.tree.getItem(event?.args?.element).value;
     if (itemValue) {
-      const item = JSON.parse(itemValue);
+      const item: File = JSON.parse(itemValue);
 
-      if (
-        this.currentFile.path !== item.path ||
-        this.currentFile.configuration !== item.configuration
-      ) {
-        this.fileService
-          .getFileFromConfiguration(item.configuration, item.path)
-          .then((file) => {
-            if (file) {
-              this.codeService.clearMementoHistory();
-              this.codeService.setCurrentFile({
-                path: item.path,
-                type: FileType.XML,
-                data: file,
-                saved: true,
-                configuration: item.configuration,
-              });
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-            this.toastr.error(error, `File can't be fetched`);
-          });
+      if (!this.currentFile?.saved) {
+        this.switchWithoutSavingDecision(item);
+      } else {
+        this.codeService.switchCurrentFile(item);
       }
+    }
+  }
+
+  switchWithoutSavingDecision(item: File): void {
+    switch (+this.settings.switchWithoutSaving) {
+      case SwitchWithoutSavingOption.ask:
+        this.ngxSmartModalService
+          .getModal('saveDialog')
+          .setData(item, true)
+          .open();
+        break;
+      case SwitchWithoutSavingOption.save:
+        this.codeService.save();
+        break;
+      case SwitchWithoutSavingOption.discard:
+        this.codeService.switchCurrentFile(item);
+        break;
     }
   }
 }

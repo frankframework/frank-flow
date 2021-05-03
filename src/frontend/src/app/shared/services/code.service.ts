@@ -7,7 +7,6 @@ import { Originator } from '../memento/originator';
 import { Caretaker } from '../memento/caretaker';
 import { FileService } from './file.service';
 import { ToastrService } from 'ngx-toastr';
-import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -120,5 +119,36 @@ export class CodeService {
 
   getCurrentFile(): File | undefined {
     return this.originator?.getState();
+  }
+
+  switchCurrentFile(item: File): void {
+    const currentFile = this.originator?.getState();
+
+    if (
+      currentFile &&
+      item.configuration &&
+      item.path &&
+      (currentFile.path !== item.path ||
+        currentFile.configuration !== item.configuration)
+    ) {
+      this.fileService
+        .getFileFromConfiguration(item.configuration, item.path)
+        .then((file) => {
+          if (file) {
+            this.clearMementoHistory();
+            this.setCurrentFile({
+              path: item.path,
+              type: FileType.XML,
+              data: file,
+              saved: true,
+              configuration: item.configuration,
+            });
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          this.toastr.error(error, `File can't be fetched`);
+        });
+    }
   }
 }
