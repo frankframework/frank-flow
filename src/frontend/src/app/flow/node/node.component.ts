@@ -37,6 +37,15 @@ export class NodeComponent implements AfterViewInit {
             e.pos[1]
           );
         }
+      } else if (e.el.classList[0] === 'color--danger') {
+        if (type) {
+          this.flowStructureService.editExitPositions(
+            e.el.id,
+            type,
+            e.pos[0],
+            e.pos[1]
+          );
+        }
       } else {
         if (type) {
           this.flowStructureService.editPipePositions(

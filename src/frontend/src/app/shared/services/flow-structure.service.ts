@@ -45,8 +45,6 @@ export class FlowStructureService {
     } else {
       receiver[pipeData.name] = this.generateNewNode(pipeData.name);
     }
-
-    // this.structure.next(this.structure.value);
   }
 
   editListenerPositions(
@@ -55,21 +53,6 @@ export class FlowStructureService {
     xPos: number,
     yPos: number
   ): void {
-    // const root = Object.keys(this.structure.value)[0];
-    // const receiver = this.structure.value[root].Adapter[0].Receiver[0];
-
-    // if (receiver[type]) {
-    //   receiver[type].forEach((listener: any) => {
-    //     for (const attr in listener.$) {
-    //       if (listener.$[attr] === listenerId) {
-    //         listener.$.x = xPos;
-    //         listener.$.y = yPos;
-    //       }
-    //     }
-    //   });
-    // }
-
-    console.log(this.structure.value);
     const root = this.structure.value;
     let x: any;
     let y: any;
@@ -86,8 +69,65 @@ export class FlowStructureService {
       }
     });
 
+    this.editPositions(x, y, xPos, yPos);
+  }
+
+  editPipePositions(
+    pipeId: string,
+    type: string,
+    xPos: number,
+    yPos: number
+  ): void {
+    const root = this.structure.value;
+    let x: any;
+    let y: any;
+
+    for (const key in root.pipes) {
+      if (key === pipeId) {
+        root.pipes[key].attributes.forEach((attr: any) => {
+          if (attr.x) {
+            x = attr;
+          } else if (attr.y) {
+            y = attr;
+          }
+        });
+      }
+    }
+
+    this.editPositions(x, y, xPos, yPos);
+  }
+
+  editExitPositions(
+    exitId: string,
+    type: string,
+    xPos: number,
+    yPos: number
+  ): void {
+    const root = this.structure.value;
+    let x: any;
+    let y: any;
+    let pathFound = false;
+
+    root.exits.forEach((exit: any) => {
+      exit.attributes.forEach((attr: any) => {
+        // TODO: (edge case) make sure path exists before x and y;
+        if (attr.path && attr.path === exitId) {
+          pathFound = true;
+        }
+        if (attr.x && pathFound) {
+          x = attr;
+        } else if (attr.y && pathFound) {
+          y = attr;
+        }
+      });
+      pathFound = false;
+    });
+
+    this.editPositions(x, y, xPos, yPos);
+  }
+
+  editPositions(x: any, y: any, xPos: number, yPos: number): void {
     if (x && y) {
-      console.log('xy: ', x, y);
       this.monacoEditorComponent?.applyEdit(
         {
           startLineNumber: x.line,
@@ -100,7 +140,6 @@ export class FlowStructureService {
 
       const diff = String(x.x).length - String(xPos).length;
 
-      console.log('DIFF: ', diff);
       this.monacoEditorComponent?.applyEdit(
         {
           startLineNumber: y.line,
@@ -111,29 +150,6 @@ export class FlowStructureService {
         'y="' + yPos + '"'
       );
     }
-
-    // this.structure.next(this.structure.value);
-  }
-
-  editPipePositions(
-    pipeId: string,
-    type: string,
-    xPos: number,
-    yPos: number
-  ): void {
-    // const root = Object.keys(this.structure.value)[0];
-    // const pipeline = this.structure.value[root].Adapter[0].Pipeline[0];
-    // if (pipeline[type]) {
-    //   pipeline[type].forEach((node: any) => {
-    //     for (const attr in node.$) {
-    //       if (node.$[attr] === pipeId) {
-    //         node.$.x = xPos;
-    //         node.$.y = yPos;
-    //       }
-    //     }
-    //   });
-    // }
-    // this.structure.next(this.structure.value);
   }
 
   generateNewNode(name: string): any {
