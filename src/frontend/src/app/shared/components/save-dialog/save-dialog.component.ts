@@ -10,6 +10,7 @@ import { File } from '../../models/file.model';
 })
 export class SaveDialogComponent {
   item!: File;
+  currentFile!: File | undefined;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
@@ -18,6 +19,7 @@ export class SaveDialogComponent {
 
   onDataAdded(): void {
     this.item = this.ngxSmartModalService.getModalData('saveDialog');
+    this.currentFile = this.codeService.getCurrentFile();
   }
 
   save(): void {
