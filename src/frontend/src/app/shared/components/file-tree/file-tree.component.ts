@@ -137,7 +137,6 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
   }
 
   switchWithoutSavingDecision(item: File): void {
-    console.log(this.settings.switchWithoutSaving);
     switch (+this.settings.switchWithoutSaving) {
       case SwitchWithoutSavingOption.ask:
         this.ngxSmartModalService
