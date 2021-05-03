@@ -10,9 +10,11 @@
   </div>
   <div>
     <p>
-      {{ currentFile?.configuration }}: {{ currentFile?.path }} has unsaved
-      changes. What would you like to do before switching to
-      {{ this.item?.configuration }}: {{ this.item?.path }}?
+      <b>'{{ currentFile?.configuration }}: {{ currentFile?.path }}'</b> has
+      unsaved changes. <br /><br />
+      What would you like to do before switching to<b>
+        '{{ this.item?.configuration }}: {{ this.item?.path }}'</b
+      >?
     </p>
   </div>
   <div class="button-actions">
