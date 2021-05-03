@@ -1,0 +1,23 @@
+<ngx-smart-modal
+  class="saveDialog"
+  customClass="nsm-centered"
+  #saveDialog
+  identifier="saveDialog"
+  (onDataAdded)="onDataAdded()"
+>
+  <div>
+    <h1>Switching files without saving</h1>
+  </div>
+  <div>
+    <p>
+      The current file hasn't been saved yet. What would you like to do with the
+      current file?
+    </p>
+  </div>
+  <div>{{ this.item?.path }}</div>
+  <div class="button-actions">
+    <app-button (click)="save()">Save</app-button>
+    <app-button (click)="discard()">Discard</app-button>
+    <app-button (click)="saveDialog.close()">Cancel</app-button>
+  </div>
+</ngx-smart-modal>
