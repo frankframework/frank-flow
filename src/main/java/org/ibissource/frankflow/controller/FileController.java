@@ -1,41 +1,46 @@
 package org.ibissource.frankflow.controller;
 
 import org.ibissource.frankflow.model.FileModel;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/file")
 public class FileController {
+    private static final String BASEDIR = "C:\\Users\\Sergi\\Documents\\Stage\\projects\\franks\\frank2frank-flow\\src\\main\\configurations\\";
+
     @GetMapping
     public FileModel getFile(@RequestParam(value = "path") String path) {
-        return new FileModel(path);
+        return new FileModel(BASEDIR + path);
     }
 
-    @PostMapping
-    public FileModel createFile(@RequestParam(value = "path") String path, @RequestBody(required = false) String content) {
-        FileModel fileModel = new FileModel(path);
-        fileModel.setContent(content);
-        return fileModel;
-    }
-
-    @PutMapping
-    public FileModel changeFile(@RequestParam(value = "path") String path, @RequestBody(required = false) String content) {
-        FileModel fileModel = new FileModel(path);
-        fileModel.setContent(content);
-        return fileModel;
-    }
-
+//    @PostMapping
+//    public FileModel createFile(@RequestParam(value = "path") String path, @RequestBody(required = false) String content) {
+//        FileModel fileModel = new FileModel(path);
+//        fileModel.setContent(content);
+//        return fileModel;
+//    }
+//
+//    @PutMapping
+//    public FileModel changeFile(@RequestParam(value = "path") String path, @RequestBody(required = false) String content) {
+//        FileModel fileModel = new FileModel(path);
+//        fileModel.setContent(content);
+//        return fileModel;
+//    }
+//
 //    @PutMapping("/file/rename")
 //    public File renameFile(@RequestParam(value = "path") String path, @RequestBody(required = false) String name) {
 //        File file = new File(path);
 //        file.setName(name);
 //        return file;
 //    }
-
-    @DeleteMapping
-    public FileModel deleteFile(@RequestParam(value = "path") String path) {
-        FileModel fileModel = new FileModel(path);
-        fileModel.delete();
-        return fileModel;
-    }
+//
+//    @DeleteMapping
+//    public FileModel deleteFile(@RequestParam(value = "path") String path) {
+//        FileModel fileModel = new FileModel(path);
+//        fileModel.delete();
+//        return fileModel;
+//    }
 }
