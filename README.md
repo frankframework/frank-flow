@@ -16,11 +16,11 @@ The project has been tested in Mozilla Firefox and Google Chrome, other browsers
 
 ### 📁 Explorer
 
-The explorer is presented on the left side of the window. The explorer will help you to browse configurations, add, rename and delete them. The fileModel-tree is a representation of the fileModel system where your configurations are located.
+The explorer is presented on the left side of the window. The explorer will help you to browse configurations, add, rename and delete them. The file-tree is a representation of the file system where your configurations are located.
 
-There are two buttons located above the fileModel-tree. The first one is for adding a new configuration and the second one is to save the current selected configuration.
+There are two buttons located above the file-tree. The first one is for adding a new configuration and the second one is to save the current selected configuration.
 
-You can select a configuration by clicking on it. The flow will be loaded on the white canvas. Two additional options will be provided by right-clicking a fileModel: Rename and delete.
+You can select a configuration by clicking on it. The flow will be loaded on the white canvas. Two additional options will be provided by right-clicking a file: Rename and delete.
 
 ### 🎨 Palette
 
@@ -79,11 +79,11 @@ The easiest way to get started with the Frank!Flow is with help of the [Frank!Ru
 
 ### Frank2Frank!Flow
 
-Create a new frank folder next to the frank-runner folder. Following the name convention this should be called `frank2frank-flow`. This folder will contain three main files and an optional fileModel to restart the runner.
+Create a new frank folder next to the frank-runner folder. Following the name convention this should be called `frank2frank-flow`. This folder will contain three main files and an optional file to restart the runner.
 
 #### POM
 
-The POM will tell the Frank!Runner which extra dependencies you want to download. In this case we want the artifact “frank-flow”. Create a fileModel called `pom.xml` and place the following text in it:
+The POM will tell the Frank!Runner which extra dependencies you want to download. In this case we want the artifact “frank-flow”. Create a file called `pom.xml` and place the following text in it:
 
 ```XML
 <project
@@ -125,18 +125,18 @@ The POM will tell the Frank!Runner which extra dependencies you want to download
 
 #### Frank!Runner properties
 
-To tell the Frank!Runner we want to download extra dependencies with maven, we have to create a new fileModel called `frank-runner.properties` with the content: `maven=true`.
+To tell the Frank!Runner we want to download extra dependencies with maven, we have to create a new file called `frank-runner.properties` with the content: `maven=true`.
 
 #### Build
 
 ##### Testing
 
-The build fileModel is needed to tell the Frank!Runner where our frank is located. Create a fileModel called `build.xml` and paste the following text in it:
+The build file is needed to tell the Frank!Runner where our frank is located. Create a file called `build.xml` and paste the following text in it:
 
 ```XML
 <project default="restart-frank2frank-flow">
 	<target name="restart-frank2frank-flow">
-		<basename property="project.dir" fileModel="${basedir}"/>
+		<basename property="project.dir" file="${basedir}"/>
 		<exec executable="../frank-runner/restart.bat" vmlauncher="false" failonerror="true">
 			<arg value="-Dproject.dir=${project.dir}"/>
 		</exec>
@@ -151,7 +151,7 @@ If you’d like to develop the Frank!Flow it would be handy to store the Frank!F
 ```XML
 <project default="restart-frank2frank-flow">
 	<target name="restart-frank2frank-flow">
-		<basename property="project.dir" fileModel="${basedir}"/>
+		<basename property="project.dir" file="${basedir}"/>
 		<exec executable="../frank-runner/restart.bat" vmlauncher="false" failonerror="true">
 			<arg value="-Dproject.dir=${project.dir}"/>
 			<arg value="-Dfrank-flow.frontend.path=C:\PATH_TO_YOUR_FRANK-FLOW_PROJECT\frank-flow\src\main\resources\frontend"/>
@@ -164,9 +164,9 @@ You should edit `PATH_TO_YOUR_FRANK-FLOW_PROJECT` to the correct location. As yo
 
 #### Restart
 
-The last fileModel is optional, because it is up to you how you restart your Frank!Runner. Some people like to use the build in Task Manager of there IDE, which will have a restart task because of the build.xml.
+The last file is optional, because it is up to you how you restart your Frank!Runner. Some people like to use the build in Task Manager of there IDE, which will have a restart task because of the build.xml.
 
-You could also create an additional `restart.bat` so it can be called via the command line interface (or double click). This fileModel should contain:
+You could also create an additional `restart.bat` so it can be called via the command line interface (or double click). This file should contain:
 
 ```bash
 call ..\frank-runner\ant.bat
