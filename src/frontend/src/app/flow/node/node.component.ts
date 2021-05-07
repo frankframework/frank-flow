@@ -26,35 +26,24 @@ export class NodeComponent implements AfterViewInit {
   private dragOptions = {
     containment: 'canvas',
     stop: (e: any) => {
-      const type = this.node.getType();
-
       if (e.el.classList[0] === 'color--info') {
-        if (type) {
-          this.flowStructureService.editListenerPositions(
-            e.el.id,
-            type,
-            e.pos[0],
-            e.pos[1]
-          );
-        }
+        this.flowStructureService.editListenerPositions(
+          e.el.id,
+          e.pos[0],
+          e.pos[1]
+        );
       } else if (e.el.classList[0] === 'color--danger') {
-        if (type) {
-          this.flowStructureService.editExitPositions(
-            e.el.id,
-            type,
-            e.pos[0],
-            e.pos[1]
-          );
-        }
+        this.flowStructureService.editExitPositions(
+          e.el.id,
+          e.pos[0],
+          e.pos[1]
+        );
       } else {
-        if (type) {
-          this.flowStructureService.editPipePositions(
-            e.el.id,
-            type,
-            e.pos[0],
-            e.pos[1]
-          );
-        }
+        this.flowStructureService.editPipePositions(
+          e.el.id,
+          e.pos[0],
+          e.pos[1]
+        );
       }
     },
   };
@@ -84,6 +73,7 @@ export class NodeComponent implements AfterViewInit {
 
   @Input() node!: Node;
   @Input() jsPlumbInstance!: jsPlumbInstance;
+  @Input() generating!: boolean;
   @HostBinding('class') public cssClass: any;
   @HostBinding('style') public style: any;
 
@@ -114,6 +104,18 @@ export class NodeComponent implements AfterViewInit {
       { anchor: 'Top', uuid: id + '_top', maxConnections: -1 },
       this.topEndpointOptions
     );
+
+    // this.jsPlumbInstance.bind("connection", (info, originalEvent) => {
+    //   // console.log(info.sourceEndpoint.anchor.elementId, info.sourceEndpoint.getElement().classList);
+    //   console.log('connection: ', this.generating)
+    //   if (!this.generating) {
+    //     const sourceName = info.sourceEndpoint.anchor.elementId;
+    //     const targetName = info.targetEndpoint.anchor.elementId
+    //     const sourceClass = info.sourceEndpoint.getElement().classList[0];
+
+    //     this.flowStructureService.addConnection(sourceName, targetName)
+    //   }
+    // });
 
     this.jsPlumbInstance.draggable(id, this.dragOptions);
   }

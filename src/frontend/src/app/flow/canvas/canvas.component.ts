@@ -38,6 +38,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   currentFile!: File;
   flowUpdate = false;
   flowGenerator!: Worker;
+  generating = false;
 
   @HostBinding('tabindex') tabindex = 1;
   @HostListener('keyup', ['$event'])
@@ -104,6 +105,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   generateFlow(data: any): void {
     this.jsPlumbInstance.ready(() => {
+      this.generating = true;
       this.jsPlumbInstance.reset();
       this.viewContainerRef.clear();
 
@@ -155,6 +157,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
           // });
 
           this.generateForwards(forwards);
+          this.generating = false;
         }
       });
     });

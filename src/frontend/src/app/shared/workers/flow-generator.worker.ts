@@ -2,25 +2,18 @@
 
 import * as sax from 'sax';
 import { QualifiedTag, SAXParser } from 'sax';
+import { FlowTree } from '../models/flowTree.model';
+import { FlowTreeNode } from '../models/flowTreeNode.model';
 
 const saxParser = sax.parser(true);
 
 let attributes: any[] = [];
+let closingTag: QualifiedTag | null = null;
+let openPipe: string | null = null;
 
 addEventListener('message', ({ data }) => {
   if (typeof data === 'string') {
-    /* 
-    
-      TODO: 
-      Loop over tags and put each name as a JSON  object.
-      Loop over attributes and put each attribute with line number and column at the right tag in the JSON.
-
-    */
-    const tree: any = {};
-
-    tree.listeners = [];
-    tree.pipes = {};
-    tree.exits = [];
+    const tree: FlowTree = new FlowTree();
 
     setOpenCallback(tree);
     setAttrCallback(tree);
@@ -31,27 +24,14 @@ addEventListener('message', ({ data }) => {
   }
 });
 
-function setOpenCallback(tree: any): void {
-  let closingTag: QualifiedTag | null = null;
-  let openPipe: string | null = null;
-
+function setOpenCallback(tree: FlowTree): void {
   saxParser.onopentag = (node: QualifiedTag) => {
-    const newNode: {
-      line: number;
-      column: number;
-      type: string;
-      name?: string;
-      forwards?: any[];
-      attributes: any[];
-      path?: string;
-    } = {
-      line: saxParser.line + 1,
-      column: saxParser.column + 1,
-      type: node.name,
-      name: String(node.attributes.name),
-      forwards: [],
-      attributes,
-    };
+    const newNode = new FlowTreeNode(
+      saxParser.line + 1,
+      saxParser.column + 1,
+      node.name,
+      attributes
+    );
 
     attributes = [];
 
@@ -59,27 +39,27 @@ function setOpenCallback(tree: any): void {
       closingTag = node;
     }
 
-    if (node.name === 'Forward' && closingTag) {
-      delete newNode.forwards;
-
+    // TODO: refactor the if else statement with strategy pattern.
+    if (newNode.type === 'Forward' && closingTag) {
       tree.pipes[closingTag.attributes.name + ''].forwards.push(newNode);
     } else if (newNode.type.match(/Listener$/g)) {
-      delete newNode.forwards;
-      delete newNode.path;
+      newNode.forwards = [];
+      newNode.name = String(node.attributes.name);
+
       tree.listeners.push(newNode);
     } else if (newNode.type.match(/Pipe$/g)) {
-      delete newNode.path;
+      newNode.forwards = [];
+      newNode.name = String(node.attributes.name);
+
       openPipe = String(node.attributes.name);
       tree.pipes[String(node.attributes.name)] = newNode;
-    } else if (node.name === 'Exit') {
-      delete newNode.forwards;
-      delete newNode.name;
-
+    } else if (newNode.type === 'Exit') {
       newNode.attributes.forEach((attr) => {
         if (attr.path) {
           newNode.path = attr.path;
         }
       });
+
       tree.exits.push(newNode);
     }
   };

@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, of, pipe, Subject } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { MonacoEditorComponent } from 'src/app/editor/monaco-editor/monaco-editor.component';
 import Exit from 'src/app/flow/node/nodes/exit.model';
+import { FlowTree } from '../models/flowTree.model';
 import { CodeService } from './code.service';
 
 @Injectable({
@@ -36,6 +37,48 @@ export class FlowStructureService {
 
   setEditorComponent(monacoEditorComponent: MonacoEditorComponent): void {
     this.monacoEditorComponent = monacoEditorComponent;
+  }
+
+  addConnection(sourceName: string, targetName: string): void {
+    const pipes = this.structure.pipes;
+    const newForward =
+      '\n\t <Forward name="success" path="' + targetName + '" />\n';
+    let lastForward;
+    let currentPipe;
+    for (const key in pipes) {
+      if (key === sourceName) {
+        const forwards = pipes[key].forwards;
+        currentPipe = pipes[key];
+        lastForward = forwards[forwards.length - 1];
+      }
+    }
+
+    if (currentPipe) {
+      if (lastForward) {
+        this.monacoEditorComponent?.applyEdit(
+          {
+            startLineNumber: lastForward.line + 1,
+            startColumn: lastForward.column,
+            endColumn: lastForward.column,
+            endLineNumber: lastForward.line + 1,
+          },
+          newForward,
+          false
+        );
+      } else {
+        this.monacoEditorComponent?.applyEdit(
+          {
+            startLineNumber: currentPipe.line - 1,
+            startColumn: currentPipe.column,
+            endColumn: currentPipe.column,
+            endLineNumber: currentPipe.line - 1,
+          },
+          newForward,
+          false
+        );
+      }
+    }
+    console.log(sourceName, targetName, lastForward);
   }
 
   addPipe(pipeData: any): void {
@@ -134,12 +177,7 @@ export class FlowStructureService {
     );
   }
 
-  editListenerPositions(
-    listenerId: string,
-    type: string,
-    xPos: number,
-    yPos: number
-  ): void {
+  editListenerPositions(listenerId: string, xPos: number, yPos: number): void {
     this.structure.listeners.forEach((listener: any) => {
       if (listener.name === listenerId) {
         this.editAttribute('x', xPos, listener.attributes);
@@ -159,12 +197,7 @@ export class FlowStructureService {
     }, 100);
   }
 
-  editPipePositions(
-    pipeId: string,
-    type: string,
-    xPos: number,
-    yPos: number
-  ): void {
+  editPipePositions(pipeId: string, xPos: number, yPos: number): void {
     for (const key in this.structure.pipes) {
       if (key === pipeId) {
         this.editAttribute('x', xPos, this.structure.pipes[key].attributes);
@@ -184,12 +217,7 @@ export class FlowStructureService {
     }, 100);
   }
 
-  editExitPositions(
-    exitId: string,
-    type: string,
-    xPos: number,
-    yPos: number
-  ): void {
+  editExitPositions(exitId: string, xPos: number, yPos: number): void {
     this.structure.exits.forEach((exit: any) => {
       if (exit.path === exitId) {
         this.editAttribute('x', xPos, exit.attributes);
@@ -223,7 +251,6 @@ export class FlowStructureService {
           newValue,
           true
         );
-        // this.reloadStructure();
       }
     });
   }
