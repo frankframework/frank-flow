@@ -1,8 +1,5 @@
 /// <reference lib="webworker" />
 
-import { Builder, Parser } from 'xml2js';
-import { File } from '../../shared/models/file.model';
-import { FileType } from '../../shared/enums/file-type.enum';
 import * as sax from 'sax';
 import { QualifiedTag, SAXParser } from 'sax';
 
@@ -11,9 +8,7 @@ const saxParser = sax.parser(true);
 let attributes: any[] = [];
 
 addEventListener('message', ({ data }) => {
-  const file = data as File;
-
-  if (file.type === FileType.XML && file.data) {
+  if (typeof data === 'string') {
     /* 
     
       TODO: 
@@ -30,35 +25,17 @@ addEventListener('message', ({ data }) => {
     setOpenCallback(tree);
     setAttrCallback(tree);
 
-    saxParser.write(file.data).close();
+    saxParser.write(data).close();
 
     postMessage(tree);
-
-    // parser.parseString(file.data, (err: any, result: any) => {
-    //   file.type = FileType.JSON;
-    //   file.data = result;
-
-    //   if (err) {
-    //     console.error(err);
-    //   }
-    // });
   }
-  //  else if (file.type === FileType.JSON && file.data) {
-  //   const builder = new Builder();
-  //   const xml = builder.buildObject(file.data);
-
-  //   file.data = xml;
-  //   file.saved = false;
-  //   file.type = FileType.XML;
-  // }
 });
 
 function setOpenCallback(tree: any): void {
   let closingTag: QualifiedTag | null = null;
+  let openPipe: string | null = null;
 
   saxParser.onopentag = (node: QualifiedTag) => {
-    // console.log(node, saxParser.line);
-
     const newNode: {
       line: number;
       column: number;
@@ -66,6 +43,7 @@ function setOpenCallback(tree: any): void {
       name?: string;
       forwards?: any[];
       attributes: any[];
+      path?: string;
     } = {
       line: saxParser.line + 1,
       column: saxParser.column + 1,
@@ -77,7 +55,6 @@ function setOpenCallback(tree: any): void {
 
     attributes = [];
 
-    // console.log(node.attributes.name);
     if (!node.isSelfClosing) {
       closingTag = node;
     }
@@ -85,40 +62,45 @@ function setOpenCallback(tree: any): void {
     if (node.name === 'Forward' && closingTag) {
       delete newNode.forwards;
 
-      // console.log('CLOSING TAG: ', closingTag)
       tree.pipes[closingTag.attributes.name + ''].forwards.push(newNode);
     } else if (newNode.type.match(/Listener$/g)) {
       delete newNode.forwards;
+      delete newNode.path;
       tree.listeners.push(newNode);
     } else if (newNode.type.match(/Pipe$/g)) {
+      delete newNode.path;
+      openPipe = String(node.attributes.name);
       tree.pipes[String(node.attributes.name)] = newNode;
     } else if (node.name === 'Exit') {
       delete newNode.forwards;
       delete newNode.name;
+
+      newNode.attributes.forEach((attr) => {
+        if (attr.path) {
+          newNode.path = attr.path;
+        }
+      });
       tree.exits.push(newNode);
     }
   };
 
   saxParser.onclosetag = (name: string) => {
-    // console.log('CLOSE: ', name);
     closingTag = null;
+    if (openPipe && tree.pipes[openPipe].type === name) {
+      tree.pipes[openPipe].line = saxParser.line + 1;
+      openPipe = null;
+    }
   };
 }
 
 function setAttrCallback(tree: any): void {
-  let curTag = '';
-
   saxParser.onattribute = (attr: sax.QualifiedAttribute) => {
-    // console.log(attr, attrParser.line, attrParser.column);
-
     const name = attr.name;
     const value = attr.value;
 
     const startColumn = saxParser.column - (name + value).length - 2;
 
-    if (name === 'name') {
-      curTag = value;
-    } else if (name === 'firstPipe') {
+    if (name === 'firstPipe') {
       tree.firstPipe = value;
     }
 

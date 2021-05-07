@@ -21,7 +21,6 @@ import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
 import { Forward } from './forward.model';
 import * as dagre from 'dagre';
-import { AttrAst } from '@angular/compiler';
 
 @Component({
   selector: 'app-canvas',
@@ -30,20 +29,17 @@ import { AttrAst } from '@angular/compiler';
 })
 export class CanvasComponent implements AfterViewInit, OnDestroy {
   @Input() nodes = [];
-
   @Input() connections = [];
-
   @ViewChild('canvas', { read: ViewContainerRef })
   viewContainerRef!: ViewContainerRef;
-  jsPlumbInstance!: jsPlumbInstance;
 
+  jsPlumbInstance!: jsPlumbInstance;
   currentFileSubscription!: Subscription;
   currentFile!: File;
-
   flowUpdate = false;
+  flowGenerator!: Worker;
 
   @HostBinding('tabindex') tabindex = 1;
-
   @HostListener('keyup', ['$event'])
   onKeyUp(kbdEvent: KeyboardEvent): void {
     if (kbdEvent.ctrlKey && kbdEvent.key === 'z') {
@@ -65,9 +61,13 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
 
     if (Worker) {
-      const flowGenerator = new Worker('./flow-generator.worker', {
-        type: 'module',
-      });
+      const flowGenerator = new Worker(
+        '../../shared/workers/flow-generator.worker',
+        {
+          type: 'module',
+        }
+      );
+      this.flowGenerator = flowGenerator;
 
       const initialCurrentFile = this.codeService.getCurrentFile();
 
@@ -75,35 +75,18 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         flowGenerator.postMessage(initialCurrentFile);
       }
 
-      this.flowStructureService.structureObservable.subscribe({
-        next: (response) => {
-          if (
-            !this.flowUpdate &&
-            response != null &&
-            Object.keys(response).length !== 0
-          ) {
-            this.currentFile.type = FileType.JSON;
-            this.currentFile.data = response;
-            flowGenerator.postMessage(this.currentFile);
-          }
-        },
-        error: (err) => {
-          console.error('Error: ' + err);
-        },
-      });
-
       this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
         {
           next: (data): void => {
             this.flowUpdate = true;
-            flowGenerator.postMessage(data);
+            flowGenerator.postMessage(data.data);
           },
         }
       );
 
       flowGenerator.onmessage = ({ data }) => {
-        // const file = data as File;
-        // this.currentFile = file;
+        console.log('canvas listener');
+
         if (data) {
           this.flowUpdate = true;
           this.flowStructureService.setStructure(data);
@@ -111,15 +94,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
           this.flowUpdate = false;
           this.generateFlow(data);
         }
-        // else if (
-        //   file.type === FileType.XML &&
-        //   file.data &&
-        //   !this.flowUpdate
-        // ) {
-        //   this.codeService.setCurrentFile(file);
-        // } else {
-        //   this.flowUpdate = false;
-        // }
       };
     }
   }
@@ -134,8 +108,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.jsPlumbInstance.ready(() => {
       this.jsPlumbInstance.reset();
       this.viewContainerRef.clear();
-
-      console.log('tree: ', data);
 
       setTimeout(() => {
         // const root = Object.keys(data)[0];
@@ -266,7 +238,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
       if (nodeInfo.forwards) {
         nodeInfo.forwards.forEach((forward: any) => {
-          console.log('forward: ', forward);
           forward.attributes.forEach((attr: any) => {
             if (attr.path) {
               forwards.push(new Forward(nodeInfo.name, attr.path));
@@ -298,8 +269,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
       });
 
       const exit = new Exit(path, path, nodeInfo.type, y, x);
-
-      console.log(exit, nodeInfo);
 
       this.nodeService.addDynamicNode(exit);
     });

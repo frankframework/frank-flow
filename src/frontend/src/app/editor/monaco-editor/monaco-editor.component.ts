@@ -172,7 +172,7 @@ export class MonacoEditorComponent
     }
   }
 
-  applyEdit(range: monaco.IRange, text: string): void {
+  applyEdit(range: monaco.IRange, text: string, flowUpdate: boolean): void {
     const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
 
     const editOperation: monaco.editor.IIdentifiedSingleEditOperation = {
@@ -180,8 +180,14 @@ export class MonacoEditorComponent
       text,
     };
 
+    console.log(
+      'range: ',
+      this.codeEditorInstance.getModel()?.getValueInRange(range)
+    );
+
     editOperations.push(editOperation);
 
+    this.fileObservableUpdate = flowUpdate;
     this.codeEditorInstance.getModel()?.applyEdits(editOperations);
   }
 
@@ -191,6 +197,7 @@ export class MonacoEditorComponent
     if (model) {
       model.onDidChangeContent(
         this.debounce(() => {
+          console.log('update!');
           if (this.currentFile && !this.fileObservableUpdate) {
             this.fileObservableUpdate = true;
             this.currentFile.data = this.codeEditorInstance.getValue();

@@ -10,7 +10,7 @@
     <app-editor
       [class.useAllSpace]="mode.is(modeType.editorMode)"
       [class.shareSpace]="mode.is(modeType.hybridMode)"
-      *ngIf="mode.is(modeType.editorMode) || mode.is(modeType.hybridMode)"
+      [hidden]="mode.is(modeType.flowMode)"
     ></app-editor>
     <app-flow
       [class.useAllSpace]="mode.is(modeType.flowMode)"
