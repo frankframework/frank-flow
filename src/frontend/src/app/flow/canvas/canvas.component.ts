@@ -85,8 +85,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
       );
 
       flowGenerator.onmessage = ({ data }) => {
-        console.log('canvas listener');
-
         if (data) {
           this.flowUpdate = true;
           this.flowStructureService.setStructure(data);

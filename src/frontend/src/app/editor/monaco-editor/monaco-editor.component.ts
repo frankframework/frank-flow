@@ -180,11 +180,6 @@ export class MonacoEditorComponent
       text,
     };
 
-    console.log(
-      'range: ',
-      this.codeEditorInstance.getModel()?.getValueInRange(range)
-    );
-
     editOperations.push(editOperation);
 
     this.fileObservableUpdate = flowUpdate;
@@ -197,7 +192,6 @@ export class MonacoEditorComponent
     if (model) {
       model.onDidChangeContent(
         this.debounce(() => {
-          console.log('update!');
           if (this.currentFile && !this.fileObservableUpdate) {
             this.fileObservableUpdate = true;
             this.currentFile.data = this.codeEditorInstance.getValue();

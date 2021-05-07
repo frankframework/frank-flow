@@ -31,7 +31,6 @@ export class FlowStructureService {
   }
 
   setStructure(structure: any): void {
-    console.log('new structure');
     this.structure = structure;
   }
 
@@ -94,7 +93,6 @@ export class FlowStructureService {
       '" y="' +
       pipeData.top +
       '" />\n';
-    console.log('add', pipeData, listeners[listeners.length - 1]);
 
     this.monacoEditorComponent?.applyEdit(
       {
@@ -123,7 +121,6 @@ export class FlowStructureService {
       '" y="' +
       exitData.getTop() +
       '" />\n';
-    console.log('add', exitData, exits[exits.length - 1]);
 
     this.monacoEditorComponent?.applyEdit(
       {
@@ -145,7 +142,6 @@ export class FlowStructureService {
   ): void {
     this.structure.listeners.forEach((listener: any) => {
       if (listener.name === listenerId) {
-        console.log('exit: ', listener);
         this.editAttribute('x', xPos, listener.attributes);
       }
     });
@@ -180,7 +176,6 @@ export class FlowStructureService {
     );
 
     setTimeout(() => {
-      console.log('AFTER: ', this.structure);
       for (const key in this.structure.pipes) {
         if (key === pipeId) {
           this.editAttribute('y', yPos, this.structure.pipes[key].attributes);
@@ -197,7 +192,6 @@ export class FlowStructureService {
   ): void {
     this.structure.exits.forEach((exit: any) => {
       if (exit.path === exitId) {
-        console.log('exit: ', exit);
         this.editAttribute('x', xPos, exit.attributes);
       }
     });
@@ -218,7 +212,6 @@ export class FlowStructureService {
   editAttribute(key: string, value: any, attributeList: any[]): void {
     attributeList.forEach((attr: any) => {
       if (attr[key]) {
-        console.log('val is: ', attr);
         const newValue = key + '="' + value + '"';
         this.monacoEditorComponent?.applyEdit(
           {
