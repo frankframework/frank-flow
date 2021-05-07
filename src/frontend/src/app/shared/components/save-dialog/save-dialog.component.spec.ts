@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SaveDialogComponent } from './save-dialog.component';
-import {NgxSmartModalModule} from 'ngx-smart-modal';
-import {ToastrModule} from 'ngx-toastr';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
+import { ToastrModule } from 'ngx-toastr';
 
 describe('SaveDialogComponent', () => {
   let component: SaveDialogComponent;
