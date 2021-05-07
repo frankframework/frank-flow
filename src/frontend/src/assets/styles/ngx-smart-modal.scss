@@ -23,6 +23,12 @@
       h1 {
         word-wrap: anywhere;
       }
+
+      .button-actions {
+        display: flex;
+        justify-content: end;
+        gap: 16px;
+      }
     }
 
     .nsm-dialog-btn-close {

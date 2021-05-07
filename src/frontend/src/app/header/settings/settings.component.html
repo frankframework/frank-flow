@@ -21,6 +21,21 @@
       ></app-toggle>
     </div>
     <div class="input-row">
+      <label for="switch-without-saving-options"
+        >What do you want to do with the current file when switching
+        files?</label
+      >
+      <select
+        id="switch-without-saving-options"
+        [(ngModel)]="settings.switchWithoutSaving"
+        (ngModelChange)="setSettings()"
+      >
+        <option [value]="switchWithoutSavingOptions.ask">Ask me</option>
+        <option [value]="switchWithoutSavingOptions.save">Save</option>
+        <option [value]="switchWithoutSavingOptions.discard">Discard</option>
+      </select>
+    </div>
+    <div class="input-row">
       <label for="edit-mode">Default edit mode</label>
       <select
         id="edit-mode"

@@ -25,9 +25,11 @@ export class FileService {
     await this.getConfigurations().then(async (configurations) => {
       if (configurations) {
         for (const configuration of configurations) {
-          await this.getFilesForConfiguration(configuration).then((files) =>
-            configurationFiles.push({ name: configuration, content: files })
-          );
+          await this.getFilesForConfiguration(configuration).then((files) => {
+            if (!files.error) {
+              configurationFiles.push({ name: configuration, content: files });
+            }
+          });
         }
       }
     });

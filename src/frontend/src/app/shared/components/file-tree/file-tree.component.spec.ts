@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ToastrModule } from 'ngx-toastr';
 
 import { FileTreeComponent } from './file-tree.component';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 describe('FileTreeComponent', () => {
   let component: FileTreeComponent;
@@ -10,7 +11,7 @@ describe('FileTreeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [FileTreeComponent],
-      imports: [ToastrModule.forRoot()],
+      imports: [ToastrModule.forRoot(), NgxSmartModalModule.forChild()],
     }).compileComponents();
   });
 

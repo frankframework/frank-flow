@@ -11,7 +11,8 @@
     "watch": "ng build --configuration=dev --watch",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "prettier": "prettier -w ."
   },
   "private": true,
   "dependencies": {
