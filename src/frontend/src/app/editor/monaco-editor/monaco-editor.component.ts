@@ -18,6 +18,7 @@ import { CodeService } from '../../shared/services/code.service';
 import { FileService } from '../../shared/services/file.service';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -50,8 +51,11 @@ export class MonacoEditorComponent
     private settingsService: SettingsService,
     private codeService: CodeService,
     private fileService: FileService,
-    private toastr: ToastrService
-  ) {}
+    private toastr: ToastrService,
+    private flowStructureService: FlowStructureService
+  ) {
+    this.flowStructureService.setEditorComponent(this);
+  }
 
   ngAfterViewInit(): void {
     this.loadMonaco();
@@ -166,6 +170,20 @@ export class MonacoEditorComponent
       this.currentFile = file;
       this.codeEditorInstance.setValue(file.data);
     }
+  }
+
+  applyEdit(range: monaco.IRange, text: string, flowUpdate: boolean): void {
+    const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
+
+    const editOperation: monaco.editor.IIdentifiedSingleEditOperation = {
+      range,
+      text,
+    };
+
+    editOperations.push(editOperation);
+
+    this.fileObservableUpdate = flowUpdate;
+    this.codeEditorInstance.getModel()?.applyEdits(editOperations);
   }
 
   initializeTwoWayBinding(): void {

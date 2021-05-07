@@ -51,7 +51,8 @@ export class Node {
   generateNode(
     rootViewContainer: ViewContainerRef,
     factoryResolver: ComponentFactoryResolver,
-    jsPlumb: jsPlumbInstance
+    jsPlumb: jsPlumbInstance,
+    generating: boolean
   ): void {
     jsPlumb.ready(() => {
       const factory = factoryResolver.resolveComponentFactory(NodeComponent);
@@ -59,6 +60,7 @@ export class Node {
 
       (component.instance as NodeComponent).node = this;
       (component.instance as NodeComponent).jsPlumbInstance = jsPlumb;
+      (component.instance as NodeComponent).generating = generating;
 
       const style = `left: ${this.getLeft()}px; top: ${this.getTop()}px;`;
       component.instance.cssClass = this.classes;

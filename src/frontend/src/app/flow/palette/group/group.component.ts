@@ -39,7 +39,7 @@ export class GroupComponent implements OnInit {
       this.flowStructureService.addPipe(newPipe);
     } else if (this.type === 'other' && pipe.name === 'PipeLineExit') {
       const exit = new Exit(pipe.name, 'Exit', 'Exit', 100, 100);
-      this.flowStructureService.addPipe(exit);
+      this.flowStructureService.addExit(exit);
     }
   }
 }
