@@ -72,6 +72,17 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         this.flowStructureService.deleteConnection(sourceName, targetName);
       }
     });
+
+    this.jsPlumbInstance.bind('dblclick', (info, originalEvent) => {
+      if (originalEvent) {
+        const sourceName = info.source.firstElementChild?.textContent?.trim();
+        const targetName = info.target.firstElementChild?.textContent?.trim();
+
+        if (sourceName && targetName) {
+          this.flowStructureService.deleteConnection(sourceName, targetName);
+        }
+      }
+    });
   }
 
   ngAfterViewInit(): void {

@@ -89,21 +89,28 @@ export class NodeComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     const id = this.node.getId();
 
-    this.jsPlumbInstance.addEndpoint(
-      id,
-      {
-        anchor: 'Bottom',
-        uuid: id + '_bottom',
-        maxConnections: -1,
-      },
-      this.bottomEndpointOptions
-    );
+    if (this.cssClass === 'shape--oval color--info') {
+      this.bottomEndpointOptions.isSource = false;
+      this.bottomEndpointOptions.connectionsDetachable = false;
+    } else {
+      this.jsPlumbInstance.addEndpoint(
+        id,
+        { anchor: 'Top', uuid: id + '_top', maxConnections: -1 },
+        this.topEndpointOptions
+      );
+    }
 
-    this.jsPlumbInstance.addEndpoint(
-      id,
-      { anchor: 'Top', uuid: id + '_top', maxConnections: -1 },
-      this.topEndpointOptions
-    );
+    if (this.cssClass !== 'shape--round color--danger') {
+      this.jsPlumbInstance.addEndpoint(
+        id,
+        {
+          anchor: 'Bottom',
+          uuid: id + '_bottom',
+          maxConnections: -1,
+        },
+        this.bottomEndpointOptions
+      );
+    }
 
     this.jsPlumbInstance.draggable(id, this.dragOptions);
   }

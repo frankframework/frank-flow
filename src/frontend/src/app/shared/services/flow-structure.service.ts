@@ -89,7 +89,6 @@ export class FlowStructureService {
     for (const key in pipes) {
       if (key === sourceName) {
         const forwards = pipes[key].forwards;
-        console.log('forwards: ', forwards);
         forwards.forEach((element: FlowTreeNode) => {
           if (element.path === targetName) {
             targetForward = element;
@@ -107,7 +106,7 @@ export class FlowStructureService {
           endLineNumber: targetForward.line,
         },
         '',
-        true
+        false
       );
     }
   }
