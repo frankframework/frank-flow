@@ -36,9 +36,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   jsPlumbInstance!: jsPlumbInstance;
   currentFileSubscription!: Subscription;
   currentFile!: File;
-  flowUpdate = false;
   flowGenerator!: Worker;
-  generating = false;
 
   @HostBinding('tabindex') tabindex = 1;
   @HostListener('keyup', ['$event'])
@@ -56,6 +54,24 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     private flowStructureService: FlowStructureService
   ) {
     this.jsPlumbInstance = this.nodeService.getInstance();
+
+    this.jsPlumbInstance.bind('connection', (info, originalEvent) => {
+      if (originalEvent) {
+        const sourceName = info.sourceEndpoint.anchor.elementId;
+        const targetName = info.targetEndpoint.anchor.elementId;
+
+        this.flowStructureService.addConnection(sourceName, targetName);
+      }
+    });
+
+    this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) => {
+      if (originalEvent) {
+        const sourceName = info.sourceEndpoint.anchor.elementId;
+        const targetName = info.targetEndpoint.anchor.elementId;
+
+        this.flowStructureService.deleteConnection(sourceName, targetName);
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -79,7 +95,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
       this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
         {
           next: (data): void => {
-            this.flowUpdate = true;
             flowGenerator.postMessage(data.data);
           },
         }
@@ -87,11 +102,12 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
       flowGenerator.onmessage = ({ data }) => {
         if (data) {
-          this.flowUpdate = true;
-          this.flowStructureService.setStructure(data);
-
-          this.flowUpdate = false;
-          this.generateFlow(data);
+          if (typeof data === 'string') {
+            alert('parser error: ' + data);
+          } else {
+            this.flowStructureService.setStructure(data);
+            this.generateFlow(data);
+          }
         }
       };
     }
@@ -99,14 +115,13 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.currentFileSubscription.unsubscribe();
-    this.jsPlumbInstance.reset();
+    this.jsPlumbInstance.reset(true);
     this.viewContainerRef.clear();
   }
 
   generateFlow(data: any): void {
     this.jsPlumbInstance.ready(() => {
-      this.generating = true;
-      this.jsPlumbInstance.reset();
+      this.jsPlumbInstance.reset(true);
       this.viewContainerRef.clear();
 
       setTimeout(() => {
@@ -157,7 +172,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
           // });
 
           this.generateForwards(forwards);
-          this.generating = false;
         }
       });
     });

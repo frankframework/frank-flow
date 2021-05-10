@@ -4,6 +4,7 @@ import { delay } from 'rxjs/operators';
 import { MonacoEditorComponent } from 'src/app/editor/monaco-editor/monaco-editor.component';
 import Exit from 'src/app/flow/node/nodes/exit.model';
 import { FlowTree } from '../models/flowTree.model';
+import { FlowTreeNode } from '../models/flowTreeNode.model';
 import { CodeService } from './code.service';
 
 @Injectable({
@@ -42,7 +43,7 @@ export class FlowStructureService {
   addConnection(sourceName: string, targetName: string): void {
     const pipes = this.structure.pipes;
     const newForward =
-      '\n\t <Forward name="success" path="' + targetName + '" />\n';
+      '\n\t\t<Forward name="success" path="' + targetName + '" />';
     let lastForward;
     let currentPipe;
     for (const key in pipes) {
@@ -57,10 +58,10 @@ export class FlowStructureService {
       if (lastForward) {
         this.monacoEditorComponent?.applyEdit(
           {
-            startLineNumber: lastForward.line + 1,
+            startLineNumber: lastForward.line,
             startColumn: lastForward.column,
             endColumn: lastForward.column,
-            endLineNumber: lastForward.line + 1,
+            endLineNumber: lastForward.line,
           },
           newForward,
           false
@@ -78,7 +79,37 @@ export class FlowStructureService {
         );
       }
     }
-    console.log(sourceName, targetName, lastForward);
+  }
+
+  deleteConnection(sourceName: string, targetName: string): void {
+    const pipes = this.structure.pipes;
+
+    let targetForward: any;
+
+    for (const key in pipes) {
+      if (key === sourceName) {
+        const forwards = pipes[key].forwards;
+        console.log('forwards: ', forwards);
+        forwards.forEach((element: FlowTreeNode) => {
+          if (element.path === targetName) {
+            targetForward = element;
+          }
+        });
+      }
+    }
+
+    if (targetForward) {
+      this.monacoEditorComponent?.applyEdit(
+        {
+          startLineNumber: targetForward.line,
+          startColumn: 0,
+          endColumn: targetForward.column,
+          endLineNumber: targetForward.line,
+        },
+        '',
+        true
+      );
+    }
   }
 
   addPipe(pipeData: any): void {

@@ -5,7 +5,8 @@ import { QualifiedTag, SAXParser } from 'sax';
 import { FlowTree } from '../models/flowTree.model';
 import { FlowTreeNode } from '../models/flowTreeNode.model';
 
-const saxParser = sax.parser(true);
+let saxParser = sax.parser(true);
+let errorMessage = '';
 
 let attributes: any[] = [];
 let closingTag: QualifiedTag | null = null;
@@ -13,12 +14,21 @@ let openPipe: string | null = null;
 
 addEventListener('message', ({ data }) => {
   if (typeof data === 'string') {
+    saxParser = sax.parser(true);
+    errorMessage = '';
+
     const tree: FlowTree = new FlowTree();
 
     setOpenCallback(tree);
     setAttrCallback(tree);
 
-    saxParser.write(data).close();
+    try {
+      saxParser.write(data).close();
+    } catch (e: any) {
+      postMessage(errorMessage);
+      saxParser.close();
+      return;
+    }
 
     postMessage(tree);
   }
@@ -38,6 +48,11 @@ function setOpenCallback(tree: FlowTree): void {
     if (!node.isSelfClosing) {
       closingTag = node;
     }
+    newNode.attributes.forEach((attr) => {
+      if (attr.path) {
+        newNode.path = attr.path;
+      }
+    });
 
     // TODO: refactor the if else statement with strategy pattern.
     if (newNode.type === 'Forward' && closingTag) {
@@ -54,22 +69,19 @@ function setOpenCallback(tree: FlowTree): void {
       openPipe = String(node.attributes.name);
       tree.pipes[String(node.attributes.name)] = newNode;
     } else if (newNode.type === 'Exit') {
-      newNode.attributes.forEach((attr) => {
-        if (attr.path) {
-          newNode.path = attr.path;
-        }
-      });
-
       tree.exits.push(newNode);
     }
   };
 
   saxParser.onclosetag = (name: string) => {
-    closingTag = null;
     if (openPipe && tree.pipes[openPipe].type === name) {
       tree.pipes[openPipe].line = saxParser.line + 1;
       openPipe = null;
     }
+  };
+
+  saxParser.onerror = (e: Error) => {
+    errorMessage = e.message;
   };
 }
 

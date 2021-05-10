@@ -107,8 +107,8 @@ export class NodeComponent implements AfterViewInit {
 
     // this.jsPlumbInstance.bind("connection", (info, originalEvent) => {
     //   // console.log(info.sourceEndpoint.anchor.elementId, info.sourceEndpoint.getElement().classList);
-    //   console.log('connection: ', this.generating)
-    //   if (!this.generating) {
+    //   console.log('connection: ', this.generating, "event: ", originalEvent);
+    //   if (originalEvent) {
     //     const sourceName = info.sourceEndpoint.anchor.elementId;
     //     const targetName = info.targetEndpoint.anchor.elementId
     //     const sourceClass = info.sourceEndpoint.getElement().classList[0];
