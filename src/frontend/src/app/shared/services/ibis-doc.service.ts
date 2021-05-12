@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -9,7 +8,7 @@ import { Subject } from 'rxjs';
 export class IbisDocService {
   ibisDoc = new Subject<any>();
 
-  constructor(private toastr: ToastrService) {
+  constructor() {
     this.fetchIbisDoc();
   }
 
@@ -23,10 +22,10 @@ export class IbisDocService {
       .then((result) => result.json())
       .then((json) => this.ibisDoc.next(json))
       .catch((error) => {
-        this.toastr.error(
-          'The ibisdoc cant be loaded from the Frank!Runner',
-          'Loading error'
-        );
+        // this.toastr.error(
+        //   'The ibisdoc cant be loaded from the Frank!Runner',
+        //   'Loading error'
+        // );
         console.error(error);
       });
   }
