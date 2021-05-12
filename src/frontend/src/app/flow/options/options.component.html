@@ -12,6 +12,7 @@
     <p>Add a new attribute</p>
     <div class="input-row">
       <select [(ngModel)]="selectedAttribute">
+        <option selected disabled>Choose an attribute</option>
         <option
           *ngFor="let attributeOption of attributeOptions"
           [ngValue]="attributeOption"
@@ -22,26 +23,26 @@
       <input
         id="newAttribute"
         type="text"
-        id="name"
+        [(ngModel)]="newAttributeValue"
         [placeholder]="selectedAttribute?.defaultValue"
       />
     </div>
-    <div class="input-description" for="newAttribute">
-      {{ selectedAttribute?.description }}
+    <div *ngIf="selectedAttribute" class="input-row input-description">
+      <span [innerHTML]="selectedAttribute?.description"></span>
     </div>
-    <app-button>Add {{ selectedAttribute.name }}</app-button>
-    <ng-container *ngFor="let attribute of node?.getAttributes()">
+    <div class="input-row" *ngIf="newAttributeValue">
+      <app-button>Add {{ selectedAttribute?.name }}</app-button>
+    </div>
+    <ng-container *ngFor="let attribute of attributes; index as i">
       <ng-container *ngFor="let item of attribute | keyvalue">
-        <div
-          class="input-row"
-          *ngIf="
-            item.key !== 'line' &&
-            item.key !== 'startColumn' &&
-            item.key !== 'endColumn'
-          "
-        >
+        <div class="input-row" *ngIf="!disabledAttributes.includes(item.key)">
           <label for="name">{{ item.key }}:</label>
-          <input type="text" id="name" [(ngModel)]="item.value" />
+          <input
+            type="text"
+            id="name"
+            [(ngModel)]="attributes[i][item.key]"
+            (ngModelChange)="changeAttribute(item.key, attribute, attributes)"
+          />
         </div>
       </ng-container>
     </ng-container>

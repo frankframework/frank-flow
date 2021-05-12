@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
+import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 import { IbisDocService } from 'src/app/shared/services/ibis-doc.service';
 import { Node } from '../node/nodes/node.model';
 
@@ -9,20 +10,18 @@ import { Node } from '../node/nodes/node.model';
   styleUrls: ['./options.component.scss'],
 })
 export class OptionsComponent {
-  node?: Node;
-  attributeOptions: any[] = [];
   ibisDoc: any;
+  node?: Node;
+  attributes!: { [key: string]: string };
+  attributeOptions: any[] = [];
   selectedAttribute!: any;
-  // toStr = JSON.stringify;
-  // newAttributePlaceholder = '';
-
-  // changeNewAttribute(): void {
-  //   this.newAttributePlaceholder = JSON.parse(this.selectedAttribute).defaultValue;
-  // }
+  newAttributeValue!: string;
+  disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
-    private ibisDocService: IbisDocService
+    private ibisDocService: IbisDocService,
+    private flowStructureService: FlowStructureService
   ) {
     this.getIbisDoc();
   }
@@ -39,14 +38,26 @@ export class OptionsComponent {
   }
 
   getAttributesForNode(): void {
-    const nodeName = this.node?.getName();
-    if (nodeName && this.ibisDoc) {
+    const attributes = this.node?.getAttributes();
+
+    if (attributes) {
+      this.attributes = attributes as { [key: string]: string };
+    }
+
+    const nodeType = this.node?.getType();
+
+    if (nodeType && this.ibisDoc) {
       const pipe = this.ibisDoc[2].classes.filter(
-        (node: any) => node.name === nodeName
+        (node: any) => node.name === nodeType || node.name + 'Pipe' === nodeType
       );
       pipe[0].methods.forEach((method: any) => {
         this.attributeOptions.push(method);
       });
     }
+  }
+
+  changeAttribute(key: string, attribute: any, attributeList: any) {
+    console.log('key: ', key, 'value: ', attribute, 'attr: ', attributeList);
+    this.flowStructureService.editAttribute(key, attribute[key], attributeList);
   }
 }

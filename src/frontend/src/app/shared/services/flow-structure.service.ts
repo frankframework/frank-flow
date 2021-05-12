@@ -283,5 +283,8 @@ export class FlowStructureService {
         );
       }
     });
+    this.flowGenerator?.postMessage(
+      this.monacoEditorComponent?.codeEditorInstance.getValue()
+    );
   }
 }

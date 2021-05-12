@@ -8,7 +8,7 @@ export class Node {
   private type?: string | undefined;
   private top?: number | undefined;
   private left?: number | undefined;
-  private attributes?: any[] | undefined;
+  private attributes?: { [key: string]: string } | undefined;
   protected classes = '';
 
   constructor(
@@ -17,7 +17,7 @@ export class Node {
     type?: string,
     top?: number,
     left?: number,
-    attributes?: any[]
+    attributes?: { [key: string]: string }
   ) {
     this.id = id;
     this.name = name;
@@ -42,7 +42,7 @@ export class Node {
   getLeft(): number | undefined {
     return this.left;
   }
-  getAttributes(): any[] | undefined {
+  getAttributes(): { [key: string]: string } | undefined {
     return this.attributes;
   }
 
