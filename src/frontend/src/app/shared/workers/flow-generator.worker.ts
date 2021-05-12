@@ -89,8 +89,9 @@ function setAttrCallback(tree: any): void {
   saxParser.onattribute = (attr: sax.QualifiedAttribute) => {
     const name = attr.name;
     const value = attr.value;
+    const QUOTES = 2;
 
-    const startColumn = saxParser.column - (name + value).length - 2;
+    const startColumn = saxParser.column - (name + value).length - QUOTES;
 
     if (name === 'firstPipe') {
       tree.firstPipe = value;

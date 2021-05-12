@@ -116,19 +116,9 @@ export class FlowStructureService {
     const pipes = root.pipes;
     let lastPipe;
 
-    const newPipe =
-      '\n\t  <' +
-      pipeData.type +
-      ' name="' +
-      pipeData.name +
-      '" x="' +
-      pipeData.left +
-      '" y="' +
-      pipeData.top +
-      '">' +
-      '\n\n\t  </' +
-      pipeData.type +
-      '> \n';
+    const newPipe = `\n\t
+    <${pipeData.type}  name="${pipeData.name}" x="${pipeData.left}'" y="${pipeData.top}">
+    \n\n\t</${pipeData.type}>\n`;
 
     const line = 0;
     for (const key in pipes) {
@@ -156,16 +146,7 @@ export class FlowStructureService {
     const listeners = root.listeners;
     const lastListener = listeners[listeners.length - 1];
 
-    const newListener =
-      '\t  <' +
-      pipeData.type +
-      ' name="' +
-      pipeData.name +
-      '" x="' +
-      pipeData.left +
-      '" y="' +
-      pipeData.top +
-      '" />\n';
+    const newListener = `\t  <${pipeData.type} name="${pipeData.name}" x="${pipeData.left}" y="${pipeData.top}" />\n`;
 
     this.monacoEditorComponent?.applyEdit(
       {
@@ -184,16 +165,7 @@ export class FlowStructureService {
     const exits = root.exits;
     const lastListener = exits[exits.length - 1];
 
-    const newExit =
-      '\t  <' +
-      exitData.getType() +
-      ' path="' +
-      exitData.getName() +
-      '" x="' +
-      exitData.getLeft() +
-      '" y="' +
-      exitData.getTop() +
-      '" />\n';
+    const newExit = `\t  <${exitData.getType()} name="${exitData.getName()}" x="${exitData.getLeft()}" y="${exitData.getTop()}" />\n`;
 
     this.monacoEditorComponent?.applyEdit(
       {
