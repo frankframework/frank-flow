@@ -6,19 +6,44 @@
   (onDataAdded)="onDataAdded()"
 >
   <div>
-    <h1>
-      {{ node?.name }}
-    </h1>
+    <h1>{{ node?.getName() }}</h1>
+    <!-- Misschien de naam en type hier doen omdat die voor alle pipes hetzelfde zijn? Ook worden ze niet echt als dezelfde soort "extra" attributen beschouwd. -->
+    <h2>Attributes</h2>
+    <p>Add a new attribute</p>
     <div class="input-row">
-      <label for="name">Name:</label>
-      <input type="text" id="name" [(ngModel)]="node.name" />
+      <select [(ngModel)]="selectedAttribute">
+        <option
+          *ngFor="let attributeOption of attributeOptions"
+          [ngValue]="attributeOption"
+        >
+          {{ attributeOption?.name }}
+        </option>
+      </select>
+      <input
+        id="newAttribute"
+        type="text"
+        id="name"
+        [placeholder]="selectedAttribute?.defaultValue"
+      />
     </div>
-    <div class="input-row">
-      <label for="toggle">Test toggle = {{ toggle }}:</label>
-      <app-toggle id="toggle" [(state)]="toggle"></app-toggle>
+    <div class="input-description" for="newAttribute">
+      {{ selectedAttribute?.description }}
     </div>
-  </div>
-  <div>
-    <app-button (click)="optionsModal.close()">Close</app-button>
+    <app-button>Add {{ selectedAttribute.name }}</app-button>
+    <ng-container *ngFor="let attribute of node?.getAttributes()">
+      <ng-container *ngFor="let item of attribute | keyvalue">
+        <div
+          class="input-row"
+          *ngIf="
+            item.key !== 'line' &&
+            item.key !== 'startColumn' &&
+            item.key !== 'endColumn'
+          "
+        >
+          <label for="name">{{ item.key }}:</label>
+          <input type="text" id="name" [(ngModel)]="item.value" />
+        </div>
+      </ng-container>
+    </ng-container>
   </div>
 </ngx-smart-modal>

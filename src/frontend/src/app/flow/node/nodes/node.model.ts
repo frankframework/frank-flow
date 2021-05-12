@@ -8,6 +8,7 @@ export class Node {
   private type?: string | undefined;
   private top?: number | undefined;
   private left?: number | undefined;
+  private attributes?: any[] | undefined;
   protected classes = '';
 
   constructor(
@@ -15,13 +16,15 @@ export class Node {
     name?: string,
     type?: string,
     top?: number,
-    left?: number
+    left?: number,
+    attributes?: any[]
   ) {
     this.id = id;
     this.name = name;
     this.type = type;
     this.top = top;
     this.left = left;
+    this.attributes = attributes;
   }
 
   getId(): string {
@@ -38,6 +41,9 @@ export class Node {
   }
   getLeft(): number | undefined {
     return this.left;
+  }
+  getAttributes(): any[] | undefined {
+    return this.attributes;
   }
 
   setTop(top: number): void {

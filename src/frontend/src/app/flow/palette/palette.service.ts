@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
-import { ToastrService } from 'ngx-toastr';
+import { IbisDocService } from 'src/app/shared/services/ibis-doc.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,29 +7,17 @@ import { ToastrService } from 'ngx-toastr';
 export class PaletteService {
   data: Map<string, any[]> = new Map<string, any[]>();
 
-  constructor(private toastr: ToastrService) {
-    this.getData();
+  constructor(private ibisDocService: IbisDocService) {
+    this.getIbisDoc();
   }
 
-  getData(): void {
-    fetch(environment.runnerUri + environment.ibisdocJsonPath, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-    })
-      .then((result) => result.json())
-      .then((data) => {
-        data.forEach((group: any) => {
+  getIbisDoc(): void {
+    this.ibisDocService.getIbisDoc().subscribe({
+      next: (ibisDoc: any) => {
+        ibisDoc.forEach((group: any) => {
           this.data.set(group.name, group.classes);
         });
-      })
-      .catch((error) => {
-        this.toastr.error(
-          'The ibisdoc cant be loaded from the Frank!Runner',
-          'Loading error'
-        );
-        console.error(error);
-      });
+      },
+    });
   }
 }

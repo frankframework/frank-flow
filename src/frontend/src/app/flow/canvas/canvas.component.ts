@@ -196,8 +196,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     nodeMap: Map<string, Node>
   ): void {
     listeners.forEach((listenerInfo) => {
-      // const listenerInfo = this.getNodeInfo(element.$);
-
       let x = 0;
       let y = 0;
 
@@ -214,7 +212,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         listenerInfo.name,
         listenerInfo.type,
         y,
-        x
+        x,
+        listenerInfo.attributes
       );
 
       graph.setNode(listenerInfo.name, {
@@ -253,7 +252,14 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         }
       });
 
-      node = new Pipe(nodeInfo.name, nodeInfo.name, nodeInfo.type, y, x);
+      node = new Pipe(
+        nodeInfo.name,
+        nodeInfo.name,
+        nodeInfo.type,
+        y,
+        x,
+        nodeInfo.attributes
+      );
 
       graph.setNode(nodeInfo.name, {
         label: nodeInfo.name,
@@ -294,19 +300,17 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         }
       });
 
-      const exit = new Exit(path, path, nodeInfo.type, y, x);
+      const exit = new Exit(
+        path,
+        path,
+        nodeInfo.type,
+        y,
+        x,
+        nodeInfo.attributes
+      );
 
       this.nodeService.addDynamicNode(exit);
     });
-  }
-
-  getNodeInfo(element: any): any {
-    const id = element.name ?? element.path;
-    const name = element.name ?? element.path;
-    const top = element.y;
-    const left = element.x;
-
-    return { id, name, top, left };
   }
 
   connectAllNodes(forwards: Forward[], graph: dagre.graphlib.Graph): void {
