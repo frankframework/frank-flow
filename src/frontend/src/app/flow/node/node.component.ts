@@ -10,6 +10,7 @@ import { Node } from './nodes/node.model';
 import { EndpointOptions, jsPlumbInstance } from 'jsplumb';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
+import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-node',
@@ -17,6 +18,8 @@ import { FlowStructureService } from 'src/app/shared/services/flow-structure.ser
   styleUrls: ['./node.component.scss'],
 })
 export class NodeComponent implements AfterViewInit {
+  cloud = faCloudDownloadAlt;
+
   private dropOptions = {
     tolerance: 'touch',
     hoverClass: 'dropHover',
@@ -54,7 +57,7 @@ export class NodeComponent implements AfterViewInit {
     isSource: true,
     scope: 'jsPlumb_DefaultScope',
     connectorStyle: { stroke: '#99cb3a', strokeWidth: 3 },
-    connector: ['Bezier', { curviness: 63 }],
+    connector: ['Flowchart', { alwaysRespectStubs: true, cornerRadius: 10 }],
     maxConnections: 30,
     isTarget: false,
     connectorOverlays: [['Arrow', { location: 1 }]],
