@@ -34,7 +34,9 @@
       <app-button>Add {{ selectedAttribute?.name }}</app-button>
     </div>
     <ng-container *ngFor="let attribute of attributes; index as i">
-      <ng-container *ngFor="let item of attribute | keyvalue">
+      <ng-container
+        *ngFor="let item of attribute | keyvalue; trackBy: customTrackBy"
+      >
         <div class="input-row" *ngIf="!disabledAttributes.includes(item.key)">
           <label for="name">{{ item.key }}:</label>
           <input

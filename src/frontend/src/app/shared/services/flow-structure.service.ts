@@ -36,6 +36,10 @@ export class FlowStructureService {
     this.structure = structure;
   }
 
+  getStructure(): any {
+    return this.structure;
+  }
+
   setEditorComponent(monacoEditorComponent: MonacoEditorComponent): void {
     this.monacoEditorComponent = monacoEditorComponent;
   }
@@ -255,8 +259,5 @@ export class FlowStructureService {
         );
       }
     });
-    this.flowGenerator?.postMessage(
-      this.monacoEditorComponent?.codeEditorInstance.getValue()
-    );
   }
 }

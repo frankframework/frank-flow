@@ -12,7 +12,7 @@ import { Node } from '../node/nodes/node.model';
 export class OptionsComponent {
   ibisDoc: any;
   node?: Node;
-  attributes!: { [key: string]: string };
+  attributes!: [{ [key: string]: string }];
   attributeOptions: any[] = [];
   selectedAttribute!: any;
   newAttributeValue!: string;
@@ -41,7 +41,7 @@ export class OptionsComponent {
     const attributes = this.node?.getAttributes();
 
     if (attributes) {
-      this.attributes = attributes as { [key: string]: string };
+      this.attributes = attributes as [{ [key: string]: string }];
     }
 
     const nodeType = this.node?.getType();
@@ -56,7 +56,21 @@ export class OptionsComponent {
     }
   }
 
+  refreshAttributes(): void {
+    const nodeType = this.node?.getType();
+    const nodeName = this.node?.getName();
+    const structure = this.flowStructureService.getStructure();
+
+    console.log(structure);
+  }
+
   changeAttribute(key: string, attribute: any, attributeList: any): void {
+    // console.log('edit: ', attribute, attributeList);
+    this.refreshAttributes();
     this.flowStructureService.editAttribute(key, attribute[key], attributeList);
+  }
+
+  customTrackBy(index: number, obj: any): any {
+    return index;
   }
 }
