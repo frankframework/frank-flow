@@ -21,13 +21,7 @@ export class IbisDocService {
     })
       .then((result) => result.json())
       .then((json) => this.ibisDoc.next(json))
-      .catch((error) => {
-        // this.toastr.error(
-        //   'The ibisdoc cant be loaded from the Frank!Runner',
-        //   'Loading error'
-        // );
-        console.error(error);
-      });
+      .catch((error) => console.error(error));
   }
 
   getIbisDoc(): any {
