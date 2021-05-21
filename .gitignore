@@ -1,6 +1,7 @@
 # IDE
 .settings
 .idea/
+*.iml
 
 # Maven build
 /target
