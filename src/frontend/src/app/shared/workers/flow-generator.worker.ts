@@ -81,6 +81,7 @@ function setOpenCallback(tree: FlowTree): void {
   };
 
   saxParser.onerror = (e: Error) => {
+    console.log('error: ', e);
     errorMessage = e.message;
   };
 }

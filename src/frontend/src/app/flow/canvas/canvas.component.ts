@@ -331,6 +331,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
           ],
         });
       });
-    });
+    }, 500);
   }
 }

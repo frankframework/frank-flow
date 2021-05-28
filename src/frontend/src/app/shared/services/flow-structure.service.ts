@@ -169,7 +169,7 @@ export class FlowStructureService {
     const exits = root.exits;
     const lastListener = exits[exits.length - 1];
 
-    const newExit = `\t  <${exitData.getType()} name="${exitData.getName()}" x="${exitData.getLeft()}" y="${exitData.getTop()}" />\n`;
+    const newExit = `\t  <${exitData.getType()} name="${exitData.getName()}" path="${exitData.getName()}" x="${exitData.getLeft()}" y="${exitData.getTop()}" />\n`;
 
     this.monacoEditorComponent?.applyEdit(
       {

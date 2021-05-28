@@ -65,7 +65,7 @@ export class OptionsComponent {
   }
 
   changeAttribute(key: string, attribute: any, attributeList: any): void {
-    // console.log('edit: ', attribute, attributeList);
+    // console.log('edit: ', attribute, attributeLi2st);
     this.refreshAttributes();
     this.flowStructureService.editAttribute(key, attribute[key], attributeList);
   }
