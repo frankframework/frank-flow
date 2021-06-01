@@ -40,11 +40,18 @@ export class FlowStructureService {
     return this.structure;
   }
 
+  refreshStructure(): void {
+    this.flowGenerator?.postMessage(
+      this.monacoEditorComponent?.codeEditorInstance.getValue()
+    );
+  }
+
   setEditorComponent(monacoEditorComponent: MonacoEditorComponent): void {
     this.monacoEditorComponent = monacoEditorComponent;
   }
 
   addConnection(sourceName: string, targetName: string): void {
+    this.positionsUpdate = true;
     const pipes = this.structure.pipes;
     const newForward =
       '\n\t\t<Forward name="success" path="' + targetName + '" />';
@@ -169,7 +176,7 @@ export class FlowStructureService {
     const exits = root.exits;
     const lastListener = exits[exits.length - 1];
 
-    const newExit = `\t  <${exitData.getType()} name="${exitData.getName()}" x="${exitData.getLeft()}" y="${exitData.getTop()}" />\n`;
+    const newExit = `\t  <${exitData.getType()} name="${exitData.getName()}" path="${exitData.getName()}" x="${exitData.getLeft()}" y="${exitData.getTop()}" />\n`;
 
     this.monacoEditorComponent?.applyEdit(
       {
@@ -184,15 +191,14 @@ export class FlowStructureService {
   }
 
   editListenerPositions(listenerId: string, xPos: number, yPos: number): void {
+    this.positionsUpdate = true;
     this.structure.listeners.forEach((listener: any) => {
       if (listener.name === listenerId) {
         this.editAttribute('x', xPos, listener.attributes);
       }
     });
 
-    this.flowGenerator?.postMessage(
-      this.monacoEditorComponent?.codeEditorInstance.getValue()
-    );
+    this.refreshStructure();
 
     setTimeout(() => {
       this.structure.listeners.forEach((listener: any) => {
@@ -204,15 +210,14 @@ export class FlowStructureService {
   }
 
   editPipePositions(pipeId: string, xPos: number, yPos: number): void {
+    this.positionsUpdate = true;
     for (const key in this.structure.pipes) {
       if (key === pipeId) {
         this.editAttribute('x', xPos, this.structure.pipes[key].attributes);
       }
     }
 
-    this.flowGenerator?.postMessage(
-      this.monacoEditorComponent?.codeEditorInstance.getValue()
-    );
+    this.refreshStructure();
 
     setTimeout(() => {
       for (const key in this.structure.pipes) {
@@ -224,15 +229,14 @@ export class FlowStructureService {
   }
 
   editExitPositions(exitId: string, xPos: number, yPos: number): void {
+    this.positionsUpdate = true;
     this.structure.exits.forEach((exit: any) => {
       if (exit.path === exitId) {
         this.editAttribute('x', xPos, exit.attributes);
       }
     });
 
-    this.flowGenerator?.postMessage(
-      this.monacoEditorComponent?.codeEditorInstance.getValue()
-    );
+    this.refreshStructure();
 
     setTimeout(() => {
       this.structure.exits.forEach((exit: any) => {
@@ -255,7 +259,7 @@ export class FlowStructureService {
             endLineNumber: attr.line,
           },
           newValue,
-          true
+          false
         );
       }
     });
