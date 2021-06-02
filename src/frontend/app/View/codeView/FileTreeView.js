@@ -85,7 +85,7 @@ export default class FileTreeView {
 
               if(file.match(/.xsd$/g)) {
                 //make method async
-                const cleanDirectoryName = this.replaceEncodings(directoryName);
+                const cleanDirectoryName = cur.replaceEncodings(directoryName);
                 let fileData = cur.fileService.getFile(cleanDirectoryName, file);
                 fileData.then(fileData => {
                   cur.xsdModel.addXsd(file, fileData);
