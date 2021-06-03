@@ -24,8 +24,7 @@ export class HeaderComponent implements OnInit {
     private library: FaIconLibrary,
     private toastr: ToastrService,
     private ngxSmartModalService: NgxSmartModalService,
-    private codeService: CodeService,
-    private fileService: FileService
+    private codeService: CodeService
   ) {
     library.addIcons(faFile, faFolder, faSave, faCog);
   }
@@ -36,7 +35,7 @@ export class HeaderComponent implements OnInit {
 
   getCurrentFile(): void {
     this.codeService.curFileObservable.subscribe(
-      (currentFile) => (this.currentFile = currentFile)
+      (currentFile: File) => (this.currentFile = currentFile)
     );
   }
 
