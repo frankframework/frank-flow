@@ -4,3 +4,9 @@
 
 # Maven build
 /target
+
+# Cypress output
+/src/frontend/cypress/videos/
+
+# Test frank config
+/src/frontend/cypress/Frank/target
