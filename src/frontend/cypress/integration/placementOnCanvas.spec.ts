@@ -7,18 +7,26 @@ describe('Placement on canvas', function() {
 
     it('Each config element is canvas element', function() {
         cy.visit('');
-        let expectedElements = this.expectedElements as ExpectedCanvasElement[];
-        cy.get('.canvas > app-node').should('have.length', expectedElements.length);
+        let expectedElements = this.expectedElements as Map<string, ExpectedCanvasElement>;
+        cy.get('.canvas > app-node').should('have.length', expectedElements.size);
         expectedElements.forEach(element => {
             requestCanvasElementDomObject(element.id).should('exist');
         });
-        checkAndGetCanvasElements(expectedElements);
+        let actualElements = checkAndGetCanvasElements([...expectedElements.values()]);
+        actualElements.then(actualElements => actualElements.forEach(actaulElement => {
+            let expectedElement = expectedElements.get(actaulElement.getId());
+            assert(actaulElement.getLeft() === expectedElement?.x, `x-coordinate match for ${expectedElement?.id}`);
+            assert(actaulElement.getTop() === expectedElement?.y, `y-coordinate match for ${expectedElement?.id}`);
+        }));
     })
 })
 
-function createExpectedCanvasElements(data: string): Array<ExpectedCanvasElement> {
-    let result: Array<ExpectedCanvasElement> = new Array<ExpectedCanvasElement>();
-    data.split('\n').forEach(s => result.push(new ExpectedCanvasElement(s)));
+function createExpectedCanvasElements(data: string): Map<string, ExpectedCanvasElement> {
+    let result = new Map<string, ExpectedCanvasElement>();
+    data.split('\n').forEach(s => {
+        let newExpectedCanvasElement = new ExpectedCanvasElement(s);
+        result.set(newExpectedCanvasElement.id, newExpectedCanvasElement);
+    });
     return result;
 }
 
@@ -61,10 +69,23 @@ function checkAndGetCanvasElements(expected: Array<ExpectedCanvasElement>): Prom
 
 class CanvasElement {
     constructor(
+        private id: string,
         private left: number,
         private top: number,
         private width: number,
         private height: number) {}
+
+    getId(): string {
+        return this.id;
+    }
+
+    getLeft(): number {
+        return this.left;
+    }
+
+    getTop(): number {
+        return this.top;
+    }
 
     toString() {
         return `CanvasElement(${this.left}, ${this.top}, ${this.width}, ${this.height})`;
@@ -77,7 +98,7 @@ function elementToCanvasElement(inputElementName: string): Promise<CanvasElement
             requestCanvasElementDomObject(inputElementName).invoke('css', 'top').then(top => {
                 requestCanvasElementDomObject(inputElementName).invoke('css', 'min-width').then(width => {
                     requestCanvasElementDomObject(inputElementName).invoke('css', 'min-height').then(height => {
-                        let result = createCanvasElement(left as unknown as string, top as unknown as string, width as unknown as string, height as unknown as string);
+                        let result = createCanvasElement(inputElementName, left as unknown as string, top as unknown as string, width as unknown as string, height as unknown as string);
                         if(result.error) {
                             reject(result.error);
                         } else {
@@ -94,7 +115,7 @@ function requestCanvasElementDomObject(name: string): Cypress.Chainable<JQuery<H
     return cy.get(`.canvas > app-node#${name}`);
 }
 
-function createCanvasElement(left:string, top: string, width: string, height: string)
+function createCanvasElement(id:string, left:string, top: string, width: string, height: string)
 :{result ?: CanvasElement, error?: string} {
     let theLeft = checkNumPixelsAndGetAsNumber(left, 'left');
     if(theLeft.error) {
@@ -113,7 +134,7 @@ function createCanvasElement(left:string, top: string, width: string, height: st
         return {error: theHeight.error};
     }
     return {result: new CanvasElement(
-        theLeft.result as number, theTop.result as number, theWidth.result as number, theHeight.result as number)};
+        id, theLeft.result as number, theTop.result as number, theWidth.result as number, theHeight.result as number)};
 }
 
 function checkNumPixelsAndGetAsNumber(s: string, tag: string)
