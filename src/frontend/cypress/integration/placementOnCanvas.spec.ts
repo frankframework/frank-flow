@@ -1,25 +1,70 @@
-import * as cypress from "cypress";
-import { reject } from "cypress/types/bluebird";
-
 describe('Placement on canvas', function() {
+    before(function() {
+        cy.fixture('expectedElements.csv')
+        .then(data => createExpectedCanvasElements(data))
+        .as('expectedElements');
+    });
+
     it('Each config element is canvas element', function() {
         cy.visit('');
-        elementToCanvasElement('FirstPipe').then(c => cy.log(c.toString()));
+        let expectedElements = this.expectedElements as ExpectedCanvasElement[];
+        cy.get('.canvas > app-node').should('have.length', expectedElements.length);
+        expectedElements.forEach(element => {
+            requestCanvasElementDomObject(element.id).should('exist');
+        });
+        checkAndGetCanvasElements(expectedElements);
     })
 })
 
-class CanvasElement {
-    left: number;
-    top: number;
-    width: number;
-    height: number;
+function createExpectedCanvasElements(data: string): Array<ExpectedCanvasElement> {
+    let result: Array<ExpectedCanvasElement> = new Array<ExpectedCanvasElement>();
+    data.split('\n').forEach(s => result.push(new ExpectedCanvasElement(s)));
+    return result;
+}
 
-    constructor(left: number, top: number, width: number, height: number) {
-        this.left = left;
-        this.top = top;
-        this.width = width;
-        this.height = height;
+class ExpectedCanvasElement {
+    id: string;
+    x: number;
+    y: number;
+
+    constructor(csvLine: string) {
+        let fields: Array<string> = csvLine.split(',');
+        if(fields.length < 3) {
+            throw new Error(`Cannot create ExpectedCanvasElement because line has less than three fields: ${csvLine}`);
+        }
+        this.id = fields[0];
+        this.x = +fields[1];
+        this.y = +fields[2];
+        if(! Number.isInteger(this.x)) {
+            throw new Error(`ExpectedCanvasElement ${this.id} has invalid x-coordinate ${fields[1]}`);
+        }
+        if(! Number.isInteger(this.y)) {
+            throw new Error(`ExpectedCanvasElement ${this.id} has invalid y-coordinate ${fields[2]}`);
+        }
     }
+
+    public toString(): string {
+        return `ExpectedCanvasElement ${this.id} at (${this.x}, ${this.y})`;
+    }
+}
+
+function checkAndGetCanvasElements(expected: Array<ExpectedCanvasElement>): Promise<Array<CanvasElement>> {
+    let promises: Array<Promise<CanvasElement>> = new Array<Promise<CanvasElement>>();
+    expected.forEach(item => promises.push(elementToCanvasElement(item.id)));
+    let result = Promise.all(promises);
+    result.then(items => {
+        cy.log('Have the actual canvas elements in CanvasElement objects:');
+        items.forEach(item => cy.log(item.toString()))
+    });
+    return result;
+}
+
+class CanvasElement {
+    constructor(
+        private left: number,
+        private top: number,
+        private width: number,
+        private height: number) {}
 
     toString() {
         return `CanvasElement(${this.left}, ${this.top}, ${this.width}, ${this.height})`;
@@ -46,7 +91,7 @@ function elementToCanvasElement(inputElementName: string): Promise<CanvasElement
 }
 
 function requestCanvasElementDomObject(name: string): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.get('.canvas > app-node#FirstPipe')
+    return cy.get(`.canvas > app-node#${name}`);
 }
 
 function createCanvasElement(left:string, top: string, width: string, height: string)
@@ -67,7 +112,8 @@ function createCanvasElement(left:string, top: string, width: string, height: st
     if(theHeight.error) {
         return {error: theHeight.error};
     }
-    return {result: new CanvasElement(theLeft.result as number, theTop.result, theWidth.result, theHeight.result)};
+    return {result: new CanvasElement(
+        theLeft.result as number, theTop.result as number, theWidth.result as number, theHeight.result as number)};
 }
 
 function checkNumPixelsAndGetAsNumber(s: string, tag: string)
