@@ -22,14 +22,14 @@ describe('Placement on canvas', () => {
       ...expectedElements.values(),
     ]);
     actualElements.then((actualElementsValue) =>
-      actualElementsValue.forEach((actaulElement) => {
-        const expectedElement = expectedElements.get(actaulElement.getId());
+      actualElementsValue.forEach((actualElement) => {
+        const expectedElement = expectedElements.get(actualElement.getId());
         assert(
-          actaulElement.getLeft() === expectedElement?.x,
+          actualElement.getLeft() === expectedElement?.x,
           `x-coordinate match for ${expectedElement?.id}`
         );
         assert(
-          actaulElement.getTop() === expectedElement?.y,
+          actualElement.getTop() === expectedElement?.y,
           `y-coordinate match for ${expectedElement?.id}`
         );
       })
