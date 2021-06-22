@@ -319,13 +319,13 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  connectAllNodes(forwards: Forward[], graph: dagre.graphlib.Graph): void {
-    setTimeout(() => {
-      forwards.forEach((forward) => {
-        graph.setEdge(forward.getSource(), forward.getDestination());
-      });
-    });
-  }
+  // connectAllNodes(forwards: Forward[], graph: dagre.graphlib.Graph): void {
+  //   setTimeout(() => {
+  //     forwards.forEach((forward) => {
+  //       graph.setEdge(forward.getSource(), forward.getDestination());
+  //     });
+  //   });
+  // }
 
   generateForwards(forwards: Forward[]): void {
     setTimeout(() => {
