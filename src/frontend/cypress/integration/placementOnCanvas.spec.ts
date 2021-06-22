@@ -1,5 +1,6 @@
 import { ExpectedCanvasElement } from '../support/expected-canvas-element';
 import { CanvasElement } from '../support/canvas-element';
+import { ParsedNumPixels } from '../support/parsed-num-pixels';
 
 describe('Placement on canvas', () => {
   before(() => {
@@ -111,47 +112,29 @@ function createCanvasElement(
   width: string,
   height: string
 ): { result?: CanvasElement; error?: string } {
-  const theLeft = checkNumPixelsAndGetAsNumber(left, 'left');
-  if (theLeft.error) {
+  const theLeft = new ParsedNumPixels(left, 'left');
+  if (!theLeft.hasNumber) {
     return { error: theLeft.error };
   }
-  const theTop = checkNumPixelsAndGetAsNumber(top, 'top');
-  if (theTop.error) {
+  const theTop = new ParsedNumPixels(top, 'top');
+  if (!theTop.hasNumber) {
     return { error: theTop.error };
   }
-  const theWidth = checkNumPixelsAndGetAsNumber(width, 'width');
-  if (theWidth.error) {
+  const theWidth = new ParsedNumPixels(width, 'width');
+  if (!theWidth.hasNumber) {
     return { error: theWidth.error };
   }
-  const theHeight = checkNumPixelsAndGetAsNumber(height, 'height');
-  if (theHeight.error) {
+  const theHeight = new ParsedNumPixels(height, 'height');
+  if (!theHeight.hasNumber) {
     return { error: theHeight.error };
   }
   return {
     result: new CanvasElement(
       id,
-      theLeft.result as number,
-      theTop.result as number,
-      theWidth.result as number,
-      theHeight.result as number
+      theLeft.theNumber,
+      theTop.theNumber,
+      theWidth.theNumber,
+      theHeight.theNumber
     ),
   };
-}
-
-function checkNumPixelsAndGetAsNumber(
-  s: string,
-  tag: string
-): { result?: number; error?: string } {
-  if (!s.endsWith('px')) {
-    return { error: `${tag} does not end with "px"` };
-  }
-  const idx = s.indexOf('px');
-  const numberString = s.substr(0, idx);
-  let v = 0;
-  try {
-    v = parseInt(numberString, 10);
-  } catch (e) {
-    return { error: `${tag} does not have a number before "px"` };
-  }
-  return { result: v };
 }
