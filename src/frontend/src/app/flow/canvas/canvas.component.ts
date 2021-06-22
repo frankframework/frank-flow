@@ -20,7 +20,7 @@ import { FileType } from '../../shared/enums/file-type.enum';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
 import { Forward } from './forward.model';
-import * as dagre from 'dagre';
+import * as cytoscape from 'cytoscape';
 
 @Component({
   selector: 'app-canvas',
@@ -136,51 +136,61 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
       this.viewContainerRef.clear();
 
       setTimeout(() => {
-        // const root = Object.keys(data)[0];
+        const root = Object.keys(data)[0];
         if (data && data.listeners && data.pipes) {
           const pipeline = data.pipes;
           const firstPipe = data.firstPipe;
           const listeners = data.listeners;
           const nodeMap = new Map<string, Node>();
 
-          const graph = new dagre.graphlib.Graph({ directed: true });
-
-          // graph.setGraph({rankdir: "TB", ranker: "network-simplex", align: "UL" });
-          // graph.setDefaultEdgeLabel(function () { return {}; });
-
-          // graph.graph().rankdir = 'TB';
-          // graph.graph().ranksep = 50;
-          // graph.graph().nodesep = 50;
-          // graph.graph().ranker = 'tight-tree';
-
           const forwards: Forward[] = [];
+
+          const graph = cytoscape({
+            layout: {
+              name: 'grid',
+              rows: 3,
+            },
+          });
 
           this.generateReceiver(listeners, firstPipe, forwards, graph, nodeMap);
           this.generatePipeline(pipeline, forwards, graph, nodeMap);
           this.generateExits(data.exits);
 
           // this.connectAllNodes(forwards, graph);
-          // dagre.layout(graph);
 
-          // console.log(graph);
+          console.log('GRAPH: ', graph);
           // console.log(nodeMap);
           // console.log(forwards);
 
-          // graph.nodes().forEach((v: any) => {
-          //   console.log('v: ', v);
-          //   const node = nodeMap.get(v);
-          //   const virtualNode = graph.node(v);
+          nodeMap.forEach((node, key) => {
+            let x = 0;
+            let y = 0;
 
-          //   if (node) {
+            if (node.getLeft() && node.getTop()) {
+              x = node.getLeft()!;
+              y = node.getTop()!;
 
-          //     node.setLeft(virtualNode.x);
-          //     node.setTop(virtualNode.y);
+              graph.add({
+                group: 'nodes',
+                data: { weight: 75 },
+                position: { x, y },
+              });
+            }
+          });
 
-          //     this.nodeService.addDynamicNode(node);
-          //     console.log("Node " + v + ": " + JSON.stringify(graph.node(v)));
+          graph.nodes().forEach((v: any) => {
+            console.log('v: ', v);
+            const node = nodeMap.get(v);
+            const virtualNode = graph.node(v);
 
-          //   }
-          // });
+            if (node) {
+              node.setLeft(virtualNode.x);
+              node.setTop(virtualNode.y);
+
+              this.nodeService.addDynamicNode(node);
+              console.log('Node ' + v + ': ' + JSON.stringify(graph.node(v)));
+            }
+          });
 
           this.generateForwards(forwards);
         }
@@ -192,7 +202,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     listeners: any[],
     firstPipe: string,
     forwards: Forward[],
-    graph: dagre.graphlib.Graph,
+    graph: cytoscape.Core,
     nodeMap: Map<string, Node>
   ): void {
     listeners.forEach((listenerInfo) => {
@@ -216,25 +226,18 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         listenerInfo.attributes
       );
 
-      graph.setNode(listenerInfo.name, {
-        label: listenerInfo.name,
-        shape: 'ellipse',
-        width: 200,
-        height: 100,
-      });
-
       forwards.push(new Forward(listenerInfo.name, firstPipe));
 
       nodeMap.set(listenerInfo.name, listenerNode);
 
-      this.nodeService.addDynamicNode(listenerNode);
+      // this.nodeService.addDynamicNode(listenerNode);
     });
   }
 
   generatePipeline(
     pipeline: any,
     forwards: Forward[],
-    graph: dagre.graphlib.Graph,
+    graph: cytoscape.Core,
     nodeMap: Map<string, Node>
   ): void {
     for (const key of Object.keys(pipeline)) {
@@ -261,11 +264,10 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         nodeInfo.attributes
       );
 
-      graph.setNode(nodeInfo.name, {
-        label: nodeInfo.name,
-        shape: 'rect',
-        width: 200,
-        height: 100,
+      graph.add({
+        group: nodeInfo.name,
+        data: { weight: 75 },
+        position: { x: x, y: y },
       });
 
       if (nodeInfo.forwards) {
@@ -280,7 +282,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
       nodeMap.set(nodeInfo.name, node);
 
-      this.nodeService.addDynamicNode(node);
+      //this.nodeService.addDynamicNode(node);
     }
   }
 
