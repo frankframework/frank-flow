@@ -182,19 +182,19 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
             }
           });
 
-          graph.nodes().forEach((v: any) => {
-            console.log('v: ', v);
-            const node = nodeMap.get(v);
-            const virtualNode = graph.node(v);
+          // graph.nodes().forEach((v: any) => {
+          //   console.log('v: ', v);
+          //   const node = nodeMap.get(v);
+          //   const virtualNode = graph.node(v);
 
-            if (node) {
-              node.setLeft(virtualNode.x);
-              node.setTop(virtualNode.y);
+          //   if (node) {
+          //     node.setLeft(virtualNode.x);
+          //     node.setTop(virtualNode.y);
 
-              this.nodeService.addDynamicNode(node);
-              console.log('Node ' + v + ': ' + JSON.stringify(graph.node(v)));
-            }
-          });
+          //     this.nodeService.addDynamicNode(node);
+          //     console.log('Node ' + v + ': ' + JSON.stringify(graph.node(v)));
+          //   }
+          // });
 
           this.generateForwards(forwards);
         }
