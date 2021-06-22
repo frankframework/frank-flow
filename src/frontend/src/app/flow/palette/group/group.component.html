@@ -5,7 +5,7 @@
   </div>
   <div class="group__list" [hidden]="foldGroup">
     <ng-container
-      *ngIf="items != undefined && items.length > 0; else emptyGroup"
+      *ngIf="items !== undefined && items.length > 0; else emptyGroup"
     >
       <app-item
         [color]="color"

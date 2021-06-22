@@ -22,7 +22,6 @@ export class FlowStructureService {
         type: 'module',
       });
       this.flowGenerator = flowGenerator;
-
       this.flowGenerator.onmessage = ({ data }) => {
         if (data) {
           this.structure = data;

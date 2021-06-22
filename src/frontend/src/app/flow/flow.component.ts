@@ -6,11 +6,9 @@ import { NodeService } from './node/node.service';
   templateUrl: './flow.component.html',
   styleUrls: ['./flow.component.scss'],
 })
-export class FlowComponent implements OnInit {
+export class FlowComponent {
   nodes = [];
   connections = [];
 
   constructor(private nodeService: NodeService) {}
-
-  ngOnInit(): void {}
 }
