@@ -17,6 +17,7 @@ export class OptionsComponent {
   selectedAttribute!: any;
   newAttributeValue!: string;
   disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
+  nodeName!: string | undefined;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
@@ -40,6 +41,7 @@ export class OptionsComponent {
   getAttributesForNode(): void {
     const attributes = this.node?.getAttributes();
 
+    this.nodeName = this.node?.getName();
     if (attributes) {
       this.attributes = attributes as [{ [key: string]: string }];
     }
@@ -56,18 +58,46 @@ export class OptionsComponent {
     }
   }
 
-  refreshAttributes(): void {
+  getUpdatedAttributes(): any {
     const nodeType = this.node?.getType();
-    const nodeName = this.node?.getName();
+    const nodeName = this.nodeName;
+
     const structure = this.flowStructureService.getStructure();
 
-    console.log(structure);
+    if (nodeType?.match(/Pipe/) && nodeName) {
+      console.log(structure.pipes, nodeName);
+      return structure.pipes[nodeName].attributes;
+    } else {
+      return null;
+    }
   }
 
-  changeAttribute(key: string, attribute: any, attributeList: any): void {
-    // console.log('edit: ', attribute, attributeLi2st);
-    this.refreshAttributes();
-    this.flowStructureService.editAttribute(key, attribute[key], attributeList);
+  changeAttribute(key: string, attribute: any): void {
+    // console.log('edit: ', attribute, attributeList);
+    this.flowStructureService.refreshStructure();
+    setTimeout(() => {
+      const attributeList = this.getUpdatedAttributes();
+      if (attributeList) {
+        if (key === 'name') {
+          this.nodeName = attribute[key];
+        }
+        this.flowStructureService.editAttribute(
+          key,
+          attribute[key],
+          attributeList
+        );
+      }
+    }, 500);
+  }
+
+  debounce(func: any, wait: number): any {
+    let timeout: ReturnType<typeof setTimeout> | null;
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+      timeout = setTimeout(() => func.apply(this, arguments), wait);
+    };
   }
 
   customTrackBy(index: number, obj: any): any {

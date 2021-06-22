@@ -117,7 +117,11 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
             alert('parser error: ' + data);
           } else {
             this.flowStructureService.setStructure(data);
-            this.generateFlow(data);
+            if (this.flowStructureService.positionsUpdate) {
+              this.flowStructureService.positionsUpdate = false;
+            } else {
+              this.generateFlow(data);
+            }
           }
         }
       };
