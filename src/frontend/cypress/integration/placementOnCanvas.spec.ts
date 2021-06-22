@@ -1,30 +1,30 @@
-describe('Placement on canvas', function() {
-    before(function() {
+describe('Placement on canvas', () => {
+    before(() => {
         cy.fixture('expectedElements.csv')
         .then(data => createExpectedCanvasElements(data))
         .as('expectedElements');
     });
 
-    it('Each config element is canvas element', function() {
+    it('Each config element is canvas element', function(): void {
         cy.visit('');
-        let expectedElements = this.expectedElements as Map<string, ExpectedCanvasElement>;
+        const expectedElements = this.expectedElements as Map<string, ExpectedCanvasElement>;
         cy.get('.canvas > app-node').should('have.length', expectedElements.size);
         expectedElements.forEach(element => {
             requestCanvasElementDomObject(element.id).should('exist');
         });
-        let actualElements = checkAndGetCanvasElements([...expectedElements.values()]);
-        actualElements.then(actualElements => actualElements.forEach(actaulElement => {
-            let expectedElement = expectedElements.get(actaulElement.getId());
+        const actualElements = checkAndGetCanvasElements([...expectedElements.values()]);
+        actualElements.then(actualElementsValue => actualElementsValue.forEach(actaulElement => {
+            const expectedElement = expectedElements.get(actaulElement.getId());
             assert(actaulElement.getLeft() === expectedElement?.x, `x-coordinate match for ${expectedElement?.id}`);
             assert(actaulElement.getTop() === expectedElement?.y, `y-coordinate match for ${expectedElement?.id}`);
         }));
-    })
-})
+    });
+});
 
 function createExpectedCanvasElements(data: string): Map<string, ExpectedCanvasElement> {
-    let result = new Map<string, ExpectedCanvasElement>();
+    const result = new Map<string, ExpectedCanvasElement>();
     data.split('\n').forEach(s => {
-        let newExpectedCanvasElement = new ExpectedCanvasElement(s);
+        const newExpectedCanvasElement = new ExpectedCanvasElement(s);
         result.set(newExpectedCanvasElement.id, newExpectedCanvasElement);
     });
     return result;
@@ -36,17 +36,17 @@ class ExpectedCanvasElement {
     y: number;
 
     constructor(csvLine: string) {
-        let fields: Array<string> = csvLine.split(',');
-        if(fields.length < 3) {
+        const fields: Array<string> = csvLine.split(',');
+        if (fields.length < 3) {
             throw new Error(`Cannot create ExpectedCanvasElement because line has less than three fields: ${csvLine}`);
         }
         this.id = fields[0];
         this.x = +fields[1];
         this.y = +fields[2];
-        if(! Number.isInteger(this.x)) {
+        if (! Number.isInteger(this.x)) {
             throw new Error(`ExpectedCanvasElement ${this.id} has invalid x-coordinate ${fields[1]}`);
         }
-        if(! Number.isInteger(this.y)) {
+        if (! Number.isInteger(this.y)) {
             throw new Error(`ExpectedCanvasElement ${this.id} has invalid y-coordinate ${fields[2]}`);
         }
     }
@@ -57,12 +57,12 @@ class ExpectedCanvasElement {
 }
 
 function checkAndGetCanvasElements(expected: Array<ExpectedCanvasElement>): Promise<Array<CanvasElement>> {
-    let promises: Array<Promise<CanvasElement>> = new Array<Promise<CanvasElement>>();
+    const promises: Array<Promise<CanvasElement>> = new Array<Promise<CanvasElement>>();
     expected.forEach(item => promises.push(elementToCanvasElement(item.id)));
-    let result = Promise.all(promises);
+    const result = Promise.all(promises);
     result.then(items => {
         cy.log('Have the actual canvas elements in CanvasElement objects:');
-        items.forEach(item => cy.log(item.toString()))
+        items.forEach(item => cy.log(item.toString()));
     });
     return result;
 }
@@ -87,7 +87,7 @@ class CanvasElement {
         return this.top;
     }
 
-    toString() {
+    toString(): string {
         return `CanvasElement(${this.left}, ${this.top}, ${this.width}, ${this.height})`;
     }
 }
@@ -98,8 +98,13 @@ function elementToCanvasElement(inputElementName: string): Promise<CanvasElement
             requestCanvasElementDomObject(inputElementName).invoke('css', 'top').then(top => {
                 requestCanvasElementDomObject(inputElementName).invoke('css', 'min-width').then(width => {
                     requestCanvasElementDomObject(inputElementName).invoke('css', 'min-height').then(height => {
-                        let result = createCanvasElement(inputElementName, left as unknown as string, top as unknown as string, width as unknown as string, height as unknown as string);
-                        if(result.error) {
+                        const result = createCanvasElement(
+                            inputElementName,
+                            left as unknown as string,
+                            top as unknown as string,
+                            width as unknown as string,
+                            height as unknown as string);
+                        if (result.error) {
                             reject(result.error);
                         } else {
                             resolve(result.result as CanvasElement);
@@ -115,22 +120,22 @@ function requestCanvasElementDomObject(name: string): Cypress.Chainable<JQuery<H
     return cy.get(`.canvas > app-node#${name}`);
 }
 
-function createCanvasElement(id:string, left:string, top: string, width: string, height: string)
-:{result ?: CanvasElement, error?: string} {
-    let theLeft = checkNumPixelsAndGetAsNumber(left, 'left');
-    if(theLeft.error) {
+function createCanvasElement(id: string, left: string, top: string, width: string, height: string)
+: {result ?: CanvasElement, error?: string} {
+    const theLeft = checkNumPixelsAndGetAsNumber(left, 'left');
+    if (theLeft.error) {
         return {error: theLeft.error};
     }
-    let theTop = checkNumPixelsAndGetAsNumber(top, 'top');
-    if(theTop.error) {
+    const theTop = checkNumPixelsAndGetAsNumber(top, 'top');
+    if (theTop.error) {
         return {error: theTop.error};
     }
-    let theWidth = checkNumPixelsAndGetAsNumber(width, 'width');
-    if(theWidth.error) {
+    const theWidth = checkNumPixelsAndGetAsNumber(width, 'width');
+    if (theWidth.error) {
         return {error: theWidth.error};
     }
-    let theHeight = checkNumPixelsAndGetAsNumber(height, 'height');
-    if(theHeight.error) {
+    const theHeight = checkNumPixelsAndGetAsNumber(height, 'height');
+    if (theHeight.error) {
         return {error: theHeight.error};
     }
     return {result: new CanvasElement(
@@ -139,15 +144,15 @@ function createCanvasElement(id:string, left:string, top: string, width: string,
 
 function checkNumPixelsAndGetAsNumber(s: string, tag: string)
 : {result ?: number, error ?: string} {
-    if(! s.endsWith('px')) {
+    if (! s.endsWith('px')) {
         return {error: `${tag} does not end with "px"`};
     }
-    let idx = s.indexOf('px');
-    let numberString = s.substr(0, idx);
+    const idx = s.indexOf('px');
+    const numberString = s.substr(0, idx);
     let v = 0;
     try {
-        v = parseInt(numberString);
-    } catch(e) {
+        v = parseInt(numberString, 10);
+    } catch (e) {
         return {error: `${tag} does not have a number before "px"`};
     }
     return {result: v};
