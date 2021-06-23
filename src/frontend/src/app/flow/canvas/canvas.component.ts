@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
 import { Forward } from './forward.model';
 import * as cytoscape from 'cytoscape';
+import { templateJitUrl } from '@angular/compiler';
 
 @Component({
   selector: 'app-canvas',
@@ -152,15 +153,22 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
           const graph = cytoscape({
             layout: {
               name: 'grid',
-              rows: 3,
+              rows: 10,
             },
+            style: [
+              {
+                selector: 'node',
+                style: {
+                  width: '200px',
+                  label: 'Node',
+                },
+              },
+            ],
           });
 
           this.generateReceiver(listeners, firstPipe, forwards, graph, nodeMap);
           this.generatePipeline(pipeline, forwards, graph, nodeMap);
-          this.generateExits(data.exits);
-
-          // this.connectAllNodes(forwards, graph);
+          this.generateExits(data.exits, nodeMap);
 
           console.log('GRAPH: ', graph);
           // console.log(nodeMap);
@@ -171,16 +179,53 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
             let y = 0;
 
             if (node.getLeft() && node.getTop()) {
-              x = node.getLeft()!;
-              y = node.getTop()!;
+              x = node.getLeft() as number;
+              y = node.getTop() as number;
 
               graph.add({
                 group: 'nodes',
-                data: { weight: 75 },
+                data: { id: node.getName(), weight: 75 },
                 position: { x, y },
+                style: {
+                  height: 200,
+                  width: 200,
+                },
               });
             }
           });
+
+          this.connectAllNodes(forwards, graph);
+
+          graph
+            .layout({
+              name: 'grid',
+              // directed: true,
+              // circle: false,
+              fit: true,
+              avoidOverlap: true,
+              rows: 4,
+              spacingFactor: 5,
+            })
+            .run();
+
+          const graphNodes = graph.nodes().jsons();
+
+          graphNodes.forEach((graphNode, index) => {
+            const objectNode = graphNode as any;
+            const node = nodeMap.get(objectNode.data.id);
+
+            const xMultiplyer = 20;
+            const yMultiplyer = 10;
+
+            node?.setLeft(Math.abs(objectNode.position.x) * xMultiplyer);
+            node?.setTop(Math.abs(objectNode.position.y) * yMultiplyer);
+          });
+
+          nodeMap.forEach((node, index) => {
+            this.nodeService.addDynamicNode(node);
+          });
+
+          console.log('nodes: ', graph.nodes().jsons());
 
           // graph.nodes().forEach((v: any) => {
           //   console.log('v: ', v);
@@ -268,12 +313,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         nodeInfo.attributes
       );
 
-      graph.add({
-        group: nodeInfo.name,
-        data: { weight: 75 },
-        position: { x: x, y: y },
-      });
-
       if (nodeInfo.forwards) {
         nodeInfo.forwards.forEach((forward: any) => {
           forward.attributes.forEach((attr: any) => {
@@ -286,11 +325,11 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
       nodeMap.set(nodeInfo.name, node);
 
-      //this.nodeService.addDynamicNode(node);
+      // this.nodeService.addDynamicNode(node);
     }
   }
 
-  generateExits(exits: any[]): void {
+  generateExits(exits: any[], nodeMap: Map<string, Node>): void {
     exits.forEach((nodeInfo) => {
       let x = 0;
       let y = 0;
@@ -315,17 +354,22 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         nodeInfo.attributes
       );
 
-      this.nodeService.addDynamicNode(exit);
+      nodeMap.set(path, exit);
     });
   }
 
-  // connectAllNodes(forwards: Forward[], graph: dagre.graphlib.Graph): void {
-  //   setTimeout(() => {
-  //     forwards.forEach((forward) => {
-  //       graph.setEdge(forward.getSource(), forward.getDestination());
-  //     });
-  //   });
-  // }
+  connectAllNodes(forwards: Forward[], graph: cytoscape.Core): void {
+    forwards.forEach((forward, index) => {
+      graph.add({
+        group: 'edges',
+        data: {
+          id: '' + index,
+          source: forward.getSource(),
+          target: forward.getDestination(),
+        },
+      });
+    });
+  }
 
   generateForwards(forwards: Forward[]): void {
     setTimeout(() => {
