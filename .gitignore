@@ -1,6 +1,9 @@
 # IDE
 .settings
 .idea/
+frank-flow.iml
 
 # Maven build
 /target
+.mvn
+dependency-reduced-pom.xml

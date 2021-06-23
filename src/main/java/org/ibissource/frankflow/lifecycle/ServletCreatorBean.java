@@ -26,30 +26,31 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.web.context.ServletContextAware;
 
 public class ServletCreatorBean implements ServletContextAware {
-	private Logger log = LogManager.getLogger(this);
-	private Class<? extends Servlet> servletClass;
-	private String urlPattern;
-	private Map<String, String> parameters;
+    private final Logger log = LogManager.getLogger(this);
+    private final Class<? extends Servlet> servletClass;
+    private final String urlPattern;
+    private final Map<String, String> parameters;
 
-	public ServletCreatorBean(String urlPattern, Class<? extends Servlet> servletClass) {
-		this(urlPattern, servletClass, null);
-	}
+    public ServletCreatorBean(String urlPattern, Class<? extends Servlet> servletClass) {
+        this(urlPattern, servletClass, null);
+    }
 
-	public ServletCreatorBean(String urlPattern, Class<? extends Servlet> servletClass, Map<String, String> parameters) {
-		this.urlPattern = urlPattern;
-		this.servletClass = servletClass;
-		this.parameters = parameters;
-	}
+    public ServletCreatorBean(String urlPattern, Class<? extends Servlet> servletClass, Map<String, String> parameters) {
+        this.urlPattern = urlPattern;
+        this.servletClass = servletClass;
+        this.parameters = parameters;
+    }
 
-	@Override
-	public void setServletContext(ServletContext servletContext) {
-		log.info("creating servlet endpoint ["+urlPattern+"] for servlet ["+servletClass.getSimpleName()+"]");
+    @Override
+    public void setServletContext(ServletContext servletContext) {
+        log.info("creating servlet endpoint [" + urlPattern + "] for servlet [" + servletClass.getSimpleName() + "]");
 
-		ServletRegistration.Dynamic serv = servletContext.addServlet(servletClass.getSimpleName(), servletClass);
-		if(parameters != null && parameters.size() > 0) {
-			if(log.isDebugEnabled()) log.debug("setting init parameters ["+parameters+"] for servlet ["+servletClass.getSimpleName()+"]");
-			serv.setInitParameters(parameters);
-		}
-		serv.addMapping(urlPattern);
-	}
+        ServletRegistration.Dynamic dynamicServlet = servletContext.addServlet(servletClass.getSimpleName(), servletClass);
+        if (parameters != null && parameters.size() > 0) {
+            if (log.isDebugEnabled())
+                log.debug("setting init parameters [" + parameters + "] for servlet [" + servletClass.getSimpleName() + "]");
+            dynamicServlet.setInitParameters(parameters);
+        }
+        dynamicServlet.addMapping(urlPattern);
+    }
 }
