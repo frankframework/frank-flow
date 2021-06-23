@@ -71,6 +71,11 @@ $themes: (
       --#{$name}-lighter: #{lighten($color, 20%)};
       --#{$name}-whiten: #{lighten($color, 50%)};
       --#{$name}-shadow: #{transparentize($color, 0.5)};
+
+      // define 10 lighter shades
+      @for $i from 1 through 20 {
+        --#{$name}-lighter-#{$i * 5}: #{lighten($color, $i * 5%)};
+      }
     }
 
     // define a css variable for each theme color

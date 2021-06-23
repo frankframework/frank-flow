@@ -1,3 +1,12 @@
-<div>
-  {{ node.getName() }}
+<div class="node">
+  <div class="node__icon">
+    <fa-icon [icon]="cloud"></fa-icon>
+  </div>
+  <div class="node__type" [title]="node.getType()">
+    {{ node.getType() }}
+  </div>
+  <div class="node__name" [title]="node.getName()">
+    {{ node.getName() }}
+  </div>
+  <div class="node__badges"></div>
 </div>
