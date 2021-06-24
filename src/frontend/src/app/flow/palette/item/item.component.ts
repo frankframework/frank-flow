@@ -6,13 +6,11 @@ import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.scss'],
 })
-export class ItemComponent implements OnInit {
+export class ItemComponent {
   cloud = faCloudDownloadAlt;
 
   @Input() color!: string;
   @Input() name!: string;
 
   constructor() {}
-
-  ngOnInit(): void {}
 }

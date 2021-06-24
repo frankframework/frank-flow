@@ -11,7 +11,7 @@ import Exit from '../../node/nodes/exit.model';
   templateUrl: './group.component.html',
   styleUrls: ['./group.component.scss'],
 })
-export class GroupComponent implements OnInit {
+export class GroupComponent {
   @Input() foldGroup = false;
   @Input() color = 'primary';
   @Input() type = 'default';
@@ -23,8 +23,6 @@ export class GroupComponent implements OnInit {
   ) {}
 
   foldArrow = () => (this.foldGroup ? faChevronDown : faChevronUp);
-
-  ngOnInit(): void {}
 
   toggleFold(): void {
     this.foldGroup = !this.foldGroup;
