@@ -182,7 +182,6 @@ export class FlowStructureService {
     positionType: string,
     position: number
   ): void {
-    console.log(structureNodes);
     const node = structureNodes.find(
       (structureNode: any) =>
         structureNode.name === nodeId || structureNode.path === nodeId
