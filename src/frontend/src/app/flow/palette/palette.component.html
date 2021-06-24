@@ -7,15 +7,36 @@
 <app-group
   color="accent"
   type="Pipes"
+  [foldGroup]="false"
   [items]="paletteService.data?.get('Pipes') | filter: search"
 ></app-group>
-<app-group
-  color="success"
-  type="Senders"
-  [items]="paletteService.data?.get('Senders') | filter: search"
-></app-group>
+<!--<app-group-->
+<!--  color="success"-->
+<!--  type="Senders"-->
+<!--  [items]="paletteService.data?.get('Senders') | filter: search"-->
+<!--&gt;</app-group>-->
+<!--<app-group-->
+<!--  color="primary"-->
+<!--  type="Validators"-->
+<!--  [items]="paletteService.data?.get('Validators') | filter: search"-->
+<!--&gt;</app-group>-->
+<!--<app-group-->
+<!--  color="success"-->
+<!--  type="TransactionalStorages"-->
+<!--  [items]="paletteService.data?.get('TransactionalStorages') | filter: search"-->
+<!--&gt;</app-group>-->
+<!--<app-group-->
+<!--  color="warning"-->
+<!--  type="ErrorMessageFormatters"-->
+<!--  [items]="paletteService.data?.get('ErrorMessageFormatters') | filter: search"-->
+<!--&gt;</app-group>-->
+<!--<app-group-->
+<!--  color="success"-->
+<!--  type="Batch"-->
+<!--  [items]="paletteService.data?.get('Batch') | filter: search"-->
+<!--&gt;</app-group>-->
 <app-group
   color="danger"
-  type="other"
+  type="Other"
   [items]="paletteService.data?.get('Other') | filter: search"
 ></app-group>

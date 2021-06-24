@@ -12,7 +12,7 @@ import Exit from '../../node/nodes/exit.model';
   styleUrls: ['./group.component.scss'],
 })
 export class GroupComponent implements OnInit {
-  @Input() foldGroup = false;
+  @Input() foldGroup = true;
   @Input() color = 'primary';
   @Input() type = 'default';
   @Input() items!: any[] | undefined;
@@ -37,7 +37,7 @@ export class GroupComponent implements OnInit {
     } else if (this.type === 'Pipes') {
       const newPipe = new Pipe(pipe.name, pipe.name, pipe.name, 100, 100);
       this.flowStructureService.addPipe(newPipe);
-    } else if (this.type === 'other' && pipe.name === 'PipeLineExit') {
+    } else if (this.type === 'Other' && pipe.name === 'PipeLineExit') {
       const exit = new Exit(pipe.name, 'Exit', 'Exit', 100, 100);
       this.flowStructureService.addExit(exit);
     }

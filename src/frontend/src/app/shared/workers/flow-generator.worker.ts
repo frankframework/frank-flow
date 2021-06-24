@@ -41,7 +41,10 @@ function setOpenCallback(tree: FlowTree): void {
 
     // TODO: refactor the if else statement with strategy pattern.
     if (newNode.type === 'Forward' && closingTag) {
-      tree.pipes[closingTag.attributes.name + ''].forwards.push(newNode);
+      const forwardPipe = tree.pipes.find(
+        (pipe: FlowTreeNode) => pipe.name === closingTag?.attributes.name + ''
+      );
+      forwardPipe?.forwards?.push(newNode);
     } else if (newNode.type.match(/Listener$/g)) {
       newNode.forwards = [];
       newNode.name = String(node.attributes.name);
@@ -52,7 +55,7 @@ function setOpenCallback(tree: FlowTree): void {
       newNode.name = String(node.attributes.name);
 
       openPipe = String(node.attributes.name);
-      tree.pipes[String(node.attributes.name)] = newNode;
+      tree.pipes.push(newNode);
     } else if (newNode.type === 'Exit') {
       newNode.attributes.forEach((attr) => {
         if (attr.path) {
@@ -66,8 +69,11 @@ function setOpenCallback(tree: FlowTree): void {
 
   saxParser.onclosetag = (name: string) => {
     closingTag = null;
-    if (openPipe && tree.pipes[openPipe].type === name) {
-      tree.pipes[openPipe].line = saxParser.line + 1;
+    const unclosedPipe = tree.pipes.find(
+      (pipe: FlowTreeNode) => pipe.name === openPipe
+    );
+    if (openPipe && unclosedPipe && unclosedPipe.type === name) {
+      unclosedPipe.line = saxParser.line + 1;
       openPipe = null;
     }
   };
