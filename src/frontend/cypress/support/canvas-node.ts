@@ -1,4 +1,4 @@
-export class CanvasElement {
+export class CanvasNode {
   constructor(
     private id: string,
     private left: number,

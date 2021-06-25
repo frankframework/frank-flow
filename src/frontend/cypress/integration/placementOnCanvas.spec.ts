@@ -1,5 +1,5 @@
-import { ExpectedCanvasElement } from '../support/expected-canvas-element';
-import { CanvasElement } from '../support/canvas-element';
+import { ExpectedCanvasNode } from '../support/expected-canvas-node';
+import { CanvasNode } from '../support/canvas-node';
 import { ParsedNumPixels } from '../support/parsed-num-pixels';
 
 describe('Placement on canvas', () => {
@@ -13,7 +13,7 @@ describe('Placement on canvas', () => {
     cy.visit('');
     const expectedElements = this.expectedElements as Map<
       string,
-      ExpectedCanvasElement
+      ExpectedCanvasNode
     >;
     cy.get('.canvas > app-node').should('have.length', expectedElements.size);
     expectedElements.forEach((element) => {
@@ -40,21 +40,19 @@ describe('Placement on canvas', () => {
 
 function createExpectedCanvasElements(
   data: string
-): Map<string, ExpectedCanvasElement> {
-  const result = new Map<string, ExpectedCanvasElement>();
+): Map<string, ExpectedCanvasNode> {
+  const result = new Map<string, ExpectedCanvasNode>();
   data.split('\n').forEach((s) => {
-    const newExpectedCanvasElement = new ExpectedCanvasElement(s);
+    const newExpectedCanvasElement = new ExpectedCanvasNode(s);
     result.set(newExpectedCanvasElement.id, newExpectedCanvasElement);
   });
   return result;
 }
 
 function checkAndGetCanvasElements(
-  expected: Array<ExpectedCanvasElement>
-): Promise<Array<CanvasElement>> {
-  const promises: Array<Promise<CanvasElement>> = new Array<
-    Promise<CanvasElement>
-  >();
+  expected: Array<ExpectedCanvasNode>
+): Promise<Array<CanvasNode>> {
+  const promises: Array<Promise<CanvasNode>> = new Array<Promise<CanvasNode>>();
   expected.forEach((item) => promises.push(elementToCanvasElement(item.id)));
   const result = Promise.all(promises);
   result.then((items) => {
@@ -64,10 +62,8 @@ function checkAndGetCanvasElements(
   return result;
 }
 
-function elementToCanvasElement(
-  inputElementName: string
-): Promise<CanvasElement> {
-  return new Promise<CanvasElement>((resolve, reject) => {
+function elementToCanvasElement(inputElementName: string): Promise<CanvasNode> {
+  return new Promise<CanvasNode>((resolve, reject) => {
     requestCanvasElementDomObject(inputElementName)
       .invoke('css', 'left')
       .then((left) => {
@@ -90,7 +86,7 @@ function elementToCanvasElement(
                     if (result.error) {
                       reject(result.error);
                     } else {
-                      resolve(result.result as CanvasElement);
+                      resolve(result.result as CanvasNode);
                     }
                   });
               });
@@ -111,7 +107,7 @@ function createCanvasElement(
   top: string,
   width: string,
   height: string
-): { result?: CanvasElement; error?: string } {
+): { result?: CanvasNode; error?: string } {
   const theLeft = new ParsedNumPixels(left, 'left');
   if (!theLeft.hasNumber) {
     return { error: theLeft.error };
@@ -129,7 +125,7 @@ function createCanvasElement(
     return { error: theHeight.error };
   }
   return {
-    result: new CanvasElement(
+    result: new CanvasNode(
       id,
       theLeft.theNumber,
       theTop.theNumber,

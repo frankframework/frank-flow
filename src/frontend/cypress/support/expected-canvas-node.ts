@@ -1,4 +1,4 @@
-export class ExpectedCanvasElement {
+export class ExpectedCanvasNode {
   id: string;
   x: number;
   y: number;
