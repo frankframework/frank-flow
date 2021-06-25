@@ -64,34 +64,24 @@ function checkAndGetCanvasElements(
 
 function elementToCanvasElement(inputElementName: string): Promise<CanvasNode> {
   return new Promise<CanvasNode>((resolve, reject) => {
-    requestCanvasElementDomObject(inputElementName)
-      .invoke('css', 'left')
-      .then((left) => {
-        requestCanvasElementDomObject(inputElementName)
-          .invoke('css', 'top')
-          .then((top) => {
-            requestCanvasElementDomObject(inputElementName)
-              .invoke('css', 'min-width')
-              .then((width) => {
-                requestCanvasElementDomObject(inputElementName)
-                  .invoke('css', 'min-height')
-                  .then((height) => {
-                    const result = createCanvasElement(
-                      inputElementName,
-                      (left as unknown) as string,
-                      (top as unknown) as string,
-                      (width as unknown) as string,
-                      (height as unknown) as string
-                    );
-                    if (result.error) {
-                      reject(result.error);
-                    } else {
-                      resolve(result.result as CanvasNode);
-                    }
-                  });
-              });
-          });
-      });
+    requestCanvasElementDomObject(inputElementName).then((domObject) => {
+      const left = domObject.css('left');
+      const top = domObject.css('top');
+      const width = domObject.css('min-width');
+      const height = domObject.css('min-height');
+      const result = createCanvasElement(
+        inputElementName,
+        (left as unknown) as string,
+        (top as unknown) as string,
+        (width as unknown) as string,
+        (height as unknown) as string
+      );
+      if (result.error) {
+        reject(result.error);
+      } else {
+        resolve(result.result as CanvasNode);
+      }
+    });
   });
 }
 
