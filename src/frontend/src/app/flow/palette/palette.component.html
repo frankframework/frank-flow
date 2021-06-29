@@ -1,21 +1,26 @@
 <app-search [(term)]="search"></app-search>
 <app-group
+  [items]="paletteService.data?.get('Listeners') | filter: search"
   color="info"
   type="Listeners"
-  [items]="paletteService.data?.get('Listeners') | filter: search"
 ></app-group>
 <app-group
+  [items]="paletteService.data?.get('Pipes') | filter: search"
   color="accent"
   type="Pipes"
-  [items]="paletteService.data?.get('Pipes') | filter: search"
 ></app-group>
 <app-group
+  [items]="paletteService.data?.get('Senders') | filter: search"
   color="success"
   type="Senders"
-  [items]="paletteService.data?.get('Senders') | filter: search"
 ></app-group>
 <app-group
-  color="danger"
-  type="other"
+  [items]="paletteService.data?.get('Validators') | filter: search"
+  color="warning"
+  type="Validators"
+></app-group>
+<app-group
   [items]="paletteService.data?.get('Other') | filter: search"
+  color="danger"
+  type="Other"
 ></app-group>

@@ -2,7 +2,7 @@ import { FlowTreeNode } from './flowTreeNode.model';
 
 export class FlowTree {
   listeners: FlowTreeNode[] = [];
-  pipes: any = {};
+  pipes: FlowTreeNode[] = [];
   exits: FlowTreeNode[] = [];
 
   constructor() {}

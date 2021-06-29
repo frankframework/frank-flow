@@ -1,14 +1,14 @@
-import { ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
-import { jsPlumbInstance, jsPlumbUtil } from 'jsplumb';
+import { ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
+import { jsPlumbInstance } from 'jsplumb';
 import { NodeComponent } from '../node.component';
 
 export class Node {
+  protected classes = '';
   private id: string;
   private name?: string | undefined;
   private type?: string | undefined;
   private top?: number | undefined;
   private left?: number | undefined;
-  protected classes = '';
 
   constructor(
     id: string,
@@ -27,15 +27,19 @@ export class Node {
   getId(): string {
     return this.id;
   }
+
   getName(): string | undefined {
     return this.name;
   }
+
   getType(): string | undefined {
     return this.type;
   }
+
   getTop(): number | undefined {
     return this.top;
   }
+
   getLeft(): number | undefined {
     return this.left;
   }

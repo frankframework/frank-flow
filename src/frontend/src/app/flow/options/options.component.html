@@ -1,9 +1,9 @@
 <ngx-smart-modal
+  #optionsModal
+  (onDataAdded)="onDataAdded()"
   class="optionsModal"
   customClass="nsm-centered"
-  #optionsModal
   identifier="optionsModal"
-  (onDataAdded)="onDataAdded()"
 >
   <div>
     <h1>
@@ -11,11 +11,11 @@
     </h1>
     <div class="input-row">
       <label for="name">Name:</label>
-      <input type="text" id="name" [(ngModel)]="node.name" />
+      <input [(ngModel)]="node.name" id="name" type="text" />
     </div>
     <div class="input-row">
       <label for="toggle">Test toggle = {{ toggle }}:</label>
-      <app-toggle id="toggle" [(state)]="toggle"></app-toggle>
+      <app-toggle [(state)]="toggle" id="toggle"></app-toggle>
     </div>
   </div>
   <div>
