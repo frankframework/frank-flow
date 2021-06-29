@@ -19,7 +19,7 @@ import { File } from '../../shared/models/file.model';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
 import { Forward } from './forward.model';
-import * as dagre from 'dagre';
+import * as  from 'dagre';
 
 @Component({
   selector: 'app-canvas',
