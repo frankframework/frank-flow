@@ -19,21 +19,6 @@
   color="warning"
   type="Validators"
 ></app-group>
-<!--<app-group-->
-<!--  color="success"-->
-<!--  type="TransactionalStorages"-->
-<!--  [items]="paletteService.data?.get('TransactionalStorages') | filter: search"-->
-<!--&gt;</app-group>-->
-<!--<app-group-->
-<!--  color="warning"-->
-<!--  type="ErrorMessageFormatters"-->
-<!--  [items]="paletteService.data?.get('ErrorMessageFormatters') | filter: search"-->
-<!--&gt;</app-group>-->
-<!--<app-group-->
-<!--  color="success"-->
-<!--  type="Batch"-->
-<!--  [items]="paletteService.data?.get('Batch') | filter: search"-->
-<!--&gt;</app-group>-->
 <app-group
   [items]="paletteService.data?.get('Other') | filter: search"
   color="danger"

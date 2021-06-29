@@ -1,16 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
-
-interface ElementType extends Array<ElementType> {
-  name: string;
-  type: string;
-}
-
-interface Element extends Array<Element> {
-  name: string;
-  type: ElementType;
-}
+import { Element } from '../../shared/models/element.model';
+import { ElementType } from '../../shared/models/element-type.model';
 
 @Injectable({
   providedIn: 'root',
