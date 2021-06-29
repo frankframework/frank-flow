@@ -19,7 +19,6 @@ import { File } from '../../shared/models/file.model';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
 import { Forward } from './forward.model';
-import * as  from 'dagre';
 
 @Component({
   selector: 'app-canvas',
@@ -117,7 +116,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
           const listeners = data.listeners;
           const nodeMap = new Map<string, Node>();
 
-          const graph = new dagre.graphlib.Graph({ directed: true });
+          // const graph = new dagre.graphlib.Graph({ directed: true });
 
           // graph.setGraph({rankdir: "TB", ranker: "network-simplex", align: "UL" });
           // graph.setDefaultEdgeLabel(function () { return {}; });
@@ -129,8 +128,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
           const forwards: Forward[] = [];
 
-          this.generateReceiver(listeners, firstPipe, forwards, graph, nodeMap);
-          this.generatePipeline(pipeline, forwards, graph, nodeMap);
+          this.generateReceiver(listeners, firstPipe, forwards, nodeMap);
+          this.generatePipeline(pipeline, forwards, nodeMap);
           this.generateExits(data.exits);
 
           // this.connectAllNodes(forwards, graph);
@@ -167,7 +166,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     listeners: any[],
     firstPipe: string,
     forwards: Forward[],
-    graph: dagre.graphlib.Graph,
     nodeMap: Map<string, Node>
   ): void {
     listeners.forEach((listenerInfo) => {
@@ -192,12 +190,12 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         x
       );
 
-      graph.setNode(listenerInfo.name, {
-        label: listenerInfo.name,
-        shape: 'ellipse',
-        width: 200,
-        height: 100,
-      });
+      // graph.setNode(listenerInfo.name, {
+      //   label: listenerInfo.name,
+      //   shape: 'ellipse',
+      //   width: 200,
+      //   height: 100,
+      // });
 
       forwards.push(new Forward(listenerInfo.name, firstPipe));
 
@@ -210,7 +208,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   generatePipeline(
     pipeline: any,
     forwards: Forward[],
-    graph: dagre.graphlib.Graph,
     nodeMap: Map<string, Node>
   ): void {
     for (const key of Object.keys(pipeline)) {
@@ -230,12 +227,12 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
       node = new Pipe(nodeInfo.name, nodeInfo.name, nodeInfo.type, y, x);
 
-      graph.setNode(nodeInfo.name, {
-        label: nodeInfo.name,
-        shape: 'rect',
-        width: 200,
-        height: 100,
-      });
+      // graph.setNode(nodeInfo.name, {
+      //   label: nodeInfo.name,
+      //   shape: 'rect',
+      //   width: 200,
+      //   height: 100,
+      // });
 
       if (nodeInfo.forwards) {
         nodeInfo.forwards.forEach((forward: any) => {
@@ -284,10 +281,10 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     return { id, name, top, left };
   }
 
-  connectAllNodes(forwards: Forward[], graph: dagre.graphlib.Graph): void {
+  connectAllNodes(forwards: Forward[]): void {
     setTimeout(() => {
       forwards.forEach((forward) => {
-        graph.setEdge(forward.getSource(), forward.getDestination());
+        // graph.setEdge(forward.getSource(), forward.getDestination());
       });
     });
   }
