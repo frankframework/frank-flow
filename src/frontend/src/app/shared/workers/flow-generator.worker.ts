@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 
 import * as sax from 'sax';
-import { QualifiedTag, SAXParser } from 'sax';
+import { QualifiedTag } from 'sax';
 import { FlowTree } from '../models/flowTree.model';
 import { FlowTreeNode } from '../models/flowTreeNode.model';
 

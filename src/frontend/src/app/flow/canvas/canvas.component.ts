@@ -1,12 +1,12 @@
 import {
   AfterViewInit,
   Component,
+  HostBinding,
+  HostListener,
   Input,
+  OnDestroy,
   ViewChild,
   ViewContainerRef,
-  HostListener,
-  HostBinding,
-  OnDestroy,
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
 import Pipe from '../node/nodes/pipe.model';
@@ -16,7 +16,6 @@ import { Node } from '../node/nodes/node.model';
 import { CodeService } from '../../shared/services/code.service';
 import { jsPlumbInstance } from 'jsplumb';
 import { File } from '../../shared/models/file.model';
-import { FileType } from '../../shared/enums/file-type.enum';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
 import { Forward } from './forward.model';
@@ -41,14 +40,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   generating = false;
 
   @HostBinding('tabindex') tabindex = 1;
-  @HostListener('keyup', ['$event'])
-  onKeyUp(kbdEvent: KeyboardEvent): void {
-    if (kbdEvent.ctrlKey && kbdEvent.key === 'z') {
-      this.codeService.undo();
-    } else if (kbdEvent.ctrlKey && kbdEvent.key === 'y') {
-      this.codeService.redo();
-    }
-  }
 
   constructor(
     private nodeService: NodeService,
@@ -56,6 +47,15 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     private flowStructureService: FlowStructureService
   ) {
     this.jsPlumbInstance = this.nodeService.getInstance();
+  }
+
+  @HostListener('keyup', ['$event'])
+  onKeyUp(kbdEvent: KeyboardEvent): void {
+    if (kbdEvent.ctrlKey && kbdEvent.key === 'z') {
+      this.codeService.undo();
+    } else if (kbdEvent.ctrlKey && kbdEvent.key === 'y') {
+      this.codeService.redo();
+    }
   }
 
   ngAfterViewInit(): void {
