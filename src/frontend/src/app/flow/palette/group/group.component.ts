@@ -12,7 +12,7 @@ import Exit from '../../node/nodes/exit.model';
   styleUrls: ['./group.component.scss'],
 })
 export class GroupComponent implements OnInit {
-  @Input() foldGroup = true;
+  @Input() foldGroup = false;
   @Input() color = 'primary';
   @Input() type = 'default';
   @Input() items!: any[] | undefined;

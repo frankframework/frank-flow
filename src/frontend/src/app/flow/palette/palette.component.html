@@ -7,19 +7,18 @@
 <app-group
   color="accent"
   type="Pipes"
-  [foldGroup]="false"
   [items]="paletteService.data?.get('Pipes') | filter: search"
 ></app-group>
-<!--<app-group-->
-<!--  color="success"-->
-<!--  type="Senders"-->
-<!--  [items]="paletteService.data?.get('Senders') | filter: search"-->
-<!--&gt;</app-group>-->
-<!--<app-group-->
-<!--  color="primary"-->
-<!--  type="Validators"-->
-<!--  [items]="paletteService.data?.get('Validators') | filter: search"-->
-<!--&gt;</app-group>-->
+<app-group
+  color="success"
+  type="Senders"
+  [items]="paletteService.data?.get('Senders') | filter: search"
+></app-group>
+<app-group
+  color="warning"
+  type="Validators"
+  [items]="paletteService.data?.get('Validators') | filter: search"
+></app-group>
 <!--<app-group-->
 <!--  color="success"-->
 <!--  type="TransactionalStorages"-->
