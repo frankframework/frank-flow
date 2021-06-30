@@ -23,9 +23,8 @@ public class DirApi {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public DirModel getDirs() {
-
-        return dirService.getDirs();
+    public Response getDirs() {
+        return Response.status(Response.Status.OK).entity(dirService.getDirs()).build();
     }
 
     @GET

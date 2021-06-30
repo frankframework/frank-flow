@@ -44,13 +44,16 @@ public class ServletCreatorBean implements ServletContextAware {
     @Override
     public void setServletContext(ServletContext servletContext) {
         log.info("creating servlet endpoint [" + urlPattern + "] for servlet [" + servletClass.getSimpleName() + "]");
+        System.out.println("creating servlet");
 
         ServletRegistration.Dynamic dynamicServlet = servletContext.addServlet(servletClass.getSimpleName(), servletClass);
         if (parameters != null && parameters.size() > 0) {
+            System.out.println(parameters);
             if (log.isDebugEnabled())
                 log.debug("setting init parameters [" + parameters + "] for servlet [" + servletClass.getSimpleName() + "]");
             dynamicServlet.setInitParameters(parameters);
         }
         dynamicServlet.addMapping(urlPattern);
+        dynamicServlet.setLoadOnStartup(1);
     }
 }

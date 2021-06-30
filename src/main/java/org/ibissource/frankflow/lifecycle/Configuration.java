@@ -33,7 +33,7 @@ public class Configuration {
     @Bean
     @Scope("singleton")
     public String test() {
-        log.info("loading Frank!Flow beans lalalala");
+        log.info("loading Frank!Flow beans");
         return "dummy";
     }
 
@@ -47,6 +47,7 @@ public class Configuration {
     @Scope("singleton")
     public ServletCreatorBean backend() {
         Map<String, String> parameters = new HashMap<>();
+        System.out.println("dfdfd");
         parameters.put("config-location", "ApiContext.xml");
         parameters.put("bus", "frank-flow-bus");
         return new ServletCreatorBean(BASEPATH + "api/*", BackendServlet.class, parameters);
