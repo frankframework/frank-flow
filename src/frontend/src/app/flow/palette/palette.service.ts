@@ -35,11 +35,13 @@ export class PaletteService {
   }
 
   sortData(data: any): void {
-    data.groups.forEach((group: any) => {
-      const elementTypes = this.getElementTypesInGroup(group, data);
-      const elements = this.getElementsForTypes(elementTypes, data);
-      this.data.set(group.name, elements);
-    });
+    if (data.groups) {
+      data.groups.forEach((group: any) => {
+        const elementTypes = this.getElementTypesInGroup(group, data);
+        const elements = this.getElementsForTypes(elementTypes, data);
+        this.data.set(group.name, elements);
+      });
+    }
   }
 
   getElementTypesInGroup(group: any, data: any): ElementType {

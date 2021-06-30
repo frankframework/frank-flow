@@ -1,100 +1,86 @@
 /// <reference lib="webworker" />
 
-import * as sax from 'sax';
-import { QualifiedTag } from 'sax';
-import { FlowTree } from '../models/flowTree.model';
-import { FlowTreeNode } from '../models/flowTreeNode.model';
+import * as saxes from 'saxes';
+import { AttributeEventForOptions, TagForOptions } from 'saxes';
+import { FlowStructure } from '../models/flowStructure.model';
+import { FlowStructureNode } from '../models/flowStructureNode.model';
 
-const saxParser = sax.parser(true);
+const MONACO_COLUMN_OFFSET = 1;
 
-let attributes: any[] = [];
-let closingTag: QualifiedTag | null = null;
-let openPipe: string | null = null;
+const parser = new saxes.SaxesParser();
+
+let flowStructure: FlowStructure;
+let unclosedPipes: string[] = [];
 
 addEventListener('message', ({ data }) => {
   if (typeof data === 'string') {
-    const tree: FlowTree = new FlowTree();
-
-    setOpenCallback(tree);
-    setAttrCallback(tree);
-
-    saxParser.write(data).close();
-
-    postMessage(tree);
+    flowStructure = new FlowStructure();
+    parser.write(data).close();
   }
 });
 
-function setOpenCallback(tree: FlowTree): void {
-  saxParser.onopentag = (node: QualifiedTag) => {
-    const newNode = new FlowTreeNode(
-      saxParser.line + 1,
-      saxParser.column + 1,
-      node.name,
-      attributes
-    );
+parser.on('end', () => postMessage(flowStructure));
 
-    attributes = [];
+parser.on('opentag', (tag: TagForOptions<{}>) => {
+  const currentNode = new FlowStructureNode(
+    parser.line,
+    parser.column + MONACO_COLUMN_OFFSET,
+    tag.name
+  );
 
-    if (!node.isSelfClosing) {
-      closingTag = node;
+  if (currentNode.type.match(/Pipe$/g)) {
+    if (!tag.isSelfClosing) {
+      unclosedPipes.push(tag.attributes['name']);
     }
+    currentNode.forwards = [];
+    flowStructure.nodes.push(currentNode);
+  } else if (currentNode.type === 'Forward') {
+    flowStructure.nodes
+      .find(
+        (pipe: FlowStructureNode) =>
+          pipe.name === unclosedPipes[unclosedPipes.length - 1]
+      )
+      ?.forwards?.push(currentNode);
+  } else if (currentNode.type.match(/Listener$/g)) {
+    console.log(currentNode);
+    flowStructure.nodes.push(currentNode);
+    console.log(flowStructure);
+  } else if (currentNode.type.match(/Exit$/g)) {
+    flowStructure.nodes.push(currentNode);
+  }
+});
 
-    // TODO: refactor the if else statement with strategy pattern.
-    if (newNode.type === 'Forward' && closingTag) {
-      const forwardPipe = tree.pipes.find(
-        (pipe: FlowTreeNode) => pipe.name === closingTag?.attributes.name + ''
-      );
-      forwardPipe?.forwards?.push(newNode);
-    } else if (newNode.type.match(/Listener$/g)) {
-      newNode.forwards = [];
-      newNode.name = String(node.attributes.name);
+parser.on('closetag', (tag: TagForOptions<{}>) => {
+  unclosedPipes.pop();
+});
 
-      tree.listeners.push(newNode);
-    } else if (newNode.type.match(/Pipe$/g)) {
-      newNode.forwards = [];
-      newNode.name = String(node.attributes.name);
+parser.on('attribute', (attribute: AttributeEventForOptions<{}>) => {
+  const lastNode = flowStructure.nodes[flowStructure.nodes.length - 1];
+  if (!lastNode) {
+    return;
+  }
+  console.log(flowStructure, flowStructure.nodes, flowStructure.nodes.length);
 
-      openPipe = String(node.attributes.name);
-      tree.pipes.push(newNode);
-    } else if (newNode.type === 'Exit') {
-      newNode.attributes.forEach((attr) => {
-        if (attr.path) {
-          newNode.path = attr.path;
-        }
-      });
+  const startColumn =
+    parser.column - (attribute.name + attribute.value).length - 2;
 
-      tree.exits.push(newNode);
-    }
-  };
-
-  saxParser.onclosetag = (name: string) => {
-    closingTag = null;
-    const unclosedPipe = tree.pipes.find(
-      (pipe: FlowTreeNode) => pipe.name === openPipe
-    );
-    if (openPipe && unclosedPipe && unclosedPipe.type === name) {
-      unclosedPipe.line = saxParser.line + 1;
-      openPipe = null;
-    }
-  };
-}
-
-function setAttrCallback(tree: any): void {
-  saxParser.onattribute = (attr: sax.QualifiedAttribute) => {
-    const name = attr.name;
-    const value = attr.value;
-
-    const startColumn = saxParser.column - (name + value).length - 2;
-
-    if (name === 'firstPipe') {
-      tree.firstPipe = value;
-    }
-
-    attributes.push({
-      [name]: value,
-      line: saxParser.line + 1,
-      endColumn: saxParser.column + 1,
+  if (attribute.name === 'firstPipe') {
+    flowStructure.firstPipe = attribute.value;
+  } else {
+    const newAttribute = {
+      value: attribute.value,
+      line: parser.line,
+      endColumn: parser.column + MONACO_COLUMN_OFFSET,
       startColumn,
-    });
-  };
-}
+    };
+
+    lastNode.attributes = {
+      ...lastNode.attributes,
+      [attribute.name]: newAttribute,
+    };
+
+    if (lastNode.type == 'DirectoryListener') {
+      console.log(lastNode.attributes);
+    }
+  }
+});

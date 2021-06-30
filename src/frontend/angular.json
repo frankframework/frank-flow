@@ -24,6 +24,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": ["saxes"],
             "outputPath": "../../target/frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -68,8 +69,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "2mb"
+                  "maximumWarning": "8mb",
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -94,7 +95,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "8mb",
                   "maximumError": "10mb"
                 },
                 {

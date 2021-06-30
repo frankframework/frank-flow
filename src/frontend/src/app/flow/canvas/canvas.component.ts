@@ -15,10 +15,12 @@ import Exit from '../node/nodes/exit.model';
 import { Node } from '../node/nodes/node.model';
 import { CodeService } from '../../shared/services/code.service';
 import { jsPlumbInstance } from 'jsplumb';
-import { File } from '../../shared/models/file.model';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
 import { Forward } from './forward.model';
+import { FlowStructureNode } from '../../shared/models/flowStructureNode.model';
+import { FlowStructure } from '../../shared/models/flowStructure.model';
+import { FlowNodeAttribute } from '../../shared/models/flowNodeAttribute.model';
 
 @Component({
   selector: 'app-canvas',
@@ -33,9 +35,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   jsPlumbInstance!: jsPlumbInstance;
   currentFileSubscription!: Subscription;
-  currentFile!: File;
   flowUpdate = false;
-  flowGenerator!: Worker;
   generating = false;
 
   @HostBinding('tabindex') tabindex = 1;
@@ -62,12 +62,12 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
     if (Worker) {
       const flowGenerator = new Worker(
-        '../../shared/workers/flow-generator.worker',
+        new URL('../../shared/workers/flow-generator.worker', import.meta.url),
         {
+          name: 'flow-generator',
           type: 'module',
         }
       );
-      this.flowGenerator = flowGenerator;
 
       const initialCurrentFile = this.codeService.getCurrentFile();
 
@@ -86,11 +86,13 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
       flowGenerator.onmessage = ({ data }) => {
         if (data) {
+          const flowStructure = new FlowStructure(data.nodes, data.firstPipe);
+
           this.flowUpdate = true;
-          this.flowStructureService.setStructure(data);
+          this.flowStructureService.setStructure(flowStructure);
 
           this.flowUpdate = false;
-          this.generateFlow(data);
+          this.generateFlow(flowStructure);
         }
       };
     }
@@ -102,59 +104,25 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.viewContainerRef.clear();
   }
 
-  generateFlow(data: any): void {
+  generateFlow(structure: FlowStructure): void {
     this.jsPlumbInstance.ready(() => {
       this.generating = true;
       this.jsPlumbInstance.reset();
       this.viewContainerRef.clear();
 
       setTimeout(() => {
-        // const root = Object.keys(data)[0];
-        if (data && data.listeners && data.pipes) {
-          const pipeline = data.pipes;
-          const firstPipe = data.firstPipe;
-          const listeners = data.listeners;
+        if (structure && structure.firstPipe) {
+          const firstPipe = structure.firstPipe;
+          const listeners = structure.listeners;
+          const pipes = structure.pipes;
+          const exits = structure.exits;
           const nodeMap = new Map<string, Node>();
-
-          // const graph = new dagre.graphlib.Graph({ directed: true });
-
-          // graph.setGraph({rankdir: "TB", ranker: "network-simplex", align: "UL" });
-          // graph.setDefaultEdgeLabel(function () { return {}; });
-
-          // graph.graph().rankdir = 'TB';
-          // graph.graph().ranksep = 50;
-          // graph.graph().nodesep = 50;
-          // graph.graph().ranker = 'tight-tree';
 
           const forwards: Forward[] = [];
 
-          this.generateReceiver(listeners, firstPipe, forwards, nodeMap);
-          this.generatePipeline(pipeline, forwards, nodeMap);
-          this.generateExits(data.exits);
-
-          // this.connectAllNodes(forwards, graph);
-          // dagre.layout(graph);
-
-          // console.log(graph);
-          // console.log(nodeMap);
-          // console.log(forwards);
-
-          // graph.nodes().forEach((v: any) => {
-          //   console.log('v: ', v);
-          //   const node = nodeMap.get(v);
-          //   const virtualNode = graph.node(v);
-
-          //   if (node) {
-
-          //     node.setLeft(virtualNode.x);
-          //     node.setTop(virtualNode.y);
-
-          //     this.nodeService.addDynamicNode(node);
-          //     console.log("Node " + v + ": " + JSON.stringify(graph.node(v)));
-
-          //   }
-          // });
-
+          this.generateListeners(listeners, firstPipe, forwards, nodeMap);
+          this.generatePipeline(pipes, forwards, nodeMap);
+          this.generateExits(exits);
           this.generateForwards(forwards);
           this.generating = false;
         }
@@ -162,130 +130,81 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  generateReceiver(
-    listeners: any[],
+  generateListeners(
+    listeners: FlowStructureNode[],
     firstPipe: string,
     forwards: Forward[],
     nodeMap: Map<string, Node>
   ): void {
-    listeners.forEach((listenerInfo) => {
-      // const listenerInfo = this.getNodeInfo(element.$);
-
-      let x = 0;
-      let y = 0;
-
-      listenerInfo.attributes.forEach((attr: any) => {
-        if (attr.x) {
-          x = attr.x;
-        } else if (attr.y) {
-          y = attr.y;
-        }
-      });
-
+    listeners.forEach((listener: FlowStructureNode) => {
+      listener = new FlowStructureNode(
+        listener.line,
+        listener.column,
+        listener.type,
+        listener.attributes
+      );
+      const [x, y] = listener.positions;
       const listenerNode = new Listener(
-        listenerInfo.name,
-        listenerInfo.name,
-        listenerInfo.type,
+        listener.name,
+        listener.name,
+        listener.type,
         y,
         x
       );
 
-      // graph.setNode(listenerInfo.name, {
-      //   label: listenerInfo.name,
-      //   shape: 'ellipse',
-      //   width: 200,
-      //   height: 100,
-      // });
-
-      forwards.push(new Forward(listenerInfo.name, firstPipe));
-
-      nodeMap.set(listenerInfo.name, listenerNode);
-
+      forwards.push(new Forward(listener.name, firstPipe));
+      nodeMap.set(listener.name, listenerNode);
       this.nodeService.addDynamicNode(listenerNode);
     });
   }
 
   generatePipeline(
-    pipeline: any,
+    pipes: FlowStructureNode[],
     forwards: Forward[],
     nodeMap: Map<string, Node>
   ): void {
-    for (const key of Object.keys(pipeline)) {
-      const nodeInfo = pipeline[key];
-      let node;
+    pipes.forEach((pipe: FlowStructureNode) => {
+      pipe = new FlowStructureNode(
+        pipe.line,
+        pipe.column,
+        pipe.type,
+        pipe.attributes
+      );
 
-      let x = 0;
-      let y = 0;
+      const [x, y] = pipe.positions;
 
-      nodeInfo.attributes.forEach((attr: any) => {
-        if (attr.x) {
-          x = attr.x;
-        } else if (attr.y) {
-          y = attr.y;
-        }
-      });
+      const node = new Pipe(pipe.name, pipe.name, pipe.type, y, x);
 
-      node = new Pipe(nodeInfo.name, nodeInfo.name, nodeInfo.type, y, x);
-
-      // graph.setNode(nodeInfo.name, {
-      //   label: nodeInfo.name,
-      //   shape: 'rect',
-      //   width: 200,
-      //   height: 100,
-      // });
-
-      if (nodeInfo.forwards) {
-        nodeInfo.forwards.forEach((forward: any) => {
-          forward.attributes.forEach((attr: any) => {
-            if (attr.path) {
-              forwards.push(new Forward(nodeInfo.name, attr.path));
+      if (pipe.forwards) {
+        pipe.forwards.forEach((forward: FlowStructureNode) => {
+          Object.entries(forward.attributes).forEach(
+            ([key, attribute]: [string, FlowNodeAttribute]) => {
+              if (key == 'path') {
+                forwards.push(new Forward(pipe.name, attribute.value));
+              }
             }
-          });
+          );
         });
       }
 
-      nodeMap.set(nodeInfo.name, node);
+      nodeMap.set(pipe.name, node);
 
       this.nodeService.addDynamicNode(node);
-    }
-  }
-
-  generateExits(exits: any[]): void {
-    exits.forEach((nodeInfo) => {
-      let x = 0;
-      let y = 0;
-      let path = '';
-
-      nodeInfo.attributes.forEach((attr: any) => {
-        if (attr.x) {
-          x = attr.x;
-        } else if (attr.y) {
-          y = attr.y;
-        } else if (attr.path) {
-          path = attr.path;
-        }
-      });
-
-      const exit = new Exit(path, path, nodeInfo.type, y, x);
-
-      this.nodeService.addDynamicNode(exit);
     });
   }
 
-  getNodeInfo(element: any): any {
-    const id = element.name ?? element.path;
-    const name = element.name ?? element.path;
-    const top = element.y;
-    const left = element.x;
+  generateExits(exits: FlowStructureNode[]): void {
+    exits.forEach((exit) => {
+      exit = new FlowStructureNode(
+        exit.line,
+        exit.column,
+        exit.type,
+        exit.attributes
+      );
 
-    return { id, name, top, left };
-  }
-
-  connectAllNodes(forwards: Forward[]): void {
-    setTimeout(() => {
-      forwards.forEach((forward) => {
-        // graph.setEdge(forward.getSource(), forward.getDestination());
-      });
+      const [x, y] = exit.positions;
+      const node = new Exit(exit.name, exit.name, exit.type, y, x);
+      this.nodeService.addDynamicNode(node);
     });
   }
 

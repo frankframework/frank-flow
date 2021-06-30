@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MonacoEditorComponent } from 'src/app/editor/monaco-editor/monaco-editor.component';
 import Exit from 'src/app/flow/node/nodes/exit.model';
 import { Subject, Subscription } from 'rxjs';
-import { FlowTreeNode } from '../models/flowTreeNode.model';
+import { FlowStructureNode } from '../models/flowStructureNode.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +10,6 @@ import { FlowTreeNode } from '../models/flowTreeNode.model';
 export class FlowStructureService {
   structure: any = {};
   structureObservable: Subject<any> = new Subject<any>();
-  positionsUpdate = false;
 
   flowGenerator?: Worker;
   monacoEditorComponent?: MonacoEditorComponent;
@@ -21,18 +20,20 @@ export class FlowStructureService {
   }
 
   initializeWorker(): void {
-    if (Worker) {
-      this.flowGenerator = new Worker('../workers/flow-generator.worker', {
-        type: 'module',
-      });
-
-      this.flowGenerator.onmessage = ({ data }) => {
-        if (data) {
-          this.structure = data;
-          this.structureObservable.next(data);
-        }
-      };
-    }
+    // if (Worker) {
+    //   this.flowGenerator = new Worker(new URL('../../shared/workers/flow-generator.worker', import.meta.url),
+    //     {
+    //       name: 'flow-generator',
+    //       type: 'module',
+    //     });
+    //
+    //   this.flowGenerator.onmessage = ({ data }) => {
+    //     if (data) {
+    //       this.structure = data;
+    //       this.structureObservable.next(data);
+    //     }
+    //   };
+    // }
   }
 
   updateStructure(): void {
@@ -55,7 +56,7 @@ export class FlowStructureService {
       '\n\t <Forward name="success" path="' + targetName + '" />\n';
     let lastForward;
     const currentPipe = pipes.find(
-      (pipe: FlowTreeNode) => pipe.name === sourceName
+      (pipe: FlowStructureNode) => pipe.name === sourceName
     );
     const forwards = currentPipe.forwards;
     if (forwards) {
@@ -110,8 +111,7 @@ export class FlowStructureService {
   }
 
   addListener(pipeData: any): void {
-    const root = this.structure;
-    const listeners = root.listeners;
+    const listeners = this.structure.pipes;
     const lastListener = listeners[listeners.length - 1];
 
     const newListener = `\t  <${pipeData.type} name="${pipeData.name}" x="${pipeData.left}" y="${pipeData.top}" />\n`;
@@ -129,8 +129,7 @@ export class FlowStructureService {
   }
 
   addExit(exitData: Exit): void {
-    const root = this.structure;
-    const exits = root.exits;
+    const exits = this.structure.exits;
     const lastListener = exits[exits.length - 1];
 
     const newExit = `\t  <${exitData.getType()} path="${exitData.getName()}" x="${exitData.getLeft()}" y="${exitData.getTop()}" />\n`;
