@@ -73,7 +73,6 @@ export class OptionsComponent {
   }
 
   changeAttribute(key: string, attribute: any): void {
-    // console.log('edit: ', attribute, attributeList);
     this.flowStructureService.refreshStructure();
     setTimeout(() => {
       const attributeList = this.getUpdatedAttributes();

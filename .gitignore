@@ -2,8 +2,6 @@
 .settings
 .idea/
 *.iml
-.idea
-frank-flow.iml
 
 # Maven build
 /target
