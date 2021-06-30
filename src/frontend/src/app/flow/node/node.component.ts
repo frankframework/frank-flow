@@ -57,7 +57,15 @@ export class NodeComponent implements AfterViewInit {
     isSource: true,
     scope: 'jsPlumb_DefaultScope',
     connectorStyle: { stroke: '#99cb3a', strokeWidth: 3 },
-    connector: ['Flowchart', { alwaysRespectStubs: true, cornerRadius: 10 }],
+    connector: [
+      'Bezier',
+      {
+        alwaysRespectStubs: true,
+        cornerRadius: 10,
+        stub: [10, 50],
+        midpoint: 0.0001,
+      },
+    ],
     maxConnections: 30,
     isTarget: false,
     connectorOverlays: [['Arrow', { location: 1 }]],

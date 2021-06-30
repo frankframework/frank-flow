@@ -55,6 +55,7 @@ export class CodeService {
   }
 
   undo(): File | undefined {
+    console.log('undo');
     this.redoAction = true;
     this.caretaker?.undo();
 
