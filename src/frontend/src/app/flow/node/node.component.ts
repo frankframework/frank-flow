@@ -4,7 +4,6 @@ import {
   HostBinding,
   HostListener,
   Input,
-  Pipe,
 } from '@angular/core';
 import { Node } from './nodes/node.model';
 import { EndpointOptions, jsPlumbInstance } from 'jsplumb';
@@ -19,13 +18,16 @@ import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
 })
 export class NodeComponent implements AfterViewInit {
   cloud = faCloudDownloadAlt;
-
+  @Input() node!: Node;
+  @Input() jsPlumbInstance!: jsPlumbInstance;
+  @Input() generating!: boolean;
+  @HostBinding('class') public cssClass: any;
+  @HostBinding('style') public style: any;
   private dropOptions = {
     tolerance: 'touch',
     hoverClass: 'dropHover',
     activeClass: 'dragActive',
   };
-
   private dragOptions = {
     containment: 'canvas',
     stop: (e: any) => {
@@ -50,7 +52,6 @@ export class NodeComponent implements AfterViewInit {
       }
     },
   };
-
   private bottomEndpointOptions: EndpointOptions = {
     endpoint: ['Dot', { radius: 7 }],
     paintStyle: { fill: '#99cb3a' },
@@ -71,7 +72,6 @@ export class NodeComponent implements AfterViewInit {
     connectorOverlays: [['Arrow', { location: 1 }]],
     dropOptions: this.dropOptions,
   };
-
   private topEndpointOptions: EndpointOptions = {
     endpoint: ['Dot', { radius: 4 }],
     paintStyle: { fill: '#ffcb3a' },
@@ -82,20 +82,14 @@ export class NodeComponent implements AfterViewInit {
     dropOptions: this.dropOptions,
   };
 
-  @Input() node!: Node;
-  @Input() jsPlumbInstance!: jsPlumbInstance;
-  @Input() generating!: boolean;
-  @HostBinding('class') public cssClass: any;
-  @HostBinding('style') public style: any;
-
-  @HostListener('dblclick') onDoubleClick(): void {
-    this.openOptions();
-  }
-
   constructor(
     public ngxSmartModalService: NgxSmartModalService,
     public flowStructureService: FlowStructureService
   ) {}
+
+  @HostListener('dblclick') onDoubleClick(): void {
+    this.openOptions();
+  }
 
   ngAfterViewInit(): void {
     const id = this.node.getId();

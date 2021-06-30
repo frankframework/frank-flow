@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { NodeService } from '../../node/node.service';
 import { FlowStructureService } from '../../../shared/services/flow-structure.service';
@@ -11,7 +11,7 @@ import Exit from '../../node/nodes/exit.model';
   templateUrl: './group.component.html',
   styleUrls: ['./group.component.scss'],
 })
-export class GroupComponent implements OnInit {
+export class GroupComponent {
   @Input() foldGroup = false;
   @Input() color = 'primary';
   @Input() type = 'default';
@@ -24,8 +24,6 @@ export class GroupComponent implements OnInit {
 
   foldArrow = () => (this.foldGroup ? faChevronDown : faChevronUp);
 
-  ngOnInit(): void {}
-
   toggleFold(): void {
     this.foldGroup = !this.foldGroup;
   }
@@ -37,7 +35,7 @@ export class GroupComponent implements OnInit {
     } else if (this.type === 'Pipes') {
       const newPipe = new Pipe(pipe.name, pipe.name, pipe.name, 100, 100);
       this.flowStructureService.addPipe(newPipe);
-    } else if (this.type === 'other' && pipe.name === 'PipeLineExit') {
+    } else if (this.type === 'Other' && pipe.name === 'PipeLineExit') {
       const exit = new Exit(pipe.name, 'Exit', 'Exit', 100, 100);
       this.flowStructureService.addExit(exit);
     }

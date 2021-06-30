@@ -1,12 +1,12 @@
 import {
   AfterViewInit,
   Component,
+  HostBinding,
+  HostListener,
   Input,
+  OnDestroy,
   ViewChild,
   ViewContainerRef,
-  HostListener,
-  HostBinding,
-  OnDestroy,
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
 import { Node } from '../node/nodes/node.model';

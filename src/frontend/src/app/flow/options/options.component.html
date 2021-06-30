@@ -1,9 +1,9 @@
 <ngx-smart-modal
+  #optionsModal
+  (onDataAdded)="onDataAdded()"
   class="optionsModal"
   customClass="nsm-centered"
-  #optionsModal
   identifier="optionsModal"
-  (onDataAdded)="onDataAdded()"
 >
   <div>
     <h1>{{ node?.getName() }}</h1>

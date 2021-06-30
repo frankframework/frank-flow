@@ -29,6 +29,7 @@
         grid-row-start: 2;
         grid-column-start: 1;
       }
+
       &__name {
         grid-row-start: 3;
         grid-column-start: 1;
@@ -49,6 +50,7 @@
         grid-row-start: 2;
         grid-column-start: 1;
       }
+
       &__name {
         grid-row-start: 3;
         grid-column-start: 1;
@@ -118,6 +120,7 @@
     &__icon {
       grid-column-start: 1;
     }
+
     &__type {
       grid-column-start: 2;
       white-space: nowrap;

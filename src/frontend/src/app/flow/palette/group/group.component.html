@@ -1,17 +1,17 @@
 <div [className]="'group group--' + color">
   <div class="group__header">
     <div>{{ this.type }}</div>
-    <fa-icon [icon]="foldArrow()" (click)="toggleFold()"></fa-icon>
+    <fa-icon (click)="toggleFold()" [icon]="foldArrow()"></fa-icon>
   </div>
-  <div class="group__list" [hidden]="foldGroup">
+  <div [hidden]="foldGroup" class="group__list">
     <ng-container
-      *ngIf="items != undefined && items.length > 0; else emptyGroup"
+      *ngIf="items !== undefined && items.length > 0; else emptyGroup"
     >
       <app-item
-        [color]="color"
-        *ngFor="let item of items"
-        [name]="item.name"
         (click)="addNode(item)"
+        *ngFor="let item of items"
+        [color]="color"
+        [name]="item.name"
       ></app-item>
     </ng-container>
   </div>

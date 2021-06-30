@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 
 import * as sax from 'sax';
-import { QualifiedTag, SAXParser } from 'sax';
+import { QualifiedTag } from 'sax';
 import { FlowTree } from '../models/flowTree.model';
 import { FlowTreeNode } from '../models/flowTreeNode.model';
 
@@ -56,7 +56,10 @@ function setOpenCallback(tree: FlowTree): void {
 
     // TODO: refactor the if else statement with strategy pattern.
     if (newNode.type === 'Forward' && closingTag) {
-      tree.pipes[closingTag.attributes.name + ''].forwards.push(newNode);
+      const forwardPipe = tree.pipes.find(
+        (pipe: FlowTreeNode) => pipe.name === closingTag?.attributes.name + ''
+      );
+      forwardPipe?.forwards?.push(newNode);
     } else if (newNode.type.match(/Listener$/g)) {
       newNode.forwards = [];
       newNode.name = String(node.attributes.name);
@@ -67,15 +70,19 @@ function setOpenCallback(tree: FlowTree): void {
       newNode.name = String(node.attributes.name);
 
       openPipe = String(node.attributes.name);
-      tree.pipes[String(node.attributes.name)] = newNode;
+      tree.pipes.push(newNode);
     } else if (newNode.type === 'Exit') {
       tree.exits.push(newNode);
     }
   };
 
   saxParser.onclosetag = (name: string) => {
-    if (openPipe && tree.pipes[openPipe].type === name) {
-      tree.pipes[openPipe].line = saxParser.line + 1;
+    closingTag = null;
+    const unclosedPipe = tree.pipes.find(
+      (pipe: FlowTreeNode) => pipe.name === openPipe
+    );
+    if (openPipe && unclosedPipe && unclosedPipe.type === name) {
+      unclosedPipe.line = saxParser.line + 1;
       openPipe = null;
     }
   };
