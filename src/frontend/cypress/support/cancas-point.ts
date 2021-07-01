@@ -6,7 +6,9 @@ export class CanvasPoint {
   }
 
   public closeTo(other: CanvasPoint): boolean {
-    return other.x - this.x <= eps;
+    const xClose = Math.abs(other.x - this.x) <= eps;
+    const yClose = Math.abs(other.y - this.y) <= eps;
+    return xClose && yClose;
   }
 }
 
