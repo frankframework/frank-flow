@@ -2,16 +2,32 @@ import { ExpectedCanvasNode } from '../support/expected-canvas-node';
 import { CanvasNode } from '../support/canvas-node';
 import { ParsedNumPixels } from '../support/parsed-num-pixels';
 import { CanvasConnectionArea } from '../support/canvas-connection-area';
+import { ExpectedConnection } from '../support/expected-connection';
+import { ParsedPathDProperty } from '../support/parsed-path-d-property';
+import { ParsedClassTransformProperty } from '../support/parsed-path-transform-property';
+import { CanvasConnection } from 'cypress/support/canvas-connection';
+import * as cypress from 'cypress';
 
 describe('Placement on canvas', () => {
   before(() => {
     cy.fixture('expectedElements.csv')
       .then((data) => createExpectedCanvasElements(data))
       .as('expectedElements');
+    cy.fixture('expectedConnections.csv')
+      .then((data) => createExpectedConnections(data))
+      .as('expectedConnections');
+    cy.visit('');
+    // TODO: Calculate the number of connections here
+    awaitFlowChartConnections(4);
   });
 
   it('Each config element is canvas element', function (): void {
-    cy.visit('');
+    const expectedConnections = this
+      .expectedConnections as ExpectedConnection[];
+    cy.log('Expected connections are:');
+    expectedConnections.forEach((expectedConnection) =>
+      cy.log(`  ${expectedConnection.toString()}`)
+    );
     const expectedElements = this.expectedElements as Map<
       string,
       ExpectedCanvasNode
@@ -39,6 +55,17 @@ describe('Placement on canvas', () => {
     requestCanvasConnectionAreas(2 * expectedElements.size).then((areas) => {
       areas.forEach((area) => cy.log(area.toString()));
     });
+    requestCanvasConnections(expectedConnections.length)
+      .then((conn) => {
+        cy.log('Have the points that are connected');
+        conn.forEach((c) => {
+          cy.log(c.toString());
+        });
+      })
+      .catch((e) => expect(e).to.equal(null));
+    const expectNaN: number = +'xxx';
+    const comparison: boolean = Number.isNaN(expectNaN);
+    expect(comparison).to.equal(true);
   });
 });
 
@@ -49,6 +76,16 @@ function createExpectedCanvasElements(
   data.split('\n').forEach((s) => {
     const newExpectedCanvasElement = new ExpectedCanvasNode(s);
     result.set(newExpectedCanvasElement.id, newExpectedCanvasElement);
+  });
+  return result;
+}
+
+function createExpectedConnections(data: string): ExpectedConnection[] {
+  const result: ExpectedConnection[] = [];
+  data.split('\n').forEach((s) => {
+    const endpoints = s.split(',');
+    const connection = new ExpectedConnection(endpoints[0], endpoints[1]);
+    result.push(connection);
   });
   return result;
 }
@@ -206,3 +243,145 @@ function createCanvasConnectionArea(
     ),
   };
 }
+
+function requestCanvasConnections(
+  numConnections: number
+): Promise<CanvasConnection[]> {
+  const promises: Promise<CanvasConnection>[] = [];
+  for (let i = 0; i < numConnections; ++i) {
+    promises.push(requestCanvasConnection(i));
+  }
+  return Promise.all(promises);
+}
+
+function awaitFlowChartConnections(numConnections: number) {
+  cy.get(connectionSearchString, { timeout: 10000 }).should('exist');
+  for (let i = 0; i < numConnections; ++i) {
+    awaitFlowChartConnectionComplete(i);
+  }
+}
+
+function awaitFlowChartConnectionComplete(index: number) {
+  cy.get(connectionSearchString, { timeout: 10000 }).eq(index).should('exist');
+}
+
+function requestCanvasConnection(index: number): Promise<CanvasConnection> {
+  return new Promise((resolve, reject) => {
+    getCanvasConnectionDomObject(index)
+      .invoke('css', 'left')
+      .then((left) => {
+        getCanvasConnectionDomObject(index)
+          .invoke('css', 'top')
+          .then((top) => {
+            getCanvasConnectionDomObject(index)
+              .find('path')
+              .first()
+              .invoke('css', 'd')
+              .then((domD) => {
+                getCanvasConnectionDomObject(index)
+                  .find('path')
+                  .first()
+                  .invoke('css', 'transform')
+                  .then((domTransform) => {
+                    const parsedPropertyD = new ParsedPathDProperty(
+                      (domD as unknown) as string
+                    );
+                    if (parsedPropertyD.hasError()) {
+                      reject(
+                        'Property d error: ' + parsedPropertyD.getErrorMsg()
+                      );
+                      return;
+                    }
+                    const parsedPropertyTransform = new ParsedClassTransformProperty(
+                      (domTransform as unknown) as string
+                    );
+                    if (parsedPropertyTransform.hasError()) {
+                      reject(
+                        'Property transform error: ' +
+                          parsedPropertyTransform.getErrorMsg()
+                      );
+                    }
+                    const resultOrError = createCanvasConnection(
+                      (left as unknown) as string,
+                      (top as unknown) as string,
+                      parsedPropertyD.getBeginX(),
+                      parsedPropertyD.getBeginY(),
+                      parsedPropertyD.getEndX(),
+                      parsedPropertyD.getEndY(),
+                      parsedPropertyTransform.getX(),
+                      parsedPropertyTransform.getY()
+                    );
+                    if (resultOrError.error) {
+                      reject(resultOrError.error);
+                    } else {
+                      resolve(resultOrError.result as CanvasConnection);
+                    }
+                  });
+              });
+          });
+      });
+  });
+}
+
+function getCanvasConnectionDomObject(
+  index: number
+): Cypress.Chainable<JQuery<HTMLElement>> {
+  return cy.get(connectionSearchString).eq(index);
+}
+
+function createCanvasConnection(
+  left: string,
+  top: string,
+  beginX: string,
+  beginY: string,
+  endX: string,
+  endY: string,
+  transformX: string,
+  transformY: string
+): { result?: CanvasConnection; error?: string } {
+  const theLeft = new ParsedNumPixels(left, 'left');
+  if (!theLeft.hasNumber) {
+    return { error: theLeft.error };
+  }
+  const theTop = new ParsedNumPixels(top, 'top');
+  if (!theTop.hasNumber) {
+    return { error: theTop.error };
+  }
+  const theBeginX = +beginX;
+  if (Number.isNaN(theBeginX)) {
+    return { error: `Path begin x is not a number: ${beginX}` };
+  }
+  const theBeginY = +beginY;
+  if (Number.isNaN(theBeginY)) {
+    return { error: `Path begin y is not a number: ${beginY}` };
+  }
+  const theEndX = +endX;
+  if (Number.isNaN(theEndX)) {
+    return { error: `Path end x is not a number: ${endX}` };
+  }
+  const theEndY = +endY;
+  if (Number.isNaN(theEndY)) {
+    return { error: `Path end y is not a number: ${endY}` };
+  }
+  const theTransformX = +transformX;
+  if (Number.isNaN(theTransformX)) {
+    return { error: `Transform x is not a number: ${transformX}` };
+  }
+  const theTransformY = +transformY;
+  if (Number.isNaN(theTransformY)) {
+    return { error: `Transform y is not a number: ${transformY}` };
+  }
+  const connection = new CanvasConnection(
+    theLeft.theNumber,
+    theTop.theNumber,
+    theBeginX,
+    theBeginY,
+    theEndX,
+    theEndY,
+    theTransformX,
+    theTransformY
+  );
+  return { result: connection };
+}
+
+const connectionSearchString = '.canvas > svg.jtk-connector';
