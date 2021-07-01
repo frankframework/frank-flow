@@ -45,14 +45,25 @@ export class FlowStructureService {
     this.structure = structure;
   }
 
+  getStructure(): any {
+    return this.structure;
+  }
+
+  refreshStructure(): void {
+    this.flowGenerator?.postMessage(
+      this.monacoEditorComponent?.codeEditorInstance.getValue()
+    );
+  }
+
   setEditorComponent(monacoEditorComponent: MonacoEditorComponent): void {
     this.monacoEditorComponent = monacoEditorComponent;
   }
 
   addConnection(sourceName: string, targetName: string): void {
+    this.positionsUpdate = true;
     const pipes = this.structure.pipes;
     const newForward =
-      '\n\t <Forward name="success" path="' + targetName + '" />\n';
+      '\n\t\t<Forward name="success" path="' + targetName + '" />';
     let lastForward;
     const currentPipe = pipes.find(
       (pipe: FlowTreeNode) => pipe.name === sourceName
@@ -66,10 +77,10 @@ export class FlowStructureService {
       if (lastForward) {
         this.monacoEditorComponent?.applyEdit(
           {
-            startLineNumber: lastForward.line + 1,
+            startLineNumber: lastForward.line,
             startColumn: lastForward.column,
             endColumn: lastForward.column,
-            endLineNumber: lastForward.line + 1,
+            endLineNumber: lastForward.line,
           },
           newForward,
           false
@@ -86,6 +97,36 @@ export class FlowStructureService {
           false
         );
       }
+    }
+  }
+
+  deleteConnection(sourceName: string, targetName: string): void {
+    const pipes = this.structure.pipes;
+
+    let targetForward: any;
+
+    for (const key in pipes) {
+      if (key === sourceName) {
+        const forwards = pipes[key].forwards;
+        forwards.forEach((element: FlowTreeNode) => {
+          if (element.path === targetName) {
+            targetForward = element;
+          }
+        });
+      }
+    }
+
+    if (targetForward) {
+      this.monacoEditorComponent?.applyEdit(
+        {
+          startLineNumber: targetForward.line,
+          startColumn: 0,
+          endColumn: targetForward.column,
+          endLineNumber: targetForward.line,
+        },
+        '',
+        false
+      );
     }
   }
 
@@ -201,7 +242,7 @@ export class FlowStructureService {
             endLineNumber: attr.line,
           },
           newValue,
-          true
+          false
         );
       }
     });
