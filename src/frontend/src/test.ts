@@ -27,3 +27,6 @@ getTestBed().initTestEnvironment(
 const context = require.context('./', true, /\.spec\.ts$/);
 // And load the modules.
 context.keys().map(context);
+// Add the tests in frontend/cypress/support
+const context2 = require.context('../cypress/support', true, /out\.spec\.ts$/);
+context2.keys().map(context2);
