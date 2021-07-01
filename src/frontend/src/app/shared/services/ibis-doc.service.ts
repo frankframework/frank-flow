@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import {Observable, Subject} from 'rxjs';
-import {ToastrService} from 'ngx-toastr';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +8,7 @@ import {ToastrService} from 'ngx-toastr';
 export class IbisDocService {
   ibisDoc = new Subject<any>();
 
-  constructor(private toastr: ToastrService) {
+  constructor() {
     this.fetchIbisDoc();
   }
 
@@ -23,11 +22,7 @@ export class IbisDocService {
       .then((result) => result.json())
       .then((json) => this.ibisDoc.next(json))
       .catch((error) => {
-        this.toastr.error(
-          'The ibisdoc cant be loaded from the Frank!Framework',
-          'Loading error'
-        );
-        console.error(error)
+        console.error(error);
       });
   }
 

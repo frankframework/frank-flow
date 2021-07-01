@@ -1,15 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PaletteService } from './palette.service';
-import { ToastrModule } from 'ngx-toastr';
 
 describe('PaletteService', () => {
   let service: PaletteService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [ToastrModule.forRoot()],
-    });
+    TestBed.configureTestingModule({});
     service = TestBed.inject(PaletteService);
   });
 
