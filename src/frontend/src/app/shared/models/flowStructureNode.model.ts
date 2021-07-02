@@ -16,7 +16,12 @@ export class FlowStructureNode {
   forwards?: any[];
 
   get name(): string {
-    return this.attributes['name'] ? this.attributes['name'].value : 'test';
+    if (this.attributes['name']) {
+      return this.attributes['name'].value;
+    } else if (this.attributes['path']) {
+      return this.attributes['path'].value;
+    }
+    return this.type;
   }
 
   get positions(): [number, number] {
@@ -37,11 +42,13 @@ export class FlowStructureNode {
     line: number,
     column: number,
     type: string,
-    attributes: FlowNodeAttributes = {}
+    attributes: FlowNodeAttributes,
+    forwards: any[] | undefined = undefined
   ) {
     this.line = line;
     this.column = column;
     this.type = type;
     this.attributes = attributes;
+    this.forwards = forwards;
   }
 }

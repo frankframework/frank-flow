@@ -3,6 +3,7 @@ import { MonacoEditorComponent } from 'src/app/editor/monaco-editor/monaco-edito
 import Exit from 'src/app/flow/node/nodes/exit.model';
 import { Subject, Subscription } from 'rxjs';
 import { FlowStructureNode } from '../models/flowStructureNode.model';
+import { FlowNodeAttribute } from '../models/flowNodeAttribute.model';
 
 @Injectable({
   providedIn: 'root',
@@ -181,28 +182,37 @@ export class FlowStructureService {
     positionType: string,
     position: number
   ): void {
-    const node = structureNodes.find(
-      (structureNode: any) =>
-        structureNode.name === nodeId || structureNode.path === nodeId
-    );
+    const node = structureNodes.find((structureNode: any) => {
+      const node = new FlowStructureNode(
+        structureNode.line,
+        structureNode.column,
+        structureNode.type,
+        structureNode.attributes,
+        structureNode.forwards
+      );
+      return node.name === nodeId;
+    });
     this.editAttribute(positionType, position, node.attributes);
   }
 
   editAttribute(key: string, value: any, attributeList: any[]): void {
-    attributeList.forEach((attr: any) => {
-      if (attr[key]) {
-        const newValue = `${key}="${value}"`;
-        this.monacoEditorComponent?.applyEdit(
-          {
-            startLineNumber: attr.line,
-            startColumn: attr.startColumn,
-            endColumn: attr.endColumn,
-            endLineNumber: attr.line,
-          },
-          newValue,
-          true
-        );
+    Object.entries(attributeList).forEach(
+      ([attributeKey, attribute]: [string, FlowNodeAttribute]) => {
+        if (attributeKey === key) {
+          const newValue = `${key}="${value}"`;
+          console.log(attribute);
+          this.monacoEditorComponent?.applyEdit(
+            {
+              startLineNumber: attribute.line,
+              startColumn: attribute.startColumn,
+              endColumn: attribute.endColumn,
+              endLineNumber: attribute.line,
+            },
+            newValue,
+            true
+          );
+        }
       }
-    });
+    );
   }
 }

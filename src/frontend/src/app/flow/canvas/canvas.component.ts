@@ -168,18 +168,17 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         pipe.line,
         pipe.column,
         pipe.type,
-        pipe.attributes
+        pipe.attributes,
+        pipe.forwards
       );
-
       const [x, y] = pipe.positions;
-
       const node = new Pipe(pipe.name, pipe.name, pipe.type, y, x);
 
       if (pipe.forwards) {
         pipe.forwards.forEach((forward: FlowStructureNode) => {
           Object.entries(forward.attributes).forEach(
             ([key, attribute]: [string, FlowNodeAttribute]) => {
-              if (key == 'path') {
+              if (key === 'path') {
                 forwards.push(new Forward(pipe.name, attribute.value));
               }
             }
@@ -188,7 +187,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
       }
 
       nodeMap.set(pipe.name, node);
-
       this.nodeService.addDynamicNode(node);
     });
   }
