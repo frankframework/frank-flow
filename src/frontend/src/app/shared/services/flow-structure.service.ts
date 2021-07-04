@@ -11,6 +11,7 @@ import { FlowNodeAttribute } from '../models/flowNodeAttribute.model';
 export class FlowStructureService {
   structure: any = {};
   structureObservable: Subject<any> = new Subject<any>();
+  positionsUpdate = false;
 
   flowGenerator?: Worker;
   monacoEditorComponent?: MonacoEditorComponent;
@@ -47,14 +48,25 @@ export class FlowStructureService {
     this.structure = structure;
   }
 
+  getStructure(): any {
+    return this.structure;
+  }
+
+  refreshStructure(): void {
+    this.flowGenerator?.postMessage(
+      this.monacoEditorComponent?.codeEditorInstance.getValue()
+    );
+  }
+
   setEditorComponent(monacoEditorComponent: MonacoEditorComponent): void {
     this.monacoEditorComponent = monacoEditorComponent;
   }
 
   addConnection(sourceName: string, targetName: string): void {
+    this.positionsUpdate = true;
     const pipes = this.structure.pipes;
     const newForward =
-      '\n\t <Forward name="success" path="' + targetName + '" />\n';
+      '\n\t\t<Forward name="success" path="' + targetName + '" />';
     let lastForward;
     const currentPipe = pipes.find(
       (pipe: FlowStructureNode) => pipe.name === sourceName
@@ -68,10 +80,10 @@ export class FlowStructureService {
       if (lastForward) {
         this.monacoEditorComponent?.applyEdit(
           {
-            startLineNumber: lastForward.line + 1,
+            startLineNumber: lastForward.line,
             startColumn: lastForward.column,
             endColumn: lastForward.column,
-            endLineNumber: lastForward.line + 1,
+            endLineNumber: lastForward.line,
           },
           newForward,
           false
@@ -88,6 +100,28 @@ export class FlowStructureService {
           false
         );
       }
+    }
+  }
+
+  deleteConnection(sourceName: string, targetName: string): void {
+    const sourcePipe = this.structure.pipes.find(
+      (pipe: FlowStructureNode) => pipe.name === sourceName
+    );
+    const targetForward = sourcePipe.forwards.find(
+      (forward: FlowStructureNode) => forward.name === targetName
+    );
+
+    if (targetForward) {
+      this.monacoEditorComponent?.applyEdit(
+        {
+          startLineNumber: targetForward.line,
+          startColumn: 0,
+          endColumn: targetForward.column,
+          endLineNumber: targetForward.line,
+        },
+        '',
+        false
+      );
     }
   }
 
@@ -209,7 +243,7 @@ export class FlowStructureService {
               endLineNumber: attribute.line,
             },
             newValue,
-            true
+            false
           );
         }
       }

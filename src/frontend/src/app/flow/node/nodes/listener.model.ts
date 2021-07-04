@@ -6,7 +6,8 @@ export default class Listener extends Node {
     name?: string,
     type?: string,
     top?: number,
-    left?: number
+    left?: number,
+    attributes?: any[]
   ) {
     super(id, name, type, top, left);
     this.classes = 'shape--oval color--info';

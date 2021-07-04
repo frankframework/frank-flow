@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PaletteService } from './palette.service';
+import { IbisDocService } from './ibis-doc.service';
 
-describe('PaletteService', () => {
-  let service: PaletteService;
+describe('IbisDocService', () => {
+  let service: IbisDocService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PaletteService);
+    service = TestBed.inject(IbisDocService);
   });
 
   it('should be created', () => {

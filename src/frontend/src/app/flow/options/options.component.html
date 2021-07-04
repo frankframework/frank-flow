@@ -6,19 +6,47 @@
   identifier="optionsModal"
 >
   <div>
-    <h1>
-      {{ node?.name }}
-    </h1>
+    <h1>{{ node?.getName() }}</h1>
+    <!-- TODO: Name and type here, those are generic for all nodes. Other attributes can be seen as 'additional' -->
+    <h2>Attributes</h2>
+    <p>Add a new attribute</p>
     <div class="input-row">
-      <label for="name">Name:</label>
-      <input [(ngModel)]="node.name" id="name" type="text" />
+      <select [(ngModel)]="selectedAttribute">
+        <option selected disabled>Choose an attribute</option>
+        <option
+          *ngFor="let attributeOption of attributeOptions"
+          [ngValue]="attributeOption"
+        >
+          {{ attributeOption?.name }}
+        </option>
+      </select>
+      <input
+        id="newAttribute"
+        type="text"
+        [(ngModel)]="newAttributeValue"
+        [placeholder]="selectedAttribute?.defaultValue"
+      />
     </div>
-    <div class="input-row">
-      <label for="toggle">Test toggle = {{ toggle }}:</label>
-      <app-toggle [(state)]="toggle" id="toggle"></app-toggle>
+    <div *ngIf="selectedAttribute" class="input-row input-description">
+      <span [innerHTML]="selectedAttribute?.description"></span>
     </div>
-  </div>
-  <div>
-    <app-button (click)="optionsModal.close()">Close</app-button>
+    <div class="input-row" *ngIf="newAttributeValue">
+      <app-button>Add {{ selectedAttribute?.name }}</app-button>
+    </div>
+    <ng-container *ngFor="let attribute of attributes; index as i">
+      <ng-container
+        *ngFor="let item of attribute | keyvalue; trackBy: customTrackBy"
+      >
+        <div class="input-row" *ngIf="!disabledAttributes.includes(item.key)">
+          <label for="name">{{ item.key }}:</label>
+          <input
+            type="text"
+            id="name"
+            [(ngModel)]="attributes[i][item.key]"
+            (ngModelChange)="changeAttribute(item.key, attribute)"
+          />
+        </div>
+      </ng-container>
+    </ng-container>
   </div>
 </ngx-smart-modal>

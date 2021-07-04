@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
-import { ToastrService } from 'ngx-toastr';
 import { Element } from '../../shared/models/element.model';
 import { ElementType } from '../../shared/models/element-type.model';
+import { IbisDocService } from '../../shared/services/ibis-doc.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,28 +9,14 @@ import { ElementType } from '../../shared/models/element-type.model';
 export class PaletteService {
   data: Map<string, any[]> = new Map<string, any[]>();
 
-  constructor(private toastr: ToastrService) {
+  constructor(private ibisDocService: IbisDocService) {
     this.getData();
   }
 
   getData(): void {
-    fetch(environment.runnerUri + environment.ibisdocJsonPath, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-    })
-      .then((result) => result.json())
-      .then((data) => {
-        this.sortData(data);
-      })
-      .catch((error) => {
-        this.toastr.error(
-          'The ibisdoc cant be loaded from the Frank!Framework',
-          'Loading error'
-        );
-        console.error(error);
-      });
+    this.ibisDocService.getIbisDoc().subscribe({
+      next: (data) => this.sortData(data),
+    });
   }
 
   sortData(data: any): void {

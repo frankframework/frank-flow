@@ -9,19 +9,22 @@ export class Node {
   private type?: string | undefined;
   private top?: number | undefined;
   private left?: number | undefined;
+  private attributes?: [{ [key: string]: string }] | undefined;
 
   constructor(
     id: string,
     name?: string,
     type?: string,
     top?: number,
-    left?: number
+    left?: number,
+    attributes?: [{ [key: string]: string }]
   ) {
     this.id = id;
     this.name = name;
     this.type = type;
     this.top = top;
     this.left = left;
+    this.attributes = attributes;
   }
 
   getId(): string {
@@ -42,6 +45,9 @@ export class Node {
 
   getLeft(): number | undefined {
     return this.left;
+  }
+  getAttributes(): [{ [key: string]: string }] | undefined {
+    return this.attributes;
   }
 
   setTop(top: number): void {
