@@ -24,6 +24,7 @@ export class OptionsComponent {
   newAttributeValue!: string;
   disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
   nodeName!: string | undefined;
+  nodeDescription?: string;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
@@ -59,7 +60,9 @@ export class OptionsComponent {
         // TODO: + Pipe might not be needed with the frankDoc.
         (node: any) => node.name === nodeType || node.name + 'Pipe' === nodeType
       );
-      element.attributes.forEach((attribute: any) => {
+      this.nodeDescription = element?.descriptionHeader;
+      this.attributeOptions = [];
+      element?.attributes?.forEach((attribute: any) => {
         this.attributeOptions.push(attribute);
       });
     }
