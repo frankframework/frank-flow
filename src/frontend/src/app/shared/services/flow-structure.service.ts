@@ -22,20 +22,22 @@ export class FlowStructureService {
   }
 
   initializeWorker(): void {
-    // if (Worker) {
-    //   this.flowGenerator = new Worker(new URL('../../shared/workers/flow-generator.worker', import.meta.url),
-    //     {
-    //       name: 'flow-generator',
-    //       type: 'module',
-    //     });
-    //
-    //   this.flowGenerator.onmessage = ({ data }) => {
-    //     if (data) {
-    //       this.structure = data;
-    //       this.structureObservable.next(data);
-    //     }
-    //   };
-    // }
+    if (Worker) {
+      this.flowGenerator = new Worker(
+        new URL('../../shared/workers/flow-generator.worker', import.meta.url),
+        {
+          name: 'flow-generator',
+          type: 'module',
+        }
+      );
+
+      this.flowGenerator.onmessage = ({ data }) => {
+        if (data) {
+          this.structure = data;
+          this.structureObservable.next(data);
+        }
+      };
+    }
   }
 
   updateStructure(): void {
@@ -45,6 +47,7 @@ export class FlowStructureService {
   }
 
   setStructure(structure: any): void {
+    this.structureObservable.next(structure);
     this.structure = structure;
   }
 
@@ -204,9 +207,15 @@ export class FlowStructureService {
       .asObservable()
       .subscribe({
         next: (data) =>
-          this.editNodePosition(data[structureNodes], nodeId, 'y', yPos),
+          this.editNodePosition(data[structureNodes], nodeId, 'y', yPos, false),
       });
-    this.editNodePosition(this.structure[structureNodes], nodeId, 'x', xPos);
+    this.editNodePosition(
+      this.structure[structureNodes],
+      nodeId,
+      'x',
+      xPos,
+      true
+    );
     this.updateStructure();
   }
 
@@ -214,13 +223,19 @@ export class FlowStructureService {
     structureNodes: any,
     nodeId: string,
     positionType: string,
-    position: number
+    position: number,
+    flowUpdate: boolean
   ): void {
     const node = structureNodes.find((node: any) => node.name === nodeId);
-    this.editAttribute(positionType, position, node.attributes);
+    this.editAttribute(positionType, position, node.attributes, flowUpdate);
   }
 
-  editAttribute(key: string, value: any, attributeList: any[]): void {
+  editAttribute(
+    key: string,
+    value: any,
+    attributeList: any[],
+    flowUpdate = false
+  ): void {
     Object.entries(attributeList).forEach(
       ([attributeKey, attribute]: [string, FlowNodeAttribute]) => {
         if (attributeKey === key) {
@@ -233,7 +248,7 @@ export class FlowStructureService {
               endLineNumber: attribute.line,
             },
             newValue,
-            false
+            flowUpdate
           );
         }
       }
