@@ -3,21 +3,27 @@ import { FlowStructureNode } from './flowStructureNode.model';
 export class FlowStructure {
   nodes: FlowStructureNode[];
   firstPipe: string;
-  get listeners(): FlowStructureNode[] {
+  listeners: FlowStructureNode[];
+  pipes: FlowStructureNode[];
+  exits: FlowStructureNode[];
+
+  getListeners(): FlowStructureNode[] {
     return (
       this.nodes.filter((node: FlowStructureNode) =>
         node.type.match(/Listener/g)
       ) ?? []
     );
   }
-  get pipes(): FlowStructureNode[] {
+
+  getPipes(): FlowStructureNode[] {
     return (
       this.nodes.filter((node: FlowStructureNode) =>
         node.type.match(/Pipe/g)
       ) ?? []
     );
   }
-  get exits(): FlowStructureNode[] {
+
+  getExits(): FlowStructureNode[] {
     return (
       this.nodes.filter((node: FlowStructureNode) =>
         node.type.match(/Exit/g)
@@ -28,5 +34,9 @@ export class FlowStructure {
   constructor(nodes: FlowStructureNode[] = [], firstPipe: string = '') {
     this.nodes = nodes;
     this.firstPipe = firstPipe;
+
+    this.listeners = this.getListeners();
+    this.pipes = this.getPipes();
+    this.exits = this.getExits();
   }
 }

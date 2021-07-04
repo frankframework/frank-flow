@@ -7,7 +7,6 @@ import { Node } from '../../flow/node/nodes/node.model';
 import { Forward } from '../models/forward.model';
 import { FlowStructureNode } from '../models/flowStructureNode.model';
 import { FlowNodeAttribute } from '../models/flowNodeAttribute.model';
-import { FlowStructureService } from './flow-structure.service';
 
 @Injectable({
   providedIn: 'root',
@@ -27,17 +26,10 @@ export class NodeGeneratorService {
     this.generateListeners(listeners, firstPipe);
     this.generatePipeline(pipes);
     this.generateExits(exits);
-    this.generateForwards();
   }
 
   generateListeners(listeners: FlowStructureNode[], firstPipe: string): void {
     listeners.forEach((listener) => {
-      listener = new FlowStructureNode(
-        listener.line,
-        listener.column,
-        listener.type,
-        listener.attributes
-      );
       const [x, y] = listener.positions;
       const listenerNode = new Listener(
         listener.name,
@@ -49,19 +41,11 @@ export class NodeGeneratorService {
 
       this.forwards.push(new Forward(listener.name, firstPipe));
       this.nodeMap.set(listener.name, listenerNode);
-      this.nodeService.addDynamicNode(listenerNode);
     });
   }
 
   generatePipeline(pipes: FlowStructureNode[]): void {
     pipes.forEach((pipe: FlowStructureNode) => {
-      pipe = new FlowStructureNode(
-        pipe.line,
-        pipe.column,
-        pipe.type,
-        pipe.attributes,
-        pipe.forwards
-      );
       const [x, y] = pipe.positions;
       const node = new Pipe(pipe.name, pipe.name, pipe.type, y, x);
 
@@ -78,19 +62,11 @@ export class NodeGeneratorService {
       }
 
       this.nodeMap.set(pipe.name, node);
-      this.nodeService.addDynamicNode(node);
     });
   }
 
   generateExits(exits: any[]): void {
     exits.forEach((exit) => {
-      exit = new FlowStructureNode(
-        exit.line,
-        exit.column,
-        exit.type,
-        exit.attributes
-      );
-
       const [x, y] = exit.positions;
       const node = new Exit(exit.name, exit.name, exit.type, y, x);
       this.nodeMap.set(exit.name, node);

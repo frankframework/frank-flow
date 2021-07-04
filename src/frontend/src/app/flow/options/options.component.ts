@@ -65,7 +65,6 @@ export class OptionsComponent {
     const structure = this.flowStructureService.getStructure();
 
     if (nodeType?.match(/Pipe/) && nodeName) {
-      console.log(structure.pipes, nodeName);
       return structure.pipes[nodeName].attributes;
     } else {
       return null;

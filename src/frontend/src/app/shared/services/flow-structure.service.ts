@@ -69,7 +69,7 @@ export class FlowStructureService {
       '\n\t\t<Forward name="success" path="' + targetName + '" />';
     let lastForward;
     const currentPipe = pipes.find(
-      (pipe: FlowStructureNode) => pipe.name === sourceName
+      (pipe: FlowStructureNode) => pipe.attributes['name'].value === sourceName
     );
     const forwards = currentPipe.forwards;
     if (forwards) {
@@ -216,16 +216,7 @@ export class FlowStructureService {
     positionType: string,
     position: number
   ): void {
-    const node = structureNodes.find((structureNode: any) => {
-      const node = new FlowStructureNode(
-        structureNode.line,
-        structureNode.column,
-        structureNode.type,
-        structureNode.attributes,
-        structureNode.forwards
-      );
-      return node.name === nodeId;
-    });
+    const node = structureNodes.find((node: any) => node.name === nodeId);
     this.editAttribute(positionType, position, node.attributes);
   }
 
@@ -234,7 +225,6 @@ export class FlowStructureService {
       ([attributeKey, attribute]: [string, FlowNodeAttribute]) => {
         if (attributeKey === key) {
           const newValue = `${key}="${value}"`;
-          console.log(attribute);
           this.monacoEditorComponent?.applyEdit(
             {
               startLineNumber: attribute.line,

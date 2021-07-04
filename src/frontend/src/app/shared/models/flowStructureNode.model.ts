@@ -1,21 +1,15 @@
 import { FlowNodeAttributes } from './flowNodeAttributes.model';
-import { FlowNodeAttribute } from './flowNodeAttribute.model';
 
 export class FlowStructureNode {
-  attributes: {
-    [p: string]: {
-      value: string;
-      endColumn: number;
-      line: number;
-      startColumn: number;
-    };
-  } = {};
+  attributes: FlowNodeAttributes = {};
   line: number;
   column: number;
   type: string;
   forwards?: any[];
+  name: string;
+  positions: [x: number, y: number];
 
-  get name(): string {
+  getName(): string {
     if (this.attributes['name']) {
       return this.attributes['name'].value;
     } else if (this.attributes['path']) {
@@ -24,7 +18,7 @@ export class FlowStructureNode {
     return this.type;
   }
 
-  get positions(): [number, number] {
+  getPositions(): [number, number] {
     let x = 0;
     let y = 0;
 
@@ -48,7 +42,10 @@ export class FlowStructureNode {
     this.line = line;
     this.column = column;
     this.type = type;
-    this.attributes = attributes;
     this.forwards = forwards;
+
+    this.attributes = attributes ?? [];
+    this.name = this.getName();
+    this.positions = this.getPositions();
   }
 }

@@ -71,22 +71,22 @@ export class GraphService {
       const xMultiplier = 300;
       const yMultiplier = 100;
 
-      node?.setLeft(Math.abs(graphNode.position.x) * xMultiplier);
-      node?.setTop(Math.abs(graphNode.position.y) * yMultiplier);
+      // node?.setLeft(Math.abs(graphNode.position.x) * xMultiplier);
+      // node?.setTop(Math.abs(graphNode.position.y) * yMultiplier);
     });
 
     let listenerMargin = 100;
     let exitMargin = 800;
 
     nodeMap.forEach((node, index) => {
-      if (node.getType()?.match(/Listener/g)) {
-        node?.setLeft(100);
-        node?.setTop(listenerMargin);
-        listenerMargin += 100;
-      } else if (node.getType()?.match(/Exit/g)) {
-        node?.setLeft(exitMargin);
-        exitMargin += 100;
-      }
+      // if (node.getType()?.match(/Listener/g)) {
+      //   node?.setLeft(100);
+      //   node?.setTop(listenerMargin);
+      //   listenerMargin += 100;
+      // } else if (node.getType()?.match(/Exit/g)) {
+      //   node?.setLeft(exitMargin);
+      //   exitMargin += 100;
+      // }
       this.nodeService.addDynamicNode(node);
     });
   }

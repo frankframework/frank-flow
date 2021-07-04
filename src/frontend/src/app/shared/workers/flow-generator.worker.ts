@@ -21,7 +21,9 @@ addEventListener('message', ({ data }) => {
   }
 });
 
-parser.on('end', () => postMessage(flowStructure));
+parser.on('end', () =>
+  postMessage(new FlowStructure(flowStructure.nodes, flowStructure.firstPipe))
+);
 
 parser.on('opentag', (tag: TagForOptions<{}>) => {
   const currentNode = new FlowStructureNode(
