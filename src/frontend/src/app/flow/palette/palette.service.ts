@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Element } from '../../shared/models/element.model';
 import { ElementType } from '../../shared/models/element-type.model';
-import { IbisDocService } from '../../shared/services/ibis-doc.service';
+import { FrankDocService } from '../../shared/services/frank-doc.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,12 +9,12 @@ import { IbisDocService } from '../../shared/services/ibis-doc.service';
 export class PaletteService {
   data: Map<string, any[]> = new Map<string, any[]>();
 
-  constructor(private ibisDocService: IbisDocService) {
+  constructor(private frankDocService: FrankDocService) {
     this.getData();
   }
 
   getData(): void {
-    this.ibisDocService.getIbisDoc().subscribe({
+    this.frankDocService.getFrankDoc().subscribe({
       next: (data) => this.sortData(data),
     });
   }

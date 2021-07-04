@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { IbisDocService } from './ibis-doc.service';
+import { FrankDocService } from './frank-doc.service';
 
-describe('IbisDocService', () => {
-  let service: IbisDocService;
+describe('FrankDocService', () => {
+  let service: FrankDocService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(IbisDocService);
+    service = TestBed.inject(FrankDocService);
   });
 
   it('should be created', () => {
