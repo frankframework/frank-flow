@@ -17,6 +17,11 @@ export class NodeGeneratorService {
 
   constructor(private nodeService: NodeService) {}
 
+  resetNodes(): void {
+    this.nodeMap = new Map<string, Node>();
+    this.forwards = [];
+  }
+
   generateNodes(
     firstPipe: string,
     listeners: FlowStructureNode[],

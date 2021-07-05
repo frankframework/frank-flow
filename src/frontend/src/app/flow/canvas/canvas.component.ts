@@ -138,6 +138,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.jsPlumbInstance.ready(() => {
       this.jsPlumbInstance.reset(true);
       this.viewContainerRef.clear();
+      this.nodeGeneratorService.resetNodes();
 
       setTimeout(() => {
         if (structure && structure.firstPipe) {
