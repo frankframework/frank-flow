@@ -69,7 +69,7 @@ export class FlowStructureService {
     this.positionsUpdate = true;
     const pipes = this.structure.pipes;
     const newForward =
-      '\n\t\t<Forward name="success" path="' + targetName + '" />';
+      '\n\t\t\t\t<Forward name="success" path="' + targetName + '" />';
     let lastForward;
     const currentPipe = pipes.find(
       (pipe: FlowStructureNode) => pipe.attributes['name'].value === sourceName
@@ -94,10 +94,10 @@ export class FlowStructureService {
       } else {
         this.monacoEditorComponent?.applyEdit(
           {
-            startLineNumber: currentPipe.line - 1,
+            startLineNumber: currentPipe.line,
             startColumn: currentPipe.column,
             endColumn: currentPipe.column,
-            endLineNumber: currentPipe.line - 1,
+            endLineNumber: currentPipe.line,
           },
           newForward,
           false
@@ -111,7 +111,8 @@ export class FlowStructureService {
       (pipe: FlowStructureNode) => pipe.name === sourceName
     );
     const targetForward = sourcePipe.forwards.find(
-      (forward: FlowStructureNode) => forward.name === targetName
+      (forward: FlowStructureNode) =>
+        forward.attributes['path'].value === targetName
     );
 
     if (targetForward) {
