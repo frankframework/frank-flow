@@ -1,12 +1,12 @@
 /// <reference path="../../../../node_modules/monaco-editor/monaco.d.ts" />
-import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs';
-import {File} from '../models/file.model';
-import {FileType} from '../enums/file-type.enum';
-import {Originator} from '../memento/originator';
-import {Caretaker} from '../memento/caretaker';
-import {FileService} from './file.service';
-import {ToastrService} from 'ngx-toastr';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+import { File } from '../models/file.model';
+import { FileType } from '../enums/file-type.enum';
+import { Originator } from '../memento/originator';
+import { Caretaker } from '../memento/caretaker';
+import { FileService } from './file.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',

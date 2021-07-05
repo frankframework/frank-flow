@@ -5,128 +5,89 @@ import Listener from '../../flow/node/nodes/listener.model';
 import Exit from '../../flow/node/nodes/exit.model';
 import { Node } from '../../flow/node/nodes/node.model';
 import { Forward } from '../models/forward.model';
+import { FlowStructureNode } from '../models/flowStructureNode.model';
+import { FlowNodeAttribute } from '../models/flowNodeAttribute.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NodeGeneratorService {
+  nodeMap: Map<string, Node> = new Map<string, Node>();
+  forwards: Forward[] = [];
+
   constructor(private nodeService: NodeService) {}
 
-  public generateReceiver(
-    listeners: any[],
+  resetNodes(): void {
+    this.nodeMap = new Map<string, Node>();
+    this.forwards = [];
+  }
+
+  generateNodes(
     firstPipe: string,
-    forwards: Forward[],
-    nodeMap: Map<string, Node>
+    listeners: FlowStructureNode[],
+    pipes: FlowStructureNode[],
+    exits: FlowStructureNode[]
   ): void {
-    listeners.forEach((listenerInfo) => {
-      let x = 0;
-      let y = 0;
+    this.generateListeners(listeners, firstPipe);
+    this.generatePipeline(pipes);
+    this.generateExits(exits);
+  }
 
-      listenerInfo.attributes.forEach((attr: any) => {
-        if (attr.x) {
-          x = attr.x;
-        } else if (attr.y) {
-          y = attr.y;
-        }
-      });
-
+  generateListeners(listeners: FlowStructureNode[], firstPipe: string): void {
+    listeners.forEach((listener) => {
+      const [x, y] = listener.positions;
       const listenerNode = new Listener(
-        listenerInfo.name,
-        listenerInfo.name,
-        listenerInfo.type,
+        listener.name,
+        listener.name,
+        listener.type,
         y,
-        x,
-        listenerInfo.attributes
+        x
       );
 
-      forwards.push(new Forward(listenerInfo.name, firstPipe));
-
-      nodeMap.set(listenerInfo.name, listenerNode);
+      this.forwards.push(new Forward(listener.name, firstPipe));
+      this.nodeMap.set(listener.name, listenerNode);
     });
   }
 
-  public generatePipeline(
-    pipeline: any,
-    forwards: Forward[],
-    nodeMap: Map<string, Node>
-  ): void {
-    for (const key of Object.keys(pipeline)) {
-      const nodeInfo = pipeline[key];
-      let node;
+  generatePipeline(pipes: FlowStructureNode[]): void {
+    pipes.forEach((pipe: FlowStructureNode) => {
+      const [x, y] = pipe.positions;
+      const node = new Pipe(pipe.name, pipe.name, pipe.type, y, x);
 
-      let x = 0;
-      let y = 0;
-
-      nodeInfo.attributes.forEach((attr: any) => {
-        if (attr.x) {
-          x = attr.x;
-        } else if (attr.y) {
-          y = attr.y;
-        }
-      });
-
-      node = new Pipe(
-        nodeInfo.name,
-        nodeInfo.name,
-        nodeInfo.type,
-        y,
-        x,
-        nodeInfo.attributes
-      );
-
-      if (nodeInfo.forwards) {
-        nodeInfo.forwards.forEach((forward: any) => {
-          forward.attributes.forEach((attr: any) => {
-            if (attr.path) {
-              forwards.push(new Forward(nodeInfo.name, attr.path));
+      if (pipe.forwards) {
+        pipe.forwards.forEach((forward: FlowStructureNode) => {
+          Object.entries(forward.attributes).forEach(
+            ([key, attribute]: [string, FlowNodeAttribute]) => {
+              if (key === 'path') {
+                this.forwards.push(new Forward(pipe.name, attribute.value));
+              }
             }
-          });
+          );
         });
       }
 
-      nodeMap.set(nodeInfo.name, node);
-    }
-  }
-
-  public generateExits(exits: any[], nodeMap: Map<string, Node>): void {
-    exits.forEach((nodeInfo) => {
-      let x = 0;
-      let y = 0;
-      let path = '';
-
-      nodeInfo.attributes.forEach((attr: any) => {
-        if (attr.x) {
-          x = attr.x;
-        } else if (attr.y) {
-          y = attr.y;
-        } else if (attr.path) {
-          path = attr.path;
-        }
-      });
-
-      const exit = new Exit(
-        path,
-        path,
-        nodeInfo.type,
-        y,
-        x,
-        nodeInfo.attributes
-      );
-
-      nodeMap.set(path, exit);
+      this.nodeMap.set(pipe.name, node);
     });
   }
 
-  public generateForwards(forwards: Forward[]): void {
-    setTimeout(() => {
-      forwards.forEach((forward) => {
+  generateExits(exits: any[]): void {
+    exits.forEach((exit) => {
+      const [x, y] = exit.positions;
+      const node = new Exit(exit.name, exit.name, exit.type, y, x);
+      this.nodeMap.set(exit.name, node);
+    });
+  }
+
+  generateForwards(): void {
+    setTimeout(() =>
+      this.forwards.forEach((forward) =>
         this.nodeService.addConnection({
           uuids: [
             forward.getSource() + '_bottom',
             forward.getDestination() + '_top',
           ],
-        });
-      });
-    }, 500);
+        })
+      )
+    );
   }
 }

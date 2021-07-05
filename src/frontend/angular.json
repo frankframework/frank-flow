@@ -24,7 +24,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": ["cytoscape"],
+            "allowedCommonJsDependencies": ["saxes, cytoscape"],
             "outputPath": "../../target/frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -80,12 +80,6 @@
               ]
             },
             "dev": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
               "baseHref": "/frank-flow/",
               "deployUrl": "/frank-flow/",
               "outputHashing": "none",

@@ -14,3 +14,4 @@ dependency-reduced-pom.xml
 # Test frank config
 /src/frontend/cypress/Frank/target
 /src/frontend/cypress/Frank/.gitignore
+src/frontend/src/environments/environment.ts

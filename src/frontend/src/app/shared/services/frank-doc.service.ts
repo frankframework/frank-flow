@@ -5,28 +5,28 @@ import { Observable, Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class IbisDocService {
-  ibisDoc = new Subject<any>();
+export class FrankDocService {
+  frankDoc = new Subject<any>();
 
   constructor() {
-    this.fetchIbisDoc();
+    this.fetchFrankDoc();
   }
 
-  fetchIbisDoc(): void {
-    fetch(environment.runnerUri + environment.ibisdocJsonPath, {
+  fetchFrankDoc(): void {
+    fetch(environment.runnerUri + environment.frankDocJsonPath, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
       },
     })
       .then((result) => result.json())
-      .then((json) => this.ibisDoc.next(json))
+      .then((json) => this.frankDoc.next(json))
       .catch((error) => {
         console.error(error);
       });
   }
 
-  getIbisDoc(): Observable<any> {
-    return this.ibisDoc.asObservable();
+  getFrankDoc(): Observable<any> {
+    return this.frankDoc.asObservable();
   }
 }

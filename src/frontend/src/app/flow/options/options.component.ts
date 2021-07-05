@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
-import { IbisDocService } from 'src/app/shared/services/ibis-doc.service';
+import { FrankDocService } from 'src/app/shared/services/frank-doc.service';
 import { Node } from '../node/nodes/node.model';
 
 @Component({
@@ -10,27 +10,34 @@ import { Node } from '../node/nodes/node.model';
   styleUrls: ['./options.component.scss'],
 })
 export class OptionsComponent {
-  ibisDoc: any;
+  frankDoc: any;
   node?: Node;
+  // TODO: Make types.
   attributes!: [{ [key: string]: string }];
-  attributeOptions: any[] = [];
+  attributeOptions: {
+    name: string;
+    describer: string;
+    deprecated?: boolean;
+    default?: string;
+  }[] = [];
   selectedAttribute!: any;
   newAttributeValue!: string;
   disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
   nodeName!: string | undefined;
+  nodeDescription?: string;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
-    private ibisDocService: IbisDocService,
+    private frankDocService: FrankDocService,
     private flowStructureService: FlowStructureService
   ) {
-    this.getIbisDoc();
+    this.getFrankDoc();
   }
 
-  getIbisDoc(): void {
-    this.ibisDocService
-      .getIbisDoc()
-      .subscribe((ibisDoc: any) => (this.ibisDoc = ibisDoc));
+  getFrankDoc(): void {
+    this.frankDocService
+      .getFrankDoc()
+      .subscribe((frankDoc: any) => (this.frankDoc = frankDoc));
   }
 
   onDataAdded(): void {
@@ -48,12 +55,15 @@ export class OptionsComponent {
 
     const nodeType = this.node?.getType();
 
-    if (nodeType && this.ibisDoc) {
-      const pipe = this.ibisDoc[2].classes.filter(
+    if (nodeType && this.frankDoc) {
+      const element = this.frankDoc.elements.find(
+        // TODO: + Pipe might not be needed with the frankDoc.
         (node: any) => node.name === nodeType || node.name + 'Pipe' === nodeType
       );
-      pipe[0].methods.forEach((method: any) => {
-        this.attributeOptions.push(method);
+      this.nodeDescription = element?.descriptionHeader;
+      this.attributeOptions = [];
+      element?.attributes?.forEach((attribute: any) => {
+        this.attributeOptions.push(attribute);
       });
     }
   }
@@ -65,7 +75,6 @@ export class OptionsComponent {
     const structure = this.flowStructureService.getStructure();
 
     if (nodeType?.match(/Pipe/) && nodeName) {
-      console.log(structure.pipes, nodeName);
       return structure.pipes[nodeName].attributes;
     } else {
       return null;

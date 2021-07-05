@@ -19,7 +19,14 @@ export class GraphService {
     });
   }
 
-  public makeGraph(): void {
+  makeGraph(nodeMap: Map<string, Node>, forwards: Forward[]): void {
+    this.initializeGraph();
+    this.addNodesToGraph(nodeMap);
+    this.connectAllNodes(forwards);
+    this.generateGraphedNodes(nodeMap);
+  }
+
+  initializeGraph(): void {
     this.graph = cytoscape({
       layout: {
         name: 'grid',
@@ -28,15 +35,10 @@ export class GraphService {
     });
   }
 
-  public addNodesToGraph(nodeMap: Map<string, Node>): void {
+  addNodesToGraph(nodeMap: Map<string, Node>): void {
     nodeMap.forEach((node, key) => {
-      let x = 0;
-      let y = 0;
-
-      if (node.getLeft() && node.getTop()) {
-        x = node.getLeft() as number;
-        y = node.getTop() as number;
-      }
+      const x = (node.getLeft() as number) ?? 0;
+      const y = (node.getTop() as number) ?? 0;
 
       this.graph.add({
         group: 'nodes',
@@ -50,7 +52,7 @@ export class GraphService {
     });
   }
 
-  public generateGraphedNodes(nodeMap: Map<string, Node>): void {
+  generateGraphedNodes(nodeMap: Map<string, Node>): void {
     this.graph
       .layout({
         name: 'breadthfirst',
@@ -63,34 +65,33 @@ export class GraphService {
 
     const graphNodes = this.graph.nodes().jsons();
 
-    graphNodes.forEach((graphNode, index) => {
-      const objectNode = graphNode as any;
-      const node = nodeMap.get(objectNode.data.id);
+    graphNodes.forEach((graphNode: any, index: any) => {
+      const node = nodeMap.get(graphNode.data.id);
 
-      const xMultiplyer = 300;
-      const yMultiplyer = 100;
+      const xMultiplier = 300;
+      const yMultiplier = 100;
 
-      node?.setLeft(Math.abs(objectNode.position.x) * xMultiplyer);
-      node?.setTop(Math.abs(objectNode.position.y) * yMultiplyer);
+      // node?.setLeft(Math.abs(graphNode.position.x) * xMultiplier);
+      // node?.setTop(Math.abs(graphNode.position.y) * yMultiplier);
     });
 
     let listenerMargin = 100;
     let exitMargin = 800;
 
     nodeMap.forEach((node, index) => {
-      if (node.getType()?.match(/Listener/g)) {
-        node?.setLeft(100);
-        node?.setTop(listenerMargin);
-        listenerMargin += 100;
-      } else if (node.getType()?.match(/Exit/g)) {
-        node?.setLeft(exitMargin);
-        exitMargin += 100;
-      }
+      // if (node.getType()?.match(/Listener/g)) {
+      //   node?.setLeft(100);
+      //   node?.setTop(listenerMargin);
+      //   listenerMargin += 100;
+      // } else if (node.getType()?.match(/Exit/g)) {
+      //   node?.setLeft(exitMargin);
+      //   exitMargin += 100;
+      // }
       this.nodeService.addDynamicNode(node);
     });
   }
 
-  public connectAllNodes(forwards: Forward[]): void {
+  connectAllNodes(forwards: Forward[]): void {
     forwards.forEach((forward, index) => {
       const source = forward.getSource();
       const target = forward.getDestination();

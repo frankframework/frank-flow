@@ -9,15 +9,13 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
-import { Node } from '../node/nodes/node.model';
 import { CodeService } from '../../shared/services/code.service';
 import { jsPlumbInstance } from 'jsplumb';
-import { File } from '../../shared/models/file.model';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
-import { Forward } from '../../shared/models/forward.model';
-import { GraphService } from 'src/app/shared/services/graph.service';
-import { NodeGeneratorService } from 'src/app/shared/services/node-generator.service';
+import { GraphService } from '../../shared/services/graph.service';
+import { NodeGeneratorService } from '../../shared/services/node-generator.service';
+import { FlowStructure } from '../../shared/models/flowStructure.model';
 
 @Component({
   selector: 'app-canvas',
@@ -27,13 +25,12 @@ import { NodeGeneratorService } from 'src/app/shared/services/node-generator.ser
 export class CanvasComponent implements AfterViewInit, OnDestroy {
   @Input() nodes = [];
   @Input() connections = [];
-
   @ViewChild('canvas', { read: ViewContainerRef })
   viewContainerRef!: ViewContainerRef;
 
   jsPlumbInstance!: jsPlumbInstance;
   currentFileSubscription!: Subscription;
-  currentFile!: File;
+  flowUpdate = false;
   flowGenerator!: Worker;
 
   @HostBinding('tabindex') tabindex = 1;
@@ -56,6 +53,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
     this.createGeneratorWorker();
+    this.setCurrentFileListener();
+    this.setGeneratorWorkerListener();
   }
 
   ngOnDestroy(): void {
@@ -67,24 +66,16 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   createGeneratorWorker(): void {
     if (Worker) {
       this.flowGenerator = new Worker(
-        '../../shared/workers/flow-generator.worker',
+        new URL('../../shared/workers/flow-generator.worker', import.meta.url),
         {
+          name: 'flow-generator',
           type: 'module',
         }
       );
-
-      this.setCurrentFileListener();
-      this.setGeneratorWorkerListener();
     }
   }
 
-  selectFirstFile(): void {
-    const initialCurrentFile = this.codeService.getCurrentFile();
-    if (initialCurrentFile) {
-      this.flowGenerator.postMessage(initialCurrentFile);
-    }
-  }
-
+  // TODO: Save
   handleKeyboardUpEvent(kbdEvent: KeyboardEvent): void {
     if (kbdEvent.ctrlKey && kbdEvent.key === 'z') {
       this.codeService.undo();
@@ -96,16 +87,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   setGeneratorWorkerListener(): void {
     this.flowGenerator.onmessage = ({ data }) => {
       if (data) {
-        if (typeof data === 'string') {
-          alert('parser error: ' + data);
-        } else {
-          this.flowStructureService.setStructure(data);
-          if (this.flowStructureService.positionsUpdate) {
-            this.flowStructureService.positionsUpdate = false;
-          } else {
-            this.generateFlow(data);
-          }
-        }
+        this.flowStructureService.setStructure(data);
+        this.generateFlow(data);
       }
     };
   }
@@ -151,40 +134,28 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  generateFlow(data: any): void {
+  generateFlow(structure: FlowStructure): void {
     this.jsPlumbInstance.ready(() => {
       this.jsPlumbInstance.reset(true);
       this.viewContainerRef.clear();
+      this.nodeGeneratorService.resetNodes();
 
       setTimeout(() => {
-        if (data && data.listeners && data.pipes) {
-          const pipeline = data.pipes;
-          const firstPipe = data.firstPipe;
-          const listeners = data.listeners;
-          const nodeMap = new Map<string, Node>();
-          const forwards: Forward[] = [];
-
-          this.graphService.makeGraph();
-
-          this.nodeGeneratorService.generateReceiver(
-            listeners,
-            firstPipe,
-            forwards,
-            nodeMap
+        if (structure && structure.firstPipe) {
+          this.nodeGeneratorService.generateNodes(
+            structure.firstPipe,
+            structure.listeners,
+            structure.pipes,
+            structure.exits
           );
-          this.nodeGeneratorService.generatePipeline(
-            pipeline,
-            forwards,
-            nodeMap
-          );
-          this.nodeGeneratorService.generateExits(data.exits, nodeMap);
-
-          this.graphService.addNodesToGraph(nodeMap);
-          this.graphService.connectAllNodes(forwards);
-          this.graphService.generateGraphedNodes(nodeMap);
-
-          this.nodeGeneratorService.generateForwards(forwards);
         }
+
+        this.graphService.makeGraph(
+          this.nodeGeneratorService.nodeMap,
+          this.nodeGeneratorService.forwards
+        );
+
+        this.nodeGeneratorService.generateForwards();
       });
     });
   }
