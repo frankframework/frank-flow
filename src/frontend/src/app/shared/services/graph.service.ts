@@ -64,15 +64,15 @@ export class GraphService {
       .run();
 
     const graphNodes = this.graph.nodes().jsons();
+    let listenerMargin = 100;
+    let exitMargin = 800;
+    let exitTopPosition = 0;
 
     graphNodes.forEach((graphNode: any, index: any) => {
       const node = nodeMap.get(graphNode.data.id);
 
       const xMultiplier = 300;
       const yMultiplier = 100;
-
-      let listenerMargin = 100;
-      let exitMargin = 800;
 
       if (node?.getTop() === 0 && node.getLeft() === 0) {
         if (node.getType()?.match(/Listener/g)) {
@@ -81,11 +81,19 @@ export class GraphService {
           listenerMargin += 100;
         } else if (node.getType()?.match(/Exit/g)) {
           node?.setLeft(exitMargin);
-          node?.setTop(1700);
+          node?.setTop(exitTopPosition);
+          console.log('add exit:', exitMargin, exitTopPosition);
           exitMargin += 100;
         } else {
-          node?.setLeft(Math.abs(graphNode.position.x) * xMultiplier);
-          node?.setTop(Math.abs(graphNode.position.y) * yMultiplier);
+          const nodeLeftPosition = Math.abs(graphNode.position.x) * xMultiplier;
+          const nodeTopPosition = Math.abs(graphNode.position.y) * yMultiplier;
+
+          if (nodeTopPosition > exitTopPosition) {
+            exitTopPosition = nodeTopPosition;
+          }
+
+          node?.setLeft(nodeLeftPosition);
+          node?.setTop(nodeTopPosition);
         }
       }
       if (node) {
