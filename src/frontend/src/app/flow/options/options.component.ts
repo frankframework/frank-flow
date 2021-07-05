@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
+import { FlowNodeAttribute } from 'src/app/shared/models/flowNodeAttribute.model';
+import { FlowNodeAttributes } from 'src/app/shared/models/flowNodeAttributes.model';
+import { FlowStructureNode } from 'src/app/shared/models/flowStructureNode.model';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 import { FrankDocService } from 'src/app/shared/services/frank-doc.service';
 import { Node } from '../node/nodes/node.model';
@@ -13,7 +16,7 @@ export class OptionsComponent {
   frankDoc: any;
   node?: Node;
   // TODO: Make types.
-  attributes!: [{ [key: string]: string }];
+  attributes!: FlowNodeAttributes;
   attributeOptions: {
     name: string;
     describer: string;
@@ -50,7 +53,7 @@ export class OptionsComponent {
 
     this.nodeName = this.node?.getName();
     if (attributes) {
-      this.attributes = attributes as [{ [key: string]: string }];
+      this.attributes = attributes;
     }
 
     const nodeType = this.node?.getType();
@@ -75,10 +78,21 @@ export class OptionsComponent {
     const structure = this.flowStructureService.getStructure();
 
     if (nodeType?.match(/Pipe/) && nodeName) {
-      return structure.pipes[nodeName].attributes;
+      return structure.pipes.find(
+        (pipe: FlowStructureNode) => pipe.name == nodeName
+      );
     } else {
       return null;
     }
+  }
+
+  addAttribute(): void {
+    this.flowStructureService.createAttribute(
+      this.selectedAttribute.name,
+      this.newAttributeValue,
+      this.attributes,
+      false
+    );
   }
 
   changeAttribute(key: string, attribute: any): void {
@@ -87,15 +101,15 @@ export class OptionsComponent {
       const attributeList = this.getUpdatedAttributes();
       if (attributeList) {
         if (key === 'name') {
-          this.nodeName = attribute[key];
+          this.nodeName = attribute.value.value;
         }
         this.flowStructureService.editAttribute(
           key,
-          attribute[key],
-          attributeList
+          attribute.value.value,
+          attributeList.attributes
         );
       }
-    }, 500);
+    });
   }
 
   debounce(func: any, wait: number): any {

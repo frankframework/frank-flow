@@ -3,6 +3,7 @@ import { NodeService } from '../../flow/node/node.service';
 import { Node } from '../../flow/node/nodes/node.model';
 import { Forward } from '../models/forward.model';
 import * as cytoscape from 'cytoscape';
+import { FlowStructureService } from './flow-structure.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,10 @@ import * as cytoscape from 'cytoscape';
 export class GraphService {
   private graph: cytoscape.Core;
 
-  constructor(private nodeService: NodeService) {
+  constructor(
+    private nodeService: NodeService,
+    private flowStructureService: FlowStructureService
+  ) {
     this.graph = cytoscape({
       layout: {
         name: 'grid',
@@ -22,7 +26,11 @@ export class GraphService {
   makeGraph(nodeMap: Map<string, Node>, forwards: Forward[]): void {
     this.initializeGraph();
     this.addNodesToGraph(nodeMap);
-    this.connectAllNodes(forwards);
+    try {
+      this.connectAllNodes(forwards);
+    } catch (e) {
+      console.log('cant connect nodes, check if connection exists');
+    }
     this.generateGraphedNodes(nodeMap);
   }
 
@@ -64,8 +72,8 @@ export class GraphService {
       .run();
 
     const graphNodes = this.graph.nodes().jsons();
-    let listenerMargin = 100;
-    let exitMargin = 800;
+    let listenerTopMargin = 100;
+    let exitLeftMargin = 800;
     let exitTopPosition = 0;
 
     graphNodes.forEach((graphNode: any, index: any) => {
@@ -76,14 +84,17 @@ export class GraphService {
 
       if (node?.getTop() === 0 && node.getLeft() === 0) {
         if (node.getType()?.match(/Listener/g)) {
-          node?.setLeft(100);
-          node?.setTop(listenerMargin);
-          listenerMargin += 100;
+          const left = 100;
+
+          node?.setLeft(left);
+          node?.setTop(listenerTopMargin);
+
+          listenerTopMargin += 100;
         } else if (node.getType()?.match(/Exit/g)) {
-          node?.setLeft(exitMargin);
+          node?.setLeft(exitLeftMargin);
           node?.setTop(exitTopPosition);
-          console.log('add exit:', exitMargin, exitTopPosition);
-          exitMargin += 100;
+
+          exitLeftMargin += 100;
         } else {
           const nodeLeftPosition = Math.abs(graphNode.position.x) * xMultiplier;
           const nodeTopPosition = Math.abs(graphNode.position.y) * yMultiplier;

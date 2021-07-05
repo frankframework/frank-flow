@@ -4,6 +4,7 @@ import Exit from 'src/app/flow/node/nodes/exit.model';
 import { Subject, Subscription } from 'rxjs';
 import { FlowStructureNode } from '../models/flowStructureNode.model';
 import { FlowNodeAttribute } from '../models/flowNodeAttribute.model';
+import { FlowNodeAttributes } from '../models/flowNodeAttributes.model';
 
 @Injectable({
   providedIn: 'root',
@@ -131,17 +132,17 @@ export class FlowStructureService {
 
   addPipe(pipeData: any): void {
     const pipes = this.structure.pipes;
-    const newPipe = `\n\t  <${pipeData.type} name="${pipeData.name}" x="${pipeData.left}" y="${pipeData.top}">\n\t  </${pipeData.type}>`;
+    const newPipe = `\n\t\t\t<${pipeData.type} name="${pipeData.name}" x="${pipeData.left}" y="${pipeData.top}">\n\t\t\t</${pipeData.type}>\n`;
 
     const lastPipe = pipes[pipes.length - 1];
 
     if (lastPipe) {
       this.monacoEditorComponent?.applyEdit(
         {
-          startLineNumber: lastPipe.line + 1,
+          startLineNumber: lastPipe.line + 3,
           startColumn: lastPipe.startColumn,
           endColumn: lastPipe.endColumn,
-          endLineNumber: lastPipe.line + 1,
+          endLineNumber: lastPipe.line + 3,
         },
         newPipe,
         false
@@ -234,13 +235,16 @@ export class FlowStructureService {
   editAttribute(
     key: string,
     value: any,
-    attributeList: any[],
+    attributeList: FlowNodeAttributes,
     flowUpdate = false
   ): void {
+    let hasAttribute = false;
     Object.entries(attributeList).forEach(
       ([attributeKey, attribute]: [string, FlowNodeAttribute]) => {
         if (attributeKey === key) {
           const newValue = `${key}="${value}"`;
+
+          hasAttribute = true;
           this.monacoEditorComponent?.applyEdit(
             {
               startLineNumber: attribute.line,
@@ -253,6 +257,49 @@ export class FlowStructureService {
           );
         }
       }
+    );
+    if (!hasAttribute) {
+      this.createAttribute(key, value, attributeList, flowUpdate);
+    }
+  }
+
+  createAttribute(
+    key: string,
+    value: any,
+    attributeList: FlowNodeAttributes,
+    flowUpdate: boolean
+  ): void {
+    if (Object.entries(attributeList).length === 0) {
+      return;
+    }
+
+    const newValue = ` ${key}="${value}"`;
+
+    let endColumn = 0;
+    let startColumn = 0;
+    let line = 0;
+
+    Object.entries(attributeList).forEach(
+      ([attributeKey, attribute]: [string, FlowNodeAttribute]) => {
+        if (attribute.line > line) {
+          line = attribute.line;
+        }
+        if (attribute.endColumn > startColumn) {
+          startColumn = attribute.endColumn;
+          endColumn = startColumn;
+        }
+      }
+    );
+
+    this.monacoEditorComponent?.applyEdit(
+      {
+        startLineNumber: line,
+        startColumn: startColumn,
+        endColumn,
+        endLineNumber: line,
+      },
+      newValue,
+      flowUpdate
     );
   }
 }
