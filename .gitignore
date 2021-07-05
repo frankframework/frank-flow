@@ -1,16 +1,14 @@
-# IDE
-.settings
 .idea
-frank-flow.iml
+*.iml
+target
+lib
+bin
 
-# Maven build
-/target
-.mvn
-dependency-reduced-pom.xml
+# Eclipse
+.classpath
+.settings
+.apt_generated
+.factorypath
 
-# Cypress output
-/src/frontend/cypress/videos/
-
-# Test frank config
-/src/frontend/cypress/Frank/target
-/src/frontend/cypress/Frank/.gitignore
+**/META-INF/maven
+**/META-INF/MANIFEST.MF
