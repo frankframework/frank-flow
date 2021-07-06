@@ -31,13 +31,13 @@ export class GroupComponent {
   addNode(pipe: any): void {
     if (this.type === 'Listeners') {
       const listener = new Listener(pipe.name, pipe.name, pipe.name, 100, 100);
-      //this.flowStructureService.addListener(listener);
+      this.flowStructureService.addListener(listener);
     } else if (this.type === 'Pipes') {
       const newPipe = new Pipe(pipe.name, pipe.name, pipe.name, 100, 100);
       this.flowStructureService.addPipe(newPipe);
     } else if (this.type === 'Other' && pipe.name === 'PipeLineExit') {
       const exit = new Exit(pipe.name, 'Exit', 'Exit', 100, 100);
-      //sthis.flowStructureService.addExit(exit);
+      this.flowStructureService.addExit(exit);
     }
   }
 }

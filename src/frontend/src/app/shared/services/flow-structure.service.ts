@@ -144,7 +144,7 @@ export class FlowStructureService {
       lastPipe = this.structure.pipeline;
       line = lastPipe.line + 1;
     } else {
-      line = lastPipe.line + lastPipe.forwards.length + 4;
+      line = lastPipe.endLine + 1;
     }
 
     if (lastPipe) {
@@ -162,8 +162,10 @@ export class FlowStructureService {
   }
 
   addListener(pipeData: any): void {
-    const listeners = this.structure.pipes;
+    const listeners = this.structure.listeners;
     const lastListener = listeners[listeners.length - 1];
+
+    console.log(lastListener);
 
     const newListener = `\t  <${pipeData.type} name="${pipeData.name}" x="${pipeData.left}" y="${pipeData.top}" />\n`;
 
@@ -181,16 +183,21 @@ export class FlowStructureService {
 
   addExit(exitData: Exit): void {
     const exits = this.structure.exits;
-    const lastListener = exits[exits.length - 1];
+    let lastExit = exits[exits.length - 1];
+
+    if (!lastExit) {
+      lastExit = this.structure.pipes[this.structure.pipes.length - 1];
+      lastExit.line = lastExit.endLine;
+    }
 
     const newExit = `\t  <${exitData.getType()} path="${exitData.getName()}" x="${exitData.getLeft()}" y="${exitData.getTop()}" />\n`;
 
     this.monacoEditorComponent?.applyEdit(
       {
-        startLineNumber: lastListener.line + 1,
-        startColumn: lastListener.startColumn,
-        endColumn: lastListener.endColumn,
-        endLineNumber: lastListener.line + 1,
+        startLineNumber: lastExit.line + 1,
+        startColumn: lastExit.startColumn,
+        endColumn: lastExit.endColumn,
+        endLineNumber: lastExit.line + 1,
       },
       newExit,
       false
