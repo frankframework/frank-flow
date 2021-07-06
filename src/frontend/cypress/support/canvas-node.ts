@@ -19,6 +19,14 @@ export class CanvasNode {
     return this.top;
   }
 
+  getRight(): number {
+    return this.left + this.width;
+  }
+
+  getBottom(): number {
+    return this.top + this.height;
+  }
+
   toString(): string {
     return `CanvasElement(${this.left}, ${this.top}, ${this.width}, ${this.height})`;
   }

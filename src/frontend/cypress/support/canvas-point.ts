@@ -1,3 +1,5 @@
+import { CanvasNode } from './canvas-node';
+
 export class CanvasPoint {
   constructor(private x: number, private y: number) {}
 
@@ -9,6 +11,16 @@ export class CanvasPoint {
     const xClose = Math.abs(other.x - this.x) <= eps;
     const yClose = Math.abs(other.y - this.y) <= eps;
     return xClose && yClose;
+  }
+
+  public atNode(node: CanvasNode): boolean {
+    const minX = node.getLeft() - eps;
+    const maxX = node.getRight() + eps;
+    const minY = node.getTop() - eps;
+    const maxY = node.getBottom() + eps;
+    const xOK = this.x >= minX && this.x <= maxX;
+    const yOK = this.y >= minY && this.y <= maxY;
+    return xOK && yOK;
   }
 
   public getX(): number {
