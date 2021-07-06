@@ -190,7 +190,7 @@ export class FlowStructureService {
       lastExit.line = lastExit.endLine;
     }
 
-    const newExit = `\t  <${exitData.getType()} path="${exitData.getName()}" x="${exitData.getLeft()}" y="${exitData.getTop()}" />\n`;
+    const newExit = `\t\t\t<${exitData.getType()} path="${exitData.getName()}" x="${exitData.getLeft()}" y="${exitData.getTop()}" />\n`;
 
     this.monacoEditorComponent?.applyEdit(
       {
