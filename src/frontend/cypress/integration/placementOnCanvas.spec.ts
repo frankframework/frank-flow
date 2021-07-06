@@ -6,6 +6,7 @@ import { ExpectedConnection } from '../support/expected-connection';
 import { ParsedPathDProperty } from '../support/parsed-path-d-property';
 import { ParsedClassTransformProperty } from '../support/parsed-path-transform-property';
 import { CanvasConnection } from 'cypress/support/canvas-connection';
+import { ConnectionsOnCanvas } from '../support/connections-on-canvas';
 import * as cypress from 'cypress';
 
 describe('Placement on canvas', () => {
@@ -52,10 +53,16 @@ describe('Placement on canvas', () => {
         );
       })
     );
-    requestCanvasConnectionAreas(2 * expectedElements.size).then((areas) => {
+    const canvasConnectionAreas = requestCanvasConnectionAreas(
+      2 * expectedElements.size
+    );
+    canvasConnectionAreas.then((areas) => {
       areas.forEach((area) => cy.log(area.toString()));
     });
-    requestCanvasConnections(expectedConnections.length)
+    const canvasConnections = requestCanvasConnections(
+      expectedConnections.length
+    );
+    canvasConnections
       .then((conn) => {
         cy.log('Have the points that are connected');
         conn.forEach((c) => {
@@ -63,9 +70,39 @@ describe('Placement on canvas', () => {
         });
       })
       .catch((e) => expect(e).to.equal(null));
-    const expectNaN: number = +'xxx';
-    const comparison: boolean = Number.isNaN(expectNaN);
-    expect(comparison).to.equal(true);
+    actualElements
+      .then((theActualElements) => {
+        canvasConnectionAreas
+          .then((theCanvasConnectionAreas) => {
+            const connections = new ConnectionsOnCanvas(
+              theActualElements,
+              theCanvasConnectionAreas
+            );
+            canvasConnections
+              .then((theCanvasConnections) => {
+                try {
+                  connections.setCanvasConnections(theCanvasConnections);
+                  cy.log(
+                    'All canvas elements have been parsed. Checking that the nodes are connected as expected'
+                  );
+                  expect(connections.numConnections()).to.equal(
+                    expectedConnections.length
+                  );
+                  expectedConnections.forEach((expectedConnection) => {
+                    expect(
+                      connections.hasExpectedConnection(expectedConnection)
+                    ).to.be.true;
+                  });
+                  cy.log('Done checking node connections');
+                } catch (e) {
+                  expect(e).to.equal(null);
+                }
+              })
+              .catch((e) => expect(e).to.equal(null));
+          })
+          .catch((e) => expect(e).to.equal(null));
+      })
+      .catch((e) => expect(e).to.equal(null));
   });
 });
 

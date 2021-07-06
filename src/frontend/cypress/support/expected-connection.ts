@@ -2,11 +2,11 @@ export class ExpectedConnection {
   constructor(private from: string, private to: string) {}
 
   getFrom() {
-    return this.from;
+    return this.from.trim();
   }
 
   getTo() {
-    return this.to;
+    return this.to.trim();
   }
 
   toString(): string {

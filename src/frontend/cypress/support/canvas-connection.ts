@@ -1,3 +1,5 @@
+import { CanvasPoint } from './canvas-point';
+
 export class CanvasConnection {
   private connectionStartX: number;
   private connectionStartY: number;
@@ -18,6 +20,14 @@ export class CanvasConnection {
     this.connectionStartY = top + beginY + transformY;
     this.connectionEndX = left + endX + transformX;
     this.connectionEndY = top + endY + transformY;
+  }
+
+  public getBeginPoint(): CanvasPoint {
+    return new CanvasPoint(this.connectionStartX, this.connectionStartY);
+  }
+
+  public getEndPoint(): CanvasPoint {
+    return new CanvasPoint(this.connectionEndX, this.connectionEndY);
   }
 
   public toString(): string {

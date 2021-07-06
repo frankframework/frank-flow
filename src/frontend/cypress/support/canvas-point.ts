@@ -1,10 +1,22 @@
 import { CanvasNode } from './canvas-node';
 
 export class CanvasPoint {
-  constructor(private x: number, private y: number) {}
+  constructor(private x: number, private y: number) {
+    if (Number.isNaN(x)) {
+      throw new Error('CanvasPoint constructor called with NaN x-coordinate');
+    }
+    if (Number.isNaN(y)) {
+      throw new Error('CanvasPoint constructor called with NaN y-coordinate');
+    }
+    if (x === 0 && y === 0) {
+      throw new Error(
+        'CanvasPoint constructor called with unexpected point (0, 0)'
+      );
+    }
+  }
 
   public toString(): string {
-    return `CanvasPoint(${this.x}, ${this.y})`;
+    return 'CanvasPoint(' + +this.x + ', ' + +this.y + ')';
   }
 
   public closeTo(other: CanvasPoint): boolean {
