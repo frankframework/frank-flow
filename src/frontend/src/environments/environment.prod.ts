@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
   runnerUri: 'http://localhost/',
-  ibisdocJsonPath: 'rest/ibisdoc/ibisdoc.json',
+  frankDocJsonPath: 'iaf/api/frankdoc/files/frankdoc.json',
 };

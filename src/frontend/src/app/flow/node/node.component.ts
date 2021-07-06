@@ -4,7 +4,6 @@ import {
   HostBinding,
   HostListener,
   Input,
-  Pipe,
 } from '@angular/core';
 import { Node } from './nodes/node.model';
 import { EndpointOptions, jsPlumbInstance } from 'jsplumb';
@@ -19,13 +18,16 @@ import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
 })
 export class NodeComponent implements AfterViewInit {
   cloud = faCloudDownloadAlt;
-
+  @Input() node!: Node;
+  @Input() jsPlumbInstance!: jsPlumbInstance;
+  @Input() generating!: boolean;
+  @HostBinding('class') public cssClass: any;
+  @HostBinding('style') public style: any;
   private dropOptions = {
     tolerance: 'touch',
     hoverClass: 'dropHover',
     activeClass: 'dragActive',
   };
-
   private dragOptions = {
     containment: 'canvas',
     stop: (e: any) => {
@@ -50,20 +52,26 @@ export class NodeComponent implements AfterViewInit {
       }
     },
   };
-
   private bottomEndpointOptions: EndpointOptions = {
     endpoint: ['Dot', { radius: 7 }],
     paintStyle: { fill: '#99cb3a' },
     isSource: true,
     scope: 'jsPlumb_DefaultScope',
     connectorStyle: { stroke: '#99cb3a', strokeWidth: 3 },
-    connector: ['Flowchart', { alwaysRespectStubs: true, cornerRadius: 10 }],
+    connector: [
+      'Bezier',
+      {
+        alwaysRespectStubs: true,
+        cornerRadius: 10,
+        stub: [10, 50],
+        midpoint: 0.0001,
+      },
+    ],
     maxConnections: 30,
     isTarget: false,
     connectorOverlays: [['Arrow', { location: 1 }]],
     dropOptions: this.dropOptions,
   };
-
   private topEndpointOptions: EndpointOptions = {
     endpoint: ['Dot', { radius: 4 }],
     paintStyle: { fill: '#ffcb3a' },
@@ -74,51 +82,40 @@ export class NodeComponent implements AfterViewInit {
     dropOptions: this.dropOptions,
   };
 
-  @Input() node!: Node;
-  @Input() jsPlumbInstance!: jsPlumbInstance;
-  @Input() generating!: boolean;
-  @HostBinding('class') public cssClass: any;
-  @HostBinding('style') public style: any;
-
-  @HostListener('dblclick') onDoubleClick(): void {
-    this.openOptions();
-  }
-
   constructor(
     public ngxSmartModalService: NgxSmartModalService,
     public flowStructureService: FlowStructureService
   ) {}
 
+  @HostListener('dblclick') onDoubleClick(): void {
+    this.openOptions();
+  }
+
   ngAfterViewInit(): void {
     const id = this.node.getId();
 
-    this.jsPlumbInstance.addEndpoint(
-      id,
-      {
-        anchor: 'Bottom',
-        uuid: id + '_bottom',
-        maxConnections: -1,
-      },
-      this.bottomEndpointOptions
-    );
+    if (this.cssClass === 'shape--oval color--info') {
+      this.bottomEndpointOptions.isSource = false;
+      this.bottomEndpointOptions.connectionsDetachable = false;
+    } else {
+      this.jsPlumbInstance.addEndpoint(
+        id,
+        { anchor: 'Top', uuid: id + '_top', maxConnections: -1 },
+        this.topEndpointOptions
+      );
+    }
 
-    this.jsPlumbInstance.addEndpoint(
-      id,
-      { anchor: 'Top', uuid: id + '_top', maxConnections: -1 },
-      this.topEndpointOptions
-    );
-
-    // this.jsPlumbInstance.bind("connection", (info, originalEvent) => {
-    //   // console.log(info.sourceEndpoint.anchor.elementId, info.sourceEndpoint.getElement().classList);
-    //   console.log('connection: ', this.generating)
-    //   if (!this.generating) {
-    //     const sourceName = info.sourceEndpoint.anchor.elementId;
-    //     const targetName = info.targetEndpoint.anchor.elementId
-    //     const sourceClass = info.sourceEndpoint.getElement().classList[0];
-
-    //     this.flowStructureService.addConnection(sourceName, targetName)
-    //   }
-    // });
+    if (this.cssClass !== 'shape--round color--danger') {
+      this.jsPlumbInstance.addEndpoint(
+        id,
+        {
+          anchor: 'Bottom',
+          uuid: id + '_bottom',
+          maxConnections: -1,
+        },
+        this.bottomEndpointOptions
+      );
+    }
 
     this.jsPlumbInstance.draggable(id, this.dragOptions);
   }

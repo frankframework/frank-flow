@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PaletteService } from './palette.service';
+import { NodeGeneratorService } from './node-generator.service';
 
-describe('PaletteService', () => {
-  let service: PaletteService;
+describe('NodeGeneratorService', () => {
+  let service: NodeGeneratorService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PaletteService);
+    service = TestBed.inject(NodeGeneratorService);
   });
 
   it('should be created', () => {

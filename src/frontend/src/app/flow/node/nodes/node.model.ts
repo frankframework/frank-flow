@@ -1,43 +1,53 @@
-import { ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
-import { jsPlumbInstance, jsPlumbUtil } from 'jsplumb';
+import { ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
+import { jsPlumbInstance } from 'jsplumb';
 import { NodeComponent } from '../node.component';
 
 export class Node {
+  protected classes = '';
   private id: string;
   private name?: string | undefined;
   private type?: string | undefined;
   private top?: number | undefined;
   private left?: number | undefined;
-  protected classes = '';
+  private attributes?: [{ [key: string]: string }] | undefined;
 
   constructor(
     id: string,
     name?: string,
     type?: string,
     top?: number,
-    left?: number
+    left?: number,
+    attributes?: [{ [key: string]: string }]
   ) {
     this.id = id;
     this.name = name;
     this.type = type;
     this.top = top;
     this.left = left;
+    this.attributes = attributes;
   }
 
   getId(): string {
     return this.id;
   }
+
   getName(): string | undefined {
     return this.name;
   }
+
   getType(): string | undefined {
     return this.type;
   }
+
   getTop(): number | undefined {
     return this.top;
   }
+
   getLeft(): number | undefined {
     return this.left;
+  }
+  getAttributes(): [{ [key: string]: string }] | undefined {
+    return this.attributes;
   }
 
   setTop(top: number): void {

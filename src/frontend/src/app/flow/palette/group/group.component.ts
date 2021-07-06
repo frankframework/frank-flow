@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { NodeService } from '../../node/node.service';
 import { FlowStructureService } from '../../../shared/services/flow-structure.service';
@@ -35,7 +35,7 @@ export class GroupComponent {
     } else if (this.type === 'Pipes') {
       const newPipe = new Pipe(pipe.name, pipe.name, pipe.name, 100, 100);
       this.flowStructureService.addPipe(newPipe);
-    } else if (this.type === 'other' && pipe.name === 'PipeLineExit') {
+    } else if (this.type === 'Other' && pipe.name === 'PipeLineExit') {
       const exit = new Exit(pipe.name, 'Exit', 'Exit', 100, 100);
       this.flowStructureService.addExit(exit);
     }

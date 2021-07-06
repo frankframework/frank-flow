@@ -1,6 +1,3 @@
-import { ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
-import { jsPlumbInstance } from 'jsplumb';
-import { NodeComponent } from '../node.component';
 import { Node } from './node.model';
 
 export default class Exit extends Node {
@@ -9,7 +6,8 @@ export default class Exit extends Node {
     name?: string,
     type?: string,
     top?: number,
-    left?: number
+    left?: number,
+    attributes?: any[]
   ) {
     super(id, name, type, top, left);
     this.classes = 'shape--round color--danger';

@@ -2,10 +2,10 @@
   <div class="node__icon">
     <fa-icon [icon]="cloud"></fa-icon>
   </div>
-  <div class="node__type" [title]="node.getType()">
+  <div [title]="node.getType()" class="node__type">
     {{ node.getType() }}
   </div>
-  <div class="node__name" [title]="node.getName()">
+  <div [title]="node.getName()" class="node__name">
     {{ node.getName() }}
   </div>
   <div class="node__badges"></div>

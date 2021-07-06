@@ -206,7 +206,7 @@ export class MonacoEditorComponent
     }
     this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
       {
-        next: (file) => {
+        next: (file: File) => {
           if (file.data) {
             this.updateQueue.push(file);
             this.currentFile = file;

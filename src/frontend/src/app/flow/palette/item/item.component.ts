@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
