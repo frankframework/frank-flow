@@ -8,22 +8,39 @@ import { FlowStructureNode } from '../models/flowStructureNode.model';
 
 const MONACO_COLUMN_OFFSET = 1;
 
-const parser = new saxes.SaxesParser();
+let parser = new saxes.SaxesParser();
 
 let flowStructure: FlowStructure;
 let unclosedPipes: string[] = [];
 let bufferAttributes: FlowNodeAttributes;
+let pipeline: FlowStructureNode;
 
 addEventListener('message', ({ data }) => {
   if (typeof data === 'string') {
     flowStructure = new FlowStructure();
-    parser.write(data).close();
+
+    try {
+      parser.write(data).close();
+    } catch (e) {
+      console.log('catched e');
+      parser = new saxes.SaxesParser();
+    }
   }
 });
 
-parser.on('end', () =>
-  postMessage(new FlowStructure(flowStructure.nodes, flowStructure.firstPipe))
-);
+parser.on('end', () => {
+  const newFlowStructure = new FlowStructure(
+    flowStructure.nodes,
+    flowStructure.firstPipe
+  );
+  newFlowStructure.pipeline = pipeline;
+  postMessage(newFlowStructure);
+});
+
+parser.on('error', () => {
+  console.log('new parser!');
+  parser = new saxes.SaxesParser();
+});
 
 parser.on('opentag', (tag: TagForOptions<{}>) => {
   const currentNode = new FlowStructureNode(
@@ -50,6 +67,8 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     flowStructure.nodes.push(currentNode);
   } else if (currentNode.type.match(/Exit$/g)) {
     flowStructure.nodes.push(currentNode);
+  } else if (currentNode.type === 'Pipeline') {
+    pipeline = currentNode;
   }
 });
 

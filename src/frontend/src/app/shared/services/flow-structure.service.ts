@@ -132,17 +132,28 @@ export class FlowStructureService {
 
   addPipe(pipeData: any): void {
     const pipes = this.structure.pipes;
+    console.log('structure', this.structure);
     const newPipe = `\n\t\t\t<${pipeData.type} name="${pipeData.name}" x="${pipeData.left}" y="${pipeData.top}">\n\t\t\t</${pipeData.type}>\n`;
 
-    const lastPipe = pipes[pipes.length - 1];
+    let lastPipe = pipes[pipes.length - 1];
+    console.log('lastPipe is: ', lastPipe);
+
+    let line;
+
+    if (!lastPipe) {
+      lastPipe = this.structure.pipeline;
+      line = lastPipe.line + 1;
+    } else {
+      line = lastPipe.line + lastPipe.forwards.length + 4;
+    }
 
     if (lastPipe) {
       this.monacoEditorComponent?.applyEdit(
         {
-          startLineNumber: lastPipe.line + 3,
+          startLineNumber: line,
           startColumn: lastPipe.startColumn,
           endColumn: lastPipe.endColumn,
-          endLineNumber: lastPipe.line + 3,
+          endLineNumber: line,
         },
         newPipe,
         false
