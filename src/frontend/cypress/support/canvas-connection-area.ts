@@ -1,4 +1,4 @@
-import { CanvasPoint } from './cancas-point';
+import { CanvasPoint } from './canvas-point';
 
 export class CanvasConnectionArea {
   constructor(

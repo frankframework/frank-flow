@@ -1,4 +1,4 @@
-import { CanvasPoint } from '../support/cancas-point';
+import { CanvasPoint } from '../support/canvas-point';
 
 describe('CanvasPoint tests', function () {
   const first = new CanvasPoint(10, 10);
