@@ -2,3 +2,4 @@ TestFrankFlow,FirstPipe
 FirstPipe,ThirdPipe
 SecondPipe,ThirdPipe
 ThirdPipe,SecondPipe
+ThirdPipe,EXIT
