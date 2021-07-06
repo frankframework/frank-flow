@@ -10,6 +10,14 @@ export class CanvasPoint {
     const yClose = Math.abs(other.y - this.y) <= eps;
     return xClose && yClose;
   }
+
+  public getX(): number {
+    return this.x;
+  }
+
+  public getY(): number {
+    return this.y;
+  }
 }
 
 const eps = 2;

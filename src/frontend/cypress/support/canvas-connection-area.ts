@@ -1,3 +1,5 @@
+import { CanvasPoint } from './cancas-point';
+
 export class CanvasConnectionArea {
   constructor(
     private left: number,
@@ -12,6 +14,12 @@ export class CanvasConnectionArea {
 
   getTop(): number {
     return this.top;
+  }
+
+  getCenter(): CanvasPoint {
+    const centerX = (2.0 * this.left + this.width) / 2.0;
+    const centerY = (2.0 * this.top + this.height) / 2.0;
+    return new CanvasPoint(centerX, centerY);
   }
 
   toString(): string {
