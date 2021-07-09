@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FlowNodeAttribute } from 'src/app/shared/models/flowNodeAttribute.model';
+import { FlowNodeAttributeOptions } from 'src/app/shared/models/flowNodeAttributeOptions.model';
 import { FlowNodeAttributes } from 'src/app/shared/models/flowNodeAttributes.model';
 import { FlowStructureNode } from 'src/app/shared/models/flowStructureNode.model';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
@@ -15,14 +16,8 @@ import { Node } from '../node/nodes/node.model';
 export class OptionsComponent {
   frankDoc: any;
   node?: Node;
-  // TODO: Make types.
   attributes!: FlowNodeAttributes;
-  attributeOptions: {
-    name: string;
-    describer: string;
-    deprecated?: boolean;
-    default?: string;
-  }[] = [];
+  attributeOptions: FlowNodeAttributeOptions[] = [];
   selectedAttribute!: any;
   newAttributeValue!: string;
   disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
