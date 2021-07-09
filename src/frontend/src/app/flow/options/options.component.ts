@@ -79,7 +79,7 @@ export class OptionsComponent {
 
     if (nodeType?.match(/Pipe/) && nodeName) {
       return structure.pipes.find(
-        (pipe: FlowStructureNode) => pipe.name == nodeName
+        (pipe: FlowStructureNode) => pipe.name === nodeName
       );
     } else {
       return null;

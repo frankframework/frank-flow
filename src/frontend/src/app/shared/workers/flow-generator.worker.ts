@@ -23,7 +23,6 @@ addEventListener('message', ({ data }) => {
     try {
       parser.write(data).close();
     } catch (e) {
-      console.log('catched e');
       parser = new saxes.SaxesParser();
     }
   }
@@ -36,11 +35,6 @@ parser.on('end', () => {
   );
   newFlowStructure.pipeline = pipeline;
   postMessage(newFlowStructure);
-});
-
-parser.on('error', () => {
-  console.log('new parser!');
-  parser = new saxes.SaxesParser();
 });
 
 parser.on('opentag', (tag: TagForOptions<{}>) => {
@@ -86,9 +80,6 @@ parser.on('closetag', (tag: TagForOptions<{}>) => {
     if (pipe) {
       pipe.endLine = parser.line;
     }
-
-    //console.log('close', parser.line)
-    // console.log('close: ', tag, parser.line, 'closing pipe: ', closingTag)
   }
 });
 

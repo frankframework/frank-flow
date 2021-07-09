@@ -89,12 +89,6 @@ export class GraphService {
           node?.setLeft(left);
           node?.setTop(listenerTopMargin);
 
-          // this.flowStructureService.editListenerPositions(
-          //   node.getId(),
-          //   left,
-          //   listenerTopMargin
-          // );
-
           listenerTopMargin += 100;
         } else if (node.getType()?.match(/Exit/g)) {
           node?.setLeft(exitLeftMargin);

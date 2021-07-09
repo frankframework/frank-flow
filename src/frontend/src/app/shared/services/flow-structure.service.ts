@@ -136,7 +136,6 @@ export class FlowStructureService {
     const newPipe = `\n\t\t\t<${pipeData.type} name="${pipeData.name}" x="${pipeData.left}" y="${pipeData.top}">\n\t\t\t</${pipeData.type}>\n`;
 
     let lastPipe = pipes[pipes.length - 1];
-    console.log('lastPipe is: ', lastPipe);
 
     let line;
 
