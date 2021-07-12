@@ -1,6 +1,5 @@
 @import '~jqwidgets-ng/jqwidgets/styles/jqx.base.css';
 
-.jqx-widget,
 .jqx-widget-content {
   color: var(--text-color);
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -9,18 +8,27 @@
   background: var(--bg-color);
 }
 
+.jqx-dropdownbutton-popup {
+  .jqx-widget-content {
+    background: var(--bg-color-muted);
+  }
+}
+
 .jqx-tree-item {
   border: none;
   padding: 4px;
 }
+
 .jqx-tree-item-li {
   text-indent: 0;
   background-color: transparent;
   border: none;
 }
+
 .jqx-tree-item-hover {
   padding: 4px;
 }
+
 .jqx-tree-item-selected {
   color: inherit;
   right: 0;
@@ -35,6 +43,10 @@
 
 .jqx-fill-state-pressed {
   background: var(--bg-color-muted);
+
+  &.jqx-tree-item {
+    background: none;
+  }
 }
 
 .jqx-rc-all {

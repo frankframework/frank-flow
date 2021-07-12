@@ -13,6 +13,8 @@ export class NodeService {
   rootViewContainer!: ViewContainerRef;
   jsPlumbInstance!: jsPlumbInstance;
 
+  generating = false;
+
   constructor(private factoryResolver: ComponentFactoryResolver) {
     this.jsPlumbInstance = jsPlumb.getInstance({ Container: 'canvas' });
   }
@@ -32,14 +34,17 @@ export class NodeService {
     node.generateNode(
       this.rootViewContainer,
       this.factoryResolver,
-      this.jsPlumbInstance
+      this.jsPlumbInstance,
+      this.generating
     );
   }
 
   addConnection(connection: ConnectParams): void {
-    this.jsPlumbInstance.ready(() => {
-      this.jsPlumbInstance.connect({ uuids: connection.uuids });
-    });
+    if (!this.generating) {
+      this.jsPlumbInstance.ready(() => {
+        this.jsPlumbInstance.connect({ uuids: connection.uuids });
+      });
+    }
   }
 
   clear(): void {

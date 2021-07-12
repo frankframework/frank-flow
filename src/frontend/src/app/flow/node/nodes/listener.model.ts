@@ -1,27 +1,16 @@
-import { ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
-import { jsPlumbInstance } from 'jsplumb';
-import { NodeComponent } from '../node.component';
+import { FlowNodeAttributes } from 'src/app/shared/models/flowNodeAttributes.model';
 import { Node } from './node.model';
 
 export default class Listener extends Node {
-  generateNode(
-    rootViewContainer: ViewContainerRef,
-    factoryResolver: ComponentFactoryResolver,
-    plumbInstance: jsPlumbInstance
-  ): void {
-    plumbInstance.ready(() => {
-      const factory = factoryResolver.resolveComponentFactory(NodeComponent);
-      const component = factory.create(rootViewContainer.injector);
-
-      (component.instance as any).node = this;
-      (component.instance as any).jsPlumbInstance = plumbInstance;
-
-      const style = `left: ${this.getLeft()}px; top: ${this.getTop()}px;`;
-      component.instance.cssClass = 'shape--oval color--info';
-      component.instance.style = style;
-      component.location.nativeElement.id = this.getId();
-
-      rootViewContainer.insert(component.hostView);
-    });
+  constructor(
+    id: string,
+    name?: string,
+    type?: string,
+    top?: number,
+    left?: number,
+    attributes?: FlowNodeAttributes
+  ) {
+    super(id, name, type, top, left, attributes);
+    this.classes = 'shape--oval color--info';
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Settings } from './settings.model';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { DefaultSettings } from './defaultSettings.model';
+import { DefaultSettings } from './options/default-settings.model';
 
 @Injectable({
   providedIn: 'root',

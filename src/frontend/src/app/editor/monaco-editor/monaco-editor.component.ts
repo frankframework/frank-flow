@@ -15,6 +15,10 @@ import { SettingsService } from '../../header/settings/settings.service';
 import { Settings } from '../../header/settings/settings.model';
 import { File } from '../../shared/models/file.model';
 import { CodeService } from '../../shared/services/code.service';
+import { FileService } from '../../shared/services/file.service';
+import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
+import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -32,15 +36,26 @@ export class MonacoEditorComponent
   @Output() codeChange = new EventEmitter<string>();
 
   codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
-  curFile = new File();
+  currentFile = new File();
   fileObservableUpdate = false;
+
+  currentFileSubscription!: Subscription;
+  modeSubscription!: Subscription;
+  settingsSubscription!: Subscription;
+
+  updateQueue: File[] = [];
 
   constructor(
     private monacoElement: ElementRef,
     private modeService: ModeService,
     private settingsService: SettingsService,
-    private codeService: CodeService
-  ) {}
+    private codeService: CodeService,
+    private fileService: FileService,
+    private toastr: ToastrService,
+    private flowStructureService: FlowStructureService
+  ) {
+    this.flowStructureService.setEditorComponent(this);
+  }
 
   ngAfterViewInit(): void {
     this.loadMonaco();
@@ -52,10 +67,10 @@ export class MonacoEditorComponent
     }
   }
 
-  ngOnDestroy(): void {}
-
-  public setObservableUpdate(value: boolean): void {
-    this.fileObservableUpdate = value;
+  ngOnDestroy(): void {
+    this.currentFileSubscription.unsubscribe();
+    this.modeSubscription.unsubscribe();
+    this.settingsSubscription.unsubscribe();
   }
 
   loadMonaco(): void {
@@ -96,8 +111,10 @@ export class MonacoEditorComponent
 
   initializeMonaco(): void {
     this.initializeEditor();
+    this.initializeActions();
+    this.initializeFile();
+    this.initUpdateQueue();
     this.initializeTwoWayBinding();
-    this.codeService.setEditor(this.codeEditorInstance);
     this.initializeResizeObserver();
     this.initializeThemeObserver();
   }
@@ -112,33 +129,105 @@ export class MonacoEditorComponent
     );
   }
 
+  initializeActions(): void {
+    this.codeEditorInstance.addAction({
+      id: 'memento-undo-action',
+      label: 'Undo',
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_Z],
+      contextMenuGroupId: 'memento',
+      contextMenuOrder: 2,
+      run: () => this.setValue(this.codeService.undo()),
+    });
+
+    this.codeEditorInstance.addAction({
+      id: 'memento-redo-action',
+      label: 'Redo',
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_Y],
+      contextMenuGroupId: 'memento',
+      contextMenuOrder: 3,
+      run: () => this.setValue(this.codeService.redo()),
+    });
+    this.codeEditorInstance.addAction({
+      id: 'file-save-action',
+      label: 'Save',
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
+      contextMenuGroupId: 'file',
+      contextMenuOrder: 3,
+      run: () => this.save(),
+    });
+  }
+
+  save(): void {
+    this.codeService.save();
+  }
+
+  initializeFile(): void {
+    this.setValue(this.codeService.getCurrentFile());
+  }
+
+  setValue(file: File | undefined): void {
+    if (file?.data) {
+      this.currentFile = file;
+      this.codeEditorInstance.setValue(file.data);
+    }
+  }
+
+  applyEdit(range: monaco.IRange, text: string, flowUpdate: boolean): void {
+    const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
+
+    const editOperation: monaco.editor.IIdentifiedSingleEditOperation = {
+      range,
+      text,
+    };
+
+    editOperations.push(editOperation);
+
+    this.fileObservableUpdate = flowUpdate;
+    this.codeEditorInstance.getModel()?.applyEdits(editOperations);
+  }
+
   initializeTwoWayBinding(): void {
     const model = this.codeEditorInstance.getModel();
 
     if (model) {
       model.onDidChangeContent(
         this.debounce(() => {
-          if (!this.fileObservableUpdate) {
+          if (this.currentFile && !this.fileObservableUpdate) {
             this.fileObservableUpdate = true;
-            this.curFile.data = this.codeEditorInstance.getValue();
-            this.codeService.setCurrentFile(this.curFile);
+            this.currentFile.data = this.codeEditorInstance.getValue();
+            this.currentFile.saved = false;
+
+            this.codeService.setCurrentFile(this.currentFile);
           } else {
             this.fileObservableUpdate = false;
           }
         }, 500)
       );
     }
-    this.codeService.curFileObservable.subscribe({
-      next: (file) => {
-        if (file.data && !this.fileObservableUpdate) {
-          this.fileObservableUpdate = true;
-          model?.setValue(file.data);
-          this.curFile = file;
-        } else if (this.fileObservableUpdate) {
-          this.fileObservableUpdate = false;
-        }
-      },
-    });
+    this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
+      {
+        next: (file: File) => {
+          if (file.data) {
+            this.updateQueue.push(file);
+            this.currentFile = file;
+          }
+        },
+      }
+    );
+  }
+
+  initUpdateQueue(): void {
+    const model = this.codeEditorInstance.getModel();
+    setInterval(() => {
+      const file = this.updateQueue.shift();
+      if (file && file.data && !this.fileObservableUpdate) {
+        this.fileObservableUpdate = true;
+        model?.setValue(file.data);
+        this.currentFile = file;
+      } else if (file && this.fileObservableUpdate) {
+        this.fileObservableUpdate = false;
+      }
+    }, 510);
   }
 
   debounce(func: any, wait: number): any {
@@ -152,7 +241,7 @@ export class MonacoEditorComponent
   }
 
   initializeResizeObserver(): void {
-    this.modeService.getMode().subscribe({
+    this.modeSubscription = this.modeService.getMode().subscribe({
       next: () => {
         this.onResize();
       },
@@ -173,7 +262,7 @@ export class MonacoEditorComponent
   }
 
   initializeThemeObserver(): void {
-    this.settingsService.getSettings().subscribe({
+    this.settingsSubscription = this.settingsService.getSettings().subscribe({
       next: (settings) => {
         this.onThemeChange(settings);
       },

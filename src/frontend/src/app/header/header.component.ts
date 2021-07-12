@@ -8,6 +8,9 @@ import {
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSmartModalService } from 'ngx-smart-modal';
+import { CodeService } from '../shared/services/code.service';
+import { FileService } from '../shared/services/file.service';
+import { File } from '../shared/models/file.model';
 
 @Component({
   selector: 'app-header',
@@ -15,22 +18,33 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
+  currentFile!: File;
+
   constructor(
-    library: FaIconLibrary,
+    private library: FaIconLibrary,
     private toastr: ToastrService,
-    public ngxSmartModalService: NgxSmartModalService
+    private ngxSmartModalService: NgxSmartModalService,
+    private codeService: CodeService,
+    private fileService: FileService
   ) {
     library.addIcons(faFile, faFolder, faSave, faCog);
   }
 
-  // TODO remove later example for toaster
-  showSuccess(): void {
-    this.toastr.success('Your file has been saved succesfully.', 'File saved!');
+  ngOnInit(): void {
+    this.getCurrentFile();
+  }
+
+  getCurrentFile(): void {
+    this.codeService.curFileObservable.subscribe(
+      (currentFile) => (this.currentFile = currentFile)
+    );
+  }
+
+  save(): void {
+    this.codeService.save();
   }
 
   openSettings(): void {
     this.ngxSmartModalService.getModal('settingsModal').open();
   }
-
-  ngOnInit(): void {}
 }

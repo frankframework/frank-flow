@@ -1,0 +1,13 @@
+<jqxDropDownButton #dropDownButtonReference [height]="32" [width]="'100%'">
+  <app-file-tree
+    [fileMatch]="fileMatch"
+    [height]="512"
+    [ngClass]="{
+      light: !settings?.darkMode,
+      dark: settings?.darkMode
+    }"
+    [width]="dropDownButtonReference.elementRef?.nativeElement.offsetWidth"
+    class="root"
+  >
+  </app-file-tree>
+</jqxDropDownButton>
