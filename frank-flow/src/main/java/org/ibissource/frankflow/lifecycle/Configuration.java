@@ -18,6 +18,8 @@ package org.ibissource.frankflow.lifecycle;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ibissource.frankflow.BackendServlet;
@@ -25,11 +27,13 @@ import org.ibissource.frankflow.FrontendServlet;
 import org.ibissource.frankflow.util.FrankFlowProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
+import org.springframework.web.context.ServletContextAware;
 
 @org.springframework.context.annotation.Configuration
-public class Configuration {
+public class Configuration implements ServletContextAware {
 	private Logger log = LogManager.getLogger(this);
 	private String basePath = null;
+	private ServletContext servletContext;
 
 	@Bean
 	@Scope("singleton")
@@ -45,6 +49,8 @@ public class Configuration {
 	
 			log.info("loading Frank!Flow using context-path ["+path+"]");
 			basePath = path;
+
+			servletContext.setAttribute("basepath", basePath);
 		}
 		return basePath;
 	}
@@ -62,5 +68,10 @@ public class Configuration {
 		parameters.put("config-location", "ApiContext.xml");
 		parameters.put("bus", "frank-flow-bus");
 		return new ServletCreatorBean(getBasePath()+"api/*", BackendServlet.class, parameters);
+	}
+
+	@Override
+	public void setServletContext(ServletContext servletContext) {
+		this.servletContext = servletContext;
 	}
 }

@@ -32,10 +32,8 @@ public class FrontendServlet extends HttpServlet {
 		super.init();
 
 		frontendPath = FileUtils.getAbsPath(FrankFlowProperties.getProperty("frank-flow.frontend-path"));
-	}
 
-	public void setBasePath(String basePath) {
-		this.basePath = basePath;
+		basePath = (String) getServletConfig().getServletContext().getAttribute("basepath");
 	}
 
 	@Override
