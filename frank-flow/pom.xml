@@ -12,7 +12,6 @@
 
 	<properties>
 		<spring.version>4.3.25.RELEASE</spring.version>
-		<tomcat.version>9.0.43</tomcat.version>
 	</properties>
 
 	<dependencies>

@@ -21,8 +21,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Comparator;
+import java.util.Properties;
+import java.util.stream.Stream;
 
 import org.apache.catalina.Context;
+import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.tomcat.util.scan.StandardJarScanner;
 
@@ -49,6 +55,10 @@ public class TomcatInitializer {
 		baseDir.mkdirs();
 		System.out.println("resolved base directory to [" + baseDir + "]");
 
+		Connector connector = new Connector();
+		connector.setPort(Integer.valueOf(webPort));
+		tomcat.setConnector(connector);
+
 		File warFile = expandWarFile(baseDir);
 		Context ctx = tomcat.addWebapp("", warFile.toString());
 		ctx.setName("Frank!Flow Runner");
@@ -63,7 +73,7 @@ public class TomcatInitializer {
 //		ctx.setResources(resources);
 
 		tomcat.setAddDefaultWebXmlToWebapp(false);
-		tomcat.getServer().setPort(Integer.valueOf(webPort));
+//		tomcat.getServer().setPort(Integer.valueOf(webPort));
 
 		tomcat.init();
 		tomcat.start();
@@ -84,15 +94,23 @@ public class TomcatInitializer {
 		File warFile = new File(baseDir, "ROOT.war");
 		System.out.println("expanding war file to ["+warFile+"]");
 
+		File warFolder = new File(baseDir, "ROOT");
+		if(warFolder.exists()) {
+			try (Stream<Path> stream = Files.walk(warFolder.toPath())) {
+				stream.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+			}
+			Files.deleteIfExists(warFolder.toPath());
+		}
+
+		Files.deleteIfExists(warFile.toPath());
+
 		URL url = TomcatInitializer.class.getResource("/frank-flow-webapp.war");
 		if(url == null) {
 			url = new File("C:\\Data\\Git\\frank-flow-frontend\\frank-flow-webapp\\target\\frank-flow-webapp-2.0.2-SNAPSHOT.war").toURL();
 		}
 
-		try (InputStream inputStream = url.openStream()) {
-			try(FileOutputStream fos = new FileOutputStream(warFile)) {
-				copy(inputStream, fos);
-			}
+		try (InputStream inputStream = url.openStream(); FileOutputStream fos = new FileOutputStream(warFile)) {
+			copy(inputStream, fos);
 		}
 
 		if(!warFile.exists()) {
