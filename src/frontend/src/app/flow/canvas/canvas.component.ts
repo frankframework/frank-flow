@@ -124,8 +124,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
     this.jsPlumbInstance.bind('dblclick', (info, originalEvent) => {
       if (originalEvent) {
-        const sourceName = info.source.firstElementChild?.textContent?.trim();
-        const targetName = info.target.firstElementChild?.textContent?.trim();
+        const sourceName = info.source.children[0].children[2].innerHTML.trim();
+        const targetName = info.target.children[0].children[2].innerHTML.trim();
 
         if (sourceName && targetName) {
           this.flowStructureService.deleteConnection(sourceName, targetName);

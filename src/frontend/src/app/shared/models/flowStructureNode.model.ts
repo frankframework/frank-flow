@@ -3,6 +3,7 @@ import { FlowNodeAttributes } from './flowNodeAttributes.model';
 export class FlowStructureNode {
   attributes: FlowNodeAttributes = {};
   line: number;
+  endLine: number;
   column: number;
   type: string;
   forwards?: any[];
@@ -34,12 +35,14 @@ export class FlowStructureNode {
 
   constructor(
     line: number,
+    endLine: number,
     column: number,
     type: string,
     attributes: FlowNodeAttributes,
     forwards: any[] | undefined = undefined
   ) {
     this.line = line;
+    this.endLine = endLine;
     this.column = column;
     this.type = type;
     this.forwards = forwards;

@@ -6,6 +6,7 @@ export class FlowStructure {
   listeners: FlowStructureNode[];
   pipes: FlowStructureNode[];
   exits: FlowStructureNode[];
+  pipeline!: FlowStructureNode;
 
   getListeners(): FlowStructureNode[] {
     return (
