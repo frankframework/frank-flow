@@ -22,7 +22,7 @@ describe('Placement on canvas', () => {
     awaitFlowChartConnections(4);
   });
 
-  it('Each config element is canvas element', function (): void {
+  it('Each config element is canvas element and connections are as expected', function (): void {
     const expectedConnections = this
       .expectedConnections as ExpectedConnection[];
     cy.log('Expected connections are:');
@@ -53,8 +53,12 @@ describe('Placement on canvas', () => {
         );
       })
     );
+    // We assume that canvas elements have one or two connection points.
+    // Pipes have one connection point, while exits and listeners have one.
+    // We assume that there is one listener and one exit, and that
+    // all other elements are pipes.
     const canvasConnectionAreas = requestCanvasConnectionAreas(
-      2 * expectedElements.size
+      2 * expectedElements.size - 2
     );
     canvasConnectionAreas.then((areas) => {
       areas.forEach((area) => cy.log(area.toString()));
@@ -145,8 +149,8 @@ function elementToCanvasNode(inputElementName: string): Promise<CanvasNode> {
     requestCanvasNodeDomObject(inputElementName).then((domObject) => {
       const left = domObject.css('left');
       const top = domObject.css('top');
-      const width = domObject.css('min-width');
-      const height = domObject.css('min-height');
+      const width = domObject.css('width');
+      const height = domObject.css('height');
       const result = createCanvasNode(
         inputElementName,
         (left as unknown) as string,

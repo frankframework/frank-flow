@@ -34,6 +34,16 @@ export class ConnectionsOnCanvas {
         }
       });
     });
+    cy.log('Connection points by node id:');
+    this.connectionPointsByNodeId.forEach((points, id) =>
+      this.logPointsOfId(points, id)
+    );
+    cy.log('End connection points by node id');
+  }
+
+  logPointsOfId(points: CanvasPoint[], id: string) {
+    const pointsStr: string = points.map((p) => p.toString()).join(', ');
+    cy.log(`id: ${id}, points: ${pointsStr}`);
   }
 
   public setCanvasConnections(connections: CanvasConnection[]): void {
