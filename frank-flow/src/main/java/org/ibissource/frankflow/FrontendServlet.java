@@ -13,8 +13,8 @@ import javax.ws.rs.core.MediaType;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ibissource.frankflow.lifecycle.Configuration;
 import org.ibissource.frankflow.util.FileUtils;
+import org.ibissource.frankflow.util.FrankFlowProperties;
 import org.ibissource.frankflow.util.MimeTypeUtil;
 import org.springframework.util.StringUtils;
 
@@ -25,20 +25,26 @@ public class FrontendServlet extends HttpServlet {
 	private String frontendPath = null;
 	private final Logger log = LogManager.getLogger(this);
 
+	private String basePath;
+
 	@Override
 	public void init() throws ServletException {
 		super.init();
 
-		frontendPath = FileUtils.getFrontendPath();
+		frontendPath = FileUtils.getAbsPath(FrankFlowProperties.getProperty("frank-flow.frontend-path"));
+	}
+
+	public void setBasePath(String basePath) {
+		this.basePath = basePath;
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String path = req.getPathInfo();
 		if(path == null) {
-			log.warn("no path found, redirecting to ["+Configuration.BASEPATH+"]");
+			log.warn("no path found, redirecting to ["+basePath+"]");
 
-			resp.sendRedirect(req.getContextPath() + Configuration.BASEPATH);
+			resp.sendRedirect(req.getContextPath() + basePath);
 			return;
 		}
 		if(path.equals("/")) {

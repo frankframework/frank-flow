@@ -31,6 +31,8 @@ import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.tomcat.util.scan.StandardJarScanner;
+import org.ibissource.frankflow.util.FileUtils;
+import org.ibissource.frankflow.util.FrankFlowProperties;
 
 public class TomcatInitializer {
 
@@ -40,7 +42,7 @@ public class TomcatInitializer {
 
 		// The port that we should run on can be set into an environment variable
 		// Look for that variable and default to 8080 if it isn't there.
-		String webPort = System.getenv("PORT");
+		String webPort = FrankFlowProperties.getProperty("frank-flow.port");
 		if(webPort == null || webPort.isEmpty()) {
 			webPort = "8080";
 		}
@@ -106,7 +108,8 @@ public class TomcatInitializer {
 
 		URL url = TomcatInitializer.class.getResource("/frank-flow-webapp.war");
 		if(url == null) {
-			url = new File("C:\\Data\\Git\\frank-flow-frontend\\frank-flow-webapp\\target\\frank-flow-webapp-2.0.2-SNAPSHOT.war").toURL();
+			String absPath = FileUtils.getAbsPath(FrankFlowProperties.getProperty("frank-flow.war"));
+			url = new File(absPath).toURI().toURL();
 		}
 
 		try (InputStream inputStream = url.openStream(); FileOutputStream fos = new FileOutputStream(warFile)) {

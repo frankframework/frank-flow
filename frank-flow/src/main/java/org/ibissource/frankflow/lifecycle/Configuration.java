@@ -22,25 +22,37 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ibissource.frankflow.BackendServlet;
 import org.ibissource.frankflow.FrontendServlet;
+import org.ibissource.frankflow.util.FrankFlowProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 
 @org.springframework.context.annotation.Configuration
 public class Configuration {
 	private Logger log = LogManager.getLogger(this);
-	public static final String BASEPATH = System.getProperty("frank-flow.basepath", "/frank-flow/");
+	private String basePath = null;
 
 	@Bean
 	@Scope("singleton")
-	public String test() {
-		log.info("loading Frank!Flow beans");
-		return "dummy";
+	public String getBasePath() {
+		if(basePath == null) {
+			String path = FrankFlowProperties.getProperty("frank-flow.context-path", "/frank-flow/");
+			if(!path.startsWith("/")) {
+				path = "/"+path;
+			}
+			if(!path.endsWith("/")) {
+				path = path+"/";
+			}
+	
+			log.info("loading Frank!Flow using context-path ["+path+"]");
+			basePath = path;
+		}
+		return basePath;
 	}
 
 	@Bean
 	@Scope("singleton")
 	public ServletCreatorBean frontend() {
-		return new ServletCreatorBean(BASEPATH+"*", FrontendServlet.class);
+		return new ServletCreatorBean(getBasePath()+"*", FrontendServlet.class);
 	}
 
 	@Bean
@@ -49,6 +61,6 @@ public class Configuration {
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("config-location", "ApiContext.xml");
 		parameters.put("bus", "frank-flow-bus");
-		return new ServletCreatorBean(BASEPATH+"api/*", BackendServlet.class, parameters);
+		return new ServletCreatorBean(getBasePath()+"api/*", BackendServlet.class, parameters);
 	}
 }

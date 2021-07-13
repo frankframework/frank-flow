@@ -62,8 +62,7 @@ public abstract class FileUtils {
 		return dir;
 	}
 
-	public static String getFrontendPath() {
-		String path = System.getProperty("frank-flow.frontend.path"); //change this in catalina.properties
+	public static String getAbsPath(String path) {
 
 		if(StringUtils.isEmpty(path)) {
 			return null;
