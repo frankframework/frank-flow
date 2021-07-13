@@ -24,7 +24,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
-import java.util.Properties;
 import java.util.stream.Stream;
 
 import org.apache.catalina.Context;
@@ -108,8 +107,15 @@ public class TomcatInitializer {
 
 		URL url = TomcatInitializer.class.getResource("/frank-flow-webapp.war");
 		if(url == null) {
-			String absPath = FileUtils.getAbsPath(FrankFlowProperties.getProperty("frank-flow.war"));
-			url = new File(absPath).toURI().toURL();
+			String localWarFile = FrankFlowProperties.getProperty("frank-flow.war");
+			if(localWarFile != null) {
+				String absPath = FileUtils.getAbsPath(localWarFile);
+				url = new File(absPath).toURI().toURL();
+			}
+		}
+
+		if(url == null) {
+			throw new IOException("WAR file not found");
 		}
 
 		try (InputStream inputStream = url.openStream(); FileOutputStream fos = new FileOutputStream(warFile)) {
@@ -117,7 +123,7 @@ public class TomcatInitializer {
 		}
 
 		if(!warFile.exists()) {
-			throw new IOException("WAR not found");
+			throw new IOException("expanded WAR not found");
 		}
 
 		return warFile;
