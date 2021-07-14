@@ -14,7 +14,7 @@ on:
 
 defaults:
   run:
-    working-directory: src/frontend
+    working-directory: frank-flow/src/frontend
 
 jobs:
   build:
