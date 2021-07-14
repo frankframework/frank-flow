@@ -13,8 +13,6 @@
 	<name>Frank!Flow Launcher</name>
 
 	<properties>
-		<spring.version>4.3.25.RELEASE</spring.version>
-		<cxf.version>3.1.18</cxf.version>
 		<tomcat.version>9.0.48</tomcat.version>
 		<jetty.version>9.4.42.v20210604</jetty.version>
 	</properties>
