@@ -1,5 +1,6 @@
 import { ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
 import { jsPlumbInstance } from 'jsplumb';
+import { FlowNodeAttributes } from 'src/app/shared/models/flowNodeAttributes.model';
 import { NodeComponent } from '../node.component';
 
 export class Node {
@@ -9,19 +10,22 @@ export class Node {
   private type?: string | undefined;
   private top?: number | undefined;
   private left?: number | undefined;
+  private attributes?: FlowNodeAttributes | undefined;
 
   constructor(
     id: string,
     name?: string,
     type?: string,
     top?: number,
-    left?: number
+    left?: number,
+    attributes?: FlowNodeAttributes
   ) {
     this.id = id;
     this.name = name;
     this.type = type;
     this.top = top;
     this.left = left;
+    this.attributes = attributes;
   }
 
   getId(): string {
@@ -42,6 +46,9 @@ export class Node {
 
   getLeft(): number | undefined {
     return this.left;
+  }
+  getAttributes(): FlowNodeAttributes | undefined {
+    return this.attributes;
   }
 
   setTop(top: number): void {

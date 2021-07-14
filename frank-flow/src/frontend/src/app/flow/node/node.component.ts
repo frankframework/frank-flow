@@ -58,7 +58,15 @@ export class NodeComponent implements AfterViewInit {
     isSource: true,
     scope: 'jsPlumb_DefaultScope',
     connectorStyle: { stroke: '#99cb3a', strokeWidth: 3 },
-    connector: ['Flowchart', { alwaysRespectStubs: true, cornerRadius: 10 }],
+    connector: [
+      'Bezier',
+      {
+        alwaysRespectStubs: true,
+        cornerRadius: 10,
+        stub: [10, 50],
+        midpoint: 0.0001,
+      },
+    ],
     maxConnections: 30,
     isTarget: false,
     connectorOverlays: [['Arrow', { location: 1 }]],
@@ -86,33 +94,28 @@ export class NodeComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     const id = this.node.getId();
 
-    this.jsPlumbInstance.addEndpoint(
-      id,
-      {
-        anchor: 'Bottom',
-        uuid: id + '_bottom',
-        maxConnections: -1,
-      },
-      this.bottomEndpointOptions
-    );
+    if (this.cssClass === 'shape--oval color--info') {
+      this.bottomEndpointOptions.isSource = false;
+      this.bottomEndpointOptions.connectionsDetachable = false;
+    } else {
+      this.jsPlumbInstance.addEndpoint(
+        id,
+        { anchor: 'Top', uuid: id + '_top', maxConnections: -1 },
+        this.topEndpointOptions
+      );
+    }
 
-    this.jsPlumbInstance.addEndpoint(
-      id,
-      { anchor: 'Top', uuid: id + '_top', maxConnections: -1 },
-      this.topEndpointOptions
-    );
-
-    // this.jsPlumbInstance.bind("connection", (info, originalEvent) => {
-    //   // console.log(info.sourceEndpoint.anchor.elementId, info.sourceEndpoint.getElement().classList);
-    //   console.log('connection: ', this.generating)
-    //   if (!this.generating) {
-    //     const sourceName = info.sourceEndpoint.anchor.elementId;
-    //     const targetName = info.targetEndpoint.anchor.elementId
-    //     const sourceClass = info.sourceEndpoint.getElement().classList[0];
-
-    //     this.flowStructureService.addConnection(sourceName, targetName)
-    //   }
-    // });
+    if (this.cssClass !== 'shape--round color--danger') {
+      this.jsPlumbInstance.addEndpoint(
+        id,
+        {
+          anchor: 'Bottom',
+          uuid: id + '_bottom',
+          maxConnections: -1,
+        },
+        this.bottomEndpointOptions
+      );
+    }
 
     this.jsPlumbInstance.draggable(id, this.dragOptions);
   }
