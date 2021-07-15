@@ -13,7 +13,9 @@
     <div class="input-row" *ngIf="attributeOptions.length > 0">
       <label for="selectAttribute">Add attribute:</label>
       <select id="selectAttribute" [(ngModel)]="selectedAttribute" required>
-        <option selected [ngValue]="undefined" hidden disabled>Choose an attribute...</option>
+        <option selected [ngValue]="undefined" hidden disabled>
+          Choose an attribute...
+        </option>
         <option
           *ngFor="let attributeOption of attributeOptions"
           [ngValue]="attributeOption"
@@ -31,15 +33,16 @@
         [placeholder]="selectedAttribute?.default ?? ''"
       />
     </div>
-    <div *ngIf="selectedAttribute" class="input-row">
+    <div
+      *ngIf="selectedAttribute && selectedAttribute?.description"
+      class="row"
+    >
       <label>Description of attribute</label>
+      <div [innerHTML]="selectedAttribute?.description"></div>
     </div>
-    <div *ngIf="selectedAttribute" class="input-description">
-      <span [innerHTML]="selectedAttribute?.description"></span>
-    </div>
-    <div class="input-row" *ngIf="newAttributeValue">
+    <div class="row" *ngIf="newAttributeValue">
       <app-button (click)="addAttribute()"
-      >Add {{ selectedAttribute?.name }}</app-button
+        >Add {{ selectedAttribute?.name }}</app-button
       >
     </div>
     <ng-container
