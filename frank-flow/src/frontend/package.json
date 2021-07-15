@@ -9,7 +9,8 @@
     "build:analyze": "ng build --prod --stats-json && webpack-bundle-analyzer ../../target/frontend/stats.json",
     "build:dev": "ng build --configuration dev",
     "watch": "ng build --configuration dev --watch",
-    "test": "ng test",
+    "unit": "ng test",
+    "unit:ci": "ng test --browsers=Chrome --no-watch --no-progress",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "e2e:ci": "cypress run",
@@ -76,7 +77,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged && ng lint",
-      "pre-push": "ng test --browsers=Chrome --no-watch --no-progress && npm-run-all e2e:ci"
+      "pre-push": "run-s unit:ci e2e:ci"
     }
   }
 }
