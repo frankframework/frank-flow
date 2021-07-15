@@ -44,6 +44,7 @@ export class OptionsComponent {
   }
 
   getAttributesForNode(): void {
+    this.selectedAttribute = undefined;
     const attributes = this.node?.getAttributes();
 
     this.nodeName = this.node?.getName();
@@ -55,8 +56,7 @@ export class OptionsComponent {
 
     if (nodeType && this.frankDoc) {
       const element = this.frankDoc.elements.find(
-        // TODO: + Pipe might not be needed with the frankDoc.
-        (node: any) => node.name === nodeType || node.name + 'Pipe' === nodeType
+        (node: any) => node.elementNames.includes(nodeType)
       );
       this.nodeDescription = element?.descriptionHeader;
       this.attributeOptions = [];
