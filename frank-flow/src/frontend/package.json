@@ -12,6 +12,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "e2e:ci": "cypress run",
     "prettier": "prettier -w ."
   },
   "private": true,
@@ -75,7 +76,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged && ng lint",
-      "pre-push": "ng test --browsers=Chrome --no-watch --no-progress"
+      "pre-push": "ng test --browsers=Chrome --no-watch --no-progress && npm-run-all e2e:ci"
     }
   }
 }
