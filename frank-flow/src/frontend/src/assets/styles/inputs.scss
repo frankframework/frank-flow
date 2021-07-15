@@ -25,16 +25,19 @@ select {
   justify-content: space-between;
   align-items: center;
 
+  input,
+  select {
+    width: 50%;
+  }
+}
+
+.row,
+.input-row {
   &:not(:nth-last-of-type(1)) {
     margin-bottom: 8px;
   }
 
   label {
     font-weight: bold;
-  }
-
-  input,
-  select {
-    width: 50%;
   }
 }

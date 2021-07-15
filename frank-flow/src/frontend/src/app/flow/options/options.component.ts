@@ -14,13 +14,13 @@ import { Node } from '../node/nodes/node.model';
   styleUrls: ['./options.component.scss'],
 })
 export class OptionsComponent {
+  disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
   frankDoc: any;
   node?: Node;
   attributes!: FlowNodeAttributes;
   attributeOptions: FlowNodeAttributeOptions[] = [];
   selectedAttribute!: any;
   newAttributeValue!: string;
-  disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
   nodeName!: string | undefined;
   nodeDescription?: string;
 
@@ -40,11 +40,20 @@ export class OptionsComponent {
 
   onDataAdded(): void {
     this.node = this.ngxSmartModalService.getModalData('optionsModal');
+    this.resetPreviousData();
     this.getAttributesForNode();
   }
 
-  getAttributesForNode(): void {
+  resetPreviousData() {
+    this.attributes = {};
+    this.attributeOptions = [];
     this.selectedAttribute = undefined;
+    this.newAttributeValue = '';
+    this.nodeName = '';
+    this.nodeDescription = '';
+  }
+
+  getAttributesForNode(): void {
     const attributes = this.node?.getAttributes();
 
     this.nodeName = this.node?.getName();
@@ -55,11 +64,10 @@ export class OptionsComponent {
     const nodeType = this.node?.getType();
 
     if (nodeType && this.frankDoc) {
-      const element = this.frankDoc.elements.find(
-        (node: any) => node.elementNames.includes(nodeType)
+      const element = this.frankDoc.elements.find((node: any) =>
+        node.elementNames.includes(nodeType)
       );
       this.nodeDescription = element?.descriptionHeader;
-      this.attributeOptions = [];
       element?.attributes?.forEach((attribute: any) => {
         this.attributeOptions.push(attribute);
       });
