@@ -6,12 +6,15 @@ jobs:
     steps:
       - name: Checkout this frank-flow repository
         uses: actions/checkout@v2
+        with:
+          path: frank-flow
       - name: Setup Node
         uses: actions/setup-node@v2
       - name: Checkout frank-runner
         uses: actions/checkout@v2
         with:
           repository: ibissource/frank-runner
+          path: frank-runner
       - name: List all files
         run: tree > allFiles.txt
       - name: Store file listing artifact
