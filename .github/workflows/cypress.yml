@@ -4,8 +4,19 @@ jobs:
   cypress-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-      - uses: actions/checkout@v2
+      - name: Checkout this frank-flow repository
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+      - name: Checkout frank-runner
+        uses: actions/checkout@v2
         with:
           repository: ibissource/frank-runner
+      - name: List all files
+        run: tree > allFiles.txt
+      - name: Store file listing artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: allFiles.txt
+          path: allFiles.txt
+          path: output.log
