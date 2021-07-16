@@ -2,7 +2,7 @@ name: Run Cypress test
 on: push
 jobs:
   cypress-test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout this frank-flow repository
         uses: actions/checkout@v2
@@ -15,6 +15,8 @@ jobs:
         with:
           repository: ibissource/frank-runner
           path: frank-runner
+      - name: Build backend
+        run: mvn -f frank-flow -P frontend --log-file backendMavenBuildLog.txt clean install          
       - name: List all files
         run: tree > allFiles.txt
       - name: Store file listing artifact
@@ -22,3 +24,8 @@ jobs:
         with:
           name: allFiles.txt
           path: allFiles.txt
+      - name: Store Maven build output
+        uses: actions/upload-artifact@v2
+        with:
+          name: backendMavenBuildLog.txt
+          path: backendMavenBuildLog.txt
