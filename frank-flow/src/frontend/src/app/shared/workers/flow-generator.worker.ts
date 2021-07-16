@@ -7,6 +7,7 @@ import { FlowStructure } from '../models/flowStructure.model';
 import { FlowStructureNode } from '../models/flowStructureNode.model';
 
 const MONACO_COLUMN_OFFSET = 1;
+const QUOTE_AND_EQUALS = 2;
 
 let parser = new saxes.SaxesParser();
 
@@ -19,13 +20,20 @@ let endLine: number;
 addEventListener('message', ({ data }) => {
   if (typeof data === 'string') {
     flowStructure = new FlowStructure();
-
-    try {
-      parser.write(data).close();
-    } catch (e) {
-      parser = new saxes.SaxesParser();
-    }
+    parserWrite(data);
   }
+});
+
+const parserWrite = (data: string) => {
+  try {
+    parser.write(data).close();
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+parser.on('error', (error) => {
+  console.error(error);
 });
 
 parser.on('end', () => {
@@ -85,7 +93,9 @@ parser.on('closetag', (tag: TagForOptions<{}>) => {
 
 parser.on('attribute', (attribute: AttributeEventForOptions<{}>) => {
   const startColumn =
-    parser.column - (attribute.name + attribute.value).length - 2; // Quote and equals sign
+    parser.column -
+    (attribute.name + attribute.value).length -
+    QUOTE_AND_EQUALS;
 
   if (attribute.name === 'firstPipe') {
     flowStructure.firstPipe = attribute.value;

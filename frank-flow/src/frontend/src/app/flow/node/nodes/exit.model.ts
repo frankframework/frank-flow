@@ -1,4 +1,5 @@
 import { Node } from './node.model';
+import { FlowNodeAttributes } from '../../../shared/models/flowNodeAttributes.model';
 
 export default class Exit extends Node {
   constructor(
@@ -7,9 +8,9 @@ export default class Exit extends Node {
     type?: string,
     top?: number,
     left?: number,
-    attributes?: any[]
+    attributes?: FlowNodeAttributes
   ) {
-    super(id, name, type, top, left);
+    super(id, name, type, top, left, attributes);
     this.classes = 'shape--round color--danger';
   }
 }

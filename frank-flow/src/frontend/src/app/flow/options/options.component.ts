@@ -47,10 +47,14 @@ export class OptionsComponent {
   resetPreviousData() {
     this.attributes = {};
     this.attributeOptions = [];
-    this.selectedAttribute = undefined;
-    this.newAttributeValue = '';
     this.nodeName = '';
     this.nodeDescription = '';
+    this.clearNewAttribute();
+  }
+
+  clearNewAttribute() {
+    this.selectedAttribute = undefined;
+    this.newAttributeValue = '';
   }
 
   getAttributesForNode(): void {
@@ -96,6 +100,7 @@ export class OptionsComponent {
       this.attributes,
       false
     );
+    this.clearNewAttribute();
   }
 
   changeAttribute(key: string, attribute: any): void {
