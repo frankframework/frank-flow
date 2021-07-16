@@ -16,7 +16,7 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "es2020",
-    "lib": ["es2018", "dom"],
+    "lib": ["es2020", "dom"],
     "paths": {
       "timers": ["node_modules/timers-browserify"],
       "stream": ["node_modules/stream-browserify"]

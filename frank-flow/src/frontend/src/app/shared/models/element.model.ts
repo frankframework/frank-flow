@@ -1,6 +1,6 @@
 import { ElementType } from './element-type.model';
 
-export interface Element extends Array<Element> {
+export interface Element {
   name: string;
   type: ElementType;
 }

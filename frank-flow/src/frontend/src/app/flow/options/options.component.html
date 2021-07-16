@@ -10,10 +10,12 @@
     <p>{{ nodeDescription }}</p>
     <!-- TODO: Name and type here, those are generic for all nodes. Other attributes can be seen as 'additional' -->
     <h2>Attributes</h2>
-    <p>Add a new attribute</p>
-    <div class="input-row">
-      <select [(ngModel)]="selectedAttribute">
-        <option selected disabled>Choose an attribute</option>
+    <div class="input-row" *ngIf="attributeOptions.length > 0">
+      <label for="selectAttribute">Add attribute:</label>
+      <select id="selectAttribute" [(ngModel)]="selectedAttribute" required>
+        <option selected [ngValue]="undefined" hidden disabled>
+          Choose an attribute...
+        </option>
         <option
           *ngFor="let attributeOption of attributeOptions"
           [ngValue]="attributeOption"
@@ -21,17 +23,24 @@
           {{ attributeOption?.name }}
         </option>
       </select>
+    </div>
+    <div class="input-row" *ngIf="selectedAttribute">
+      <label for="newAttribute">New attribute value:</label>
       <input
         id="newAttribute"
         type="text"
         [(ngModel)]="newAttributeValue"
-        [placeholder]="selectedAttribute?.default"
+        [placeholder]="selectedAttribute?.default ?? ''"
       />
     </div>
-    <div *ngIf="selectedAttribute" class="input-row input-description">
-      <span [innerHTML]="selectedAttribute?.description"></span>
+    <div
+      *ngIf="selectedAttribute && selectedAttribute?.description"
+      class="row"
+    >
+      <label>Description of attribute</label>
+      <div [innerHTML]="selectedAttribute?.description"></div>
     </div>
-    <div class="input-row" *ngIf="newAttributeValue">
+    <div class="row" *ngIf="newAttributeValue">
       <app-button (click)="addAttribute()"
         >Add {{ selectedAttribute?.name }}</app-button
       >

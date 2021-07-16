@@ -24,7 +24,7 @@ export class PaletteService {
       data.groups.forEach((group: any) => {
         const elementTypes = this.getElementTypesInGroup(group, data);
         const elements = this.getElementsForTypes(elementTypes, data);
-        this.data.set(group.name, elements);
+        this.data.set(group.name, elements.flat(1));
       });
     }
   }
@@ -43,11 +43,17 @@ export class PaletteService {
       .flat(1);
   }
 
-  getElementsForTypes(types: ElementType, data: any): Element {
-    return types.map((type: ElementType) => ({
-      name: data.elements.find((element: any) => element.fullName === type.name)
-        .name,
-      type,
-    })) as Element;
+  getElementsForTypes(types: ElementType, data: any): Element[] {
+    return types.map(
+      (type: ElementType): Element => {
+        const element = data.elements.find(
+          (element: any) => element.fullName === type.name
+        );
+        return element.elementNames.map((elementName: string) => ({
+          name: elementName,
+          type,
+        }));
+      }
+    ) as Element[];
   }
 }

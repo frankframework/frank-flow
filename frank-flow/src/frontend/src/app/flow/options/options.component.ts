@@ -14,13 +14,13 @@ import { Node } from '../node/nodes/node.model';
   styleUrls: ['./options.component.scss'],
 })
 export class OptionsComponent {
+  disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
   frankDoc: any;
   node?: Node;
   attributes!: FlowNodeAttributes;
   attributeOptions: FlowNodeAttributeOptions[] = [];
   selectedAttribute!: any;
   newAttributeValue!: string;
-  disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
   nodeName!: string | undefined;
   nodeDescription?: string;
 
@@ -40,7 +40,17 @@ export class OptionsComponent {
 
   onDataAdded(): void {
     this.node = this.ngxSmartModalService.getModalData('optionsModal');
+    this.resetPreviousData();
     this.getAttributesForNode();
+  }
+
+  resetPreviousData() {
+    this.attributes = {};
+    this.attributeOptions = [];
+    this.selectedAttribute = undefined;
+    this.newAttributeValue = '';
+    this.nodeName = '';
+    this.nodeDescription = '';
   }
 
   getAttributesForNode(): void {
@@ -54,12 +64,10 @@ export class OptionsComponent {
     const nodeType = this.node?.getType();
 
     if (nodeType && this.frankDoc) {
-      const element = this.frankDoc.elements.find(
-        // TODO: + Pipe might not be needed with the frankDoc.
-        (node: any) => node.name === nodeType || node.name + 'Pipe' === nodeType
+      const element = this.frankDoc.elements.find((node: any) =>
+        node.elementNames.includes(nodeType)
       );
       this.nodeDescription = element?.descriptionHeader;
-      this.attributeOptions = [];
       element?.attributes?.forEach((attribute: any) => {
         this.attributeOptions.push(attribute);
       });
