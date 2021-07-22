@@ -19,13 +19,13 @@ jobs:
         run: echo "frank-flow.frontend-path = ${pwd}\\frank-flow\\src\\frontend" > frank-runner\\frank-flow.properties
       - name: Build backend
         run: mvn -f frank-flow -P frontend --log-file backendMavenBuildLog.txt clean install          
-      - name: List all files
-        run: tree > allFiles.txt
       - name: Run cypress test
         uses: cypress-io/github-action@v2.9.7
         with:
-          service: ant -buildfile frank-flow\\frank-flow\\src\\frontend\\cypress\\Frank
-          start: cd frank-flow\src\frontend; npx cypress run
+          start: ant -buildfile frank-flow\\frank-flow\\src\\frontend\\cypress\\Frank
+          working-directory: frank-flow\\frank-flow\\src\\frontend
+      - name: List all files
+        run: tree > allFiles.txt
       - name: Store (logging) information as artifact
         uses: actions/upload-artifact@v2
         with:
