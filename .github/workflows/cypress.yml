@@ -35,3 +35,4 @@ jobs:
             backendMavenBuildLog.txt
             frank-runner\\build.properties
             frank-runner\\frank-flow.properties
+            frank-runner\\build\\apache-tomcat*\\logs
