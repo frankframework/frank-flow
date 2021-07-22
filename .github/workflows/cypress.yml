@@ -22,7 +22,7 @@ jobs:
       - name: List all files
         run: tree > allFiles.txt
       - name: Run cypress test
-        uses: cypress.io/github-action@v2.9.7
+        uses: cypress-io/github-action@v2.9.7
         with:
           service: ant -buildfile frank-flow\\frank-flow\\src\\frontend\\cypress\\Frank
           start: cd frank-flow\src\frontend; npx cypress run
