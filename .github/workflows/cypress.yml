@@ -25,7 +25,7 @@ jobs:
           working-directory: frank-flow\\frank-flow\\src\\frontend
           start: ant -buildfile cypress\\Frank\\build.xml
           wait-on: 'http://localhost:80/frank-flow/'
-          wait-on-timeout: 300
+          wait-on-timeout: 900
       - name: List all files
         if: always()
         run: tree > allFiles.txt
