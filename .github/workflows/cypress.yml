@@ -16,11 +16,11 @@ jobs:
           repository: ibissource/frank-runner
           path: frank-runner
       - name: Write build.properties
-        run: echo projects.dir = %GITHUB_WORKSPACE%\\frank-flow\\frank-flow\\src\\frontend\\cypress\\Frank > frank-runner\\build.properties
+        run: echo "projects.dir = ${GITHUB_WORKSPACE}\\frank-flow\\src\\frontend\\cypress\\Frank" > frank-runner\\build.properties
       - name: Write frank-flow.properties
-        run: echo frank-flow.frontend-path = %GITHUB_WORKSPACE%\\frank-flow\\frank-flow\\src\\frontend > frank-runner\\frank-flow.properties
-      - name: Build backend
-        run: mvn -f frank-flow -P frontend --log-file backendMavenBuildLog.txt clean install          
+        run: echo "frank-flow.frontend-path = ${GITHUB_WORKSPACE}\\frank-flow\\src\\frontend" > frank-runner\\frank-flow.properties
+      # - name: Build backend
+      #   run: mvn -f frank-flow -P frontend --log-file backendMavenBuildLog.txt clean install          
       - name: List all files
         run: tree > allFiles.txt
       - name: Store (logging) information as artifact
