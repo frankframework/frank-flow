@@ -22,8 +22,8 @@ jobs:
       - name: Run cypress test
         uses: cypress-io/github-action@v2.9.7
         with:
-          start: ant -buildfile frank-flow\\frank-flow\\src\\frontend\\cypress\\Frank\\build.xml
           working-directory: frank-flow\\frank-flow\\src\\frontend
+          start: ant -buildfile cypress\\Frank\\build.xml
       - name: List all files
         run: tree > allFiles.txt
       - name: Store (logging) information as artifact
