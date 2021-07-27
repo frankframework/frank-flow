@@ -16,7 +16,7 @@ jobs:
           repository: ibissource/frank-runner
           path: frank-runner
       - name: Write frank-flow.properties
-        run: echo "frank-flow.frontend-path = ${pwd}\\frank-flow\\src\\frontend" > frank-runner\\frank-flow.properties
+        run: echo "frank-flow.frontend-path = $($pwd -replace '\\','\\')\\frank-flow\\src\\frontend" > frank-runner\\frank-flow.properties
       - name: Build backend
         run: mvn -f frank-flow -P frontend --log-file backendMavenBuildLog.txt clean install
       - name: Run cypress test
