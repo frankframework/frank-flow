@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  runnerUri: 'http://localhost/',
+  runnerUri: 'http://localhost:1000/',
   frankDocJsonPath: 'iaf/api/frankdoc/files/frankdoc.json',
 };
 
