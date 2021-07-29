@@ -18,7 +18,7 @@ jobs:
       - name: Working directory
         run: echo $pwd
       - name: Write frank-flow.properties
-        run: echo "frank-flow.frontend-path = $($pwd -replace '\\','\\')\\target\\frontend" > frank-runner\\frank-flow.properties
+        run: echo "frank-flow.frontend-path = $($pwd -replace '\\','\\')\\frank-flow\\frank-flow\\target\\frontend" > frank-runner\\frank-flow.properties
       - name: Build backend
         run: mvn -f frank-flow -P frontend --log-file backendMavenBuildLog.txt clean install
       - name: Run cypress test
