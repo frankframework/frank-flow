@@ -15,6 +15,8 @@ jobs:
         with:
           repository: ibissource/frank-runner
           path: frank-runner
+      - name: Working directory
+        run: echo $pwd
       - name: Write frank-flow.properties
         run: echo "frank-flow.frontend-path = $($pwd -replace '\\','\\')\\target\\frontend" > frank-runner\\frank-flow.properties
       - name: Build backend
@@ -25,7 +27,7 @@ jobs:
           working-directory: frank-flow\\frank-flow\\src\\frontend
           start: ant -buildfile cypress\\Frank\\build.xml
           wait-on: "http://localhost:1000/frank-flow/"
-          wait-on-timeout: 900
+          wait-on-timeout: 450
       - name: List all files
         if: always()
         run: tree > allFiles.txt
