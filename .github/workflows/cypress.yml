@@ -24,8 +24,8 @@ jobs:
       - name: Run cypress test
         uses: cypress-io/github-action@v2.9.7
         with:
-          working-directory: frank-flow\\frank-flow\\src\\frontend
-          start: ant -buildfile cypress\\Frank\\build.xml
+          working-directory: frank-flow\\frank-flow\\src\\frontend\\cypress\\Frank
+          start: ant -buildfile build.xml
           wait-on: "http://localhost:1000/frank-flow/"
           wait-on-timeout: 450
       - name: List all files
