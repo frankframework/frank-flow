@@ -4,23 +4,24 @@ import {
   OnInit,
   Renderer2,
   ViewChild,
-  ViewContainerRef,
 } from '@angular/core';
+import { PanZoomConfig, PanZoomConfigOptions } from 'ngx-panzoom';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
-  PanZoomConfig,
-  PanZoomConfigOptions,
-  PanZoomAPI,
-  PanZoomModel,
-} from 'ngx-panzoom';
-import { Subscription } from 'rxjs';
-import { NodeGeneratorService } from '../shared/services/node-generator.service';
+  faArrowDown,
+  faArrowUp,
+  faArrowLeft,
+  faArrowRight,
+} from '@fortawesome/free-solid-svg-icons';
+import { CodeService } from '../shared/services/code.service';
+import { GraphService } from '../shared/services/graph.service';
 
 @Component({
   selector: 'app-flow',
   templateUrl: './flow.component.html',
   styleUrls: ['./flow.component.scss'],
 })
-export class FlowComponent implements OnInit {
+export class FlowComponent {
   nodes = [];
   connections = [];
   private panZoomConfigOptions: PanZoomConfigOptions = {
@@ -32,55 +33,87 @@ export class FlowComponent implements OnInit {
     zoomOnDoubleClick: false,
   };
   panzoomConfig: PanZoomConfig = new PanZoomConfig(this.panZoomConfigOptions);
-  private modelChangedSubscription!: Subscription;
-  private panZoomAPI!: PanZoomAPI;
-  private apiSubscription!: Subscription;
 
   @ViewChild('nodeContainer', { read: ElementRef })
   nodeContainerRef!: ElementRef;
+  private offset = 500;
 
   constructor(
-    private nodeGeneratorService: NodeGeneratorService,
-    private renderer: Renderer2
-  ) {}
-
-  ngOnInit(): void {
-    console.log('hoi?');
-    this.modelChangedSubscription = this.panzoomConfig.modelChanged.subscribe(
-      (model: PanZoomModel) => this.onModelChanged(model)
-    );
-    this.apiSubscription = this.panzoomConfig.api.subscribe(
-      (api: PanZoomAPI) => (this.panZoomAPI = api)
-    );
+    private graphService: GraphService,
+    private codeService: CodeService,
+    private renderer: Renderer2,
+    private library: FaIconLibrary
+  ) {
+    this.library.addIcons(faArrowDown, faArrowUp, faArrowRight, faArrowLeft);
   }
 
-  onModelChanged(model: PanZoomModel): void {
-    // console.log('change in model: ', model);
-    const offset = 500;
+  expandLeft(): void {
+    this.graphService.expanding = true;
 
-    if (this.nodeContainerRef) {
-      if (model.pan.x >= 0) {
-        this.nodeGeneratorService.offX = offset;
-        //this.panZoomAPI.resetView();
-        this.panZoomAPI.centerContent(10);
-        console.log(
-          'expand canvas: ',
-          this.nodeContainerRef.nativeElement.getElementsByClassName(
-            'canvas'
-          )[0].offsetWidth
-        );
-        const el = this.nodeContainerRef.nativeElement.getElementsByClassName(
-          'canvas'
-        )[0];
-        const elWidth = this.nodeContainerRef.nativeElement.getElementsByClassName(
-          'canvas'
-        )[0].offsetWidth;
-        this.renderer.setStyle(el, 'width', elWidth + offset + 'px');
-      } else if (model.pan.y >= 0) {
-        this.nodeGeneratorService.offY = offset;
-        this.nodeContainerRef.nativeElement.style.height =
-          this.nodeContainerRef.nativeElement.style.height + offset + 'px';
-      }
-    }
+    this.graphService.offX += this.offset;
+    const el = this.nodeContainerRef.nativeElement.getElementsByClassName(
+      'canvas'
+    )[0];
+    const elWidth = this.nodeContainerRef.nativeElement.getElementsByClassName(
+      'canvas'
+    )[0].offsetWidth;
+    this.renderer.setStyle(el, 'width', elWidth + this.offset + 'px');
+    this.codeService.reloadFile();
+
+    // TODO: timeouts are ugly, so find a better solution for setting expanding to false after flow generation.
+    setTimeout(() => {
+      this.graphService.expanding = false;
+    }, 100);
+  }
+
+  expandTop(): void {
+    this.graphService.expanding = true;
+
+    this.graphService.offY += this.offset;
+    const el = this.nodeContainerRef.nativeElement.getElementsByClassName(
+      'canvas'
+    )[0];
+    const elHeight = this.nodeContainerRef.nativeElement.getElementsByClassName(
+      'canvas'
+    )[0].offsetHeight;
+    this.renderer.setStyle(el, 'height', elHeight + this.offset + 'px');
+
+    this.codeService.reloadFile();
+
+    setTimeout(() => {
+      this.graphService.expanding = false;
+    }, 100);
+  }
+
+  expandRight(): void {
+    this.graphService.expanding = true;
+
+    const el = this.nodeContainerRef.nativeElement.getElementsByClassName(
+      'canvas'
+    )[0];
+    const elWidth = this.nodeContainerRef.nativeElement.getElementsByClassName(
+      'canvas'
+    )[0].offsetWidth;
+    this.renderer.setStyle(el, 'width', elWidth + this.offset + 'px');
+
+    setTimeout(() => {
+      this.graphService.expanding = false;
+    }, 100);
+  }
+
+  expandBottom(): void {
+    this.graphService.expanding = true;
+
+    const el = this.nodeContainerRef.nativeElement.getElementsByClassName(
+      'canvas'
+    )[0];
+    const elHeight = this.nodeContainerRef.nativeElement.getElementsByClassName(
+      'canvas'
+    )[0].offsetHeight;
+    this.renderer.setStyle(el, 'height', elHeight + this.offset + 'px');
+
+    setTimeout(() => {
+      this.graphService.expanding = false;
+    }, 100);
   }
 }

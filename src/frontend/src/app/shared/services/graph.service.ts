@@ -11,6 +11,27 @@ import { FlowStructureService } from './flow-structure.service';
 export class GraphService {
   private graph: cytoscape.Core;
 
+  offsetY: number = 0;
+  offsetX: number = 0;
+
+  expanding: boolean = false;
+
+  set offY(value: number) {
+    this.offsetY = value;
+  }
+
+  get offY(): number {
+    return this.offsetY;
+  }
+
+  set offX(value: number) {
+    this.offsetX = value;
+  }
+
+  get offX(): number {
+    return this.offsetX;
+  }
+
   constructor(
     private nodeService: NodeService,
     private flowStructureService: FlowStructureService
@@ -108,6 +129,14 @@ export class GraphService {
         }
       }
       if (node) {
+        const top = node.getTop();
+        const left = node.getLeft();
+
+        if (top && left && this.expanding) {
+          node.setTop(top + this.offsetY);
+          node.setLeft(left + this.offsetX);
+        }
+
         this.nodeService.addDynamicNode(node);
       }
     });

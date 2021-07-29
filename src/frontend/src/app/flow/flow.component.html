@@ -1,11 +1,40 @@
 <div class="flowContainer">
-  <pan-zoom [config]="panzoomConfig">
+  <pan-zoom [config]="panzoomConfig" id="panzoom">
+    <fa-icon
+      icon="arrow-left"
+      size="10x"
+      class="arrowLeft"
+      transform="down-1"
+      (click)="expandLeft()"
+    ></fa-icon>
+    <fa-icon
+      icon="arrow-up"
+      size="10x"
+      class="arrowTop"
+      transform="down-1"
+      (click)="expandTop()"
+    ></fa-icon>
+    <fa-icon
+      icon="arrow-down"
+      size="10x"
+      class="arrowBottom"
+      transform="down-1"
+      (click)="expandBottom()"
+    ></fa-icon>
+    <fa-icon
+      icon="arrow-right"
+      size="10x"
+      class="arrowRight"
+      transform="down-1"
+      (click)="expandRight()"
+    ></fa-icon>
+
     <app-canvas
       #nodeContainer
       [nodes]="nodes"
       [connections]="connections"
     ></app-canvas>
   </pan-zoom>
-  <app-palette></app-palette>
 </div>
+<app-palette></app-palette>
 <app-options></app-options>

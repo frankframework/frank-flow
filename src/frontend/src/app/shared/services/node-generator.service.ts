@@ -14,26 +14,8 @@ import { FlowNodeAttribute } from '../models/flowNodeAttribute.model';
 export class NodeGeneratorService {
   nodeMap: Map<string, Node> = new Map<string, Node>();
   forwards: Forward[] = [];
-  offsetY: number = 0;
-  offsetX: number = 0;
 
   constructor(private nodeService: NodeService) {}
-
-  set offY(value: number) {
-    this.offsetY = value;
-  }
-
-  get offY(): number {
-    return this.offsetY;
-  }
-
-  set offX(value: number) {
-    this.offsetX = value;
-  }
-
-  get offX(): number {
-    return this.offsetX;
-  }
 
   resetNodes(): void {
     this.nodeMap = new Map<string, Node>();
@@ -59,8 +41,8 @@ export class NodeGeneratorService {
         listener.name,
         listener.name,
         listener.type,
-        y + this.offsetY,
-        x + this.offsetX,
+        y,
+        x,
         attributes
       );
 
@@ -73,14 +55,7 @@ export class NodeGeneratorService {
     pipes.forEach((pipe: FlowStructureNode) => {
       const [x, y] = pipe.positions;
       const attributes = pipe.attributes;
-      const node = new Pipe(
-        pipe.name,
-        pipe.name,
-        pipe.type,
-        y + this.offsetY,
-        x + this.offsetX,
-        attributes
-      );
+      const node = new Pipe(pipe.name, pipe.name, pipe.type, y, x, attributes);
 
       if (pipe.forwards) {
         pipe.forwards.forEach((forward: FlowStructureNode) => {
@@ -102,14 +77,7 @@ export class NodeGeneratorService {
     exits.forEach((exit) => {
       const [x, y] = exit.positions;
       const attributes = exit.attributes;
-      const node = new Exit(
-        exit.name,
-        exit.name,
-        exit.type,
-        y + this.offsetY,
-        x + this.offsetX,
-        attributes
-      );
+      const node = new Exit(exit.name, exit.name, exit.type, y, x, attributes);
       this.nodeMap.set(exit.name, node);
     });
   }
