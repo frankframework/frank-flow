@@ -14,4 +14,8 @@ describe('Check canvas loaded', function () {
   it('Check canvas', function () {
     cy.get('.canvas');
   });
+
+  it('Check canvas has contents', function () {
+    cy.get('.canvas > app-node');
+  });
 });
