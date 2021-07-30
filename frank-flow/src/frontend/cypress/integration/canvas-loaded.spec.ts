@@ -18,4 +18,10 @@ describe('Check canvas loaded', function () {
   it('Check canvas has contents', function () {
     cy.get('.canvas > app-node');
   });
+
+  it('Check whether API available', function () {
+    cy.request('/api/configurations', { log: true }).then((response) =>
+      cy.log(response.body)
+    );
+  });
 });
