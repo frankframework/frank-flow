@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log('hallo, hallo');
     this.getMode();
     this.getSettings();
   }
