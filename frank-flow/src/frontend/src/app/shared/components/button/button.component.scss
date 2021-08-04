@@ -1,0 +1,32 @@
+.button {
+  color: var(--text-color);
+  border: 2px solid var(--border-color);
+  height: 32px;
+  min-width: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: capitalize;
+  font-weight: bold;
+  padding: 4px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--text-color);
+  }
+
+  &--default {
+    background-color: var(--bg-color);
+  }
+
+  &--dark {
+    background: var(--dark-cyan);
+    color: #fafafa;
+  }
+}
+
+.selected {
+  border-color: var(--primary);
+}

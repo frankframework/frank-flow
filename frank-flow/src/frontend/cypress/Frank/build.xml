@@ -1,0 +1,9 @@
+<project default="restart-frank-flow-e2e-frank">
+	<target name="restart-frank-flow-e2e-frank">
+		<basename property="project.dir" file="${basedir}"/>
+		<exec executable="../../../../../../frank-runner/restart.bat" vmlauncher="false" failonerror="true">
+			<arg value="-Dprojects.dir=${basedir}/.."/>
+			<arg value="-Dproject.dir=${project.dir}"/>
+		</exec>
+	</target>
+</project>
