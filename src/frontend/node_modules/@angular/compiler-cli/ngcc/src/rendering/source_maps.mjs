@@ -1,0 +1,54 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { fromObject, generateMapFileComment } from 'convert-source-map';
+import { absoluteFrom, absoluteFromSourceFile } from '../../../src/ngtsc/file_system';
+import { ContentOrigin, SourceFileLoader } from '../../../src/ngtsc/sourcemaps';
+/**
+ * Merge the input and output source-maps, replacing the source-map comment in the output file
+ * with an appropriate source-map comment pointing to the merged source-map.
+ */
+export function renderSourceAndMap(logger, fs, sourceFile, generatedMagicString) {
+    var _a;
+    const sourceFilePath = absoluteFromSourceFile(sourceFile);
+    const sourceMapPath = absoluteFrom(`${sourceFilePath}.map`);
+    const generatedContent = generatedMagicString.toString();
+    const generatedMap = generatedMagicString.generateMap({ file: sourceFilePath, source: sourceFilePath, includeContent: true });
+    try {
+        const loader = new SourceFileLoader(fs, logger, {});
+        const generatedFile = loader.loadSourceFile(sourceFilePath, generatedContent, { map: generatedMap, mapPath: sourceMapPath });
+        const rawMergedMap = generatedFile.renderFlattenedSourceMap();
+        const mergedMap = fromObject(rawMergedMap);
+        const originalFile = loader.loadSourceFile(sourceFilePath, generatedMagicString.original);
+        if (originalFile.rawMap === null && !sourceFile.isDeclarationFile ||
+            ((_a = originalFile.rawMap) === null || _a === void 0 ? void 0 : _a.origin) === ContentOrigin.Inline) {
+            // We render an inline source map if one of:
+            // * there was no input source map and this is not a typings file;
+            // * the input source map exists and was inline.
+            //
+            // We do not generate inline source maps for typings files unless there explicitly was one in
+            // the input file because these inline source maps can be very large and it impacts on the
+            // performance of IDEs that need to read them to provide intellisense etc.
+            return [
+                { path: sourceFilePath, contents: `${generatedFile.contents}\n${mergedMap.toComment()}` }
+            ];
+        }
+        const sourceMapComment = generateMapFileComment(`${fs.basename(sourceFilePath)}.map`);
+        return [
+            { path: sourceFilePath, contents: `${generatedFile.contents}\n${sourceMapComment}` },
+            { path: sourceMapPath, contents: mergedMap.toJSON() }
+        ];
+    }
+    catch (e) {
+        logger.error(`Error when flattening the source-map "${sourceMapPath}" for "${sourceFilePath}": ${e.toString()}`);
+        return [
+            { path: sourceFilePath, contents: generatedContent },
+            { path: sourceMapPath, contents: fromObject(generatedMap).toJSON() },
+        ];
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic291cmNlX21hcHMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9jb21waWxlci1jbGkvbmdjYy9zcmMvcmVuZGVyaW5nL3NvdXJjZV9tYXBzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOzs7Ozs7R0FNRztBQUNILE9BQU8sRUFBQyxVQUFVLEVBQUUsc0JBQXNCLEVBQXFCLE1BQU0sb0JBQW9CLENBQUM7QUFJMUYsT0FBTyxFQUFDLFlBQVksRUFBRSxzQkFBc0IsRUFBcUIsTUFBTSxnQ0FBZ0MsQ0FBQztBQUV4RyxPQUFPLEVBQUMsYUFBYSxFQUFnQixnQkFBZ0IsRUFBQyxNQUFNLCtCQUErQixDQUFDO0FBVTVGOzs7R0FHRztBQUNILE1BQU0sVUFBVSxrQkFBa0IsQ0FDOUIsTUFBYyxFQUFFLEVBQXNCLEVBQUUsVUFBeUIsRUFDakUsb0JBQWlDOztJQUNuQyxNQUFNLGNBQWMsR0FBRyxzQkFBc0IsQ0FBQyxVQUFVLENBQUMsQ0FBQztJQUMxRCxNQUFNLGFBQWEsR0FBRyxZQUFZLENBQUMsR0FBRyxjQUFjLE1BQU0sQ0FBQyxDQUFDO0lBQzVELE1BQU0sZ0JBQWdCLEdBQUcsb0JBQW9CLENBQUMsUUFBUSxFQUFFLENBQUM7SUFDekQsTUFBTSxZQUFZLEdBQWlCLG9CQUFvQixDQUFDLFdBQVcsQ0FDL0QsRUFBQyxJQUFJLEVBQUUsY0FBYyxFQUFFLE1BQU0sRUFBRSxjQUFjLEVBQUUsY0FBYyxFQUFFLElBQUksRUFBQyxDQUFDLENBQUM7SUFFMUUsSUFBSTtRQUNGLE1BQU0sTUFBTSxHQUFHLElBQUksZ0JBQWdCLENBQUMsRUFBRSxFQUFFLE1BQU0sRUFBRSxFQUFFLENBQUMsQ0FBQztRQUNwRCxNQUFNLGFBQWEsR0FBRyxNQUFNLENBQUMsY0FBYyxDQUN2QyxjQUFjLEVBQUUsZ0JBQWdCLEVBQUUsRUFBQyxHQUFHLEVBQUUsWUFBWSxFQUFFLE9BQU8sRUFBRSxhQUFhLEVBQUMsQ0FBQyxDQUFDO1FBRW5GLE1BQU0sWUFBWSxHQUFpQixhQUFhLENBQUMsd0JBQXdCLEVBQUUsQ0FBQztRQUM1RSxNQUFNLFNBQVMsR0FBRyxVQUFVLENBQUMsWUFBWSxDQUFDLENBQUM7UUFDM0MsTUFBTSxZQUFZLEdBQUcsTUFBTSxDQUFDLGNBQWMsQ0FBQyxjQUFjLEVBQUUsb0JBQW9CLENBQUMsUUFBUSxDQUFDLENBQUM7UUFDMUYsSUFBSSxZQUFZLENBQUMsTUFBTSxLQUFLLElBQUksSUFBSSxDQUFDLFVBQVUsQ0FBQyxpQkFBaUI7WUFDN0QsQ0FBQSxNQUFBLFlBQVksQ0FBQyxNQUFNLDBDQUFFLE1BQU0sTUFBSyxhQUFhLENBQUMsTUFBTSxFQUFFO1lBQ3hELDRDQUE0QztZQUM1QyxrRUFBa0U7WUFDbEUsZ0RBQWdEO1lBQ2hELEVBQUU7WUFDRiw2RkFBNkY7WUFDN0YsMEZBQTBGO1lBQzFGLDBFQUEwRTtZQUMxRSxPQUFPO2dCQUNMLEVBQUMsSUFBSSxFQUFFLGNBQWMsRUFBRSxRQUFRLEVBQUUsR0FBRyxhQUFhLENBQUMsUUFBUSxLQUFLLFNBQVMsQ0FBQyxTQUFTLEVBQUUsRUFBRSxFQUFDO2FBQ3hGLENBQUM7U0FDSDtRQUVELE1BQU0sZ0JBQWdCLEdBQUcsc0JBQXNCLENBQUMsR0FBRyxFQUFFLENBQUMsUUFBUSxDQUFDLGNBQWMsQ0FBQyxNQUFNLENBQUMsQ0FBQztRQUN0RixPQUFPO1lBQ0wsRUFBQyxJQUFJLEVBQUUsY0FBYyxFQUFFLFFBQVEsRUFBRSxHQUFHLGFBQWEsQ0FBQyxRQUFRLEtBQUssZ0JBQWdCLEVBQUUsRUFBQztZQUNsRixFQUFDLElBQUksRUFBRSxhQUFhLEVBQUUsUUFBUSxFQUFFLFNBQVMsQ0FBQyxNQUFNLEVBQUUsRUFBQztTQUNwRCxDQUFDO0tBQ0g7SUFBQyxPQUFPLENBQUMsRUFBRTtRQUNWLE1BQU0sQ0FBQyxLQUFLLENBQUMseUNBQXlDLGFBQWEsVUFDL0QsY0FBYyxNQUFNLENBQUMsQ0FBQyxRQUFRLEVBQUUsRUFBRSxDQUFDLENBQUM7UUFDeEMsT0FBTztZQUNMLEVBQUMsSUFBSSxFQUFFLGNBQWMsRUFBRSxRQUFRLEVBQUUsZ0JBQWdCLEVBQUM7WUFDbEQsRUFBQyxJQUFJLEVBQUUsYUFBYSxFQUFFLFFBQVEsRUFBRSxVQUFVLENBQUMsWUFBWSxDQUFDLENBQUMsTUFBTSxFQUFFLEVBQUM7U0FDbkUsQ0FBQztLQUNIO0FBQ0gsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuaW1wb3J0IHtmcm9tT2JqZWN0LCBnZW5lcmF0ZU1hcEZpbGVDb21tZW50LCBTb3VyY2VNYXBDb252ZXJ0ZXJ9IGZyb20gJ2NvbnZlcnQtc291cmNlLW1hcCc7XG5pbXBvcnQgTWFnaWNTdHJpbmcgZnJvbSAnbWFnaWMtc3RyaW5nJztcbmltcG9ydCAqIGFzIHRzIGZyb20gJ3R5cGVzY3JpcHQnO1xuXG5pbXBvcnQge2Fic29sdXRlRnJvbSwgYWJzb2x1dGVGcm9tU291cmNlRmlsZSwgUmVhZG9ubHlGaWxlU3lzdGVtfSBmcm9tICcuLi8uLi8uLi9zcmMvbmd0c2MvZmlsZV9zeXN0ZW0nO1xuaW1wb3J0IHtMb2dnZXJ9IGZyb20gJy4uLy4uLy4uL3NyYy9uZ3RzYy9sb2dnaW5nJztcbmltcG9ydCB7Q29udGVudE9yaWdpbiwgUmF3U291cmNlTWFwLCBTb3VyY2VGaWxlTG9hZGVyfSBmcm9tICcuLi8uLi8uLi9zcmMvbmd0c2Mvc291cmNlbWFwcyc7XG5cbmltcG9ydCB7RmlsZVRvV3JpdGV9IGZyb20gJy4vdXRpbHMnO1xuXG5leHBvcnQgaW50ZXJmYWNlIFNvdXJjZU1hcEluZm8ge1xuICBzb3VyY2U6IHN0cmluZztcbiAgbWFwOiBTb3VyY2VNYXBDb252ZXJ0ZXJ8bnVsbDtcbiAgaXNJbmxpbmU6IGJvb2xlYW47XG59XG5cbi8qKlxuICogTWVyZ2UgdGhlIGlucHV0IGFuZCBvdXRwdXQgc291cmNlLW1hcHMsIHJlcGxhY2luZyB0aGUgc291cmNlLW1hcCBjb21tZW50IGluIHRoZSBvdXRwdXQgZmlsZVxuICogd2l0aCBhbiBhcHByb3ByaWF0ZSBzb3VyY2UtbWFwIGNvbW1lbnQgcG9pbnRpbmcgdG8gdGhlIG1lcmdlZCBzb3VyY2UtbWFwLlxuICovXG5leHBvcnQgZnVuY3Rpb24gcmVuZGVyU291cmNlQW5kTWFwKFxuICAgIGxvZ2dlcjogTG9nZ2VyLCBmczogUmVhZG9ubHlGaWxlU3lzdGVtLCBzb3VyY2VGaWxlOiB0cy5Tb3VyY2VGaWxlLFxuICAgIGdlbmVyYXRlZE1hZ2ljU3RyaW5nOiBNYWdpY1N0cmluZyk6IEZpbGVUb1dyaXRlW10ge1xuICBjb25zdCBzb3VyY2VGaWxlUGF0aCA9IGFic29sdXRlRnJvbVNvdXJjZUZpbGUoc291cmNlRmlsZSk7XG4gIGNvbnN0IHNvdXJjZU1hcFBhdGggPSBhYnNvbHV0ZUZyb20oYCR7c291cmNlRmlsZVBhdGh9Lm1hcGApO1xuICBjb25zdCBnZW5lcmF0ZWRDb250ZW50ID0gZ2VuZXJhdGVkTWFnaWNTdHJpbmcudG9TdHJpbmcoKTtcbiAgY29uc3QgZ2VuZXJhdGVkTWFwOiBSYXdTb3VyY2VNYXAgPSBnZW5lcmF0ZWRNYWdpY1N0cmluZy5nZW5lcmF0ZU1hcChcbiAgICAgIHtmaWxlOiBzb3VyY2VGaWxlUGF0aCwgc291cmNlOiBzb3VyY2VGaWxlUGF0aCwgaW5jbHVkZUNvbnRlbnQ6IHRydWV9KTtcblxuICB0cnkge1xuICAgIGNvbnN0IGxvYWRlciA9IG5ldyBTb3VyY2VGaWxlTG9hZGVyKGZzLCBsb2dnZXIsIHt9KTtcbiAgICBjb25zdCBnZW5lcmF0ZWRGaWxlID0gbG9hZGVyLmxvYWRTb3VyY2VGaWxlKFxuICAgICAgICBzb3VyY2VGaWxlUGF0aCwgZ2VuZXJhdGVkQ29udGVudCwge21hcDogZ2VuZXJhdGVkTWFwLCBtYXBQYXRoOiBzb3VyY2VNYXBQYXRofSk7XG5cbiAgICBjb25zdCByYXdNZXJnZWRNYXA6IFJhd1NvdXJjZU1hcCA9IGdlbmVyYXRlZEZpbGUucmVuZGVyRmxhdHRlbmVkU291cmNlTWFwKCk7XG4gICAgY29uc3QgbWVyZ2VkTWFwID0gZnJvbU9iamVjdChyYXdNZXJnZWRNYXApO1xuICAgIGNvbnN0IG9yaWdpbmFsRmlsZSA9IGxvYWRlci5sb2FkU291cmNlRmlsZShzb3VyY2VGaWxlUGF0aCwgZ2VuZXJhdGVkTWFnaWNTdHJpbmcub3JpZ2luYWwpO1xuICAgIGlmIChvcmlnaW5hbEZpbGUucmF3TWFwID09PSBudWxsICYmICFzb3VyY2VGaWxlLmlzRGVjbGFyYXRpb25GaWxlIHx8XG4gICAgICAgIG9yaWdpbmFsRmlsZS5yYXdNYXA/Lm9yaWdpbiA9PT0gQ29udGVudE9yaWdpbi5JbmxpbmUpIHtcbiAgICAgIC8vIFdlIHJlbmRlciBhbiBpbmxpbmUgc291cmNlIG1hcCBpZiBvbmUgb2Y6XG4gICAgICAvLyAqIHRoZXJlIHdhcyBubyBpbnB1dCBzb3VyY2UgbWFwIGFuZCB0aGlzIGlzIG5vdCBhIHR5cGluZ3MgZmlsZTtcbiAgICAgIC8vICogdGhlIGlucHV0IHNvdXJjZSBtYXAgZXhpc3RzIGFuZCB3YXMgaW5saW5lLlxuICAgICAgLy9cbiAgICAgIC8vIFdlIGRvIG5vdCBnZW5lcmF0ZSBpbmxpbmUgc291cmNlIG1hcHMgZm9yIHR5cGluZ3MgZmlsZXMgdW5sZXNzIHRoZXJlIGV4cGxpY2l0bHkgd2FzIG9uZSBpblxuICAgICAgLy8gdGhlIGlucHV0IGZpbGUgYmVjYXVzZSB0aGVzZSBpbmxpbmUgc291cmNlIG1hcHMgY2FuIGJlIHZlcnkgbGFyZ2UgYW5kIGl0IGltcGFjdHMgb24gdGhlXG4gICAgICAvLyBwZXJmb3JtYW5jZSBvZiBJREVzIHRoYXQgbmVlZCB0byByZWFkIHRoZW0gdG8gcHJvdmlkZSBpbnRlbGxpc2Vuc2UgZXRjLlxuICAgICAgcmV0dXJuIFtcbiAgICAgICAge3BhdGg6IHNvdXJjZUZpbGVQYXRoLCBjb250ZW50czogYCR7Z2VuZXJhdGVkRmlsZS5jb250ZW50c31cXG4ke21lcmdlZE1hcC50b0NvbW1lbnQoKX1gfVxuICAgICAgXTtcbiAgICB9XG5cbiAgICBjb25zdCBzb3VyY2VNYXBDb21tZW50ID0gZ2VuZXJhdGVNYXBGaWxlQ29tbWVudChgJHtmcy5iYXNlbmFtZShzb3VyY2VGaWxlUGF0aCl9Lm1hcGApO1xuICAgIHJldHVybiBbXG4gICAgICB7cGF0aDogc291cmNlRmlsZVBhdGgsIGNvbnRlbnRzOiBgJHtnZW5lcmF0ZWRGaWxlLmNvbnRlbnRzfVxcbiR7c291cmNlTWFwQ29tbWVudH1gfSxcbiAgICAgIHtwYXRoOiBzb3VyY2VNYXBQYXRoLCBjb250ZW50czogbWVyZ2VkTWFwLnRvSlNPTigpfVxuICAgIF07XG4gIH0gY2F0Y2ggKGUpIHtcbiAgICBsb2dnZXIuZXJyb3IoYEVycm9yIHdoZW4gZmxhdHRlbmluZyB0aGUgc291cmNlLW1hcCBcIiR7c291cmNlTWFwUGF0aH1cIiBmb3IgXCIke1xuICAgICAgICBzb3VyY2VGaWxlUGF0aH1cIjogJHtlLnRvU3RyaW5nKCl9YCk7XG4gICAgcmV0dXJuIFtcbiAgICAgIHtwYXRoOiBzb3VyY2VGaWxlUGF0aCwgY29udGVudHM6IGdlbmVyYXRlZENvbnRlbnR9LFxuICAgICAge3BhdGg6IHNvdXJjZU1hcFBhdGgsIGNvbnRlbnRzOiBmcm9tT2JqZWN0KGdlbmVyYXRlZE1hcCkudG9KU09OKCl9LFxuICAgIF07XG4gIH1cbn1cbiJdfQ==

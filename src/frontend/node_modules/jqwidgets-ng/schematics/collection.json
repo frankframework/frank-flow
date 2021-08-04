@@ -1,0 +1,20 @@
+// This is the root config file where the schematics are defined.
+{
+  "$schema": "./node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    // Adds jQWidgets Angular Material to an application without changing any templates
+    "ng-add": {
+      "description": "Adds jQWidgets for Angular to the application without affecting any templates",
+      "factory": "./ng-add/index",
+      "schema": "./ng-add/schema.json",
+      "aliases": ["jqx-shell", "install"]
+    },
+    // Creates a grid component
+    "grid": {
+      "description": "Create a component that displays data with a data-grid",
+      "factory": "./ng-generate/grid/index",
+      "schema": "./ng-generate/grid/schema.json",
+      "aliases": ["jqxgrid"]
+    }
+  }
+}

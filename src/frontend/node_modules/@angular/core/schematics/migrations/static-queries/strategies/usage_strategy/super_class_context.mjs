@@ -1,0 +1,38 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import * as ts from 'typescript';
+import { isFunctionLikeDeclaration } from '../../../../utils/typescript/functions';
+import { hasModifier } from '../../../../utils/typescript/nodes';
+import { getPropertyNameText } from '../../../../utils/typescript/property_name';
+import { getSuperClassDeclarations } from '../../angular/super_class';
+/**
+ * Updates the specified function context to map abstract super-class class members
+ * to their implementation TypeScript nodes. This allows us to run the declaration visitor
+ * for the super class with the context of the "baseClass" (e.g. with implemented abstract
+ * class members)
+ */
+export function updateSuperClassAbstractMembersContext(baseClass, context, classMetadataMap) {
+    getSuperClassDeclarations(baseClass, classMetadataMap).forEach(superClassDecl => {
+        superClassDecl.members.forEach(superClassMember => {
+            if (!superClassMember.name || !hasModifier(superClassMember, ts.SyntaxKind.AbstractKeyword)) {
+                return;
+            }
+            // Find the matching implementation of the abstract declaration from the super class.
+            const baseClassImpl = baseClass.members.find(baseClassMethod => !!baseClassMethod.name &&
+                getPropertyNameText(baseClassMethod.name) ===
+                    getPropertyNameText(superClassMember.name));
+            if (!baseClassImpl || !isFunctionLikeDeclaration(baseClassImpl) || !baseClassImpl.body) {
+                return;
+            }
+            if (!context.has(superClassMember)) {
+                context.set(superClassMember, baseClassImpl);
+            }
+        });
+    });
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic3VwZXJfY2xhc3NfY29udGV4dC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uLy4uLy4uLy4uLy4uL3BhY2thZ2VzL2NvcmUvc2NoZW1hdGljcy9taWdyYXRpb25zL3N0YXRpYy1xdWVyaWVzL3N0cmF0ZWdpZXMvdXNhZ2Vfc3RyYXRlZ3kvc3VwZXJfY2xhc3NfY29udGV4dC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7Ozs7O0dBTUc7QUFFSCxPQUFPLEtBQUssRUFBRSxNQUFNLFlBQVksQ0FBQztBQUVqQyxPQUFPLEVBQUMseUJBQXlCLEVBQUMsTUFBTSx3Q0FBd0MsQ0FBQztBQUNqRixPQUFPLEVBQUMsV0FBVyxFQUFDLE1BQU0sb0NBQW9DLENBQUM7QUFDL0QsT0FBTyxFQUFDLG1CQUFtQixFQUFDLE1BQU0sNENBQTRDLENBQUM7QUFFL0UsT0FBTyxFQUFDLHlCQUF5QixFQUFDLE1BQU0sMkJBQTJCLENBQUM7QUFLcEU7Ozs7O0dBS0c7QUFDSCxNQUFNLFVBQVUsc0NBQXNDLENBQ2xELFNBQThCLEVBQUUsT0FBd0IsRUFBRSxnQkFBa0M7SUFDOUYseUJBQXlCLENBQUMsU0FBUyxFQUFFLGdCQUFnQixDQUFDLENBQUMsT0FBTyxDQUFDLGNBQWMsQ0FBQyxFQUFFO1FBQzlFLGNBQWMsQ0FBQyxPQUFPLENBQUMsT0FBTyxDQUFDLGdCQUFnQixDQUFDLEVBQUU7WUFDaEQsSUFBSSxDQUFDLGdCQUFnQixDQUFDLElBQUksSUFBSSxDQUFDLFdBQVcsQ0FBQyxnQkFBZ0IsRUFBRSxFQUFFLENBQUMsVUFBVSxDQUFDLGVBQWUsQ0FBQyxFQUFFO2dCQUMzRixPQUFPO2FBQ1I7WUFFRCxxRkFBcUY7WUFDckYsTUFBTSxhQUFhLEdBQUcsU0FBUyxDQUFDLE9BQU8sQ0FBQyxJQUFJLENBQ3hDLGVBQWUsQ0FBQyxFQUFFLENBQUMsQ0FBQyxDQUFDLGVBQWUsQ0FBQyxJQUFJO2dCQUNyQyxtQkFBbUIsQ0FBQyxlQUFlLENBQUMsSUFBSSxDQUFDO29CQUNyQyxtQkFBbUIsQ0FBQyxnQkFBZ0IsQ0FBQyxJQUFLLENBQUMsQ0FBQyxDQUFDO1lBRXpELElBQUksQ0FBQyxhQUFhLElBQUksQ0FBQyx5QkFBeUIsQ0FBQyxhQUFhLENBQUMsSUFBSSxDQUFDLGFBQWEsQ0FBQyxJQUFJLEVBQUU7Z0JBQ3RGLE9BQU87YUFDUjtZQUVELElBQUksQ0FBQyxPQUFPLENBQUMsR0FBRyxDQUFDLGdCQUFnQixDQUFDLEVBQUU7Z0JBQ2xDLE9BQU8sQ0FBQyxHQUFHLENBQUMsZ0JBQWdCLEVBQUUsYUFBYSxDQUFDLENBQUM7YUFDOUM7UUFDSCxDQUFDLENBQUMsQ0FBQztJQUNMLENBQUMsQ0FBQyxDQUFDO0FBQ0wsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5pbXBvcnQgKiBhcyB0cyBmcm9tICd0eXBlc2NyaXB0JztcblxuaW1wb3J0IHtpc0Z1bmN0aW9uTGlrZURlY2xhcmF0aW9ufSBmcm9tICcuLi8uLi8uLi8uLi91dGlscy90eXBlc2NyaXB0L2Z1bmN0aW9ucyc7XG5pbXBvcnQge2hhc01vZGlmaWVyfSBmcm9tICcuLi8uLi8uLi8uLi91dGlscy90eXBlc2NyaXB0L25vZGVzJztcbmltcG9ydCB7Z2V0UHJvcGVydHlOYW1lVGV4dH0gZnJvbSAnLi4vLi4vLi4vLi4vdXRpbHMvdHlwZXNjcmlwdC9wcm9wZXJ0eV9uYW1lJztcbmltcG9ydCB7Q2xhc3NNZXRhZGF0YU1hcH0gZnJvbSAnLi4vLi4vYW5ndWxhci9uZ19xdWVyeV92aXNpdG9yJztcbmltcG9ydCB7Z2V0U3VwZXJDbGFzc0RlY2xhcmF0aW9uc30gZnJvbSAnLi4vLi4vYW5ndWxhci9zdXBlcl9jbGFzcyc7XG5cbmltcG9ydCB7RnVuY3Rpb25Db250ZXh0fSBmcm9tICcuL2RlY2xhcmF0aW9uX3VzYWdlX3Zpc2l0b3InO1xuXG5cbi8qKlxuICogVXBkYXRlcyB0aGUgc3BlY2lmaWVkIGZ1bmN0aW9uIGNvbnRleHQgdG8gbWFwIGFic3RyYWN0IHN1cGVyLWNsYXNzIGNsYXNzIG1lbWJlcnNcbiAqIHRvIHRoZWlyIGltcGxlbWVudGF0aW9uIFR5cGVTY3JpcHQgbm9kZXMuIFRoaXMgYWxsb3dzIHVzIHRvIHJ1biB0aGUgZGVjbGFyYXRpb24gdmlzaXRvclxuICogZm9yIHRoZSBzdXBlciBjbGFzcyB3aXRoIHRoZSBjb250ZXh0IG9mIHRoZSBcImJhc2VDbGFzc1wiIChlLmcuIHdpdGggaW1wbGVtZW50ZWQgYWJzdHJhY3RcbiAqIGNsYXNzIG1lbWJlcnMpXG4gKi9cbmV4cG9ydCBmdW5jdGlvbiB1cGRhdGVTdXBlckNsYXNzQWJzdHJhY3RNZW1iZXJzQ29udGV4dChcbiAgICBiYXNlQ2xhc3M6IHRzLkNsYXNzRGVjbGFyYXRpb24sIGNvbnRleHQ6IEZ1bmN0aW9uQ29udGV4dCwgY2xhc3NNZXRhZGF0YU1hcDogQ2xhc3NNZXRhZGF0YU1hcCkge1xuICBnZXRTdXBlckNsYXNzRGVjbGFyYXRpb25zKGJhc2VDbGFzcywgY2xhc3NNZXRhZGF0YU1hcCkuZm9yRWFjaChzdXBlckNsYXNzRGVjbCA9PiB7XG4gICAgc3VwZXJDbGFzc0RlY2wubWVtYmVycy5mb3JFYWNoKHN1cGVyQ2xhc3NNZW1iZXIgPT4ge1xuICAgICAgaWYgKCFzdXBlckNsYXNzTWVtYmVyLm5hbWUgfHwgIWhhc01vZGlmaWVyKHN1cGVyQ2xhc3NNZW1iZXIsIHRzLlN5bnRheEtpbmQuQWJzdHJhY3RLZXl3b3JkKSkge1xuICAgICAgICByZXR1cm47XG4gICAgICB9XG5cbiAgICAgIC8vIEZpbmQgdGhlIG1hdGNoaW5nIGltcGxlbWVudGF0aW9uIG9mIHRoZSBhYnN0cmFjdCBkZWNsYXJhdGlvbiBmcm9tIHRoZSBzdXBlciBjbGFzcy5cbiAgICAgIGNvbnN0IGJhc2VDbGFzc0ltcGwgPSBiYXNlQ2xhc3MubWVtYmVycy5maW5kKFxuICAgICAgICAgIGJhc2VDbGFzc01ldGhvZCA9PiAhIWJhc2VDbGFzc01ldGhvZC5uYW1lICYmXG4gICAgICAgICAgICAgIGdldFByb3BlcnR5TmFtZVRleHQoYmFzZUNsYXNzTWV0aG9kLm5hbWUpID09PVxuICAgICAgICAgICAgICAgICAgZ2V0UHJvcGVydHlOYW1lVGV4dChzdXBlckNsYXNzTWVtYmVyLm5hbWUhKSk7XG5cbiAgICAgIGlmICghYmFzZUNsYXNzSW1wbCB8fCAhaXNGdW5jdGlvbkxpa2VEZWNsYXJhdGlvbihiYXNlQ2xhc3NJbXBsKSB8fCAhYmFzZUNsYXNzSW1wbC5ib2R5KSB7XG4gICAgICAgIHJldHVybjtcbiAgICAgIH1cblxuICAgICAgaWYgKCFjb250ZXh0LmhhcyhzdXBlckNsYXNzTWVtYmVyKSkge1xuICAgICAgICBjb250ZXh0LnNldChzdXBlckNsYXNzTWVtYmVyLCBiYXNlQ2xhc3NJbXBsKTtcbiAgICAgIH1cbiAgICB9KTtcbiAgfSk7XG59XG4iXX0=

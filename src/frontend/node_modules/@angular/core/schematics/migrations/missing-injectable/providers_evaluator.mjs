@@ -1,0 +1,50 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { forwardRefResolver } from '@angular/compiler-cli/src/ngtsc/annotations';
+import { StaticInterpreter } from '@angular/compiler-cli/src/ngtsc/partial_evaluator/src/interpreter';
+/**
+ * Providers evaluator that extends the ngtsc static interpreter. This is necessary because
+ * the static interpreter by default only exposes the resolved value, but we are also interested
+ * in the TypeScript nodes that declare providers. It would be possible to manually traverse the
+ * AST to collect these nodes, but that would mean that we need to re-implement the static
+ * interpreter in order to handle all possible scenarios. (e.g. spread operator, function calls,
+ * callee scope). This can be avoided by simply extending the static interpreter and intercepting
+ * the "visitObjectLiteralExpression" method.
+ */
+export class ProvidersEvaluator extends StaticInterpreter {
+    constructor() {
+        super(...arguments);
+        this._providerLiterals = [];
+    }
+    visitObjectLiteralExpression(node, context) {
+        const resolvedValue = super.visitObjectLiteralExpression(node, Object.assign(Object.assign({}, context), { insideProviderDef: true }));
+        // do not collect nested object literals. e.g. a provider could use a
+        // spread assignment (which resolves to another object literal). In that
+        // case the referenced object literal is not a provider object literal.
+        if (!context.insideProviderDef) {
+            this._providerLiterals.push({ node, resolvedValue });
+        }
+        return resolvedValue;
+    }
+    /**
+     * Evaluates the given expression and returns its statically resolved value
+     * and a list of object literals which define Angular providers.
+     */
+    evaluate(expr) {
+        this._providerLiterals = [];
+        const resolvedValue = this.visit(expr, {
+            originatingFile: expr.getSourceFile(),
+            absoluteModuleName: null,
+            resolutionContext: expr.getSourceFile().fileName,
+            scope: new Map(),
+            foreignFunctionResolver: forwardRefResolver
+        });
+        return { resolvedValue, literals: this._providerLiterals };
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHJvdmlkZXJzX2V2YWx1YXRvci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uLy4uLy4uL3BhY2thZ2VzL2NvcmUvc2NoZW1hdGljcy9taWdyYXRpb25zL21pc3NpbmctaW5qZWN0YWJsZS9wcm92aWRlcnNfZXZhbHVhdG9yLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOzs7Ozs7R0FNRztBQUVILE9BQU8sRUFBQyxrQkFBa0IsRUFBQyxNQUFNLDZDQUE2QyxDQUFDO0FBRS9FLE9BQU8sRUFBQyxpQkFBaUIsRUFBQyxNQUFNLG1FQUFtRSxDQUFDO0FBUXBHOzs7Ozs7OztHQVFHO0FBQ0gsTUFBTSxPQUFPLGtCQUFtQixTQUFRLGlCQUFpQjtJQUF6RDs7UUFDVSxzQkFBaUIsR0FBc0IsRUFBRSxDQUFDO0lBNkJwRCxDQUFDO0lBM0JDLDRCQUE0QixDQUFDLElBQWdDLEVBQUUsT0FBWTtRQUN6RSxNQUFNLGFBQWEsR0FDZixLQUFLLENBQUMsNEJBQTRCLENBQUMsSUFBSSxrQ0FBTSxPQUFPLEtBQUUsaUJBQWlCLEVBQUUsSUFBSSxJQUFFLENBQUM7UUFDcEYscUVBQXFFO1FBQ3JFLHdFQUF3RTtRQUN4RSx1RUFBdUU7UUFDdkUsSUFBSSxDQUFDLE9BQU8sQ0FBQyxpQkFBaUIsRUFBRTtZQUM5QixJQUFJLENBQUMsaUJBQWlCLENBQUMsSUFBSSxDQUFDLEVBQUMsSUFBSSxFQUFFLGFBQWEsRUFBQyxDQUFDLENBQUM7U0FDcEQ7UUFDRCxPQUFPLGFBQWEsQ0FBQztJQUN2QixDQUFDO0lBRUQ7OztPQUdHO0lBQ0gsUUFBUSxDQUFDLElBQW1CO1FBQzFCLElBQUksQ0FBQyxpQkFBaUIsR0FBRyxFQUFFLENBQUM7UUFDNUIsTUFBTSxhQUFhLEdBQUcsSUFBSSxDQUFDLEtBQUssQ0FBQyxJQUFJLEVBQUU7WUFDckMsZUFBZSxFQUFFLElBQUksQ0FBQyxhQUFhLEVBQUU7WUFDckMsa0JBQWtCLEVBQUUsSUFBSTtZQUN4QixpQkFBaUIsRUFBRSxJQUFJLENBQUMsYUFBYSxFQUFFLENBQUMsUUFBUTtZQUNoRCxLQUFLLEVBQUUsSUFBSSxHQUFHLEVBQUU7WUFDaEIsdUJBQXVCLEVBQUUsa0JBQWtCO1NBQzVDLENBQUMsQ0FBQztRQUNILE9BQU8sRUFBQyxhQUFhLEVBQUUsUUFBUSxFQUFFLElBQUksQ0FBQyxpQkFBaUIsRUFBQyxDQUFDO0lBQzNELENBQUM7Q0FDRiIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5pbXBvcnQge2ZvcndhcmRSZWZSZXNvbHZlcn0gZnJvbSAnQGFuZ3VsYXIvY29tcGlsZXItY2xpL3NyYy9uZ3RzYy9hbm5vdGF0aW9ucyc7XG5pbXBvcnQge1Jlc29sdmVkVmFsdWV9IGZyb20gJ0Bhbmd1bGFyL2NvbXBpbGVyLWNsaS9zcmMvbmd0c2MvcGFydGlhbF9ldmFsdWF0b3InO1xuaW1wb3J0IHtTdGF0aWNJbnRlcnByZXRlcn0gZnJvbSAnQGFuZ3VsYXIvY29tcGlsZXItY2xpL3NyYy9uZ3RzYy9wYXJ0aWFsX2V2YWx1YXRvci9zcmMvaW50ZXJwcmV0ZXInO1xuaW1wb3J0ICogYXMgdHMgZnJvbSAndHlwZXNjcmlwdCc7XG5cbmV4cG9ydCBpbnRlcmZhY2UgUHJvdmlkZXJMaXRlcmFsIHtcbiAgbm9kZTogdHMuT2JqZWN0TGl0ZXJhbEV4cHJlc3Npb247XG4gIHJlc29sdmVkVmFsdWU6IFJlc29sdmVkVmFsdWU7XG59XG5cbi8qKlxuICogUHJvdmlkZXJzIGV2YWx1YXRvciB0aGF0IGV4dGVuZHMgdGhlIG5ndHNjIHN0YXRpYyBpbnRlcnByZXRlci4gVGhpcyBpcyBuZWNlc3NhcnkgYmVjYXVzZVxuICogdGhlIHN0YXRpYyBpbnRlcnByZXRlciBieSBkZWZhdWx0IG9ubHkgZXhwb3NlcyB0aGUgcmVzb2x2ZWQgdmFsdWUsIGJ1dCB3ZSBhcmUgYWxzbyBpbnRlcmVzdGVkXG4gKiBpbiB0aGUgVHlwZVNjcmlwdCBub2RlcyB0aGF0IGRlY2xhcmUgcHJvdmlkZXJzLiBJdCB3b3VsZCBiZSBwb3NzaWJsZSB0byBtYW51YWxseSB0cmF2ZXJzZSB0aGVcbiAqIEFTVCB0byBjb2xsZWN0IHRoZXNlIG5vZGVzLCBidXQgdGhhdCB3b3VsZCBtZWFuIHRoYXQgd2UgbmVlZCB0byByZS1pbXBsZW1lbnQgdGhlIHN0YXRpY1xuICogaW50ZXJwcmV0ZXIgaW4gb3JkZXIgdG8gaGFuZGxlIGFsbCBwb3NzaWJsZSBzY2VuYXJpb3MuIChlLmcuIHNwcmVhZCBvcGVyYXRvciwgZnVuY3Rpb24gY2FsbHMsXG4gKiBjYWxsZWUgc2NvcGUpLiBUaGlzIGNhbiBiZSBhdm9pZGVkIGJ5IHNpbXBseSBleHRlbmRpbmcgdGhlIHN0YXRpYyBpbnRlcnByZXRlciBhbmQgaW50ZXJjZXB0aW5nXG4gKiB0aGUgXCJ2aXNpdE9iamVjdExpdGVyYWxFeHByZXNzaW9uXCIgbWV0aG9kLlxuICovXG5leHBvcnQgY2xhc3MgUHJvdmlkZXJzRXZhbHVhdG9yIGV4dGVuZHMgU3RhdGljSW50ZXJwcmV0ZXIge1xuICBwcml2YXRlIF9wcm92aWRlckxpdGVyYWxzOiBQcm92aWRlckxpdGVyYWxbXSA9IFtdO1xuXG4gIHZpc2l0T2JqZWN0TGl0ZXJhbEV4cHJlc3Npb24obm9kZTogdHMuT2JqZWN0TGl0ZXJhbEV4cHJlc3Npb24sIGNvbnRleHQ6IGFueSkge1xuICAgIGNvbnN0IHJlc29sdmVkVmFsdWUgPVxuICAgICAgICBzdXBlci52aXNpdE9iamVjdExpdGVyYWxFeHByZXNzaW9uKG5vZGUsIHsuLi5jb250ZXh0LCBpbnNpZGVQcm92aWRlckRlZjogdHJ1ZX0pO1xuICAgIC8vIGRvIG5vdCBjb2xsZWN0IG5lc3RlZCBvYmplY3QgbGl0ZXJhbHMuIGUuZy4gYSBwcm92aWRlciBjb3VsZCB1c2UgYVxuICAgIC8vIHNwcmVhZCBhc3NpZ25tZW50ICh3aGljaCByZXNvbHZlcyB0byBhbm90aGVyIG9iamVjdCBsaXRlcmFsKS4gSW4gdGhhdFxuICAgIC8vIGNhc2UgdGhlIHJlZmVyZW5jZWQgb2JqZWN0IGxpdGVyYWwgaXMgbm90IGEgcHJvdmlkZXIgb2JqZWN0IGxpdGVyYWwuXG4gICAgaWYgKCFjb250ZXh0Lmluc2lkZVByb3ZpZGVyRGVmKSB7XG4gICAgICB0aGlzLl9wcm92aWRlckxpdGVyYWxzLnB1c2goe25vZGUsIHJlc29sdmVkVmFsdWV9KTtcbiAgICB9XG4gICAgcmV0dXJuIHJlc29sdmVkVmFsdWU7XG4gIH1cblxuICAvKipcbiAgICogRXZhbHVhdGVzIHRoZSBnaXZlbiBleHByZXNzaW9uIGFuZCByZXR1cm5zIGl0cyBzdGF0aWNhbGx5IHJlc29sdmVkIHZhbHVlXG4gICAqIGFuZCBhIGxpc3Qgb2Ygb2JqZWN0IGxpdGVyYWxzIHdoaWNoIGRlZmluZSBBbmd1bGFyIHByb3ZpZGVycy5cbiAgICovXG4gIGV2YWx1YXRlKGV4cHI6IHRzLkV4cHJlc3Npb24pIHtcbiAgICB0aGlzLl9wcm92aWRlckxpdGVyYWxzID0gW107XG4gICAgY29uc3QgcmVzb2x2ZWRWYWx1ZSA9IHRoaXMudmlzaXQoZXhwciwge1xuICAgICAgb3JpZ2luYXRpbmdGaWxlOiBleHByLmdldFNvdXJjZUZpbGUoKSxcbiAgICAgIGFic29sdXRlTW9kdWxlTmFtZTogbnVsbCxcbiAgICAgIHJlc29sdXRpb25Db250ZXh0OiBleHByLmdldFNvdXJjZUZpbGUoKS5maWxlTmFtZSxcbiAgICAgIHNjb3BlOiBuZXcgTWFwKCksXG4gICAgICBmb3JlaWduRnVuY3Rpb25SZXNvbHZlcjogZm9yd2FyZFJlZlJlc29sdmVyXG4gICAgfSk7XG4gICAgcmV0dXJuIHtyZXNvbHZlZFZhbHVlLCBsaXRlcmFsczogdGhpcy5fcHJvdmlkZXJMaXRlcmFsc307XG4gIH1cbn1cbiJdfQ==

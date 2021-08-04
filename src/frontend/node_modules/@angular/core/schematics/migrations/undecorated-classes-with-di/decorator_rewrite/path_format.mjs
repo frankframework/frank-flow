@@ -1,0 +1,17 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { normalize } from 'path';
+/** Normalizes the specified path to conform with the posix path format. */
+export function getPosixPath(pathString) {
+    const normalized = normalize(pathString).replace(/\\/g, '/');
+    if (!normalized.startsWith('.')) {
+        return `./${normalized}`;
+    }
+    return normalized;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicGF0aF9mb3JtYXQuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9jb3JlL3NjaGVtYXRpY3MvbWlncmF0aW9ucy91bmRlY29yYXRlZC1jbGFzc2VzLXdpdGgtZGkvZGVjb3JhdG9yX3Jld3JpdGUvcGF0aF9mb3JtYXQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztHQU1HO0FBRUgsT0FBTyxFQUFDLFNBQVMsRUFBQyxNQUFNLE1BQU0sQ0FBQztBQUUvQiwyRUFBMkU7QUFDM0UsTUFBTSxVQUFVLFlBQVksQ0FBQyxVQUFrQjtJQUM3QyxNQUFNLFVBQVUsR0FBRyxTQUFTLENBQUMsVUFBVSxDQUFDLENBQUMsT0FBTyxDQUFDLEtBQUssRUFBRSxHQUFHLENBQUMsQ0FBQztJQUM3RCxJQUFJLENBQUMsVUFBVSxDQUFDLFVBQVUsQ0FBQyxHQUFHLENBQUMsRUFBRTtRQUMvQixPQUFPLEtBQUssVUFBVSxFQUFFLENBQUM7S0FDMUI7SUFDRCxPQUFPLFVBQVUsQ0FBQztBQUNwQixDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbmltcG9ydCB7bm9ybWFsaXplfSBmcm9tICdwYXRoJztcblxuLyoqIE5vcm1hbGl6ZXMgdGhlIHNwZWNpZmllZCBwYXRoIHRvIGNvbmZvcm0gd2l0aCB0aGUgcG9zaXggcGF0aCBmb3JtYXQuICovXG5leHBvcnQgZnVuY3Rpb24gZ2V0UG9zaXhQYXRoKHBhdGhTdHJpbmc6IHN0cmluZykge1xuICBjb25zdCBub3JtYWxpemVkID0gbm9ybWFsaXplKHBhdGhTdHJpbmcpLnJlcGxhY2UoL1xcXFwvZywgJy8nKTtcbiAgaWYgKCFub3JtYWxpemVkLnN0YXJ0c1dpdGgoJy4nKSkge1xuICAgIHJldHVybiBgLi8ke25vcm1hbGl6ZWR9YDtcbiAgfVxuICByZXR1cm4gbm9ybWFsaXplZDtcbn1cbiJdfQ==

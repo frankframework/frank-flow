@@ -1,0 +1,1 @@
+export declare function getDomElements(): ReadonlySet<string>;

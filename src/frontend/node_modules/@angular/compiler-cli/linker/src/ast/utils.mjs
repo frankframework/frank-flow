@@ -1,0 +1,17 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { FatalLinkerError } from '../fatal_linker_error';
+/**
+ * Assert that the given `node` is of the type guarded by the `predicate` function.
+ */
+export function assert(node, predicate, expected) {
+    if (!predicate(node)) {
+        throw new FatalLinkerError(node, `Unsupported syntax, expected ${expected}.`);
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidXRpbHMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9jb21waWxlci1jbGkvbGlua2VyL3NyYy9hc3QvdXRpbHMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztHQU1HO0FBQ0gsT0FBTyxFQUFDLGdCQUFnQixFQUFDLE1BQU0sdUJBQXVCLENBQUM7QUFFdkQ7O0dBRUc7QUFDSCxNQUFNLFVBQVUsTUFBTSxDQUNsQixJQUFPLEVBQUUsU0FBaUMsRUFBRSxRQUFnQjtJQUM5RCxJQUFJLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxFQUFFO1FBQ3BCLE1BQU0sSUFBSSxnQkFBZ0IsQ0FBQyxJQUFJLEVBQUUsZ0NBQWdDLFFBQVEsR0FBRyxDQUFDLENBQUM7S0FDL0U7QUFDSCxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5pbXBvcnQge0ZhdGFsTGlua2VyRXJyb3J9IGZyb20gJy4uL2ZhdGFsX2xpbmtlcl9lcnJvcic7XG5cbi8qKlxuICogQXNzZXJ0IHRoYXQgdGhlIGdpdmVuIGBub2RlYCBpcyBvZiB0aGUgdHlwZSBndWFyZGVkIGJ5IHRoZSBgcHJlZGljYXRlYCBmdW5jdGlvbi5cbiAqL1xuZXhwb3J0IGZ1bmN0aW9uIGFzc2VydDxULCBLIGV4dGVuZHMgVD4oXG4gICAgbm9kZTogVCwgcHJlZGljYXRlOiAobm9kZTogVCkgPT4gbm9kZSBpcyBLLCBleHBlY3RlZDogc3RyaW5nKTogYXNzZXJ0cyBub2RlIGlzIEsge1xuICBpZiAoIXByZWRpY2F0ZShub2RlKSkge1xuICAgIHRocm93IG5ldyBGYXRhbExpbmtlckVycm9yKG5vZGUsIGBVbnN1cHBvcnRlZCBzeW50YXgsIGV4cGVjdGVkICR7ZXhwZWN0ZWR9LmApO1xuICB9XG59XG4iXX0=

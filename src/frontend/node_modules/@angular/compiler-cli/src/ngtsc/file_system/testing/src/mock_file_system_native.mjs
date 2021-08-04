@@ -1,0 +1,57 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/// <reference types="node" />
+import * as os from 'os';
+import { NodeJSFileSystem } from '../../src/node_js_file_system';
+import { MockFileSystem } from './mock_file_system';
+const isWindows = os.platform() === 'win32';
+export class MockFileSystemNative extends MockFileSystem {
+    constructor(cwd = '/') {
+        super(undefined, cwd);
+    }
+    // Delegate to the real NodeJSFileSystem for these path related methods
+    resolve(...paths) {
+        return NodeJSFileSystem.prototype.resolve.call(this, this.pwd(), ...paths);
+    }
+    dirname(file) {
+        return NodeJSFileSystem.prototype.dirname.call(this, file);
+    }
+    join(basePath, ...paths) {
+        return NodeJSFileSystem.prototype.join.call(this, basePath, ...paths);
+    }
+    relative(from, to) {
+        return NodeJSFileSystem.prototype.relative.call(this, from, to);
+    }
+    basename(filePath, extension) {
+        return NodeJSFileSystem.prototype.basename.call(this, filePath, extension);
+    }
+    isCaseSensitive() {
+        return NodeJSFileSystem.prototype.isCaseSensitive.call(this);
+    }
+    isRooted(path) {
+        return NodeJSFileSystem.prototype.isRooted.call(this, path);
+    }
+    isRoot(path) {
+        return NodeJSFileSystem.prototype.isRoot.call(this, path);
+    }
+    normalize(path) {
+        // When running in Windows, absolute paths are normalized to always include a drive letter. This
+        // ensures that rooted posix paths used in tests will be normalized to real Windows paths, i.e.
+        // including a drive letter. Note that the same normalization is done in emulated Windows mode
+        // (see `MockFileSystemWindows`) so that the behavior is identical between native Windows and
+        // emulated Windows mode.
+        if (isWindows) {
+            path = path.replace(/^[\/\\]/i, 'C:/');
+        }
+        return NodeJSFileSystem.prototype.normalize.call(this, path);
+    }
+    splitPath(path) {
+        return path.split(/[\\\/]/);
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibW9ja19maWxlX3N5c3RlbV9uYXRpdmUuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi9wYWNrYWdlcy9jb21waWxlci1jbGkvc3JjL25ndHNjL2ZpbGVfc3lzdGVtL3Rlc3Rpbmcvc3JjL21vY2tfZmlsZV9zeXN0ZW1fbmF0aXZlLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOzs7Ozs7R0FNRztBQUNILDhCQUE4QjtBQUM5QixPQUFPLEtBQUssRUFBRSxNQUFNLElBQUksQ0FBQztBQUN6QixPQUFPLEVBQUMsZ0JBQWdCLEVBQUMsTUFBTSwrQkFBK0IsQ0FBQztBQUcvRCxPQUFPLEVBQUMsY0FBYyxFQUFDLE1BQU0sb0JBQW9CLENBQUM7QUFFbEQsTUFBTSxTQUFTLEdBQUcsRUFBRSxDQUFDLFFBQVEsRUFBRSxLQUFLLE9BQU8sQ0FBQztBQUU1QyxNQUFNLE9BQU8sb0JBQXFCLFNBQVEsY0FBYztJQUN0RCxZQUFZLE1BQXNCLEdBQXFCO1FBQ3JELEtBQUssQ0FBQyxTQUFTLEVBQUUsR0FBRyxDQUFDLENBQUM7SUFDeEIsQ0FBQztJQUVELHVFQUF1RTtJQUV2RSxPQUFPLENBQUMsR0FBRyxLQUFlO1FBQ3hCLE9BQU8sZ0JBQWdCLENBQUMsU0FBUyxDQUFDLE9BQU8sQ0FBQyxJQUFJLENBQUMsSUFBSSxFQUFFLElBQUksQ0FBQyxHQUFHLEVBQUUsRUFBRSxHQUFHLEtBQUssQ0FBQyxDQUFDO0lBQzdFLENBQUM7SUFDRCxPQUFPLENBQW1CLElBQU87UUFDL0IsT0FBTyxnQkFBZ0IsQ0FBQyxTQUFTLENBQUMsT0FBTyxDQUFDLElBQUksQ0FBQyxJQUFJLEVBQUUsSUFBSSxDQUFNLENBQUM7SUFDbEUsQ0FBQztJQUNELElBQUksQ0FBbUIsUUFBVyxFQUFFLEdBQUcsS0FBZTtRQUNwRCxPQUFPLGdCQUFnQixDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLElBQUksRUFBRSxRQUFRLEVBQUUsR0FBRyxLQUFLLENBQU0sQ0FBQztJQUM3RSxDQUFDO0lBQ0QsUUFBUSxDQUF1QixJQUFPLEVBQUUsRUFBSztRQUMzQyxPQUFPLGdCQUFnQixDQUFDLFNBQVMsQ0FBQyxRQUFRLENBQUMsSUFBSSxDQUFDLElBQUksRUFBRSxJQUFJLEVBQUUsRUFBRSxDQUFDLENBQUM7SUFDbEUsQ0FBQztJQUVELFFBQVEsQ0FBQyxRQUFnQixFQUFFLFNBQWtCO1FBQzNDLE9BQU8sZ0JBQWdCLENBQUMsU0FBUyxDQUFDLFFBQVEsQ0FBQyxJQUFJLENBQUMsSUFBSSxFQUFFLFFBQVEsRUFBRSxTQUFTLENBQUMsQ0FBQztJQUM3RSxDQUFDO0lBRUQsZUFBZTtRQUNiLE9BQU8sZ0JBQWdCLENBQUMsU0FBUyxDQUFDLGVBQWUsQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLENBQUM7SUFDL0QsQ0FBQztJQUVELFFBQVEsQ0FBQyxJQUFZO1FBQ25CLE9BQU8sZ0JBQWdCLENBQUMsU0FBUyxDQUFDLFFBQVEsQ0FBQyxJQUFJLENBQUMsSUFBSSxFQUFFLElBQUksQ0FBQyxDQUFDO0lBQzlELENBQUM7SUFFRCxNQUFNLENBQUMsSUFBb0I7UUFDekIsT0FBTyxnQkFBZ0IsQ0FBQyxTQUFTLENBQUMsTUFBTSxDQUFDLElBQUksQ0FBQyxJQUFJLEVBQUUsSUFBSSxDQUFDLENBQUM7SUFDNUQsQ0FBQztJQUVELFNBQVMsQ0FBdUIsSUFBTztRQUNyQyxnR0FBZ0c7UUFDaEcsK0ZBQStGO1FBQy9GLDhGQUE4RjtRQUM5Riw2RkFBNkY7UUFDN0YseUJBQXlCO1FBQ3pCLElBQUksU0FBUyxFQUFFO1lBQ2IsSUFBSSxHQUFHLElBQUksQ0FBQyxPQUFPLENBQUMsVUFBVSxFQUFFLEtBQUssQ0FBTSxDQUFDO1NBQzdDO1FBRUQsT0FBTyxnQkFBZ0IsQ0FBQyxTQUFTLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxJQUFJLEVBQUUsSUFBSSxDQUFNLENBQUM7SUFDcEUsQ0FBQztJQUVTLFNBQVMsQ0FBSSxJQUFZO1FBQ2pDLE9BQU8sSUFBSSxDQUFDLEtBQUssQ0FBQyxRQUFRLENBQUMsQ0FBQztJQUM5QixDQUFDO0NBQ0YiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIEBsaWNlbnNlXG4gKiBDb3B5cmlnaHQgR29vZ2xlIExMQyBBbGwgUmlnaHRzIFJlc2VydmVkLlxuICpcbiAqIFVzZSBvZiB0aGlzIHNvdXJjZSBjb2RlIGlzIGdvdmVybmVkIGJ5IGFuIE1JVC1zdHlsZSBsaWNlbnNlIHRoYXQgY2FuIGJlXG4gKiBmb3VuZCBpbiB0aGUgTElDRU5TRSBmaWxlIGF0IGh0dHBzOi8vYW5ndWxhci5pby9saWNlbnNlXG4gKi9cbi8vLyA8cmVmZXJlbmNlIHR5cGVzPVwibm9kZVwiIC8+XG5pbXBvcnQgKiBhcyBvcyBmcm9tICdvcyc7XG5pbXBvcnQge05vZGVKU0ZpbGVTeXN0ZW19IGZyb20gJy4uLy4uL3NyYy9ub2RlX2pzX2ZpbGVfc3lzdGVtJztcbmltcG9ydCB7QWJzb2x1dGVGc1BhdGgsIFBhdGhTZWdtZW50LCBQYXRoU3RyaW5nfSBmcm9tICcuLi8uLi9zcmMvdHlwZXMnO1xuXG5pbXBvcnQge01vY2tGaWxlU3lzdGVtfSBmcm9tICcuL21vY2tfZmlsZV9zeXN0ZW0nO1xuXG5jb25zdCBpc1dpbmRvd3MgPSBvcy5wbGF0Zm9ybSgpID09PSAnd2luMzInO1xuXG5leHBvcnQgY2xhc3MgTW9ja0ZpbGVTeXN0ZW1OYXRpdmUgZXh0ZW5kcyBNb2NrRmlsZVN5c3RlbSB7XG4gIGNvbnN0cnVjdG9yKGN3ZDogQWJzb2x1dGVGc1BhdGggPSAnLycgYXMgQWJzb2x1dGVGc1BhdGgpIHtcbiAgICBzdXBlcih1bmRlZmluZWQsIGN3ZCk7XG4gIH1cblxuICAvLyBEZWxlZ2F0ZSB0byB0aGUgcmVhbCBOb2RlSlNGaWxlU3lzdGVtIGZvciB0aGVzZSBwYXRoIHJlbGF0ZWQgbWV0aG9kc1xuXG4gIHJlc29sdmUoLi4ucGF0aHM6IHN0cmluZ1tdKTogQWJzb2x1dGVGc1BhdGgge1xuICAgIHJldHVybiBOb2RlSlNGaWxlU3lzdGVtLnByb3RvdHlwZS5yZXNvbHZlLmNhbGwodGhpcywgdGhpcy5wd2QoKSwgLi4ucGF0aHMpO1xuICB9XG4gIGRpcm5hbWU8VCBleHRlbmRzIHN0cmluZz4oZmlsZTogVCk6IFQge1xuICAgIHJldHVybiBOb2RlSlNGaWxlU3lzdGVtLnByb3RvdHlwZS5kaXJuYW1lLmNhbGwodGhpcywgZmlsZSkgYXMgVDtcbiAgfVxuICBqb2luPFQgZXh0ZW5kcyBzdHJpbmc+KGJhc2VQYXRoOiBULCAuLi5wYXRoczogc3RyaW5nW10pOiBUIHtcbiAgICByZXR1cm4gTm9kZUpTRmlsZVN5c3RlbS5wcm90b3R5cGUuam9pbi5jYWxsKHRoaXMsIGJhc2VQYXRoLCAuLi5wYXRocykgYXMgVDtcbiAgfVxuICByZWxhdGl2ZTxUIGV4dGVuZHMgUGF0aFN0cmluZz4oZnJvbTogVCwgdG86IFQpOiBQYXRoU2VnbWVudHxBYnNvbHV0ZUZzUGF0aCB7XG4gICAgcmV0dXJuIE5vZGVKU0ZpbGVTeXN0ZW0ucHJvdG90eXBlLnJlbGF0aXZlLmNhbGwodGhpcywgZnJvbSwgdG8pO1xuICB9XG5cbiAgYmFzZW5hbWUoZmlsZVBhdGg6IHN0cmluZywgZXh0ZW5zaW9uPzogc3RyaW5nKTogUGF0aFNlZ21lbnQge1xuICAgIHJldHVybiBOb2RlSlNGaWxlU3lzdGVtLnByb3RvdHlwZS5iYXNlbmFtZS5jYWxsKHRoaXMsIGZpbGVQYXRoLCBleHRlbnNpb24pO1xuICB9XG5cbiAgaXNDYXNlU2Vuc2l0aXZlKCkge1xuICAgIHJldHVybiBOb2RlSlNGaWxlU3lzdGVtLnByb3RvdHlwZS5pc0Nhc2VTZW5zaXRpdmUuY2FsbCh0aGlzKTtcbiAgfVxuXG4gIGlzUm9vdGVkKHBhdGg6IHN0cmluZyk6IGJvb2xlYW4ge1xuICAgIHJldHVybiBOb2RlSlNGaWxlU3lzdGVtLnByb3RvdHlwZS5pc1Jvb3RlZC5jYWxsKHRoaXMsIHBhdGgpO1xuICB9XG5cbiAgaXNSb290KHBhdGg6IEFic29sdXRlRnNQYXRoKTogYm9vbGVhbiB7XG4gICAgcmV0dXJuIE5vZGVKU0ZpbGVTeXN0ZW0ucHJvdG90eXBlLmlzUm9vdC5jYWxsKHRoaXMsIHBhdGgpO1xuICB9XG5cbiAgbm9ybWFsaXplPFQgZXh0ZW5kcyBQYXRoU3RyaW5nPihwYXRoOiBUKTogVCB7XG4gICAgLy8gV2hlbiBydW5uaW5nIGluIFdpbmRvd3MsIGFic29sdXRlIHBhdGhzIGFyZSBub3JtYWxpemVkIHRvIGFsd2F5cyBpbmNsdWRlIGEgZHJpdmUgbGV0dGVyLiBUaGlzXG4gICAgLy8gZW5zdXJlcyB0aGF0IHJvb3RlZCBwb3NpeCBwYXRocyB1c2VkIGluIHRlc3RzIHdpbGwgYmUgbm9ybWFsaXplZCB0byByZWFsIFdpbmRvd3MgcGF0aHMsIGkuZS5cbiAgICAvLyBpbmNsdWRpbmcgYSBkcml2ZSBsZXR0ZXIuIE5vdGUgdGhhdCB0aGUgc2FtZSBub3JtYWxpemF0aW9uIGlzIGRvbmUgaW4gZW11bGF0ZWQgV2luZG93cyBtb2RlXG4gICAgLy8gKHNlZSBgTW9ja0ZpbGVTeXN0ZW1XaW5kb3dzYCkgc28gdGhhdCB0aGUgYmVoYXZpb3IgaXMgaWRlbnRpY2FsIGJldHdlZW4gbmF0aXZlIFdpbmRvd3MgYW5kXG4gICAgLy8gZW11bGF0ZWQgV2luZG93cyBtb2RlLlxuICAgIGlmIChpc1dpbmRvd3MpIHtcbiAgICAgIHBhdGggPSBwYXRoLnJlcGxhY2UoL15bXFwvXFxcXF0vaSwgJ0M6LycpIGFzIFQ7XG4gICAgfVxuXG4gICAgcmV0dXJuIE5vZGVKU0ZpbGVTeXN0ZW0ucHJvdG90eXBlLm5vcm1hbGl6ZS5jYWxsKHRoaXMsIHBhdGgpIGFzIFQ7XG4gIH1cblxuICBwcm90ZWN0ZWQgc3BsaXRQYXRoPFQ+KHBhdGg6IHN0cmluZyk6IHN0cmluZ1tdIHtcbiAgICByZXR1cm4gcGF0aC5zcGxpdCgvW1xcXFxcXC9dLyk7XG4gIH1cbn1cbiJdfQ==

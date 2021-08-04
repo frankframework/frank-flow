@@ -1,0 +1,1 @@
+export declare function toPattern(value: readonly unknown[]): RegExp;

@@ -1,0 +1,99 @@
+body.dialog-open {
+  overflow: hidden; }
+
+.nsm-dialog-btn-close {
+  border: 0;
+  background: none;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 1.2em;
+  cursor: pointer; }
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: background-color 500ms;
+  background-color: transparent;
+  z-index: 999; }
+  .overlay.nsm-overlay-open {
+    background-color: rgba(0, 0, 0, 0.5); }
+  .overlay.transparent {
+    background-color: transparent; }
+
+.nsm-dialog {
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+  min-height: 200px;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  pointer-events: none;
+  outline: none; }
+  .nsm-dialog.nsm-dialog-close {
+    opacity: 0; }
+  .nsm-dialog.nsm-centered {
+    display: flex;
+    align-items: center;
+    min-height: calc(100% - (1.75rem * 2)); }
+
+.nsm-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  background-clip: padding-box;
+  background-color: #fff;
+  border-radius: 2px;
+  padding: 1rem;
+  margin-top: 1.75rem;
+  margin-bottom: 1.75rem;
+  margin-left: 1.75rem;
+  margin-right: 1.75rem;
+  box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2), 0 13px 19px 2px rgba(0, 0, 0, 0.14), 0 5px 24px 4px rgba(0, 0, 0, 0.12);
+  outline: 0;
+  transform: translate3d(0, 0, 0); }
+
+.nsm-body {
+  position: relative;
+  flex: 1 1 auto; }
+
+/* *************************
+* Animations
+* *************************/
+.nsm-dialog[class*=nsm-dialog-animation-] {
+  transition: transform 500ms ease-in-out, opacity 500ms; }
+
+.nsm-dialog-animation-ltr {
+  transform: translate3d(-50%, 0, 0); }
+  .nsm-dialog-animation-ltr.nsm-dialog-open {
+    transform: translate3d(0, 0, 0); }
+  .nsm-dialog-animation-ltr.nsm-dialog-close {
+    transform: translate3d(-50%, 0, 0); }
+
+.nsm-dialog-animation-rtl {
+  transform: translate3d(50%, 0, 0); }
+  .nsm-dialog-animation-rtl.nsm-dialog-open {
+    transform: translate3d(0, 0, 0); }
+  .nsm-dialog-animation-rtl.nsm-dialog-close {
+    transform: translate3d(50%, 0, 0); }
+
+.nsm-dialog-animation-ttb {
+  transform: translate3d(0, -50%, 0); }
+  .nsm-dialog-animation-ttb.nsm-dialog-open {
+    transform: translate3d(0, 0, 0); }
+  .nsm-dialog-animation-ttb.nsm-dialog-close {
+    transform: translate3d(0, -50%, 0); }
+
+.nsm-dialog-animation-btt {
+  transform: translate3d(0, 50%, 0); }
+  .nsm-dialog-animation-btt.nsm-dialog-open {
+    transform: translate3d(0, 0, 0); }
+  .nsm-dialog-animation-btt.nsm-dialog-close {
+    transform: translate3d(0, 50%, 0); }

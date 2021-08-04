@@ -1,0 +1,24 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+import { parseTemplate } from '@angular/compiler';
+/**
+ * Parses the given HTML content using the Angular compiler. In case the parsing
+ * fails, null is being returned.
+ */
+export function parseHtmlGracefully(htmlContent, filePath) {
+    try {
+        return parseTemplate(htmlContent, filePath).nodes;
+    }
+    catch (_a) {
+        // Do nothing if the template couldn't be parsed. We don't want to throw any
+        // exception if a template is syntactically not valid. e.g. template could be
+        // using preprocessor syntax.
+        return null;
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicGFyc2VfaHRtbC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uLy4uL3BhY2thZ2VzL2NvcmUvc2NoZW1hdGljcy91dGlscy9wYXJzZV9odG1sLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOzs7Ozs7R0FNRztBQUVILE9BQU8sRUFBQyxhQUFhLEVBQUMsTUFBTSxtQkFBbUIsQ0FBQztBQUdoRDs7O0dBR0c7QUFDSCxNQUFNLFVBQVUsbUJBQW1CLENBQUMsV0FBbUIsRUFBRSxRQUFnQjtJQUN2RSxJQUFJO1FBQ0YsT0FBTyxhQUFhLENBQUMsV0FBVyxFQUFFLFFBQVEsQ0FBQyxDQUFDLEtBQUssQ0FBQztLQUNuRDtJQUFDLFdBQU07UUFDTiw0RUFBNEU7UUFDNUUsNkVBQTZFO1FBQzdFLDZCQUE2QjtRQUM3QixPQUFPLElBQUksQ0FBQztLQUNiO0FBQ0gsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5pbXBvcnQge3BhcnNlVGVtcGxhdGV9IGZyb20gJ0Bhbmd1bGFyL2NvbXBpbGVyJztcbmltcG9ydCB7Tm9kZX0gZnJvbSAnQGFuZ3VsYXIvY29tcGlsZXIvc3JjL3JlbmRlcjMvcjNfYXN0JztcblxuLyoqXG4gKiBQYXJzZXMgdGhlIGdpdmVuIEhUTUwgY29udGVudCB1c2luZyB0aGUgQW5ndWxhciBjb21waWxlci4gSW4gY2FzZSB0aGUgcGFyc2luZ1xuICogZmFpbHMsIG51bGwgaXMgYmVpbmcgcmV0dXJuZWQuXG4gKi9cbmV4cG9ydCBmdW5jdGlvbiBwYXJzZUh0bWxHcmFjZWZ1bGx5KGh0bWxDb250ZW50OiBzdHJpbmcsIGZpbGVQYXRoOiBzdHJpbmcpOiBOb2RlW118bnVsbCB7XG4gIHRyeSB7XG4gICAgcmV0dXJuIHBhcnNlVGVtcGxhdGUoaHRtbENvbnRlbnQsIGZpbGVQYXRoKS5ub2RlcztcbiAgfSBjYXRjaCB7XG4gICAgLy8gRG8gbm90aGluZyBpZiB0aGUgdGVtcGxhdGUgY291bGRuJ3QgYmUgcGFyc2VkLiBXZSBkb24ndCB3YW50IHRvIHRocm93IGFueVxuICAgIC8vIGV4Y2VwdGlvbiBpZiBhIHRlbXBsYXRlIGlzIHN5bnRhY3RpY2FsbHkgbm90IHZhbGlkLiBlLmcuIHRlbXBsYXRlIGNvdWxkIGJlXG4gICAgLy8gdXNpbmcgcHJlcHJvY2Vzc29yIHN5bnRheC5cbiAgICByZXR1cm4gbnVsbDtcbiAgfVxufVxuIl19

@@ -1,0 +1,1 @@
+<jqxGrid [selectionmode]="'checkbox'" [source]="source"  [theme]="'material'" [autoheight]="true" [pageable]="true" [altrows]="true" [filterable]="true" [sortable]="true" [columns]="columns" #grid></jqxGrid>
