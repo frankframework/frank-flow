@@ -5,20 +5,16 @@
   background-color: var(--border-color);
 }
 
-#panzoom {
-  width: 200%;
-}
-
 .arrowTop {
   position: absolute;
-  bottom: 100%;
-  left: 50%;
+  top: 100%;
+  left: 45%;
 }
 
 .arrowLeft {
   position: absolute;
-  top: 50%;
-  right: 100%;
+  top: 45%;
+  left: 100%;
 }
 
 .arrowBottom {

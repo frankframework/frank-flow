@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  OnInit,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { PanZoomConfig, PanZoomConfigOptions } from 'ngx-panzoom';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
@@ -50,39 +44,28 @@ export class FlowComponent {
   expandLeft(): void {
     this.graphService.expanding = true;
 
-    this.graphService.offX += this.offset;
     const el = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
     )[0];
     const elWidth = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
     )[0].offsetWidth;
-    this.renderer.setStyle(el, 'width', elWidth + this.offset + 'px');
+    this.renderer.setStyle(el, 'width', elWidth - this.offset + 'px');
     this.codeService.reloadFile();
-
-    // TODO: timeouts are ugly, so find a better solution for setting expanding to false after flow generation.
-    setTimeout(() => {
-      this.graphService.expanding = false;
-    }, 100);
   }
 
   expandTop(): void {
     this.graphService.expanding = true;
 
-    this.graphService.offY += this.offset;
     const el = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
     )[0];
     const elHeight = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
     )[0].offsetHeight;
-    this.renderer.setStyle(el, 'height', elHeight + this.offset + 'px');
+    this.renderer.setStyle(el, 'height', elHeight - this.offset + 'px');
 
     this.codeService.reloadFile();
-
-    setTimeout(() => {
-      this.graphService.expanding = false;
-    }, 100);
   }
 
   expandRight(): void {
