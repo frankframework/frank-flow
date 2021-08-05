@@ -9,7 +9,6 @@ describe('FlowComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [FlowComponent],
-      imports: [ToastrModule.forRoot()],
     }).compileComponents();
   });
 

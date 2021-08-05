@@ -7,8 +7,6 @@ import {
   faArrowLeft,
   faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
-import { CodeService } from '../shared/services/code.service';
-import { GraphService } from '../shared/services/graph.service';
 
 @Component({
   selector: 'app-flow',
@@ -32,71 +30,51 @@ export class FlowComponent {
   nodeContainerRef!: ElementRef;
   private offset = 500;
 
-  constructor(
-    private graphService: GraphService,
-    private codeService: CodeService,
-    private renderer: Renderer2,
-    private library: FaIconLibrary
-  ) {
+  constructor(private renderer: Renderer2, private library: FaIconLibrary) {
     this.library.addIcons(faArrowDown, faArrowUp, faArrowRight, faArrowLeft);
   }
 
-  expandLeft(): void {
-    this.graphService.expanding = true;
-
+  decreaseRight(): void {
     const el = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
     )[0];
     const elWidth = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
     )[0].offsetWidth;
+
     this.renderer.setStyle(el, 'width', elWidth - this.offset + 'px');
-    this.codeService.reloadFile();
   }
 
-  expandTop(): void {
-    this.graphService.expanding = true;
-
+  decreaseBottom(): void {
     const el = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
     )[0];
     const elHeight = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
     )[0].offsetHeight;
-    this.renderer.setStyle(el, 'height', elHeight - this.offset + 'px');
 
-    this.codeService.reloadFile();
+    this.renderer.setStyle(el, 'height', elHeight - this.offset + 'px');
   }
 
   expandRight(): void {
-    this.graphService.expanding = true;
-
     const el = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
     )[0];
     const elWidth = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
     )[0].offsetWidth;
-    this.renderer.setStyle(el, 'width', elWidth + this.offset + 'px');
 
-    setTimeout(() => {
-      this.graphService.expanding = false;
-    }, 100);
+    this.renderer.setStyle(el, 'width', elWidth + this.offset + 'px');
   }
 
   expandBottom(): void {
-    this.graphService.expanding = true;
-
     const el = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
     )[0];
     const elHeight = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
     )[0].offsetHeight;
-    this.renderer.setStyle(el, 'height', elHeight + this.offset + 'px');
 
-    setTimeout(() => {
-      this.graphService.expanding = false;
-    }, 100);
+    this.renderer.setStyle(el, 'height', elHeight + this.offset + 'px');
   }
 }
