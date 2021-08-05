@@ -39,7 +39,6 @@ export class FlowComponent {
     private library: FaIconLibrary
   ) {
     this.library.addIcons(faArrowDown, faArrowUp, faArrowRight, faArrowLeft);
-    console.log('dikke poep');
   }
 
   expandLeft(): void {
