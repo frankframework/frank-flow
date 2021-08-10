@@ -13,7 +13,7 @@ export class FrankDocService {
   }
 
   fetchFrankDoc(): void {
-    fetch(environment.runnerUri + environment.frankDocJsonPath, {
+    fetch(window.location.origin + '/' + environment.frankDocJsonPath, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
