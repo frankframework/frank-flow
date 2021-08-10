@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import { Configuration } from '../models/configuration.model';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -7,7 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class FileService {
-  BASE_PATH = environment.runnerUri + 'frank-flow/api/configurations';
+  BASE_PATH = window.location.href + 'api/configurations';
   configurationFiles = new BehaviorSubject<Configuration[]>([]);
 
   constructor() {
