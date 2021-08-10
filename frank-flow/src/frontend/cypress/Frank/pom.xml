@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>org.ibissource</groupId>
 			<artifactId>ibis-adapterframework-webapp</artifactId>
-      <version>[7.7-20210726.162851,)</version>
+      <version>[7.7-20210805.140000,)</version>
 			<type>war</type>
 		</dependency>
 		<dependency>
