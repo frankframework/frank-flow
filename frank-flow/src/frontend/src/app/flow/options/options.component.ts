@@ -44,6 +44,13 @@ export class OptionsComponent {
     this.getAttributesForNode();
   }
 
+  reloadAttributes() {
+    this.flowStructureService.refreshStructure();
+    setTimeout(() => {
+      this.attributes = this.getUpdatedAttributes().attributes;
+    }, 100);
+  }
+
   resetPreviousData() {
     this.attributes = {};
     this.attributeOptions = [];
@@ -101,6 +108,8 @@ export class OptionsComponent {
       false
     );
     this.clearNewAttribute();
+
+    this.reloadAttributes();
   }
 
   changeAttribute(key: string, attribute: any): void {
@@ -117,6 +126,20 @@ export class OptionsComponent {
           attributeList.attributes
         );
       }
+    });
+  }
+
+  deleteAttribute(key: string): void {
+    this.flowStructureService.refreshStructure();
+    setTimeout(() => {
+      const attributeList = this.getUpdatedAttributes();
+      if (attributeList) {
+        this.flowStructureService.deleteAttribute(
+          key,
+          attributeList.attributes
+        );
+      }
+      this.reloadAttributes();
     });
   }
 
