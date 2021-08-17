@@ -1,6 +1,7 @@
 <app-button
   (click)="setMode(modeType.editorMode)"
   [selected]="mode.is(modeType.editorMode)"
+  id="btnEditorMode"
 >
   <fa-icon icon="code" transform="down-1"></fa-icon>
 </app-button>
@@ -13,6 +14,7 @@
 <app-button
   (click)="setMode(modeType.flowMode)"
   [selected]="mode.is(modeType.flowMode)"
+  id="btnFlowMode"
 >
   <fa-icon icon="project-diagram" transform="down-1"></fa-icon>
 </app-button>
