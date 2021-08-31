@@ -69,9 +69,11 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.createGeneratorWorker();
     this.setCurrentFileListener();
     this.setGeneratorWorkerListener();
-    this.modelChangedSubscription = this.panzoomConfig.modelChanged.subscribe(
-      (model: PanZoomModel) => this.onModelChanged(model)
-    );
+    if (this.panzoomConfig) {
+      this.modelChangedSubscription = this.panzoomConfig.modelChanged.subscribe(
+        (model: PanZoomModel) => this.onModelChanged(model)
+      );
+    }
   }
 
   ngOnDestroy(): void {

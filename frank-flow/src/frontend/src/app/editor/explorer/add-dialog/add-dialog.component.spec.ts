@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NgxSmartModalModule } from 'ngx-smart-modal';
 
 import { AddDialogComponent } from './add-dialog.component';
 
@@ -9,6 +10,7 @@ describe('AddDialogComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AddDialogComponent],
+      imports: [NgxSmartModalModule.forRoot()],
     }).compileComponents();
   });
 
