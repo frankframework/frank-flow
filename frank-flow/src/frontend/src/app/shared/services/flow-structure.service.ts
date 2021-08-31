@@ -282,18 +282,16 @@ export class FlowStructureService {
 
   escapeSpecialChars(value: string): string {
     return value
+      .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
-      .replace(/&/g, '&amp;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&apos;');
   }
 
   escapeAttribute(attribute: FlowNodeAttribute): void {
     const escapedValue = this.escapeSpecialChars(attribute.value);
-    const lengthDifferance = Math.abs(
-      attribute.value.length - escapedValue.length
-    );
+    const lengthDifferance = escapedValue.length - attribute.value.length;
     attribute.startColumn -= lengthDifferance;
   }
 
