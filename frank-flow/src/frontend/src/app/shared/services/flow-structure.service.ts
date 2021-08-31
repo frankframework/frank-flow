@@ -290,8 +290,14 @@ export class FlowStructureService {
   }
 
   escapeAttribute(attribute: FlowNodeAttribute): void {
+    console.log(attribute.value);
     const escapedValue = this.escapeSpecialChars(attribute.value);
     const lengthDifferance = escapedValue.length - attribute.value.length;
+    console.log(
+      escapedValue.length - attribute.value.length,
+      escapedValue.length,
+      attribute.value.length
+    );
     attribute.startColumn -= lengthDifferance;
   }
 
