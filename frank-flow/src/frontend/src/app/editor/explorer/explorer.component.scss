@@ -5,3 +5,9 @@
 .search-box {
   padding: 16px;
 }
+
+.crud-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}

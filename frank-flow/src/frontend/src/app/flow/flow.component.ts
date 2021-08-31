@@ -7,6 +7,7 @@ import {
   faArrowLeft,
   faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-flow',
@@ -24,7 +25,10 @@ export class FlowComponent {
     dragMouseButton: 'left',
     zoomOnDoubleClick: false,
   };
-  panzoomConfig: PanZoomConfig = new PanZoomConfig(this.panZoomConfigOptions);
+
+  public panzoomConfig: PanZoomConfig = new PanZoomConfig(
+    this.panZoomConfigOptions
+  );
 
   @ViewChild('nodeContainer', { read: ElementRef })
   nodeContainerRef!: ElementRef;

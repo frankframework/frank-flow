@@ -1,4 +1,13 @@
 <div class="search-box">
   <input [(ngModel)]="searchTerm" placeholder="Search" type="text" />
 </div>
+<div class="crud-box">
+  <app-button (click)="openAddDialog()">
+    <fa-icon icon="plus" transform="down-1"></fa-icon>
+  </app-button>
+  <app-button>
+    <fa-icon icon="redo-alt" transform="down-1"></fa-icon>
+  </app-button>
+</div>
 <app-file-tree [height]="'100%'" [width]="'100%'"></app-file-tree>
+<app-add-dialog></app-add-dialog>
