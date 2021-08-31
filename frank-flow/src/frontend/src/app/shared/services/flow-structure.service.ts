@@ -257,7 +257,9 @@ export class FlowStructureService {
     Object.entries(attributeList).forEach(
       ([attributeKey, attribute]: [string, FlowNodeAttribute]) => {
         if (attributeKey === key) {
-          const newValue = `${key}="${value}"`;
+          const escapedValue = this.escapeSpecialChars(value);
+          const valueTemplate = `${key}="${escapedValue}"`;
+          this.escapeAttribute(attribute);
 
           hasAttribute = true;
           this.monacoEditorComponent?.applyEdit(
@@ -267,7 +269,7 @@ export class FlowStructureService {
               endColumn: attribute.endColumn,
               endLineNumber: attribute.line,
             },
-            newValue,
+            valueTemplate,
             flowUpdate
           );
         }
@@ -276,6 +278,18 @@ export class FlowStructureService {
     if (!hasAttribute) {
       this.createAttribute(key, value, attributeList, flowUpdate);
     }
+  }
+
+  escapeSpecialChars(value: string): string {
+    return value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  escapeAttribute(attribute: FlowNodeAttribute): void {
+    const escapedValue = this.escapeSpecialChars(attribute.value);
+    const lengthDifferance = Math.abs(
+      attribute.value.length - escapedValue.length
+    );
+    attribute.startColumn -= lengthDifferance;
   }
 
   deleteAttribute(
@@ -288,8 +302,7 @@ export class FlowStructureService {
       ([attributeKey, attribute]: [string, FlowNodeAttribute]) => {
         if (attributeKey === key) {
           const newValue = ``;
-
-          this.checkAttributeForSpecialChars(attribute);
+          this.escapeAttribute(attribute);
 
           hasAttribute = true;
           this.monacoEditorComponent?.applyEdit(
@@ -307,15 +320,6 @@ export class FlowStructureService {
     );
   }
 
-  checkAttributeForSpecialChars(attribute: FlowNodeAttribute): void {
-    if (attribute.value.match(/</g)) {
-      attribute.startColumn -= 3;
-    }
-    if (attribute.value.match(/>/g)) {
-      attribute.startColumn -= 3;
-    }
-  }
-
   createAttribute(
     key: string,
     value: any,
@@ -326,7 +330,7 @@ export class FlowStructureService {
       return;
     }
 
-    const newValue = ` ${key}="${value}"`;
+    const newValue = ` ${key}="${this.escapeSpecialChars(value)}"`;
 
     let endColumn = 0;
     let startColumn = 0;
