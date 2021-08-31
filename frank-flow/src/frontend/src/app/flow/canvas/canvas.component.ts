@@ -59,8 +59,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   onModelChanged(model: PanZoomModel): void {
-    console.log('change', model);
-
     this.jsPlumbInstance.setZoom(
       model.zoomLevel ? model.zoomLevel / 2 : this.LAST_ZOOM_LEVEL
     );

@@ -1,0 +1,15 @@
+<ngx-smart-modal
+  #addDialog
+  class="addDialog"
+  customClass="nsm-centered"
+  identifier="addDialog"
+>
+  <div>
+    <h1>add File</h1>
+  </div>
+  <input [(ngModel)]="fileName" placeholder="File name" type="text" />
+  <div class="button-actions">
+    <app-button (click)="add()">Add</app-button>
+    <app-button (click)="addDialog.close()">Cancel</app-button>
+  </div>
+</ngx-smart-modal>
