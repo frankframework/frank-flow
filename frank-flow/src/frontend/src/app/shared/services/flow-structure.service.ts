@@ -281,7 +281,12 @@ export class FlowStructureService {
   }
 
   escapeSpecialChars(value: string): string {
-    return value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return value
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
   }
 
   escapeAttribute(attribute: FlowNodeAttribute): void {
