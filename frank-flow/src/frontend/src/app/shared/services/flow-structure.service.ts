@@ -132,7 +132,7 @@ export class FlowStructureService {
 
   addPipe(pipeData: any): void {
     const pipes = this.structure.pipes;
-    console.log('structure', this.structure);
+
     const newPipe = `\n\t\t\t<${pipeData.type} name="${pipeData.name}" x="${pipeData.left}" y="${pipeData.top}">\n\t\t\t</${pipeData.type}>\n`;
 
     let lastPipe = pipes[pipes.length - 1];
@@ -163,8 +163,6 @@ export class FlowStructureService {
   addListener(pipeData: any): void {
     const listeners = this.structure.listeners;
     const lastListener = listeners[listeners.length - 1];
-
-    console.log(lastListener);
 
     const newListener = `\t  <${pipeData.type} name="${pipeData.name}" x="${pipeData.left}" y="${pipeData.top}" />\n`;
 
@@ -259,7 +257,61 @@ export class FlowStructureService {
     Object.entries(attributeList).forEach(
       ([attributeKey, attribute]: [string, FlowNodeAttribute]) => {
         if (attributeKey === key) {
-          const newValue = `${key}="${value}"`;
+          const escapedValue = this.escapeSpecialChars(value);
+          const valueTemplate = `${key}="${escapedValue}"`;
+          this.escapeAttribute(attribute);
+
+          hasAttribute = true;
+          this.monacoEditorComponent?.applyEdit(
+            {
+              startLineNumber: attribute.line,
+              startColumn: attribute.startColumn,
+              endColumn: attribute.endColumn,
+              endLineNumber: attribute.line,
+            },
+            valueTemplate,
+            flowUpdate
+          );
+        }
+      }
+    );
+    if (!hasAttribute) {
+      this.createAttribute(key, value, attributeList, flowUpdate);
+    }
+  }
+
+  escapeSpecialChars(value: string): string {
+    return value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+  }
+
+  escapeAttribute(attribute: FlowNodeAttribute): void {
+    console.log(attribute.value);
+    const escapedValue = this.escapeSpecialChars(attribute.value);
+    const lengthDifferance = escapedValue.length - attribute.value.length;
+    console.log(
+      escapedValue.length - attribute.value.length,
+      escapedValue.length,
+      attribute.value.length
+    );
+    attribute.startColumn -= lengthDifferance;
+  }
+
+  deleteAttribute(
+    key: string,
+    attributeList: FlowNodeAttributes,
+    flowUpdate = false
+  ): void {
+    let hasAttribute = false;
+    Object.entries(attributeList).forEach(
+      ([attributeKey, attribute]: [string, FlowNodeAttribute]) => {
+        if (attributeKey === key) {
+          const newValue = ``;
+          this.escapeAttribute(attribute);
 
           hasAttribute = true;
           this.monacoEditorComponent?.applyEdit(
@@ -275,9 +327,6 @@ export class FlowStructureService {
         }
       }
     );
-    if (!hasAttribute) {
-      this.createAttribute(key, value, attributeList, flowUpdate);
-    }
   }
 
   createAttribute(
@@ -290,7 +339,7 @@ export class FlowStructureService {
       return;
     }
 
-    const newValue = ` ${key}="${value}"`;
+    const newValue = ` ${key}="${this.escapeSpecialChars(value)}"`;
 
     let endColumn = 0;
     let startColumn = 0;
