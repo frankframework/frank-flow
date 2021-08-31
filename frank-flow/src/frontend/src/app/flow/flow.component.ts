@@ -14,9 +14,14 @@ import {
   styleUrls: ['./flow.component.scss'],
 })
 export class FlowComponent {
+  private readonly CanvasExpansionSize = 500;
+
+  @ViewChild('nodeContainer', { read: ElementRef })
+  nodeContainerRef!: ElementRef;
   nodes = [];
   connections = [];
-  private panZoomConfigOptions: PanZoomConfigOptions = {
+
+  panZoomConfigOptions: PanZoomConfigOptions = {
     zoomLevels: 10,
     zoomStepDuration: 0.2,
     freeMouseWheelFactor: 0.01,
@@ -25,10 +30,6 @@ export class FlowComponent {
     zoomOnDoubleClick: false,
   };
   panzoomConfig: PanZoomConfig = new PanZoomConfig(this.panZoomConfigOptions);
-
-  @ViewChild('nodeContainer', { read: ElementRef })
-  nodeContainerRef!: ElementRef;
-  private offset = 500;
 
   constructor(private renderer: Renderer2, private library: FaIconLibrary) {
     this.library.addIcons(faArrowDown, faArrowUp, faArrowRight, faArrowLeft);
@@ -42,7 +43,11 @@ export class FlowComponent {
       'canvas'
     )[0].offsetWidth;
 
-    this.renderer.setStyle(el, 'width', elWidth - this.offset + 'px');
+    this.renderer.setStyle(
+      el,
+      'width',
+      elWidth - this.CanvasExpansionSize + 'px'
+    );
   }
 
   decreaseBottom(): void {
@@ -53,7 +58,11 @@ export class FlowComponent {
       'canvas'
     )[0].offsetHeight;
 
-    this.renderer.setStyle(el, 'height', elHeight - this.offset + 'px');
+    this.renderer.setStyle(
+      el,
+      'height',
+      elHeight - this.CanvasExpansionSize + 'px'
+    );
   }
 
   expandRight(): void {
@@ -64,7 +73,11 @@ export class FlowComponent {
       'canvas'
     )[0].offsetWidth;
 
-    this.renderer.setStyle(el, 'width', elWidth + this.offset + 'px');
+    this.renderer.setStyle(
+      el,
+      'width',
+      elWidth + this.CanvasExpansionSize + 'px'
+    );
   }
 
   expandBottom(): void {
@@ -75,6 +88,10 @@ export class FlowComponent {
       'canvas'
     )[0].offsetHeight;
 
-    this.renderer.setStyle(el, 'height', elHeight + this.offset + 'px');
+    this.renderer.setStyle(
+      el,
+      'height',
+      elHeight + this.CanvasExpansionSize + 'px'
+    );
   }
 }
