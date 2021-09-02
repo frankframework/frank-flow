@@ -280,13 +280,15 @@ export class FlowStructureService {
     }
   }
 
-  escapeSpecialChars(value: string): string {
-    return value
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&apos;');
+  escapeSpecialChars(value: any): string {
+    return typeof value === 'string'
+      ? value
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&apos;')
+      : value;
   }
 
   escapeAttribute(attribute: FlowNodeAttribute): void {
