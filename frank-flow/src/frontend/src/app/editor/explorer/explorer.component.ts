@@ -6,6 +6,7 @@ import {
   faRedoAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { NgxSmartModalService } from 'ngx-smart-modal';
+import { FileService } from '../../shared/services/file.service';
 
 @Component({
   selector: 'app-explorer',
@@ -17,7 +18,8 @@ export class ExplorerComponent {
 
   constructor(
     library: FaIconLibrary,
-    private ngxSmartModalService: NgxSmartModalService
+    private ngxSmartModalService: NgxSmartModalService,
+    private fileService: FileService
   ) {
     library.addIcons(faPlus, faRedoAlt);
   }
@@ -27,6 +29,6 @@ export class ExplorerComponent {
   }
 
   refreshFileTree(): void {
-    console.log('refresh');
+    this.fileService.fetchFiles();
   }
 }

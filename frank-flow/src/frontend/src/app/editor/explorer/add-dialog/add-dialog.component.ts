@@ -63,7 +63,6 @@ export class AddDialogComponent {
         this.createBasicFile(this.fileName)
       );
     });
-    console.log('fetch');
     this.fileService.fetchFiles();
 
     this.ngxSmartModalService.close('addDialog');
