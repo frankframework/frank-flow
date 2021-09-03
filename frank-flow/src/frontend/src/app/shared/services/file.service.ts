@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { Configuration } from '../models/configuration.model';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { File } from '../models/file.model';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class FileService {
   BASE_PATH = environment.runnerUri + 'frank-flow/api/configurations';
   configurationFiles = new BehaviorSubject<Configuration[]>([]);
+
+  currentDirectory!: File;
 
   constructor() {
     this.fetchFiles();
@@ -72,6 +75,14 @@ export class FileService {
     return fetch(`${this.BASE_PATH}/${configuration}/files/?path=${path}`, {
       method: 'POST',
       body: formData,
+    })
+      .then((response) => response.ok)
+      .catch((error) => console.error(error));
+  }
+
+  removeFileFromConfiguation(file: File): void {
+    fetch(`${this.BASE_PATH}/${file.configuration}/files/?path=${file.path}`, {
+      method: 'DELETE',
     })
       .then((response) => response.ok)
       .catch((error) => console.error(error));

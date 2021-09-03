@@ -2,12 +2,9 @@
   background: var(--bg-color);
 }
 
-.search-box {
+.action-box {
   padding: 16px;
-}
-
-.crud-box {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  gap: 16px;
 }

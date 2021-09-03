@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { create } from 'cypress/types/lodash';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FileService } from 'src/app/shared/services/file.service';
+import { CodeService } from '../../../shared/services/code.service';
+import { File } from '../../../shared/models/file.model';
 
 @Component({
   selector: 'app-add-dialog',
@@ -11,12 +12,40 @@ import { FileService } from 'src/app/shared/services/file.service';
 export class AddDialogComponent {
   item: any;
   fileName: string;
+  currentFile!: File;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
-    private fileService: FileService
+    private fileService: FileService,
+    private codeService: CodeService
   ) {
     this.fileName = '';
+    this.getCurrentFile();
+  }
+
+  onDataAdded(): void {
+    this.item = this.ngxSmartModalService.getModalData('addDialog');
+  }
+
+  add(): void {
+    const currentDirectory = this.fileService.currentDirectory;
+    console.log('currentdir: ', currentDirectory);
+    if (currentDirectory.configuration) {
+      this.fileService.updateFileForConfiguration(
+        currentDirectory.configuration,
+        currentDirectory.path + '/' + this.fileName,
+        this.createBasicFile(this.fileName)
+      );
+
+      this.fileService.fetchFiles();
+      this.ngxSmartModalService.close('addDialog');
+    }
+  }
+
+  getCurrentFile(): void {
+    this.codeService.curFileObservable.subscribe(
+      (currentFile) => (this.currentFile = currentFile)
+    );
   }
 
   createBasicFile(displayName: string): string {
@@ -49,23 +78,6 @@ export class AddDialogComponent {
       '\t</Adapter>\n' +
       '</Configuration>\n'
     );
-  }
-
-  onDataAdded(): void {
-    this.item = this.ngxSmartModalService.getModalData('addDialog');
-  }
-
-  add(): void {
-    this.fileService.getFiles().subscribe((f) => {
-      this.fileService.updateFileForConfiguration(
-        f[0].name,
-        this.fileName,
-        this.createBasicFile(this.fileName)
-      );
-    });
-    this.fileService.fetchFiles();
-
-    this.ngxSmartModalService.close('addDialog');
   }
 
   discard(): void {

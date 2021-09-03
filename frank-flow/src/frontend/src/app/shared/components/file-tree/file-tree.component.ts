@@ -16,6 +16,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { SettingsService } from '../../../header/settings/settings.service';
 import { Settings } from '../../../header/settings/settings.model';
 import { SwitchWithoutSavingOption } from '../../../header/settings/options/switch-without-saving-option';
+import { FileType } from '../../enums/file-type.enum';
 import TreeItem = jqwidgets.TreeItem;
 
 @Component({
@@ -92,7 +93,11 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
           if (!this.fileMatch || file.match(this.fileMatch)) {
             items.push({
               label: file,
-              value: JSON.stringify({ configuration, path: path + file }),
+              value: JSON.stringify({
+                configuration,
+                path: path + file,
+                type: FileType.XML,
+              }),
             });
           }
         });
@@ -100,6 +105,11 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
         items.push({
           label: key,
           items: this.parseFiles(configuration, content[key], key + '/'),
+          value: JSON.stringify({
+            configuration,
+            path: path + key,
+            type: FileType.FOLDER,
+          }),
         });
       }
     });
@@ -128,10 +138,15 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
     if (itemValue) {
       const item: File = JSON.parse(itemValue);
 
-      if (!this.currentFile?.saved) {
-        this.switchWithoutSavingDecision(item);
-      } else {
-        this.codeService.switchCurrentFile(item);
+      if (item.type === FileType.XML) {
+        if (!this.currentFile?.saved) {
+          this.switchWithoutSavingDecision(item);
+        } else {
+          this.codeService.switchCurrentFile(item);
+        }
+        this.tree.selectItem(null);
+      } else if (item.type === FileType.FOLDER) {
+        this.fileService.currentDirectory = item;
       }
     }
   }
