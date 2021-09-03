@@ -17,7 +17,6 @@ export class FileService {
   fetchFiles(): void {
     this.getConfigurationsWithFiles().then((configurationFiles) => {
       this.configurationFiles.next(configurationFiles);
-      console.log(configurationFiles);
     });
   }
 

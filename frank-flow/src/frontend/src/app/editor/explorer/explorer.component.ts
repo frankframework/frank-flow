@@ -25,4 +25,8 @@ export class ExplorerComponent {
   openAddDialog(): void {
     this.ngxSmartModalService.getModal('addDialog').open();
   }
+
+  refreshFileTree(): void {
+    console.log('refresh');
+  }
 }
