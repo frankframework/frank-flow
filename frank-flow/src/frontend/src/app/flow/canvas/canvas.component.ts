@@ -34,7 +34,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   flowGenerator!: Worker;
 
   @HostBinding('tabindex') tabindex = 1;
-  @HostListener('keyup', ['$event'])
+  @HostListener('document:keyup', ['$event'])
   onKeyUp(kbdEvent: KeyboardEvent): void {
     this.handleKeyboardUpEvent(kbdEvent);
   }
