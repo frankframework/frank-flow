@@ -54,6 +54,14 @@ export class CodeService {
     });
   }
 
+  reloadFile(): void {
+    const curFile = this.getCurrentFile();
+
+    if (curFile) {
+      this.currentFile.next(curFile);
+    }
+  }
+
   undo(): File | undefined {
     this.redoAction = true;
     this.caretaker?.undo();

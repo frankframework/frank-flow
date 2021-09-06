@@ -8,6 +8,7 @@ import {
   faColumns,
   faProjectDiagram,
 } from '@fortawesome/free-solid-svg-icons';
+import { CodeService } from 'src/app/shared/services/code.service';
 
 @Component({
   selector: 'app-modes',

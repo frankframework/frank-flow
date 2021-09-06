@@ -7,8 +7,10 @@
 >
   <div>
     <h1>{{ node?.getName() }}</h1>
+    <hr />
     <h2>{{ node?.getType() }}</h2>
     <p>{{ nodeDescription }}</p>
+    <hr />
     <!-- TODO: Name and type here, those are generic for all nodes. Other attributes can be seen as 'additional' -->
     <h2>Attributes</h2>
     <div class="input-row" *ngIf="attributeOptions.length > 0">
@@ -46,6 +48,7 @@
         >Add {{ selectedAttribute?.name }}</app-button
       >
     </div>
+    <hr />
     <ng-container
       *ngFor="
         let attribute of attributes | keyvalue;
@@ -61,9 +64,10 @@
         <input
           type="text"
           id="name"
-          [(ngModel)]="attributes[attribute.key].value"
-          (ngModelChange)="changeAttribute(attribute.key, attribute)"
+          [ngModel]="attributes[attribute.key].value"
+          (ngModelChange)="changeAttribute(attribute.key, attribute, $event)"
         />
+        <app-button (click)="deleteAttribute(attribute.key)">Delete</app-button>
       </div>
     </ng-container>
   </div>

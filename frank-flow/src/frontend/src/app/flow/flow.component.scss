@@ -2,4 +2,29 @@
   display: grid;
   grid-template-columns: auto 256px;
   height: 100%;
+  background-color: var(--border-color);
+}
+
+.arrowTop {
+  position: absolute;
+  top: 100%;
+  left: 45%;
+}
+
+.arrowLeft {
+  position: absolute;
+  top: 45%;
+  left: 100%;
+}
+
+.arrowBottom {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+}
+
+.arrowRight {
+  position: absolute;
+  left: 100%;
+  top: 50%;
 }
