@@ -19,11 +19,7 @@ export class ModeComponent implements OnInit {
   modeType = ModeType;
   mode!: Mode;
 
-  constructor(
-    private modeService: ModeService,
-    library: FaIconLibrary,
-    private codeService: CodeService
-  ) {
+  constructor(private modeService: ModeService, library: FaIconLibrary) {
     library.addIcons(faCode, faProjectDiagram, faColumns);
   }
 
