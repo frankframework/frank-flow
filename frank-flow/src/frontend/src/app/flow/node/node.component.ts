@@ -61,10 +61,9 @@ export class NodeComponent implements AfterViewInit {
     connector: [
       'Bezier',
       {
-        alwaysRespectStubs: true,
         cornerRadius: 10,
-        stub: [10, 50],
-        midpoint: 0.0001,
+        stub: 50,
+        midpoint: 0.5,
       },
     ],
     maxConnections: 30,
@@ -100,7 +99,11 @@ export class NodeComponent implements AfterViewInit {
     } else {
       this.jsPlumbInstance.addEndpoint(
         id,
-        { anchor: 'Top', uuid: id + '_top', maxConnections: -1 },
+        {
+          anchor: [[0.2, 0, 0, -1], [1, 0.2, 1, 0], 'Top'],
+          uuid: id + '_top',
+          maxConnections: -1,
+        },
         this.topEndpointOptions
       );
     }
@@ -109,7 +112,7 @@ export class NodeComponent implements AfterViewInit {
       this.jsPlumbInstance.addEndpoint(
         id,
         {
-          anchor: 'Bottom',
+          anchor: [[0.2, 0, 0, -1], [1, 0.2, 1, 0], 'Bottom'],
           uuid: id + '_bottom',
           maxConnections: -1,
         },
