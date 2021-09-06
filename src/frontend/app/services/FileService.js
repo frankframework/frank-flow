@@ -2,8 +2,8 @@ import ToBeautifulSyntax from '../View/codeView/ToBeautifulSyntax.js';
 
 
 export default class FileService {
-    constructor(codeController) {
-        this.codeController = codeController;
+    constructor(fileTreeController) {
+        this.fileTreeController = fileTreeController;
 
         this.toBeautifulSyntax = new ToBeautifulSyntax();
 
@@ -28,7 +28,7 @@ export default class FileService {
                 fileTree.push(obj);
 
                 if (fileTree.length === data.length) {
-                    cur.codeController.fileTreeView.makeTree(fileTree);
+                    cur.fileTreeController.fileTreeView.makeTree(fileTree);
                     return fileTree;
                 }
             })
@@ -86,8 +86,7 @@ export default class FileService {
                 localStorage.setItem('currentAdapter', adapterName);
             }
 
-            cur.codeController.setEditorValue(beautiful);
-            cur.codeController.quickGenerate();
+            cur.fileTreeController.setEditorValue(beautiful);
         }).catch(e => {
             console.error('Error getting file: ', e);
         })

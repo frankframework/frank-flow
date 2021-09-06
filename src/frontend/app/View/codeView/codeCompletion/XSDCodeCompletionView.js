@@ -22,14 +22,22 @@ export default class XSDCodeCompletionView {
 
       // TODO: Use the real path as used in the configurations.
       //  This should be loaded dynamically. (xsdManager.update())
-      let namespace = data.fileData.match(/\w*?(?=:schema)/g);
+      
+      const namespace = data.fileData.match(/\w*?(?=:schema)/);
+      let ifRootTag = [];
+
+      if(namespace[0] == 'xs') {
+        ifRootTag = ['Configuration', 'Module', 'Adapter'];
+      }
+
       console.log(data.path, data.fileData, namespace[0]);
+
       this.xsdManager.set({
         path: data.path,
         value: data.fileData,
         namespace: namespace[0],
         nonStrictPath: true,
-        includeIfRootTag: ['Configuration', 'Module', 'Adapter'],
+        includeIfRootTag: ifRootTag,
       });
 
 
