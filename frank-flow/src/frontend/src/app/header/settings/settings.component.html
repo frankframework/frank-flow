@@ -9,15 +9,15 @@
     <div class="input-row">
       <label>Enable dark mode</label>
       <app-toggle
-        (stateChange)="setSettings()"
         [(state)]="settings.darkMode"
+        (stateChange)="setSettings()"
       ></app-toggle>
     </div>
     <div class="input-row">
       <label>Show confirmation popups</label>
       <app-toggle
-        (stateChange)="setSettings()"
         [(state)]="settings.showPopups"
+        (stateChange)="setSettings()"
       ></app-toggle>
     </div>
     <div class="input-row">
@@ -26,8 +26,8 @@
         files?</label
       >
       <select
-        (ngModelChange)="setSettings()"
         [(ngModel)]="settings.switchWithoutSaving"
+        (ngModelChange)="setSettings()"
         id="switch-without-saving-options"
       >
         <option [value]="switchWithoutSavingOptions.ask">Ask me</option>
@@ -38,8 +38,8 @@
     <div class="input-row">
       <label for="edit-mode">Default edit mode</label>
       <select
-        (ngModelChange)="setSettings()"
         [(ngModel)]="settings.defaultMode"
+        (ngModelChange)="setSettings()"
         id="edit-mode"
       >
         <option [value]="modeType.flowMode">Flow</option>
