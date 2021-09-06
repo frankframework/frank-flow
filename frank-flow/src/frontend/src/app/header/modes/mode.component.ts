@@ -8,6 +8,7 @@ import {
   faColumns,
   faProjectDiagram,
 } from '@fortawesome/free-solid-svg-icons';
+import { CodeService } from 'src/app/shared/services/code.service';
 
 @Component({
   selector: 'app-modes',
@@ -18,7 +19,11 @@ export class ModeComponent implements OnInit {
   modeType = ModeType;
   mode!: Mode;
 
-  constructor(private modeService: ModeService, library: FaIconLibrary) {
+  constructor(
+    private modeService: ModeService,
+    library: FaIconLibrary,
+    private codeService: CodeService
+  ) {
     library.addIcons(faCode, faProjectDiagram, faColumns);
   }
 
