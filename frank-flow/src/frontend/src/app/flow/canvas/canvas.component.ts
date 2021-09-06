@@ -55,6 +55,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.createGeneratorWorker();
     this.setCurrentFileListener();
     this.setGeneratorWorkerListener();
+    this.codeService.reloadFile();
   }
 
   ngOnDestroy(): void {
