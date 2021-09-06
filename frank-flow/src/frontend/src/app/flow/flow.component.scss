@@ -5,26 +5,27 @@
   background-color: var(--border-color);
 }
 
-.arrowTop {
-  position: absolute;
-  top: 100%;
-  left: 45%;
-}
+.panzoom {
+  display: grid;
+  grid-template-rows: auto 35px;
+  grid-template-columns: auto 35px;
+  gap: 16px;
 
-.arrowLeft {
-  position: absolute;
-  top: 45%;
-  left: 100%;
-}
+  .arrows {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
 
-.arrowBottom {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-}
+    fa-icon {
+      color: var(--dark-cyan);
+    }
 
-.arrowRight {
-  position: absolute;
-  left: 100%;
-  top: 50%;
+    &--horizontal {
+      flex-direction: column;
+    }
+
+    &--vertical {
+      flex-direction: row;
+    }
+  }
 }
