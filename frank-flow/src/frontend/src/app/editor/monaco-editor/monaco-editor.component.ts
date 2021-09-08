@@ -168,7 +168,6 @@ export class MonacoEditorComponent
   setValue(file: File | undefined): void {
     if (file?.data) {
       const position = this.codeEditorInstance.getPosition();
-      console.log(position);
       this.currentFile = file;
       this.codeEditorInstance.getModel()?.setValue(file.data);
       if (position) {
