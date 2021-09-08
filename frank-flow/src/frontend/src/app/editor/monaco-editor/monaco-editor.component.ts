@@ -167,8 +167,13 @@ export class MonacoEditorComponent
 
   setValue(file: File | undefined): void {
     if (file?.data) {
+      const position = this.codeEditorInstance.getPosition();
+      console.log(position);
       this.currentFile = file;
-      this.codeEditorInstance.setValue(file.data);
+      this.codeEditorInstance.getModel()?.setValue(file.data);
+      if (position) {
+        this.codeEditorInstance.setPosition(position);
+      }
     }
   }
 
@@ -196,7 +201,6 @@ export class MonacoEditorComponent
             this.fileObservableUpdate = true;
             this.currentFile.data = this.codeEditorInstance.getValue();
             this.currentFile.saved = false;
-
             this.codeService.setCurrentFile(this.currentFile);
           } else {
             this.fileObservableUpdate = false;
@@ -216,14 +220,13 @@ export class MonacoEditorComponent
     );
   }
 
+  // TODO: Refactor: Only run que when there are items in it. Update que based on observer, not on interval.
   initUpdateQueue(): void {
-    const model = this.codeEditorInstance.getModel();
     setInterval(() => {
       const file = this.updateQueue.shift();
       if (file && file.data && !this.fileObservableUpdate) {
         this.fileObservableUpdate = true;
-        model?.setValue(file.data);
-        this.currentFile = file;
+        this.setValue(file);
       } else if (file && this.fileObservableUpdate) {
         this.fileObservableUpdate = false;
       }
