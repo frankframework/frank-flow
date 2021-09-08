@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: Bug
+labels: bug
 assignees: ''
 
 ---
@@ -14,12 +14,13 @@ A clear and concise description of what the bug is.
 Please state your name. If we don't know who is reporting, a solution of the issue might be delayed.
 
 **Category** 
-Use following Tags to categorize your bug report
- - Filetree (explorer)
- - Pipe pallatte
- - Flow chart
- - Code editor
- - Pipe info
+Use the following Tags to categorize your bug report
+* [ ] Explorer
+* [ ] Editor
+* [ ] Flow
+* [ ] Pipe options
+* [ ] Palette
+* [ ] Settings
 
 **To Reproduce**
 Steps to reproduce the behavior:
@@ -35,4 +36,4 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Additional context**
-Add any other context about the problem here. (f.e. ladybug report / test adapter with larva test)
+Add any other context about the problem here. (f.e. ladybug report, console error or test adapter with larva test)
