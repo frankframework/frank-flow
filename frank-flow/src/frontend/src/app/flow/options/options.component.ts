@@ -112,7 +112,7 @@ export class OptionsComponent {
     this.reloadAttributes();
   }
 
-  changeAttribute(key: string, attribute: any): void {
+  changeAttribute(key: string, attribute: any, event: Event): void {
     this.flowStructureService.refreshStructure();
     setTimeout(() => {
       const attributeList = this.getUpdatedAttributes();
@@ -122,7 +122,7 @@ export class OptionsComponent {
         }
         this.flowStructureService.editAttribute(
           key,
-          attribute.value.value,
+          event,
           attributeList.attributes
         );
       }

@@ -74,6 +74,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         (model: PanZoomModel) => this.onModelChanged(model)
       );
     }
+    this.codeService.reloadFile();
   }
 
   ngOnDestroy(): void {

@@ -64,8 +64,8 @@
         <input
           type="text"
           id="name"
-          [(ngModel)]="attributes[attribute.key].value"
-          (ngModelChange)="changeAttribute(attribute.key, attribute)"
+          [ngModel]="attributes[attribute.key].value"
+          (ngModelChange)="changeAttribute(attribute.key, attribute, $event)"
         />
         <app-button (click)="deleteAttribute(attribute.key)">Delete</app-button>
       </div>

@@ -1,4 +1,10 @@
-import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Renderer2,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
 import { PanZoomConfig, PanZoomConfigOptions } from 'ngx-panzoom';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
@@ -14,10 +20,15 @@ import { Subscription } from 'rxjs';
   templateUrl: './flow.component.html',
   styleUrls: ['./flow.component.scss'],
 })
-export class FlowComponent {
+export class FlowComponent implements AfterViewInit {
+  private readonly canvasExpansionSize = 500;
+
+  @ViewChild('nodeContainer', { read: ElementRef })
+  nodeContainerRef!: ElementRef;
   nodes = [];
   connections = [];
-  private panZoomConfigOptions: PanZoomConfigOptions = {
+
+  panZoomConfigOptions: PanZoomConfigOptions = {
     zoomLevels: 10,
     zoomStepDuration: 0.2,
     freeMouseWheelFactor: 0.01,
@@ -30,55 +41,46 @@ export class FlowComponent {
     this.panZoomConfigOptions
   );
 
-  @ViewChild('nodeContainer', { read: ElementRef })
-  nodeContainerRef!: ElementRef;
-  private offset = 500;
+  canvasElement?: any;
 
   constructor(private renderer: Renderer2, private library: FaIconLibrary) {
     this.library.addIcons(faArrowDown, faArrowUp, faArrowRight, faArrowLeft);
   }
 
-  decreaseRight(): void {
-    const el = this.nodeContainerRef.nativeElement.getElementsByClassName(
+  ngAfterViewInit(): void {
+    this.canvasElement = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
     )[0];
-    const elWidth = this.nodeContainerRef.nativeElement.getElementsByClassName(
-      'canvas'
-    )[0].offsetWidth;
+  }
 
-    this.renderer.setStyle(el, 'width', elWidth - this.offset + 'px');
+  decreaseRight(): void {
+    this.changeCanvasSize('width', -this.canvasExpansionSize);
   }
 
   decreaseBottom(): void {
-    const el = this.nodeContainerRef.nativeElement.getElementsByClassName(
-      'canvas'
-    )[0];
-    const elHeight = this.nodeContainerRef.nativeElement.getElementsByClassName(
-      'canvas'
-    )[0].offsetHeight;
-
-    this.renderer.setStyle(el, 'height', elHeight - this.offset + 'px');
+    this.changeCanvasSize('height', -this.canvasExpansionSize);
   }
 
   expandRight(): void {
-    const el = this.nodeContainerRef.nativeElement.getElementsByClassName(
-      'canvas'
-    )[0];
-    const elWidth = this.nodeContainerRef.nativeElement.getElementsByClassName(
-      'canvas'
-    )[0].offsetWidth;
-
-    this.renderer.setStyle(el, 'width', elWidth + this.offset + 'px');
+    this.changeCanvasSize('width', this.canvasExpansionSize);
   }
 
   expandBottom(): void {
-    const el = this.nodeContainerRef.nativeElement.getElementsByClassName(
-      'canvas'
-    )[0];
-    const elHeight = this.nodeContainerRef.nativeElement.getElementsByClassName(
-      'canvas'
-    )[0].offsetHeight;
+    this.changeCanvasSize('height', this.canvasExpansionSize);
+  }
 
-    this.renderer.setStyle(el, 'height', elHeight + this.offset + 'px');
+  changeCanvasSize(
+    direction: 'height' | 'width',
+    expansionValue: number
+  ): void {
+    this.renderer.setStyle(
+      this.canvasElement,
+      direction,
+      (direction == 'height'
+        ? this.canvasElement.offsetHeight
+        : this.canvasElement.offsetWidth) +
+        expansionValue +
+        'px'
+    );
   }
 }

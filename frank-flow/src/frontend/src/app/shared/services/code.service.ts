@@ -58,7 +58,7 @@ export class CodeService {
     const curFile = this.getCurrentFile();
 
     if (curFile) {
-      this.setCurrentFile(curFile);
+      this.currentFile.next(curFile);
     }
   }
 

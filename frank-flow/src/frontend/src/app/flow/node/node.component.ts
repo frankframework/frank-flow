@@ -30,6 +30,7 @@ export class NodeComponent implements AfterViewInit {
   };
   private dragOptions = {
     containment: 'canvas',
+    grid: [20, 20],
     stop: (e: any) => {
       if (e.el.classList[0] === 'color--info') {
         this.flowStructureService.editListenerPositions(

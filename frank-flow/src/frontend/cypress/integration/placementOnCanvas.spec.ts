@@ -17,7 +17,7 @@ describe('Placement on canvas', () => {
     cy.fixture('expectedConnections.csv')
       .then((data) => createExpectedConnections(data))
       .as('expectedConnections');
-    cy.visit('');
+    cy.visit('', { timeout: 300000 });
     // TODO: Calculate the number of connections here
     awaitFlowChartConnections(4);
   });
