@@ -1,13 +1,28 @@
 <ngx-smart-modal
   #addDialog
+  (onDataAdded)="onDataAdded()"
   class="addDialog"
   customClass="nsm-centered"
   identifier="addDialog"
 >
   <div>
-    <h1>Add File to {{ currentFile?.configuration }}</h1>
+    <h1>
+      Add a new {{ isFolder ? 'folder' : 'file' }} to
+      {{ currentDirectory?.configuration }}: {{ currentDirectory?.path }}
+    </h1>
   </div>
-  <input [(ngModel)]="fileName" placeholder="File name" type="text" />
+  <div class="input-row">
+    <label> Do you want create a folder? </label>
+    <app-toggle
+      [(state)]="isFolder"
+      (stateChange)="isFolder = $event"
+    ></app-toggle>
+  </div>
+  <input
+    [(ngModel)]="fileName"
+    [placeholder]="(isFolder ? 'Folder' : 'File') + ' name'"
+    type="text"
+  />
   <div class="button-actions">
     <app-button (click)="add()">Add</app-button>
     <app-button (click)="addDialog.close()">Cancel</app-button>

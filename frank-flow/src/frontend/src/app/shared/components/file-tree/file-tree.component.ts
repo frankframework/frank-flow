@@ -146,7 +146,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
         }
         this.tree.selectItem(null);
       } else if (item.type === FileType.FOLDER) {
-        this.fileService.currentDirectory = item;
+        this.codeService.currentDirectory = item;
       }
     }
   }

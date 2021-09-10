@@ -32,7 +32,10 @@ export class ExplorerComponent {
   }
 
   openAddDialog(): void {
-    this.ngxSmartModalService.getModal('addDialog').open();
+    this.ngxSmartModalService
+      .getModal('addDialog')
+      .setData(this.currentFile, true)
+      .open();
   }
 
   deleteFile(): void {

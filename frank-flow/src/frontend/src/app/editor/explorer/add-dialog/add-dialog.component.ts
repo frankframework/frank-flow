@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FileService } from 'src/app/shared/services/file.service';
 import { CodeService } from '../../../shared/services/code.service';
@@ -10,45 +10,41 @@ import { File } from '../../../shared/models/file.model';
   styleUrls: ['./add-dialog.component.scss'],
 })
 export class AddDialogComponent {
-  item: any;
-  fileName: string;
+  fileName!: string;
   currentFile!: File;
+  isFolder = false;
+  currentDirectory!: File;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
     private fileService: FileService,
     private codeService: CodeService
-  ) {
-    this.fileName = '';
-    this.getCurrentFile();
-  }
+  ) {}
 
   onDataAdded(): void {
-    this.item = this.ngxSmartModalService.getModalData('addDialog');
+    this.currentFile = this.ngxSmartModalService.getModalData('addDialog');
+    this.currentDirectory = this.codeService.currentDirectory;
   }
 
   add(): void {
-    const currentDirectory = this.fileService.currentDirectory;
-    console.log('currentdir: ', currentDirectory);
-    if (currentDirectory.configuration) {
+    if (this.currentDirectory.configuration) {
       this.fileService.updateFileForConfiguration(
-        currentDirectory.configuration,
-        currentDirectory.path + '/' + this.fileName,
-        this.createBasicFile(this.fileName)
+        this.currentDirectory.configuration,
+        this.currentDirectory.path + '/' + this.fileName,
+        this.basicFileTemplate(this.fileName)
       );
-
+      this.clearForm();
       this.fileService.fetchFiles();
       this.ngxSmartModalService.close('addDialog');
     }
   }
 
-  getCurrentFile(): void {
-    this.codeService.curFileObservable.subscribe(
-      (currentFile) => (this.currentFile = currentFile)
-    );
+  clearForm(): void {
+    this.fileName = '';
+    this.isFolder = false;
   }
 
-  createBasicFile(displayName: string): string {
+  basicFileTemplate(displayName: string): string {
     return (
       '<Configuration name="' +
       displayName +

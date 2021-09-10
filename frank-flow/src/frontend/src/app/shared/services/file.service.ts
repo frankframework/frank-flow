@@ -10,8 +10,6 @@ export class FileService {
   BASE_PATH = window.location.href + 'api/configurations';
   configurationFiles = new BehaviorSubject<Configuration[]>([]);
 
-  currentDirectory!: File;
-
   constructor() {
     this.fetchFiles();
   }
