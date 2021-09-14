@@ -77,10 +77,13 @@ export class FileService {
       .catch((error) => console.error(error));
   }
 
-  removeFileFromConfiguation(file: File): void {
-    fetch(`${this.BASE_PATH}/${file.configuration}/files/?path=${file.path}`, {
-      method: 'DELETE',
-    })
+  removeFileFromConfiguation(file: File): Promise<boolean | void> {
+    return fetch(
+      `${this.BASE_PATH}/${file.configuration}/files/?path=${file.path}`,
+      {
+        method: 'DELETE',
+      }
+    )
       .then((response) => response.ok)
       .catch((error) => console.error(error));
   }

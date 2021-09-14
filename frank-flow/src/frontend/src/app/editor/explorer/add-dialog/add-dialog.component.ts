@@ -3,6 +3,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FileService } from 'src/app/shared/services/file.service';
 import { CodeService } from '../../../shared/services/code.service';
 import { File } from '../../../shared/models/file.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-dialog',
@@ -18,7 +19,8 @@ export class AddDialogComponent {
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
     private fileService: FileService,
-    private codeService: CodeService
+    private codeService: CodeService,
+    private toastr: ToastrService
   ) {}
 
   onDataAdded(): void {
@@ -28,11 +30,27 @@ export class AddDialogComponent {
 
   add(): void {
     if (this.currentDirectory.configuration) {
-      this.fileService.updateFileForConfiguration(
-        this.currentDirectory.configuration,
-        this.currentDirectory.path + '/' + this.fileName,
-        this.basicFileTemplate(this.fileName)
-      );
+      const fileName = this.fileName;
+
+      this.fileService
+        .updateFileForConfiguration(
+          this.currentDirectory.configuration,
+          this.currentDirectory.path + '/' + fileName,
+          this.basicFileTemplate(fileName)
+        )
+        .then((response) => {
+          if (response) {
+            this.toastr.success(
+              `The file ${fileName} has been created.`,
+              'File created!'
+            );
+          } else {
+            this.toastr.error(
+              `The file ${fileName} couldn't be created.`,
+              'Error creating'
+            );
+          }
+        });
       this.clearForm();
       this.fileService.fetchFiles();
       this.ngxSmartModalService.close('addDialog');

@@ -5,6 +5,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FileService } from '../../shared/services/file.service';
 import { CodeService } from '../../shared/services/code.service';
 import { File } from '../../shared/models/file.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-explorer',
@@ -19,7 +20,8 @@ export class ExplorerComponent {
     library: FaIconLibrary,
     private ngxSmartModalService: NgxSmartModalService,
     private fileService: FileService,
-    private codeService: CodeService
+    private codeService: CodeService,
+    private toastr: ToastrService
   ) {
     library.addIcons(faPlus, faRedoAlt, faTrash);
     this.getCurrentFile();
@@ -39,7 +41,21 @@ export class ExplorerComponent {
   }
 
   deleteFile(): void {
-    this.fileService.removeFileFromConfiguation(this.currentFile);
+    this.fileService
+      .removeFileFromConfiguation(this.currentFile)
+      .then((response) => {
+        if (response) {
+          this.toastr.success(
+            `The file ${this.currentFile.path} has been removed.`,
+            'File removed!'
+          );
+        } else {
+          this.toastr.error(
+            `The file ${this.currentFile.path} couldn't be removed.`,
+            'Error removing'
+          );
+        }
+      });
     this.fileService.fetchFiles();
   }
 
