@@ -49,6 +49,8 @@ export class ExplorerComponent {
             `The file ${this.currentFile.path} has been removed.`,
             'File removed!'
           );
+          this.codeService.getFirstFile();
+          this.fileService.fetchFiles();
         } else {
           this.toastr.error(
             `The file ${this.currentFile.path} couldn't be removed.`,
@@ -56,7 +58,6 @@ export class ExplorerComponent {
           );
         }
       });
-    this.fileService.fetchFiles();
   }
 
   refreshFileTree(): void {
