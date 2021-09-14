@@ -18,6 +18,7 @@ export class CodeService {
   private originator?: Originator;
   private caretaker?: Caretaker;
   private redoAction = false;
+  currentDirectory!: File;
 
   constructor(private fileService: FileService, private toastr: ToastrService) {
     this.originator = new Originator(new File());
@@ -46,6 +47,10 @@ export class CodeService {
                 configuration: firstConfig.name,
                 saved: true,
               });
+              this.currentDirectory = {
+                configuration: firstConfig.name,
+                path: '',
+              };
             }
           });
           subscription.unsubscribe();

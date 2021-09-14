@@ -47,4 +47,11 @@ export class HeaderComponent implements OnInit {
   openSettings(): void {
     this.ngxSmartModalService.getModal('settingsModal').open();
   }
+
+  openAddDialog(): void {
+    this.ngxSmartModalService
+      .getModal('addDialog')
+      .setData(this.currentFile, true)
+      .open();
+  }
 }

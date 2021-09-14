@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Configuration } from '../models/configuration.model';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { File } from '../models/file.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,9 +15,9 @@ export class FileService {
   }
 
   fetchFiles(): void {
-    this.getConfigurationsWithFiles().then((configurationFiles) =>
-      this.configurationFiles.next(configurationFiles)
-    );
+    this.getConfigurationsWithFiles().then((configurationFiles) => {
+      this.configurationFiles.next(configurationFiles);
+    });
   }
 
   async getConfigurationsWithFiles(): Promise<Configuration[]> {
@@ -72,6 +73,17 @@ export class FileService {
       method: 'POST',
       body: formData,
     })
+      .then((response) => response.ok)
+      .catch((error) => console.error(error));
+  }
+
+  removeFileFromConfiguation(file: File): Promise<boolean | void> {
+    return fetch(
+      `${this.BASE_PATH}/${file.configuration}/files/?path=${file.path}`,
+      {
+        method: 'DELETE',
+      }
+    )
       .then((response) => response.ok)
       .catch((error) => console.error(error));
   }

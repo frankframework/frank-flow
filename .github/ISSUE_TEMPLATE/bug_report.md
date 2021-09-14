@@ -1,10 +1,9 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ''
+title: ""
 labels: bug
-assignees: ''
-
+assignees: ""
 ---
 
 **Describe the bug**
@@ -13,17 +12,19 @@ A clear and concise description of what the bug is.
 **Reporter**
 Please state your name. If we don't know who is reporting, a solution of the issue might be delayed.
 
-**Category** 
+**Category**
 Use the following Tags to categorize your bug report
-* Explorer
-* Editor
-* Flow
-* Pipe options
-* Palette
-* Settings
+
+- Explorer
+- Editor
+- Flow
+- Pipe options
+- Palette
+- Settings
 
 **To Reproduce**
 Steps to reproduce the behavior:
+
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
