@@ -16,7 +16,7 @@ import { AddDialogComponent } from './explorer/add-dialog/add-dialog.component';
     ExplorerComponent,
     MonacoEditorComponent,
   ],
-  exports: [EditorComponent],
+  exports: [EditorComponent, AddDialogComponent],
   imports: [
     CommonModule,
     FormsModule,
