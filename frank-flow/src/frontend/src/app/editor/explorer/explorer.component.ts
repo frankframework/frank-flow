@@ -49,6 +49,7 @@ export class ExplorerComponent {
             `The file ${this.currentFile.path} has been removed.`,
             'File removed!'
           );
+          this.codeService.getFirstFile();
           this.fileService.fetchFiles();
         } else {
           this.toastr.error(
