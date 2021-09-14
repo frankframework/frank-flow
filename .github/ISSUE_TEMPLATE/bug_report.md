@@ -15,12 +15,12 @@ Please state your name. If we don't know who is reporting, a solution of the iss
 **Category**
 Use the following Tags to categorize your bug report
 
-- [ ] Explorer
-- [ ] Editor
-- [ ] Flow
-- [ ] Pipe options
-- [ ] Palette
-- [ ] Settings
+- Explorer
+- Editor
+- Flow
+- Pipe options
+- Palette
+- Settings
 
 **To Reproduce**
 Steps to reproduce the behavior:
