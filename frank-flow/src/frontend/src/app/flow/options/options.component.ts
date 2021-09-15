@@ -16,9 +16,10 @@ import { Node } from '../node/nodes/node.model';
 export class OptionsComponent {
   disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
   frankDoc: any;
-  node?: Node;
-  attributes!: FlowNodeAttributes;
   attributeOptions: FlowNodeAttributeOptions[] = [];
+  node!: Node;
+  attributes!: FlowNodeAttributes;
+  changedAttributes: { attribute: string; value: string | number }[] = [];
   selectedAttribute!: any;
   newAttributeValue!: string;
   nodeName!: string | undefined;
@@ -44,6 +45,14 @@ export class OptionsComponent {
     this.getAttributesForNode();
   }
 
+  onAnyCloseEvent(): void {
+    this.flowStructureService.editAttributes(
+      'nodes',
+      this.node.getId(),
+      this.changedAttributes
+    );
+  }
+
   reloadAttributes() {
     this.flowStructureService.refreshStructure();
     setTimeout(() => {
@@ -53,6 +62,7 @@ export class OptionsComponent {
 
   resetPreviousData() {
     this.attributes = {};
+    this.changedAttributes = [];
     this.attributeOptions = [];
     this.nodeName = '';
     this.nodeDescription = '';
@@ -80,24 +90,19 @@ export class OptionsComponent {
       );
       this.nodeDescription = element?.descriptionHeader;
       element?.attributes?.forEach((attribute: any) => {
-        this.attributeOptions.push(attribute);
+        if (!Object.keys(this.attributes).includes(attribute.name)) {
+          this.attributeOptions.push(attribute);
+        }
       });
     }
   }
 
   getUpdatedAttributes(): any {
-    const nodeType = this.node?.getType();
-    const nodeName = this.nodeName;
-
     const structure = this.flowStructureService.getStructure();
 
-    if (nodeType?.match(/Pipe/) && nodeName) {
-      return structure.pipes.find(
-        (pipe: FlowStructureNode) => pipe.name === nodeName
-      );
-    } else {
-      return null;
-    }
+    return structure.nodes.find(
+      (pipe: FlowStructureNode) => pipe.name === this.nodeName
+    );
   }
 
   addAttribute(): void {
@@ -112,21 +117,16 @@ export class OptionsComponent {
     this.reloadAttributes();
   }
 
-  changeAttribute(key: string, attribute: any, event: Event): void {
-    this.flowStructureService.refreshStructure();
-    setTimeout(() => {
-      const attributeList = this.getUpdatedAttributes();
-      if (attributeList) {
-        if (key === 'name') {
-          this.nodeName = attribute.value.value;
-        }
-        this.flowStructureService.editAttribute(
-          key,
-          event,
-          attributeList.attributes
-        );
-      }
-    });
+  changeAttribute(key: string, _: any, event: Event): void {
+    const index = this.changedAttributes?.findIndex(
+      (attribute) => attribute.attribute == key
+    );
+
+    if (index !== -1) {
+      this.changedAttributes[index] = { attribute: key, value: event as any };
+    } else {
+      this.changedAttributes.push({ attribute: key, value: event as any });
+    }
   }
 
   deleteAttribute(key: string): void {
