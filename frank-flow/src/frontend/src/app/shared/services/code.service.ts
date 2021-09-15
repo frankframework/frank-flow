@@ -157,7 +157,7 @@ export class CodeService {
       this.fileService
         .getFileFromConfiguration(item.configuration, item.path)
         .then((file) => {
-          if (file) {
+          if (file != null) {
             this.clearMementoHistory();
             this.setCurrentFile({
               path: item.path,
