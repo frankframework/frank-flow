@@ -253,31 +253,43 @@ export class FlowStructureService {
     attributeList: FlowNodeAttributes,
     flowUpdate = false
   ): void {
-    let hasAttribute = false;
-    Object.entries(attributeList).forEach(
-      ([attributeKey, attribute]: [string, FlowNodeAttribute]) => {
-        if (attributeKey === key) {
-          const escapedValue = this.escapeSpecialChars(value);
-          const valueTemplate = `${key}="${escapedValue}"`;
-          this.escapeAttribute(attribute);
+    const attribute = this.findAttribute(attributeList, key);
 
-          hasAttribute = true;
-          this.monacoEditorComponent?.applyEdit(
-            {
-              startLineNumber: attribute.line,
-              startColumn: attribute.startColumn,
-              endColumn: attribute.endColumn,
-              endLineNumber: attribute.line,
-            },
-            valueTemplate,
-            flowUpdate
-          );
+    if (attribute) {
+      const escapedValue = this.escapeSpecialChars(value);
+      const valueTemplate = `${key}="${escapedValue}"`;
+      this.escapeAttribute(attribute);
+
+      this.monacoEditorComponent?.applyEdit(
+        {
+          startLineNumber: attribute.line,
+          startColumn: attribute.startColumn,
+          endColumn: attribute.endColumn,
+          endLineNumber: attribute.line,
+        },
+        valueTemplate,
+        flowUpdate
+      );
+    } else {
+      this.createAttribute(key, value, attributeList, flowUpdate);
+    }
+  }
+
+  findAttribute(
+    attributeList: FlowNodeAttributes,
+    search: string
+  ): FlowNodeAttribute | undefined {
+    let attribute: FlowNodeAttribute | undefined = undefined;
+
+    Object.entries(attributeList).forEach(
+      ([attributeKey, currentAttribute]: [string, FlowNodeAttribute]) => {
+        if (attributeKey === search) {
+          attribute = currentAttribute;
         }
       }
     );
-    if (!hasAttribute) {
-      this.createAttribute(key, value, attributeList, flowUpdate);
-    }
+
+    return attribute;
   }
 
   escapeSpecialChars(value: any): string {
@@ -302,27 +314,23 @@ export class FlowStructureService {
     attributeList: FlowNodeAttributes,
     flowUpdate = false
   ): void {
-    let hasAttribute = false;
-    Object.entries(attributeList).forEach(
-      ([attributeKey, attribute]: [string, FlowNodeAttribute]) => {
-        if (attributeKey === key) {
-          const newValue = ``;
-          this.escapeAttribute(attribute);
+    const attribute = this.findAttribute(attributeList, key);
 
-          hasAttribute = true;
-          this.monacoEditorComponent?.applyEdit(
-            {
-              startLineNumber: attribute.line,
-              startColumn: attribute.startColumn,
-              endColumn: attribute.endColumn,
-              endLineNumber: attribute.line,
-            },
-            newValue,
-            flowUpdate
-          );
-        }
-      }
-    );
+    if (attribute) {
+      const newValue = ``;
+      this.escapeAttribute(attribute);
+
+      this.monacoEditorComponent?.applyEdit(
+        {
+          startLineNumber: attribute.line,
+          startColumn: attribute.startColumn,
+          endColumn: attribute.endColumn,
+          endLineNumber: attribute.line,
+        },
+        newValue,
+        flowUpdate
+      );
+    }
   }
 
   createAttribute(
@@ -336,32 +344,40 @@ export class FlowStructureService {
     }
 
     const newValue = ` ${key}="${this.escapeSpecialChars(value)}"`;
+    const lastAttribute = this.findLastAttribute(attributeList);
 
-    let endColumn = 0;
-    let startColumn = 0;
-    let line = 0;
+    if (lastAttribute) {
+      this.monacoEditorComponent?.applyEdit(
+        {
+          startLineNumber: lastAttribute.line,
+          endLineNumber: lastAttribute.line,
+          startColumn: lastAttribute.endColumn,
+          endColumn: lastAttribute.endColumn,
+        },
+        newValue,
+        flowUpdate
+      );
+    }
+  }
+
+  findLastAttribute(
+    attributeList: FlowNodeAttributes
+  ): FlowNodeAttribute | undefined {
+    let currentLastAttribute: FlowNodeAttribute | undefined = undefined;
 
     Object.entries(attributeList).forEach(
       ([attributeKey, attribute]: [string, FlowNodeAttribute]) => {
-        if (attribute.line > line) {
-          line = attribute.line;
+        if (!currentLastAttribute) {
+          currentLastAttribute = attribute;
         }
-        if (attribute.endColumn > startColumn) {
-          startColumn = attribute.endColumn;
-          endColumn = startColumn;
+        if (attribute.line > currentLastAttribute.line) {
+          currentLastAttribute = attribute;
+        } else if (attribute.endColumn > currentLastAttribute.endColumn) {
+          currentLastAttribute = attribute;
         }
       }
     );
 
-    this.monacoEditorComponent?.applyEdit(
-      {
-        startLineNumber: line,
-        startColumn: startColumn,
-        endColumn,
-        endLineNumber: line,
-      },
-      newValue,
-      flowUpdate
-    );
+    return currentLastAttribute;
   }
 }

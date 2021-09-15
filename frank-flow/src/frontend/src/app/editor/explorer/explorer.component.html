@@ -1,4 +1,12 @@
-<div class="search-box">
-  <input [(ngModel)]="searchTerm" placeholder="Search" type="text" />
+<div class="action-box">
+  <app-button (click)="openAddDialog()">
+    <fa-icon icon="plus" transform="down-1"></fa-icon>
+  </app-button>
+  <app-button (click)="deleteFile()">
+    <fa-icon icon="trash" transform="down-1"></fa-icon>
+  </app-button>
+  <app-button (click)="refreshFileTree()">
+    <fa-icon icon="redo-alt" transform="down-1"></fa-icon>
+  </app-button>
 </div>
 <app-file-tree [height]="'100%'" [width]="'100%'"></app-file-tree>

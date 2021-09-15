@@ -13,6 +13,7 @@ import {
   faArrowLeft,
   faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-flow',
@@ -20,7 +21,7 @@ import {
   styleUrls: ['./flow.component.scss'],
 })
 export class FlowComponent implements AfterViewInit {
-  private readonly CanvasExpansionSize = 500;
+  private readonly canvasExpansionSize = 500;
 
   @ViewChild('nodeContainer', { read: ElementRef })
   nodeContainerRef!: ElementRef;
@@ -35,7 +36,11 @@ export class FlowComponent implements AfterViewInit {
     dragMouseButton: 'left',
     zoomOnDoubleClick: false,
   };
-  panzoomConfig: PanZoomConfig = new PanZoomConfig(this.panZoomConfigOptions);
+
+  public panzoomConfig: PanZoomConfig = new PanZoomConfig(
+    this.panZoomConfigOptions
+  );
+
   canvasElement?: any;
 
   constructor(private renderer: Renderer2, private library: FaIconLibrary) {
@@ -49,19 +54,19 @@ export class FlowComponent implements AfterViewInit {
   }
 
   decreaseRight(): void {
-    this.changeCanvasSize('width', -this.CanvasExpansionSize);
+    this.changeCanvasSize('width', -this.canvasExpansionSize);
   }
 
   decreaseBottom(): void {
-    this.changeCanvasSize('height', -this.CanvasExpansionSize);
+    this.changeCanvasSize('height', -this.canvasExpansionSize);
   }
 
   expandRight(): void {
-    this.changeCanvasSize('width', this.CanvasExpansionSize);
+    this.changeCanvasSize('width', this.canvasExpansionSize);
   }
 
   expandBottom(): void {
-    this.changeCanvasSize('height', this.CanvasExpansionSize);
+    this.changeCanvasSize('height', this.canvasExpansionSize);
   }
 
   changeCanvasSize(

@@ -16,6 +16,8 @@ import { FlowStructureService } from '../../shared/services/flow-structure.servi
 import { GraphService } from '../../shared/services/graph.service';
 import { NodeGeneratorService } from '../../shared/services/node-generator.service';
 import { FlowStructure } from '../../shared/models/flowStructure.model';
+import { PanZoomConfig } from 'ngx-panzoom/lib/panzoom-config';
+import { PanZoomModel } from 'ngx-panzoom/lib/panzoom-model';
 
 @Component({
   selector: 'app-canvas',
@@ -23,8 +25,12 @@ import { FlowStructure } from '../../shared/models/flowStructure.model';
   styleUrls: ['./canvas.component.scss'],
 })
 export class CanvasComponent implements AfterViewInit, OnDestroy {
+  private readonly LAST_ZOOM_LEVEL = 0.25;
+
   @Input() nodes = [];
   @Input() connections = [];
+  @Input() panzoomConfig!: PanZoomConfig;
+
   @ViewChild('canvas', { read: ViewContainerRef })
   viewContainerRef!: ViewContainerRef;
 
@@ -39,6 +45,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.handleKeyboardUpEvent(kbdEvent);
   }
 
+  private modelChangedSubscription!: Subscription;
+
   constructor(
     private nodeService: NodeService,
     private codeService: CodeService,
@@ -50,11 +58,22 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.setConnectionEventListeners();
   }
 
+  onModelChanged(model: PanZoomModel): void {
+    this.jsPlumbInstance.setZoom(
+      model.zoomLevel ? model.zoomLevel / 2 : this.LAST_ZOOM_LEVEL
+    );
+  }
+
   ngAfterViewInit(): void {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
     this.createGeneratorWorker();
     this.setCurrentFileListener();
     this.setGeneratorWorkerListener();
+    if (this.panzoomConfig) {
+      this.modelChangedSubscription = this.panzoomConfig.modelChanged.subscribe(
+        (model: PanZoomModel) => this.onModelChanged(model)
+      );
+    }
     this.codeService.reloadFile();
   }
 

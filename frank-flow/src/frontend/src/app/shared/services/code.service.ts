@@ -19,6 +19,7 @@ export class CodeService {
   private originator?: Originator;
   private caretaker?: Caretaker;
   private redoAction = false;
+  currentDirectory!: File;
 
   constructor(private fileService: FileService, private toastr: ToastrService) {
     this.originator = new Originator(new File());
@@ -31,24 +32,33 @@ export class CodeService {
       next: (files) => {
         if (files.length > 0) {
           const firstConfig = files[0];
-          const firstConfigFile = files[0].content._files.filter(
-            (file: string) => file.match(/.+\.xml$/)
-          )[0];
-          const firstFile = this.fileService.getFileFromConfiguration(
-            firstConfig.name,
-            firstConfigFile
-          );
-          firstFile.then((file) => {
-            if (file) {
-              this.setCurrentFile({
-                path: firstConfigFile,
-                type: FileType.XML,
-                data: file,
-                configuration: firstConfig.name,
-                saved: true,
+          this.currentDirectory = {
+            configuration: firstConfig.name,
+            path: '',
+          };
+
+          if (files[0].content) {
+            const firstConfigFile = files[0].content._files.filter(
+              (file: string) => file.match(/.+\.xml$/)
+            )[0];
+            if (firstConfigFile) {
+              const firstFile = this.fileService.getFileFromConfiguration(
+                firstConfig.name,
+                firstConfigFile
+              );
+              firstFile.then((file) => {
+                if (file) {
+                  this.setCurrentFile({
+                    path: firstConfigFile,
+                    type: FileType.XML,
+                    data: file,
+                    configuration: firstConfig.name,
+                    saved: true,
+                  });
+                }
               });
             }
-          });
+          }
           subscription.unsubscribe();
         }
       },
