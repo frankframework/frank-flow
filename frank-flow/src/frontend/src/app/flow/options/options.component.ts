@@ -117,7 +117,7 @@ export class OptionsComponent {
     this.reloadAttributes();
   }
 
-  changeAttribute(key: string, _: any, event: Event): void {
+  changeAttribute(key: string, event: Event): void {
     const index = this.changedAttributes?.findIndex(
       (attribute) => attribute.attribute == key
     );
@@ -134,6 +134,7 @@ export class OptionsComponent {
     setTimeout(() => {
       const attributeList = this.getUpdatedAttributes();
       if (attributeList) {
+        this.removeChangedAttribute(key);
         this.flowStructureService.deleteAttribute(
           key,
           attributeList.attributes
@@ -141,6 +142,13 @@ export class OptionsComponent {
       }
       this.reloadAttributes();
     });
+  }
+
+  removeChangedAttribute(key: string): void {
+    const index = this.changedAttributes?.findIndex(
+      (attribute) => attribute.attribute == key
+    );
+    this.changedAttributes.splice(index);
   }
 
   debounce(func: any, wait: number): any {
