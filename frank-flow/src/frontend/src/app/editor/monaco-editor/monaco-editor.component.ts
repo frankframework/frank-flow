@@ -166,7 +166,7 @@ export class MonacoEditorComponent
   }
 
   setValue(file: File | undefined): void {
-    if (file?.data) {
+    if (file?.data != null) {
       const position = this.codeEditorInstance.getPosition();
       this.currentFile = file;
       this.codeEditorInstance.getModel()?.setValue(file.data);
@@ -210,7 +210,7 @@ export class MonacoEditorComponent
     this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
       {
         next: (file: File) => {
-          if (file.data) {
+          if (file.data != null) {
             this.updateQueue.push(file);
             this.currentFile = file;
           }
@@ -223,7 +223,7 @@ export class MonacoEditorComponent
   initUpdateQueue(): void {
     setInterval(() => {
       const file = this.updateQueue.shift();
-      if (file && file.data && !this.fileObservableUpdate) {
+      if (file && file.data != null && !this.fileObservableUpdate) {
         this.fileObservableUpdate = true;
         this.setValue(file);
       } else if (file && this.fileObservableUpdate) {
