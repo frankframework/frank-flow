@@ -13,8 +13,6 @@ export class Caretaker {
 
   public save(): void {
     const memento = this.originator.save();
-
-    console.log('new memento');
     this.mementos.push(memento);
   }
 
