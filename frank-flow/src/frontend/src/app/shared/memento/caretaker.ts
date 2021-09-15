@@ -13,7 +13,6 @@ export class Caretaker {
 
   public save(): void {
     const memento = this.originator.save();
-
     this.mementos.push(memento);
   }
 
@@ -38,8 +37,8 @@ export class Caretaker {
       return;
     }
 
+    const previousMemento = this.mementos[this.mementos.length - 2];
     const currentMemento = this.mementos.pop();
-    const previousMemento = this.mementos.pop();
 
     if (previousMemento) {
       this.originator.restore(previousMemento);

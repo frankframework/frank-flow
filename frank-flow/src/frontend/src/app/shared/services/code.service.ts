@@ -7,6 +7,7 @@ import { Originator } from '../memento/originator';
 import { Caretaker } from '../memento/caretaker';
 import { FileService } from './file.service';
 import { ToastrService } from 'ngx-toastr';
+import { FileMemento } from '../memento/file-memento';
 
 @Injectable({
   providedIn: 'root',
@@ -76,6 +77,7 @@ export class CodeService {
     this.redoAction = true;
     this.caretaker?.undo();
 
+    this.currentFile.next(this.originator?.getState());
     return this.originator?.getState();
   }
 
@@ -83,6 +85,9 @@ export class CodeService {
     this.redoAction = true;
     this.caretaker?.redo();
 
+    if (this.originator) {
+      this.setCurrentFile(this.originator?.getState());
+    }
     return this.originator?.getState();
   }
 

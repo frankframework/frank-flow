@@ -40,7 +40,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   flowGenerator!: Worker;
 
   @HostBinding('tabindex') tabindex = 1;
-  @HostListener('keyup', ['$event'])
+  @HostListener('window:keydown', ['$event'])
   onKeyUp(kbdEvent: KeyboardEvent): void {
     this.handleKeyboardUpEvent(kbdEvent);
   }
@@ -95,12 +95,14 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  // TODO: Save
   handleKeyboardUpEvent(kbdEvent: KeyboardEvent): void {
     if (kbdEvent.ctrlKey && kbdEvent.key === 'z') {
       this.codeService.undo();
     } else if (kbdEvent.ctrlKey && kbdEvent.key === 'y') {
       this.codeService.redo();
+    } else if (kbdEvent.ctrlKey && kbdEvent.key === 's') {
+      kbdEvent.preventDefault();
+      this.codeService.save();
     }
   }
 
