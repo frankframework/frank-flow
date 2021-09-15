@@ -1,6 +1,7 @@
 <ngx-smart-modal
   #optionsModal
   (onDataAdded)="onDataAdded()"
+  (onAnyCloseEvent)="onAnyCloseEvent()"
   class="optionsModal"
   customClass="nsm-centered"
   identifier="optionsModal"
@@ -65,7 +66,7 @@
           type="text"
           id="name"
           [ngModel]="attributes[attribute.key].value"
-          (ngModelChange)="changeAttribute(attribute.key, attribute, $event)"
+          (ngModelChange)="changeAttribute(attribute.key, $event)"
         />
         <app-button (click)="deleteAttribute(attribute.key)">Delete</app-button>
       </div>
