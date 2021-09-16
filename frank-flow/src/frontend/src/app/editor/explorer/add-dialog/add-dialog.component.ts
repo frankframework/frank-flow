@@ -30,12 +30,7 @@ export class AddDialogComponent {
 
   findDuplicateFileName(fileName: string, directory: any): boolean {
     if (directory != null && fileName != null) {
-      const foundFile = directory._files.find(
-        (file: string) => file === fileName
-      );
-      if (foundFile) {
-        return true;
-      }
+      return directory._files.find((file: string) => file === fileName);
     }
     return false;
   }
@@ -64,6 +59,7 @@ export class AddDialogComponent {
   checkForDuplicateFiles(): boolean {
     const fileName = this.fileName;
     const rootDir = this.fileService.configurationFiles.value;
+    let duplicatesFound = false;
 
     if (this.currentDirectory.path !== undefined) {
       const currentDirectory = this.findCurrentDirectory(
@@ -71,15 +67,17 @@ export class AddDialogComponent {
         this.currentDirectory.path
       );
 
-      if (this.findDuplicateFileName(fileName, currentDirectory)) {
+      duplicatesFound = this.findDuplicateFileName(fileName, currentDirectory);
+
+      if (duplicatesFound) {
         this.toastr.error(
           `The file ${fileName} already exists in this directory.`,
           'Error creating'
         );
-        return true;
       }
     }
-    return false;
+
+    return duplicatesFound;
   }
 
   add(): void {
