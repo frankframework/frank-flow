@@ -219,32 +219,43 @@ export class FlowStructureService {
     xPos: number,
     yPos: number
   ): void {
-    this.structureSubscription?.unsubscribe();
-    this.structureSubscription = this.structureObservable
-      .asObservable()
-      .subscribe({
-        next: (data) =>
-          this.editNodePosition(data[structureNodes], nodeId, 'y', yPos, false),
-      });
-    this.editNodePosition(
-      this.structure[structureNodes],
-      nodeId,
-      'x',
-      xPos,
-      true
-    );
-    this.updateStructure();
+    this.editAttributes(structureNodes, nodeId, [
+      { attribute: 'x', value: xPos },
+      { attribute: 'y', value: yPos },
+    ]);
   }
 
-  editNodePosition(
-    structureNodes: any,
+  editAttributes(
+    structureNodes: string,
     nodeId: string,
-    positionType: string,
-    position: number,
-    flowUpdate: boolean
+    attributes: { attribute: string; value: string | number }[]
   ): void {
-    const node = structureNodes.find((node: any) => node.name === nodeId);
-    this.editAttribute(positionType, position, node.attributes, flowUpdate);
+    this.structureSubscription?.unsubscribe();
+    const currentAttribute = attributes.pop();
+    if (currentAttribute) {
+      if (attributes) {
+        this.structureSubscription = this.structureObservable
+          .asObservable()
+          .subscribe({
+            next: (data) => {
+              this.structure = data;
+              this.editAttributes(structureNodes, nodeId, attributes);
+            },
+          });
+      }
+      const node = this.structure[structureNodes]?.find(
+        (node: any) => node.name === nodeId
+      );
+      if (node) {
+        this.editAttribute(
+          currentAttribute.attribute,
+          currentAttribute.value,
+          node.attributes,
+          attributes.length !== 0
+        );
+        this.updateStructure();
+      }
+    }
   }
 
   editAttribute(
