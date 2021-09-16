@@ -26,10 +26,6 @@ export class AddDialogComponent {
   onDataAdded(): void {
     this.currentFile = this.ngxSmartModalService.getModalData('addDialog');
     this.currentDirectory = this.codeService.currentDirectory;
-    console.log(
-      this.currentDirectory,
-      this.fileService.configurationFiles.value
-    );
   }
 
   findDuplicateFileName(fileName: string, directory: any): boolean {
