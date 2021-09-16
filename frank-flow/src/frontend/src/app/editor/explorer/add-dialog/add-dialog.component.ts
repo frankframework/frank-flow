@@ -26,10 +26,68 @@ export class AddDialogComponent {
   onDataAdded(): void {
     this.currentFile = this.ngxSmartModalService.getModalData('addDialog');
     this.currentDirectory = this.codeService.currentDirectory;
+    console.log(
+      this.currentDirectory,
+      this.fileService.configurationFiles.value
+    );
+  }
+
+  findDuplicateFileName(fileName: string, directory: any): boolean {
+    if (directory != null && fileName != null) {
+      const foundFile = directory._files.find(
+        (file: string) => file === fileName
+      );
+      if (foundFile) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  findCurrentDirectory(directory: any, path: string): any {
+    if (path === '') {
+      return directory;
+    } else {
+      let nextDirRegex = path.match(/.*(?=\/)/g);
+      let nextDir;
+      let nextPath = path.replace(/.*\//g, '');
+
+      if (!nextDirRegex) {
+        nextDir = path;
+        nextPath = '';
+      } else {
+        nextDir = nextDirRegex[0];
+      }
+
+      if (nextDir) {
+        return this.findCurrentDirectory(directory[nextDir], nextPath);
+      }
+    }
+  }
+
+  checkForDuplicateFiles(): boolean {
+    const fileName = this.fileName;
+    const rootDir = this.fileService.configurationFiles.value;
+
+    if (this.currentDirectory.path !== undefined) {
+      const currentDirectory = this.findCurrentDirectory(
+        rootDir[0].content,
+        this.currentDirectory.path
+      );
+
+      if (this.findDuplicateFileName(fileName, currentDirectory)) {
+        this.toastr.error(
+          `The file ${fileName} already exists in this directory.`,
+          'Error creating'
+        );
+        return true;
+      }
+    }
+    return false;
   }
 
   add(): void {
-    if (this.currentDirectory.configuration) {
+    if (this.currentDirectory.configuration && !this.checkForDuplicateFiles()) {
       const fileName = this.fileName;
 
       this.fileService
