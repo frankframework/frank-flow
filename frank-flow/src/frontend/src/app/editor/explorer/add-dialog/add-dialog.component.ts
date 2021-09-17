@@ -84,7 +84,7 @@ export class AddDialogComponent {
   }
 
   findDuplicateFileName(fileName: string, directory: any): boolean {
-    return directory?._files.find((file: string) => file === fileName);
+    return directory?._files?.find((file: string) => file === fileName);
   }
 
   clearForm(): void {
