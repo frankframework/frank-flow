@@ -71,6 +71,11 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
         label: configuration.name,
         expanded: true,
         items: this.parseFiles(configuration.name, configuration.content),
+        value: JSON.stringify({
+          configuration: configuration.name,
+          path: '',
+          type: FileType.FOLDER,
+        }),
       })
     );
 
