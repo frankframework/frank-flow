@@ -27,7 +27,7 @@ type canvasDirection = 'height' | 'width';
 })
 export class FlowComponent implements AfterViewInit {
   private readonly canvasExpansionSize = 500;
-  private readonly monacoQueueUpdateInterval = 520;
+  private readonly monacoUpdateQueueInterval = 520;
   private readonly nodeBufferSpace = 300;
 
   @ViewChild('nodeContainer', { read: ElementRef })
@@ -75,7 +75,7 @@ export class FlowComponent implements AfterViewInit {
         next: (file: File) => {
           setTimeout(() => {
             this.setBasicCanvasSize();
-          }, this.monacoQueueUpdateInterval);
+          }, this.monacoUpdateQueueInterval);
         },
       }
     );
