@@ -13,7 +13,12 @@ import {
   faArrowLeft,
   faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
+import { FlowStructureService } from '../shared/services/flow-structure.service';
+import { FlowStructureNode } from '../shared/models/flowStructureNode.model';
+import { CodeService } from '../shared/services/code.service';
 import { Subscription } from 'rxjs';
+import { File } from '../shared/models/file.model';
+import { FlowStructure } from '../shared/models/flowStructure.model';
 
 @Component({
   selector: 'app-flow',
@@ -22,11 +27,15 @@ import { Subscription } from 'rxjs';
 })
 export class FlowComponent implements AfterViewInit {
   private readonly canvasExpansionSize = 500;
+  private readonly monacoQueueUpdateInterval = 520;
+  private readonly nodeBufferSpace = 300;
+
+  private minimumYPosition = 0;
+  private minimumXPosition = 0;
+  currentFileSubscription!: Subscription;
 
   @ViewChild('nodeContainer', { read: ElementRef })
   nodeContainerRef!: ElementRef;
-  nodes = [];
-  connections = [];
 
   panZoomConfigOptions: PanZoomConfigOptions = {
     zoomLevels: 10,
@@ -43,7 +52,12 @@ export class FlowComponent implements AfterViewInit {
 
   canvasElement?: any;
 
-  constructor(private renderer: Renderer2, private library: FaIconLibrary) {
+  constructor(
+    private renderer: Renderer2,
+    private library: FaIconLibrary,
+    private flowStructureService: FlowStructureService,
+    private codeService: CodeService
+  ) {
     this.library.addIcons(faArrowDown, faArrowUp, faArrowRight, faArrowLeft);
   }
 
@@ -51,6 +65,16 @@ export class FlowComponent implements AfterViewInit {
     this.canvasElement = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
     )[0];
+
+    this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
+      {
+        next: (file: File) => {
+          setTimeout(() => {
+            this.setBasicCanvasSize();
+          }, this.monacoQueueUpdateInterval);
+        },
+      }
+    );
   }
 
   decreaseRight(): void {
@@ -69,18 +93,77 @@ export class FlowComponent implements AfterViewInit {
     this.changeCanvasSize('height', this.canvasExpansionSize);
   }
 
+  setBasicCanvasSize(): void {
+    this.calculateMinimumCanvasSize();
+
+    this.renderCanvas('width', this.minimumXPosition + this.nodeBufferSpace);
+    this.renderCanvas('height', this.minimumYPosition + this.nodeBufferSpace);
+  }
+
   changeCanvasSize(
     direction: 'height' | 'width',
     expansionValue: number
   ): void {
-    this.renderer.setStyle(
-      this.canvasElement,
-      direction,
-      (direction == 'height'
+    this.calculateMinimumCanvasSize();
+    if (this.canChangeCanvasSize(direction, expansionValue)) {
+      this.renderCanvas(
+        direction,
+        this.getNewCanvasSize(direction, expansionValue)
+      );
+    }
+  }
+
+  renderCanvas(direction: 'height' | 'width', value: number): void {
+    this.renderer.setStyle(this.canvasElement, direction, value + 'px');
+  }
+
+  canChangeCanvasSize(
+    direction: 'height' | 'width',
+    expansionValue: number
+  ): boolean {
+    if (direction === 'height') {
+      return (
+        this.getNewCanvasSize(direction, expansionValue) > this.minimumYPosition
+      );
+    } else {
+      return (
+        this.getNewCanvasSize(direction, expansionValue) > this.minimumXPosition
+      );
+    }
+  }
+
+  getNewCanvasSize(
+    direction: 'height' | 'width',
+    expansionValue: number
+  ): number {
+    return (
+      (direction === 'height'
         ? this.canvasElement.offsetHeight
-        : this.canvasElement.offsetWidth) +
-        expansionValue +
-        'px'
+        : this.canvasElement.offsetWidth) + expansionValue
     );
+  }
+
+  calculateMinimumCanvasSize(): void {
+    const structure = this.flowStructureService.getStructure();
+
+    this.minimumXPosition = 0;
+    this.minimumYPosition = 0;
+
+    structure.nodes.forEach((element: FlowStructureNode) => {
+      this.minimumXPosition = this.comparePositions(
+        this.minimumXPosition,
+        element.positions[0]
+      );
+      this.minimumYPosition = this.comparePositions(
+        this.minimumYPosition,
+        element.positions[1]
+      );
+    });
+  }
+
+  comparePositions(highestPosition: number, currentPosition: number): number {
+    return currentPosition > highestPosition
+      ? currentPosition
+      : highestPosition;
   }
 }
