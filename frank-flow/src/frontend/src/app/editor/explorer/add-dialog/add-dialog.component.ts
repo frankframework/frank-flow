@@ -94,35 +94,19 @@ export class AddDialogComponent {
 
   helloWorldFileTemplate(displayName: string): string {
     displayName = displayName.replace('.xml', '');
-    return (
-      '<Configuration name="' +
-      displayName +
-      '">\n' +
-      '\t<Adapter name="' +
-      displayName +
-      'Adapter"> \n' +
-      '\t\t<Receiver name="' +
-      displayName +
-      'Receiver"> \n' +
-      '\t\t\t<JavaListener name="' +
-      displayName +
-      'Listener" serviceName="' +
-      displayName +
-      'Service" />\n' +
-      '\t\t</Receiver>\n' +
-      '\t\t<Pipeline firstPipe="' +
-      displayName +
-      'Pipe">\n' +
-      '\t\t\t<FixedResultPipe name="' +
-      displayName +
-      'Pipe" returnString="Hello World">\n' +
-      '\t\t\t\t<Forward name="success" path="EXIT"/> \n' +
-      '\t\t\t</FixedResultPipe> \n' +
-      '\t\t\t<Exit path="EXIT" state="success"/> \n' +
-      '\t\t</Pipeline> \n' +
-      '\t</Adapter>\n' +
-      '</Configuration>\n'
-    );
+    return `<Configuration name="$\{displayName}">
+       \t<Adapter name="${displayName}Adapter">
+       \t\t<Receiver name="${displayName}Receiver">
+       \t\t\t<JavaListener name="${displayName}Listener" serviceName="${displayName}Service" />
+       \t\t</Receiver>
+       \t\t<Pipeline firstPipe="${displayName}Pipe">
+       \t\t\t<FixedResultPipe name="${displayName}Pipe" returnString="Hello World">
+       \t\t\t\t<Forward name="success" path="EXIT"/>
+       \t\t\t</FixedResultPipe>
+       \t\t\t<Exit path="EXIT" state="success"/>
+       \t\t</Pipeline>
+       \t</Adapter>
+       </Configuration>`;
   }
 
   discard(): void {
