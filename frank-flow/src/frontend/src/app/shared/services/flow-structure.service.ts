@@ -133,7 +133,7 @@ export class FlowStructureService {
   addPipe(pipeData: any): void {
     const pipes = this.structure.pipes;
 
-    const newPipe = `\n\t\t\t<${pipeData.type} name="${pipeData.name}" x="${pipeData.left}" y="${pipeData.top}">\n\t\t\t</${pipeData.type}>\n`;
+    const newPipe = `\t\t\t<${pipeData.type} name="${pipeData.name}" x="${pipeData.left}" y="${pipeData.top}">\n\t\t\t</${pipeData.type}>\n`;
 
     let lastPipe = pipes[pipes.length - 1];
 
@@ -161,17 +161,19 @@ export class FlowStructureService {
   }
 
   addListener(pipeData: any): void {
-    const listeners = this.structure.listeners;
-    const lastListener = listeners[listeners.length - 1];
+    const receivers = this.structure.receivers;
+    const lastReceiver = receivers[receivers.length - 1];
 
-    const newListener = `\t  <${pipeData.type} name="${pipeData.name}" x="${pipeData.left}" y="${pipeData.top}" />\n`;
+    const newListener = `\t\t<Receiver name="testConfigurationReceiver">
+        \t<${pipeData.type} name="${pipeData.name}" x="${pipeData.left}" y="${pipeData.top}" />
+        </Receiver>\n`;
 
     this.monacoEditorComponent?.applyEdit(
       {
-        startLineNumber: lastListener.line + 1,
-        startColumn: lastListener.startColumn,
-        endColumn: lastListener.endColumn,
-        endLineNumber: lastListener.line + 1,
+        startLineNumber: lastReceiver.endLine + 1,
+        startColumn: lastReceiver.startColumn,
+        endColumn: lastReceiver.endColumn,
+        endLineNumber: lastReceiver.endLine + 1,
       },
       newListener,
       false

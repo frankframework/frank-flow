@@ -73,6 +73,11 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     flowStructure.nodes.push(currentNode);
   } else if (currentNode.type === 'Pipeline') {
     pipeline = currentNode;
+  } else if (currentNode.type === 'Receiver') {
+    if (!tag.isSelfClosing) {
+      unclosedPipes.push(currentNode.name);
+    }
+    flowStructure.nodes.push(currentNode);
   }
 });
 
