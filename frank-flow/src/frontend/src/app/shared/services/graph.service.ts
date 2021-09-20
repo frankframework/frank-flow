@@ -10,6 +10,7 @@ import { FlowStructureService } from './flow-structure.service';
 })
 export class GraphService {
   private graph: cytoscape.Core;
+  public nodeMap!: Map<string, Node>;
 
   constructor(
     private nodeService: NodeService,
@@ -111,6 +112,7 @@ export class GraphService {
         this.nodeService.addDynamicNode(node);
       }
     });
+    this.nodeMap = nodeMap;
   }
 
   connectAllNodes(forwards: Forward[]): void {
