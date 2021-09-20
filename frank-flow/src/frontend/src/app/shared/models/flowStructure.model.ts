@@ -7,6 +7,7 @@ export class FlowStructure {
   pipes: FlowStructureNode[];
   exits: FlowStructureNode[];
   pipeline!: FlowStructureNode;
+  receivers: FlowStructureNode[];
 
   getListeners(): FlowStructureNode[] {
     return (
@@ -32,6 +33,14 @@ export class FlowStructure {
     );
   }
 
+  getReceivers(): FlowStructureNode[] {
+    return (
+      this.nodes.filter(
+        (node: FlowStructureNode) => node.type === 'Receiver'
+      ) ?? []
+    );
+  }
+
   constructor(nodes: FlowStructureNode[] = [], firstPipe: string = '') {
     this.nodes = nodes;
     this.firstPipe = firstPipe;
@@ -39,5 +48,6 @@ export class FlowStructure {
     this.listeners = this.getListeners();
     this.pipes = this.getPipes();
     this.exits = this.getExits();
+    this.receivers = this.getReceivers();
   }
 }

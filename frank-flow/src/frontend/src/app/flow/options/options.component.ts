@@ -89,11 +89,9 @@ export class OptionsComponent {
         node.elementNames.includes(nodeType)
       );
       this.nodeDescription = element?.descriptionHeader;
-      element?.attributes?.forEach((attribute: any) => {
-        if (!Object.keys(this.attributes).includes(attribute.name)) {
-          this.attributeOptions.push(attribute);
-        }
-      });
+      element?.attributes?.forEach((attribute: any) =>
+        this.attributeOptions.push(attribute)
+      );
     }
   }
 
@@ -113,7 +111,6 @@ export class OptionsComponent {
       false
     );
     this.clearNewAttribute();
-
     this.reloadAttributes();
   }
 
@@ -163,5 +160,9 @@ export class OptionsComponent {
 
   customTrackBy(index: number, obj: any): any {
     return index;
+  }
+
+  attributeIsUsed(attributeName: string | undefined): boolean {
+    return Object.keys(this.attributes).includes(attributeName ?? '');
   }
 }

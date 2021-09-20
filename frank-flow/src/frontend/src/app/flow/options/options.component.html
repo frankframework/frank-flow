@@ -23,6 +23,7 @@
         <option
           *ngFor="let attributeOption of attributeOptions"
           [ngValue]="attributeOption"
+          [hidden]="attributeIsUsed(attributeOption?.name)"
         >
           {{ attributeOption?.name }}
         </option>
