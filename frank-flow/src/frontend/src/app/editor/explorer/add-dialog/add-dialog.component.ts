@@ -41,7 +41,7 @@ export class AddDialogComponent {
         .updateFileForConfiguration(
           this.currentDirectory.configuration,
           this.currentDirectory.path + '/' + fileName,
-          this.basicFileTemplate(fileName)
+          this.helloWorldFileTemplate(fileName)
         )
         .then((response) => {
           if (response) {
@@ -92,7 +92,8 @@ export class AddDialogComponent {
     this.isFolder = false;
   }
 
-  basicFileTemplate(displayName: string): string {
+  helloWorldFileTemplate(displayName: string): string {
+    displayName = displayName.replace('.xml', '');
     return (
       '<Configuration name="' +
       displayName +
@@ -102,7 +103,7 @@ export class AddDialogComponent {
       'Adapter"> \n' +
       '\t\t<Receiver name="' +
       displayName +
-      'Receiver" x="681" y="24"> \n' +
+      'Receiver"> \n' +
       '\t\t\t<JavaListener name="' +
       displayName +
       'Listener" serviceName="' +
@@ -117,7 +118,7 @@ export class AddDialogComponent {
       'Pipe" returnString="Hello World">\n' +
       '\t\t\t\t<Forward name="success" path="EXIT"/> \n' +
       '\t\t\t</FixedResultPipe> \n' +
-      '\t\t\t<Exit path="EXIT" state="success" x="223" y="425"/> \n' +
+      '\t\t\t<Exit path="EXIT" state="success"/> \n' +
       '\t\t</Pipeline> \n' +
       '\t</Adapter>\n' +
       '</Configuration>\n'
