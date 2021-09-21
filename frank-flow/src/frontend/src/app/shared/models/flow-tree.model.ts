@@ -1,4 +1,4 @@
-import { FlowTreeNode } from './flowTreeNode.model';
+import { FlowTreeNode } from './flow-tree-node.model';
 
 export class FlowTree {
   listeners: FlowTreeNode[] = [];

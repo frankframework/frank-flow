@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { MonacoEditorComponent } from 'src/app/editor/monaco-editor/monaco-editor.component';
 import Exit from 'src/app/flow/node/nodes/exit.model';
 import { Subject, Subscription } from 'rxjs';
-import { FlowStructureNode } from '../models/flowStructureNode.model';
-import { FlowNodeAttribute } from '../models/flowNodeAttribute.model';
-import { FlowNodeAttributes } from '../models/flowNodeAttributes.model';
+import { FlowStructureNode } from '../models/flow-structure-node.model';
+import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
+import { FlowNodeAttributes } from '../models/flow-node-attributes.model';
 
 @Injectable({
   providedIn: 'root',
@@ -34,8 +34,12 @@ export class FlowStructureService {
 
       this.flowGenerator.onmessage = ({ data }) => {
         if (data) {
-          this.structure = data;
-          this.structureObservable.next(data);
+          if (data.errors.length > 0) {
+            console.log(data.errors);
+          } else {
+            this.structure = data.structure;
+            this.structureObservable.next(data.structure);
+          }
         }
       };
     }

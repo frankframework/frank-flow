@@ -1,6 +1,6 @@
 import { ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
 import { jsPlumbInstance } from 'jsplumb';
-import { FlowNodeAttributes } from 'src/app/shared/models/flowNodeAttributes.model';
+import { FlowNodeAttributes } from 'src/app/shared/models/flow-node-attributes.model';
 import { NodeComponent } from '../node.component';
 
 export class Node {

@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
 import { GraphService } from '../../shared/services/graph.service';
 import { NodeGeneratorService } from '../../shared/services/node-generator.service';
-import { FlowStructure } from '../../shared/models/flowStructure.model';
+import { FlowStructure } from '../../shared/models/flow-structure.model';
 import { PanZoomConfig } from 'ngx-panzoom/lib/panzoom-config';
 import { PanZoomModel } from 'ngx-panzoom/lib/panzoom-model';
 
@@ -107,8 +107,12 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   setGeneratorWorkerListener(): void {
     this.flowGenerator.onmessage = ({ data }) => {
       if (data) {
-        this.flowStructureService.setStructure(data);
-        this.generateFlow(data);
+        if (data.errors.length > 0) {
+          console.log(data.errors);
+        } else {
+          this.flowStructureService.setStructure(data.structure);
+          this.generateFlow(data.structure);
+        }
       }
     };
   }
