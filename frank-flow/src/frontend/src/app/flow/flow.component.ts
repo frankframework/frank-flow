@@ -34,7 +34,7 @@ export class FlowComponent implements AfterViewInit {
   private nodeContainerRef!: ElementRef;
   private minimumYPosition = 0;
   private minimumXPosition = 0;
-  private canvasElement?: any;
+  private canvasElement?: HTMLElement;
   private panZoomConfigOptions: PanZoomConfigOptions = {
     zoomLevels: 10,
     zoomStepDuration: 0.2,
@@ -136,8 +136,8 @@ export class FlowComponent implements AfterViewInit {
   getNewCanvasSize(direction: canvasDirection, expansionValue: number): number {
     return (
       (direction === 'height'
-        ? this.canvasElement.offsetHeight
-        : this.canvasElement.offsetWidth) + expansionValue
+        ? this.canvasElement?.offsetHeight ?? 0
+        : this.canvasElement?.offsetWidth ?? 0) + expansionValue
     );
   }
 
