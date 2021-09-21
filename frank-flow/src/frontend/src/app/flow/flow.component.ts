@@ -13,7 +13,13 @@ import {
   faArrowLeft,
   faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
+import { CodeService } from '../shared/services/code.service';
 import { Subscription } from 'rxjs';
+import { File } from '../shared/models/file.model';
+import { GraphService } from '../shared/services/graph.service';
+
+type canvasDirection = 'height' | 'width';
+type minimumPositions = { x: number; y: number };
 
 @Component({
   selector: 'app-flow',
@@ -22,13 +28,13 @@ import { Subscription } from 'rxjs';
 })
 export class FlowComponent implements AfterViewInit {
   private readonly canvasExpansionSize = 500;
+  private readonly monacoUpdateQueueInterval = 520;
+  private readonly nodeBufferSpace = 300;
 
   @ViewChild('nodeContainer', { read: ElementRef })
-  nodeContainerRef!: ElementRef;
-  nodes = [];
-  connections = [];
-
-  panZoomConfigOptions: PanZoomConfigOptions = {
+  private nodeContainerRef!: ElementRef;
+  private canvasElement?: HTMLElement;
+  private panZoomConfigOptions: PanZoomConfigOptions = {
     zoomLevels: 10,
     zoomStepDuration: 0.2,
     freeMouseWheelFactor: 0.01,
@@ -37,20 +43,41 @@ export class FlowComponent implements AfterViewInit {
     zoomOnDoubleClick: false,
   };
 
+  public currentFileSubscription!: Subscription;
   public panzoomConfig: PanZoomConfig = new PanZoomConfig(
     this.panZoomConfigOptions
   );
 
-  canvasElement?: any;
-
-  constructor(private renderer: Renderer2, private library: FaIconLibrary) {
+  constructor(
+    private renderer: Renderer2,
+    private library: FaIconLibrary,
+    private codeService: CodeService,
+    private graphService: GraphService
+  ) {
     this.library.addIcons(faArrowDown, faArrowUp, faArrowRight, faArrowLeft);
   }
 
   ngAfterViewInit(): void {
+    this.setCanvasElement();
+    this.setCurrentFileSubscribtion();
+  }
+
+  setCanvasElement(): void {
     this.canvasElement = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
     )[0];
+  }
+
+  setCurrentFileSubscribtion(): void {
+    this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
+      {
+        next: (file: File) => {
+          setTimeout(() => {
+            this.setBasicCanvasSize();
+          }, this.monacoUpdateQueueInterval);
+        },
+      }
+    );
   }
 
   decreaseRight(): void {
@@ -69,18 +96,60 @@ export class FlowComponent implements AfterViewInit {
     this.changeCanvasSize('height', this.canvasExpansionSize);
   }
 
-  changeCanvasSize(
-    direction: 'height' | 'width',
+  setBasicCanvasSize(): void {
+    const minimumPositions = this.calculateMinimumCanvasSize();
+
+    this.renderCanvas('width', minimumPositions.x + this.nodeBufferSpace);
+    this.renderCanvas('height', minimumPositions.y + this.nodeBufferSpace);
+  }
+
+  changeCanvasSize(direction: canvasDirection, expansionValue: number): void {
+    if (this.canChangeCanvasSize(direction, expansionValue)) {
+      this.renderCanvas(
+        direction,
+        this.getNewCanvasSize(direction, expansionValue)
+      );
+    }
+  }
+
+  renderCanvas(direction: canvasDirection, value: number): void {
+    this.renderer.setStyle(this.canvasElement, direction, value + 'px');
+  }
+
+  canChangeCanvasSize(
+    direction: canvasDirection,
     expansionValue: number
-  ): void {
-    this.renderer.setStyle(
-      this.canvasElement,
-      direction,
-      (direction == 'height'
-        ? this.canvasElement.offsetHeight
-        : this.canvasElement.offsetWidth) +
-        expansionValue +
-        'px'
+  ): boolean {
+    const minimumPositions = this.calculateMinimumCanvasSize();
+    return (
+      this.getNewCanvasSize(direction, expansionValue) >
+      (direction === 'height' ? minimumPositions.y : minimumPositions.x)
     );
+  }
+
+  getNewCanvasSize(direction: canvasDirection, expansionValue: number): number {
+    return (
+      (direction === 'height'
+        ? this.canvasElement?.offsetHeight ?? 0
+        : this.canvasElement?.offsetWidth ?? 0) + expansionValue
+    );
+  }
+
+  calculateMinimumCanvasSize(): minimumPositions {
+    let x = 0;
+    let y = 0;
+
+    this.graphService.nodeMap.forEach((node, key) => {
+      x = this.comparePositions(x, node.getLeft() ?? 0);
+      y = this.comparePositions(y, node.getTop() ?? 0);
+    });
+
+    return { x, y };
+  }
+
+  comparePositions(highestPosition: number, currentPosition: number): number {
+    return currentPosition > highestPosition
+      ? currentPosition
+      : highestPosition;
   }
 }

@@ -27,8 +27,6 @@ import { PanZoomModel } from 'ngx-panzoom/lib/panzoom-model';
 export class CanvasComponent implements AfterViewInit, OnDestroy {
   private readonly LAST_ZOOM_LEVEL = 0.25;
 
-  @Input() nodes = [];
-  @Input() connections = [];
   @Input() panzoomConfig!: PanZoomConfig;
 
   @ViewChild('canvas', { read: ViewContainerRef })
