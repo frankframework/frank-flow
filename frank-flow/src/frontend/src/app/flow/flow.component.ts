@@ -19,6 +19,7 @@ import { File } from '../shared/models/file.model';
 import { GraphService } from '../shared/services/graph.service';
 
 type canvasDirection = 'height' | 'width';
+type minimumPositions = { x: number; y: number };
 
 @Component({
   selector: 'app-flow',
@@ -32,8 +33,6 @@ export class FlowComponent implements AfterViewInit {
 
   @ViewChild('nodeContainer', { read: ElementRef })
   private nodeContainerRef!: ElementRef;
-  private minimumYPosition = 0;
-  private minimumXPosition = 0;
   private canvasElement?: HTMLElement;
   private panZoomConfigOptions: PanZoomConfigOptions = {
     zoomLevels: 10,
@@ -98,10 +97,10 @@ export class FlowComponent implements AfterViewInit {
   }
 
   setBasicCanvasSize(): void {
-    this.calculateMinimumCanvasSize();
+    const minimumPositions = this.calculateMinimumCanvasSize();
 
-    this.renderCanvas('width', this.minimumXPosition + this.nodeBufferSpace);
-    this.renderCanvas('height', this.minimumYPosition + this.nodeBufferSpace);
+    this.renderCanvas('width', minimumPositions.x + this.nodeBufferSpace);
+    this.renderCanvas('height', minimumPositions.y + this.nodeBufferSpace);
   }
 
   changeCanvasSize(direction: canvasDirection, expansionValue: number): void {
@@ -121,16 +120,11 @@ export class FlowComponent implements AfterViewInit {
     direction: canvasDirection,
     expansionValue: number
   ): boolean {
-    this.calculateMinimumCanvasSize();
-    if (direction === 'height') {
-      return (
-        this.getNewCanvasSize(direction, expansionValue) > this.minimumYPosition
-      );
-    } else {
-      return (
-        this.getNewCanvasSize(direction, expansionValue) > this.minimumXPosition
-      );
-    }
+    const minimumPositions = this.calculateMinimumCanvasSize();
+    return (
+      this.getNewCanvasSize(direction, expansionValue) >
+      (direction === 'height' ? minimumPositions.y : minimumPositions.x)
+    );
   }
 
   getNewCanvasSize(direction: canvasDirection, expansionValue: number): number {
@@ -141,24 +135,16 @@ export class FlowComponent implements AfterViewInit {
     );
   }
 
-  calculateMinimumCanvasSize(): void {
-    this.resetPositions();
+  calculateMinimumCanvasSize(): minimumPositions {
+    let x = 0;
+    let y = 0;
 
     this.graphService.nodeMap.forEach((node, key) => {
-      this.minimumXPosition = this.comparePositions(
-        this.minimumXPosition,
-        node.getLeft() ?? 0
-      );
-      this.minimumYPosition = this.comparePositions(
-        this.minimumYPosition,
-        node.getTop() ?? 0
-      );
+      x = this.comparePositions(x, node.getLeft() ?? 0);
+      y = this.comparePositions(y, node.getTop() ?? 0);
     });
-  }
 
-  resetPositions(): void {
-    this.minimumXPosition = 0;
-    this.minimumYPosition = 0;
+    return { x, y };
   }
 
   comparePositions(highestPosition: number, currentPosition: number): number {
