@@ -59,7 +59,8 @@ export class FlowComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.setCanvasElement();
-    this.setCurrentFileSubscribtion();
+    this.setCurrentFileSubscription();
+    this.setBasicCanvasSize();
   }
 
   setCanvasElement(): void {
@@ -68,7 +69,7 @@ export class FlowComponent implements AfterViewInit {
     )[0];
   }
 
-  setCurrentFileSubscribtion(): void {
+  setCurrentFileSubscription(): void {
     this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
       {
         next: (file: File) => {
@@ -113,7 +114,9 @@ export class FlowComponent implements AfterViewInit {
   }
 
   renderCanvas(direction: canvasDirection, value: number): void {
-    this.renderer.setStyle(this.canvasElement, direction, value + 'px');
+    if (this.canvasElement) {
+      this.renderer.setStyle(this.canvasElement, direction, value + 'px');
+    }
   }
 
   canChangeCanvasSize(
@@ -139,7 +142,7 @@ export class FlowComponent implements AfterViewInit {
     let x = 0;
     let y = 0;
 
-    this.graphService.nodeMap.forEach((node, key) => {
+    this.graphService.nodeMap?.forEach((node, key) => {
       x = this.comparePositions(x, node.getLeft() ?? 0);
       y = this.comparePositions(y, node.getTop() ?? 0);
     });
