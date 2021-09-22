@@ -34,9 +34,7 @@ export class FlowStructureService {
 
       this.flowGenerator.onmessage = ({ data }) => {
         if (data) {
-          if (data.errors.length > 0) {
-            console.log(data.errors);
-          } else {
+          if (data.errors.length <= 0) {
             this.structure = data.structure;
             this.structureObservable.next(data.structure);
           }

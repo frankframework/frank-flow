@@ -18,6 +18,7 @@ import { NodeGeneratorService } from '../../shared/services/node-generator.servi
 import { FlowStructure } from '../../shared/models/flow-structure.model';
 import { PanZoomConfig } from 'ngx-panzoom/lib/panzoom-config';
 import { PanZoomModel } from 'ngx-panzoom/lib/panzoom-model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-canvas',
@@ -36,8 +37,10 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   currentFileSubscription!: Subscription;
   flowUpdate = false;
   flowGenerator!: Worker;
+  errorsFound!: boolean;
 
   @HostBinding('tabindex') tabindex = 1;
+
   @HostListener('window:keydown', ['$event'])
   onKeyUp(kbdEvent: KeyboardEvent): void {
     this.handleKeyboardUpEvent(kbdEvent);
@@ -50,7 +53,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     private codeService: CodeService,
     private flowStructureService: FlowStructureService,
     private graphService: GraphService,
-    private nodeGeneratorService: NodeGeneratorService
+    private nodeGeneratorService: NodeGeneratorService,
+    private toastr: ToastrService
   ) {
     this.jsPlumbInstance = this.nodeService.getInstance();
     this.setConnectionEventListeners();
@@ -108,8 +112,16 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.flowGenerator.onmessage = ({ data }) => {
       if (data) {
         if (data.errors.length > 0) {
-          console.log(data.errors);
+          this.errorsFound = true;
+          this.toastr.clear();
+          data.errors.forEach((error: string) => {
+            this.toastr.error(error, 'Parsing error in XML', {
+              disableTimeOut: true,
+            });
+          });
         } else {
+          this.errorsFound = false;
+          this.toastr.clear();
           this.flowStructureService.setStructure(data.structure);
           this.generateFlow(data.structure);
         }
