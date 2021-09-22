@@ -8,57 +8,152 @@ The project has been tested in Mozilla Firefox and Google Chrome, other browsers
 
 ## Features of the Frank!Flow
 
-First of all, the Frank!Flow consists of three 'modes' of 'views'. These are: Editor, Flow and Hybrid. Each of the modes focus on a specific use case, like editing visually or programatically. The modes are made with usability in mind, which means that the Flow is the most simple and the Editor is the most advanced.
+First of all, the Frank!Flow consists of three 'modes' or 'views'. These are: Flow, Hybrid and Editor. Each of the modes focus on a specific use case, like editing visually or programatically. The modes are made with usability in mind, which means that the Flow is the most simple and the Editor is the most advanced.
 
 ### 📁 Explorer
 
-The Explorer is presented in the middle of the top-bar as a drop down menu (regardless of which mode you're in) and presents the current configuration. The Explorer is also presented on left side of the window when in Editor mode. The explorer will help you to browse configurations, add, ~~rename~~ and delete them. The Explorer is a representation of the file system where your configurations are located.
+The Explorer is presented on the left side of the application and can be shown or hidden with a toggle. The explorer will help you to browse configurations, add, rename and delete them. The Explorer is a representation of the file-system where your configurations are located.
 
-There are some buttons associated with the Explorer that will perform actions on the file system. Two buttons are located on the header and are used for adding a configuration and saving the current configuration (respectively). The Three buttons above the Explorer in Editor mode are used for adding and deleting a configuration as well as refreshing the Explorer (handy when files changed on the system). A file can be added to a sub-folder, by selecting the folder first (marking it blue).
+There are some buttons associated with the Explorer that will perform actions on the file-system. Three buttons are located on the header and are used for adding, saving and modifying the current file (respectively). The modify button will open a modal in which the file can be renamed or deleted. The four buttons above the Explorer in Editor mode are used for adding, deleting and modifying a file as well as refreshing the Explorer (handy when files have changed on the file-system). A file or folder can be added to  by selecting the folder first then pressing the add button.
 
 You can select a configuration by clicking on it. The Flow will be loaded on the Canvas.
 
 ### 🎨 Palette
 
-The palette contains all the usable pipes and validators out of which the adapters are build. The pipes can be searched and are categorized respectively.
+The palette contains all the usable listeners, pipes, validators and an exit out of which the adapters are build. These elements can be searched and are categorized respectively.
 
-The pipe will be added to the canvas by clicking on it.
+The element will be added to the canvas by clicking on it.
 
-### 🔌 Flow
+### 🏗️Flow
 
-The flow is the main attraction of the application and has a lot of hidden features. There are a number of ways to manipulate the flow:
+The Flow is the main attraction of the application and has a lot of hidden features. There are a number of ways to manipulate the Flow:
 
-- You can move the pipes by dragging them around.
-- A forward can be created by dragging from the bottom circle of the first pipe, to the top circle of the second pipe. While dragging you can see an arrow, pointing in the direction of the forward.
-- Double click a forward to remove it.
+- You can move the elements by dragging them around.
+- A forward can be created by dragging from the green circle of the first element, to the yellow circle of the second element. While dragging you can see an arrow, pointing in the direction of the forward.
+- A forward can be removed by double clicking it or by disconnecting it from the circle. The latter can be tricky if there are a lot of forwards connected to an element.
+
+The Flow shows the connection from a listener to a pipe in blue because it isn't a forward. In the XML it is defined as `firstPipe` on the `pipeline`. When no first pipe has been assigned, the Flow will show a dashed line to show the implicitly selected first pipe. The user can manipulate the first pipe by dragging a connection as if it was a forward.
 
 ### 🎛 Pipe options
 
-You can select a pipe by double clicking it on the canvas. The options of the pipe will be opened in a modal in the middle of the screen. In this modal it is possible to add new attributes and edit attributes.
+You can select an element by double clicking it on the canvas. The options of the pipe will be opened in a modal in the middle of the screen. Information about the element is given at the top of the modal and it also has a button that will take you to the Frank!Doc of the element. In the middle section it is possible to add, edit and delete attributes on the element.  Finally there is a delete button at the bottom, which will remove the element all together.
 
 ### ⌨ Editor
 
-While the flow can help you manipulate your adapter, there are still some people that want some more control or are used to editing the adapter in XML-code.
+While the Flow can help you manipulate your adapter, there are still some people that want some more control or are used to editing the adapter in XML-code. The Editor had a lot of features similar to Visual Studio Code because it is based on the [Monaco Editor](https://microsoft.github.io/monaco-editor/)
 
-#### ~~Autocompletion~~
+### 🔄 Hybrid
 
-_Currently unavailable in the Frank!Flow 2.0_
-
-The XML autocompletion is custom made for the Frank!Flow and is made available for everybody that wants XML completion based on XSD’s for the Monaco Editor. Like this project, it is open-source and can be found [here on Github](https://github.com/philipsens/monaco-xsd-code-completion).
-
-The autocompletion has support for multiple XSD’s, namespaces and isn’t just limited to the IbisDoc. Just place the XSD in the configuration folder and reference it in the configuration to add autocompletion.
+The Hybrid mode is a combination of the Editor and the Flow modes. It will show you every modification you make in real-time. For example, if you add an element to the Flow, it will automatically get inserted into the XML and the other way around. This mode is a great way to learn XML or to get an overview of an already existing configuration. 
 
 ## How to use the Frank!Flow
 
-The easiest way to use the Frank!Flow is by starting the Frank!Runner with the Frank2Example4 Frank.
+### Frank!Runner
 
-_More instructions on running the Frank!Flow in a standalone way or in an existing project will follow._
+The easiest way to get started with the Frank!Flow is with help of the [Frank!Runner](https://github.com/ibissource/frank-runner). Startup the [Frank2Example4](https://github.com/ibissource/frank-runner#frank2example4) and go to `localhost/frank-flow` in your browser.
+
+### Maven enabled Frank
+
+You can add the Frank!Flow to an existing Frank by adding it to the POM.
+
+The POM will tell Maven which extra dependencies you want to download. In this case we want the artifact “frank-flow”. Add the following dependencies and repository to the `pom.xml`:
+
+```XML
+<dependencies>
+    <dependency>
+        <groupId>org.ibissource</groupId>
+        <artifactId>ibis-adapterframework-webapp</artifactId>
+        <version>[7.7,)</version>
+        <type>war</type>
+    </dependency>
+    <dependency>
+        <groupId>org.ibissource</groupId>
+        <artifactId>frank-flow</artifactId>
+        <version>[2.2,)</version>
+    </dependency>
+</dependencies>
+
+<repositories>
+    <repository>
+        <id>ibissource</id>
+        <name>Ibissource</name>
+        <url>https://nexus.ibissource.org/content/repositories/public</url>
+    </repository>
+</repositories>
+```
 
 ## Developing the Frank!Flow
 
-_Instructions on developing the Frank!Flow will follow._
+If you’d like to develop the Frank!Flow it would be handy to store the Frank!Flow project in a folder next to the Frank!Runner. This is recommended because there is a pre-made Frank and `build.xml` to test with.
 
-## Other projects
+This project consists of two main parts: The Angular (TypeScript) frontend and the Java backend.
 
-- [Frank!Runner](https://github.com/ibissource/frank-runner)
-- [XSD code completion for the Monaco Editor](https://github.com/philipsens/monaco-xsd-code-completion)
+### Preparations
+
+#### Requirements
+
+There are some basic requirements that are needed to test or develop the Frank!Flow application. These requirements are:
+
+##### Backend
+
+- [Java](https://www.java.com/nl/download/)
+- [Maven](http://maven.apache.org/)
+
+##### Frontend
+
+- [Node.js](https://nodejs.org/en/)
+- [Yarn](https://yarnpkg.com/getting-started/install)
+
+#### DevTools
+
+There are some tools that have to be used during development. These tools are needed for linters that keep the code clean and formatted the same way. The tools get run automatically by a Git hook.
+
+To install the tools go to the folder `frank-flow/src/frontend` this is needed because of the way this mono repo has been structured. This might change in the feature. Run `yarn` in this folder and everything should be good to go!
+
+### Frontend
+
+The code for the frontend is located at `frank-flow/src/frontend`. This folder contains the cypress integration tests, the source files for the application and configurations. 
+
+#### Building the frontend
+
+There are two ways to build the application, for development and for production. The difference lays in the way the code gets transpiled.
+
+##### Development
+
+The dist folder is located at  `frank-flow/target/frontend`, set the absolute path of this folder as [frontend path in the properties file](#configuration) so the Frank!Runner knows what to serve. To build a development version you can run `yarn build:dev` or `yarn watch` if you want to build continually. The code won’t be minified which will make it easier to debug.
+
+##### Production
+
+You can make a production build by running the command `yarn build:prod` or by [building the whole application](#building-the-whole-application).
+
+##### Analyze build
+
+To analyze the size of the build and which files are making it so big, run `yarn build:analyze`.
+
+### Backend
+
+The backend is used to serve the frontend and as an API for getting files from the file-system. The code is located at `frank-flow/main/java`.
+
+#### Building the backend
+
+There are two simple ways to build the backend, for development and production use.
+
+##### Building just the backend
+
+The easiest option while developing is to just run `mvn install`. This will only build the backend. This could be usefull if you're just developing the API or if the frontend is being served by the Frank!Runner.
+
+##### Building the whole application
+
+The other option to run `mvn install -P frontend`. This command builds both the backend and the frontend. It is meant for production, because this command will also install Node.js and NPM to build the production frontend in a CI environment.
+
+### Configuration
+
+The Frank!Flow has some configuration options which are mainly used for the backend. The configuration options can be set by placing them in a `frank-flow.properties` file. This file should be placed in the location from where the Frank!Flow gets start. While developing with the Frank!Runner this would be in the root of the folder `frank-runner`.
+
+| Property                   | Description                                      | Example                                                      |
+| -------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
+| `frank-flow.frontend-path` | The location of the dist folder for the frontend | `frank-flow.frontend-path = /home/user/Projects/frank-flow/frank-flow/target/frontend` |
+| `frank-flow.context-path`  | The URL at which the Frank!Flow will be served   | `frank-flow.context-path = /frank-flow/`                     |
+| `frank-flow.port`          | The port which the build-in Tomcat should use    | `frank-flow.port = 8080`                                     |
+| `frank-flow.war`           | The webapp war                                   | `frank-flow.war = /frank-flow-webapp.war`                    |
+
