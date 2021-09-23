@@ -19,6 +19,7 @@ import { FlowStructure } from '../../shared/models/flow-structure.model';
 import { PanZoomConfig } from 'ngx-panzoom/lib/panzoom-config';
 import { PanZoomModel } from 'ngx-panzoom/lib/panzoom-model';
 import { ToastrService } from 'ngx-toastr';
+import { FlowGenerationData } from '../../shared/models/flow-generation-data.model';
 
 @Component({
   selector: 'app-canvas',
@@ -111,22 +112,29 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   setGeneratorWorkerListener(): void {
     this.flowGenerator.onmessage = ({ data }) => {
       if (data) {
-        if (data.errors.length > 0) {
-          this.errorsFound = true;
-          this.toastr.clear();
-          data.errors.forEach((error: string) => {
-            this.toastr.error(error, 'Parsing error in XML', {
-              disableTimeOut: true,
-            });
-          });
+        if (this.parsingErrorsFound(data)) {
+          this.showParsingErrors(data.errors);
         } else {
-          this.errorsFound = false;
           this.toastr.clear();
           this.flowStructureService.setStructure(data.structure);
           this.generateFlow(data.structure);
         }
       }
     };
+  }
+
+  parsingErrorsFound(data: FlowGenerationData): boolean {
+    this.errorsFound = data.errors.length > 0;
+    return this.errorsFound;
+  }
+
+  showParsingErrors(errors: string[]): void {
+    this.toastr.clear();
+    errors.forEach((error: string) => {
+      this.toastr.error(error, 'Parsing error in XML', {
+        disableTimeOut: true,
+      });
+    });
   }
 
   setCurrentFileListener(): void {

@@ -5,6 +5,7 @@ import { Subject, Subscription } from 'rxjs';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
 import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
 import { FlowNodeAttributes } from '../models/flow-node-attributes.model';
+import { FlowGenerationData } from '../models/flow-generation-data.model';
 
 @Injectable({
   providedIn: 'root',
@@ -34,13 +35,17 @@ export class FlowStructureService {
 
       this.flowGenerator.onmessage = ({ data }) => {
         if (data) {
-          if (data.errors.length <= 0) {
+          if (!this.parsingErrorsFound(data)) {
             this.structure = data.structure;
             this.structureObservable.next(data.structure);
           }
         }
       };
     }
+  }
+
+  parsingErrorsFound(data: FlowGenerationData): boolean {
+    return data.errors.length > 0;
   }
 
   updateStructure(): void {
