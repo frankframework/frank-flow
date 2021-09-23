@@ -143,27 +143,45 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   groupSimilarErrors(errors: string[]): XmlParseError[] {
-    const parsedErrors: XmlParseError[] = [];
-    errors.forEach((currentError, index) => {
-      const lastError = parsedErrors[parsedErrors.length - 1];
-      const parsedError = this.parseErrorMessage(currentError);
-      if (lastError && lastError.message === parsedError.message) {
-        if (
-          lastError.endLine === parsedError.startLine &&
-          lastError.endColumn + 1 === parsedError.startColumn
-        ) {
-          lastError.endColumn = parsedError.startColumn;
-        } else if (
-          lastError.endLine + 1 === parsedError.startLine &&
-          parsedError.startColumn === 1
-        ) {
-          lastError.endLine = parsedError.startLine;
+    const groupedErrors: XmlParseError[] = [];
+    errors.forEach((errorMessage, index) => {
+      const lastError = groupedErrors[groupedErrors.length - 1];
+      const error = this.parseErrorMessage(errorMessage);
+      if (this.errorMessageEqualToLast(error, lastError)) {
+        if (this.errorColumnFollowsLast(error, lastError)) {
+          lastError.endColumn = error.startColumn;
+        } else if (this.errorLineFollowsLast(error, lastError)) {
+          lastError.endLine = error.startLine;
         }
       } else {
-        parsedErrors.push(parsedError);
+        groupedErrors.push(error);
       }
     });
-    return parsedErrors;
+    return groupedErrors;
+  }
+
+  errorMessageEqualToLast(
+    error: XmlParseError,
+    lastError: XmlParseError
+  ): boolean {
+    return lastError && lastError.message === error.message;
+  }
+
+  errorColumnFollowsLast(
+    error: XmlParseError,
+    lastError: XmlParseError
+  ): boolean {
+    return (
+      lastError.endLine === error.startLine &&
+      lastError.endColumn + 1 === error.startColumn
+    );
+  }
+
+  errorLineFollowsLast(
+    error: XmlParseError,
+    lastError: XmlParseError
+  ): boolean {
+    return lastError.endLine + 1 === error.startLine && error.startColumn === 1;
   }
 
   parseErrorMessage(error: string): XmlParseError {
