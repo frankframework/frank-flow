@@ -20,6 +20,7 @@ import { PanZoomConfig } from 'ngx-panzoom/lib/panzoom-config';
 import { PanZoomModel } from 'ngx-panzoom/lib/panzoom-model';
 import { ToastrService } from 'ngx-toastr';
 import { FlowGenerationData } from '../../shared/models/flow-generation-data.model';
+import { XmlParseError } from '../../shared/models/xml-parse-error.model';
 
 @Component({
   selector: 'app-canvas',
@@ -111,11 +112,11 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   setGeneratorWorkerListener(): void {
     this.flowGenerator.onmessage = ({ data }) => {
+      this.toastr.clear();
       if (data) {
         if (this.parsingErrorsFound(data)) {
           this.showParsingErrors(data.errors);
         } else {
-          this.toastr.clear();
           this.flowStructureService.setStructure(data.structure);
           this.generateFlow(data.structure);
         }
@@ -129,12 +130,47 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   showParsingErrors(errors: string[]): void {
-    this.toastr.clear();
-    errors.forEach((error: string) => {
-      this.toastr.error(error, 'Parsing error in XML', {
-        disableTimeOut: true,
-      });
+    const parsedErrors = this.groupSimilarErrors(errors);
+    parsedErrors.forEach((error: XmlParseError) => {
+      this.toastr.error(
+        error.getTemplateString(),
+        'Parsing error found in XML',
+        {
+          disableTimeOut: true,
+        }
+      );
     });
+  }
+
+  groupSimilarErrors(errors: string[]): XmlParseError[] {
+    const parsedErrors: XmlParseError[] = [];
+    errors.forEach((currentError, index) => {
+      const lastError = parsedErrors[parsedErrors.length - 1];
+      const parsedError = this.parseErrorMessage(currentError);
+      if (lastError && lastError.message === parsedError.message) {
+        if (
+          lastError.endLine === parsedError.startLine &&
+          lastError.endColumn + 1 === parsedError.startColumn
+        ) {
+          lastError.endColumn = parsedError.startColumn;
+        } else if (
+          lastError.endLine + 1 === parsedError.startLine &&
+          parsedError.startColumn === 1
+        ) {
+          lastError.endLine = parsedError.startLine;
+        }
+      } else {
+        parsedErrors.push(parsedError);
+      }
+    });
+    return parsedErrors;
+  }
+
+  parseErrorMessage(error: string): XmlParseError {
+    const [startLine, startColumn, message] = error
+      .split(/([0-9]+):([0-9]+):\s(.+)/)
+      .filter((i) => i);
+    return new XmlParseError(+startLine, +startColumn, message);
   }
 
   setCurrentFileListener(): void {
