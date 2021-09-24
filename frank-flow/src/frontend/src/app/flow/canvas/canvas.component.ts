@@ -15,9 +15,12 @@ import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
 import { GraphService } from '../../shared/services/graph.service';
 import { NodeGeneratorService } from '../../shared/services/node-generator.service';
-import { FlowStructure } from '../../shared/models/flowStructure.model';
+import { FlowStructure } from '../../shared/models/flow-structure.model';
 import { PanZoomConfig } from 'ngx-panzoom/lib/panzoom-config';
 import { PanZoomModel } from 'ngx-panzoom/lib/panzoom-model';
+import { ToastrService } from 'ngx-toastr';
+import { FlowGenerationData } from '../../shared/models/flow-generation-data.model';
+import { XmlParseError } from '../../shared/models/xml-parse-error.model';
 
 @Component({
   selector: 'app-canvas',
@@ -36,8 +39,10 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   currentFileSubscription!: Subscription;
   flowUpdate = false;
   flowGenerator!: Worker;
+  errorsFound!: boolean;
 
   @HostBinding('tabindex') tabindex = 1;
+
   @HostListener('window:keydown', ['$event'])
   onKeyUp(kbdEvent: KeyboardEvent): void {
     this.handleKeyboardUpEvent(kbdEvent);
@@ -50,7 +55,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     private codeService: CodeService,
     private flowStructureService: FlowStructureService,
     private graphService: GraphService,
-    private nodeGeneratorService: NodeGeneratorService
+    private nodeGeneratorService: NodeGeneratorService,
+    private toastr: ToastrService
   ) {
     this.jsPlumbInstance = this.nodeService.getInstance();
     this.setConnectionEventListeners();
@@ -106,11 +112,87 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   setGeneratorWorkerListener(): void {
     this.flowGenerator.onmessage = ({ data }) => {
+      this.toastr.clear();
       if (data) {
-        this.flowStructureService.setStructure(data);
-        this.generateFlow(data);
+        if (this.parsingErrorsFound(data)) {
+          this.showParsingErrors(data.errors);
+        } else {
+          this.flowStructureService.setStructure(data.structure);
+          this.generateFlow(data.structure);
+        }
       }
     };
+  }
+
+  parsingErrorsFound(data: FlowGenerationData): boolean {
+    this.errorsFound = data.errors.length > 0;
+    return this.errorsFound;
+  }
+
+  showParsingErrors(errors: string[]): void {
+    const parsedErrors = this.groupSimilarErrors(errors);
+    parsedErrors.forEach((error: XmlParseError) => {
+      this.toastr.error(
+        error.getTemplateString(),
+        'Parsing error found in XML',
+        {
+          disableTimeOut: true,
+        }
+      );
+    });
+  }
+
+  groupSimilarErrors(errors: string[]): XmlParseError[] {
+    const groupedErrors: XmlParseError[] = [];
+    errors.forEach((errorMessage, index) => {
+      const lastError = groupedErrors[groupedErrors.length - 1];
+      const error = this.parseErrorMessage(errorMessage);
+      if (this.errorMessageEqualToLast(error, lastError)) {
+        if (this.errorColumnFollowsLast(error, lastError)) {
+          lastError.endColumn = error.startColumn;
+        } else if (this.errorLineFollowsLast(error, lastError)) {
+          lastError.endLine = error.startLine;
+        }
+      } else {
+        groupedErrors.push(error);
+      }
+    });
+    return groupedErrors;
+  }
+
+  errorMessageEqualToLast(
+    error: XmlParseError,
+    lastError: XmlParseError
+  ): boolean {
+    return lastError && lastError.message === error.message;
+  }
+
+  errorColumnFollowsLast(
+    error: XmlParseError,
+    lastError: XmlParseError
+  ): boolean {
+    return (
+      lastError.endLine === error.startLine &&
+      lastError.endColumn + 1 === error.startColumn
+    );
+  }
+
+  errorLineFollowsLast(
+    error: XmlParseError,
+    lastError: XmlParseError
+  ): boolean {
+    return lastError.endLine + 1 === error.startLine && error.startColumn === 1;
+  }
+
+  parseErrorMessage(error: string): XmlParseError {
+    const [startLine, startColumn, message] = error
+      .split(/([0-9]+):([0-9]+):\s(.+)/)
+      .filter((i) => i);
+    return new XmlParseError({
+      startLine: +startLine,
+      startColumn: +startColumn,
+      message,
+    });
   }
 
   setCurrentFileListener(): void {

@@ -16,10 +16,6 @@ const toastrConfig = {
   extendedTimeOut: 2000,
   maxOpened: 10,
   autoDismiss: true,
-  preventDuplicates: true,
-  countDuplicates: true,
-  resetTimeoutOnDuplicate: true,
-  includeTitleDuplicates: true,
 };
 
 @NgModule({
