@@ -5,8 +5,8 @@ import Listener from '../../flow/node/nodes/listener.model';
 import Exit from '../../flow/node/nodes/exit.model';
 import { Node } from '../../flow/node/nodes/node.model';
 import { Forward } from '../models/forward.model';
-import { FlowStructureNode } from '../models/flowStructureNode.model';
-import { FlowNodeAttribute } from '../models/flowNodeAttribute.model';
+import { FlowStructureNode } from '../models/flow-structure-node.model';
+import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
 
 @Injectable({
   providedIn: 'root',

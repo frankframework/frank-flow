@@ -1,4 +1,4 @@
-import { FlowNodeAttributes } from 'src/app/shared/models/flowNodeAttributes.model';
+import { FlowNodeAttributes } from 'src/app/shared/models/flow-node-attributes.model';
 import { Node } from './node.model';
 
 export default class Listener extends Node {

@@ -1,4 +1,4 @@
-import { FlowNodeAttributes } from './flowNodeAttributes.model';
+import { FlowNodeAttributes } from './flow-node-attributes.model';
 
 export class FlowStructureNode {
   attributes: FlowNodeAttributes = {};

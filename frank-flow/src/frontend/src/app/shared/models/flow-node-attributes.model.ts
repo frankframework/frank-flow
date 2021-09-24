@@ -1,4 +1,4 @@
-import { FlowNodeAttribute } from './flowNodeAttribute.model';
+import { FlowNodeAttribute } from './flow-node-attribute.model';
 
 export interface FlowNodeAttributes {
   [p: string]: FlowNodeAttribute;

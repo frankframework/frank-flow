@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { FlowNodeAttribute } from 'src/app/shared/models/flowNodeAttribute.model';
-import { FlowNodeAttributeOptions } from 'src/app/shared/models/flowNodeAttributeOptions.model';
-import { FlowNodeAttributes } from 'src/app/shared/models/flowNodeAttributes.model';
-import { FlowStructureNode } from 'src/app/shared/models/flowStructureNode.model';
+import { FlowNodeAttribute } from 'src/app/shared/models/flow-node-attribute.model';
+import { FlowNodeAttributeOptions } from 'src/app/shared/models/flow-node-attribute-options.model';
+import { FlowNodeAttributes } from 'src/app/shared/models/flow-node-attributes.model';
+import { FlowStructureNode } from 'src/app/shared/models/flow-structure-node.model';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 import { FrankDocService } from 'src/app/shared/services/frank-doc.service';
 import { Node } from '../node/nodes/node.model';

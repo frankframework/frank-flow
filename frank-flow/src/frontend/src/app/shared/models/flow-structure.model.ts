@@ -1,4 +1,4 @@
-import { FlowStructureNode } from './flowStructureNode.model';
+import { FlowStructureNode } from './flow-structure-node.model';
 
 export class FlowStructure {
   nodes: FlowStructureNode[];

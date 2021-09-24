@@ -2,9 +2,10 @@
 
 import * as saxes from 'saxes';
 import { AttributeEventForOptions, TagForOptions } from 'saxes';
-import { FlowNodeAttributes } from '../models/flowNodeAttributes.model';
-import { FlowStructure } from '../models/flowStructure.model';
-import { FlowStructureNode } from '../models/flowStructureNode.model';
+import { FlowNodeAttributes } from '../models/flow-node-attributes.model';
+import { FlowStructure } from '../models/flow-structure.model';
+import { FlowStructureNode } from '../models/flow-structure-node.model';
+import { FlowGenerationData } from '../models/flow-generation-data.model';
 
 const MONACO_COLUMN_OFFSET = 1;
 const QUOTE_AND_EQUALS = 2;
@@ -12,6 +13,7 @@ const QUOTE_AND_EQUALS = 2;
 let parser = new saxes.SaxesParser();
 
 let flowStructure: FlowStructure;
+let errors: string[] = [];
 let unclosedPipes: string[] = [];
 let bufferAttributes: FlowNodeAttributes;
 let pipeline: FlowStructureNode;
@@ -20,6 +22,7 @@ let endLine: number;
 addEventListener('message', ({ data }) => {
   if (typeof data === 'string') {
     flowStructure = new FlowStructure();
+    errors = [];
     parserWrite(data);
   }
 });
@@ -33,7 +36,7 @@ const parserWrite = (data: string) => {
 };
 
 parser.on('error', (error) => {
-  console.error(error);
+  errors.push(error.message);
 });
 
 parser.on('end', () => {
@@ -42,7 +45,11 @@ parser.on('end', () => {
     flowStructure.firstPipe
   );
   newFlowStructure.pipeline = pipeline;
-  postMessage(newFlowStructure);
+
+  postMessage({
+    structure: newFlowStructure,
+    errors: errors,
+  } as FlowGenerationData);
 });
 
 parser.on('opentag', (tag: TagForOptions<{}>) => {
