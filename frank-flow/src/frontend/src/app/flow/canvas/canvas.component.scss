@@ -1,0 +1,23 @@
+#canvas {
+  background-color: var(--bg-color);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
+  background-image: -webkit-linear-gradient(var(--shade-1) 1px, transparent 1px),
+    -webkit-linear-gradient(0, var(--shade-1) 1px, transparent 1px),
+    -webkit-linear-gradient(var(--shade-1-shadow) 1px, transparent 1px),
+    -webkit-linear-gradient(0, var(--shade-1-shadow) 1px, transparent 1px);
+  display: inline-block;
+  position: relative;
+  width: 2000px;
+  height: 2000px;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.5);
+}

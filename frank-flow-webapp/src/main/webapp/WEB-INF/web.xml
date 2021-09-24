@@ -1,0 +1,27 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+		 version="3.0">
+	<display-name>Frank!Flow</display-name>
+
+	<description>Sergi will add this</description>
+
+	<listener>
+		<listener-class>org.ibissource.frankflow.lifecycle.SpringWebAppInitializer</listener-class>
+	</listener>
+
+	<!-- Welcome File List -->
+	<mime-mapping>
+		<extension>svg</extension>
+		<mime-type>image/svg+xml</mime-type>
+	</mime-mapping>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
+	<!-- Error pages -->
+<!-- 	<error-page> -->
+<!-- 		<exception-type>java.lang.Exception</exception-type> -->
+<!-- 		<location>/error_page.html</location> -->
+<!-- 	</error-page> -->
+</web-app>

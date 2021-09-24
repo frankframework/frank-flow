@@ -1,0 +1,76 @@
+<ngx-smart-modal
+  #optionsModal
+  (onDataAdded)="onDataAdded()"
+  (onAnyCloseEvent)="onAnyCloseEvent()"
+  class="optionsModal"
+  customClass="nsm-centered"
+  identifier="optionsModal"
+>
+  <div>
+    <h1>{{ node?.getName() }}</h1>
+    <hr />
+    <h2>{{ node?.getType() }}</h2>
+    <p>{{ nodeDescription }}</p>
+    <hr />
+    <!-- TODO: Name and type here, those are generic for all nodes. Other attributes can be seen as 'additional' -->
+    <h2>Attributes</h2>
+    <div class="input-row" *ngIf="attributeOptions.length > 0">
+      <label for="selectAttribute">Add attribute:</label>
+      <select id="selectAttribute" [(ngModel)]="selectedAttribute" required>
+        <option selected [ngValue]="undefined" hidden disabled>
+          Choose an attribute...
+        </option>
+        <option
+          *ngFor="let attributeOption of attributeOptions"
+          [ngValue]="attributeOption"
+          [hidden]="attributeIsUsed(attributeOption?.name)"
+        >
+          {{ attributeOption?.name }}
+        </option>
+      </select>
+    </div>
+    <div class="input-row" *ngIf="selectedAttribute">
+      <label for="newAttribute">New attribute value:</label>
+      <input
+        id="newAttribute"
+        type="text"
+        [(ngModel)]="newAttributeValue"
+        [placeholder]="selectedAttribute?.default ?? ''"
+      />
+    </div>
+    <div
+      *ngIf="selectedAttribute && selectedAttribute?.description"
+      class="row"
+    >
+      <label>Description of attribute</label>
+      <div [innerHTML]="selectedAttribute?.description"></div>
+    </div>
+    <div class="row" *ngIf="newAttributeValue">
+      <app-button (click)="addAttribute()"
+        >Add {{ selectedAttribute?.name }}</app-button
+      >
+    </div>
+    <hr />
+    <ng-container
+      *ngFor="
+        let attribute of attributes | keyvalue;
+        trackBy: customTrackBy;
+        index as i
+      "
+    >
+      <div
+        class="input-row"
+        *ngIf="!disabledAttributes.includes(attribute.key)"
+      >
+        <label for="name">{{ attribute.key }}:</label>
+        <input
+          type="text"
+          id="name"
+          [ngModel]="attributes[attribute.key].value"
+          (ngModelChange)="changeAttribute(attribute.key, $event)"
+        />
+        <app-button (click)="deleteAttribute(attribute.key)">Delete</app-button>
+      </div>
+    </ng-container>
+  </div>
+</ngx-smart-modal>

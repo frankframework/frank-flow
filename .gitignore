@@ -2,6 +2,11 @@
 .settings
 .idea/
 *.iml
+target
+lib
+bin
+frank-flow.properties
+.project
 
 # Maven build
 /target
@@ -9,8 +14,12 @@
 dependency-reduced-pom.xml
 
 # Cypress output
-/src/frontend/cypress/videos/
+frank-flow/src/frontend/cypress/videos/
 
 # Test frank config
-/src/frontend/cypress/Frank/target
-/src/frontend/cypress/Frank/.gitignore
+frank-flow/src/frontend/cypress/Frank/target
+frank-flow/src/frontend/cypress/Frank/.gitignore
+frank-flow/src/frontend/src/environments/environment.ts
+
+**/META-INF/maven
+**/META-INF/MANIFEST.MF

@@ -1,0 +1,20 @@
+:host {
+  background: var(--bg-color-muted);
+  display: flex;
+  flex-direction: column;
+}
+
+.search-box {
+  padding: 16px;
+}
+
+app-file-tree {
+  flex-grow: 1;
+}
+
+.action-box {
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
