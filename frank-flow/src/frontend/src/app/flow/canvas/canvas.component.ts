@@ -188,7 +188,11 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     const [startLine, startColumn, message] = error
       .split(/([0-9]+):([0-9]+):\s(.+)/)
       .filter((i) => i);
-    return new XmlParseError(+startLine, +startColumn, message);
+    return new XmlParseError({
+      startLine: +startLine,
+      startColumn: +startColumn,
+      message,
+    });
   }
 
   setCurrentFileListener(): void {

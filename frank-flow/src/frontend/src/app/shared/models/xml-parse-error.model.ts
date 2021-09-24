@@ -5,12 +5,16 @@ export class XmlParseError {
   endColumn: number;
   message: string;
 
-  constructor(startLine: number, startColumn: number, message: string) {
-    this.startLine = startLine;
-    this.startColumn = startColumn;
-    this.endLine = startLine;
-    this.endColumn = startColumn;
-    this.message = message;
+  constructor(options: {
+    startLine: number;
+    startColumn: number;
+    message: string;
+  }) {
+    this.startLine = options.startLine;
+    this.startColumn = options.startColumn;
+    this.message = options.message;
+    this.endLine = options.startLine;
+    this.endColumn = options.startColumn;
   }
 
   getTemplateString(): string {
