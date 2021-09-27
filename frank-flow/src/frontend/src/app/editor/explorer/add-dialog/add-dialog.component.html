@@ -1,6 +1,7 @@
 <ngx-smart-modal
   #addDialog
   (onDataAdded)="onDataAdded()"
+  (onOpenFinished)="inputElement.focus()"
   class="addDialog"
   customClass="nsm-centered"
   identifier="addDialog"
@@ -19,9 +20,11 @@
     ></app-toggle>
   </div>
   <input
+    #inputElement
     [(ngModel)]="fileName"
     [placeholder]="(isFolder ? 'Folder' : 'File') + ' name'"
     type="text"
+    (keyup.enter)="add()"
   />
   <div class="button-actions">
     <app-button (click)="add()">Add</app-button>
