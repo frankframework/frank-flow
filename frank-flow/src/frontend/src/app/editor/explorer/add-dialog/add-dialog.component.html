@@ -24,6 +24,7 @@
     [(ngModel)]="fileName"
     [placeholder]="(isFolder ? 'Folder' : 'File') + ' name'"
     type="text"
+    (keyup.enter)="add()"
   />
   <div class="button-actions">
     <app-button (click)="add()">Add</app-button>
