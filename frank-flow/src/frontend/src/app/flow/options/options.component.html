@@ -36,6 +36,7 @@
         type="text"
         [(ngModel)]="newAttributeValue"
         [placeholder]="selectedAttribute?.default ?? ''"
+        (keyup.enter)="addAttribute()"
       />
     </div>
     <div
