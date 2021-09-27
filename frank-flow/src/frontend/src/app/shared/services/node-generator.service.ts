@@ -37,14 +37,14 @@ export class NodeGeneratorService {
     listeners.forEach((listener) => {
       const [x, y] = listener.positions;
       const attributes = listener.attributes;
-      const listenerNode = new Listener(
-        listener.name,
-        listener.name,
-        listener.type,
-        y,
-        x,
-        attributes
-      );
+      const listenerNode = new Listener({
+        id: listener.name,
+        name: listener.name,
+        type: listener.type,
+        top: y,
+        left: x,
+        attributes,
+      });
 
       this.forwards.push(new Forward(listener.name, firstPipe));
       this.nodeMap.set(listener.name, listenerNode);
@@ -55,7 +55,14 @@ export class NodeGeneratorService {
     pipes.forEach((pipe: FlowStructureNode) => {
       const [x, y] = pipe.positions;
       const attributes = pipe.attributes;
-      const node = new Pipe(pipe.name, pipe.name, pipe.type, y, x, attributes);
+      const node = new Pipe({
+        id: pipe.name,
+        name: pipe.name,
+        type: pipe.type,
+        top: y,
+        left: x,
+        attributes,
+      });
 
       if (pipe.forwards) {
         pipe.forwards.forEach((forward: FlowStructureNode) => {
@@ -77,7 +84,14 @@ export class NodeGeneratorService {
     exits.forEach((exit) => {
       const [x, y] = exit.positions;
       const attributes = exit.attributes;
-      const node = new Exit(exit.name, exit.name, exit.type, y, x, attributes);
+      const node = new Exit({
+        id: exit.name,
+        name: exit.name,
+        type: exit.type,
+        top: y,
+        left: x,
+        attributes,
+      });
       this.nodeMap.set(exit.name, node);
     });
   }

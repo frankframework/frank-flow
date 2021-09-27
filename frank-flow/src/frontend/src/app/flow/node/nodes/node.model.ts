@@ -12,20 +12,20 @@ export class Node {
   private left?: number | undefined;
   private attributes?: FlowNodeAttributes | undefined;
 
-  constructor(
-    id: string,
-    name?: string,
-    type?: string,
-    top?: number,
-    left?: number,
-    attributes?: FlowNodeAttributes
-  ) {
-    this.id = id;
-    this.name = name;
-    this.type = type;
-    this.top = top;
-    this.left = left;
-    this.attributes = attributes;
+  constructor(options: {
+    id: string;
+    name?: string;
+    type?: string;
+    top?: number;
+    left?: number;
+    attributes?: FlowNodeAttributes;
+  }) {
+    this.id = options.id;
+    this.name = options.name;
+    this.type = options.type;
+    this.top = options.top;
+    this.left = options.left;
+    this.attributes = options.attributes;
   }
 
   getId(): string {
