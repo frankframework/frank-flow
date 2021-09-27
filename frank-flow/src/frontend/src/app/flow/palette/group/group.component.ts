@@ -30,13 +30,13 @@ export class GroupComponent {
 
   addNode(pipe: any): void {
     if (this.type === 'Listeners') {
-      const listener = new Listener(pipe.name, pipe.name, pipe.name, 100, 100);
+      const listener = new Listener(pipe.name, pipe.name, pipe.name);
       this.flowStructureService.addListener(listener);
     } else if (this.type === 'Pipes') {
-      const newPipe = new Pipe(pipe.name, pipe.name, pipe.name, 100, 100);
+      const newPipe = new Pipe(pipe.name, pipe.name, pipe.name);
       this.flowStructureService.addPipe(newPipe);
     } else if (this.type === 'Other' && pipe.name === 'Exit') {
-      const exit = new Exit(pipe.name, 'Exit', 'Exit', 100, 100);
+      const exit = new Exit(pipe.name, 'Exit', 'Exit');
       this.flowStructureService.addExit(exit);
     }
   }
