@@ -20,7 +20,13 @@ describe('NodeComponent', () => {
     fixture = TestBed.createComponent(NodeComponent);
     component = fixture.componentInstance;
 
-    component.node = new PipeModel('TestPipe', undefined, 'TestPipe', 20, 20);
+    component.node = new PipeModel({
+      id: 'TestPipe',
+      name: undefined,
+      type: 'TestPipe',
+      top: 20,
+      left: 20,
+    });
     fixture.elementRef.nativeElement.id = component.node.getId();
     component.jsPlumbInstance = jsPlumb.getInstance();
 
