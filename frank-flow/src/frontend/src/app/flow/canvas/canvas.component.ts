@@ -114,6 +114,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.flowGenerator.onmessage = ({ data }) => {
       this.toastr.clear();
       if (data) {
+        this.flowStructureService.errorSubject.next(data.errors);
+
         if (this.parsingErrorsFound(data)) {
           this.showParsingErrors(data.errors);
         } else {

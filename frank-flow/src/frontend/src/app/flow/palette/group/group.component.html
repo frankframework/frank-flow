@@ -10,7 +10,7 @@
       <app-item
         (click)="addNode(item)"
         *ngFor="let item of items"
-        [color]="color"
+        [color]="locked ? 'locked' : color"
         [name]="item.name"
       ></app-item>
     </ng-container>
