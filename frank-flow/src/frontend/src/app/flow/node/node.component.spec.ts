@@ -22,7 +22,7 @@ describe('NodeComponent', () => {
 
     component.node = new PipeModel({
       id: 'TestPipe',
-      name: undefined,
+      name: 'TestPipe',
       type: 'TestPipe',
       top: 20,
       left: 20,

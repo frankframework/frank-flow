@@ -6,16 +6,16 @@ import { NodeComponent } from '../node.component';
 export class Node {
   protected classes = '';
   private id: string;
-  private name?: string | undefined;
-  private type?: string | undefined;
+  private name: string;
+  private type: string;
   private top?: number | undefined;
   private left?: number | undefined;
   private attributes?: FlowNodeAttributes | undefined;
 
   constructor(options: {
     id: string;
-    name?: string;
-    type?: string;
+    name: string;
+    type: string;
     top?: number;
     left?: number;
     attributes?: FlowNodeAttributes;
@@ -32,11 +32,11 @@ export class Node {
     return this.id;
   }
 
-  getName(): string | undefined {
+  getName(): string {
     return this.name;
   }
 
-  getType(): string | undefined {
+  getType(): string {
     return this.type;
   }
 
