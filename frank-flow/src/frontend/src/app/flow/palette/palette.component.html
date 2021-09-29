@@ -3,24 +3,29 @@
   [items]="paletteService.data?.get('Listeners') | filter: search"
   color="info"
   type="Listeners"
+  [locked]="locked"
 ></app-group>
 <app-group
   [items]="paletteService.data?.get('Pipes') | filter: search"
   color="accent"
   type="Pipes"
+  [locked]="locked"
 ></app-group>
 <app-group
   [items]="paletteService.data?.get('Senders') | filter: search"
   color="success"
   type="Senders"
+  [locked]="locked"
 ></app-group>
 <app-group
   [items]="paletteService.data?.get('Validators') | filter: search"
   color="warning"
   type="Validators"
+  [locked]="locked"
 ></app-group>
 <app-group
   [items]="paletteService.data?.get('Other') | filter: search"
   color="danger"
   type="Other"
+  [locked]="locked"
 ></app-group>
