@@ -139,31 +139,32 @@ export class FlowStructureService {
 
   addPipe(pipeData: any): void {
     const pipes = this.structure.pipes;
+    const lastPipe = pipes[pipes.length - 1] ?? this.structure.pipeline;
+    const line = (lastPipe.endLine ?? lastPipe.line) + 1;
+    const pipeName = this.getUniquePipeName(pipeData.name);
+    const pipeTemplate = `\t\t\t<${pipeData.type} name="${pipeName}">\n\t\t\t</${pipeData.type}>\n`;
 
-    const newPipe = `\t\t\t<${pipeData.type} name="${pipeData.name}">\n\t\t\t</${pipeData.type}>\n`;
+    this.monacoEditorComponent?.applyEdit(
+      {
+        startLineNumber: line,
+        startColumn: lastPipe.startColumn,
+        endColumn: lastPipe.endColumn,
+        endLineNumber: line,
+      },
+      pipeTemplate,
+      false
+    );
+  }
 
-    let lastPipe = pipes[pipes.length - 1];
+  getUniquePipeName(name: string, increment?: number): string {
+    const nameIsUsed = this.structure.pipes.find(
+      (pipe: FlowStructureNode) => pipe.name == name + (increment ?? '')
+    );
 
-    let line;
-
-    if (!lastPipe) {
-      lastPipe = this.structure.pipeline;
-      line = lastPipe.line + 1;
+    if (nameIsUsed) {
+      return this.getUniquePipeName(name, (increment ?? 1) + 1);
     } else {
-      line = lastPipe.endLine + 1;
-    }
-
-    if (lastPipe) {
-      this.monacoEditorComponent?.applyEdit(
-        {
-          startLineNumber: line,
-          startColumn: lastPipe.startColumn,
-          endColumn: lastPipe.endColumn,
-          endLineNumber: line,
-        },
-        newPipe,
-        false
-      );
+      return name + (increment ?? '');
     }
   }
 
