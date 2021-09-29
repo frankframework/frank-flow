@@ -142,8 +142,10 @@ export class FlowStructureService {
   addPipe(pipeData: Pipe): void {
     const pipes = this.structure.pipes;
     const lastPipe = pipes[pipes.length - 1] ?? this.structure.pipeline;
-    const line = (lastPipe.endLine ?? lastPipe.line) + 1;
+    const line =
+      (pipes[pipes.length - 1] ? lastPipe.endLine : lastPipe.line) + 1;
     const pipeName = this.getUniquePipeName(pipeData.getName());
+
     const pipeTemplate = `\t\t\t<${pipeData.getType()} name="${pipeName}">\n\t\t\t</${pipeData.getType()}>\n`;
 
     this.monacoEditorComponent?.applyEdit(
@@ -167,7 +169,7 @@ export class FlowStructureService {
     name: string,
     increment?: number
   ): string {
-    const nameIsUsed = this.structure.pipes.find(
+    const nameIsUsed = nodes.find(
       (pipe: FlowStructureNode) => pipe.name == name + (increment ?? '')
     );
 
@@ -183,7 +185,7 @@ export class FlowStructureService {
     const lastReceiver = receivers[receivers.length - 1];
     const listenerName = this.getUniqueListenerName(pipeData.getName());
 
-    const newListener = `\t\t<Receiver name="testConfigurationReceiver">
+    const listenerTemplate = `\t\t<Receiver name="testConfigurationReceiver">
         \t<${pipeData.getType()} name="${listenerName}" />
         </Receiver>\n`;
 
@@ -194,7 +196,7 @@ export class FlowStructureService {
         endColumn: lastReceiver.endColumn,
         endLineNumber: lastReceiver.endLine + 1,
       },
-      newListener,
+      listenerTemplate,
       false
     );
   }
@@ -205,14 +207,13 @@ export class FlowStructureService {
 
   addExit(exitData: Exit): void {
     const exits = this.structure.exits;
-    let lastExit = exits[exits.length - 1];
+    const lastExit =
+      exits[exits.length - 1] ??
+      this.structure.pipes[this.structure.pipes.length - 1];
+    lastExit.line = exits[exits.length - 1] ? lastExit.line : lastExit.endLine;
+    const exitName = this.getUniqueExitPath(exitData.getName());
 
-    if (!lastExit) {
-      lastExit = this.structure.pipes[this.structure.pipes.length - 1];
-      lastExit.line = lastExit.endLine;
-    }
-
-    const newExit = `\t\t\t<${exitData.getType()} path="${exitData.getName()}" />\n`;
+    const exitTemplate = `\t\t\t<${exitData.getType()} path="${exitName}" />\n`;
 
     this.monacoEditorComponent?.applyEdit(
       {
@@ -221,7 +222,7 @@ export class FlowStructureService {
         endColumn: lastExit.endColumn,
         endLineNumber: lastExit.line + 1,
       },
-      newExit,
+      exitTemplate,
       false
     );
   }
