@@ -13,6 +13,7 @@ import Exit from '../../node/nodes/exit.model';
 })
 export class GroupComponent {
   @Input() foldGroup = false;
+  @Input() locked = false;
   @Input() color = 'primary';
   @Input() type = 'default';
   @Input() items!: any[] | undefined;
@@ -29,6 +30,9 @@ export class GroupComponent {
   }
 
   addNode(pipe: any): void {
+    if (this.locked) {
+      return;
+    }
     if (this.type === 'Listeners') {
       const listener = new Listener({
         id: pipe.name,

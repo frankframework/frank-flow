@@ -12,12 +12,15 @@ import { FlowGenerationData } from '../models/flow-generation-data.model';
 })
 export class FlowStructureService {
   structure: any = {};
-  structureObservable: Subject<any> = new Subject<any>();
+  structureSubject: Subject<any> = new Subject<any>();
+  errorSubject: Subject<string[]> = new Subject<string[]>();
   positionsUpdate = false;
 
   flowGenerator?: Worker;
   monacoEditorComponent?: MonacoEditorComponent;
   structureSubscription?: Subscription;
+
+  errorObservable = () => this.errorSubject.asObservable();
 
   constructor() {
     this.initializeWorker();
@@ -37,7 +40,7 @@ export class FlowStructureService {
         if (data) {
           if (!this.parsingErrorsFound(data)) {
             this.structure = data.structure;
-            this.structureObservable.next(data.structure);
+            this.structureSubject.next(data.structure);
           }
         }
       };
@@ -55,7 +58,7 @@ export class FlowStructureService {
   }
 
   setStructure(structure: any): void {
-    this.structureObservable.next(structure);
+    this.structureSubject.next(structure);
     this.structure = structure;
   }
 
@@ -243,7 +246,7 @@ export class FlowStructureService {
     const currentAttribute = attributes.pop();
     if (currentAttribute) {
       if (attributes) {
-        this.structureSubscription = this.structureObservable
+        this.structureSubscription = this.structureSubject
           .asObservable()
           .subscribe({
             next: (data) => {
