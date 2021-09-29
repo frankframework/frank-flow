@@ -4,8 +4,8 @@ import { FlowNodeAttributes } from '../../../shared/models/flow-node-attributes.
 export default class Exit extends Node {
   constructor(options: {
     id: string;
-    name?: string;
-    type?: string;
+    name: string;
+    type: string;
     top?: number;
     left?: number;
     attributes?: FlowNodeAttributes;

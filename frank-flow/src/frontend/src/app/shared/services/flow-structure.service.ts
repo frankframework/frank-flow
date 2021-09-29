@@ -6,6 +6,8 @@ import { FlowStructureNode } from '../models/flow-structure-node.model';
 import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
 import { FlowNodeAttributes } from '../models/flow-node-attributes.model';
 import { FlowGenerationData } from '../models/flow-generation-data.model';
+import Listener from '../../flow/node/nodes/listener.model';
+import Pipe from '../../flow/node/nodes/pipe.model';
 
 @Injectable({
   providedIn: 'root',
@@ -140,42 +142,54 @@ export class FlowStructureService {
     }
   }
 
-  addPipe(pipeData: any): void {
+  addPipe(pipeData: Pipe): void {
     const pipes = this.structure.pipes;
+    const lastPipe = pipes[pipes.length - 1] ?? this.structure.pipeline;
+    const line =
+      (pipes[pipes.length - 1] ? lastPipe.endLine : lastPipe.line) + 1;
+    const pipeName = this.getUniquePipeName(pipeData.getName());
 
-    const newPipe = `\t\t\t<${pipeData.type} name="${pipeData.name}">\n\t\t\t</${pipeData.type}>\n`;
+    const pipeTemplate = `\t\t\t<${pipeData.getType()} name="${pipeName}">\n\t\t\t</${pipeData.getType()}>\n`;
 
-    let lastPipe = pipes[pipes.length - 1];
+    this.monacoEditorComponent?.applyEdit(
+      {
+        startLineNumber: line,
+        startColumn: lastPipe.startColumn,
+        endColumn: lastPipe.endColumn,
+        endLineNumber: line,
+      },
+      pipeTemplate,
+      false
+    );
+  }
 
-    let line;
+  getUniquePipeName(name: string): string {
+    return this.getUniqueNodeName(this.structure.pipes, name);
+  }
 
-    if (!lastPipe) {
-      lastPipe = this.structure.pipeline;
-      line = lastPipe.line + 1;
+  getUniqueNodeName(
+    nodes: FlowStructureNode[],
+    name: string,
+    increment?: number
+  ): string {
+    const nameIsUsed = nodes.find(
+      (pipe: FlowStructureNode) => pipe.name == name + (increment ?? '')
+    );
+
+    if (nameIsUsed) {
+      return this.getUniqueNodeName(nodes, name, (increment ?? 1) + 1);
     } else {
-      line = lastPipe.endLine + 1;
-    }
-
-    if (lastPipe) {
-      this.monacoEditorComponent?.applyEdit(
-        {
-          startLineNumber: line,
-          startColumn: lastPipe.startColumn,
-          endColumn: lastPipe.endColumn,
-          endLineNumber: line,
-        },
-        newPipe,
-        false
-      );
+      return name + (increment ?? '');
     }
   }
 
-  addListener(pipeData: any): void {
+  addListener(pipeData: Listener): void {
     const receivers = this.structure.receivers;
     const lastReceiver = receivers[receivers.length - 1];
+    const listenerName = this.getUniqueListenerName(pipeData.getName());
 
-    const newListener = `\t\t<Receiver name="testConfigurationReceiver">
-        \t<${pipeData.type} name="${pipeData.name}" />
+    const listenerTemplate = `\t\t<Receiver name="${listenerName}">
+        \t<${pipeData.getType()} name="${listenerName}" />
         </Receiver>\n`;
 
     this.monacoEditorComponent?.applyEdit(
@@ -185,21 +199,24 @@ export class FlowStructureService {
         endColumn: lastReceiver.endColumn,
         endLineNumber: lastReceiver.endLine + 1,
       },
-      newListener,
+      listenerTemplate,
       false
     );
   }
 
+  getUniqueListenerName(name: string): string {
+    return this.getUniqueNodeName(this.structure.listeners, name);
+  }
+
   addExit(exitData: Exit): void {
     const exits = this.structure.exits;
-    let lastExit = exits[exits.length - 1];
+    const lastExit =
+      exits[exits.length - 1] ??
+      this.structure.pipes[this.structure.pipes.length - 1];
+    lastExit.line = exits[exits.length - 1] ? lastExit.line : lastExit.endLine;
+    const exitName = this.getUniqueExitPath(exitData.getName());
 
-    if (!lastExit) {
-      lastExit = this.structure.pipes[this.structure.pipes.length - 1];
-      lastExit.line = lastExit.endLine;
-    }
-
-    const newExit = `\t\t\t<${exitData.getType()} path="${exitData.getName()}" />\n`;
+    const exitTemplate = `\t\t\t<${exitData.getType()} path="${exitName}" />\n`;
 
     this.monacoEditorComponent?.applyEdit(
       {
@@ -208,9 +225,13 @@ export class FlowStructureService {
         endColumn: lastExit.endColumn,
         endLineNumber: lastExit.line + 1,
       },
-      newExit,
+      exitTemplate,
       false
     );
+  }
+
+  getUniqueExitPath(name: string): string {
+    return this.getUniqueNodeName(this.structure.exits, name);
   }
 
   editListenerPositions(nodeId: string, xPos: number, yPos: number): void {
