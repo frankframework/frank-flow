@@ -173,7 +173,7 @@ export class FlowStructureService {
     increment?: number
   ): string {
     const nameIsUsed = nodes.find(
-      (pipe: FlowStructureNode) => pipe.name == name + (increment ?? '')
+      (pipe: FlowStructureNode) => pipe.name === name + (increment ?? '')
     );
 
     if (nameIsUsed) {
