@@ -185,7 +185,7 @@ export class FlowStructureService {
     const lastReceiver = receivers[receivers.length - 1];
     const listenerName = this.getUniqueListenerName(pipeData.getName());
 
-    const listenerTemplate = `\t\t<Receiver name="testConfigurationReceiver">
+    const listenerTemplate = `\t\t<Receiver name="${listenerName}">
         \t<${pipeData.getType()} name="${listenerName}" />
         </Receiver>\n`;
 
