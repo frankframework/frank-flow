@@ -156,13 +156,21 @@ export class FlowStructureService {
     );
   }
 
-  getUniquePipeName(name: string, increment?: number): string {
+  getUniquePipeName(name: string): string {
+    return this.getUniqueNodeName(this.structure.pipes, name);
+  }
+
+  getUniqueNodeName(
+    nodes: FlowStructureNode[],
+    name: string,
+    increment?: number
+  ): string {
     const nameIsUsed = this.structure.pipes.find(
       (pipe: FlowStructureNode) => pipe.name == name + (increment ?? '')
     );
 
     if (nameIsUsed) {
-      return this.getUniquePipeName(name, (increment ?? 1) + 1);
+      return this.getUniqueNodeName(nodes, name, (increment ?? 1) + 1);
     } else {
       return name + (increment ?? '');
     }
