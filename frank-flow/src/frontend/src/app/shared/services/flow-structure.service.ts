@@ -6,6 +6,8 @@ import { FlowStructureNode } from '../models/flow-structure-node.model';
 import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
 import { FlowNodeAttributes } from '../models/flow-node-attributes.model';
 import { FlowGenerationData } from '../models/flow-generation-data.model';
+import Listener from '../../flow/node/nodes/listener.model';
+import Pipe from '../../flow/node/nodes/pipe.model';
 
 @Injectable({
   providedIn: 'root',
@@ -137,12 +139,12 @@ export class FlowStructureService {
     }
   }
 
-  addPipe(pipeData: any): void {
+  addPipe(pipeData: Pipe): void {
     const pipes = this.structure.pipes;
     const lastPipe = pipes[pipes.length - 1] ?? this.structure.pipeline;
     const line = (lastPipe.endLine ?? lastPipe.line) + 1;
-    const pipeName = this.getUniquePipeName(pipeData.name);
-    const pipeTemplate = `\t\t\t<${pipeData.type} name="${pipeName}">\n\t\t\t</${pipeData.type}>\n`;
+    const pipeName = this.getUniquePipeName(pipeData.getName());
+    const pipeTemplate = `\t\t\t<${pipeData.getType()} name="${pipeName}">\n\t\t\t</${pipeData.getType()}>\n`;
 
     this.monacoEditorComponent?.applyEdit(
       {
@@ -176,12 +178,13 @@ export class FlowStructureService {
     }
   }
 
-  addListener(pipeData: any): void {
+  addListener(pipeData: Listener): void {
     const receivers = this.structure.receivers;
     const lastReceiver = receivers[receivers.length - 1];
+    const listenerName = this.getUniqueListenerName(pipeData.getName());
 
     const newListener = `\t\t<Receiver name="testConfigurationReceiver">
-        \t<${pipeData.type} name="${pipeData.name}" />
+        \t<${pipeData.getType()} name="${listenerName}" />
         </Receiver>\n`;
 
     this.monacoEditorComponent?.applyEdit(
@@ -194,6 +197,10 @@ export class FlowStructureService {
       newListener,
       false
     );
+  }
+
+  getUniqueListenerName(name: string): string {
+    return this.getUniqueNodeName(this.structure.listeners, name);
   }
 
   addExit(exitData: Exit): void {
@@ -217,6 +224,10 @@ export class FlowStructureService {
       newExit,
       false
     );
+  }
+
+  getUniqueExitPath(name: string): string {
+    return this.getUniqueNodeName(this.structure.exits, name);
   }
 
   editListenerPositions(nodeId: string, xPos: number, yPos: number): void {

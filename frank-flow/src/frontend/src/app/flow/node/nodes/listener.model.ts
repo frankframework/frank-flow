@@ -4,8 +4,8 @@ import { Node } from './node.model';
 export default class Listener extends Node {
   constructor(options: {
     id: string;
-    name?: string;
-    type?: string;
+    name: string;
+    type: string;
     top?: number;
     left?: number;
     attributes?: FlowNodeAttributes;
