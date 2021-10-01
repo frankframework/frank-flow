@@ -42,7 +42,7 @@ export class ExplorerComponent {
 
   deleteFile(): void {
     this.fileService
-      .removeFileFromConfiguation(this.currentFile)
+      .removeFileFromConfiguration(this.currentFile)
       .then((response) => {
         if (response) {
           this.toastr.success(

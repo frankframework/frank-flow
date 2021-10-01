@@ -101,7 +101,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
               value: JSON.stringify({
                 configuration,
                 path: path + file,
-                type: FileType.XML,
+                type: FileType.FILE,
               }),
             });
           }
@@ -143,7 +143,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
     if (itemValue) {
       const item: File = JSON.parse(itemValue);
 
-      if (item.type === FileType.XML) {
+      if (item.type === FileType.FILE) {
         if (!this.currentFile?.saved) {
           this.switchWithoutSavingDecision(item);
         } else {

@@ -201,7 +201,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
       {
         next: (data): void => {
-          this.flowGenerator.postMessage(data.data);
+          this.flowGenerator.postMessage(data.xml);
         },
       }
     );

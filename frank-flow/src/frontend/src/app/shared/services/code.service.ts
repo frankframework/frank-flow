@@ -7,7 +7,7 @@ import { Originator } from '../memento/originator';
 import { Caretaker } from '../memento/caretaker';
 import { FileService } from './file.service';
 import { ToastrService } from 'ngx-toastr';
-import { FileMemento } from '../memento/file-memento';
+import { Folder } from '../models/folder.model';
 
 @Injectable({
   providedIn: 'root',
@@ -45,7 +45,7 @@ export class CodeService {
       this.currentDirectory = {
         configuration: firstConfig.name,
         path: '',
-      };
+      } as Folder;
 
       if (this.files[0].content) {
         const firstConfigFile = this.files[0].content._files.filter(
@@ -60,11 +60,10 @@ export class CodeService {
             if (file) {
               this.setCurrentFile({
                 path: firstConfigFile,
-                type: FileType.XML,
-                data: file,
+                xml: file,
                 configuration: firstConfig.name,
                 saved: true,
-              });
+              } as File);
             }
           });
         }
@@ -104,14 +103,14 @@ export class CodeService {
       currentFile &&
       currentFile.configuration &&
       currentFile.path &&
-      currentFile.data &&
+      currentFile.xml &&
       !currentFile.saved
     ) {
       this.fileService
         .updateFileForConfiguration(
           currentFile.configuration,
           currentFile.path,
-          currentFile.data
+          currentFile.xml
         )
         .then((response) => {
           if (response) {
@@ -154,13 +153,7 @@ export class CodeService {
   switchCurrentFile(item: File): void {
     const currentFile = this.originator?.getState();
 
-    if (
-      currentFile &&
-      item.configuration &&
-      item.path &&
-      (currentFile.path !== item.path ||
-        currentFile.configuration !== item.configuration)
-    ) {
+    if (this.canSwitchCurrentFile(currentFile, item)) {
       this.fileService
         .getFileFromConfiguration(item.configuration, item.path)
         .then((file) => {
@@ -168,11 +161,10 @@ export class CodeService {
             this.clearMementoHistory();
             this.setCurrentFile({
               path: item.path,
-              type: FileType.XML,
-              data: file,
+              xml: file,
               saved: true,
               configuration: item.configuration,
-            });
+            } as File);
           }
         })
         .catch((error) => {
@@ -180,5 +172,15 @@ export class CodeService {
           this.toastr.error(error, `File can't be fetched`);
         });
     }
+  }
+
+  canSwitchCurrentFile(currentFile: File | undefined, item: File): boolean {
+    return !!(
+      currentFile &&
+      item.configuration &&
+      item.path &&
+      (currentFile.path !== item.path ||
+        currentFile.configuration !== item.configuration)
+    );
   }
 }

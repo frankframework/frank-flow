@@ -36,8 +36,8 @@ export class MonacoEditorComponent
   @Output() codeChange = new EventEmitter<string>();
 
   codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
-  currentFile = new File();
-  fileObservableUpdate = false;
+  currentFile!: File;
+  fileObservableUpdate = false; //old
 
   currentFileSubscription!: Subscription;
   modeSubscription!: Subscription;
@@ -166,10 +166,10 @@ export class MonacoEditorComponent
   }
 
   setValue(file: File | undefined): void {
-    if (file?.data != null) {
+    if (file?.xml != null) {
       const position = this.codeEditorInstance.getPosition();
       this.currentFile = file;
-      this.codeEditorInstance.getModel()?.setValue(file.data);
+      this.codeEditorInstance.getModel()?.setValue(file.xml);
       if (position) {
         this.codeEditorInstance.setPosition(position);
       }
@@ -198,7 +198,7 @@ export class MonacoEditorComponent
         this.debounce(() => {
           if (this.currentFile && !this.fileObservableUpdate) {
             this.fileObservableUpdate = true;
-            this.currentFile.data = this.codeEditorInstance.getValue();
+            this.currentFile.xml = this.codeEditorInstance.getValue();
             this.currentFile.saved = false;
             this.codeService.setCurrentFile(this.currentFile);
           } else {
@@ -210,7 +210,7 @@ export class MonacoEditorComponent
     this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
       {
         next: (file: File) => {
-          if (file.data != null) {
+          if (file.xml != null) {
             this.updateQueue.push(file);
             this.currentFile = file;
           }
@@ -223,7 +223,7 @@ export class MonacoEditorComponent
   initUpdateQueue(): void {
     setInterval(() => {
       const file = this.updateQueue.shift();
-      if (file && file.data != null && !this.fileObservableUpdate) {
+      if (file && file.xml != null && !this.fileObservableUpdate) {
         this.fileObservableUpdate = true;
         this.setValue(file);
       } else if (file && this.fileObservableUpdate) {
