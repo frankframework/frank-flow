@@ -1,5 +1,4 @@
 export enum FileType {
-  JSON,
-  XML,
+  FILE,
   FOLDER,
 }

@@ -8,7 +8,7 @@ import {
 import { jqxTreeComponent } from 'jqwidgets-ng/jqxtree';
 import { ToastrService } from 'ngx-toastr';
 import { Configuration } from '../../models/configuration.model';
-import { CodeService } from '../../services/code.service';
+import { CurrentFileService } from '../../services/current-file.service';
 import { FileService } from '../../services/file.service';
 import { File } from '../../models/file.model';
 import { Subscription } from 'rxjs';
@@ -39,7 +39,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private fileService: FileService,
-    private codeService: CodeService,
+    private codeService: CurrentFileService,
     private ngxSmartModalService: NgxSmartModalService,
     private settingsService: SettingsService,
     private toastr: ToastrService
@@ -101,7 +101,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
               value: JSON.stringify({
                 configuration,
                 path: path + file,
-                type: FileType.XML,
+                type: FileType.FILE,
               }),
             });
           }
@@ -127,7 +127,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
     if (initialCurrentFile) {
       this.currentFile = initialCurrentFile;
     }
-    this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
+    this.currentFileSubscription = this.codeService.currentFileObservable.subscribe(
       (currentFile) => (this.currentFile = currentFile)
     );
   }
@@ -143,7 +143,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
     if (itemValue) {
       const item: File = JSON.parse(itemValue);
 
-      if (item.type === FileType.XML) {
+      if (item.type === FileType.FILE) {
         if (!this.currentFile?.saved) {
           this.switchWithoutSavingDecision(item);
         } else {

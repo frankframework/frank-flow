@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { CodeService } from '../../services/code.service';
+import { CurrentFileService } from '../../services/current-file.service';
 import { File } from '../../models/file.model';
 
 @Component({
@@ -14,7 +14,7 @@ export class SaveDialogComponent {
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
-    private codeService: CodeService
+    private codeService: CurrentFileService
   ) {}
 
   onDataAdded(): void {

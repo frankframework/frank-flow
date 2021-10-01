@@ -5,58 +5,36 @@ import { Subject, Subscription } from 'rxjs';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
 import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
 import { FlowNodeAttributes } from '../models/flow-node-attributes.model';
-import { FlowGenerationData } from '../models/flow-generation-data.model';
 import Listener from '../../flow/node/nodes/listener.model';
 import Pipe from '../../flow/node/nodes/pipe.model';
+import { CurrentFileService } from './current-file.service';
+import { File } from '../models/file.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FlowStructureService {
+  private currentFile!: File;
   structure: any = {};
   structureSubject: Subject<any> = new Subject<any>();
   errorSubject: Subject<string[]> = new Subject<string[]>();
   positionsUpdate = false;
 
-  flowGenerator?: Worker;
   monacoEditorComponent?: MonacoEditorComponent;
   structureSubscription?: Subscription;
 
   errorObservable = () => this.errorSubject.asObservable();
 
-  constructor() {
-    this.initializeWorker();
+  constructor(private currentFileService: CurrentFileService) {
+    this.getCurrentFile();
   }
 
-  initializeWorker(): void {
-    if (Worker) {
-      this.flowGenerator = new Worker(
-        new URL('../../shared/workers/flow-generator.worker', import.meta.url),
-        {
-          name: 'flow-generator',
-          type: 'module',
-        }
-      );
-
-      this.flowGenerator.onmessage = ({ data }) => {
-        if (data) {
-          if (!this.parsingErrorsFound(data)) {
-            this.structure = data.structure;
-            this.structureSubject.next(data.structure);
-          }
-        }
-      };
-    }
-  }
-
-  parsingErrorsFound(data: FlowGenerationData): boolean {
-    return data.errors.length > 0;
-  }
-
-  updateStructure(): void {
-    this.flowGenerator?.postMessage(
-      this.monacoEditorComponent?.codeEditorInstance.getValue()
-    );
+  getCurrentFile(): void {
+    this.currentFileService.currentFileObservable.subscribe({
+      next: (currentFile: File): void => {
+        this.currentFile = currentFile;
+      },
+    });
   }
 
   setStructure(structure: any): void {
@@ -68,13 +46,7 @@ export class FlowStructureService {
     return this.structure;
   }
 
-  refreshStructure(): void {
-    this.flowGenerator?.postMessage(
-      this.monacoEditorComponent?.codeEditorInstance.getValue()
-    );
-  }
-
-  setEditorComponent(monacoEditorComponent: MonacoEditorComponent): void {
+  setMonacoEditorComponent(monacoEditorComponent: MonacoEditorComponent): void {
     this.monacoEditorComponent = monacoEditorComponent;
   }
 
@@ -286,7 +258,7 @@ export class FlowStructureService {
           node.attributes,
           attributes.length !== 0
         );
-        this.updateStructure();
+        // this.updateStructure();
       }
     }
   }

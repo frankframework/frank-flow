@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FileService } from 'src/app/shared/services/file.service';
-import { CodeService } from '../../../shared/services/code.service';
+import { CurrentFileService } from '../../../shared/services/current-file.service';
 import { File } from '../../../shared/models/file.model';
 import { ToastrService } from 'ngx-toastr';
 
@@ -19,7 +19,7 @@ export class AddDialogComponent {
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
     private fileService: FileService,
-    private codeService: CodeService,
+    private codeService: CurrentFileService,
     private toastr: ToastrService
   ) {}
 
