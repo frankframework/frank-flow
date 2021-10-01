@@ -3,7 +3,7 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faPlus, faRedoAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FileService } from '../../shared/services/file.service';
-import { CodeService } from '../../shared/services/code.service';
+import { CurrentFileService } from '../../shared/services/current-file.service';
 import { File } from '../../shared/models/file.model';
 import { ToastrService } from 'ngx-toastr';
 
@@ -20,7 +20,7 @@ export class ExplorerComponent {
     library: FaIconLibrary,
     private ngxSmartModalService: NgxSmartModalService,
     private fileService: FileService,
-    private codeService: CodeService,
+    private codeService: CurrentFileService,
     private toastr: ToastrService
   ) {
     library.addIcons(faPlus, faRedoAlt, faTrash);
@@ -28,7 +28,7 @@ export class ExplorerComponent {
   }
 
   getCurrentFile(): void {
-    this.codeService.curFileObservable.subscribe(
+    this.codeService.currentFileObservable.subscribe(
       (currentFile: File) => (this.currentFile = currentFile)
     );
   }
@@ -42,7 +42,7 @@ export class ExplorerComponent {
 
   deleteFile(): void {
     this.fileService
-      .removeFileFromConfiguation(this.currentFile)
+      .removeFileFromConfiguration(this.currentFile)
       .then((response) => {
         if (response) {
           this.toastr.success(

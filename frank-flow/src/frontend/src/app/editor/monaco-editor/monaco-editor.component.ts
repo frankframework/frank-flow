@@ -14,7 +14,7 @@ import { ModeService } from '../../header/modes/mode.service';
 import { SettingsService } from '../../header/settings/settings.service';
 import { Settings } from '../../header/settings/settings.model';
 import { File } from '../../shared/models/file.model';
-import { CodeService } from '../../shared/services/code.service';
+import { CurrentFileService } from '../../shared/services/current-file.service';
 import { FileService } from '../../shared/services/file.service';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -36,8 +36,8 @@ export class MonacoEditorComponent
   @Output() codeChange = new EventEmitter<string>();
 
   codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
-  currentFile = new File();
-  fileObservableUpdate = false;
+  currentFile!: File;
+  fileObservableUpdate = false; //old
 
   currentFileSubscription!: Subscription;
   modeSubscription!: Subscription;
@@ -49,12 +49,12 @@ export class MonacoEditorComponent
     private monacoElement: ElementRef,
     private modeService: ModeService,
     private settingsService: SettingsService,
-    private codeService: CodeService,
+    private codeService: CurrentFileService,
     private fileService: FileService,
     private toastr: ToastrService,
     private flowStructureService: FlowStructureService
   ) {
-    this.flowStructureService.setEditorComponent(this);
+    this.flowStructureService.setMonacoEditorComponent(this);
   }
 
   ngAfterViewInit(): void {
@@ -131,23 +131,6 @@ export class MonacoEditorComponent
 
   initializeActions(): void {
     this.codeEditorInstance.addAction({
-      id: 'memento-undo-action',
-      label: 'Undo',
-      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_Z],
-      contextMenuGroupId: 'memento',
-      contextMenuOrder: 2,
-      run: () => this.setValue(this.codeService.undo()),
-    });
-
-    this.codeEditorInstance.addAction({
-      id: 'memento-redo-action',
-      label: 'Redo',
-      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_Y],
-      contextMenuGroupId: 'memento',
-      contextMenuOrder: 3,
-      run: () => this.setValue(this.codeService.redo()),
-    });
-    this.codeEditorInstance.addAction({
       id: 'file-save-action',
       label: 'Save',
       keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
@@ -166,10 +149,10 @@ export class MonacoEditorComponent
   }
 
   setValue(file: File | undefined): void {
-    if (file?.data != null) {
+    if (file?.xml) {
       const position = this.codeEditorInstance.getPosition();
       this.currentFile = file;
-      this.codeEditorInstance.getModel()?.setValue(file.data);
+      this.codeEditorInstance.getModel()?.setValue(file.xml);
       if (position) {
         this.codeEditorInstance.setPosition(position);
       }
@@ -185,32 +168,28 @@ export class MonacoEditorComponent
     };
 
     editOperations.push(editOperation);
-
-    this.fileObservableUpdate = flowUpdate;
+    this.currentFile.flowNeedsUpdate = flowUpdate;
     this.codeEditorInstance.getModel()?.applyEdits(editOperations);
   }
 
   initializeTwoWayBinding(): void {
     const model = this.codeEditorInstance.getModel();
 
-    if (model) {
-      model.onDidChangeContent(
-        this.debounce(() => {
-          if (this.currentFile && !this.fileObservableUpdate) {
-            this.fileObservableUpdate = true;
-            this.currentFile.data = this.codeEditorInstance.getValue();
-            this.currentFile.saved = false;
-            this.codeService.setCurrentFile(this.currentFile);
-          } else {
-            this.fileObservableUpdate = false;
-          }
-        }, 500)
-      );
-    }
-    this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
+    model?.onDidChangeContent(
+      this.debounce(() => {
+        if (this.currentFile) {
+          this.currentFile.xml = this.codeEditorInstance.getValue();
+          this.currentFile.saved = false;
+          this.codeService.setCurrentFile(this.currentFile);
+        }
+      }, 500)
+    );
+
+    // TODO: Is this still needed? Maybe its smart to document what goes wrong if we don't do this.
+    this.currentFileSubscription = this.codeService.currentFileObservable.subscribe(
       {
         next: (file: File) => {
-          if (file.data != null) {
+          if (file.xml && !file.flowStructure) {
             this.updateQueue.push(file);
             this.currentFile = file;
           }
@@ -223,7 +202,7 @@ export class MonacoEditorComponent
   initUpdateQueue(): void {
     setInterval(() => {
       const file = this.updateQueue.shift();
-      if (file && file.data != null && !this.fileObservableUpdate) {
+      if (file && file.xml != null && !this.fileObservableUpdate) {
         this.fileObservableUpdate = true;
         this.setValue(file);
       } else if (file && this.fileObservableUpdate) {

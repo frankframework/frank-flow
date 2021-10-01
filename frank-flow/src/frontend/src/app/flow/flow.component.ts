@@ -13,7 +13,7 @@ import {
   faArrowLeft,
   faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
-import { CodeService } from '../shared/services/code.service';
+import { CurrentFileService } from '../shared/services/current-file.service';
 import { Subscription } from 'rxjs';
 import { File } from '../shared/models/file.model';
 import { GraphService } from '../shared/services/graph.service';
@@ -51,7 +51,7 @@ export class FlowComponent implements AfterViewInit {
   constructor(
     private renderer: Renderer2,
     private library: FaIconLibrary,
-    private codeService: CodeService,
+    private codeService: CurrentFileService,
     private graphService: GraphService
   ) {
     this.library.addIcons(faArrowDown, faArrowUp, faArrowRight, faArrowLeft);
@@ -70,7 +70,7 @@ export class FlowComponent implements AfterViewInit {
   }
 
   setCurrentFileSubscription(): void {
-    this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
+    this.currentFileSubscription = this.codeService.currentFileObservable.subscribe(
       {
         next: (file: File) => {
           setTimeout(() => {
