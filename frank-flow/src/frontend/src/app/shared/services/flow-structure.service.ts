@@ -23,6 +23,8 @@ export class FlowStructureService {
   monacoEditorComponent?: MonacoEditorComponent;
   structureSubscription?: Subscription;
 
+  fileO;
+
   errorObservable = () => this.errorSubject.asObservable();
 
   constructor(private currentFileService: CurrentFileService) {
