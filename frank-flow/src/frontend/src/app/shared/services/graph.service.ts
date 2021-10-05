@@ -30,7 +30,7 @@ export class GraphService {
     try {
       this.connectAllNodes(forwards);
     } catch (e) {
-      console.log('cant connect nodes, check if connection exists');
+      console.error(`Can't connect nodes, check if connection exists`);
     }
     this.generateGraphedNodes(nodeMap);
   }

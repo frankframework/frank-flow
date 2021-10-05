@@ -98,6 +98,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
       {
         next: (currentFile: File): void => {
           if (currentFile.flowStructure && currentFile.flowNeedsUpdate) {
+            console.log('flowNeedsUpdate');
             this.generateFlow(currentFile.flowStructure);
           }
         },
