@@ -33,11 +33,10 @@ export class Originator {
   }
 
   public setState(file: File): void {
-    this.state = new File();
+    // this.state = new File();
 
     this.state.path = file.path;
     this.state.xml = file.xml;
-    this.state.type = file.type;
     this.state.configuration = file.configuration;
     this.state.saved = file.saved;
   }

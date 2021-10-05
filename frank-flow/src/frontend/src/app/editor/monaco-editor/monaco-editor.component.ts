@@ -28,43 +28,33 @@ let loadPromise: Promise<void>;
   templateUrl: './monaco-editor.component.html',
   styleUrls: ['./monaco-editor.component.scss'],
 })
-export class MonacoEditorComponent
-  implements AfterViewInit, OnChanges, OnDestroy {
+export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   @ViewChild('editorContainer') editorContainer!: ElementRef;
 
-  @Input() code = '';
   @Output() codeChange = new EventEmitter<string>();
 
   codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
   currentFile!: File;
-  fileObservableUpdate = false; //old
 
   currentFileSubscription!: Subscription;
   modeSubscription!: Subscription;
   settingsSubscription!: Subscription;
 
-  updateQueue: File[] = [];
+  private newFileLoaded!: boolean;
+  private flowNeedsUpdate: boolean = true;
 
   constructor(
     private monacoElement: ElementRef,
     private modeService: ModeService,
     private settingsService: SettingsService,
-    private codeService: CurrentFileService,
+    private currentFileService: CurrentFileService,
     private fileService: FileService,
     private toastr: ToastrService,
     private flowStructureService: FlowStructureService
-  ) {
-    this.flowStructureService.setMonacoEditorComponent(this);
-  }
+  ) {}
 
   ngAfterViewInit(): void {
     this.loadMonaco();
-  }
-
-  ngOnChanges(): void {
-    if (this.codeEditorInstance) {
-      this.codeEditorInstance.setValue(this.code);
-    }
   }
 
   ngOnDestroy(): void {
@@ -113,8 +103,8 @@ export class MonacoEditorComponent
     this.initializeEditor();
     this.initializeActions();
     this.initializeFile();
-    this.initUpdateQueue();
-    this.initializeTwoWayBinding();
+    this.initializeOnChangeEvent();
+    this.initializeNewFileSubscription();
     this.initializeResizeObserver();
     this.initializeThemeObserver();
   }
@@ -141,11 +131,11 @@ export class MonacoEditorComponent
   }
 
   save(): void {
-    this.codeService.save();
+    this.currentFileService.save();
   }
 
   initializeFile(): void {
-    this.setValue(this.codeService.getCurrentFile());
+    this.setValue(this.currentFileService.getCurrentFile());
   }
 
   setValue(file: File | undefined): void {
@@ -159,56 +149,52 @@ export class MonacoEditorComponent
     }
   }
 
-  applyEdit(range: monaco.IRange, text: string, flowUpdate: boolean): void {
-    const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
-
-    const editOperation: monaco.editor.IIdentifiedSingleEditOperation = {
-      range,
-      text,
-    };
-
-    editOperations.push(editOperation);
-    this.currentFile.flowNeedsUpdate = flowUpdate;
+  applyEditsFuckingHell(
+    editOperations: monaco.editor.IIdentifiedSingleEditOperation[],
+    flowUpdate: boolean
+  ): void {
+    this.flowNeedsUpdate = flowUpdate;
+    console.log(editOperations);
     this.codeEditorInstance.getModel()?.applyEdits(editOperations);
   }
 
-  initializeTwoWayBinding(): void {
+  initializeOnChangeEvent(): void {
     const model = this.codeEditorInstance.getModel();
 
     model?.onDidChangeContent(
       this.debounce(() => {
-        if (this.currentFile) {
-          this.currentFile.xml = this.codeEditorInstance.getValue();
-          this.currentFile.saved = false;
-          this.codeService.setCurrentFile(this.currentFile);
+        const value = this.codeEditorInstance.getValue();
+
+        if (this.currentFile && !this.isNewFileLoaded()) {
+          this.currentFile.saved = this.isNewFileLoaded();
+          this.currentFile.xml = value;
+          this.currentFile.flowNeedsUpdate = this.flowNeedsUpdate;
+          console.log('monaco sets new file');
+          this.currentFileService.updateCurrentFile(this.currentFile);
         }
+        this.flowNeedsUpdate = true;
       }, 500)
     );
+  }
 
-    // TODO: Is this still needed? Maybe its smart to document what goes wrong if we don't do this.
-    this.currentFileSubscription = this.codeService.currentFileObservable.subscribe(
+  isNewFileLoaded(): boolean {
+    const newFileLoaded = this.newFileLoaded;
+    this.newFileLoaded = false;
+    return newFileLoaded;
+  }
+
+  initializeNewFileSubscription(): void {
+    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
       {
         next: (file: File) => {
           if (file.xml && !file.flowStructure) {
-            this.updateQueue.push(file);
+            this.newFileLoaded = true;
+            this.setValue(file);
             this.currentFile = file;
           }
         },
       }
     );
-  }
-
-  // TODO: Refactor: Only run que when there are items in it. Update que based on observer, not on interval.
-  initUpdateQueue(): void {
-    setInterval(() => {
-      const file = this.updateQueue.shift();
-      if (file && file.xml != null && !this.fileObservableUpdate) {
-        this.fileObservableUpdate = true;
-        this.setValue(file);
-      } else if (file && this.fileObservableUpdate) {
-        this.fileObservableUpdate = false;
-      }
-    }, 510);
   }
 
   debounce(func: any, wait: number): any {

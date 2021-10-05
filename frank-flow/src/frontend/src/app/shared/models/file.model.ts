@@ -1,12 +1,14 @@
 import { FileType } from '../enums/file-type.enum';
-import { FileTreeItem } from './file-tree-item.model';
 import { FlowStructure } from './flow-structure.model';
 
-export interface File extends FileTreeItem {
+export interface File {
   path: string;
   configuration: string;
   xml?: string;
   flowStructure?: FlowStructure;
+  // TODO: Error[]
+  errors?: string[];
   saved?: boolean;
   flowNeedsUpdate?: boolean;
+  type: FileType;
 }

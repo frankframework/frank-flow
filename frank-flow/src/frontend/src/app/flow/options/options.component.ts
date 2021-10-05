@@ -7,6 +7,10 @@ import { FlowStructureNode } from 'src/app/shared/models/flow-structure-node.mod
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 import { FrankDocService } from 'src/app/shared/services/frank-doc.service';
 import { Node } from '../node/nodes/node.model';
+import { CurrentFileService } from '../../shared/services/current-file.service';
+import { File } from '../../shared/models/file.model';
+import { FlowStructure } from '../../shared/models/flow-structure.model';
+import { PaletteComponent } from '../palette/palette.component';
 
 @Component({
   selector: 'app-options',
@@ -28,15 +32,32 @@ export class OptionsComponent {
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
     private frankDocService: FrankDocService,
-    private flowStructureService: FlowStructureService
+    private flowStructureService: FlowStructureService,
+    private currentFileService: CurrentFileService
   ) {
     this.getFrankDoc();
+    this.getCurrentFile();
   }
 
   getFrankDoc(): void {
     this.frankDocService
       .getFrankDoc()
       .subscribe((frankDoc: any) => (this.frankDoc = frankDoc));
+  }
+
+  getCurrentFile(): void {
+    this.currentFileService.currentFileObservable.subscribe({
+      next: (currentFile: File) => {
+        const node = currentFile.flowStructure?.nodes.find(
+          (pipe: FlowStructureNode) => pipe.name === this.nodeName
+        );
+
+        if (node) {
+          this.attributes = node.attributes;
+          console.log(this.attributes);
+        }
+      },
+    });
   }
 
   onDataAdded(): void {
@@ -53,12 +74,12 @@ export class OptionsComponent {
     );
   }
 
-  reloadAttributes() {
-    this.flowStructureService.refreshStructure();
-    setTimeout(() => {
-      this.attributes = this.getUpdatedAttributes().attributes;
-    }, 100);
-  }
+  // reloadAttributes() {
+  //   // TODO: this.flowStructureService.refreshStructure();
+  //   setTimeout(() => {
+  //     this.attributes = this.getUpdatedAttributes().attributes;
+  //   }, 100);
+  // }
 
   resetPreviousData() {
     this.attributes = {};
@@ -95,14 +116,6 @@ export class OptionsComponent {
     }
   }
 
-  getUpdatedAttributes(): any {
-    const structure = this.flowStructureService.getStructure();
-
-    return structure.nodes.find(
-      (pipe: FlowStructureNode) => pipe.name === this.nodeName
-    );
-  }
-
   addAttribute(): void {
     this.flowStructureService.createAttribute(
       this.selectedAttribute.name,
@@ -111,7 +124,6 @@ export class OptionsComponent {
       false
     );
     this.clearNewAttribute();
-    this.reloadAttributes();
   }
 
   changeAttribute(key: string, event: Event): void {
@@ -127,17 +139,10 @@ export class OptionsComponent {
   }
 
   deleteAttribute(key: string): void {
-    this.flowStructureService.refreshStructure();
+    console.log(this.attributes);
     setTimeout(() => {
-      const attributeList = this.getUpdatedAttributes();
-      if (attributeList) {
-        this.removeChangedAttribute(key);
-        this.flowStructureService.deleteAttribute(
-          key,
-          attributeList.attributes
-        );
-      }
-      this.reloadAttributes();
+      this.removeChangedAttribute(key);
+      this.flowStructureService.deleteAttribute(key, this.attributes);
     });
   }
 

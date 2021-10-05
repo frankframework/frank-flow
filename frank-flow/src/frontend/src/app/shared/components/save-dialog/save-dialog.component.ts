@@ -24,12 +24,12 @@ export class SaveDialogComponent {
 
   save(): void {
     this.codeService.save();
-    this.codeService.switchCurrentFile(this.item);
+    this.codeService.switchToFileTreeItem(this.item);
     this.ngxSmartModalService.close('saveDialog');
   }
 
   discard(): void {
-    this.codeService.switchCurrentFile(this.item);
+    this.codeService.switchToFileTreeItem(this.item);
     this.ngxSmartModalService.close('saveDialog');
   }
 }

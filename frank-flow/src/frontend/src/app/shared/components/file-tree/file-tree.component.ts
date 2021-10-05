@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { jqxTreeComponent } from 'jqwidgets-ng/jqxtree';
 import { ToastrService } from 'ngx-toastr';
-import { Configuration } from '../../models/configuration.model';
 import { CurrentFileService } from '../../services/current-file.service';
 import { FileService } from '../../services/file.service';
 import { File } from '../../models/file.model';
@@ -17,6 +16,7 @@ import { SettingsService } from '../../../header/settings/settings.service';
 import { Settings } from '../../../header/settings/settings.model';
 import { SwitchWithoutSavingOption } from '../../../header/settings/options/switch-without-saving-option';
 import { FileType } from '../../enums/file-type.enum';
+import { Configuration } from '../../models/configuration.model';
 import TreeItem = jqwidgets.TreeItem;
 
 @Component({
@@ -39,7 +39,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private fileService: FileService,
-    private codeService: CurrentFileService,
+    private currentFileService: CurrentFileService,
     private ngxSmartModalService: NgxSmartModalService,
     private settingsService: SettingsService,
     private toastr: ToastrService
@@ -123,11 +123,11 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
   }
 
   getCurrentFile(): void {
-    const initialCurrentFile = this.codeService.getCurrentFile();
+    const initialCurrentFile = this.currentFileService.getCurrentFile();
     if (initialCurrentFile) {
       this.currentFile = initialCurrentFile;
     }
-    this.currentFileSubscription = this.codeService.currentFileObservable.subscribe(
+    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
       (currentFile) => (this.currentFile = currentFile)
     );
   }
@@ -147,11 +147,11 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
         if (!this.currentFile?.saved) {
           this.switchWithoutSavingDecision(item);
         } else {
-          this.codeService.switchCurrentFile(item);
+          this.currentFileService.switchToFileTreeItem(item);
         }
         this.tree.selectItem(null);
       } else if (item.type === FileType.FOLDER) {
-        this.codeService.currentDirectory = item;
+        this.currentFileService.currentDirectory = item;
       }
     }
   }
@@ -165,10 +165,10 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
           .open();
         break;
       case SwitchWithoutSavingOption.save:
-        this.codeService.save();
+        this.currentFileService.save();
         break;
       case SwitchWithoutSavingOption.discard:
-        this.codeService.switchCurrentFile(item);
+        this.currentFileService.switchToFileTreeItem(item);
         break;
     }
   }
