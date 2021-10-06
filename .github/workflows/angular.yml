@@ -29,6 +29,26 @@ jobs:
           path: frank-runner
       - name: Working directory
         run: pwd
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+      - name: Install dependencies
+        run: npm ci
+        with:
+          working-directory: frank-flow/frank-flow/src/frontend
+      - name: Run unit tests
+        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+        with:
+          working-directory: frank-flow/frank-flow/src/frontend
 #      - name: Write frank-flow.properties
 #        run: echo "frank-flow.frontend-path = $($pwd -replace '\\','\\')\\frank-flow\\frank-flow\\target\\frontend" > frank-runner\\frank-flow.properties
 #      - name: Build backend
