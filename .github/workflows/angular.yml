@@ -16,7 +16,7 @@ jobs:
   cypress-test:
     runs-on: self-hosted
     steps:
-      - name: Checkout this frank-flow repository
+      - name: Checkout frank-flow repository
         uses: actions/checkout@v2
         with:
           path: frank-flow
