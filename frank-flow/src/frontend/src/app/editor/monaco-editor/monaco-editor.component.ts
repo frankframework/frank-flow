@@ -51,7 +51,9 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     private fileService: FileService,
     private toastr: ToastrService,
     private flowStructureService: FlowStructureService
-  ) {}
+  ) {
+    this.flowStructureService.setMonacoEditorComponent(this);
+  }
 
   ngAfterViewInit(): void {
     this.loadMonaco();
@@ -154,7 +156,6 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     flowUpdate: boolean
   ): void {
     this.flowNeedsUpdate = flowUpdate;
-    console.log(editOperations);
     this.codeEditorInstance.getModel()?.applyEdits(editOperations);
   }
 
@@ -169,7 +170,6 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
           this.currentFile.saved = this.isNewFileLoaded();
           this.currentFile.xml = value;
           this.currentFile.flowNeedsUpdate = this.flowNeedsUpdate;
-          console.log('monaco sets new file');
           this.currentFileService.updateCurrentFile(this.currentFile);
         }
         this.flowNeedsUpdate = true;
