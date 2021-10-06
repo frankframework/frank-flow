@@ -51,6 +51,17 @@ jobs:
         run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-runner/frank-flow.properties
       - name: Build backend
         run: mvn -f frank-flow -P frontend clean install
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-frank-runner
+        with:
+          paths: |
+            frank-runner/build
+            frank-runner/downloads
+          key: ${{ runner.os }}-frank-runner-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-frank-runner-
       - name: Start Frank!Runner
         working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
         run: ./restart.sh
