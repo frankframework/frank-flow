@@ -65,13 +65,13 @@ jobs:
       - name: Start Frank!Runner
         working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
         run: ./restart.sh
-        with:
-          wait-on: "http://localhost:1000/frank-flow/"
-          wait-on-timeout: 450
       - name: Run cypress
         uses: cypress-io/github-action@v2.9.7
         with:
           working-directory: frank-flow/frank-flow/src/frontend
+          start: ./cypress/Frank/restart.sh
+          wait-on: "http://localhost:1000/frank-flow/"
+          wait-on-timeout: 450
 #      - name: List all files
 #        if: always()
 #        run: tree > allFiles.txt
