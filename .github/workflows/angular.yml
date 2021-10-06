@@ -50,14 +50,14 @@ jobs:
       - name: Write frank-flow.properties
         run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-runner/frank-flow.properties
       - name: Build backend
-        run: mvn -f frank-flow -P frontend --log-file backendMavenBuildLog.txt clean install
-#      - name: Run cypress test
-#        uses: cypress-io/github-action@v2.9.7
-#        with:
-#          working-directory: frank-flow\\frank-flow\\src\\frontend
-#          start: ant -buildfile cypress\\Frank\\build.xml
-#          wait-on: "http://localhost:1000/frank-flow/"
-#          wait-on-timeout: 450
+        run: mvn -f frank-flow -P frontend clean install
+      - name: Run cypress test
+        uses: cypress-io/github-action@v2.9.7
+        with:
+          working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
+          start: ./restart.sh
+          wait-on: "http://localhost:1000/frank-flow/"
+          wait-on-timeout: 450
 #      - name: List all files
 #        if: always()
 #        run: tree > allFiles.txt
