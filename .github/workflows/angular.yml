@@ -62,13 +62,14 @@ jobs:
           key: ${{ runner.os }}-frank-runner-${{ hashFiles('**/ibis-adapterframework-webapp-*') }}
           restore-keys: |
             ${{ runner.os }}-frank-runner-
-      - name: Start Frank!Runner
-        working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
-        run: ./restart.sh
+      #      - name: Start Frank!Runner
+      #        working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
+      #        run: ./restart.sh
       - name: Run cypress test
         uses: cypress-io/github-action@v2.9.7
         with:
           working-directory: frank-flow/frank-flow/src/frontend
+          start: ./cypress/Frank/restart.sh
           wait-on: "http://localhost:1000/frank-flow/"
           wait-on-timeout: 450
 #      - name: List all files
