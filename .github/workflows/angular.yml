@@ -62,10 +62,7 @@ jobs:
           key: ${{ runner.os }}-frank-runner
           restore-keys: |
             ${{ runner.os }}-frank-runner
-      - name: Start Frank!Runner
-        working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
-        run: ./restart.sh
-      - name: Run cypress tests
+      - name: Run cypress tests and start Frank!Runner
         uses: cypress-io/github-action@v2.9.7
         with:
           working-directory: frank-flow/frank-flow/src/frontend
