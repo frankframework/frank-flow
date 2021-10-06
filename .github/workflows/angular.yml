@@ -56,10 +56,10 @@ jobs:
         env:
           cache-name: cache-frank-runner
         with:
-          paths: |
+          path: |
             frank-runner/build
             frank-runner/downloads
-          key: ${{ runner.os }}-frank-runner-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-frank-runner-${{ hashFiles('**/ibis-adapterframework-webapp-*') }}
           restore-keys: |
             ${{ runner.os }}-frank-runner-
       - name: Start Frank!Runner
