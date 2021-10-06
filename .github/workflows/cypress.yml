@@ -1,6 +1,17 @@
 name: Run Cypress test
 
-on: push
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "frank-flow/src/frontend/**"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "frank-flow/src/frontend/**"
+
 jobs:
   cypress-test:
     runs-on: windows-latest
