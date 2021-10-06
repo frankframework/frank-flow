@@ -1,15 +1,42 @@
 name: Run Cypress test
-on: push
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "src/frontend/**"
+    pull_request:
+      branches:
+        - master
+      paths:
+        - "src/frontend/**"
+
 jobs:
   cypress-test:
     runs-on: windows-latest
     steps:
-      - name: Checkout this frank-flow repository
+      - name: Checkout frank-flow repository
         uses: actions/checkout@v2
         with:
           path: frank-flow
-      - name: Setup Node
-        uses: actions/setup-node@v2
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+      - name: Install dependencies
+        run: npm ci
+      - name: Run unit tests
+        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+
       - name: Checkout frank-runner
         uses: actions/checkout@v2
         with:
