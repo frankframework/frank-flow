@@ -1,6 +1,7 @@
 <project default="restart-frank-flow-e2e-frank">
 	<target name="restart-frank-flow-e2e-frank">
 		<basename property="project.dir" file="${basedir}"/>
+    <condition property="exe" value="../../restart.bat" else="/bin/bash"><os family="windows"/></condition>
     <condition property="arg" value="../../../../../../frank-runner/restart.sh" else=""><os family="unix"/></condition>
 		<exec executable="${exe}" vmlauncher="false" failonerror="true">
 			<arg value="-Dprojects.dir=${basedir}/.."/>
