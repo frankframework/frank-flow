@@ -65,7 +65,7 @@ jobs:
       - name: Start Frank!Runner
         working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
         run: ./restart.sh
-      - name: Run cypress test
+      - name: Run cypress
         uses: cypress-io/github-action@v2.9.7
         with:
           working-directory: frank-flow/frank-flow/src/frontend
