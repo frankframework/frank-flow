@@ -51,7 +51,7 @@ jobs:
         run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-runner/frank-flow.properties
       - name: Build backend
         run: mvn -f frank-flow -P frontend clean install
-      - name: Cache local Maven repository
+      - name: Cache Frank!Runner downloads and builds
         uses: actions/cache@v2
         env:
           cache-name: cache-frank-runner
