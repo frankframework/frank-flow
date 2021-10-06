@@ -21,9 +21,6 @@ export class FlowStructureService {
   positionsUpdate = false;
 
   monacoEditorComponent?: MonacoEditorComponent;
-  private editAttributesQueNeeded!: boolean;
-
-  private editAttributesQue: any;
 
   constructor(private currentFileService: CurrentFileService) {
     this.getCurrentFile();
@@ -35,6 +32,10 @@ export class FlowStructureService {
         this.currentFile = currentFile;
       },
     });
+  }
+
+  setMonacoEditorComponent(monacoEditorComponent: MonacoEditorComponent): void {
+    this.monacoEditorComponent = monacoEditorComponent;
   }
 
   addConnection(sourceName: string, targetName: string): void {
@@ -386,7 +387,6 @@ export class FlowStructureService {
         endColumn: attribute.endColumn,
         endLineNumber: attribute.line,
       };
-      console.log(range, text);
       this.monacoEditorComponent?.applyEditsFuckingHell(
         [{ range, text }],
         flowUpdate
