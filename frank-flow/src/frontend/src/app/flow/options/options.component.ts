@@ -12,6 +12,7 @@ import { File } from '../../shared/models/file.model';
 import { FlowStructure } from '../../shared/models/flow-structure.model';
 import { PaletteComponent } from '../palette/palette.component';
 import { Subscription } from 'rxjs';
+import { OptionsChangedAttribute } from './options-changed-attribute.model';
 
 @Component({
   selector: 'app-options',
@@ -24,7 +25,7 @@ export class OptionsComponent implements OnInit {
   availableAttributes: FlowNodeAttributeOptions[] = [];
   flowNode!: Node;
   attributes!: FlowNodeAttributes;
-  changedAttributes: { attribute: string; value: string | number }[] = [];
+  changedAttributes: OptionsChangedAttribute[] = [];
   selectedAttribute!: any;
   newAttributeValue!: string;
   nodeName!: string | undefined;
@@ -80,7 +81,7 @@ export class OptionsComponent implements OnInit {
 
   changedAttributesHasNodeName(): boolean {
     return !!this.changedAttributes.find(
-      (attribute) =>
+      (attribute: OptionsChangedAttribute) =>
         attribute.attribute === 'name' || attribute.attribute === 'path'
     );
   }
