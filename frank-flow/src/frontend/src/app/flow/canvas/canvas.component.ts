@@ -19,8 +19,6 @@ import { FlowStructure } from '../../shared/models/flow-structure.model';
 import { PanZoomConfig } from 'ngx-panzoom/lib/panzoom-config';
 import { PanZoomModel } from 'ngx-panzoom/lib/panzoom-model';
 import { ToastrService } from 'ngx-toastr';
-import { FlowGenerationData } from '../../shared/models/flow-generation-data.model';
-import { XmlParseError } from '../../shared/models/xml-parse-error.model';
 import { File } from '../../shared/models/file.model';
 
 @Component({
@@ -40,7 +38,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   currentFileSubscription!: Subscription;
   flowUpdate = false;
 
-  errorsFound!: boolean;
+  private errors!: string[] | undefined;
+  locked!: boolean;
 
   @HostBinding('tabindex') tabindex = 1;
 
@@ -97,12 +96,18 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
       {
         next: (currentFile: File): void => {
+          this.errors = currentFile.errors;
+          this.locked = this.XmlErrorsFound();
           if (currentFile.flowStructure && currentFile.flowNeedsUpdate) {
             this.generateFlow(currentFile.flowStructure);
           }
         },
       }
     );
+  }
+
+  XmlErrorsFound(): boolean {
+    return this.errors !== undefined && this.errors.length > 0;
   }
 
   setConnectionEventListeners(): void {
