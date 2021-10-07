@@ -202,7 +202,8 @@ export class FlowStructureService {
   editAttributes(
     dom: any,
     nodeId: string,
-    attributes: { attribute: string; value: string | number }[]
+    attributes: { attribute: string; value: string | number }[],
+    flowUpdate: boolean = false
   ): void {
     const node = this.currentFile.flowStructure?.nodes.find(
       (node: any) => node.name === nodeId
@@ -223,7 +224,10 @@ export class FlowStructureService {
         }
       });
 
-      this.monacoEditorComponent?.applyEditsFuckingHell(editOperations, false);
+      this.monacoEditorComponent?.applyEditsFuckingHell(
+        editOperations,
+        flowUpdate
+      );
     }
   }
 
@@ -398,7 +402,7 @@ export class FlowStructureService {
     key: string,
     value: any,
     attributeList: FlowNodeAttributes,
-    flowUpdate: boolean
+    flowUpdate: boolean = false
   ): void {
     if (Object.entries(attributeList).length === 0) {
       return;

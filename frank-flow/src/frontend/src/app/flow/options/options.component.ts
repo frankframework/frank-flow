@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FlowNodeAttribute } from 'src/app/shared/models/flow-node-attribute.model';
 import { FlowNodeAttributeOptions } from 'src/app/shared/models/flow-node-attribute-options.model';
@@ -18,26 +18,30 @@ import { Subscription } from 'rxjs';
   templateUrl: './options.component.html',
   styleUrls: ['./options.component.scss'],
 })
-export class OptionsComponent {
+export class OptionsComponent implements OnInit {
   disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
   frankDoc: any;
-  attributeOptions: FlowNodeAttributeOptions[] = [];
-  node!: Node;
+  availableAttributes: FlowNodeAttributeOptions[] = [];
+  flowNode!: Node;
   attributes!: FlowNodeAttributes;
   changedAttributes: { attribute: string; value: string | number }[] = [];
   selectedAttribute!: any;
   newAttributeValue!: string;
   nodeName!: string | undefined;
   nodeDescription?: string;
-  private currentFileSubscription!: Subscription;
+  private currentFile!: File;
+  structureNode!: FlowStructureNode;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
     private frankDocService: FrankDocService,
     private flowStructureService: FlowStructureService,
     private currentFileService: CurrentFileService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this.getFrankDoc();
+    this.getCurrentFile();
   }
 
   getFrankDoc(): void {
@@ -47,52 +51,43 @@ export class OptionsComponent {
   }
 
   getCurrentFile(): void {
-    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
-      {
-        next: (currentFile: File) => {
-          const node = currentFile.flowStructure?.nodes.find(
-            (pipe: FlowStructureNode) => pipe.name === this.nodeName
-          );
-
-          if (node) {
-            this.node;
-            this.attributes = node.attributes;
-            console.log(this.attributes);
-          }
-        },
-      }
-    );
+    this.currentFileService.currentFileObservable.subscribe({
+      next: (currentFile: File) => {
+        this.currentFile = currentFile;
+        this.getAttributesOnNode();
+      },
+    });
   }
 
   onDataAdded(): void {
-    // TODO: Doesnt get the newest node, use the node from local structure observed in this class.
-    this.node = this.ngxSmartModalService.getModalData('optionsModal');
-    this.getCurrentFile();
+    this.flowNode = this.ngxSmartModalService.getModalData('optionsModal');
     this.resetPreviousData();
-    this.getAttributesForNode();
+  }
+
+  onOpen() {
+    this.getAttributesOnNode();
+    this.getAvailableAttributesForNode();
   }
 
   onAnyCloseEvent(): void {
-    this.currentFileSubscription.unsubscribe();
     this.flowStructureService.editAttributes(
       'nodes',
-      this.node.getId(),
-      this.changedAttributes
+      this.flowNode.getId(),
+      this.changedAttributes,
+      this.changedAttributesHasNodeName()
     );
   }
 
-  // reloadAttributes() {
-  //   // TODO: this.flowStructureService.refreshStructure();
-  //   setTimeout(() => {
-  //     this.attributes = this.getUpdatedAttributes().attributes;
-  //   }, 100);
-  // }
+  changedAttributesHasNodeName(): boolean {
+    return !!this.changedAttributes.find(
+      (attribute) =>
+        attribute.attribute === 'name' || attribute.attribute === 'path'
+    );
+  }
 
   resetPreviousData() {
     this.attributes = {};
     this.changedAttributes = [];
-    this.attributeOptions = [];
-    this.nodeName = '';
     this.nodeDescription = '';
     this.clearNewAttribute();
   }
@@ -102,23 +97,27 @@ export class OptionsComponent {
     this.newAttributeValue = '';
   }
 
-  getAttributesForNode(): void {
-    const attributes = this.node?.getAttributes();
+  getAttributesOnNode(): void {
+    const node = this.currentFile.flowStructure?.nodes.find(
+      (node: FlowStructureNode) => node.name === this.flowNode?.getName()
+    );
 
-    this.nodeName = this.node?.getName();
-    if (attributes) {
-      this.attributes = attributes;
+    if (node) {
+      this.structureNode = node;
+      this.attributes = node.attributes;
     }
+  }
 
-    const nodeType = this.node?.getType();
+  getAvailableAttributesForNode(): void {
+    this.availableAttributes = [];
 
-    if (nodeType && this.frankDoc) {
-      const element = this.frankDoc.elements.find((node: any) =>
-        node.elementNames.includes(nodeType)
+    if (this.structureNode?.type && this.frankDoc) {
+      const element = this.frankDoc.elements.find((element: any) =>
+        element.elementNames.includes(this.structureNode?.type)
       );
-      this.nodeDescription = element?.descriptionHeader;
+      this.nodeDescription = element?.description;
       element?.attributes?.forEach((attribute: any) =>
-        this.attributeOptions.push(attribute)
+        this.availableAttributes.push(attribute)
       );
     }
   }
@@ -127,8 +126,7 @@ export class OptionsComponent {
     this.flowStructureService.createAttribute(
       this.selectedAttribute.name,
       this.newAttributeValue,
-      this.attributes,
-      false
+      this.attributes
     );
     this.clearNewAttribute();
   }
