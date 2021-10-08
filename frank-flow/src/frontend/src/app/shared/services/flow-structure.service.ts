@@ -68,12 +68,12 @@ export class FlowStructureService {
   deleteConnection(sourceName: string, targetName: string): void {
     const targetForward = this.getTargetForward(sourceName, targetName);
 
-    const text = '';
+    const text = '\u008D';
     const range = {
       startLineNumber: targetForward.line,
       startColumn: 0,
-      endColumn: targetForward.column,
-      endLineNumber: targetForward.line,
+      endColumn: 0,
+      endLineNumber: targetForward.line + 1,
     };
 
     this.monacoEditorComponent?.applyEdits([{ range, text }], true);
