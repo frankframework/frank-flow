@@ -151,9 +151,9 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  applyEditsFuckingHell(
+  applyEdits(
     editOperations: monaco.editor.IIdentifiedSingleEditOperation[],
-    flowUpdate: boolean
+    flowUpdate: boolean = false
   ): void {
     this.flowNeedsUpdate = flowUpdate;
     this.codeEditorInstance.getModel()?.applyEdits(editOperations);
