@@ -17,7 +17,6 @@ let errors: string[] = [];
 let unclosedPipes: string[] = [];
 let bufferAttributes: FlowNodeAttributes;
 let pipeline: FlowStructureNode;
-let endLine: number;
 
 addEventListener('message', ({ data }) => {
   if (typeof data === 'string') {
@@ -55,7 +54,7 @@ parser.on('end', () => {
 parser.on('opentag', (tag: TagForOptions<{}>) => {
   const currentNode = new FlowStructureNode(
     parser.line,
-    endLine,
+    parser.line,
     parser.column + MONACO_COLUMN_OFFSET,
     tag.name,
     bufferAttributes
@@ -89,13 +88,11 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
 });
 
 parser.on('closetag', (tag: TagForOptions<{}>) => {
-  endLine = parser.line;
   if (tag.attributes['name'] === unclosedPipes[unclosedPipes.length - 1]) {
     let closingTag = unclosedPipes.pop();
-
-    let pipe = flowStructure.nodes.find((pipe: FlowStructureNode) => {
-      return pipe.name === closingTag;
-    });
+    let pipe = flowStructure.nodes.find(
+      (pipe: FlowStructureNode) => pipe.name === closingTag
+    );
 
     if (pipe) {
       pipe.endLine = parser.line;
