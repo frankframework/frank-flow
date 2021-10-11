@@ -158,6 +158,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   ): void {
     this.flowNeedsUpdate = flowUpdate;
     this.insertUpdate = true;
+    // TODO: This shoul add a state to the undo/undo for monaco.
     this.codeEditorInstance.getModel()?.applyEdits(editOperations);
   }
 
