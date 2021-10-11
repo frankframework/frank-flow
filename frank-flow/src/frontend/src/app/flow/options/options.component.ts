@@ -12,7 +12,7 @@ import { File } from '../../shared/models/file.model';
 import { FlowStructure } from '../../shared/models/flow-structure.model';
 import { PaletteComponent } from '../palette/palette.component';
 import { Subscription } from 'rxjs';
-import { OptionsChangedAttribute } from './options-changed-attribute.model';
+import { ChangedAttribute } from '../../shared/models/changed-attribute.model';
 
 @Component({
   selector: 'app-options',
@@ -25,7 +25,7 @@ export class OptionsComponent implements OnInit {
   availableAttributes: FlowNodeAttributeOptions[] = [];
   flowNode!: Node;
   attributes!: FlowNodeAttributes;
-  changedAttributes: OptionsChangedAttribute[] = [];
+  changedAttributes: ChangedAttribute[] = [];
   selectedAttribute!: any;
   newAttributeValue!: string;
   nodeName!: string | undefined;
@@ -72,7 +72,6 @@ export class OptionsComponent implements OnInit {
 
   onAnyCloseEvent(): void {
     this.flowStructureService.editAttributes(
-      'nodes',
       this.flowNode.getId(),
       this.changedAttributes,
       this.changedAttributesHasNodeName()
@@ -81,8 +80,8 @@ export class OptionsComponent implements OnInit {
 
   changedAttributesHasNodeName(): boolean {
     return !!this.changedAttributes.find(
-      (attribute: OptionsChangedAttribute) =>
-        attribute.attribute === 'name' || attribute.attribute === 'path'
+      (attribute: ChangedAttribute) =>
+        attribute.name === 'name' || attribute.name === 'path'
     );
   }
 
@@ -132,15 +131,16 @@ export class OptionsComponent implements OnInit {
     this.clearNewAttribute();
   }
 
-  changeAttribute(key: string, event: Event): void {
+  changeAttribute(name: string, event: Event): void {
     const index = this.changedAttributes?.findIndex(
-      (attribute) => attribute.attribute == key
+      (attribute) => attribute.name == name
     );
 
+    const value = (event as any) as string | number;
     if (index !== -1) {
-      this.changedAttributes[index] = { attribute: key, value: event as any };
+      this.changedAttributes[index] = { name, value };
     } else {
-      this.changedAttributes.push({ attribute: key, value: event as any });
+      this.changedAttributes.push({ name, value });
     }
   }
 
@@ -153,7 +153,7 @@ export class OptionsComponent implements OnInit {
 
   removeChangedAttribute(key: string): void {
     const index = this.changedAttributes?.findIndex(
-      (attribute) => attribute.attribute == key
+      (attribute) => attribute.name == key
     );
     this.changedAttributes.splice(index);
   }
