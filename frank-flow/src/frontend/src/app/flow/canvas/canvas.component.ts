@@ -90,6 +90,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
       kbdEvent.preventDefault();
       this.currentFileService.save();
     }
+    // TODO: Add undo/redo
   }
 
   setCurrentFileListener(): void {
