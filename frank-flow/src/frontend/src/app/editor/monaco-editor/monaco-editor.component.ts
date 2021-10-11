@@ -42,6 +42,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
 
   private newFileLoaded!: boolean;
   private flowNeedsUpdate: boolean = true;
+  private insertUpdate: boolean = false;
 
   constructor(
     private monacoElement: ElementRef,
@@ -156,25 +157,35 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     flowUpdate: boolean = false
   ): void {
     this.flowNeedsUpdate = flowUpdate;
+    this.insertUpdate = true;
     this.codeEditorInstance.getModel()?.applyEdits(editOperations);
   }
 
   initializeOnChangeEvent(): void {
     const model = this.codeEditorInstance.getModel();
 
-    model?.onDidChangeContent(
-      this.debounce(() => {
-        const value = this.codeEditorInstance.getValue();
+    model?.onDidChangeContent(() => {
+      if (this.insertUpdate) {
+        this.updateCurrentFile();
+        this.insertUpdate = false;
+      } else {
+        this.debounce(() => {
+          this.updateCurrentFile();
+        }, 500);
+      }
+    });
+  }
 
-        if (this.currentFile && !this.isNewFileLoaded()) {
-          this.currentFile.saved = this.isNewFileLoaded();
-          this.currentFile.xml = value;
-          this.currentFile.flowNeedsUpdate = this.flowNeedsUpdate;
-          this.currentFileService.updateCurrentFile(this.currentFile);
-        }
-        this.flowNeedsUpdate = true;
-      }, 500)
-    );
+  updateCurrentFile(): void {
+    const value = this.codeEditorInstance.getValue();
+
+    if (this.currentFile && !this.isNewFileLoaded()) {
+      this.currentFile.saved = this.isNewFileLoaded();
+      this.currentFile.xml = value;
+      this.currentFile.flowNeedsUpdate = this.flowNeedsUpdate;
+      this.currentFileService.updateCurrentFile(this.currentFile);
+    }
+    this.flowNeedsUpdate = true;
   }
 
   isNewFileLoaded(): boolean {

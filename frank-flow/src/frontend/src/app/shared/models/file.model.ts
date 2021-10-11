@@ -6,7 +6,6 @@ export interface File {
   configuration: string;
   xml?: string;
   flowStructure?: FlowStructure;
-  // TODO: Error[]
   errors?: string[];
   saved?: boolean;
   flowNeedsUpdate?: boolean;

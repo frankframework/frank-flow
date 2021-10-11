@@ -44,7 +44,6 @@ export class CurrentFileService {
     }
   }
 
-  // TODO: Errors can go in file, right? We can check in components if currentFile.errors.
   initializeXmlToFlowStructureWorkerEventListener(): void {
     this.xmlToFlowStructureWorker.onmessage = ({ data }) => {
       this.toastr.clear();
