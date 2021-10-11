@@ -2,9 +2,6 @@ import { Injectable } from '@angular/core';
 import { Configuration } from '../models/configuration.model';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { File } from '../models/file.model';
-TestBed.configureTestingModule({
-  imports: [ToastrModule.forRoot()],
-});
 
 @Injectable({
   providedIn: 'root',
