@@ -21,9 +21,9 @@ export class FlowStructureService {
   private currentFile!: File;
   private monacoEditorComponent?: MonacoEditorComponent;
   private flowStructure!: FlowStructure;
-  // private applyEditsQueue: monaco.editor.IIdentifiedSingleEditOperation[] = [];
   private waitingOnNewStructure = false;
   private editAttributeQueue: Map<string, ChangedAttribute[]> = new Map();
+  private flowUpdate!: boolean;
 
   constructor(private currentFileService: CurrentFileService) {
     this.getCurrentFile();
@@ -42,7 +42,6 @@ export class FlowStructureService {
 
   setFlowStructure(flowStructure: FlowStructure): void {
     if (this.flowStructure !== flowStructure) {
-      console.log('structure change');
       this.flowStructure = flowStructure;
       this.waitingOnNewStructure = false;
       this.attemptEditAttributes();
@@ -66,27 +65,6 @@ export class FlowStructureService {
 
     this.monacoEditorComponent?.applyEdits([{ range, text }]);
   }
-
-  // monacoEditorComponent?.applyEdits(
-  //   editOperations: monaco.editor.IIdentifiedSingleEditOperation[],
-  //   flowUpdate = false
-  // ): void {
-  //   editOperations.forEach((editOperation) => {
-  //     const sameRangeIndex = this.applyEditsQueue.findIndex(
-  //       (applyEditOperation: monaco.editor.IIdentifiedSingleEditOperation) =>
-  //         editOperation.range === applyEditOperation.range
-  //     );
-  //
-  //     if (sameRangeIndex >= 0) {
-  //       this.applyEditsQueue[sameRangeIndex] = editOperation;
-  //     } else {
-  //       this.applyEditsQueue.push(editOperation);
-  //     }
-  //   });
-  //
-  //   // TODO: FlowUpdate
-  //   this.attemptApplyEditsQueue();
-  // }
 
   getElementAboveForward(sourceName: string): FlowStructureNode {
     const currentPipe = this.flowStructure.pipes.find(
@@ -138,7 +116,6 @@ export class FlowStructureService {
       endLineNumber: line,
     };
 
-    // TODO: Instead of updating everything, could we dynamically add a node to the flow?
     this.monacoEditorComponent?.applyEdits([{ range, text }], true);
   }
 
@@ -229,12 +206,12 @@ export class FlowStructureService {
     ]);
   }
 
-  // TODO: Cant edit attributes to fast. Need to have a new structure.
   editAttributes(
     nodeId: string,
     attributes: ChangedAttribute[],
     flowUpdate: boolean = false
   ): void {
+    this.flowUpdate = flowUpdate;
     let nodeAttributes: ChangedAttribute[] = [];
 
     attributes.forEach((attribute) => {
@@ -284,7 +261,7 @@ export class FlowStructureService {
       this.waitingOnNewStructure = true;
       const editOperations = this.getEditOperationsForChangedAttributes();
       if (editOperations) {
-        this.monacoEditorComponent?.applyEdits(editOperations);
+        this.monacoEditorComponent?.applyEdits(editOperations, this.flowUpdate);
       }
       this.editAttributeQueue.clear();
     }
