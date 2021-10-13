@@ -49,8 +49,6 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     private modeService: ModeService,
     private settingsService: SettingsService,
     private currentFileService: CurrentFileService,
-    private fileService: FileService,
-    private toastr: ToastrService,
     private flowStructureService: FlowStructureService
   ) {
     this.flowStructureService.setMonacoEditorComponent(this);
@@ -168,19 +166,20 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   updateCurrentFileOnChange(): any {
-    if (this.insertUpdate) {
-      this.insertUpdate = false;
-      return this.updateCurrentFile();
-    } else {
-      return this.debounce(() => {
+    return () => {
+      if (this.insertUpdate) {
+        this.insertUpdate = false;
         this.updateCurrentFile();
-      }, 500);
-    }
+      } else {
+        this.debounce(() => {
+          this.updateCurrentFile();
+        }, 500)();
+      }
+    };
   }
 
   updateCurrentFile(): void {
     const value = this.codeEditorInstance.getValue();
-
     if (this.currentFile && !this.isNewFileLoaded()) {
       this.currentFile.saved = this.isNewFileLoaded();
       this.currentFile.xml = value;
@@ -212,10 +211,12 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
 
   debounce(func: any, wait: number): any {
     let timeout: ReturnType<typeof setTimeout> | null;
+
     return () => {
       if (timeout) {
         clearTimeout(timeout);
       }
+
       timeout = setTimeout(() => func.apply(this, arguments), wait);
     };
   }
