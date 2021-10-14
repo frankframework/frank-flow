@@ -99,6 +99,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.initializeEditor();
     this.initializeActions();
     this.initializeFile();
+    this.initializeOnKeyUpEvent();
     this.initializeOnChangeEvent();
     this.initializeNewFileSubscription();
     this.initializeResizeObserver();
@@ -156,9 +157,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
 
   initializeOnKeyUpEvent(): void {
     this.codeEditorInstance?.onKeyUp(
-      this.debounce(() => {
-        this.setValueAsCurrentFile();
-      }, 500)
+      this.debounce(() => this.setValueAsCurrentFile(), 500)
     );
   }
 
