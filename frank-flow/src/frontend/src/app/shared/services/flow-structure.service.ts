@@ -141,15 +141,18 @@ export class FlowStructureService {
 
   addListener(pipeData: Listener): void {
     const receivers = this.flowStructure.receivers;
-    const lastReceiver = receivers[receivers.length - 1];
+    const lastReceiver =
+      receivers[receivers.length - 1] ?? this.flowStructure.pipeline;
+    const line =
+      lastReceiver.endLine - (receivers[receivers.length - 1] ? 0 : 1);
     const listenerName = this.getUniqueListenerName(pipeData.getName());
 
     const text = `\n\t\t<Receiver name="${listenerName}Receiver">\n\t\t\t<${pipeData.getType()} name="${listenerName}" />\n\t\t</Receiver>`;
     const range = {
-      startLineNumber: lastReceiver.endLine,
+      startLineNumber: line,
       startColumn: lastReceiver.column,
       endColumn: lastReceiver.column,
-      endLineNumber: lastReceiver.endLine,
+      endLineNumber: line,
     };
 
     this.monacoEditorComponent?.applyEdits([{ range, text }], true);
