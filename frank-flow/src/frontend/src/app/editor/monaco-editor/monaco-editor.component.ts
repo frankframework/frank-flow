@@ -4,8 +4,6 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  Input,
-  OnChanges,
   OnDestroy,
   Output,
   ViewChild,
@@ -15,8 +13,6 @@ import { SettingsService } from '../../header/settings/settings.service';
 import { Settings } from '../../header/settings/settings.model';
 import { File } from '../../shared/models/file.model';
 import { CurrentFileService } from '../../shared/services/current-file.service';
-import { FileService } from '../../shared/services/file.service';
-import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 
@@ -40,9 +36,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   modeSubscription!: Subscription;
   settingsSubscription!: Subscription;
 
-  private newFileLoaded!: boolean;
   private flowNeedsUpdate: boolean = true;
-  private insertUpdate: boolean = false;
+  private applyEditsUpdate: boolean = false;
 
   constructor(
     private monacoElement: ElementRef,
@@ -155,33 +150,32 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     flowUpdate: boolean = false
   ): void {
     this.flowNeedsUpdate = flowUpdate;
-    this.insertUpdate = true;
+    this.applyEditsUpdate = true;
     this.codeEditorInstance.getModel()?.applyEdits(editOperations);
   }
 
+  initializeOnKeyUpEvent(): void {
+    this.codeEditorInstance?.onKeyUp(
+      this.debounce(() => {
+        this.setValueAsCurrentFile();
+      }, 500)
+    );
+  }
+
   initializeOnChangeEvent(): void {
-    const model = this.codeEditorInstance.getModel();
-
-    model?.onDidChangeContent(this.updateCurrentFileOnChange());
-  }
-
-  updateCurrentFileOnChange(): any {
-    return () => {
-      if (this.insertUpdate) {
-        this.insertUpdate = false;
-        this.updateCurrentFile();
-      } else {
-        this.debounce(() => {
-          this.updateCurrentFile();
-        }, 500)();
+    this.codeEditorInstance.getModel()?.onDidChangeContent(() => {
+      if (this.applyEditsUpdate) {
+        this.applyEditsUpdate = false;
+        this.setValueAsCurrentFile();
       }
-    };
+    });
   }
 
-  updateCurrentFile(): void {
+  setValueAsCurrentFile(): void {
     const value = this.codeEditorInstance.getValue();
-    if (this.currentFile && !this.isNewFileLoaded()) {
-      this.currentFile.saved = this.isNewFileLoaded();
+
+    if (this.currentFile) {
+      this.currentFile.saved = false;
       this.currentFile.xml = value;
       this.currentFile.flowNeedsUpdate = this.flowNeedsUpdate;
       this.currentFileService.updateCurrentFile(this.currentFile);
@@ -189,18 +183,11 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.flowNeedsUpdate = true;
   }
 
-  isNewFileLoaded(): boolean {
-    const newFileLoaded = this.newFileLoaded;
-    this.newFileLoaded = false;
-    return newFileLoaded;
-  }
-
   initializeNewFileSubscription(): void {
     this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
       {
         next: (file: File) => {
           if (file.xml && !file.flowStructure) {
-            this.newFileLoaded = true;
             this.setValue(file);
             this.currentFile = file;
           }
@@ -211,12 +198,10 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
 
   debounce(func: any, wait: number): any {
     let timeout: ReturnType<typeof setTimeout> | null;
-
     return () => {
       if (timeout) {
         clearTimeout(timeout);
       }
-
       timeout = setTimeout(() => func.apply(this, arguments), wait);
     };
   }
