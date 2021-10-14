@@ -109,7 +109,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
       } else {
         items.push({
           label: key,
-          items: this.parseFiles(configuration, content[key], key + '/'),
+          items: this.parseFiles(configuration, content[key], path + key + '/'),
           value: JSON.stringify({
             configuration,
             path: path + key,
