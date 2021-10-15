@@ -131,10 +131,12 @@ export class CurrentFileService {
   }
 
   getFiles(): void {
+    let firstFileLoaded = false;
     this.fileService.getFiles().subscribe({
       next: (files) => {
         this.files = files;
-        if (this.currentFileSubject) {
+        if (this.currentFileSubject && !firstFileLoaded) {
+          firstFileLoaded = true;
           this.getFirstFile();
         }
       },
