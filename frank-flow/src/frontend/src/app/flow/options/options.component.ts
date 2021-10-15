@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { FlowNodeAttribute } from 'src/app/shared/models/flow-node-attribute.model';
 import { FlowNodeAttributeOptions } from 'src/app/shared/models/flow-node-attribute-options.model';
 import { FlowNodeAttributes } from 'src/app/shared/models/flow-node-attributes.model';
 import { FlowStructureNode } from 'src/app/shared/models/flow-structure-node.model';
@@ -9,9 +8,6 @@ import { FrankDocService } from 'src/app/shared/services/frank-doc.service';
 import { Node } from '../node/nodes/node.model';
 import { CurrentFileService } from '../../shared/services/current-file.service';
 import { File } from '../../shared/models/file.model';
-import { FlowStructure } from '../../shared/models/flow-structure.model';
-import { PaletteComponent } from '../palette/palette.component';
-import { Subscription } from 'rxjs';
 import { ChangedAttribute } from '../../shared/models/changed-attribute.model';
 
 @Component({

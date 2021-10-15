@@ -14,22 +14,22 @@ export class SaveDialogComponent {
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
-    private codeService: CurrentFileService
+    private currentFileService: CurrentFileService
   ) {}
 
   onDataAdded(): void {
     this.item = this.ngxSmartModalService.getModalData('saveDialog');
-    this.currentFile = this.codeService.getCurrentFile();
+    this.currentFile = this.currentFileService.getCurrentFile();
   }
 
   save(): void {
-    this.codeService.save();
-    this.codeService.switchToFileTreeItem(this.item);
+    this.currentFileService.save();
+    this.currentFileService.switchToFileTreeItem(this.item);
     this.ngxSmartModalService.close('saveDialog');
   }
 
   discard(): void {
-    this.codeService.switchToFileTreeItem(this.item);
+    this.currentFileService.switchToFileTreeItem(this.item);
     this.ngxSmartModalService.close('saveDialog');
   }
 }

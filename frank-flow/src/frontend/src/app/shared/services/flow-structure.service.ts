@@ -3,7 +3,6 @@
 import { Injectable } from '@angular/core';
 import { MonacoEditorComponent } from 'src/app/editor/monaco-editor/monaco-editor.component';
 import Exit from 'src/app/flow/node/nodes/exit.model';
-import { Subject, Subscription } from 'rxjs';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
 import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
 import { FlowNodeAttributes } from '../models/flow-node-attributes.model';
