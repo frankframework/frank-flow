@@ -186,13 +186,17 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
       {
         next: (file: File) => {
-          if (file.xml && !file.flowStructure) {
+          if (this.isNewlyLoadedFile(file)) {
             this.setValue(file);
             this.currentFile = file;
           }
         },
       }
     );
+  }
+
+  isNewlyLoadedFile(file: File) {
+    return file.xml && !file.flowStructure;
   }
 
   debounce(func: any, wait: number): any {
