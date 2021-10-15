@@ -1,17 +1,17 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   Renderer2,
   ViewChild,
-  AfterViewInit,
 } from '@angular/core';
 import { PanZoomConfig, PanZoomConfigOptions } from 'ngx-panzoom';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
   faArrowDown,
-  faArrowUp,
   faArrowLeft,
   faArrowRight,
+  faArrowUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { CurrentFileService } from '../shared/services/current-file.service';
 import { Subscription } from 'rxjs';
@@ -51,7 +51,7 @@ export class FlowComponent implements AfterViewInit {
   constructor(
     private renderer: Renderer2,
     private library: FaIconLibrary,
-    private codeService: CurrentFileService,
+    private currentFileService: CurrentFileService,
     private graphService: GraphService
   ) {
     this.library.addIcons(faArrowDown, faArrowUp, faArrowRight, faArrowLeft);
@@ -70,7 +70,7 @@ export class FlowComponent implements AfterViewInit {
   }
 
   setCurrentFileSubscription(): void {
-    this.currentFileSubscription = this.codeService.currentFileObservable.subscribe(
+    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
       {
         next: (file: File) => {
           setTimeout(() => {

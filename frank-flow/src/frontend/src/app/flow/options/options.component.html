@@ -10,14 +10,14 @@
   <div>
     <h2>{{ structureNode?.type }}: {{ structureNode?.name }}</h2>
     <p [innerHTML]="nodeDescription"></p>
-    <!-- TODO: Change to local Frank!Runner env URI -->
     <a
       href="https://ibis4example.ibissource.org/iaf/frankdoc/#!/All/{{
         structureNode?.type
       }}"
       target="_blank"
-      ><app-button>Read more</app-button></a
     >
+      <app-button>Read more</app-button>
+    </a>
     <hr />
     <!-- TODO: Name and type here, those are generic for all nodes. Other attributes can be seen as 'additional' -->
     <h2>Attributes</h2>

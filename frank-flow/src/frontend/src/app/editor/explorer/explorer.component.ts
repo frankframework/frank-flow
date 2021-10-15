@@ -20,7 +20,7 @@ export class ExplorerComponent {
     library: FaIconLibrary,
     private ngxSmartModalService: NgxSmartModalService,
     private fileService: FileService,
-    private codeService: CurrentFileService,
+    private currentFileService: CurrentFileService,
     private toastr: ToastrService
   ) {
     library.addIcons(faPlus, faRedoAlt, faTrash);
@@ -28,7 +28,7 @@ export class ExplorerComponent {
   }
 
   getCurrentFile(): void {
-    this.codeService.currentFileObservable.subscribe(
+    this.currentFileService.currentFileObservable.subscribe(
       (currentFile: File) => (this.currentFile = currentFile)
     );
   }
@@ -50,7 +50,7 @@ export class ExplorerComponent {
             'File removed!'
           );
           this.refreshFileTree();
-          this.codeService.getFirstFile();
+          this.currentFileService.getFirstFile();
         } else {
           this.toastr.error(
             `The file ${this.currentFile.path} couldn't be removed.`,

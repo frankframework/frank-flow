@@ -19,13 +19,13 @@ export class AddDialogComponent {
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
     private fileService: FileService,
-    private codeService: CurrentFileService,
+    private currentFileService: CurrentFileService,
     private toastr: ToastrService
   ) {}
 
   onDataAdded(): void {
     this.currentFile = this.ngxSmartModalService.getModalData('addDialog');
-    this.currentDirectory = this.codeService.currentDirectory;
+    this.currentDirectory = this.currentFileService.currentDirectory;
   }
 
   add(): void {

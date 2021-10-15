@@ -24,7 +24,7 @@ export class SelectorComponent implements AfterViewInit {
 
   constructor(
     private settingsService: SettingsService,
-    private codeService: CurrentFileService
+    private currentFileService: CurrentFileService
   ) {}
 
   ngAfterViewInit(): void {
@@ -41,7 +41,7 @@ export class SelectorComponent implements AfterViewInit {
   }
 
   getCurrentFile(): void {
-    this.codeService.currentFileObservable.subscribe({
+    this.currentFileService.currentFileObservable.subscribe({
       next: (currentFile) => {
         this.currentFile = currentFile;
         if (currentFile.path) {

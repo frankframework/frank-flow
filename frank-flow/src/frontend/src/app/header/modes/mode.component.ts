@@ -8,7 +8,6 @@ import {
   faColumns,
   faProjectDiagram,
 } from '@fortawesome/free-solid-svg-icons';
-import { CurrentFileService } from 'src/app/shared/services/current-file.service';
 
 @Component({
   selector: 'app-modes',
