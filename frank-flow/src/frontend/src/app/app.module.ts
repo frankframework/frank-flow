@@ -9,6 +9,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FlowModule } from './flow/flow.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { SharedModule } from './shared/components/shared.module';
 
 const toastrConfig = {
   positionClass: 'toast-bottom-right',
@@ -29,6 +30,7 @@ const toastrConfig = {
     FlowModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(toastrConfig),
+    SharedModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FileService } from 'src/app/shared/services/file.service';
-import { CurrentFileService } from '../../../shared/services/current-file.service';
-import { File } from '../../../shared/models/file.model';
+import { CurrentFileService } from '../../services/current-file.service';
+import { File } from '../../models/file.model';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -29,29 +29,27 @@ export class AddDialogComponent {
   }
 
   add(): void {
-    const fileName = this.fileName;
-    const duplicateFiles = this.checkForDuplicateFiles();
-    if (duplicateFiles) {
+    if (this.fileAlreadyExistsInFolder()) {
       this.toastr.error(
-        `The file ${fileName} already exists in this directory.`,
+        `The file ${this.fileName} already exists in this directory.`,
         'Error creating'
       );
     } else if (this.currentDirectory.configuration) {
       this.fileService
         .updateFileForConfiguration(
           this.currentDirectory.configuration,
-          this.currentDirectory.path + '/' + fileName,
-          this.helloWorldFileTemplate(fileName)
+          this.currentDirectory.path + '/' + this.fileName,
+          this.helloWorldFileTemplate(this.fileName)
         )
         .then((response) => {
           if (response) {
             this.toastr.success(
-              `The file ${fileName} has been created.`,
+              `The file ${this.fileName} has been created.`,
               'File created!'
             );
           } else {
             this.toastr.error(
-              `The file ${fileName} couldn't be created.`,
+              `The file ${this.fileName} couldn't be created.`,
               'Error creating'
             );
           }
@@ -62,7 +60,7 @@ export class AddDialogComponent {
     }
   }
 
-  checkForDuplicateFiles(): boolean {
+  fileAlreadyExistsInFolder(): boolean {
     const fileName = this.fileName;
     const rootDir = this.fileService.configurationFiles.value;
     const currentDirectory = this.findCurrentDirectory(
@@ -95,18 +93,18 @@ export class AddDialogComponent {
   helloWorldFileTemplate(displayName: string): string {
     displayName = displayName.replace('.xml', '');
     return `<Configuration name="$\{displayName}">
-       \t<Adapter name="${displayName}Adapter">
-       \t\t<Receiver name="${displayName}Receiver">
-       \t\t\t<JavaListener name="${displayName}Listener" serviceName="${displayName}Service" />
-       \t\t</Receiver>
-       \t\t<Pipeline firstPipe="${displayName}Pipe">
-       \t\t\t<FixedResultPipe name="${displayName}Pipe" returnString="Hello World">
-       \t\t\t\t<Forward name="success" path="EXIT"/>
-       \t\t\t</FixedResultPipe>
-       \t\t\t<Exit path="EXIT" state="success"/>
-       \t\t</Pipeline>
-       \t</Adapter>
-       </Configuration>`;
+\t<Adapter name="${displayName}Adapter">
+\t\t<Receiver name="${displayName}Receiver">
+\t\t\t<JavaListener name="${displayName}Listener" serviceName="${displayName}Service" />
+\t\t</Receiver>
+\t\t<Pipeline firstPipe="${displayName}Pipe">
+\t\t\t<FixedResultPipe name="${displayName}Pipe" returnString="Hello World">
+\t\t\t\t<Forward name="success" path="EXIT"/>
+\t\t\t</FixedResultPipe>
+\t\t\t<Exit path="EXIT" state="success"/>
+\t\t</Pipeline>
+\t</Adapter>
+</Configuration>`;
   }
 
   discard(): void {
