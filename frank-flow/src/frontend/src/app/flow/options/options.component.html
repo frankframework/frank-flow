@@ -1,31 +1,41 @@
 <ngx-smart-modal
   #optionsModal
   (onDataAdded)="onDataAdded()"
+  (onOpen)="onOpen()"
   (onAnyCloseEvent)="onAnyCloseEvent()"
   class="optionsModal"
   customClass="nsm-centered"
   identifier="optionsModal"
 >
   <div>
-    <h1>{{ node?.getName() }}</h1>
-    <hr />
-    <h2>{{ node?.getType() }}</h2>
-    <p>{{ nodeDescription }}</p>
+    <h2>{{ structureNode?.type }}: {{ structureNode?.name }}</h2>
+    <p [innerHTML]="nodeDescription"></p>
+    <a
+      href="https://ibis4example.ibissource.org/iaf/frankdoc/#!/All/{{
+        structureNode?.type
+      }}"
+      target="_blank"
+    >
+      <app-button>Read more</app-button>
+    </a>
     <hr />
     <!-- TODO: Name and type here, those are generic for all nodes. Other attributes can be seen as 'additional' -->
     <h2>Attributes</h2>
-    <div class="input-row" *ngIf="attributeOptions.length > 0">
+    <div class="input-row" *ngIf="availableAttributes.length > 0">
       <label for="selectAttribute">Add attribute:</label>
       <select id="selectAttribute" [(ngModel)]="selectedAttribute" required>
         <option selected [ngValue]="undefined" hidden disabled>
           Choose an attribute...
         </option>
         <option
-          *ngFor="let attributeOption of attributeOptions"
-          [ngValue]="attributeOption"
-          [hidden]="attributeIsUsed(attributeOption?.name)"
+          *ngFor="let availableAttribute of availableAttributes"
+          [ngValue]="availableAttribute"
+          [hidden]="
+            attributeIsUsed(availableAttribute?.name) ||
+            availableAttribute?.deprecated
+          "
         >
-          {{ attributeOption?.name }}
+          {{ availableAttribute?.name }}
         </option>
       </select>
     </div>
@@ -44,7 +54,7 @@
       class="row"
     >
       <label>Description of attribute</label>
-      <div [innerHTML]="selectedAttribute?.description"></div>
+      <p [innerHTML]="selectedAttribute?.description"></p>
     </div>
     <div class="row" *ngIf="newAttributeValue">
       <app-button (click)="addAttribute()"

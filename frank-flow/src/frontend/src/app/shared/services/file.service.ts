@@ -77,7 +77,7 @@ export class FileService {
       .catch((error) => console.error(error));
   }
 
-  removeFileFromConfiguation(file: File): Promise<boolean | void> {
+  removeFileFromConfiguration(file: File): Promise<boolean | void> {
     return fetch(
       `${this.BASE_PATH}/${file.configuration}/files/?path=${file.path}`,
       {

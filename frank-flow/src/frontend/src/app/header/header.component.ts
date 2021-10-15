@@ -8,8 +8,7 @@ import {
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { CodeService } from '../shared/services/code.service';
-import { FileService } from '../shared/services/file.service';
+import { CurrentFileService } from '../shared/services/current-file.service';
 import { File } from '../shared/models/file.model';
 
 @Component({
@@ -24,8 +23,7 @@ export class HeaderComponent implements OnInit {
     private library: FaIconLibrary,
     private toastr: ToastrService,
     private ngxSmartModalService: NgxSmartModalService,
-    private codeService: CodeService,
-    private fileService: FileService
+    private currentFileService: CurrentFileService
   ) {
     library.addIcons(faFile, faFolder, faSave, faCog);
   }
@@ -35,13 +33,13 @@ export class HeaderComponent implements OnInit {
   }
 
   getCurrentFile(): void {
-    this.codeService.curFileObservable.subscribe(
+    this.currentFileService.currentFileObservable.subscribe(
       (currentFile) => (this.currentFile = currentFile)
     );
   }
 
   save(): void {
-    this.codeService.save();
+    this.currentFileService.save();
   }
 
   openSettings(): void {

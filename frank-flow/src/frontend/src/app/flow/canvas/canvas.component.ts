@@ -9,7 +9,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
-import { CodeService } from '../../shared/services/code.service';
+import { CurrentFileService } from '../../shared/services/current-file.service';
 import { jsPlumbInstance } from 'jsplumb';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
@@ -19,8 +19,7 @@ import { FlowStructure } from '../../shared/models/flow-structure.model';
 import { PanZoomConfig } from 'ngx-panzoom/lib/panzoom-config';
 import { PanZoomModel } from 'ngx-panzoom/lib/panzoom-model';
 import { ToastrService } from 'ngx-toastr';
-import { FlowGenerationData } from '../../shared/models/flow-generation-data.model';
-import { XmlParseError } from '../../shared/models/xml-parse-error.model';
+import { File } from '../../shared/models/file.model';
 
 @Component({
   selector: 'app-canvas',
@@ -38,8 +37,9 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   jsPlumbInstance!: jsPlumbInstance;
   currentFileSubscription!: Subscription;
   flowUpdate = false;
-  flowGenerator!: Worker;
-  errorsFound!: boolean;
+
+  private errors!: string[] | undefined;
+  locked!: boolean;
 
   @HostBinding('tabindex') tabindex = 1;
 
@@ -52,7 +52,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private nodeService: NodeService,
-    private codeService: CodeService,
+    private currentFileService: CurrentFileService,
     private flowStructureService: FlowStructureService,
     private graphService: GraphService,
     private nodeGeneratorService: NodeGeneratorService,
@@ -70,15 +70,13 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
-    this.createGeneratorWorker();
     this.setCurrentFileListener();
-    this.setGeneratorWorkerListener();
     if (this.panzoomConfig) {
       this.modelChangedSubscription = this.panzoomConfig.modelChanged.subscribe(
         (model: PanZoomModel) => this.onModelChanged(model)
       );
     }
-    this.codeService.reloadFile();
+    this.currentFileService.reloadFile();
   }
 
   ngOnDestroy(): void {
@@ -87,124 +85,30 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.viewContainerRef.clear();
   }
 
-  createGeneratorWorker(): void {
-    if (Worker) {
-      this.flowGenerator = new Worker(
-        new URL('../../shared/workers/flow-generator.worker', import.meta.url),
-        {
-          name: 'flow-generator',
-          type: 'module',
-        }
-      );
-    }
-  }
-
   handleKeyboardUpEvent(kbdEvent: KeyboardEvent): void {
-    if (kbdEvent.ctrlKey && kbdEvent.key === 'z') {
-      this.codeService.undo();
-    } else if (kbdEvent.ctrlKey && kbdEvent.key === 'y') {
-      this.codeService.redo();
-    } else if (kbdEvent.ctrlKey && kbdEvent.key === 's') {
+    if (kbdEvent.ctrlKey && kbdEvent.key === 's') {
       kbdEvent.preventDefault();
-      this.codeService.save();
+      this.currentFileService.save();
     }
-  }
-
-  setGeneratorWorkerListener(): void {
-    this.flowGenerator.onmessage = ({ data }) => {
-      this.toastr.clear();
-      if (data) {
-        this.flowStructureService.errorSubject.next(data.errors);
-
-        if (this.parsingErrorsFound(data)) {
-          this.showParsingErrors(data.errors);
-        } else {
-          this.flowStructureService.setStructure(data.structure);
-          this.generateFlow(data.structure);
-        }
-      }
-    };
-  }
-
-  parsingErrorsFound(data: FlowGenerationData): boolean {
-    this.errorsFound = data.errors.length > 0;
-    return this.errorsFound;
-  }
-
-  showParsingErrors(errors: string[]): void {
-    const parsedErrors = this.groupSimilarErrors(errors);
-    parsedErrors.forEach((error: XmlParseError) => {
-      this.toastr.error(
-        error.getTemplateString(),
-        'Parsing error found in XML',
-        {
-          disableTimeOut: true,
-        }
-      );
-    });
-  }
-
-  groupSimilarErrors(errors: string[]): XmlParseError[] {
-    const groupedErrors: XmlParseError[] = [];
-    errors.forEach((errorMessage, index) => {
-      const lastError = groupedErrors[groupedErrors.length - 1];
-      const error = this.parseErrorMessage(errorMessage);
-      if (this.errorMessageEqualToLast(error, lastError)) {
-        if (this.errorColumnFollowsLast(error, lastError)) {
-          lastError.endColumn = error.startColumn;
-        } else if (this.errorLineFollowsLast(error, lastError)) {
-          lastError.endLine = error.startLine;
-        }
-      } else {
-        groupedErrors.push(error);
-      }
-    });
-    return groupedErrors;
-  }
-
-  errorMessageEqualToLast(
-    error: XmlParseError,
-    lastError: XmlParseError
-  ): boolean {
-    return lastError && lastError.message === error.message;
-  }
-
-  errorColumnFollowsLast(
-    error: XmlParseError,
-    lastError: XmlParseError
-  ): boolean {
-    return (
-      lastError.endLine === error.startLine &&
-      lastError.endColumn + 1 === error.startColumn
-    );
-  }
-
-  errorLineFollowsLast(
-    error: XmlParseError,
-    lastError: XmlParseError
-  ): boolean {
-    return lastError.endLine + 1 === error.startLine && error.startColumn === 1;
-  }
-
-  parseErrorMessage(error: string): XmlParseError {
-    const [startLine, startColumn, message] = error
-      .split(/([0-9]+):([0-9]+):\s(.+)/)
-      .filter((i) => i);
-    return new XmlParseError({
-      startLine: +startLine,
-      startColumn: +startColumn,
-      message,
-    });
+    // TODO: Add undo/redo
   }
 
   setCurrentFileListener(): void {
-    this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
+    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
       {
-        next: (data): void => {
-          this.flowGenerator.postMessage(data.data);
+        next: (currentFile: File): void => {
+          this.errors = currentFile.errors;
+          this.locked = this.XmlErrorsFound();
+          if (currentFile.flowStructure && currentFile.flowNeedsUpdate) {
+            this.generateFlow(currentFile.flowStructure);
+          }
         },
       }
     );
+  }
+
+  XmlErrorsFound(): boolean {
+    return this.errors !== undefined && this.errors.length > 0;
   }
 
   setConnectionEventListeners(): void {

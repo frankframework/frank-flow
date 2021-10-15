@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { CodeService } from '../../services/code.service';
+import { CurrentFileService } from '../../services/current-file.service';
 import { File } from '../../models/file.model';
 
 @Component({
@@ -14,22 +14,22 @@ export class SaveDialogComponent {
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
-    private codeService: CodeService
+    private currentFileService: CurrentFileService
   ) {}
 
   onDataAdded(): void {
     this.item = this.ngxSmartModalService.getModalData('saveDialog');
-    this.currentFile = this.codeService.getCurrentFile();
+    this.currentFile = this.currentFileService.getCurrentFile();
   }
 
   save(): void {
-    this.codeService.save();
-    this.codeService.switchCurrentFile(this.item);
+    this.currentFileService.save();
+    this.currentFileService.switchToFileTreeItem(this.item);
     this.ngxSmartModalService.close('saveDialog');
   }
 
   discard(): void {
-    this.codeService.switchCurrentFile(this.item);
+    this.currentFileService.switchToFileTreeItem(this.item);
     this.ngxSmartModalService.close('saveDialog');
   }
 }

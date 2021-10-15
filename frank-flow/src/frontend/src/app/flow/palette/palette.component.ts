@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { PaletteService } from './palette.service';
-import { FlowStructureService } from '../../shared/services/flow-structure.service';
 import { Subscription } from 'rxjs';
+import { CurrentFileService } from '../../shared/services/current-file.service';
+import { File } from '../../shared/models/file.model';
 
 @Component({
   selector: 'app-palette',
@@ -10,13 +11,13 @@ import { Subscription } from 'rxjs';
 })
 export class PaletteComponent implements AfterViewInit, OnDestroy {
   public search!: string;
-  private errors!: string[];
+  private errors!: string[] | undefined;
   public locked: boolean = false;
-  private errorSubscription!: Subscription;
+  private currentFileSubscription!: Subscription;
 
   constructor(
     public paletteService: PaletteService,
-    private flowStructureService: FlowStructureService
+    private currentFileService: CurrentFileService
   ) {}
 
   ngAfterViewInit(): void {
@@ -24,21 +25,21 @@ export class PaletteComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.errorSubscription.unsubscribe();
+    this.currentFileSubscription.unsubscribe();
   }
 
   getXmlParseErrors(): void {
-    this.errorSubscription = this.flowStructureService
-      .errorObservable()
-      .subscribe({
-        next: (errors) => {
-          this.errors = errors;
+    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
+      {
+        next: (file: File) => {
+          this.errors = file.errors;
           this.locked = this.XmlErrorsFound();
         },
-      });
+      }
+    );
   }
 
   XmlErrorsFound(): boolean {
-    return this.errors.length > 0;
+    return this.errors !== undefined && this.errors.length > 0;
   }
 }
