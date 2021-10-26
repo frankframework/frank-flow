@@ -33,44 +33,42 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-      - name: Cache Node.js modules
+      - name: Cache Node modules
+        id: node-cache
         uses: actions/cache@v2
         with:
-          path: ~/.npm
-          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-node-
-            ${{ runner.OS }}-
-      - name: Install dependencies
-        working-directory: frank-flow/frank-flow/src/frontend
-        run: npm ci
-      - name: Run unit tests
-        working-directory: frank-flow/frank-flow/src/frontend
-        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-      - name: Write frank-flow.properties
-        run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-runner/frank-flow.properties
-      - name: Build backend
-        run: mvn -f frank-flow -P frontend clean install
-      - name: Cache Frank!Runner downloads and builds
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-frank-runner
-        with:
-          path: |
-            frank-runner/build
-            frank-runner/downloads
-          key: ${{ runner.os }}-frank-runner
-          restore-keys: |
-            ${{ runner.os }}-frank-runner
-      - name: Start Frank!Runner
-        working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
-        run: ./restart.sh
-      - name: Run cypress
-        uses: cypress-io/github-action@v2.9.7
-        with:
-          working-directory: frank-flow/frank-flow/src/frontend
-          wait-on: "http://localhost:1000/frank-flow/"
-          wait-on-timeout: 450
+          key: ${{ runner.OS }}-node-${{ hashFiles('frank-flow/frank-flow/src/frontend/package-lock.json') }}
+          path: frank-flow/frank-flow/src/frontend/node_modules
+      - name: Install Dependencies
+        if: steps.node-cache.outputs.cache-hit != 'true'
+        run: npm install
+#      - name: Run unit tests
+#        working-directory: frank-flow/frank-flow/src/frontend
+#        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+#      - name: Write frank-flow.properties
+#        run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-runner/frank-flow.properties
+#      - name: Build backend
+#        run: mvn -f frank-flow -P frontend clean install
+#      - name: Cache Frank!Runner downloads and builds
+#        uses: actions/cache@v2
+#        env:
+#          cache-name: cache-frank-runner
+#        with:
+#          path: |
+#            frank-runner/build
+#            frank-runner/downloads
+#          key: ${{ runner.os }}-frank-runner
+#          restore-keys: |
+#            ${{ runner.os }}-frank-runner
+#      - name: Start Frank!Runner
+#        working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
+#        run: ./restart.sh
+#      - name: Run cypress
+#        uses: cypress-io/github-action@v2.9.7
+#        with:
+#          working-directory: frank-flow/frank-flow/src/frontend
+#          wait-on: "http://localhost:1000/frank-flow/"
+#          wait-on-timeout: 450
 #      - name: List all files
 #        if: always()
 #        run: tree > allFiles.txt
