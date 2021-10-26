@@ -16,10 +16,9 @@ import {
 import { CurrentFileService } from '../shared/services/current-file.service';
 import { Subscription } from 'rxjs';
 import { File } from '../shared/models/file.model';
-import { GraphService } from '../shared/services/graph.service';
 
 type canvasDirection = 'height' | 'width';
-type minimumPositions = { x: number; y: number };
+type CanvasSize = { x: number; y: number };
 
 @Component({
   selector: 'app-flow',
@@ -28,8 +27,6 @@ type minimumPositions = { x: number; y: number };
 })
 export class FlowComponent implements AfterViewInit {
   private readonly canvasExpansionSize = 500;
-  private readonly monacoUpdateQueueInterval = 520;
-  private readonly nodeBufferSpace = 300;
 
   @ViewChild('nodeContainer', { read: ElementRef })
   private nodeContainerRef!: ElementRef;
@@ -47,12 +44,12 @@ export class FlowComponent implements AfterViewInit {
   public panzoomConfig: PanZoomConfig = new PanZoomConfig(
     this.panZoomConfigOptions
   );
+  private currentFile!: File;
 
   constructor(
     private renderer: Renderer2,
     private library: FaIconLibrary,
-    private currentFileService: CurrentFileService,
-    private graphService: GraphService
+    private currentFileService: CurrentFileService
   ) {
     this.library.addIcons(faArrowDown, faArrowUp, faArrowRight, faArrowLeft);
   }
@@ -72,10 +69,9 @@ export class FlowComponent implements AfterViewInit {
   setCurrentFileSubscription(): void {
     this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
       {
-        next: (file: File) => {
-          setTimeout(() => {
-            this.setBasicCanvasSize();
-          }, this.monacoUpdateQueueInterval);
+        next: (currentFile: File) => {
+          this.currentFile = currentFile;
+          this.setBasicCanvasSize();
         },
       }
     );
@@ -99,9 +95,18 @@ export class FlowComponent implements AfterViewInit {
 
   setBasicCanvasSize(): void {
     const minimumPositions = this.calculateMinimumCanvasSize();
+    const canvasSize = this.calculateIncrementedCanvasSize(minimumPositions);
 
-    this.renderCanvas('width', minimumPositions.x + this.nodeBufferSpace);
-    this.renderCanvas('height', minimumPositions.y + this.nodeBufferSpace);
+    this.renderCanvas('width', canvasSize.x);
+    this.renderCanvas('height', canvasSize.y);
+  }
+
+  calculateIncrementedCanvasSize(canvasSize: CanvasSize): CanvasSize {
+    canvasSize.y +=
+      this.canvasExpansionSize - (canvasSize.y % this.canvasExpansionSize);
+    canvasSize.x +=
+      this.canvasExpansionSize - (canvasSize.x % this.canvasExpansionSize);
+    return canvasSize;
   }
 
   changeCanvasSize(direction: canvasDirection, expansionValue: number): void {
@@ -138,13 +143,13 @@ export class FlowComponent implements AfterViewInit {
     );
   }
 
-  calculateMinimumCanvasSize(): minimumPositions {
+  calculateMinimumCanvasSize(): CanvasSize {
     let x = 0;
     let y = 0;
 
-    this.graphService.nodeMap?.forEach((node, key) => {
-      x = this.comparePositions(x, node.getLeft() ?? 0);
-      y = this.comparePositions(y, node.getTop() ?? 0);
+    this.currentFile?.flowStructure?.nodes?.forEach((node, key) => {
+      x = this.comparePositions(x, node.positions.x ?? 0);
+      y = this.comparePositions(y, node.positions.y ?? 0);
     });
 
     return { x, y };
