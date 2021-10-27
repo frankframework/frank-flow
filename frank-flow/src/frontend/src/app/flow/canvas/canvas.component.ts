@@ -81,7 +81,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.currentFileSubscription.unsubscribe();
-    this.jsPlumbInstance.reset(true);
+    this.jsPlumbInstance.reset();
     this.viewContainerRef.clear();
   }
 
