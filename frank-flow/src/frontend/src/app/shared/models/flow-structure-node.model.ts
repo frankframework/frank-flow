@@ -8,9 +8,9 @@ export class FlowStructureNode {
   type: string;
   forwards?: any[];
   name: string;
-  positions: [x: number, y: number];
+  positions: { x: number; y: number };
 
-  getName(): string {
+  private getName(): string {
     if (this.attributes['name']) {
       return this.attributes['name'].value;
     } else if (this.attributes['path']) {
@@ -19,7 +19,7 @@ export class FlowStructureNode {
     return this.type;
   }
 
-  getPositions(): [number, number] {
+  private getPositions(): { x: number; y: number } {
     let x = 0;
     let y = 0;
 
@@ -30,7 +30,7 @@ export class FlowStructureNode {
       y = +this.attributes['y'].value;
     }
 
-    return [x, y];
+    return { x, y };
   }
 
   constructor(
