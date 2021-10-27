@@ -67,7 +67,7 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     }
     currentNode.forwards = [];
     flowStructure.nodes.push(currentNode);
-  } else if (currentNode.type === 'Forward') {
+  } else if (currentNode.type.toLocaleLowerCase() === 'forward') {
     flowStructure.nodes
       .find((pipe: FlowStructureNode) => {
         return pipe.name === unclosedPipes[unclosedPipes.length - 1];
