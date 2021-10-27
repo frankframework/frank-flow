@@ -2,7 +2,6 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  OnDestroy,
   Renderer2,
   ViewChild,
 } from '@angular/core';
@@ -15,7 +14,6 @@ import {
   faArrowUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { CurrentFileService } from '../shared/services/current-file.service';
-import { Subscription } from 'rxjs';
 import { File } from '../shared/models/file.model';
 import { FlowStructureNode } from '../shared/models/flow-structure-node.model';
 import { GraphService } from '../shared/services/graph.service';
@@ -29,7 +27,7 @@ type CanvasSize = { x: number; y: number };
   templateUrl: './flow.component.html',
   styleUrls: ['./flow.component.scss'],
 })
-export class FlowComponent implements AfterViewInit, OnDestroy {
+export class FlowComponent implements AfterViewInit {
   private readonly canvasExpansionSize = 500;
 
   @ViewChild('nodeContainer', { read: ElementRef })
@@ -44,12 +42,10 @@ export class FlowComponent implements AfterViewInit, OnDestroy {
     zoomOnDoubleClick: false,
   };
 
-  public currentFileSubscription!: Subscription;
   public panzoomConfig: PanZoomConfig = new PanZoomConfig(
     this.panZoomConfigOptions
   );
   private currentFile!: File;
-  private nodeMapSubscription!: Subscription;
   private nodes!: Map<string, Node>;
 
   constructor(
@@ -68,11 +64,6 @@ export class FlowComponent implements AfterViewInit, OnDestroy {
     this.setBasicCanvasSize();
   }
 
-  ngOnDestroy(): void {
-    this.currentFileSubscription.unsubscribe();
-    this.nodeMapSubscription.unsubscribe();
-  }
-
   setCanvasElement(): void {
     this.canvasElement = this.nodeContainerRef.nativeElement.getElementsByClassName(
       'canvas'
@@ -80,20 +71,17 @@ export class FlowComponent implements AfterViewInit, OnDestroy {
   }
 
   setCurrentFileSubscription(): void {
-    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
-      {
-        next: (currentFile: File) => {
-          this.currentFile = currentFile;
-          this.setBasicCanvasSize();
-        },
-      }
-    );
+    this.currentFileService.currentFileObservable.subscribe({
+      next: (currentFile: File) => {
+        this.currentFile = currentFile;
+        this.setBasicCanvasSize();
+      },
+    });
   }
 
   setNodesSubscription(): void {
-    this.nodeMapSubscription = this.graphService.nodesObservable.subscribe({
+    this.graphService.nodesObservable.subscribe({
       next: (nodes: Map<string, Node>) => {
-        console.log(nodes);
         this.nodes = nodes;
         this.setBasicCanvasSize();
       },
