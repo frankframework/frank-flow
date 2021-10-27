@@ -158,6 +158,7 @@ export class FlowComponent implements AfterViewInit {
     const minimumCanvasSize = { x: 0, y: 0 };
     this.getMinimumCanvasSizeForFlowStructure(minimumCanvasSize);
     this.getMinimumCanvasSizeForGraphService(minimumCanvasSize);
+    this.getMinimumCanvasSizeWithNodeBuffer(minimumCanvasSize);
     return minimumCanvasSize;
   }
 
@@ -175,6 +176,13 @@ export class FlowComponent implements AfterViewInit {
       positions.x = this.comparePositions(positions.x, node.getLeft() ?? 0);
       positions.y = this.comparePositions(positions.y, node.getTop() ?? 0);
     });
+  }
+
+  getMinimumCanvasSizeWithNodeBuffer(positions: CanvasSize): void {
+    const maxWidthOfNode = 200;
+    const maxHeightOfNode = 100;
+    positions.x += maxWidthOfNode;
+    positions.y += maxHeightOfNode;
   }
 
   comparePositions(lastPosition: number, currentPosition: number): number {
