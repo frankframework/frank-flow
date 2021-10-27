@@ -3,19 +3,17 @@ import { NodeService } from '../../flow/node/node.service';
 import { Node } from '../../flow/node/nodes/node.model';
 import { Forward } from '../models/forward.model';
 import * as cytoscape from 'cytoscape';
-import { FlowStructureService } from './flow-structure.service';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GraphService {
   private graph: cytoscape.Core;
-  public nodeMap!: Map<string, Node>;
+  private nodesSubject = new Subject<Map<string, Node>>();
+  public nodesObservable = this.nodesSubject.asObservable();
 
-  constructor(
-    private nodeService: NodeService,
-    private flowStructureService: FlowStructureService
-  ) {
+  constructor(private nodeService: NodeService) {
     this.graph = cytoscape({
       layout: {
         name: 'grid',
@@ -112,7 +110,7 @@ export class GraphService {
         this.nodeService.addDynamicNode(node);
       }
     });
-    this.nodeMap = nodeMap;
+    this.nodesSubject.next(nodeMap);
   }
 
   connectAllNodes(forwards: Forward[]): void {
