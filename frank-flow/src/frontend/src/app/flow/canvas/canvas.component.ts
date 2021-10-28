@@ -10,7 +10,11 @@ import {
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
 import { CurrentFileService } from '../../shared/services/current-file.service';
-import { jsPlumbInstance } from 'jsplumb';
+import {
+  ConnectionMadeEventInfo,
+  jsPlumbInstance,
+  OnConnectionBindInfo,
+} from 'jsplumb';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
 import { GraphService } from '../../shared/services/graph.service';
@@ -18,7 +22,6 @@ import { NodeGeneratorService } from '../../shared/services/node-generator.servi
 import { FlowStructure } from '../../shared/models/flow-structure.model';
 import { PanZoomConfig } from 'ngx-panzoom/lib/panzoom-config';
 import { PanZoomModel } from 'ngx-panzoom/lib/panzoom-model';
-import { ToastrService } from 'ngx-toastr';
 import { File } from '../../shared/models/file.model';
 
 @Component({
@@ -42,6 +45,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   locked!: boolean;
 
   @HostBinding('tabindex') tabindex = 1;
+  private connectionIsMoving = false;
 
   @HostListener('window:keydown', ['$event'])
   onKeyUp(kbdEvent: KeyboardEvent): void {
@@ -55,8 +59,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     private currentFileService: CurrentFileService,
     private flowStructureService: FlowStructureService,
     private graphService: GraphService,
-    private nodeGeneratorService: NodeGeneratorService,
-    private toastr: ToastrService
+    private nodeGeneratorService: NodeGeneratorService
   ) {
     this.jsPlumbInstance = this.nodeService.getInstance();
     this.setConnectionEventListeners();
@@ -112,34 +115,63 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   setConnectionEventListeners(): void {
-    this.jsPlumbInstance.bind('connection', (info, originalEvent) => {
-      if (originalEvent) {
-        const sourceName = info.sourceEndpoint.anchor.elementId;
-        const targetName = info.targetEndpoint.anchor.elementId;
+    this.jsPlumbInstance.bind('connection', (info, originalEvent) =>
+      this.onConnection(info, originalEvent)
+    );
+    this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) =>
+      this.onConnectionDetached(info, originalEvent)
+    );
+    this.jsPlumbInstance.bind('connectionMoved', (info, originalEvent) =>
+      this.onConnectionMoved(info, originalEvent)
+    );
+    this.jsPlumbInstance.bind('dblclick', (info, originalEvent) =>
+      this.onDoubleClick(info, originalEvent)
+    );
+  }
 
-        this.flowStructureService.addConnection(sourceName, targetName);
-      }
-    });
+  private onConnection(
+    info: ConnectionMadeEventInfo,
+    originalEvent: Event
+  ): void {
+    if (originalEvent == null || this.connectionIsMoving) {
+      return;
+    }
+    this.flowStructureService.addConnection(info.sourceId, info.targetId);
+    this.connectionIsMoving = false;
+  }
 
-    this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) => {
-      if (originalEvent) {
-        const sourceName = info.sourceEndpoint.anchor.elementId;
-        const targetName = info.targetEndpoint.anchor.elementId;
+  private onConnectionDetached(
+    info: OnConnectionBindInfo,
+    originalEvent: Event
+  ) {
+    if (originalEvent == null) {
+      return;
+    }
+    this.flowStructureService.deleteConnection(info.sourceId, info.targetId);
+    this.connectionIsMoving = false;
+  }
 
-        this.flowStructureService.deleteConnection(sourceName, targetName);
-      }
-    });
+  private onConnectionMoved(info: OnConnectionBindInfo, originalEvent: Event) {
+    if (originalEvent == null) {
+      return;
+    }
+    this.flowStructureService.moveConnection(
+      info.originalSourceId,
+      info.originalTargetId,
+      info.newTargetId
+    );
+    this.connectionIsMoving = true;
+  }
 
-    this.jsPlumbInstance.bind('dblclick', (info, originalEvent) => {
-      if (originalEvent) {
-        const sourceName = info.source.children[0].children[2].innerHTML.trim();
-        const targetName = info.target.children[0].children[2].innerHTML.trim();
-
-        if (sourceName && targetName) {
-          this.flowStructureService.deleteConnection(sourceName, targetName);
-        }
-      }
-    });
+  private onDoubleClick(info: OnConnectionBindInfo, originalEvent: Event) {
+    if (originalEvent == null) {
+      return;
+    }
+    this.flowStructureService.deleteConnection(
+      info.sourceId,
+      info.targetId,
+      true
+    );
   }
 
   generateFlow(structure: FlowStructure): void {
