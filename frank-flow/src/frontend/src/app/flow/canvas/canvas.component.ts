@@ -10,7 +10,11 @@ import {
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
 import { CurrentFileService } from '../../shared/services/current-file.service';
-import { jsPlumbInstance } from 'jsplumb';
+import {
+  ConnectionMadeEventInfo,
+  jsPlumbInstance,
+  OnConnectionBindInfo,
+} from 'jsplumb';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
 import { GraphService } from '../../shared/services/graph.service';
@@ -111,44 +115,63 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   setConnectionEventListeners(): void {
-    this.jsPlumbInstance.bind('connection', (info, originalEvent) => {
-      if (originalEvent == null || this.connectionIsMoving) {
-        this.connectionIsMoving = false;
-        return;
-      }
-      this.flowStructureService.addConnection(info.sourceId, info.targetId);
-    });
+    this.jsPlumbInstance.bind('connection', (info, originalEvent) =>
+      this.onConnection(info, originalEvent)
+    );
+    this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) =>
+      this.onConnectionDetached(info, originalEvent)
+    );
+    this.jsPlumbInstance.bind('connectionMoved', (info, originalEvent) =>
+      this.onConnectionMoved(info, originalEvent)
+    );
+    this.jsPlumbInstance.bind('dblclick', (info, originalEvent) =>
+      this.onDoubleClick(info, originalEvent)
+    );
+  }
 
-    this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) => {
-      if (originalEvent == null) {
-        return;
-      }
-      this.flowStructureService.deleteConnection(info.sourceId, info.targetId);
-      this.connectionIsMoving = false;
-    });
+  private onConnection(
+    info: ConnectionMadeEventInfo,
+    originalEvent: Event
+  ): void {
+    if (originalEvent == null || this.connectionIsMoving) {
+      return;
+    }
+    this.flowStructureService.addConnection(info.sourceId, info.targetId);
+    this.connectionIsMoving = false;
+  }
 
-    this.jsPlumbInstance.bind('connectionMoved', (info, originalEvent) => {
-      if (originalEvent == null) {
-        return;
-      }
-      this.flowStructureService.moveConnection(
-        info.originalSourceId,
-        info.originalTargetId,
-        info.newTargetId
-      );
-      this.connectionIsMoving = true;
-    });
+  private onConnectionDetached(
+    info: OnConnectionBindInfo,
+    originalEvent: Event
+  ) {
+    if (originalEvent == null) {
+      return;
+    }
+    this.flowStructureService.deleteConnection(info.sourceId, info.targetId);
+    this.connectionIsMoving = false;
+  }
 
-    this.jsPlumbInstance.bind('dblclick', (info, originalEvent) => {
-      if (originalEvent == null) {
-        return;
-      }
-      this.flowStructureService.deleteConnection(
-        info.sourceId,
-        info.targetId,
-        true
-      );
-    });
+  private onConnectionMoved(info: OnConnectionBindInfo, originalEvent: Event) {
+    if (originalEvent == null) {
+      return;
+    }
+    this.flowStructureService.moveConnection(
+      info.originalSourceId,
+      info.originalTargetId,
+      info.newTargetId
+    );
+    this.connectionIsMoving = true;
+  }
+
+  private onDoubleClick(info: OnConnectionBindInfo, originalEvent: Event) {
+    if (originalEvent == null) {
+      return;
+    }
+    this.flowStructureService.deleteConnection(
+      info.sourceId,
+      info.targetId,
+      true
+    );
   }
 
   generateFlow(structure: FlowStructure): void {
