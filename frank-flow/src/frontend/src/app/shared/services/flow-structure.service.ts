@@ -76,10 +76,14 @@ export class FlowStructureService {
     return lastForward ?? currentPipe;
   }
 
-  deleteConnection(sourceName: string, targetName: string): void {
+  deleteConnection(
+    sourceName: string,
+    targetName: string,
+    doubleClickEvent = false
+  ): void {
     const targetForward = this.getTargetForward(sourceName, targetName);
 
-    const text = '\u008D';
+    const text = '';
     const range = {
       startLineNumber: targetForward.line,
       startColumn: 0,
@@ -87,7 +91,7 @@ export class FlowStructureService {
       endLineNumber: targetForward.line + 1,
     };
 
-    this.monacoEditorComponent?.applyEdits([{ range, text }], true);
+    this.monacoEditorComponent?.applyEdits([{ range, text }], doubleClickEvent);
   }
 
   getTargetForward(sourceName: string, targetName: string): FlowStructureNode {
@@ -99,6 +103,29 @@ export class FlowStructureService {
       (forward: FlowStructureNode) =>
         forward.attributes['path'].value === targetName
     );
+  }
+
+  moveConnection(
+    originalSourceName: string,
+    originalTargetName: string,
+    newTargetName: string
+  ): void {
+    const targetForward = this.getTargetForward(
+      originalSourceName,
+      originalTargetName
+    );
+
+    const pathAttribute = targetForward.attributes['path'];
+
+    const text = `path="${newTargetName}"`;
+    const range = {
+      startLineNumber: pathAttribute.line,
+      startColumn: pathAttribute.startColumn,
+      endColumn: pathAttribute.endColumn,
+      endLineNumber: pathAttribute.line,
+    };
+
+    this.monacoEditorComponent?.applyEdits([{ range, text }]);
   }
 
   addPipe(pipeData: Pipe): void {
