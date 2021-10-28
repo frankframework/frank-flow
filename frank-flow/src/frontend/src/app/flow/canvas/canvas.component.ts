@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
 import { CurrentFileService } from '../../shared/services/current-file.service';
-import { jsPlumb, jsPlumbInstance } from 'jsplumb';
+import { jsPlumbInstance } from 'jsplumb';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
 import { GraphService } from '../../shared/services/graph.service';
