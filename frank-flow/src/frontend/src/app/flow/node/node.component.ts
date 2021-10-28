@@ -54,7 +54,7 @@ export class NodeComponent implements AfterViewInit {
     },
   };
   private bottomEndpointOptions: EndpointOptions = {
-    endpoint: ['Dot', { radius: 7 }],
+    endpoint: ['Dot', { radius: 10 }],
     paintStyle: { fill: '#99cb3a' },
     isSource: true,
     scope: 'jsPlumb_DefaultScope',
@@ -74,7 +74,7 @@ export class NodeComponent implements AfterViewInit {
     dropOptions: this.dropOptions,
   };
   private topEndpointOptions: EndpointOptions = {
-    endpoint: ['Dot', { radius: 4 }],
+    endpoint: ['Dot', { radius: 7 }],
     paintStyle: { fill: '#ffcb3a' },
     isSource: false,
     scope: 'jsPlumb_DefaultScope',
