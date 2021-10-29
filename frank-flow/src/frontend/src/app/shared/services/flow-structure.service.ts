@@ -131,14 +131,17 @@ export class FlowStructureService {
   addPipe(pipeData: Pipe): void {
     const pipes = this.flowStructure.pipes;
     const lastPipe = pipes[pipes.length - 1] ?? this.flowStructure.pipeline;
-    const line = pipes[pipes.length - 1] ? lastPipe.endLine : lastPipe.line;
+    const line =
+      (pipes[pipes.length - 1] ? lastPipe.endLine : lastPipe.line) + 1;
     const pipeName = this.getUniquePipeName(pipeData.getName());
 
-    const text = `\n\t\t\t<${pipeData.getType()} name="${pipeName}">\n\t\t\t</${pipeData.getType()}>`;
+    console.log(lastPipe, line, !!pipes[pipes.length - 1]);
+
+    const text = `\t\t\t<${pipeData.getType()} name="${pipeName}">\n\t\t\t</${pipeData.getType()}>\n`;
     const range = {
       startLineNumber: line,
-      startColumn: lastPipe.column,
-      endColumn: lastPipe.column,
+      startColumn: 0,
+      endColumn: 0,
       endLineNumber: line,
     };
 
