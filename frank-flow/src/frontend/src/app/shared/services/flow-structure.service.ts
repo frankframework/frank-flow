@@ -135,8 +135,6 @@ export class FlowStructureService {
       (pipes[pipes.length - 1] ? lastPipe.endLine : lastPipe.line) + 1;
     const pipeName = this.getUniquePipeName(pipeData.getName());
 
-    console.log(lastPipe, line, !!pipes[pipes.length - 1]);
-
     const text = `\t\t\t<${pipeData.getType()} name="${pipeName}">\n\t\t\t</${pipeData.getType()}>\n`;
     const range = {
       startLineNumber: line,
