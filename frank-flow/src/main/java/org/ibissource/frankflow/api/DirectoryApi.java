@@ -17,6 +17,7 @@ package org.ibissource.frankflow.api;
 
 import java.io.File;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -47,7 +48,7 @@ public class DirectoryApi {
         File file = getFile(rootFolder, path);
 
         if(file.exists()) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            throw new ApiException("an unexpected error occured, file ["+path+"] does not exists");
         }
         if(FileUtils.createDir(file)) {
             return Response.status(Response.Status.OK).build();
@@ -56,6 +57,27 @@ public class DirectoryApi {
         }
 
 
+    }
+
+    @DELETE
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteDirectory(@PathParam("name") String configurationName, @QueryParam("path") String path) {
+        File rootFolder = FileUtils.getDir(configurationName);
+        File file = getFile(rootFolder, path);
+
+        if(!file.exists()) {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+		if(!file.isDirectory()) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+
+        if(file.delete()) {
+			return Response.status(Response.Status.OK).build();
+		} else {
+			throw new ApiException("unable to remove file ["+path+"]");
+		}
     }
 
     /**
