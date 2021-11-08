@@ -38,6 +38,7 @@ export class ExplorerComponent {
       .getModal('addDialog')
       .setData(this.currentFile, true)
       .open();
+    this.refreshFileTree();
   }
 
   deleteFile(): void {
