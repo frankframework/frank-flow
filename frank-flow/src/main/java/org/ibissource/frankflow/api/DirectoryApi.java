@@ -17,6 +17,7 @@ package org.ibissource.frankflow.api;
 
 import java.io.File;
 
+import javax.ws.rs.PATCH;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -26,9 +27,21 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-
 import org.apache.commons.io.FilenameUtils;
 import org.ibissource.frankflow.util.FileUtils;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.cxf.jaxrs.ext.multipart.Attachment;
+import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
+
+import org.ibissource.frankflow.util.FileUtils;
+import org.ibissource.frankflow.util.MimeTypeUtil;
+import javax.activation.DataHandler;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.ws.rs.FormParam;
 
 @Path("/configurations/{name}/directories")
 public class DirectoryApi {
@@ -40,17 +53,56 @@ public class DirectoryApi {
         File rootFolder = FileUtils.getDir(configurationName);
         File file = getFile(rootFolder, path);
 
-        if(file.exists()) {
-            throw new ApiException("an unexpected error occured, file ["+path+"] does not exists");
+        if (file.exists()) {
+            throw new ApiException("directory already exists", Response.Status.CONFLICT);
         }
-        if(FileUtils.createDir(file)) {
-            return Response.status(Response.Status.OK).build();
+        if (FileUtils.createDir(file)) {
+            return Response.status(Response.Status.CREATED).build();
         } else {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            throw new ApiException("Could not create file", Response.Status.CONFLICT);
         }
-
 
     }
+
+    @PATCH
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response renameFolder(@PathParam("name") String configurationName, @QueryParam("path") String path, @FormParam("newName") String newName) {
+
+        if(newName == null || newName == "") {
+            throw new ApiException("an unexpected error occured, property [newName] does not exist or is empty");
+        }
+
+        File rootFolder = FileUtils.getDir(configurationName);
+        File file = getFile(rootFolder, path);
+
+        //TODO: check for slashes in the path to also rename in an inner directory.
+
+        // Pattern pattern = Pattern.compile("\\", Pattern.CASE_INSENSITIVE);
+        // Matcher matcher = pattern.matcher(path);
+
+        // if(matcher.find()) {
+        //     path.replaceAll("[^]*?(?=\\)", newName);
+        // } else {
+        //     path = newName;
+        // }
+
+        // System.out.println("path is: " + path);
+        File destFile = getFile(rootFolder, newName);
+
+        if(!file.exists()) {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+        if(!file.isDirectory()) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+
+        if(file.renameTo(destFile)) {
+		    return Response.status(Response.Status.OK).build();
+        } else {
+            throw new ApiException("an unexpected error occured, file can't be renamed");
+        }
+	}
 
     @DELETE
     @Path("/")
@@ -62,13 +114,13 @@ public class DirectoryApi {
         if(!file.exists()) {
 			return Response.status(Response.Status.NOT_FOUND).build();
 		}
-		if(!file.isDirectory()) {
+        if(!file.isDirectory()) {
 			return Response.status(Response.Status.BAD_REQUEST).build();
-		}
-
+		} 
+            
         if(file.delete()) {
 			return Response.status(Response.Status.OK).build();
-		} else {
+        } else {
 			throw new ApiException("unable to remove file ["+path+"]");
 		}
     }
