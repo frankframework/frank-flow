@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Observable, Subject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FrankDocService {
-  frankDoc = new Subject<any>();
+  frankDoc = new ReplaySubject<any>();
 
   constructor() {
     this.fetchFrankDoc();
