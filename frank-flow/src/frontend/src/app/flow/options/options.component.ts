@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FlowNodeAttributeOptions } from 'src/app/shared/models/flow-node-attribute-options.model';
 import { FlowNodeAttributes } from 'src/app/shared/models/flow-node-attributes.model';
