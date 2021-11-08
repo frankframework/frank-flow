@@ -1,6 +1,6 @@
 /// <reference path="../../../../node_modules/monaco-editor/monaco.d.ts" />
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { File } from '../models/file.model';
 import { FileService } from './file.service';
 import { ToastrService } from 'ngx-toastr';
@@ -14,7 +14,7 @@ import { FileType } from '../enums/file-type.enum';
 export class CurrentFileService {
   private editor!: monaco.editor.IStandaloneCodeEditor;
   private currentFile!: File;
-  private currentFileSubject = new Subject<File>();
+  private currentFileSubject = new ReplaySubject<File>(1);
   public currentFileObservable = this.currentFileSubject.asObservable();
   private xmlToFlowStructureWorker!: Worker;
 
@@ -167,14 +167,6 @@ export class CurrentFileService {
     }
   }
 
-  reloadFile(): void {
-    const curFile = this.getCurrentFile();
-
-    if (curFile) {
-      this.currentFileSubject.next(curFile);
-    }
-  }
-
   save(): void {
     if (
       this.currentFile &&
@@ -211,10 +203,6 @@ export class CurrentFileService {
   updateCurrentFile(file: File): void {
     this.currentFile = file;
     this.xmlToFlowStructureWorker.postMessage(file.xml);
-  }
-
-  getCurrentFile(): File {
-    return this.currentFile;
   }
 
   switchToFileTreeItem(fileTreeItem: File): void {

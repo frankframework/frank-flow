@@ -98,7 +98,6 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   initializeMonaco(): void {
     this.initializeEditor();
     this.initializeActions();
-    this.initializeFile();
     this.initializeOnKeyUpEvent();
     this.initializeOnChangeEvent();
     this.initializeNewFileSubscription();
@@ -129,10 +128,6 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
 
   save(): void {
     this.currentFileService.save();
-  }
-
-  initializeFile(): void {
-    this.setValue(this.currentFileService.getCurrentFile());
   }
 
   setValue(file: File | undefined): void {
