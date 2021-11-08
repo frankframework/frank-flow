@@ -8,6 +8,7 @@ import {
   faColumns,
   faProjectDiagram,
 } from '@fortawesome/free-solid-svg-icons';
+import { CurrentFileService } from 'src/app/shared/services/current-file.service';
 
 @Component({
   selector: 'app-modes',
@@ -18,7 +19,11 @@ export class ModeComponent implements OnInit {
   modeType = ModeType;
   mode!: Mode;
 
-  constructor(private modeService: ModeService, library: FaIconLibrary) {
+  constructor(
+    private modeService: ModeService,
+    library: FaIconLibrary,
+    private currentFileService: CurrentFileService
+  ) {
     library.addIcons(faCode, faProjectDiagram, faColumns);
   }
 
@@ -33,5 +38,13 @@ export class ModeComponent implements OnInit {
   setMode(modeType: ModeType): void {
     this.mode.set(modeType);
     this.modeService.setMode(this.mode);
+    this.setFileFlowUpdate();
+  }
+
+  setFileFlowUpdate(): void {
+    const currentFile = this.currentFileService.getCurrentFile();
+    if (currentFile) {
+      currentFile.flowNeedsUpdate = true;
+    }
   }
 }
