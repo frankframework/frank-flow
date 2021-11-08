@@ -144,7 +144,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
       const item: File = JSON.parse(itemValue);
 
       if (item.type === FileType.FILE) {
-        if (this.currentFile && !this.currentFile?.saved) {
+        if (this.fileNeedsToBeSaved()) {
           this.switchWithoutSavingDecision(item);
         } else {
           this.currentFileService.switchToFileTreeItem(item);
@@ -154,6 +154,10 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
         this.currentFileService.currentDirectory = item;
       }
     }
+  }
+
+  fileNeedsToBeSaved(): boolean {
+    return this.currentFile && !this.currentFile?.saved;
   }
 
   switchWithoutSavingDecision(item: File): void {
