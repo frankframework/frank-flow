@@ -99,7 +99,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
       {
         next: (currentFile: File): void => {
-          console.log(currentFile);
           this.errors = currentFile.errors;
           this.locked = this.XmlErrorsFound();
           if (currentFile.flowStructure && currentFile.flowNeedsUpdate) {
