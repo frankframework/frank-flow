@@ -175,7 +175,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   generateFlow(structure: FlowStructure): void {
     this.jsPlumbInstance.ready(() => {
-      this.jsPlumbInstance.reset(false);
+      this.jsPlumbInstance.reset(true);
       this.viewContainerRef.clear();
       this.nodeGeneratorService.resetNodes();
 
