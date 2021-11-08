@@ -26,24 +26,17 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.util.StringUtils;
 
 import org.apache.commons.io.FilenameUtils;
 import org.ibissource.frankflow.util.FileUtils;
 
 @Path("/configurations/{name}/directories")
 public class DirectoryApi {
-	private static final Logger log = LogManager.getLogger(FileUtils.class);
-	public static final String BASE_DIR = System.getProperty("configurations.directory");
 
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response makeDirectory(@PathParam("name") String configurationName, @QueryParam("path") String path) {
-        log.info("Post to directories");
-        System.out.println("Post to directories!");
         File rootFolder = FileUtils.getDir(configurationName);
         File file = getFile(rootFolder, path);
 

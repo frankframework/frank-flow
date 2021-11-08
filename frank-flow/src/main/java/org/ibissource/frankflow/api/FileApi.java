@@ -43,16 +43,11 @@ import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.ibissource.frankflow.util.FileUtils;
 import org.ibissource.frankflow.util.MimeTypeUtil;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.util.StringUtils;
 
 
 @Path("/configurations/{name}/files")
 public class FileApi {
 
-	private static final Logger log = LogManager.getLogger(FileUtils.class);
-	public static final String BASE_DIR = System.getProperty("configurations.directory");
 
 	@Context Request request;
 
@@ -60,8 +55,6 @@ public class FileApi {
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFile(@PathParam("name") String configurationName, @QueryParam("path") String path) {
-		log.info("get to files");
-		System.out.println("Get to directories!");
 		File rootFolder = FileUtils.getDir(configurationName);
 		File file = getFile(rootFolder, path);
 		if(!file.exists()) {
