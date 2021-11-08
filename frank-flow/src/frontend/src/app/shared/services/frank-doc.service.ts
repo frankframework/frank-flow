@@ -6,7 +6,7 @@ import { Observable, ReplaySubject } from 'rxjs';
   providedIn: 'root',
 })
 export class FrankDocService {
-  frankDoc = new ReplaySubject<any>();
+  frankDoc = new ReplaySubject<any>(1);
 
   constructor() {
     this.fetchFrankDoc();

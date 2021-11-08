@@ -73,13 +73,12 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
-    this.setCurrentFileListener();
+    this.subscribeToCurrentFile();
     if (this.panzoomConfig) {
       this.modelChangedSubscription = this.panzoomConfig.modelChanged.subscribe(
         (model: PanZoomModel) => this.onModelChanged(model)
       );
     }
-    this.currentFileService.reloadFile();
   }
 
   ngOnDestroy(): void {
@@ -96,10 +95,11 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     // TODO: Add undo/redo
   }
 
-  setCurrentFileListener(): void {
+  subscribeToCurrentFile(): void {
     this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
       {
         next: (currentFile: File): void => {
+          console.log(currentFile);
           this.errors = currentFile.errors;
           this.locked = this.XmlErrorsFound();
           if (currentFile.flowStructure && currentFile.flowNeedsUpdate) {
@@ -176,7 +176,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   generateFlow(structure: FlowStructure): void {
     this.jsPlumbInstance.ready(() => {
-      this.jsPlumbInstance.reset(true);
+      this.jsPlumbInstance.reset(false);
       this.viewContainerRef.clear();
       this.nodeGeneratorService.resetNodes();
 
