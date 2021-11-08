@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FlowNodeAttributeOptions } from 'src/app/shared/models/flow-node-attribute-options.model';
 import { FlowNodeAttributes } from 'src/app/shared/models/flow-node-attributes.model';
@@ -9,13 +9,14 @@ import { Node } from '../node/nodes/node.model';
 import { CurrentFileService } from '../../shared/services/current-file.service';
 import { File } from '../../shared/models/file.model';
 import { ChangedAttribute } from '../../shared/models/changed-attribute.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-options',
   templateUrl: './options.component.html',
   styleUrls: ['./options.component.scss'],
 })
-export class OptionsComponent implements OnInit {
+export class OptionsComponent implements OnInit, OnDestroy {
   disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
   frankDoc: any;
   availableAttributes: FlowNodeAttributeOptions[] = [];
@@ -28,6 +29,7 @@ export class OptionsComponent implements OnInit {
   nodeDescription?: string;
   private currentFile!: File;
   structureNode!: FlowStructureNode;
+  frankDocSubscription!: Subscription;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
@@ -41,8 +43,12 @@ export class OptionsComponent implements OnInit {
     this.getCurrentFile();
   }
 
+  ngOnDestroy(): void {
+    this.frankDocSubscription.unsubscribe();
+  }
+
   getFrankDoc(): void {
-    this.frankDocService
+    this.frankDocSubscription = this.frankDocService
       .getFrankDoc()
       .subscribe((frankDoc: any) => (this.frankDoc = frankDoc));
   }
