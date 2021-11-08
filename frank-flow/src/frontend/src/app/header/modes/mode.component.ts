@@ -61,7 +61,9 @@ export class ModeComponent implements OnInit, OnDestroy {
   }
 
   flowNeedsUpdate(): void {
-    this.currentFile.flowNeedsUpdate =
-      this.mode.currentMode === ModeType.editorMode;
+    if (this.currentFile) {
+      this.currentFile.flowNeedsUpdate =
+        this.mode.currentMode === ModeType.editorMode;
+    }
   }
 }
