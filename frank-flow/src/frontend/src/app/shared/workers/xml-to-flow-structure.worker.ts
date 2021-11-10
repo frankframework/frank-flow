@@ -108,14 +108,14 @@ parser.on('attribute', (attribute: AttributeEventForOptions<{}>) => {
 
   if (attribute.name === 'firstPipe') {
     flowStructure.firstPipe = attribute.value;
-  } else {
-    const newAttribute = {
-      value: attribute.value,
-      line: parser.line,
-      endColumn: parser.column + MONACO_COLUMN_OFFSET,
-      startColumn,
-    };
-
-    bufferAttributes = { ...bufferAttributes, [attribute.name]: newAttribute };
   }
+
+  const newAttribute = {
+    value: attribute.value,
+    line: parser.line,
+    endColumn: parser.column + MONACO_COLUMN_OFFSET,
+    startColumn,
+  };
+
+  bufferAttributes = { ...bufferAttributes, [attribute.name]: newAttribute };
 });
