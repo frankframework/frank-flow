@@ -128,6 +128,20 @@ export class FlowStructureService {
     this.monacoEditorComponent?.applyEdits([{ range, text }]);
   }
 
+  changeFirstPipe(newFirstPipe: string): void {
+    const firstPipe = this.flowStructure.pipeline.attributes['firstPipe'];
+
+    const text = `firstPipe="${newFirstPipe}"`;
+    const range = {
+      startLineNumber: firstPipe.line,
+      startColumn: firstPipe.startColumn,
+      endColumn: firstPipe.endColumn,
+      endLineNumber: firstPipe.line,
+    };
+
+    this.monacoEditorComponent?.applyEdits([{ range, text }]);
+  }
+
   addPipe(pipeData: Pipe): void {
     const pipes = this.flowStructure.pipes;
     const lastPipe = pipes[pipes.length - 1] ?? this.flowStructure.pipeline;
