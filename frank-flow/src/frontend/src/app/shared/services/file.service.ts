@@ -87,4 +87,20 @@ export class FileService {
       .then((response) => response.ok)
       .catch((error) => console.error(error));
   }
+
+  createDirectoryForConfiguration(configuration: string, path: string): void {
+    fetch(`${this.BASE_PATH}/${configuration}/directories/?path=${path}`, {
+      method: 'POST',
+    })
+      .then((response) => response.ok)
+      .catch((error) => console.error(error));
+  }
+
+  removeDirectoryForConfiguration(configuration: string, path: string): void {
+    fetch(`${this.BASE_PATH}/${configuration}/directories/?path=${path}`, {
+      method: 'DELETE',
+    })
+      .then((response) => response.ok)
+      .catch((error) => console.error(error));
+  }
 }
