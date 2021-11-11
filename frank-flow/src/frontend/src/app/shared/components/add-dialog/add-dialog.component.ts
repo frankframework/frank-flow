@@ -32,32 +32,38 @@ export class AddDialogComponent {
     if (this.fileAlreadyExistsInFolder()) {
       this.toastr.error(
         `The file ${this.fileName} already exists in this directory.`,
-        'Error creating'
+        `Error creating ${this.isFolder ? 'folder' : 'file'}`
       );
-    } else if (this.currentDirectory.configuration) {
-      this.fileService
-        .updateFileForConfiguration(
-          this.currentDirectory.configuration,
-          this.currentDirectory.path + '/' + this.fileName,
-          this.helloWorldFileTemplate(this.fileName)
-        )
-        .then((response) => {
-          if (response) {
-            this.toastr.success(
-              `The file ${this.fileName} has been created.`,
-              'File created!'
-            );
-          } else {
-            this.toastr.error(
-              `The file ${this.fileName} couldn't be created.`,
-              'Error creating'
-            );
-          }
-        });
-      this.clearForm();
-      this.fileService.fetchFiles();
-      this.ngxSmartModalService.close('addDialog');
+      return;
     }
+    if (!this.currentDirectory.configuration) {
+      this.toastr.error(
+        `Please select a configuration or directory.`,
+        `Error creating ${this.isFolder ? 'folder' : 'file'}`
+      );
+    }
+    this.createFileOrFolder().then((response) => {
+      if (response) {
+        this.toastr.success(
+          `The ${this.isFolder ? 'folder' : 'file'} ${
+            this.fileName
+          } has been created.`,
+          `${this.isFolder ? 'Folder' : 'File'} created!`
+        );
+      } else {
+        this.toastr.error(
+          `The ${this.isFolder ? 'folder' : 'file'} ${
+            this.fileName
+          } couldn't be created.`,
+          `Error creating ${this.isFolder ? 'folder' : 'file'}`
+        );
+      }
+    });
+
+    this.clearDirectory();
+    this.clearForm();
+    this.fileService.fetchFiles();
+    this.ngxSmartModalService.close('addDialog');
   }
 
   fileAlreadyExistsInFolder(): boolean {
@@ -83,6 +89,25 @@ export class AddDialogComponent {
 
   findDuplicateFileName(fileName: string, directory: any): boolean {
     return directory?._files?.find((file: string) => file === fileName);
+  }
+
+  createFileOrFolder(): Promise<boolean | void> {
+    if (this.isFolder) {
+      return this.fileService.createDirectoryForConfiguration(
+        this.currentDirectory.configuration,
+        this.currentDirectory.path + '/' + this.fileName
+      );
+    } else {
+      return this.fileService.updateFileForConfiguration(
+        this.currentDirectory.configuration,
+        this.currentDirectory.path + '/' + this.fileName,
+        this.helloWorldFileTemplate(this.fileName)
+      );
+    }
+  }
+
+  clearDirectory(): void {
+    this.currentDirectory.configuration = '';
   }
 
   clearForm(): void {
