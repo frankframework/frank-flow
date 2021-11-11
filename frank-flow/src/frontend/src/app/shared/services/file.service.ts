@@ -61,58 +61,64 @@ export class FileService {
       .catch((error) => console.error(error));
   }
 
-  updateFileForConfiguration(
+  createFileForConfiguration(
     configuration: string,
     path: string,
     content: string
-  ): Promise<boolean | void> {
+  ): Promise<Response> {
     const formData = new FormData();
     formData.append('file', content);
 
     return fetch(`${this.BASE_PATH}/${configuration}/files/?path=${path}`, {
       method: 'POST',
       body: formData,
-    })
-      .then((response) => response.ok)
-      .catch((error) => console.error(error));
+    });
   }
 
-  removeFileFromConfiguration(file: File): Promise<boolean | void> {
+  updateFileForConfiguration(
+    configuration: string,
+    path: string,
+    content: string
+  ): Promise<Response> {
+    const formData = new FormData();
+    formData.append('file', content);
+
+    return fetch(`${this.BASE_PATH}/${configuration}/files/?path=${path}`, {
+      method: 'PUT',
+      body: formData,
+    });
+  }
+
+  removeFileFromConfiguration(file: File): Promise<Response> {
     return fetch(
       `${this.BASE_PATH}/${file.configuration}/files/?path=${file.path}`,
       {
         method: 'DELETE',
       }
-    )
-      .then((response) => response.ok)
-      .catch((error) => console.error(error));
+    );
   }
 
   createDirectoryForConfiguration(
     configuration: string,
     path: string
-  ): Promise<boolean | void> {
+  ): Promise<Response> {
     return fetch(
       `${this.BASE_PATH}/${configuration}/directories/?path=${path}`,
       {
         method: 'POST',
       }
-    )
-      .then((response) => response.ok)
-      .catch((error) => console.error(error));
+    );
   }
 
   removeDirectoryForConfiguration(
     configuration: string,
     path: string
-  ): Promise<boolean | void> {
+  ): Promise<Response> {
     return fetch(
       `${this.BASE_PATH}/${configuration}/directories/?path=${path}`,
       {
         method: 'DELETE',
       }
-    )
-      .then((response) => response.ok)
-      .catch((error) => console.error(error));
+    );
   }
 }

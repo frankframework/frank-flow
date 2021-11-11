@@ -189,21 +189,23 @@ export class CurrentFileService {
           this.currentFile.path,
           this.currentFile.xml
         )
-        .then((response) => {
-          if (response) {
-            this.toastr.success(
-              `The file ${this.currentFile.path} has been saved.`,
-              'File saved!'
-            );
-            this.currentFile.saved = true;
-            this.currentFile.flowNeedsUpdate = false;
-            this.updateCurrentFile(this.currentFile);
-          } else {
-            this.toastr.error(
-              `The file ${this.currentFile.path} couldn't be saved.`,
-              'Error saving'
-            );
-          }
+        .then((response) => response.ok)
+        .then(() => {
+          // TODO: Doesn't show toastr if file is saved
+          this.toastr.success(
+            `The file ${this.currentFile.path} has been saved.`,
+            'File saved!'
+          );
+          this.currentFile.saved = true;
+          this.currentFile.flowNeedsUpdate = false;
+          this.updateCurrentFile(this.currentFile);
+        })
+        .catch((error) => {
+          console.error(error);
+          this.toastr.error(
+            `The file ${this.currentFile.path} couldn't be saved.`,
+            'Error saving'
+          );
         });
     }
   }
