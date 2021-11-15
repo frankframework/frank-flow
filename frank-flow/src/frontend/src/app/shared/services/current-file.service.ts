@@ -46,7 +46,7 @@ export class CurrentFileService {
 
   initializeXmlToFlowStructureWorkerEventListener(): void {
     this.xmlToFlowStructureWorker.onmessage = ({ data }) => {
-      this.toastr.clear();
+      this.clearErrorToasts();
       if (data) {
         if (this.parsingErrorsFound(data)) {
           this.currentFile.errors = data.errors;
@@ -58,6 +58,16 @@ export class CurrentFileService {
         this.currentFileSubject.next(this.currentFile);
       }
     };
+  }
+
+  clearErrorToasts(): void {
+    this.toastr.toasts.forEach((toast) => {
+      if (
+        toast.toastRef.componentInstance.toastClasses.includes('toast-error')
+      ) {
+        toast.toastRef.manualClose();
+      }
+    });
   }
 
   parsingErrorsFound(data: FlowGenerationData): boolean {
@@ -191,7 +201,6 @@ export class CurrentFileService {
         )
         .then((response) => response.ok)
         .then(() => {
-          // TODO: Doesn't show toastr if file is saved
           this.toastr.success(
             `The file ${this.currentFile.path} has been saved.`,
             'File saved!'
