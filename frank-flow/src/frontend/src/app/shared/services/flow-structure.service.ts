@@ -59,13 +59,13 @@ export class FlowStructureService {
 
     const startLineNumber = currentNode?.line;
     const endLineNumber = currentNode?.endLine;
-    const column = currentNode?.column;
+    const endColumn = currentNode?.column;
 
-    if (startLineNumber && endLineNumber && column) {
+    if (startLineNumber && endLineNumber && endColumn) {
       const range: monaco.IRange = {
         startLineNumber,
         startColumn: 0,
-        endColumn: column,
+        endColumn,
         endLineNumber,
       };
 

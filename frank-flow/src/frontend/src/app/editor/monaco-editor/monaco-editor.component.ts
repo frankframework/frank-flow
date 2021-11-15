@@ -15,7 +15,6 @@ import { File } from '../../shared/models/file.model';
 import { CurrentFileService } from '../../shared/services/current-file.service';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
-// import { IRange } from 'monaco-editor';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
