@@ -15,6 +15,7 @@ import { File } from '../../shared/models/file.model';
 import { CurrentFileService } from '../../shared/services/current-file.service';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
+// import { IRange } from 'monaco-editor';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -38,6 +39,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
 
   private flowNeedsUpdate: boolean = true;
   private applyEditsUpdate: boolean = false;
+
+  private decorations: string[] = [];
 
   constructor(
     private monacoElement: ElementRef,
@@ -192,6 +195,20 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
 
   isNewlyLoadedFile(file: File) {
     return file.xml && !file.flowStructure;
+  }
+
+  highlightText(range: monaco.IRange) {
+    this.decorations = this.codeEditorInstance.deltaDecorations(
+      this.decorations,
+      [
+        {
+          range,
+          options: {
+            inlineClassName: 'highlightColor',
+          },
+        },
+      ]
+    );
   }
 
   debounce(func: any, wait: number): any {

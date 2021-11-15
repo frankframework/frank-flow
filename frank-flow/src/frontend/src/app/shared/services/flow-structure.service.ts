@@ -51,6 +51,28 @@ export class FlowStructureService {
     this.monacoEditorComponent = monacoEditorComponent;
   }
 
+  highlightPipe(nodeName: string, nodeType: string) {
+    const currentNode = this.flowStructure.nodes.find(
+      (node: FlowStructureNode) =>
+        node.name === nodeName && node.type === nodeType
+    );
+
+    const startLineNumber = currentNode?.line;
+    const endLineNumber = currentNode?.endLine;
+    const column = currentNode?.column;
+
+    if (startLineNumber && endLineNumber && column) {
+      const range: monaco.IRange = {
+        startLineNumber,
+        startColumn: 0,
+        endColumn: column,
+        endLineNumber,
+      };
+
+      this.monacoEditorComponent?.highlightText(range);
+    }
+  }
+
   addConnection(sourceName: string, targetName: string): void {
     const elementAbove = this.getElementAboveForward(sourceName);
 
