@@ -208,6 +208,10 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
         },
       ]
     );
+    this.codeEditorInstance.setPosition({
+      lineNumber: range.startLineNumber,
+      column: range.startColumn,
+    });
   }
 
   debounce(func: any, wait: number): any {
