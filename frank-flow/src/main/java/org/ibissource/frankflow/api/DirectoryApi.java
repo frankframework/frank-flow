@@ -76,19 +76,9 @@ public class DirectoryApi {
         File rootFolder = FileUtils.getDir(configurationName);
         File file = getFile(rootFolder, path);
 
-        //TODO: check for slashes in the path to also rename in an inner directory.
+        path = path.replaceFirst("(?<=/?.{0,10}/)[a-zA-Z0-9]*(?!/)$", newName);
 
-        // Pattern pattern = Pattern.compile("\\", Pattern.CASE_INSENSITIVE);
-        // Matcher matcher = pattern.matcher(path);
-
-        // if(matcher.find()) {
-        //     path.replaceAll("[^]*?(?=\\)", newName);
-        // } else {
-        //     path = newName;
-        // }
-
-        // System.out.println("path is: " + path);
-        File destFile = getFile(rootFolder, newName);
+        File destFile = getFile(rootFolder, path);
 
         if(!file.exists()) {
 			return Response.status(Response.Status.NOT_FOUND).build();
