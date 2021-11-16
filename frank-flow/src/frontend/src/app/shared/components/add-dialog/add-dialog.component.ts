@@ -29,60 +29,86 @@ export class AddDialogComponent {
   }
 
   add(): void {
-    if (this.fileAlreadyExistsInFolder()) {
+    if (!this.currentDirectory.configuration) {
       this.toastr.error(
-        `The file ${this.fileName} already exists in this directory.`,
-        'Error creating'
+        `Please select a configuration or directory.`,
+        `Error creating ${this.isFolder ? 'folder' : 'file'}`
       );
-    } else if (this.currentDirectory.configuration) {
-      this.fileService
-        .updateFileForConfiguration(
-          this.currentDirectory.configuration,
-          this.currentDirectory.path + '/' + this.fileName,
-          this.helloWorldFileTemplate(this.fileName)
-        )
-        .then((response) => {
-          if (response) {
-            this.toastr.success(
-              `The file ${this.fileName} has been created.`,
-              'File created!'
-            );
-          } else {
-            this.toastr.error(
-              `The file ${this.fileName} couldn't be created.`,
-              'Error creating'
-            );
-          }
-        });
+      return;
+    }
+
+    this.createFileOrFolder().then((response) => {
+      this.giveMessage(response);
       this.clearForm();
+      this.clearDirectory();
       this.fileService.fetchFiles();
       this.ngxSmartModalService.close('addDialog');
-    }
+    });
   }
 
-  fileAlreadyExistsInFolder(): boolean {
-    const fileName = this.fileName;
-    const rootDir = this.fileService.configurationFiles.value;
-    const currentDirectory = this.findCurrentDirectory(
-      rootDir[0].content,
-      this.currentDirectory.path
+  createFileOrFolder(): Promise<Response> {
+    return this.isFolder ? this.createFolder() : this.createFile();
+  }
+
+  createFolder(): Promise<Response> {
+    return this.fileService.createDirectoryForConfiguration(
+      this.currentDirectory.configuration,
+      this.currentDirectory.path + '/' + this.fileName
     );
-    return this.findDuplicateFileName(fileName, currentDirectory);
   }
 
-  findCurrentDirectory(directory: any, path: string | undefined): any {
-    if (path === '' || path === undefined) {
-      return directory;
+  createFile(): Promise<Response> {
+    return this.fileService.createFileForConfiguration(
+      this.currentDirectory.configuration,
+      this.currentDirectory.path + '/' + this.fileName,
+      this.helloWorldFileTemplate(this.fileName)
+    );
+  }
+
+  giveMessage(response: Response): void {
+    switch (response.status) {
+      case 200:
+      case 201:
+        this.giveSuccessMessage();
+        break;
+      case 409:
+        this.giveConflictMessage();
+        break;
+      default:
+        this.giveErrorMessage();
+        break;
     }
-    let nextDirRegex = path.match(/.*(?=\/)/g);
-    const nextDir = nextDirRegex ? nextDirRegex[0] : path;
-    let nextPath = nextDirRegex ? path.replace(/.*\//g, '') : '';
-
-    return this.findCurrentDirectory(directory[nextDir], nextPath);
   }
 
-  findDuplicateFileName(fileName: string, directory: any): boolean {
-    return directory?._files?.find((file: string) => file === fileName);
+  giveSuccessMessage(): void {
+    this.toastr.success(
+      `The ${this.isFolder ? 'folder' : 'file'} ${
+        this.fileName
+      } has been created.`,
+      `${this.isFolder ? 'Folder' : 'File'} created!`
+    );
+  }
+
+  giveConflictMessage(): void {
+    this.toastr.error(
+      `The ${this.isFolder ? 'folder' : 'file'} ${
+        this.fileName
+      } already exists.`,
+      `${this.isFolder ? 'Folder' : 'File'} already exists!`
+    );
+  }
+
+  giveErrorMessage(): void {
+    this.toastr.error(
+      `The ${this.isFolder ? 'folder' : 'file'} ${
+        this.fileName
+      } couldn't be created.`,
+      `Error creating ${this.isFolder ? 'folder' : 'file'}`
+    );
+  }
+
+  clearDirectory(): void {
+    this.currentFileService.resetCurrentDirectory();
   }
 
   clearForm(): void {

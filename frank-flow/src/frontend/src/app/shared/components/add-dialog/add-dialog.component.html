@@ -13,11 +13,8 @@
     </h1>
   </div>
   <div class="input-row">
-    <label> Do you want create a folder? </label>
-    <app-toggle
-      [(state)]="isFolder"
-      (stateChange)="isFolder = $event"
-    ></app-toggle>
+    <label> Do you want to create a folder? </label>
+    <app-toggle [(state)]="isFolder"></app-toggle>
   </div>
   <input
     #inputElement

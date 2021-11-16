@@ -43,8 +43,12 @@ import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.ibissource.frankflow.util.FileUtils;
 import org.ibissource.frankflow.util.MimeTypeUtil;
 
+
+
 @Path("/configurations/{name}/files")
 public class FileApi {
+
+
 	@Context Request request;
 
 	@GET
@@ -84,28 +88,8 @@ public class FileApi {
 	@PUT
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createFolder(@PathParam("name") String configurationName, @QueryParam("path") String path) {
-		File rootFolder = FileUtils.getDir(configurationName);
-		File file = getFile(rootFolder, path);
-		if(file.exists()) {
-			if(file.isDirectory()) {
-				throw new ApiException("directory already exists", Response.Status.CONFLICT);
-			} else {
-				throw new ApiException("path is a file", Response.Status.CONFLICT);
-			}
-		}
+	public Response createFolder(@PathParam("name") String configurationName, @QueryParam("path") String path,  MultipartBody inputDataMap) {
 
-		if(FileUtils.createDir(file)) {
-			return Response.status(Response.Status.CREATED).build();
-		}
-
-		return Response.status(Response.Status.OK).build();
-	}
-
-	@POST
-	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response saveFile(@PathParam("name") String configurationName, @QueryParam("path") String path, MultipartBody inputDataMap) {
 		if(inputDataMap == null) {
 			throw new ApiException("Missing form-data post parameters");
 		}
@@ -128,6 +112,36 @@ public class FileApi {
 			if (response != null) { //If ETag matches the response will be non-null;
 				throw new WebApplicationException(response.build());
 			}
+
+			
+			try (InputStream is = fileAttachment.getObject(InputStream.class)) {
+				Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				return Response.status(Response.Status.OK).tag(eTag).build();
+			} catch (IOException e) {
+				throw new ApiException("an error occured while saving file ["+path+"]", e);
+			}
+		}
+
+
+		return Response.status(Response.Status.OK).build();
+	}
+
+	@POST
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response saveFile(@PathParam("name") String configurationName, @QueryParam("path") String path, MultipartBody inputDataMap) {
+		if(inputDataMap == null) {
+			throw new ApiException("Missing form-data post parameters");
+		}
+		Attachment fileAttachment = inputDataMap.getAttachment("file");
+		if(fileAttachment == null) {
+			throw new ApiException("Missing form-data [file] parameter");
+		}
+
+		File rootFolder = FileUtils.getDir(configurationName);
+		File file = getFile(rootFolder, path);
+		if(file.exists()) {
+			throw new ApiException("file already exists", Response.Status.CONFLICT);
 		}
 
 		try (InputStream is = fileAttachment.getObject(InputStream.class)) {
