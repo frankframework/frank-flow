@@ -48,7 +48,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.getFiles();
-      this.getCurrentFile();
+      this.subscribeToCurrentFile();
       this.getSettings();
     });
   }
@@ -122,11 +122,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
     return items;
   }
 
-  getCurrentFile(): void {
-    const initialCurrentFile = this.currentFileService.getCurrentFile();
-    if (initialCurrentFile) {
-      this.currentFile = initialCurrentFile;
-    }
+  subscribeToCurrentFile(): void {
     this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
       (currentFile) => (this.currentFile = currentFile)
     );
