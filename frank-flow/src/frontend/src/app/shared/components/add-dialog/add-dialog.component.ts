@@ -66,28 +66,45 @@ export class AddDialogComponent {
   }
 
   giveMessage(response: Response): void {
-    if (response.ok) {
-      this.toastr.success(
-        `The ${this.isFolder ? 'folder' : 'file'} ${
-          this.fileName
-        } has been created.`,
-        `${this.isFolder ? 'Folder' : 'File'} created!`
-      );
-    } else if (response.status === 409) {
-      this.toastr.error(
-        `The ${this.isFolder ? 'folder' : 'file'} ${
-          this.fileName
-        } already exists.`,
-        `${this.isFolder ? 'Folder' : 'File'} already exists!`
-      );
-    } else {
-      this.toastr.error(
-        `The ${this.isFolder ? 'folder' : 'file'} ${
-          this.fileName
-        } couldn't be created.`,
-        `Error creating ${this.isFolder ? 'folder' : 'file'}`
-      );
+    switch (response.status) {
+      case 200:
+      case 201:
+        this.giveSuccessMessage();
+        break;
+      case 409:
+        this.giveConflictMessage();
+        break;
+      default:
+        this.giveErrorMessage();
+        break;
     }
+  }
+
+  giveSuccessMessage(): void {
+    this.toastr.success(
+      `The ${this.isFolder ? 'folder' : 'file'} ${
+        this.fileName
+      } has been created.`,
+      `${this.isFolder ? 'Folder' : 'File'} created!`
+    );
+  }
+
+  giveConflictMessage(): void {
+    this.toastr.error(
+      `The ${this.isFolder ? 'folder' : 'file'} ${
+        this.fileName
+      } already exists.`,
+      `${this.isFolder ? 'Folder' : 'File'} already exists!`
+    );
+  }
+
+  giveErrorMessage(): void {
+    this.toastr.error(
+      `The ${this.isFolder ? 'folder' : 'file'} ${
+        this.fileName
+      } couldn't be created.`,
+      `Error creating ${this.isFolder ? 'folder' : 'file'}`
+    );
   }
 
   clearDirectory(): void {
