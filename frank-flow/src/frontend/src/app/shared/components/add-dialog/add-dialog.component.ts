@@ -87,7 +87,7 @@ export class AddDialogComponent {
   }
 
   clearDirectory(): void {
-    this.currentDirectory.configuration = '';
+    this.currentFileService.resetCurrentDirectory();
   }
 
   clearForm(): void {

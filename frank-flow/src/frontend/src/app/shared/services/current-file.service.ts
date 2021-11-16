@@ -156,11 +156,11 @@ export class CurrentFileService {
   getFirstFile(): void {
     if (this.files.length > 0) {
       const firstConfig = this.files[0];
-      this.currentDirectory = {
+      this.setCurrentDirectory({
         configuration: firstConfig.name,
         path: '',
         type: FileType.FOLDER,
-      };
+      });
 
       if (this.files[0].content) {
         const firstFilePathInConfig = this.files[0].content._files.filter(
@@ -175,6 +175,18 @@ export class CurrentFileService {
         }
       }
     }
+  }
+
+  setCurrentDirectory(currentDirectory: File): void {
+    this.currentDirectory = currentDirectory;
+  }
+
+  resetCurrentDirectory(): void {
+    this.setCurrentDirectory({
+      configuration: '',
+      path: '',
+      type: FileType.FOLDER,
+    });
   }
 
   reloadFile(): void {
