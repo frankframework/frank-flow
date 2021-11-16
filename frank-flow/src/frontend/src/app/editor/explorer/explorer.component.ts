@@ -49,27 +49,31 @@ export class ExplorerComponent {
 
   deleteFile(): void {
     this.currentDirectory = this.currentFileService.currentDirectory;
-    const isFolder = this.currentDirectory.configuration;
-
     this.deleteFileOrFolder().then((response) => {
-      if (response.ok) {
-        this.toastr.success(
-          `The ${isFolder ? 'folder' : 'file'} ${
-            isFolder ? this.currentDirectory.path : this.currentFile.path
-          } has been removed.`,
-          `${isFolder ? 'Folder' : 'File'} removed!`
-        );
-        this.refreshFileTree();
-        this.currentFileService.getFirstFile();
-      } else {
-        this.toastr.error(
-          `The ${isFolder ? 'folder' : 'file'} ${
-            isFolder ? this.currentDirectory.path : this.currentFile.path
-          } couldn't be removed.`,
-          `${isFolder ? 'Folder' : 'File'} removing`
-        );
-      }
+      response.ok ? this.deleteFileSuccessfully() : this.deleteFileFailed();
     });
+  }
+
+  deleteFileSuccessfully(): void {
+    const isFolder = this.currentDirectory.configuration;
+    this.toastr.success(
+      `The ${isFolder ? 'folder' : 'file'} ${
+        isFolder ? this.currentDirectory.path : this.currentFile.path
+      } has been removed.`,
+      `${isFolder ? 'Folder' : 'File'} removed!`
+    );
+    this.refreshFileTree();
+    this.currentFileService.getFirstFile();
+  }
+
+  deleteFileFailed(): void {
+    const isFolder = this.currentDirectory.configuration;
+    this.toastr.error(
+      `The ${isFolder ? 'folder' : 'file'} ${
+        isFolder ? this.currentDirectory.path : this.currentFile.path
+      } couldn't be removed.`,
+      `${isFolder ? 'Folder' : 'File'} removing`
+    );
   }
 
   deleteFileOrFolder(): Promise<Response> {

@@ -190,36 +190,44 @@ export class CurrentFileService {
   }
 
   save(): void {
-    if (
-      this.currentFile &&
-      this.currentFile.configuration &&
-      this.currentFile.path &&
-      this.currentFile.xml &&
-      !this.currentFile.saved
-    ) {
+    if (this.fileCanBeSaved()) {
       this.fileService
         .updateFileForConfiguration(
           this.currentFile.configuration,
           this.currentFile.path,
-          this.currentFile.xml
+          this.currentFile.xml!
         )
         .then((response) => {
-          if (response.ok) {
-            this.toastr.success(
-              `The file ${this.currentFile.path} has been saved.`,
-              'File saved!'
-            );
-            this.currentFile.saved = true;
-            this.currentFile.flowNeedsUpdate = false;
-            this.updateCurrentFile(this.currentFile);
-          } else {
-            this.toastr.error(
-              `The file ${this.currentFile.path} couldn't be saved.`,
-              'Error saving'
-            );
-          }
+          response.ok ? this.saveFileSuccessfully() : this.saveFileFailed();
         });
     }
+  }
+
+  fileCanBeSaved(): boolean {
+    return <boolean>(
+      (this.currentFile &&
+        this.currentFile.configuration &&
+        this.currentFile.path &&
+        this.currentFile.xml &&
+        !this.currentFile.saved)
+    );
+  }
+
+  saveFileSuccessfully(): void {
+    this.toastr.success(
+      `The file ${this.currentFile.path} has been saved.`,
+      'File saved!'
+    );
+    this.currentFile.saved = true;
+    this.currentFile.flowNeedsUpdate = false;
+    this.updateCurrentFile(this.currentFile);
+  }
+
+  saveFileFailed(): void {
+    this.toastr.error(
+      `The file ${this.currentFile.path} couldn't be saved.`,
+      'Error saving'
+    );
   }
 
   updateCurrentFile(file: File): void {

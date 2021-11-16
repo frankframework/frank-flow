@@ -47,18 +47,22 @@ export class AddDialogComponent {
   }
 
   createFileOrFolder(): Promise<Response> {
-    if (this.isFolder) {
-      return this.fileService.createDirectoryForConfiguration(
-        this.currentDirectory.configuration,
-        this.currentDirectory.path + '/' + this.fileName
-      );
-    } else {
-      return this.fileService.createFileForConfiguration(
-        this.currentDirectory.configuration,
-        this.currentDirectory.path + '/' + this.fileName,
-        this.helloWorldFileTemplate(this.fileName)
-      );
-    }
+    return this.isFolder ? this.createFolder() : this.createFile();
+  }
+
+  createFolder(): Promise<Response> {
+    return this.fileService.createDirectoryForConfiguration(
+      this.currentDirectory.configuration,
+      this.currentDirectory.path + '/' + this.fileName
+    );
+  }
+
+  createFile(): Promise<Response> {
+    return this.fileService.createFileForConfiguration(
+      this.currentDirectory.configuration,
+      this.currentDirectory.path + '/' + this.fileName,
+      this.helloWorldFileTemplate(this.fileName)
+    );
   }
 
   giveMessage(response: Response): void {
