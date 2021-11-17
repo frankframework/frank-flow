@@ -63,7 +63,6 @@ export class ExplorerComponent {
       `${isFolder ? 'Folder' : 'File'} removed!`
     );
     this.refreshFileTree();
-    this.currentFileService.getFirstFile();
   }
 
   deleteFileFailed(): void {
