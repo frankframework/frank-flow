@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FlowGenerationData } from '../models/flow-generation-data.model';
 import { XmlParseError } from '../models/xml-parse-error.model';
 import { FileType } from '../enums/file-type.enum';
+import { SessionService } from './session.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,10 +24,13 @@ export class CurrentFileService {
   currentDirectory!: File;
   files!: any;
 
-  constructor(private fileService: FileService, private toastr: ToastrService) {
+  constructor(
+    private fileService: FileService,
+    private toastr: ToastrService,
+    private sessionService: SessionService
+  ) {
     this.initializeXmlToFlowStructureWorker();
     this.initializeXmlToFlowStructureWorkerEventListener();
-    this.getFiles();
   }
 
   initializeXmlToFlowStructureWorker(): void {
@@ -140,43 +144,6 @@ export class CurrentFileService {
     });
   }
 
-  getFiles(): void {
-    let firstFileLoaded = false;
-    this.fileService.getFiles().subscribe({
-      next: (files) => {
-        this.files = files;
-        if (this.currentFileSubject && !firstFileLoaded) {
-          firstFileLoaded = true;
-          this.getFirstFile();
-        }
-      },
-    });
-  }
-
-  getFirstFile(): void {
-    if (this.files.length > 0) {
-      const firstConfig = this.files[0];
-      this.setCurrentDirectory({
-        configuration: firstConfig.name,
-        path: '',
-        type: FileType.FOLDER,
-      });
-
-      if (this.files[0].content) {
-        const firstFilePathInConfig = this.files[0].content._files.filter(
-          (file: string) => file.match(/.+\.xml$/)
-        )[0];
-        if (firstFilePathInConfig) {
-          this.switchToFileTreeItem({
-            configuration: firstConfig.name,
-            path: firstFilePathInConfig,
-            type: FileType.FILE,
-          });
-        }
-      }
-    }
-  }
-
   setCurrentDirectory(currentDirectory: File): void {
     this.currentDirectory = currentDirectory;
   }
@@ -232,6 +199,7 @@ export class CurrentFileService {
 
   updateCurrentFile(file: File): void {
     this.currentFile = file;
+    this.sessionService.setSessionFile(file);
     this.xmlToFlowStructureWorker.postMessage(file.xml);
   }
 
