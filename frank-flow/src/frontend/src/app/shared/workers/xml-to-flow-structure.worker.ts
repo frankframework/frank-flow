@@ -1,7 +1,11 @@
 /// <reference lib="webworker" />
 
 import * as saxes from 'saxes';
-import { AttributeEventForOptions, TagForOptions } from 'saxes';
+import {
+  AttributeEventForOptions,
+  SaxesStartTagPlain,
+  TagForOptions,
+} from 'saxes';
 import { FlowNodeAttributes } from '../models/flow-node-attributes.model';
 import { FlowStructure } from '../models/flow-structure.model';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
@@ -17,11 +21,14 @@ let errors: string[] = [];
 let unclosedPipes: string[] = [];
 let bufferAttributes: FlowNodeAttributes;
 let pipeline: FlowStructureNode;
+let xml: string;
+let tagStartLine: number;
 
 addEventListener('message', ({ data }) => {
   if (typeof data === 'string') {
     flowStructure = new FlowStructure();
     errors = [];
+    xml = data;
     parserWrite(data);
   }
 });
@@ -51,9 +58,14 @@ parser.on('end', () => {
   } as FlowGenerationData);
 });
 
+parser.on('opentagstart', (tag: SaxesStartTagPlain) => {
+  tagStartLine = parser.line;
+  tagStartLine += xml.charCodeAt(parser.position - 1) !== 32 ? -1 : 0;
+});
+
 parser.on('opentag', (tag: TagForOptions<{}>) => {
   const currentNode = new FlowStructureNode(
-    parser.line,
+    tagStartLine,
     parser.line,
     parser.column + MONACO_COLUMN_OFFSET,
     tag.name,
