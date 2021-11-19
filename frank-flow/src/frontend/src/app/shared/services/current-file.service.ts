@@ -4,7 +4,6 @@ import { ReplaySubject } from 'rxjs';
 import { File } from '../models/file.model';
 import { FileService } from './file.service';
 import { ToastrService } from 'ngx-toastr';
-import { FlowGenerationData } from '../models/flow-generation-data.model';
 import { XmlParseError } from '../models/xml-parse-error.model';
 import { FileType } from '../enums/file-type.enum';
 import { SessionService } from './session.service';
@@ -53,13 +52,9 @@ export class CurrentFileService {
       this.clearErrorToasts();
       if (data) {
         if (this.parsingErrorsFound(data)) {
-          this.currentFile.errors = data.errors;
           this.showParsingErrors(data.errors);
-        } else {
-          this.currentFile.errors = [];
-          this.currentFile.flowStructure = data.structure;
         }
-        this.currentFileSubject.next(this.currentFile);
+        this.currentFileSubject.next(data);
       }
     };
   }
@@ -74,8 +69,8 @@ export class CurrentFileService {
     });
   }
 
-  parsingErrorsFound(data: FlowGenerationData): boolean {
-    return data.errors.length > 0;
+  parsingErrorsFound(data: File): boolean {
+    return !!(data.errors && data.errors.length > 0);
   }
 
   showParsingErrors(errors: string[]): void {
@@ -200,7 +195,7 @@ export class CurrentFileService {
   updateCurrentFile(file: File): void {
     this.currentFile = file;
     this.sessionService.setSessionFile(file);
-    this.xmlToFlowStructureWorker.postMessage(file.xml);
+    this.xmlToFlowStructureWorker.postMessage(file);
   }
 
   switchToFileTreeItem(fileTreeItem: File): void {
