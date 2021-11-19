@@ -20,7 +20,6 @@ body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-.highlightColor {
-  background: yellow;
-  background: rgba(71, 111, 48, 0.5);
+.monaco-editor__line--highlighted {
+  background: var(--accent-shadow);
 }
