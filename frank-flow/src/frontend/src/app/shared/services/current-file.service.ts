@@ -18,10 +18,7 @@ export class CurrentFileService {
   public currentFileObservable = this.currentFileSubject.asObservable();
   private xmlToFlowStructureWorker!: Worker;
 
-  private structure: any = {};
-
   currentDirectory!: File;
-  files!: any;
 
   constructor(
     private fileService: FileService,
@@ -200,23 +197,7 @@ export class CurrentFileService {
 
   switchToFileTreeItem(fileTreeItem: File): void {
     if (this.canSwitchFile(fileTreeItem)) {
-      this.fileService
-        .getFileFromConfiguration(fileTreeItem.configuration, fileTreeItem.path)
-        .then((file) => {
-          if (file != null) {
-            this.setCurrentFile({
-              path: fileTreeItem.path,
-              xml: file,
-              saved: true,
-              configuration: fileTreeItem.configuration,
-              flowNeedsUpdate: true,
-            } as File);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          this.toastr.error(error, `File can't be fetched`);
-        });
+      this.fetchFileAndSetToCurrent(fileTreeItem);
     }
   }
 
@@ -233,8 +214,34 @@ export class CurrentFileService {
     );
   }
 
+  fetchFileAndSetToCurrent(file: File): void {
+    this.fileService
+      .getFileFromConfiguration(file.configuration, file.path)
+      .then((result) => {
+        if (result) {
+          this.setNewCurrentFile(file, result);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        this.toastr.error(error, `File can't be fetched`);
+      });
+  }
+
+  setNewCurrentFile(file: File, content: string): void {
+    const currentFile = {
+      type: FileType.FILE,
+      configuration: file.configuration,
+      path: file.path,
+      xml: content,
+      saved: true,
+      flowNeedsUpdate: true,
+    };
+    this.setCurrentFile(currentFile);
+  }
+
   setCurrentFile(file: File): void {
-    this.currentFileSubject.next(file);
     this.updateCurrentFile(file);
+    this.currentFileSubject.next(file);
   }
 }
