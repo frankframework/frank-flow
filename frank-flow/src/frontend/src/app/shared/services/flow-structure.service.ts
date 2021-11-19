@@ -57,16 +57,12 @@ export class FlowStructureService {
         node.name === nodeName && node.type === nodeType
     );
 
-    const startLineNumber = currentNode?.line;
-    const endLineNumber = currentNode?.endLine;
-    const endColumn = currentNode?.column;
-
-    if (startLineNumber && endLineNumber && endColumn) {
+    if (currentNode) {
       const range: monaco.IRange = {
-        startLineNumber,
+        startLineNumber: currentNode?.line,
         startColumn: 0,
-        endColumn,
-        endLineNumber,
+        endColumn: currentNode?.column,
+        endLineNumber: currentNode?.endLine,
       };
 
       this.monacoEditorComponent?.highlightText(range);
