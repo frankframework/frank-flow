@@ -92,6 +92,13 @@ export class NodeComponent implements AfterViewInit {
     this.openOptions();
   }
 
+  @HostListener('click') onClick(): void {
+    this.flowStructureService.highlightPipe(
+      this.node.getName(),
+      this.node.getType()
+    );
+  }
+
   ngAfterViewInit(): void {
     const id = this.node.getId();
 

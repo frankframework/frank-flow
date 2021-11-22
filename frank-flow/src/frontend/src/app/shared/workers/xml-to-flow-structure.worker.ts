@@ -1,7 +1,11 @@
 /// <reference lib="webworker" />
 
 import * as saxes from 'saxes';
-import { AttributeEventForOptions, TagForOptions } from 'saxes';
+import {
+  AttributeEventForOptions,
+  SaxesStartTagPlain,
+  TagForOptions,
+} from 'saxes';
 import { FlowNodeAttributes } from '../models/flow-node-attributes.model';
 import { FlowStructure } from '../models/flow-structure.model';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
@@ -14,9 +18,11 @@ let parser = new saxes.SaxesParser();
 
 let flowStructure: FlowStructure;
 let errors: string[] = [];
-let unclosedPipes: string[] = [];
+let unclosedNodes: FlowStructureNode[] = [];
 let bufferAttributes: FlowNodeAttributes;
 let pipeline: FlowStructureNode;
+let xml: string;
+let tagStartLine: number;
 let originalFile: File;
 
 addEventListener('message', ({ data }) => {
@@ -24,6 +30,7 @@ addEventListener('message', ({ data }) => {
     originalFile = data;
     flowStructure = new FlowStructure();
     errors = [];
+    xml = data.xml;
     parserWrite(data.xml);
   }
 });
@@ -54,9 +61,21 @@ parser.on('end', () => {
   } as File);
 });
 
+parser.on('opentagstart', (tag: SaxesStartTagPlain) => {
+  tagStartLine = parser.line;
+  tagStartLine += charBeforeParserIsTabOrSpace() ? 0 : -1;
+});
+
+const charBeforeParserIsTabOrSpace = () => {
+  const tabCode = 9;
+  const spaceCode = 32;
+  const charBeforeParser = xml.charCodeAt(parser.position - 1);
+  return charBeforeParser === tabCode || charBeforeParser === spaceCode;
+};
+
 parser.on('opentag', (tag: TagForOptions<{}>) => {
   const currentNode = new FlowStructureNode(
-    parser.line,
+    tagStartLine,
     parser.line,
     parser.column + MONACO_COLUMN_OFFSET,
     tag.name,
@@ -65,15 +84,12 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
   bufferAttributes = {};
 
   if (currentNode.type.match(/Pipe$/g)) {
-    if (!tag.isSelfClosing) {
-      unclosedPipes.push(currentNode.name);
-    }
     currentNode.forwards = [];
     flowStructure.nodes.push(currentNode);
   } else if (currentNode.type.toLocaleLowerCase() === 'forward') {
     flowStructure.nodes
       .find((pipe: FlowStructureNode) => {
-        return pipe.name === unclosedPipes[unclosedPipes.length - 1];
+        return pipe === unclosedNodes[unclosedNodes.length - 1];
       })
       ?.forwards?.push(currentNode);
   } else if (currentNode.type.match(/Listener$/g)) {
@@ -83,22 +99,25 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
   } else if (currentNode.type === 'Pipeline') {
     pipeline = currentNode;
   } else if (currentNode.type === 'Receiver') {
-    if (!tag.isSelfClosing) {
-      unclosedPipes.push(currentNode.name);
-    }
     flowStructure.nodes.push(currentNode);
+  }
+
+  if (!tag.isSelfClosing) {
+    unclosedNodes.push(currentNode);
   }
 });
 
 parser.on('closetag', (tag: TagForOptions<{}>) => {
-  if (tag.attributes['name'] === unclosedPipes[unclosedPipes.length - 1]) {
-    let closingTag = unclosedPipes.pop();
-    let pipe = flowStructure.nodes.find(
-      (pipe: FlowStructureNode) => pipe.name === closingTag
-    );
-
-    if (pipe) {
-      pipe.endLine = parser.line;
+  let closingNode = unclosedNodes.pop();
+  if (
+    tag.attributes['name'] === closingNode?.name &&
+    tag.name === closingNode?.type &&
+    !tag.isSelfClosing
+  ) {
+    closingNode.endLine = parser.line;
+  } else {
+    if (closingNode != null) {
+      unclosedNodes.push(closingNode);
     }
   }
 });
