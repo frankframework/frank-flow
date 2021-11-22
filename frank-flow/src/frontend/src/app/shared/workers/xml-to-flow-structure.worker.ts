@@ -60,8 +60,15 @@ parser.on('end', () => {
 
 parser.on('opentagstart', (tag: SaxesStartTagPlain) => {
   tagStartLine = parser.line;
-  tagStartLine += xml.charCodeAt(parser.position - 1) !== 32 ? -1 : 0;
+  tagStartLine += charBeforeParserIsTabOrSpace() ? 0 : -1;
 });
+
+const charBeforeParserIsTabOrSpace = () => {
+  const tabCode = 9;
+  const spaceCode = 32;
+  const charBeforeParser = xml.charCodeAt(parser.position - 1);
+  return charBeforeParser === tabCode || charBeforeParser === spaceCode;
+};
 
 parser.on('opentag', (tag: TagForOptions<{}>) => {
   const currentNode = new FlowStructureNode(
