@@ -4,7 +4,6 @@ import { ToastrService } from 'ngx-toastr';
 import { CurrentFileService } from '../../services/current-file.service';
 import { FileService } from '../../services/file.service';
 import { File } from '../../models/file.model';
-import { FileType } from '../../enums/file-type.enum';
 
 @Component({
   selector: 'app-edit-dialog',
