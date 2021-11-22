@@ -80,7 +80,7 @@ public class DirectoryApi {
 		}
 
         if(file.renameTo(destFile)) {
-		    return Response.status(Response.Status.OK).build();
+		    return Response.status(Response.Status.OK).entity(path).type(MediaType.TEXT_PLAIN).build();
         } else {
             throw new ApiException("an unexpected error occured, folder can't be renamed");
         }

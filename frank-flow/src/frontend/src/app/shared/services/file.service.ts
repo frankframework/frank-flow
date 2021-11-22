@@ -76,29 +76,30 @@ export class FileService {
   }
 
   changeFileNameForConfiguration(
-    configuration: string,
-    path: string,
-    newName: string
-  ): Promise<Response> {
-    const formData = new FormData();
-    formData.append('newName', newName);
-
-    return fetch(`${this.BASE_PATH}/${configuration}/files/?path=${path}`, {
-      method: 'PATCH',
-      body: formData,
-    });
-  }
-
-  changeFolderNameForConfiguration(
-    configuration: string,
-    path: string,
+    file: File,
     newName: string
   ): Promise<Response> {
     const formData = new FormData();
     formData.append('newName', newName);
 
     return fetch(
-      `${this.BASE_PATH}/${configuration}/directories/?path=${path}`,
+      `${this.BASE_PATH}/${file.configuration}/files/?path=${file.path}`,
+      {
+        method: 'PATCH',
+        body: formData,
+      }
+    );
+  }
+
+  changeFolderNameForConfiguration(
+    folder: File,
+    newName: string
+  ): Promise<Response> {
+    const formData = new FormData();
+    formData.append('newName', newName);
+
+    return fetch(
+      `${this.BASE_PATH}/${folder.configuration}/directories/?path=${folder.path}`,
       {
         method: 'PATCH',
         body: formData,

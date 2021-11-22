@@ -27,16 +27,16 @@ export class EditDialogComponent {
   onDataAdded(): void {
     this.currentFile = this.ngxSmartModalService.getModalData('editDialog');
     this.currentDirectory = this.currentFileService.currentDirectory;
+    this.initFileNames();
+  }
 
+  initFileNames(): void {
     const shortName = this.currentDirectory?.path
       ? this.getShortFileOrDirectoryName(this.currentDirectory)
       : this.getShortFileOrDirectoryName(this.currentFile);
 
     this.fileName = shortName;
     this.oldFileName = shortName;
-
-    console.log('current file: ', this.currentFile);
-    console.log('current folder: ', this.currentDirectory);
   }
 
   getShortFileOrDirectoryName(file: File): string {
@@ -47,19 +47,28 @@ export class EditDialogComponent {
   }
 
   edit(): void {
-    console.log(
-      'current directory: ',
-      this.currentDirectory,
-      ' current file: ',
-      this.currentFile
-    );
+    this.editFileOrFolder()
+      .then((response) => {
+        this.giveEditMessage(response);
+        return response.text();
+      })
+      .then((newFileName) => {
+        this.handleEditedFile(newFileName);
+      });
+  }
 
-    this.editFileOrFolder().then((response) => {
-      this.giveMessage(response);
-      this.clearDirectory();
-      this.fileService.fetchFiles();
-      this.ngxSmartModalService.close('editDialog');
-    });
+  handleEditedFile(newFileName: string): void {
+    this.clearDirectory();
+    this.fileService.fetchFiles();
+    this.reloadHeaderWithNewFile(newFileName);
+    this.ngxSmartModalService.close('editDialog');
+  }
+
+  reloadHeaderWithNewFile(newFileName: string): void {
+    this.currentFile.path = this.currentDirectory?.path
+      ? this.currentFile.path.replace(this.currentDirectory?.path, newFileName)
+      : newFileName;
+    this.currentFileService.updateCurrentFile(this.currentFile);
   }
 
   editFileOrFolder(): Promise<Response> {
@@ -68,28 +77,22 @@ export class EditDialogComponent {
 
   editFile(): Promise<Response> {
     return this.fileService.changeFileNameForConfiguration(
-      this.currentFile.configuration,
-      this.currentFile.path,
+      this.currentFile,
       this.fileName
     );
   }
 
   editFolder(): Promise<Response> {
     return this.fileService.changeFolderNameForConfiguration(
-      this.currentDirectory.configuration,
-      this.currentDirectory.path,
+      this.currentDirectory,
       this.fileName
     );
   }
 
-  giveMessage(response: Response): void {
+  giveEditMessage(response: Response): void {
     switch (response.status) {
-      case 200:
       case 201:
         this.giveSuccessMessage();
-        break;
-      case 409:
-        this.giveConflictMessage();
         break;
       default:
         this.giveErrorMessage();
@@ -102,35 +105,61 @@ export class EditDialogComponent {
       `The ${this.currentDirectory?.path ? 'folder' : 'file'} ${
         this.fileName
       } has been changed.`,
-      `${this.currentDirectory ? 'Folder' : 'File'} changed!`
-    );
-  }
-
-  giveConflictMessage(): void {
-    this.toastr.error(
-      `The ${this.currentDirectory ? 'folder' : 'file'} ${
-        this.fileName
-      } already exists.`,
-      `${this.currentDirectory ? 'Folder' : 'File'} already exists!`
+      `${this.currentDirectory?.path ? 'Folder' : 'File'} changed!`
     );
   }
 
   giveErrorMessage(): void {
     this.toastr.error(
-      `The ${this.currentDirectory ? 'folder' : 'file'} ${
+      `The ${this.currentDirectory?.path ? 'folder' : 'file'} ${
         this.fileName
       } couldn't be changed.`,
-      `Error changing ${this.currentDirectory ? 'folder' : 'file'}`
+      `Error changing ${this.currentDirectory?.path ? 'folder' : 'file'}`
     );
   }
 
   delete(): void {
-    if (this.currentFile.type === FileType.FILE) {
-      this.fileService.removeFileFromConfiguration(this.currentFile);
-    } else if (this.currentFile.type === FileType.FOLDER) {
-      this.fileService.removeFolderFromConfiguration(this.currentFile);
-    }
+    this.removeFileOrFolder().then((response) => {
+      this.giveDeleteMessage(response);
+      this.clearDirectory();
+      this.fileService.fetchFiles();
+    });
     this.ngxSmartModalService.close('editDialog');
+  }
+
+  removeFileOrFolder(): Promise<Response> {
+    return this.currentDirectory?.path
+      ? this.fileService.removeFolderFromConfiguration(this.currentDirectory)
+      : this.fileService.removeFileFromConfiguration(this.currentFile);
+  }
+
+  giveDeleteMessage(response: Response): void {
+    switch (response.status) {
+      case 201:
+        this.giveDeleteSuccessMessage();
+        break;
+      default:
+        this.giveDeleteErrorMessage();
+        break;
+    }
+  }
+
+  giveDeleteSuccessMessage(): void {
+    this.toastr.success(
+      `The ${this.currentDirectory?.path ? 'folder' : 'file'} ${
+        this.fileName
+      } has been deleted.`,
+      `${this.currentDirectory?.path ? 'Folder' : 'File'} deleted!`
+    );
+  }
+
+  giveDeleteErrorMessage(): void {
+    this.toastr.error(
+      `The ${this.currentDirectory?.path ? 'folder' : 'file'} ${
+        this.fileName
+      } couldn't be deleted.`,
+      `Error deleting ${this.currentDirectory?.path ? 'folder' : 'file'}`
+    );
   }
 
   clearDirectory(): void {
