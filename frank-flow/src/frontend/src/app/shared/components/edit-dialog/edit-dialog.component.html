@@ -1,0 +1,26 @@
+<ngx-smart-modal
+  #editDialog
+  (onDataAdded)="onDataAdded()"
+  (onOpenFinished)="inputElement.focus()"
+  class="editDialog"
+  customClass="nsm-centered"
+  identifier="editDialog"
+>
+  <div>
+    <h2>
+      Edit {{ currentDirectory?.path ? 'folder' : 'file' }} <br />
+      {{ oldFileName }} to:
+    </h2>
+  </div>
+  <input
+    #inputElement
+    [(ngModel)]="fileName"
+    type="text"
+    (keyup.enter)="edit()"
+  />
+  <div class="button-actions">
+    <app-button (click)="edit()">Edit</app-button>
+    <app-button (click)="delete()">Delete</app-button>
+    <app-button (click)="editDialog.close()">Cancel</app-button>
+  </div>
+</ngx-smart-modal>

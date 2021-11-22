@@ -4,6 +4,7 @@ import {
   faFile,
   faFolder,
   faSave,
+  faPen,
 } from '@fortawesome/free-solid-svg-icons';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { ToastrService } from 'ngx-toastr';
@@ -25,7 +26,7 @@ export class HeaderComponent implements OnInit {
     private ngxSmartModalService: NgxSmartModalService,
     private currentFileService: CurrentFileService
   ) {
-    library.addIcons(faFile, faFolder, faSave, faCog);
+    library.addIcons(faFile, faFolder, faSave, faCog, faPen);
   }
 
   ngOnInit(): void {
@@ -44,6 +45,13 @@ export class HeaderComponent implements OnInit {
 
   openSettings(): void {
     this.ngxSmartModalService.getModal('settingsModal').open();
+  }
+
+  openEditFileDialog() {
+    this.ngxSmartModalService
+      .getModal('editDialog')
+      .setData(this.currentFile, true)
+      .open();
   }
 
   openAddDialog(): void {

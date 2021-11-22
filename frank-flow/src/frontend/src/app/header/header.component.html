@@ -14,6 +14,9 @@
     <app-button (click)="save()" [selected]="!currentFile?.saved" color="dark">
       <fa-icon icon="save" transform="down-1"></fa-icon>
     </app-button>
+    <app-button (click)="openEditFileDialog()" color="dark">
+      <fa-icon icon="pen" transform="down-1"></fa-icon>
+    </app-button>
   </div>
   <div class="header__actions--right">
     <app-modes></app-modes>
@@ -24,3 +27,4 @@
 </div>
 <app-settings></app-settings>
 <app-save-dialog></app-save-dialog>
+<app-edit-dialog></app-edit-dialog>
