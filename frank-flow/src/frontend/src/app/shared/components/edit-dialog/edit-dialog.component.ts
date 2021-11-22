@@ -90,6 +90,7 @@ export class EditDialogComponent {
 
   giveEditMessage(response: Response): void {
     switch (response.status) {
+      case 200:
       case 201:
         this.giveSuccessMessage();
         break;
@@ -134,6 +135,7 @@ export class EditDialogComponent {
 
   giveDeleteMessage(response: Response): void {
     switch (response.status) {
+      case 200:
       case 201:
         this.giveDeleteSuccessMessage();
         break;
