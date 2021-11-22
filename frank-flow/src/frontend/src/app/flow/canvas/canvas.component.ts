@@ -30,8 +30,6 @@ import { File } from '../../shared/models/file.model';
   styleUrls: ['./canvas.component.scss'],
 })
 export class CanvasComponent implements AfterViewInit, OnDestroy {
-  private readonly LAST_ZOOM_LEVEL = 0.25;
-
   @Input() panzoomConfig!: PanZoomConfig;
 
   @ViewChild('canvas', { read: ViewContainerRef })
@@ -66,9 +64,17 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   onModelChanged(model: PanZoomModel): void {
-    const zoom =
-      model.zoomLevel < 1 ? 0.5 + model.zoomLevel * 10 * 0.05 : model.zoomLevel;
+    const zoom = this.calculateZoomLevel(model.zoomLevel);
     this.jsPlumbInstance.setZoom(zoom);
+  }
+
+  calculateZoomLevel(zoomLevel: number): number {
+    const neutralZoomLevel = 1;
+    const minZoomLevel = 0.5;
+    const zoomStep = 0.5;
+    const zoomOutLevel = minZoomLevel + zoomLevel * zoomStep;
+    const isZoomingIn = zoomLevel < neutralZoomLevel;
+    return isZoomingIn ? zoomLevel : zoomOutLevel;
   }
 
   ngAfterViewInit(): void {
