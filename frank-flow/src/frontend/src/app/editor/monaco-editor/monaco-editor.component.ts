@@ -39,6 +39,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   private flowNeedsUpdate: boolean = true;
   private applyEditsUpdate: boolean = false;
 
+  private decorations: string[] = [];
+
   constructor(
     private monacoElement: ElementRef,
     private modeService: ModeService,
@@ -190,8 +192,26 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     );
   }
 
-  isNewlyLoadedFile(file: File) {
-    return file.xml && !file.flowStructure;
+  isNewlyLoadedFile(file: File): boolean {
+    return !!(file.xml && !file.flowStructure);
+  }
+
+  highlightText(range: monaco.IRange): void {
+    this.decorations = this.codeEditorInstance.deltaDecorations(
+      this.decorations,
+      [
+        {
+          range,
+          options: {
+            inlineClassName: 'monaco-editor__line--highlighted',
+          },
+        },
+      ]
+    );
+    this.codeEditorInstance.setPosition({
+      lineNumber: range.startLineNumber,
+      column: range.startColumn,
+    });
   }
 
   debounce(func: any, wait: number): any {

@@ -19,3 +19,7 @@ body {
   color: var(--text-color);
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+
+.monaco-editor__line--highlighted {
+  background: var(--accent-shadow);
+}
