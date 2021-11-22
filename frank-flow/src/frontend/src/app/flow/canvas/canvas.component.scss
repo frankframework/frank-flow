@@ -1,11 +1,12 @@
 #canvas {
-  background-color: var(--bg-color);
-  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
-  background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
-  background-image: -webkit-linear-gradient(var(--shade-1) 1px, transparent 1px),
-    -webkit-linear-gradient(0, var(--shade-1) 1px, transparent 1px),
-    -webkit-linear-gradient(var(--shade-1-shadow) 1px, transparent 1px),
-    -webkit-linear-gradient(0, var(--shade-1-shadow) 1px, transparent 1px);
+  background-position-x: -50px;
+  background-position-y: -50px;
+  background-size: 100px 100px;
+  background-image: radial-gradient(
+    circle,
+    var(--border-color) 1px,
+    var(--bg-color) 1px
+  );
   display: inline-block;
   position: relative;
   width: 2000px;

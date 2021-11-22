@@ -26,10 +26,10 @@ export class ModeComponent implements OnInit, OnDestroy {
 
   constructor(
     private modeService: ModeService,
-    library: FaIconLibrary,
+    private library: FaIconLibrary,
     private currentFileService: CurrentFileService
   ) {
-    library.addIcons(faCode, faProjectDiagram, faColumns);
+    this.library.addIcons(faCode, faProjectDiagram, faColumns);
   }
 
   ngOnInit(): void {

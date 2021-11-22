@@ -1,37 +1,53 @@
-<div class="flowContainer">
-  <pan-zoom [config]="panzoomConfig">
-    <div class="panzoom">
-      <app-canvas #nodeContainer [panzoomConfig]="panzoomConfig"></app-canvas>
-      <div class="arrows arrows--horizontal">
-        <fa-icon
-          icon="arrow-left"
-          size="10x"
-          transform="down-1"
-          (click)="decreaseRight()"
-        ></fa-icon>
-        <fa-icon
-          icon="arrow-right"
-          size="10x"
-          transform="down-1"
-          (click)="expandRight()"
-        ></fa-icon>
+<div class="flow-container">
+  <div>
+    <pan-zoom [config]="panzoomConfig">
+      <div class="panzoom">
+        <app-canvas #nodeContainer [panzoomConfig]="panzoomConfig"></app-canvas>
+        <div class="arrows arrows--horizontal">
+          <fa-icon
+            icon="arrow-left"
+            size="10x"
+            transform="down-1"
+            (click)="decreaseRight()"
+          ></fa-icon>
+          <fa-icon
+            icon="arrow-right"
+            size="10x"
+            transform="down-1"
+            (click)="expandRight()"
+          ></fa-icon>
+        </div>
+        <div class="arrows arrows--vertical">
+          <fa-icon
+            icon="arrow-up"
+            size="10x"
+            transform="down-1"
+            (click)="decreaseBottom()"
+          ></fa-icon>
+          <fa-icon
+            icon="arrow-down"
+            size="10x"
+            transform="down-1"
+            (click)="expandBottom()"
+          ></fa-icon>
+        </div>
       </div>
-      <div class="arrows arrows--vertical">
-        <fa-icon
-          icon="arrow-up"
-          size="10x"
-          transform="down-1"
-          (click)="decreaseBottom()"
-        ></fa-icon>
-        <fa-icon
-          icon="arrow-down"
-          size="10x"
-          transform="down-1"
-          (click)="expandBottom()"
-        ></fa-icon>
-      </div>
+    </pan-zoom>
+    <div class="flow-container__actions">
+      <app-button (click)="zoomIn()">
+        <fa-icon icon="search-plus" transform="down-1"></fa-icon>
+      </app-button>
+      <app-button (click)="zoomReset()">
+        <fa-icon icon="home" transform="down-1"></fa-icon>
+      </app-button>
+      <app-button (click)="zoomOut()">
+        <fa-icon icon="search-minus" transform="down-1"></fa-icon>
+      </app-button>
+      <app-button (click)="panCenter()">
+        <fa-icon icon="dot-circle" transform="down-1"></fa-icon>
+      </app-button>
     </div>
-  </pan-zoom>
+  </div>
   <app-palette></app-palette>
 </div>
 <app-options></app-options>
