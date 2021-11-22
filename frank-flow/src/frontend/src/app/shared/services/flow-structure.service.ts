@@ -199,18 +199,14 @@ export class FlowStructureService {
   }
 
   addListener(pipeData: Listener): void {
-    const receivers = this.flowStructure.receivers;
-    const lastReceiver =
-      receivers[receivers.length - 1] ?? this.flowStructure.pipeline;
-    const line =
-      lastReceiver.endLine - (receivers[receivers.length - 1] ? 0 : 1);
+    const line = this.flowStructure.pipeline.line;
     const listenerName = this.getUniqueListenerName(pipeData.getName());
 
-    const text = `\n\t\t<Receiver name="${listenerName}Receiver">\n\t\t\t<${pipeData.getType()} name="${listenerName}" />\n\t\t</Receiver>`;
+    const text = `\t\t<Receiver name="${listenerName}Receiver">\n\t\t\t<${pipeData.getType()} name="${listenerName}" />\n\t\t</Receiver>\n`;
     const range = {
       startLineNumber: line,
-      startColumn: lastReceiver.column,
-      endColumn: lastReceiver.column,
+      startColumn: 0,
+      endColumn: 0,
       endLineNumber: line,
     };
 
@@ -223,18 +219,16 @@ export class FlowStructureService {
 
   addExit(exitData: Exit): void {
     const exits = this.flowStructure.exits;
-    const lastExit =
-      exits[exits.length - 1] ??
-      this.flowStructure.pipes[this.flowStructure.pipes.length - 1];
-    lastExit.line = exits[exits.length - 1] ? lastExit.line : lastExit.endLine;
+    const lastExit = exits[exits.length - 1] ?? this.flowStructure.pipeline;
+    const line = lastExit.line + 1;
     const exitName = this.getUniqueExitPath(exitData.getName());
 
-    const text = `\n\t\t\t<${exitData.getType()} path="${exitName}" />`;
+    const text = `\t\t\t<${exitData.getType()} path="${exitName}" />\n`;
     const range = {
-      startLineNumber: lastExit.line,
-      startColumn: lastExit.column,
-      endColumn: lastExit.column,
-      endLineNumber: lastExit.line,
+      startLineNumber: line,
+      startColumn: 0,
+      endColumn: 0,
+      endLineNumber: line,
     };
 
     this.monacoEditorComponent?.applyEdits([{ range, text }], true);
