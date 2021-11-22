@@ -15,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 export class ExplorerComponent {
   searchTerm!: string;
   currentFile!: File;
+  private currentDirectory!: File;
 
   constructor(
     library: FaIconLibrary,
@@ -34,30 +35,55 @@ export class ExplorerComponent {
   }
 
   openAddDialog(): void {
-    this.ngxSmartModalService
-      .getModal('addDialog')
-      .setData(this.currentFile, true)
-      .open();
+    const currentDirectory = this.currentFileService.currentDirectory;
+
+    if (currentDirectory?.configuration) {
+      this.ngxSmartModalService
+        .getModal('addDialog')
+        .setData(this.currentFile, true)
+        .open();
+    } else {
+      this.toastr.error('Please select a folder first', "Can't add item");
+    }
   }
 
   deleteFile(): void {
-    this.fileService
-      .removeFileFromConfiguration(this.currentFile)
-      .then((response) => {
-        if (response) {
-          this.toastr.success(
-            `The file ${this.currentFile.path} has been removed.`,
-            'File removed!'
-          );
-          this.refreshFileTree();
-          this.currentFileService.getFirstFile();
-        } else {
-          this.toastr.error(
-            `The file ${this.currentFile.path} couldn't be removed.`,
-            'Error removing'
-          );
-        }
-      });
+    this.currentDirectory = this.currentFileService.currentDirectory;
+    this.deleteFileOrFolder().then((response) => {
+      response.ok ? this.deleteFileSuccessfully() : this.deleteFileFailed();
+    });
+  }
+
+  deleteFileSuccessfully(): void {
+    const isFolder = this.currentDirectory.configuration;
+    this.toastr.success(
+      `The ${isFolder ? 'folder' : 'file'} ${
+        isFolder ? this.currentDirectory.path : this.currentFile.path
+      } has been removed.`,
+      `${isFolder ? 'Folder' : 'File'} removed!`
+    );
+    this.refreshFileTree();
+  }
+
+  deleteFileFailed(): void {
+    const isFolder = this.currentDirectory.configuration;
+    this.toastr.error(
+      `The ${isFolder ? 'folder' : 'file'} ${
+        isFolder ? this.currentDirectory.path : this.currentFile.path
+      } couldn't be removed.`,
+      `${isFolder ? 'Folder' : 'File'} removing`
+    );
+  }
+
+  deleteFileOrFolder(): Promise<Response> {
+    if (this.currentDirectory.configuration) {
+      return this.fileService.removeDirectoryForConfiguration(
+        this.currentDirectory.configuration,
+        this.currentDirectory.path
+      );
+    } else {
+      return this.fileService.removeFileFromConfiguration(this.currentFile);
+    }
   }
 
   refreshFileTree(): void {

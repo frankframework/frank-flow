@@ -9,7 +9,7 @@ import {
 import { FlowNodeAttributes } from '../models/flow-node-attributes.model';
 import { FlowStructure } from '../models/flow-structure.model';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
-import { FlowGenerationData } from '../models/flow-generation-data.model';
+import { File } from '../models/file.model';
 
 const MONACO_COLUMN_OFFSET = 1;
 const QUOTE_AND_EQUALS = 2;
@@ -23,19 +23,21 @@ let bufferAttributes: FlowNodeAttributes;
 let pipeline: FlowStructureNode;
 let xml: string;
 let tagStartLine: number;
+let originalFile: File;
 
 addEventListener('message', ({ data }) => {
-  if (typeof data === 'string') {
+  if (typeof data.xml === 'string') {
+    originalFile = data;
     flowStructure = new FlowStructure();
     errors = [];
-    xml = data;
-    parserWrite(data);
+    xml = data.xml;
+    parserWrite(data.xml);
   }
 });
 
-const parserWrite = (data: string) => {
+const parserWrite = (xml: string) => {
   try {
-    parser.write(data).close();
+    parser.write(xml).close();
   } catch (e) {
     console.error(e);
   }
@@ -53,9 +55,10 @@ parser.on('end', () => {
   newFlowStructure.pipeline = pipeline;
 
   postMessage({
-    structure: newFlowStructure,
+    ...originalFile,
+    flowStructure: newFlowStructure,
     errors: errors,
-  } as FlowGenerationData);
+  } as File);
 });
 
 parser.on('opentagstart', (tag: SaxesStartTagPlain) => {

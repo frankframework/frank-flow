@@ -4,9 +4,9 @@ import { ReplaySubject } from 'rxjs';
 import { File } from '../models/file.model';
 import { FileService } from './file.service';
 import { ToastrService } from 'ngx-toastr';
-import { FlowGenerationData } from '../models/flow-generation-data.model';
 import { XmlParseError } from '../models/xml-parse-error.model';
 import { FileType } from '../enums/file-type.enum';
+import { SessionService } from './session.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,15 +18,15 @@ export class CurrentFileService {
   public currentFileObservable = this.currentFileSubject.asObservable();
   private xmlToFlowStructureWorker!: Worker;
 
-  private structure: any = {};
-
   currentDirectory!: File;
-  files!: any;
 
-  constructor(private fileService: FileService, private toastr: ToastrService) {
+  constructor(
+    private fileService: FileService,
+    private toastr: ToastrService,
+    private sessionService: SessionService
+  ) {
     this.initializeXmlToFlowStructureWorker();
     this.initializeXmlToFlowStructureWorkerEventListener();
-    this.getFiles();
   }
 
   initializeXmlToFlowStructureWorker(): void {
@@ -46,22 +46,28 @@ export class CurrentFileService {
 
   initializeXmlToFlowStructureWorkerEventListener(): void {
     this.xmlToFlowStructureWorker.onmessage = ({ data }) => {
-      this.toastr.clear();
+      this.clearErrorToasts();
       if (data) {
         if (this.parsingErrorsFound(data)) {
-          this.currentFile.errors = data.errors;
           this.showParsingErrors(data.errors);
-        } else {
-          this.currentFile.errors = [];
-          this.currentFile.flowStructure = data.structure;
         }
-        this.currentFileSubject.next(this.currentFile);
+        this.currentFileSubject.next(data);
       }
     };
   }
 
-  parsingErrorsFound(data: FlowGenerationData): boolean {
-    return data.errors.length > 0;
+  clearErrorToasts(): void {
+    this.toastr.toasts.forEach((toast) => {
+      if (
+        toast.toastRef.componentInstance.toastClasses.includes('toast-error')
+      ) {
+        toast.toastRef.manualClose();
+      }
+    });
+  }
+
+  parsingErrorsFound(data: File): boolean {
+    return !!(data.errors && data.errors.length > 0);
   }
 
   showParsingErrors(errors: string[]): void {
@@ -130,100 +136,68 @@ export class CurrentFileService {
     });
   }
 
-  getFiles(): void {
-    let firstFileLoaded = false;
-    this.fileService.getFiles().subscribe({
-      next: (files) => {
-        this.files = files;
-        if (this.currentFileSubject && !firstFileLoaded) {
-          firstFileLoaded = true;
-          this.getFirstFile();
-        }
-      },
+  setCurrentDirectory(currentDirectory: File): void {
+    this.currentDirectory = currentDirectory;
+  }
+
+  resetCurrentDirectory(): void {
+    this.setCurrentDirectory({
+      configuration: '',
+      path: '',
+      type: FileType.FOLDER,
     });
   }
 
-  getFirstFile(): void {
-    if (this.files.length > 0) {
-      const firstConfig = this.files[0];
-      this.currentDirectory = {
-        configuration: firstConfig.name,
-        path: '',
-        type: FileType.FOLDER,
-      };
-
-      if (this.files[0].content) {
-        const firstFilePathInConfig = this.files[0].content._files.filter(
-          (file: string) => file.match(/.+\.xml$/)
-        )[0];
-        if (firstFilePathInConfig) {
-          this.switchToFileTreeItem({
-            configuration: firstConfig.name,
-            path: firstFilePathInConfig,
-            type: FileType.FILE,
-          });
-        }
-      }
-    }
-  }
-
   save(): void {
-    if (
-      this.currentFile &&
-      this.currentFile.configuration &&
-      this.currentFile.path &&
-      this.currentFile.xml &&
-      !this.currentFile.saved
-    ) {
+    if (this.fileCanBeSaved()) {
       this.fileService
         .updateFileForConfiguration(
           this.currentFile.configuration,
           this.currentFile.path,
-          this.currentFile.xml
+          this.currentFile.xml!
         )
         .then((response) => {
-          if (response) {
-            this.toastr.success(
-              `The file ${this.currentFile.path} has been saved.`,
-              'File saved!'
-            );
-            this.currentFile.saved = true;
-            this.currentFile.flowNeedsUpdate = false;
-            this.updateCurrentFile(this.currentFile);
-          } else {
-            this.toastr.error(
-              `The file ${this.currentFile.path} couldn't be saved.`,
-              'Error saving'
-            );
-          }
+          response.ok ? this.saveFileSuccessfully() : this.saveFileFailed();
         });
     }
   }
 
+  fileCanBeSaved(): boolean {
+    return <boolean>(
+      (this.currentFile &&
+        this.currentFile.configuration &&
+        this.currentFile.path &&
+        this.currentFile.xml &&
+        !this.currentFile.saved)
+    );
+  }
+
+  saveFileSuccessfully(): void {
+    this.toastr.success(
+      `The file ${this.currentFile.path} has been saved.`,
+      'File saved!'
+    );
+    this.currentFile.saved = true;
+    this.currentFile.flowNeedsUpdate = false;
+    this.updateCurrentFile(this.currentFile);
+  }
+
+  saveFileFailed(): void {
+    this.toastr.error(
+      `The file ${this.currentFile.path} couldn't be saved.`,
+      'Error saving'
+    );
+  }
+
   updateCurrentFile(file: File): void {
     this.currentFile = file;
-    this.xmlToFlowStructureWorker.postMessage(file.xml);
+    this.sessionService.setSessionFile(file);
+    this.xmlToFlowStructureWorker.postMessage(file);
   }
 
   switchToFileTreeItem(fileTreeItem: File): void {
     if (this.canSwitchFile(fileTreeItem)) {
-      this.fileService
-        .getFileFromConfiguration(fileTreeItem.configuration, fileTreeItem.path)
-        .then((file) => {
-          if (file != null) {
-            this.setCurrentFile({
-              path: fileTreeItem.path,
-              xml: file,
-              saved: true,
-              configuration: fileTreeItem.configuration,
-              flowNeedsUpdate: true,
-            } as File);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          this.toastr.error(error, `File can't be fetched`);
-        });
+      this.fetchFileAndSetToCurrent(fileTreeItem);
     }
   }
 
@@ -240,8 +214,34 @@ export class CurrentFileService {
     );
   }
 
+  fetchFileAndSetToCurrent(file: File): void {
+    this.fileService
+      .getFileFromConfiguration(file.configuration, file.path)
+      .then((result) => {
+        if (result) {
+          this.setNewCurrentFile(file, result);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        this.toastr.error(error, `File can't be fetched`);
+      });
+  }
+
+  setNewCurrentFile(file: File, content: string): void {
+    const currentFile = {
+      type: FileType.FILE,
+      configuration: file.configuration,
+      path: file.path,
+      xml: content,
+      saved: true,
+      flowNeedsUpdate: true,
+    };
+    this.setCurrentFile(currentFile);
+  }
+
   setCurrentFile(file: File): void {
-    this.currentFileSubject.next(file);
     this.updateCurrentFile(file);
+    this.currentFileSubject.next(file);
   }
 }

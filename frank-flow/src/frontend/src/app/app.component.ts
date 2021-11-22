@@ -4,6 +4,8 @@ import { ModeService } from './header/modes/mode.service';
 import { ModeType } from './header/modes/modeType.enum';
 import { SettingsService } from './header/settings/settings.service';
 import { Settings } from './header/settings/settings.model';
+import { SessionService } from './shared/services/session.service';
+import { CurrentFileService } from './shared/services/current-file.service';
 
 @Component({
   selector: 'app-root',
@@ -17,12 +19,15 @@ export class AppComponent implements OnInit {
 
   constructor(
     private modeService: ModeService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private sessionService: SessionService,
+    private currentFileService: CurrentFileService
   ) {}
 
   ngOnInit(): void {
     this.getMode();
     this.getSettings();
+    this.initializeLoadLastSessionFIle();
   }
 
   getMode(): void {
@@ -33,5 +38,12 @@ export class AppComponent implements OnInit {
     this.settingsService
       .getSettings()
       .subscribe((settings) => (this.settings = settings));
+  }
+
+  initializeLoadLastSessionFIle(): void {
+    const lastSessionFile = this.sessionService.getSessionFile();
+    if (lastSessionFile) {
+      this.currentFileService.fetchFileAndSetToCurrent(lastSessionFile);
+    }
   }
 }
