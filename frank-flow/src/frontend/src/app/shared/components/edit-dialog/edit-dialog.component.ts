@@ -46,6 +46,10 @@ export class EditDialogComponent {
   }
 
   edit(): void {
+    if (this.oldFileName === this.fileName) {
+      return;
+    }
+
     this.editFileOrFolder()
       .then((response) => {
         this.giveEditMessage(response);
