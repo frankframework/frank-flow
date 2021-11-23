@@ -7,10 +7,20 @@
   &__actions {
     margin: 16px;
     padding: 16px;
-    background: #333333aa;
+    background: var(--bg-color-muted-shadow);
     position: relative;
     top: calc(64px - 100vh);
     right: 0;
+    display: flex;
+    gap: 16px;
+    width: fit-content;
+  }
+
+  &__no-canvas-message {
+    margin: 16px;
+    padding: 16px;
+    background: var(--bg-color-muted-shadow);
+    color: var(--text-color);
     display: flex;
     gap: 16px;
     width: fit-content;
