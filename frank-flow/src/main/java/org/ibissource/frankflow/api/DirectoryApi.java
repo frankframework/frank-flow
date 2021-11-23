@@ -66,7 +66,7 @@ public class DirectoryApi {
         File file = getFile(rootFolder, path);
 
 		if(path.contains("/")) {
-			path = path.replaceFirst("(?<=/?.{0,10}/)[a-zA-Z0-9]*(?!/)$", newName);
+			path = path.replaceFirst("(?<=/?.{0,10}/)[^/]*(?!/)$", newName);
 		} else {
 			path = newName;
 		}

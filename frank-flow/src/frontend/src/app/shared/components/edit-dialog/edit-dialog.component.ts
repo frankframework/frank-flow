@@ -39,10 +39,8 @@ export class EditDialogComponent {
   }
 
   getShortFileOrDirectoryName(file: File): string {
-    const nameInPathRegex = '(?<=/?.{0,10}/?)[a-zA-Z0-9.]*(?!/)$';
-    const nameRegexOutput = file.path.match(nameInPathRegex);
-
-    return nameRegexOutput ? nameRegexOutput[0] : '';
+    const pathRegExp = /^.*\//;
+    return file.path.replace(pathRegExp, '');
   }
 
   edit(): void {
