@@ -129,8 +129,14 @@ export class EditDialogComponent {
 
   removeFileOrFolder(): Promise<Response> {
     return this.currentDirectory?.path
-      ? this.fileService.removeFolderFromConfiguration(this.currentDirectory)
-      : this.fileService.removeFileFromConfiguration(this.currentFile);
+      ? this.fileService.removeDirectoryForConfiguration(
+          this.currentDirectory.configuration,
+          this.currentDirectory.path
+        )
+      : this.fileService.removeFileForConfiguration(
+          this.currentFile.configuration,
+          this.currentFile.path
+        );
   }
 
   giveDeleteMessage(response: Response): void {

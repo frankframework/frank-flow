@@ -121,22 +121,13 @@ export class FileService {
     });
   }
 
-  removeFileFromConfiguration(file: File): Promise<Response> {
-    return fetch(
-      `${this.BASE_PATH}/${file.configuration}/files/?path=${file.path}`,
-      {
-        method: 'DELETE',
-      }
-    );
-  }
-
-  removeFolderFromConfiguration(folder: File): Promise<Response> {
-    return fetch(
-      `${this.BASE_PATH}/${folder.configuration}/directories/?path=${folder.path}`,
-      {
-        method: 'DELETE',
-      }
-    );
+  removeFileForConfiguration(
+    configuration: string,
+    path: string
+  ): Promise<Response> {
+    return fetch(`${this.BASE_PATH}/${configuration}/files/?path=${path}`, {
+      method: 'DELETE',
+    });
   }
 
   createDirectoryForConfiguration(

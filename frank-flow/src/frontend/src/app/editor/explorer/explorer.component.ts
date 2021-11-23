@@ -96,7 +96,10 @@ export class ExplorerComponent {
         this.currentDirectory.path
       );
     } else {
-      return this.fileService.removeFileFromConfiguration(this.currentFile);
+      return this.fileService.removeFileForConfiguration(
+        this.currentFile.configuration,
+        this.currentFile.path
+      );
     }
   }
 
