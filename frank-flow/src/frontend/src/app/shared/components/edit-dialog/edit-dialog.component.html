@@ -1,0 +1,33 @@
+<ngx-smart-modal
+  #editDialog
+  (onDataAdded)="onDataAdded()"
+  (onOpenFinished)="inputElement.focus()"
+  (onAnyCloseEvent)="edit()"
+  class="editDialog"
+  customClass="nsm-centered"
+  identifier="editDialog"
+>
+  <div>
+    <h2>
+      Modify {{ currentDirectory?.path ? 'folder' : 'file' }}: {{ oldFileName }}
+    </h2>
+  </div>
+  <div class="input-row">
+    <label for="inputElement">Name</label>
+    <input
+      #inputElement
+      id="inputElement"
+      [(ngModel)]="fileName"
+      type="text"
+      (keyup.enter)="editDialog.close()"
+    />
+  </div>
+  <div class="input-row">
+    <label>
+      By clicking this button, the
+      {{ currentDirectory?.path ? 'folder' : 'file' }} wil be permanently
+      deleted
+    </label>
+    <app-button (click)="delete()">Delete</app-button>
+  </div>
+</ngx-smart-modal>
