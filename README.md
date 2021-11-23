@@ -2,7 +2,7 @@
 
 The Frank!Flow application is currently undergoing a renovation. The application will mostly be rewritten to Angular for a better User Experience and a stable product.
 
-The current version of this application is considered a Work In Progress. Go to the [1.0.x](https://github.com/ibissource/frank-flow/tree/1.0.x) branch if you want to use the stable release. 
+The current version of this application is considered a Work In Progress. Go to the [1.0.x](https://github.com/ibissource/frank-flow/tree/1.0.x) branch if you want to use the stable release.
 
 # Frank!Flow
 
@@ -38,12 +38,12 @@ The flow is the main attraction of the application and has a lot of hidden featu
 Besides dragging and clicking the pipes, there are some additional options in the right-click menu:
 
 - Toggle activity mode: The pipes will change to a simpler and compacter appearance by clicking this option.
-- Realign flow: You can reset the flow to a generated flow.
+- Realign flow: You can regenerate the locations of the pipes (without changing the run-time behavior of your configuration).
 - Toggle curve: Change the angled lines to curves.
 - Toggle flow direction: Change to flow from vertical to horizontal mode.
 - Export SVG: This option will export an SVG image of the part of the canvas you are looking at.
 
-There are two more options that will be discussed in the further chapters.
+There are two more options that will be discussed in dedicated sections.
 
 ### 🎛 Pipe options
 
@@ -64,8 +64,6 @@ The editor has some special features:
 #### Autocompletion
 
 The XML autocompletion is custom made for the Frank!Flow and is made available for everybody that wants XML completion based on XSD’s for the Monaco Editor. Like this project, it is open-source and can be found [here on Github](https://github.com/philipsens/monaco-xsd-code-completion).
-
-The autocompletion has support for multiple XSD’s, namespaces and isn’t just limited to the IbisDoc. Just place the XSD in the configuration folder and reference it in the configuration to add autocompletion.
 
 #### Validation
 
@@ -126,8 +124,6 @@ The POM will tell the Frank!Runner which extra dependencies you want to download
 #### Frank!Runner properties
 
 To tell the Frank!Runner we want to download extra dependencies with maven, we have to create a new file called `frank-runner.properties` with the content: `maven=true`.
-
-#### Build
 
 ##### Testing
 
@@ -215,9 +211,9 @@ The backend is used to serve the frontend and as an API for getting files from t
 
 There are two simple ways to build the backend, for local and server use.
 
-The easiest option while developing is to just run `mvn install`. This will install some plugins and bundle the files into the Jar. This command will also copy the frontend into the Jar if ran the [build command](#building-the-frontend). While technically you could build the Jar without the frontend, there really isn’t a reason not to, apart from testing the API only. Copying the frontend will be close to instant after the first build, as long as the build folder doesn’t change, because the target folder is cached.
+The easiest option while developing is to just run `mvn install`. This will build the backend and bundle existing front-end files into the Jar if present. While technically you could build the Jar without the frontend, there really isn’t a reason to do so. If you run `mvn inststall` multiple times, the front-end will be copied only the first time because `mvn install` does not clean up the target directory.
 
-The other option is meant for a production setting. This is because Maven will also install Node.js and NPM for building the frontend. This way is compatible with the Jenkins automation server. The build can be started by running `mvn install -P frontend`.
+The other option to run `mvn install -P frontend`. This command builds both the backend and the front-end. It is only meant for production, because with this command Maven will also install Node.js and NPM.
 
 ## Other projects
 
