@@ -73,7 +73,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     const minZoomLevel = 0.5;
     const zoomStep = 0.5;
     const zoomOutLevel = minZoomLevel + zoomLevel * zoomStep;
-    const isZoomingIn = zoomLevel < neutralZoomLevel;
+    const isZoomingIn = zoomLevel > neutralZoomLevel;
     return isZoomingIn ? zoomLevel : zoomOutLevel;
   }
 
