@@ -30,17 +30,6 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.io.FilenameUtils;
 import org.ibissource.frankflow.util.FileUtils;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.cxf.jaxrs.ext.multipart.Attachment;
-import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
-
-import org.ibissource.frankflow.util.FileUtils;
-import org.ibissource.frankflow.util.MimeTypeUtil;
-import javax.activation.DataHandler;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.ws.rs.FormParam;
 
 @Path("/configurations/{name}/directories")
@@ -76,8 +65,11 @@ public class DirectoryApi {
         File rootFolder = FileUtils.getDir(configurationName);
         File file = getFile(rootFolder, path);
 
-        path = path.replaceFirst("(?<=/?.{0,10}/)[a-zA-Z0-9]*(?!/)$", newName);
-
+		if(path.contains("/")) {
+			path = path.replaceFirst("(?<=/?.{0,10}/)[^/]*(?!/)$", newName);
+		} else {
+			path = newName;
+		}
         File destFile = getFile(rootFolder, path);
 
         if(!file.exists()) {
@@ -88,9 +80,9 @@ public class DirectoryApi {
 		}
 
         if(file.renameTo(destFile)) {
-		    return Response.status(Response.Status.OK).build();
+		    return Response.status(Response.Status.OK).entity(path).type(MediaType.TEXT_PLAIN).build();
         } else {
-            throw new ApiException("an unexpected error occured, file can't be renamed");
+            throw new ApiException("an unexpected error occured, folder can't be renamed");
         }
 	}
 

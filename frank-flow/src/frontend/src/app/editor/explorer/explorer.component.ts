@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faPlus, faRedoAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPlus,
+  faRedoAlt,
+  faTrash,
+  faPen,
+} from '@fortawesome/free-solid-svg-icons';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FileService } from '../../shared/services/file.service';
 import { CurrentFileService } from '../../shared/services/current-file.service';
@@ -24,7 +29,7 @@ export class ExplorerComponent {
     private currentFileService: CurrentFileService,
     private toastr: ToastrService
   ) {
-    library.addIcons(faPlus, faRedoAlt, faTrash);
+    library.addIcons(faPlus, faRedoAlt, faTrash, faPen);
     this.getCurrentFile();
   }
 
@@ -45,6 +50,15 @@ export class ExplorerComponent {
     } else {
       this.toastr.error('Please select a folder first', "Can't add item");
     }
+  }
+
+  openEditDialog(): void {
+    const currentDirectory = this.currentFileService.currentDirectory;
+
+    this.ngxSmartModalService
+      .getModal('editDialog')
+      .setData(this.currentFile, true)
+      .open();
   }
 
   deleteFile(): void {
@@ -82,7 +96,10 @@ export class ExplorerComponent {
         this.currentDirectory.path
       );
     } else {
-      return this.fileService.removeFileFromConfiguration(this.currentFile);
+      return this.fileService.removeFileForConfiguration(
+        this.currentFile.configuration,
+        this.currentFile.path
+      );
     }
   }
 

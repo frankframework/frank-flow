@@ -75,6 +75,38 @@ export class FileService {
     });
   }
 
+  changeFileNameForConfiguration(
+    file: File,
+    newName: string
+  ): Promise<Response> {
+    const formData = new FormData();
+    formData.append('newName', newName);
+
+    return fetch(
+      `${this.BASE_PATH}/${file.configuration}/files/?path=${file.path}`,
+      {
+        method: 'PATCH',
+        body: formData,
+      }
+    );
+  }
+
+  changeFolderNameForConfiguration(
+    folder: File,
+    newName: string
+  ): Promise<Response> {
+    const formData = new FormData();
+    formData.append('newName', newName);
+
+    return fetch(
+      `${this.BASE_PATH}/${folder.configuration}/directories/?path=${folder.path}`,
+      {
+        method: 'PATCH',
+        body: formData,
+      }
+    );
+  }
+
   updateFileForConfiguration(
     configuration: string,
     path: string,
@@ -89,13 +121,13 @@ export class FileService {
     });
   }
 
-  removeFileFromConfiguration(file: File): Promise<Response> {
-    return fetch(
-      `${this.BASE_PATH}/${file.configuration}/files/?path=${file.path}`,
-      {
-        method: 'DELETE',
-      }
-    );
+  removeFileForConfiguration(
+    configuration: string,
+    path: string
+  ): Promise<Response> {
+    return fetch(`${this.BASE_PATH}/${configuration}/files/?path=${path}`, {
+      method: 'DELETE',
+    });
   }
 
   createDirectoryForConfiguration(
