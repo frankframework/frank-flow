@@ -260,6 +260,7 @@ export class CurrentFileService {
   }
 
   setCurrentFile(file: File): void {
+    this.determineIfFileIsAConfiguration(file);
     this.updateCurrentFile(file);
     this.currentFileSubject.next(file);
   }
