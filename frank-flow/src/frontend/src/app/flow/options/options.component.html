@@ -79,6 +79,7 @@
           id="name"
           [ngModel]="attributes[attribute.key].value"
           (ngModelChange)="changeAttribute(attribute.key, $event)"
+          (keyup.enter)="optionsModal.close()"
         />
         <app-button (click)="deleteAttribute(attribute.key)">Delete</app-button>
       </div>
