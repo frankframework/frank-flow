@@ -139,10 +139,10 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     originalEvent: Event
   ): void {
     if (originalEvent == null || this.connectionIsMoving) {
+      this.connectionIsMoving = false;
       return;
     }
     this.flowStructureService.addConnection(info.sourceId, info.targetId);
-    this.connectionIsMoving = false;
   }
 
   private onConnectionDetached(
