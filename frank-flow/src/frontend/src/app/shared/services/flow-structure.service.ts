@@ -70,28 +70,25 @@ export class FlowStructureService {
   }
 
   addConnection(sourceName: string, targetName: string): void {
-    const elementAbove = this.getElementAboveForward(sourceName);
+    const endLine = this.getEndLineOfSourceElement(sourceName);
 
-    const text = `\n\t\t\t\t<Forward name="success" path="${targetName}" />`;
+    const text = `\t\t\t\t<Forward name="success" path="${targetName}" />\n`;
     const range = {
-      startLineNumber: elementAbove.line,
-      startColumn: elementAbove.column,
-      endColumn: elementAbove.column,
-      endLineNumber: elementAbove.line,
+      startLineNumber: endLine,
+      startColumn: 0,
+      endColumn: 0,
+      endLineNumber: endLine,
     };
 
     this.monacoEditorComponent?.applyEdits([{ range, text }]);
   }
 
-  getElementAboveForward(sourceName: string): FlowStructureNode {
+  getEndLineOfSourceElement(sourceName: string): number {
     const currentPipe = this.flowStructure.pipes.find(
       (pipe: FlowStructureNode) => pipe.name === sourceName
     );
 
-    const forwards = currentPipe?.forwards ?? [];
-    const lastForward = forwards[forwards?.length - 1];
-
-    return lastForward ?? currentPipe;
+    return currentPipe!.endLine;
   }
 
   deleteConnection(
