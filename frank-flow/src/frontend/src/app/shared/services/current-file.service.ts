@@ -192,7 +192,26 @@ export class CurrentFileService {
   updateCurrentFile(file: File): void {
     this.currentFile = file;
     this.sessionService.setSessionFile(file);
-    this.xmlToFlowStructureWorker.postMessage(file);
+    this.determineIfFileIsAConfiguration(file);
+
+    if (file.type === FileType.CONFIGURATION) {
+      this.xmlToFlowStructureWorker.postMessage(file);
+    } else {
+      this.currentFileSubject.next(file);
+    }
+  }
+
+  determineIfFileIsAConfiguration(file: File): void {
+    file.type = this.isFileAConfiguration(file)
+      ? FileType.CONFIGURATION
+      : FileType.FILE;
+  }
+
+  isFileAConfiguration(file: File): boolean {
+    const containsConfiguration = file.xml?.indexOf('<Configuration')! > -1;
+    const containsModule = file.xml?.indexOf('<Module')! > -1;
+    const containsAdapter = file.xml?.indexOf('<Adapter')! > -1;
+    return containsConfiguration || containsModule || containsAdapter;
   }
 
   switchToFileTreeItem(fileTreeItem: File): void {
