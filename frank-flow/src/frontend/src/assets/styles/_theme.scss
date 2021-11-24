@@ -81,6 +81,7 @@ $themes: (
     // define a css variable for each theme color
     @each $name, $color in $theme {
       --#{$name}: #{$color};
+      --#{$name}-shadow: #{transparentize($color, 0.5)};
     }
   }
 }

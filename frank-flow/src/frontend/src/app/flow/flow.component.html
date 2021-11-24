@@ -1,6 +1,9 @@
 <div class="flow-container">
   <div>
-    <pan-zoom [config]="panzoomConfig">
+    <pan-zoom
+      [hidden]="fileIsLoading || !fileIsConfiguration"
+      [config]="panzoomConfig"
+    >
       <div class="panzoom">
         <app-canvas #nodeContainer [panzoomConfig]="panzoomConfig"></app-canvas>
         <div class="arrows arrows--horizontal">
@@ -33,7 +36,10 @@
         </div>
       </div>
     </pan-zoom>
-    <div class="flow-container__actions">
+    <div
+      class="flow-container__actions"
+      *ngIf="fileIsConfiguration; else noCanvas"
+    >
       <app-button (click)="zoomIn()">
         <fa-icon icon="search-plus" transform="down-1"></fa-icon>
       </app-button>
@@ -51,3 +57,15 @@
   <app-palette></app-palette>
 </div>
 <app-options></app-options>
+
+<ng-template #noCanvas>
+  <div *ngIf="fileIsLoading" class="flow-container__no-canvas-message">
+    The file is loading in. Please wait.
+  </div>
+  <div
+    *ngIf="!fileIsLoading && !fileIsConfiguration"
+    class="flow-container__no-canvas-message"
+  >
+    The selected file does not contain a flow.
+  </div>
+</ng-template>
