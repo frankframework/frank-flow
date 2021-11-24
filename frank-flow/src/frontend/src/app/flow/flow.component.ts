@@ -25,6 +25,7 @@ import { FlowStructureNode } from '../shared/models/flow-structure-node.model';
 import { GraphService } from '../shared/services/graph.service';
 import { Node } from './node/nodes/node.model';
 import { Subscription } from 'rxjs';
+import { FileType } from '../shared/enums/file-type.enum';
 
 type canvasDirection = 'height' | 'width';
 type CanvasSize = { x: number; y: number };
@@ -61,7 +62,12 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   private currentFile!: File;
   private nodes!: Map<string, Node>;
   private panzoomApiSubscription!: Subscription;
+  private currentFileSubscription!: Subscription;
+  private graphSubscription!: Subscription;
   private panZoomAPI!: PanZoomAPI;
+
+  public fileIsLoading!: boolean;
+  public fileIsConfiguration!: boolean;
 
   constructor(
     private renderer: Renderer2,
@@ -82,20 +88,27 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.panzoomApiSubscription = this.panzoomConfig.api.subscribe(
-      (api: PanZoomAPI) => (this.panZoomAPI = api)
-    );
+    this.checkIfConfigIsLoaded();
+    this.setPanzoomApiSubscription();
+    this.setCurrentFileSubscription();
+    this.setNodesSubscription();
   }
 
   ngAfterViewInit(): void {
     this.setCanvasElement();
-    this.setCurrentFileSubscription();
-    this.setNodesSubscription();
     this.setBasicCanvasSize();
   }
 
   ngOnDestroy(): void {
     this.panzoomApiSubscription.unsubscribe();
+    this.currentFileSubscription.unsubscribe();
+    this.graphSubscription.unsubscribe();
+  }
+
+  setPanzoomApiSubscription(): void {
+    this.panzoomApiSubscription = this.panzoomConfig.api.subscribe(
+      (api: PanZoomAPI) => (this.panZoomAPI = api)
+    );
   }
 
   setCanvasElement(): void {
@@ -105,21 +118,30 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   setCurrentFileSubscription(): void {
-    this.currentFileService.currentFileObservable.subscribe({
-      next: (currentFile: File) => {
-        this.currentFile = currentFile;
-        this.setBasicCanvasSize();
-      },
-    });
+    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
+      {
+        next: (currentFile: File) => {
+          this.currentFile = currentFile;
+          this.checkIfConfigIsLoaded();
+          this.setBasicCanvasSize();
+        },
+      }
+    );
   }
 
   setNodesSubscription(): void {
-    this.graphService.nodesObservable.subscribe({
+    this.graphSubscription = this.graphService.nodesObservable.subscribe({
       next: (nodes: Map<string, Node>) => {
         this.nodes = nodes;
         this.setBasicCanvasSize();
       },
     });
+  }
+
+  checkIfConfigIsLoaded(): void {
+    this.fileIsLoading = !this.currentFile?.xml;
+    this.fileIsConfiguration =
+      this.currentFile?.type === FileType.CONFIGURATION;
   }
 
   decreaseRight(): void {
