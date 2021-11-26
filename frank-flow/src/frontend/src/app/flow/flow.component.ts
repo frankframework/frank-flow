@@ -48,7 +48,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
     freeMouseWheel: false,
     invertMouseWheel: true,
     zoomToFitZoomLevelFactor: 1,
-    dragMouseButton: 'middle',
+    dragMouseButton: 'left',
     zoomButtonIncrement: 0.1,
     zoomOnDoubleClick: false,
     dynamicContentDimensions: true,
