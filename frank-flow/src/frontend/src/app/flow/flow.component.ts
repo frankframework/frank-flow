@@ -154,7 +154,6 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   handleKeyboardUpEvent(kbdEvent: KeyboardEvent): void {
-    console.log(kbdEvent);
     if (kbdEvent.ctrlKey && kbdEvent.key === 's') {
       kbdEvent.preventDefault();
       this.currentFileService.save();
