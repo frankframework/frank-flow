@@ -17,8 +17,8 @@ import { ChangedAttribute } from '../models/changed-attribute.model';
   providedIn: 'root',
 })
 export class FlowStructureService {
+  monacoEditorComponent?: MonacoEditorComponent;
   private currentFile!: File;
-  private monacoEditorComponent?: MonacoEditorComponent;
   private flowStructure!: FlowStructure;
   private waitingOnNewStructure = false;
   private editAttributeQueue: Map<string, ChangedAttribute[]> = new Map();
