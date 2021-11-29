@@ -31,25 +31,17 @@ import { File } from '../../shared/models/file.model';
 })
 export class CanvasComponent implements AfterViewInit, OnDestroy {
   @Input() panzoomConfig!: PanZoomConfig;
-
   @ViewChild('canvas', { read: ViewContainerRef })
   viewContainerRef!: ViewContainerRef;
+  @HostBinding('tabindex') tabindex = 1;
 
   jsPlumbInstance!: jsPlumbInstance;
   currentFileSubscription!: Subscription;
   flowUpdate = false;
-
-  private errors!: string[] | undefined;
   locked!: boolean;
 
-  @HostBinding('tabindex') tabindex = 1;
+  private errors!: string[] | undefined;
   private connectionIsMoving = false;
-
-  @HostListener('window:keydown', ['$event'])
-  onKeyUp(kbdEvent: KeyboardEvent): void {
-    this.handleKeyboardUpEvent(kbdEvent);
-  }
-
   private modelChangedSubscription!: Subscription;
 
   constructor(
@@ -91,14 +83,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.currentFileSubscription.unsubscribe();
     this.jsPlumbInstance.reset();
     this.viewContainerRef.clear();
-  }
-
-  handleKeyboardUpEvent(kbdEvent: KeyboardEvent): void {
-    if (kbdEvent.ctrlKey && kbdEvent.key === 's') {
-      kbdEvent.preventDefault();
-      this.currentFileService.save();
-    }
-    // TODO: Add undo/redo
   }
 
   subscribeToCurrentFile(): void {

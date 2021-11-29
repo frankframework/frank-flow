@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  HostListener,
   OnDestroy,
   OnInit,
   Renderer2,
@@ -26,6 +27,7 @@ import { GraphService } from '../shared/services/graph.service';
 import { Node } from './node/nodes/node.model';
 import { Subscription } from 'rxjs';
 import { FileType } from '../shared/enums/file-type.enum';
+import { FlowStructureService } from '../shared/services/flow-structure.service';
 
 type canvasDirection = 'height' | 'width';
 type CanvasSize = { x: number; y: number };
@@ -40,6 +42,12 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
 
   @ViewChild('nodeContainer', { read: ElementRef })
   private nodeContainerRef!: ElementRef;
+
+  @HostListener('window:keydown', ['$event'])
+  onKeyUp(kbdEvent: KeyboardEvent): void {
+    this.handleKeyboardUpEvent(kbdEvent);
+  }
+
   private canvasElement?: HTMLElement;
   private panZoomConfigOptions: PanZoomConfigOptions = {
     zoomLevels: 3,
@@ -73,7 +81,8 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
     private renderer: Renderer2,
     private library: FaIconLibrary,
     private currentFileService: CurrentFileService,
-    private graphService: GraphService
+    private graphService: GraphService,
+    private flowStructureService: FlowStructureService
   ) {
     this.library.addIcons(
       faArrowDown,
@@ -142,6 +151,25 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
     this.fileIsLoading = !this.currentFile?.xml;
     this.fileIsConfiguration =
       this.currentFile?.type === FileType.CONFIGURATION;
+  }
+
+  handleKeyboardUpEvent(kbdEvent: KeyboardEvent): void {
+    console.log(kbdEvent);
+    if (kbdEvent.ctrlKey && kbdEvent.key === 's') {
+      kbdEvent.preventDefault();
+      this.currentFileService.save();
+    }
+    if (kbdEvent.ctrlKey && kbdEvent.key === 'z') {
+      kbdEvent.preventDefault();
+      this.flowStructureService.monacoEditorComponent?.undo();
+    }
+    if (
+      kbdEvent.ctrlKey &&
+      (kbdEvent.key === 'y' || (kbdEvent.shiftKey && kbdEvent.key === 'Z'))
+    ) {
+      kbdEvent.preventDefault();
+      this.flowStructureService.monacoEditorComponent?.redo();
+    }
   }
 
   decreaseRight(): void {
