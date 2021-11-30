@@ -3,12 +3,8 @@
     <img src="./assets/images/frank-flow-logo.svg" />
   </div>
   <div class="header__actions">
-    <app-button color="dark">
-      <fa-icon
-        (click)="openAddDialog()"
-        icon="file"
-        transform="down-1"
-      ></fa-icon>
+    <app-button (click)="openAddDialog()" color="dark">
+      <fa-icon icon="file" transform="down-1"></fa-icon>
     </app-button>
     <app-selector></app-selector>
     <app-button (click)="save()" [selected]="!currentFile?.saved" color="dark">

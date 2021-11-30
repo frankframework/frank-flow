@@ -101,7 +101,6 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.initializeEditor();
     this.initializeActions();
     this.initializeOnKeyUpEvent();
-    this.initializeOnChangeEvent();
     this.initializeNewFileSubscription();
     this.initializeResizeObserver();
     this.initializeThemeObserver();
@@ -121,11 +120,21 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.codeEditorInstance.addAction({
       id: 'file-save-action',
       label: 'Save',
-      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
       contextMenuGroupId: 'file',
       contextMenuOrder: 3,
       run: () => this.save(),
     });
+  }
+
+  undo() {
+    this.codeEditorInstance.trigger('keyboard', 'undo', null);
+    this.setValueAsCurrentFile();
+  }
+
+  redo() {
+    this.codeEditorInstance.trigger('keyboard', 'redo', null);
+    this.setValueAsCurrentFile();
   }
 
   save(): void {
@@ -134,12 +143,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
 
   setValue(file: File | undefined): void {
     if (file?.xml) {
-      const position = this.codeEditorInstance.getPosition();
       this.currentFile = file;
       this.codeEditorInstance.getModel()?.setValue(file.xml);
-      if (position) {
-        this.codeEditorInstance.setPosition(position);
-      }
     }
   }
 
@@ -149,7 +154,13 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   ): void {
     this.flowNeedsUpdate = flowUpdate;
     this.applyEditsUpdate = true;
-    this.codeEditorInstance.getModel()?.applyEdits(editOperations);
+
+    this.codeEditorInstance
+      .getModel()
+      ?.pushEditOperations([], editOperations, () => null);
+    this.codeEditorInstance.pushUndoStop();
+
+    this.setValueAsCurrentFile();
   }
 
   initializeOnKeyUpEvent(): void {
@@ -158,17 +169,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     );
   }
 
-  initializeOnChangeEvent(): void {
-    this.codeEditorInstance.getModel()?.onDidChangeContent(() => {
-      if (this.applyEditsUpdate) {
-        this.applyEditsUpdate = false;
-        this.setValueAsCurrentFile();
-      }
-    });
-  }
-
   setValueAsCurrentFile(): void {
-    const value = this.codeEditorInstance.getValue();
+    const value = this.codeEditorInstance.getModel()?.getValue();
 
     if (this.currentFile) {
       this.currentFile.saved = false;
