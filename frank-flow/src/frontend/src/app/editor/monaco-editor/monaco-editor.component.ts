@@ -1,4 +1,6 @@
 /// <reference path="../../../../node_modules/monaco-editor/monaco.d.ts" />
+// <reference path="../../../../node_modules/monaco-xsd-code-completion/src/index.ts" />
+
 import {
   AfterViewInit,
   Component,
@@ -15,6 +17,8 @@ import { File } from '../../shared/models/file.model';
 import { CurrentFileService } from '../../shared/services/current-file.service';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
+
+import * as XsdCC from 'monaco-xsd-code-completion/esm';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -35,6 +39,9 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   currentFileSubscription!: Subscription;
   modeSubscription!: Subscription;
   settingsSubscription!: Subscription;
+
+  xsdManager!: XsdCC.XsdManager;
+  xsdFeatures!: XsdCC.XsdFeatures;
 
   private flowNeedsUpdate: boolean = true;
   private applyEditsUpdate: boolean = false;
@@ -115,6 +122,10 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
         theme: 'vs-dark',
       }
     );
+
+    this.xsdManager = new XsdCC.XsdManager(this.codeEditorInstance);
+
+    console.log('xsd manager: ', this.xsdManager);
   }
 
   initializeActions(): void {
