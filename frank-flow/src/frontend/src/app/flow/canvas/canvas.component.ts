@@ -23,6 +23,8 @@ import { FlowStructure } from '../../shared/models/flow-structure.model';
 import { PanZoomConfig } from 'ngx-panzoom/lib/panzoom-config';
 import { PanZoomModel } from 'ngx-panzoom/lib/panzoom-model';
 import { File } from '../../shared/models/file.model';
+import { SettingsService } from 'src/app/header/settings/settings.service';
+import { Settings } from 'src/app/header/settings/settings.model';
 
 @Component({
   selector: 'app-canvas',
@@ -37,19 +39,22 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   jsPlumbInstance!: jsPlumbInstance;
   currentFileSubscription!: Subscription;
+  settingsSubscription!: Subscription;
   flowUpdate = false;
   locked!: boolean;
 
   private errors!: string[] | undefined;
   private connectionIsMoving = false;
   private modelChangedSubscription!: Subscription;
+  private currentFile!: File;
 
   constructor(
     private nodeService: NodeService,
     private currentFileService: CurrentFileService,
     private flowStructureService: FlowStructureService,
     private graphService: GraphService,
-    private nodeGeneratorService: NodeGeneratorService
+    private nodeGeneratorService: NodeGeneratorService,
+    private settingsService: SettingsService
   ) {
     this.jsPlumbInstance = this.nodeService.getInstance();
     this.setConnectionEventListeners();
@@ -72,6 +77,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
     this.subscribeToCurrentFile();
+    this.subscribeToSettings();
     if (this.panzoomConfig) {
       this.modelChangedSubscription = this.panzoomConfig.modelChanged.subscribe(
         (model: PanZoomModel) => this.onModelChanged(model)
@@ -92,11 +98,22 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
           this.errors = currentFile.errors;
           this.locked = this.XmlErrorsFound();
           if (currentFile.flowStructure && currentFile.flowNeedsUpdate) {
+            this.currentFile = currentFile;
             this.generateFlow(currentFile.flowStructure);
           }
         },
       }
     );
+  }
+
+  subscribeToSettings(): void {
+    this.settingsSubscription = this.settingsService
+      .getSettings()
+      .subscribe((settings: Settings) => {
+        if (this.currentFile && this.currentFile.flowStructure) {
+          this.generateFlow(this.currentFile.flowStructure);
+        }
+      });
   }
 
   XmlErrorsFound(): boolean {

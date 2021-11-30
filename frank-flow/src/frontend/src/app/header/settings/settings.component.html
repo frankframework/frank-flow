@@ -47,5 +47,24 @@
         <option [value]="modeType.editorMode">Editor</option>
       </select>
     </div>
+    <div class="input-row">
+      <label for="edit-mode">Connection type</label>
+      <select
+        [(ngModel)]="settings.connectionType"
+        (ngModelChange)="setSettings()"
+        id="connection-type"
+      >
+        <option [value]="connectionType.bezier">Bezier</option>
+        <option [value]="connectionType.flowchart">Flowchart</option>
+        <option [value]="connectionType.straight">Straight</option>
+      </select>
+    </div>
+    <div class="input-row">
+      <label>Enable vertical connectors</label>
+      <app-toggle
+        [(state)]="settings.verticalConnectors"
+        (stateChange)="setSettings()"
+      ></app-toggle>
+    </div>
   </div>
 </ngx-smart-modal>

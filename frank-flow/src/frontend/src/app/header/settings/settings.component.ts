@@ -3,6 +3,7 @@ import { SettingsService } from './settings.service';
 import { Settings } from './settings.model';
 import { ModeType } from '../modes/modeType.enum';
 import { SwitchWithoutSavingOption } from './options/switch-without-saving-option';
+import { ConnectionType } from './options/connection-type';
 
 @Component({
   selector: 'app-settings',
@@ -12,6 +13,7 @@ import { SwitchWithoutSavingOption } from './options/switch-without-saving-optio
 export class SettingsComponent implements OnInit {
   settings!: Settings;
   modeType = ModeType;
+  connectionType = ConnectionType;
   switchWithoutSavingOptions = SwitchWithoutSavingOption;
 
   constructor(private settingsService: SettingsService) {}
