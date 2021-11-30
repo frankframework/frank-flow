@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   runnerUri: 'http://localhost/',
   frankDocJsonPath: 'iaf/api/frankdoc/files/frankdoc.json',
+  frankDocXsdPath: 'iaf/api/frankdoc/files/frankdoc.xsd',
 };
 
 /*

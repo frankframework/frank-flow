@@ -1,5 +1,4 @@
 /// <reference path="../../../../node_modules/monaco-editor/monaco.d.ts" />
-// <reference path="../../../../node_modules/monaco-xsd-code-completion/src/index.ts" />
 
 import {
   AfterViewInit,
@@ -19,6 +18,7 @@ import { Subscription } from 'rxjs';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 
 import * as XsdCC from 'monaco-xsd-code-completion/esm';
+import { FrankDocService } from '../../shared/services/frank-doc.service';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -34,18 +34,17 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   @Output() codeChange = new EventEmitter<string>();
 
   codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
-  currentFile!: File;
 
-  currentFileSubscription!: Subscription;
-  modeSubscription!: Subscription;
-  settingsSubscription!: Subscription;
+  private currentFile!: File;
+  private frankDocXsd!: string;
 
-  xsdManager!: XsdCC.XsdManager;
-  xsdFeatures!: XsdCC.XsdFeatures;
+  private currentFileSubscription!: Subscription;
+  private modeSubscription!: Subscription;
+  private settingsSubscription!: Subscription;
+  private frankDocXsdSubscription!: Subscription;
 
   private flowNeedsUpdate: boolean = true;
   private applyEditsUpdate: boolean = false;
-
   private decorations: string[] = [];
 
   constructor(
@@ -53,7 +52,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     private modeService: ModeService,
     private settingsService: SettingsService,
     private currentFileService: CurrentFileService,
-    private flowStructureService: FlowStructureService
+    private flowStructureService: FlowStructureService,
+    private frankDocService: FrankDocService
   ) {
     this.flowStructureService.setMonacoEditorComponent(this);
   }
@@ -66,6 +66,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.currentFileSubscription.unsubscribe();
     this.modeSubscription.unsubscribe();
     this.settingsSubscription.unsubscribe();
+    this.frankDocXsdSubscription.unsubscribe();
   }
 
   loadMonaco(): void {
@@ -112,6 +113,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.initializeNewFileSubscription();
     this.initializeResizeObserver();
     this.initializeThemeObserver();
+    this.initializeFrankDocXsdObserver();
   }
 
   initializeEditor(): void {
@@ -122,10 +124,6 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
         theme: 'vs-dark',
       }
     );
-
-    this.xsdManager = new XsdCC.XsdManager(this.codeEditorInstance);
-
-    console.log('xsd manager: ', this.xsdManager);
   }
 
   initializeActions(): void {
@@ -268,5 +266,38 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.codeEditorInstance.updateOptions({
       theme: settings.darkMode ? 'vs-dark' : 'vs-light',
     });
+  }
+
+  initializeFrankDocXsdObserver(): void {
+    this.frankDocXsdSubscription = this.frankDocService.frankDocXsdObservable.subscribe(
+      {
+        next: (frankDocXsd) => {
+          this.frankDocXsd = frankDocXsd;
+          this.initializeXsdFeatures();
+        },
+      }
+    );
+  }
+
+  initializeXsdFeatures(): void {
+    const xsdManager = new XsdCC.XsdManager(this.codeEditorInstance);
+
+    xsdManager.set({
+      path: 'frankdoc.xsd',
+      value: this.frankDocXsd,
+      namespace: 'xs',
+      alwaysInclude: true,
+    });
+
+    const xsdFeatures = new XsdCC.XsdFeatures(
+      xsdManager,
+      monaco,
+      this.codeEditorInstance
+    ); // Initialise the xsdFeatures.
+
+    xsdFeatures.addCompletion();
+    xsdFeatures.addValidation();
+    xsdFeatures.addGenerateAction();
+    xsdFeatures.addReformatAction();
   }
 }
