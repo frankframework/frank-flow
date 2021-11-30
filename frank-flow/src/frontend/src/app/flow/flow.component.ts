@@ -154,21 +154,31 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   handleKeyboardUpEvent(kbdEvent: KeyboardEvent): void {
-    if (kbdEvent.ctrlKey && kbdEvent.key === 's') {
+    if (this.saveKeyCombination(kbdEvent)) {
       kbdEvent.preventDefault();
       this.currentFileService.save();
-    }
-    if (kbdEvent.ctrlKey && kbdEvent.key === 'z') {
+    } else if (this.undoKeyCombination(kbdEvent)) {
       kbdEvent.preventDefault();
       this.flowStructureService.monacoEditorComponent?.undo();
-    }
-    if (
-      kbdEvent.ctrlKey &&
-      (kbdEvent.key === 'y' || (kbdEvent.shiftKey && kbdEvent.key === 'Z'))
-    ) {
+    } else if (this.redoKeyCombination(kbdEvent)) {
       kbdEvent.preventDefault();
       this.flowStructureService.monacoEditorComponent?.redo();
     }
+  }
+
+  saveKeyCombination(kbdEvent: KeyboardEvent): boolean {
+    return kbdEvent.ctrlKey && kbdEvent.key === 's';
+  }
+
+  undoKeyCombination(kbdEvent: KeyboardEvent): boolean {
+    return kbdEvent.ctrlKey && kbdEvent.key === 'z';
+  }
+
+  redoKeyCombination(kbdEvent: KeyboardEvent): boolean {
+    return (
+      kbdEvent.ctrlKey &&
+      (kbdEvent.key === 'y' || (kbdEvent.shiftKey && kbdEvent.key === 'Z'))
+    );
   }
 
   decreaseRight(): void {
