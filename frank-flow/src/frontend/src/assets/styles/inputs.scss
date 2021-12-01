@@ -1,7 +1,7 @@
 @import 'variables';
 
 input[type='text'] {
-  padding: 16px;
+  padding: 8px;
   width: 100%;
   height: 32px;
   border: 2px solid var(--border-color);
@@ -14,6 +14,7 @@ input[type='text'] {
 }
 
 select {
+  padding: 0 8px;
   height: 32px;
   border: 2px solid var(--border-color);
   background-color: var(--bg-color);
@@ -26,8 +27,21 @@ select {
   align-items: center;
 
   input,
-  select {
+  select,
+  label {
     width: 50%;
+    -webkit-appearance: none;
+  }
+
+  &--input-with-button {
+    width: 50%;
+    display: flex;
+    gap: 8px;
+
+    input,
+    select {
+      flex-grow: 1;
+    }
   }
 }
 
