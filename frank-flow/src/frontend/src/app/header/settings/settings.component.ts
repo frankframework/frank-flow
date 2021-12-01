@@ -11,10 +11,10 @@ import { ConnectionType } from './options/connection-type';
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent implements OnInit {
-  settings!: Settings;
-  modeType = ModeType;
-  connectionType = ConnectionType;
-  switchWithoutSavingOptions = SwitchWithoutSavingOption;
+  public settings!: Settings;
+  public modeType = ModeType;
+  public connectionType = ConnectionType;
+  public switchWithoutSavingOptions = SwitchWithoutSavingOption;
 
   constructor(private settingsService: SettingsService) {}
 

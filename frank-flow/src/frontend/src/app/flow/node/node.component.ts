@@ -9,6 +9,8 @@ import { Node } from './nodes/node.model';
 import {
   AnchorSpec,
   ConnectorSpec,
+  DragOptions,
+  DropOptions,
   EndpointOptions,
   jsPlumbInstance,
 } from 'jsplumb';
@@ -25,9 +27,9 @@ import { ConnectionType } from 'src/app/header/settings/options/connection-type'
   styleUrls: ['./node.component.scss'],
 })
 export class NodeComponent implements AfterViewInit {
-  @Input() node!: Node;
-  @Input() jsPlumbInstance!: jsPlumbInstance;
-  @Input() generating!: boolean;
+  @Input() public node!: Node;
+  @Input() public jsPlumbInstance!: jsPlumbInstance;
+  @Input() public generating!: boolean;
   @HostBinding('class') public cssClass: any;
   @HostBinding('style') public style: any;
 
@@ -41,46 +43,86 @@ export class NodeComponent implements AfterViewInit {
     );
   }
 
-  settings!: Settings;
-  cloud = faCloudDownloadAlt;
+  private dragOptions: DragOptions = {
+    tolerance: 'touch',
+    hoverClass: 'dropHover',
+    activeClass: 'dragActive',
+  } as DragOptions;
+
+  private dropOptions: DropOptions = {
+    hoverClass: 'dropHover',
+    containment: 'canvas',
+    grid: [20, 20],
+    stop: (e: any) => {
+      this.handleDragStop(e);
+    },
+  } as DropOptions;
+
+  private topEndpointOptions: EndpointOptions = {
+    endpoint: ['Dot', { radius: 7 }],
+    paintStyle: { fill: '#ffcb3a' },
+    isSource: false,
+    scope: 'jsPlumb_DefaultScope',
+    maxConnections: 1,
+    isTarget: true,
+    dropOptions: this.dropOptions,
+  };
+
+  private bottomEndpointOptions: EndpointOptions = {
+    endpoint: ['Dot', { radius: 10 }],
+    paintStyle: { fill: '#99cb3a' },
+    isSource: true,
+    scope: 'jsPlumb_DefaultScope',
+    connectorStyle: { stroke: '#99cb3a', strokeWidth: 3 },
+    maxConnections: 30,
+    isTarget: false,
+    connectorOverlays: [['Arrow', { location: 1 }]],
+    dropOptions: this.dropOptions,
+  };
+
+  private settings!: Settings;
+  public readonly cloud = faCloudDownloadAlt;
 
   constructor(
-    public ngxSmartModalService: NgxSmartModalService,
-    public flowStructureService: FlowStructureService,
-    public settingsService: SettingsService
+    private ngxSmartModalService: NgxSmartModalService,
+    private flowStructureService: FlowStructureService,
+    private settingsService: SettingsService
   ) {
     this.getSettings();
   }
 
-  ngAfterViewInit(): void {
-    const id = this.node.getId();
-    const topEndpointOptions = this.getTopendpointOptions();
-    const bottomEndpointOptions = this.getBottomEndpointOptions();
-
-    this.nodeIsListener()
-      ? this.makeNodeListener(bottomEndpointOptions)
-      : this.makeNodeTarget(topEndpointOptions, id);
-    if (this.nodeIsNotExit()) {
-      this.makeNodeSource(bottomEndpointOptions, id);
-    }
-
-    this.jsPlumbInstance.draggable(id, this.getDragOptions());
+  getSettings(): void {
+    this.settingsService
+      .getSettings()
+      .subscribe((settings) => (this.settings = settings));
   }
 
-  nodeIsNotExit() {
-    return this.cssClass !== 'shape--round color--danger';
+  ngAfterViewInit(): void {
+    const id = this.node.getId();
+    this.bottomEndpointOptions.connector = this.getConnector();
+
+    this.nodeIsListener() ? this.makeNodeListener() : this.makeNodeTarget(id);
+    if (!this.nodeIsExit()) {
+      this.makeNodeSource(id);
+    }
+
+    this.jsPlumbInstance.draggable(id, this.dragOptions);
+  }
+
+  nodeIsExit() {
+    return this.cssClass === 'shape--round color--danger';
   }
 
   nodeIsListener() {
     return this.cssClass === 'shape--oval color--info';
   }
 
-  makeNodeListener(bottomEndpointOptions: EndpointOptions): void {
-    bottomEndpointOptions.isSource = false;
-    bottomEndpointOptions.connectionsDetachable = false;
+  makeNodeListener(): void {
+    this.bottomEndpointOptions.isSource = false;
+    this.bottomEndpointOptions.connectionsDetachable = false;
   }
 
-  makeNodeSource(bottomEndpointOptions: EndpointOptions, id: string): void {
+  makeNodeSource(id: string): void {
     this.jsPlumbInstance.addEndpoint(
       id,
       {
@@ -88,15 +130,15 @@ export class NodeComponent implements AfterViewInit {
         uuid: id + '_bottom',
         maxConnections: -1,
       },
-      bottomEndpointOptions
+      this.bottomEndpointOptions
     );
   }
 
-  makeNodeTarget(topEndpointOptions: EndpointOptions, id: string): void {
+  makeNodeTarget(id: string): void {
     this.jsPlumbInstance.addEndpoint(
       id,
       { anchor: this.getTargetAnchor(), uuid: id + '_top', maxConnections: -1 },
-      topEndpointOptions
+      this.topEndpointOptions
     );
   }
 
@@ -108,74 +150,34 @@ export class NodeComponent implements AfterViewInit {
     return this.settings.verticalConnectors ? 'Top' : 'LeftMiddle';
   }
 
-  getTopendpointOptions(): EndpointOptions {
-    return {
-      endpoint: ['Dot', { radius: 7 }],
-      paintStyle: { fill: '#ffcb3a' },
-      isSource: false,
-      scope: 'jsPlumb_DefaultScope',
-      maxConnections: 1,
-      isTarget: true,
-      dropOptions: this.getDropOptions(),
-    };
-  }
-
-  getBottomEndpointOptions(): EndpointOptions {
-    return {
-      endpoint: ['Dot', { radius: 10 }],
-      paintStyle: { fill: '#99cb3a' },
-      isSource: true,
-      scope: 'jsPlumb_DefaultScope',
-      connectorStyle: { stroke: '#99cb3a', strokeWidth: 3 },
-      connector: this.getConnector(),
-      maxConnections: 30,
-      isTarget: false,
-      connectorOverlays: [['Arrow', { location: 1 }]],
-      dropOptions: this.getDropOptions(),
-    };
-  }
-
-  getDragOptions(): any {
-    return {
-      tolerance: 'touch',
-      hoverClass: 'dropHover',
-      activeClass: 'dragActive',
-    };
-  }
-
-  getDropOptions(): any {
-    return {
-      containment: 'canvas',
-      grid: [20, 20],
-      stop: (e: any) => {
-        this.handleDragStop(e);
-      },
-    };
-  }
-
   getConnector(): ConnectorSpec {
+    const bezierConnection: ConnectorSpec = [
+      'Bezier',
+      {
+        alwaysRespectStubs: true,
+        cornerRadius: 10,
+        stub: [10, 50],
+        midpoint: 0.0001,
+      },
+    ];
+    const flowchartConnection: ConnectorSpec = [
+      'Flowchart',
+      { alwaysRespectStubs: true, cornerRadius: 25 },
+    ];
+    const straightConnection: ConnectorSpec = ['Straight', {}];
+
     switch (+this.settings.connectionType) {
       case ConnectionType.flowchart:
-        return ['Flowchart', { alwaysRespectStubs: true, cornerRadius: 25 }];
+        return flowchartConnection;
       case ConnectionType.bezier:
-        return [
-          'Bezier',
-          {
-            alwaysRespectStubs: true,
-            cornerRadius: 10,
-            stub: [10, 50],
-            midpoint: 0.0001,
-          },
-        ];
+        return bezierConnection;
+      case ConnectionType.straight:
+        return straightConnection;
       default:
-        return ['Straight', {}];
+        throw new Error(
+          'An error occurred when trying to set the connection type'
+        );
     }
-  }
-
-  getSettings(): void {
-    this.settingsService
-      .getSettings()
-      .subscribe((settings) => (this.settings = settings));
   }
 
   handleDragStop(e: any): void {

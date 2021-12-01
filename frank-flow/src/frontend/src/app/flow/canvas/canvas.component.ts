@@ -32,20 +32,23 @@ import { Settings } from 'src/app/header/settings/settings.model';
   styleUrls: ['./canvas.component.scss'],
 })
 export class CanvasComponent implements AfterViewInit, OnDestroy {
-  @Input() panzoomConfig!: PanZoomConfig;
+  @Input()
+  public panzoomConfig!: PanZoomConfig;
   @ViewChild('canvas', { read: ViewContainerRef })
-  viewContainerRef!: ViewContainerRef;
-  @HostBinding('tabindex') tabindex = 1;
+  private viewContainerRef!: ViewContainerRef;
+  @HostBinding('tabindex')
+  public tabindex = 1;
 
-  jsPlumbInstance!: jsPlumbInstance;
-  currentFileSubscription!: Subscription;
-  settingsSubscription!: Subscription;
-  flowUpdate = false;
-  locked!: boolean;
+  private jsPlumbInstance!: jsPlumbInstance;
+  private currentFileSubscription!: Subscription;
+  private settingsSubscription!: Subscription;
+
+  public flowUpdate = false;
+  public locked!: boolean;
 
   private errors!: string[] | undefined;
   private connectionIsMoving = false;
-  private modelChangedSubscription!: Subscription;
+  public modelChangedSubscription!: Subscription;
   private currentFile!: File;
 
   constructor(
@@ -110,11 +113,15 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   subscribeToSettings(): void {
     this.settingsSubscription = this.settingsService
       .getSettings()
-      .subscribe((settings: Settings) => {
-        if (this.currentFile && this.currentFile.flowStructure) {
-          this.generateFlow(this.currentFile.flowStructure);
+      .subscribe(() => {
+        if (this.flowStructureIsReceived()) {
+          this.generateFlow(this.currentFile.flowStructure!);
         }
       });
+  }
+
+  flowStructureIsReceived(): boolean {
+    return !!(this.currentFile && this.currentFile.flowStructure);
   }
 
   XmlErrorsFound(): boolean {
