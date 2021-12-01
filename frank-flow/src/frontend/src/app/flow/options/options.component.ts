@@ -10,6 +10,7 @@ import { CurrentFileService } from '../../shared/services/current-file.service';
 import { File } from '../../shared/models/file.model';
 import { ChangedAttribute } from '../../shared/models/changed-attribute.model';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-options',
@@ -17,19 +18,21 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./options.component.scss'],
 })
 export class OptionsComponent implements OnInit, OnDestroy {
-  disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
-  frankDoc: any;
-  availableAttributes: FlowNodeAttributeOptions[] = [];
-  flowNode!: Node;
-  attributes!: FlowNodeAttributes;
-  changedAttributes: ChangedAttribute[] = [];
-  selectedAttribute!: any;
-  newAttributeValue!: string;
-  nodeName!: string | undefined;
-  nodeDescription?: string;
+  public disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
+  public availableAttributes: FlowNodeAttributeOptions[] = [];
+  public attributes!: FlowNodeAttributes;
+  public selectedAttribute!: any;
+  public newAttributeValue!: string;
+  public element?: any;
+  public structureNode!: FlowStructureNode;
+  public frankDocElementsURI =
+    environment.runnerUri + '/' + environment.frankDocElements;
+
+  private frankDoc: any;
+  private flowNode!: Node;
+  private changedAttributes: ChangedAttribute[] = [];
   private currentFile!: File;
-  structureNode!: FlowStructureNode;
-  frankDocSubscription!: Subscription;
+  private frankDocSubscription!: Subscription;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
@@ -133,7 +136,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   resetPreviousData() {
     this.attributes = {};
     this.changedAttributes = [];
-    this.nodeDescription = '';
+    this.element = '';
     this.clearNewAttribute();
   }
 
@@ -156,15 +159,18 @@ export class OptionsComponent implements OnInit, OnDestroy {
   getAvailableAttributesForNode(): void {
     this.availableAttributes = [];
 
-    if (this.structureNode?.type && this.frankDoc) {
-      const element = this.frankDoc.elements.find((element: any) =>
+    if (this.areTypeAndFrankDocSet()) {
+      this.element = this.frankDoc.elements.find((element: any) =>
         element.elementNames.includes(this.structureNode?.type)
       );
-      this.nodeDescription = element?.description;
-      element?.attributes?.forEach((attribute: any) =>
+      this.element?.attributes?.forEach((attribute: any) =>
         this.availableAttributes.push(attribute)
       );
     }
+  }
+
+  areTypeAndFrankDocSet(): boolean {
+    return this.structureNode?.type && this.frankDoc;
   }
 
   addAttribute(): void {

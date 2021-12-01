@@ -3,13 +3,11 @@
   border: 2px solid var(--border-color);
   height: 32px;
   min-width: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   text-transform: capitalize;
   font-weight: bold;
   padding: 4px;
   transition: background-color 0.2s;
+  font-size: 16px;
 
   &:hover {
     background-color: var(--primary);
@@ -19,6 +17,11 @@
 
   &--default {
     background-color: var(--bg-color);
+  }
+
+  &--block {
+    display: block;
+    width: 100%;
   }
 
   &--dark {

@@ -1,3 +1,6 @@
-<div [className]="'button button--' + color" [ngClass]="{ selected: selected }">
+<button
+  [className]="'button button--' + color + (block ? ' button--block' : '')"
+  [ngClass]="{ selected: selected }"
+>
   <ng-content></ng-content>
-</div>
+</button>
