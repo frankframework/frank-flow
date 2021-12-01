@@ -18,21 +18,21 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./options.component.scss'],
 })
 export class OptionsComponent implements OnInit, OnDestroy {
-  disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
-  frankDoc: any;
-  availableAttributes: FlowNodeAttributeOptions[] = [];
-  flowNode!: Node;
-  attributes!: FlowNodeAttributes;
-  changedAttributes: ChangedAttribute[] = [];
-  selectedAttribute!: any;
-  newAttributeValue!: string;
-  nodeName!: string | undefined;
-  element?: any;
-  private currentFile!: File;
-  structureNode!: FlowStructureNode;
-  frankDocSubscription!: Subscription;
-  frankDocElementsURI =
+  public disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
+  public availableAttributes: FlowNodeAttributeOptions[] = [];
+  public attributes!: FlowNodeAttributes;
+  public selectedAttribute!: any;
+  public newAttributeValue!: string;
+  public element?: any;
+  public structureNode!: FlowStructureNode;
+  public frankDocElementsURI =
     environment.runnerUri + '/' + environment.frankDocElements;
+
+  private frankDoc: any;
+  private flowNode!: Node;
+  private changedAttributes: ChangedAttribute[] = [];
+  private currentFile!: File;
+  private frankDocSubscription!: Subscription;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
