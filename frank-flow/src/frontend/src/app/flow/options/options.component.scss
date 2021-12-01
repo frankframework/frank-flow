@@ -2,8 +2,8 @@
   width: 30vw;
 }
 
-// TODO: [Styling] Fix with flex-box
-#name {
-  position: absolute;
-  left: 30%;
+.description {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 50vh;
 }
