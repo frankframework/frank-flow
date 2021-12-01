@@ -8,15 +8,21 @@
   identifier="optionsModal"
 >
   <div>
-    <h2>{{ structureNode?.type }}: {{ structureNode?.name }}</h2>
-    <p [innerHTML]="nodeDescription"></p>
+    <h2>
+      {{ structureNode?.type
+      }}<ng-container *ngIf="element?.name !== structureNode?.type">
+        ({{ element?.name }})</ng-container
+      >: {{ structureNode?.name }}
+    </h2>
+    <p [innerHTML]="element?.description"></p>
     <a
-      href="https://ibis4example.ibissource.org/iaf/frankdoc/#!/All/{{
-        structureNode?.type
-      }}"
+      href="{{ frankDocElementsURI }}/{{ element?.name }}"
       target="_blank"
+      style="text-decoration: none"
     >
-      <app-button>Read more</app-button>
+      <app-button [block]="true"
+        >Read more about {{ element?.name }}</app-button
+      >
     </a>
     <hr />
     <!-- TODO: Name and type here, those are generic for all nodes. Other attributes can be seen as 'additional' -->

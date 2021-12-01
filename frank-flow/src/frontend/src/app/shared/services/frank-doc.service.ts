@@ -6,14 +6,16 @@ import { Observable, ReplaySubject } from 'rxjs';
   providedIn: 'root',
 })
 export class FrankDocService {
-  frankDoc = new ReplaySubject<any>(1);
+  private readonly frankDocUrl =
+    environment.runnerUri + '/' + environment.frankDocJsonPath;
+  private frankDoc = new ReplaySubject<any>(1);
 
   constructor() {
     this.fetchFrankDoc();
   }
 
   fetchFrankDoc(): void {
-    fetch(window.location.origin + '/' + environment.frankDocJsonPath, {
+    fetch(this.frankDocUrl, {
       method: 'GET',
       headers: {
         Accept: 'application/json',

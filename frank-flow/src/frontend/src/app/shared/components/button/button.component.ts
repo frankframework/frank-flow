@@ -7,6 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class ButtonComponent {
   @Input() color = 'default';
+  @Input() block = false;
   @Input() selected?: boolean;
 
   constructor() {}
