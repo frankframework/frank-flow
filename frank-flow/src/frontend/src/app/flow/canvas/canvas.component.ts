@@ -48,7 +48,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   private errors!: string[] | undefined;
   private connectionIsMoving = false;
-  public modelChangedSubscription!: Subscription;
+  private modelChangedSubscription!: Subscription;
   private currentFile!: File;
 
   constructor(
