@@ -10,6 +10,7 @@ import { CurrentFileService } from '../../shared/services/current-file.service';
 import { File } from '../../shared/models/file.model';
 import { ChangedAttribute } from '../../shared/models/changed-attribute.model';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-options',
@@ -26,10 +27,12 @@ export class OptionsComponent implements OnInit, OnDestroy {
   selectedAttribute!: any;
   newAttributeValue!: string;
   nodeName!: string | undefined;
-  nodeDescription?: string;
+  element?: any;
   private currentFile!: File;
   structureNode!: FlowStructureNode;
   frankDocSubscription!: Subscription;
+  frankDocElementsURI =
+    environment.runnerUri + '/' + environment.frankDocElements;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
@@ -133,7 +136,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   resetPreviousData() {
     this.attributes = {};
     this.changedAttributes = [];
-    this.nodeDescription = '';
+    this.element = '';
     this.clearNewAttribute();
   }
 
@@ -156,15 +159,18 @@ export class OptionsComponent implements OnInit, OnDestroy {
   getAvailableAttributesForNode(): void {
     this.availableAttributes = [];
 
-    if (this.structureNode?.type && this.frankDoc) {
-      const element = this.frankDoc.elements.find((element: any) =>
+    if (this.areTypeAndFrankDocSet()) {
+      this.element = this.frankDoc.elements.find((element: any) =>
         element.elementNames.includes(this.structureNode?.type)
       );
-      this.nodeDescription = element?.description;
-      element?.attributes?.forEach((attribute: any) =>
+      this.element?.attributes?.forEach((attribute: any) =>
         this.availableAttributes.push(attribute)
       );
     }
+  }
+
+  areTypeAndFrankDocSet(): boolean {
+    return this.structureNode?.type && this.frankDoc;
   }
 
   addAttribute(): void {

@@ -4,8 +4,9 @@
 
 export const environment = {
   production: false,
-  runnerUri: 'http://localhost/',
+  runnerUri: window.location.origin,
   frankDocJsonPath: 'iaf/api/frankdoc/files/frankdoc.json',
+  frankDocElements: 'iaf/frankdoc/#!/All',
 };
 
 /*
