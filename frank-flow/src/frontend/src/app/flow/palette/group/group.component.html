@@ -1,7 +1,11 @@
 <div [className]="'group group--' + color">
   <div class="group__header">
     <div>{{ this.type }}</div>
-    <fa-icon (click)="toggleFold()" [icon]="foldArrow()"></fa-icon>
+    <fa-icon
+      (click)="toggleFold()"
+      [icon]="foldArrow()"
+      [title]="foldGroup ? 'Expand' : 'Fold'"
+    ></fa-icon>
   </div>
   <div [hidden]="foldGroup" class="group__list">
     <ng-container

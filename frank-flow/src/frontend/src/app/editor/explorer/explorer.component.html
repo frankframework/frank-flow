@@ -1,14 +1,14 @@
 <div class="action-box">
-  <app-button (click)="openAddDialog()">
+  <app-button (click)="openAddDialog()" title="Add a file or folder">
     <fa-icon icon="plus" transform="down-1"></fa-icon>
   </app-button>
-  <app-button (click)="deleteFile()">
+  <app-button (click)="deleteFile()" title="Delete this file">
     <fa-icon icon="trash" transform="down-1"></fa-icon>
   </app-button>
-  <app-button (click)="openEditDialog()">
+  <app-button (click)="openEditDialog()" title="Modify this file">
     <fa-icon icon="pen" transform="down-1"></fa-icon>
   </app-button>
-  <app-button (click)="refreshFileTree()">
+  <app-button (click)="refreshFileTree()" title="Refresh Explorer">
     <fa-icon icon="redo-alt" transform="down-1"></fa-icon>
   </app-button>
 </div>

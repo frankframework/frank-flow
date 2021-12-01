@@ -12,12 +12,14 @@
             size="10x"
             transform="down-1"
             (click)="decreaseRight()"
+            title="Shrink canvas"
           ></fa-icon>
           <fa-icon
             icon="arrow-right"
             size="10x"
             transform="down-1"
             (click)="expandRight()"
+            title="Expand canvas"
           ></fa-icon>
         </div>
         <div class="arrows arrows--vertical">
@@ -26,12 +28,14 @@
             size="10x"
             transform="down-1"
             (click)="decreaseBottom()"
+            title="Shrink canvas"
           ></fa-icon>
           <fa-icon
             icon="arrow-down"
             size="10x"
             transform="down-1"
             (click)="expandBottom()"
+            title="Expand canvas"
           ></fa-icon>
         </div>
       </div>
@@ -40,16 +44,16 @@
       class="flow-container__actions"
       *ngIf="fileIsConfiguration; else noCanvas"
     >
-      <app-button (click)="zoomIn()">
+      <app-button (click)="zoomIn()" title="Zoom in">
         <fa-icon icon="search-plus" transform="down-1"></fa-icon>
       </app-button>
-      <app-button (click)="zoomReset()">
+      <app-button (click)="zoomReset()" title="Reset zoom and pan">
         <fa-icon icon="home" transform="down-1"></fa-icon>
       </app-button>
-      <app-button (click)="zoomOut()">
+      <app-button (click)="zoomOut()" title="Zoom out">
         <fa-icon icon="search-minus" transform="down-1"></fa-icon>
       </app-button>
-      <app-button (click)="panCenter()">
+      <app-button (click)="panCenter()" title="Pan to center">
         <fa-icon icon="dot-circle" transform="down-1"></fa-icon>
       </app-button>
     </div>
