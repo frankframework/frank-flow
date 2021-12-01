@@ -3,20 +3,37 @@
     <img src="./assets/images/frank-flow-logo.svg" />
   </div>
   <div class="header__actions">
-    <app-button (click)="openAddDialog()" color="dark">
+    <app-button
+      (click)="openAddDialog()"
+      color="dark"
+      title="Add a file or folder"
+    >
       <fa-icon icon="file" transform="down-1"></fa-icon>
     </app-button>
     <app-selector></app-selector>
-    <app-button (click)="save()" [selected]="!currentFile?.saved" color="dark">
+    <app-button
+      (click)="save()"
+      [selected]="!currentFile?.saved"
+      color="dark"
+      title="Save this file"
+    >
       <fa-icon icon="save" transform="down-1"></fa-icon>
     </app-button>
-    <app-button (click)="openEditFileDialog()" color="dark">
+    <app-button
+      (click)="openEditFileDialog()"
+      color="dark"
+      title="Modify this file"
+    >
       <fa-icon icon="pen" transform="down-1"></fa-icon>
     </app-button>
   </div>
   <div class="header__actions--right">
     <app-modes></app-modes>
-    <app-button (click)="openSettings()" color="dark">
+    <app-button
+      (click)="openSettings()"
+      color="dark"
+      title="Open settings menu"
+    >
       <fa-icon icon="cog" transform="down-1"></fa-icon>
     </app-button>
   </div>
