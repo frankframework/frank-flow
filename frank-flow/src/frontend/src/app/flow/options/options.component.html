@@ -14,7 +14,7 @@
         ({{ element?.name }})</ng-container
       >: {{ structureNode?.name }}
     </h2>
-    <p [innerHTML]="element?.description"></p>
+    <p class="description" [innerHTML]="element?.description"></p>
     <a
       href="{{ frankDocElementsURI }}/{{ element?.name }}"
       target="_blank"
@@ -63,7 +63,7 @@
       <p [innerHTML]="selectedAttribute?.description"></p>
     </div>
     <div class="row" *ngIf="newAttributeValue">
-      <app-button (click)="addAttribute()"
+      <app-button [block]="true" (click)="addAttribute()"
         >Add {{ selectedAttribute?.name }}</app-button
       >
     </div>
@@ -80,14 +80,17 @@
         *ngIf="!disabledAttributes.includes(attribute.key)"
       >
         <label for="name">{{ attribute.key }}:</label>
-        <input
-          type="text"
-          id="name"
-          [ngModel]="attributes[attribute.key].value"
-          (ngModelChange)="changeAttribute(attribute.key, $event)"
-          (keyup.enter)="optionsModal.close()"
-        />
-        <app-button (click)="deleteAttribute(attribute.key)">Delete</app-button>
+        <div class="input-row--input-with-button">
+          <input
+            type="text"
+            [ngModel]="attributes[attribute.key].value"
+            (ngModelChange)="changeAttribute(attribute.key, $event)"
+            (keyup.enter)="optionsModal.close()"
+          />
+          <app-button (click)="deleteAttribute(attribute.key)">
+            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+          </app-button>
+        </div>
       </div>
     </ng-container>
   </div>
