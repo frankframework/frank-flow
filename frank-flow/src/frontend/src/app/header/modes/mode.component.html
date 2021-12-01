@@ -2,12 +2,14 @@
   (click)="setMode(modeType.editorMode)"
   [selected]="mode.is(modeType.editorMode)"
   id="btnEditorMode"
+  title="Switch to Editor mode"
 >
   <fa-icon icon="code" transform="down-1"></fa-icon>
 </app-button>
 <app-button
   (click)="setMode(modeType.hybridMode)"
   [selected]="mode.is(modeType.hybridMode)"
+  title="Switch to Hybrid mode"
 >
   <fa-icon icon="columns" transform="down-1"></fa-icon>
 </app-button>
@@ -15,6 +17,7 @@
   (click)="setMode(modeType.flowMode)"
   [selected]="mode.is(modeType.flowMode)"
   id="btnFlowMode"
+  title="Switch to Flow mode"
 >
   <fa-icon icon="project-diagram" transform="down-1"></fa-icon>
 </app-button>
