@@ -7,8 +7,8 @@ import { DefaultSettings } from './options/default-settings.model';
   providedIn: 'root',
 })
 export class SettingsService {
-  settings: BehaviorSubject<Settings>;
-  defaultSettings = new DefaultSettings();
+  private settings: BehaviorSubject<Settings>;
+  private defaultSettings = new DefaultSettings();
 
   constructor() {
     const localStorageSettings = this.getSettingsLocalStorage();
