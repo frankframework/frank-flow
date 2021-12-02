@@ -2,7 +2,6 @@ import {
   AfterViewInit,
   Component,
   HostBinding,
-  HostListener,
   Input,
   OnDestroy,
   ViewChild,
@@ -188,32 +187,33 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   generateFlow(structure: FlowStructure): void {
-    if (!this.flowUpdate) {
-      this.jsPlumbInstance.ready(() => {
-        this.flowUpdate = true;
-        this.jsPlumbInstance.reset(true);
-        this.viewContainerRef.clear();
-        this.nodeGeneratorService.resetNodes();
-
-        setTimeout(() => {
-          if (structure && structure.firstPipe) {
-            this.nodeGeneratorService.generateNodes(
-              structure.firstPipe,
-              structure.listeners,
-              structure.pipes,
-              structure.exits
-            );
-          }
-
-          this.graphService.makeGraph(
-            this.nodeGeneratorService.nodeMap,
-            this.nodeGeneratorService.forwards
-          );
-
-          this.nodeGeneratorService.generateForwards();
-          this.flowUpdate = false;
-        });
-      });
+    if (this.flowUpdate) {
+      return;
     }
+    this.jsPlumbInstance.ready(() => {
+      this.flowUpdate = true;
+      this.jsPlumbInstance.reset(true);
+      this.viewContainerRef.clear();
+      this.nodeGeneratorService.resetNodes();
+
+      setTimeout(() => {
+        if (structure && structure.firstPipe) {
+          this.nodeGeneratorService.generateNodes(
+            structure.firstPipe,
+            structure.listeners,
+            structure.pipes,
+            structure.exits
+          );
+        }
+
+        this.graphService.makeGraph(
+          this.nodeGeneratorService.nodeMap,
+          this.nodeGeneratorService.forwards
+        );
+
+        this.nodeGeneratorService.generateForwards();
+        this.flowUpdate = false;
+      });
+    });
   }
 }
