@@ -2,7 +2,6 @@ import {
   AfterViewInit,
   Component,
   HostBinding,
-  HostListener,
   Input,
   OnDestroy,
   ViewChild,
@@ -23,6 +22,7 @@ import { FlowStructure } from '../../shared/models/flow-structure.model';
 import { PanZoomConfig } from 'ngx-panzoom/lib/panzoom-config';
 import { PanZoomModel } from 'ngx-panzoom/lib/panzoom-model';
 import { File } from '../../shared/models/file.model';
+import { SettingsService } from 'src/app/header/settings/settings.service';
 
 @Component({
   selector: 'app-canvas',
@@ -30,26 +30,32 @@ import { File } from '../../shared/models/file.model';
   styleUrls: ['./canvas.component.scss'],
 })
 export class CanvasComponent implements AfterViewInit, OnDestroy {
-  @Input() panzoomConfig!: PanZoomConfig;
+  @Input()
+  public panzoomConfig!: PanZoomConfig;
   @ViewChild('canvas', { read: ViewContainerRef })
-  viewContainerRef!: ViewContainerRef;
-  @HostBinding('tabindex') tabindex = 1;
+  private viewContainerRef!: ViewContainerRef;
+  @HostBinding('tabindex')
+  public tabindex = 1;
 
-  jsPlumbInstance!: jsPlumbInstance;
-  currentFileSubscription!: Subscription;
-  flowUpdate = false;
-  locked!: boolean;
+  private jsPlumbInstance!: jsPlumbInstance;
+  private currentFileSubscription!: Subscription;
+  private settingsSubscription!: Subscription;
+
+  public flowUpdate = false;
+  public locked!: boolean;
 
   private errors!: string[] | undefined;
   private connectionIsMoving = false;
   private modelChangedSubscription!: Subscription;
+  private currentFile!: File;
 
   constructor(
     private nodeService: NodeService,
     private currentFileService: CurrentFileService,
     private flowStructureService: FlowStructureService,
     private graphService: GraphService,
-    private nodeGeneratorService: NodeGeneratorService
+    private nodeGeneratorService: NodeGeneratorService,
+    private settingsService: SettingsService
   ) {
     this.jsPlumbInstance = this.nodeService.getInstance();
     this.setConnectionEventListeners();
@@ -72,6 +78,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
     this.subscribeToCurrentFile();
+    this.subscribeToSettings();
     if (this.panzoomConfig) {
       this.modelChangedSubscription = this.panzoomConfig.modelChanged.subscribe(
         (model: PanZoomModel) => this.onModelChanged(model)
@@ -81,6 +88,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.currentFileSubscription.unsubscribe();
+    this.settingsSubscription.unsubscribe();
     this.jsPlumbInstance.reset();
     this.viewContainerRef.clear();
   }
@@ -91,12 +99,27 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         next: (currentFile: File): void => {
           this.errors = currentFile.errors;
           this.locked = this.XmlErrorsFound();
+          this.currentFile = currentFile;
           if (currentFile.flowStructure && currentFile.flowNeedsUpdate) {
             this.generateFlow(currentFile.flowStructure);
           }
         },
       }
     );
+  }
+
+  subscribeToSettings(): void {
+    this.settingsSubscription = this.settingsService
+      .getSettings()
+      .subscribe(() => {
+        if (this.flowStructureIsReceived()) {
+          this.generateFlow(this.currentFile.flowStructure!);
+        }
+      });
+  }
+
+  flowStructureIsReceived(): boolean {
+    return !!(this.currentFile && this.currentFile.flowStructure);
   }
 
   XmlErrorsFound(): boolean {
@@ -164,7 +187,11 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   generateFlow(structure: FlowStructure): void {
+    if (this.flowUpdate) {
+      return;
+    }
     this.jsPlumbInstance.ready(() => {
+      this.flowUpdate = true;
       this.jsPlumbInstance.reset(true);
       this.viewContainerRef.clear();
       this.nodeGeneratorService.resetNodes();
@@ -185,6 +212,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         );
 
         this.nodeGeneratorService.generateForwards();
+        this.flowUpdate = false;
       });
     });
   }
