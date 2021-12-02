@@ -24,7 +24,6 @@ import { PanZoomConfig } from 'ngx-panzoom/lib/panzoom-config';
 import { PanZoomModel } from 'ngx-panzoom/lib/panzoom-model';
 import { File } from '../../shared/models/file.model';
 import { SettingsService } from 'src/app/header/settings/settings.service';
-import { Settings } from 'src/app/header/settings/settings.model';
 
 @Component({
   selector: 'app-canvas',
@@ -101,8 +100,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         next: (currentFile: File): void => {
           this.errors = currentFile.errors;
           this.locked = this.XmlErrorsFound();
+          this.currentFile = currentFile;
           if (currentFile.flowStructure && currentFile.flowNeedsUpdate) {
-            this.currentFile = currentFile;
             this.generateFlow(currentFile.flowStructure);
           }
         },
@@ -189,28 +188,32 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   generateFlow(structure: FlowStructure): void {
-    this.jsPlumbInstance.ready(() => {
-      this.jsPlumbInstance.reset(true);
-      this.viewContainerRef.clear();
-      this.nodeGeneratorService.resetNodes();
+    if (!this.flowUpdate) {
+      this.jsPlumbInstance.ready(() => {
+        this.flowUpdate = true;
+        this.jsPlumbInstance.reset(true);
+        this.viewContainerRef.clear();
+        this.nodeGeneratorService.resetNodes();
 
-      setTimeout(() => {
-        if (structure && structure.firstPipe) {
-          this.nodeGeneratorService.generateNodes(
-            structure.firstPipe,
-            structure.listeners,
-            structure.pipes,
-            structure.exits
+        setTimeout(() => {
+          if (structure && structure.firstPipe) {
+            this.nodeGeneratorService.generateNodes(
+              structure.firstPipe,
+              structure.listeners,
+              structure.pipes,
+              structure.exits
+            );
+          }
+
+          this.graphService.makeGraph(
+            this.nodeGeneratorService.nodeMap,
+            this.nodeGeneratorService.forwards
           );
-        }
 
-        this.graphService.makeGraph(
-          this.nodeGeneratorService.nodeMap,
-          this.nodeGeneratorService.forwards
-        );
-
-        this.nodeGeneratorService.generateForwards();
+          this.nodeGeneratorService.generateForwards();
+          this.flowUpdate = false;
+        });
       });
-    });
+    }
   }
 }

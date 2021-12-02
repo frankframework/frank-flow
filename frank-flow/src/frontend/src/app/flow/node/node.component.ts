@@ -43,20 +43,19 @@ export class NodeComponent implements AfterViewInit {
     );
   }
 
-  private dragOptions: DragOptions = {
+  private dropOptions: DropOptions = {
     tolerance: 'touch',
     hoverClass: 'dropHover',
     activeClass: 'dragActive',
-  } as DragOptions;
+  } as DropOptions;
 
-  private dropOptions: DropOptions = {
-    hoverClass: 'dropHover',
+  private dragOptions: DragOptions = {
     containment: 'canvas',
     grid: [20, 20],
     stop: (e: any) => {
       this.handleDragStop(e);
     },
-  } as DropOptions;
+  } as DragOptions;
 
   private topEndpointOptions: EndpointOptions = {
     endpoint: ['Dot', { radius: 7 }],
