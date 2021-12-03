@@ -88,7 +88,10 @@
             (keyup.enter)="optionsModal.close()"
           />
           <app-button (click)="deleteAttribute(attribute.key)">
-            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+            <fa-icon
+              title="Delete attribute"
+              [icon]="['fas', 'trash']"
+            ></fa-icon>
           </app-button>
         </div>
       </div>
