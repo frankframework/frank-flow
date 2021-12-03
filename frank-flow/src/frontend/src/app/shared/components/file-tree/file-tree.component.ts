@@ -61,8 +61,13 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
 
   getFiles(): void {
     this.fileSubscription = this.fileService.getFiles().subscribe({
-      next: (configurationFiles) => this.addFilesToTree(configurationFiles),
+      next: (configurationFiles) => this.updateFileTree(configurationFiles),
     });
+  }
+
+  updateFileTree(configurationFiles: any): void {
+    this.currentFileService.resetCurrentDirectory();
+    this.addFilesToTree(configurationFiles);
   }
 
   addFilesToTree(configurationFiles: any): void {
