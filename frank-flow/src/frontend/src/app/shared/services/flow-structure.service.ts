@@ -72,7 +72,7 @@ export class FlowStructureService {
   addConnection(sourceId: string, targetId: string): void {
     const endLine = this.getEndLineOfSourceElement(sourceId);
     const target = this.flowStructure.nodes.find(
-      (node) => node.uuid == targetId
+      (node) => node.uid == targetId
     );
 
     const text = `\t\t\t\t<Forward name="success" path="${target?.name}" />\n`;
@@ -88,7 +88,7 @@ export class FlowStructureService {
 
   getEndLineOfSourceElement(sourceId: string): number {
     const currentPipe = this.flowStructure.pipes.find(
-      (pipe: FlowStructureNode) => pipe.uuid === sourceId
+      (pipe: FlowStructureNode) => pipe.uid === sourceId
     );
 
     return currentPipe!.endLine;
@@ -124,7 +124,7 @@ export class FlowStructureService {
 
     const pathAttribute = targetForward.attributes['path'];
     const newTarget = this.flowStructure.nodes.find(
-      (node) => node.uuid === newTargetId
+      (node) => node.uid === newTargetId
     );
 
     const text = `path="${newTarget?.name}"`;
@@ -140,10 +140,10 @@ export class FlowStructureService {
 
   getTargetForward(sourceId: string, targetId: string): FlowStructureNode {
     const sourcePipe = this.flowStructure.pipes.find(
-      (pipe: FlowStructureNode) => pipe.uuid === sourceId
+      (pipe: FlowStructureNode) => pipe.uid === sourceId
     );
     const targetPipe = this.flowStructure.nodes.find(
-      (pipe: FlowStructureNode) => pipe.uuid === targetId
+      (pipe: FlowStructureNode) => pipe.uid === targetId
     );
 
     return (sourcePipe?.forwards ?? []).find(
@@ -330,7 +330,7 @@ export class FlowStructureService {
     | void {
     for (const [nodeId, editAttributes] of this.editAttributeQueue.entries()) {
       const node = this.currentFile.flowStructure?.nodes.find(
-        (node: FlowStructureNode) => node.uuid === nodeId
+        (node: FlowStructureNode) => node.uid === nodeId
       );
 
       const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];

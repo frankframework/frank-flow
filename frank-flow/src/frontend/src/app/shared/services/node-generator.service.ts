@@ -42,7 +42,7 @@ export class NodeGeneratorService {
       const positions = listener.positions;
       const attributes = listener.attributes;
       const listenerNode = new Listener({
-        id: listener.uuid,
+        id: listener.uid,
         name: listener.name,
         type: listener.type,
         top: positions.y,
@@ -53,8 +53,8 @@ export class NodeGeneratorService {
       const forwardTarget = pipes.find(
         (targetPipe) => targetPipe.name === firstPipe
       );
-      this.forwards.push(new Forward(listener.uuid, forwardTarget?.uuid!));
-      this.nodeMap.set(listener.uuid, listenerNode);
+      this.forwards.push(new Forward(listener.uid, forwardTarget?.uid!));
+      this.nodeMap.set(listener.uid, listenerNode);
     });
   }
 
@@ -66,7 +66,7 @@ export class NodeGeneratorService {
       const positions = pipe.positions;
       const attributes = pipe.attributes;
       const node = new Pipe({
-        id: pipe.uuid,
+        id: pipe.uid,
         name: pipe.name,
         type: pipe.type,
         top: positions.y,
@@ -82,16 +82,14 @@ export class NodeGeneratorService {
                 const forwardTarget = nodes.find(
                   (targetNode) => targetNode.name === attribute.value
                 );
-                this.forwards.push(
-                  new Forward(pipe.uuid, forwardTarget?.uuid!)
-                );
+                this.forwards.push(new Forward(pipe.uid, forwardTarget?.uid!));
               }
             }
           );
         });
       }
 
-      this.nodeMap.set(pipe.uuid, node);
+      this.nodeMap.set(pipe.uid, node);
     });
   }
 
@@ -100,14 +98,14 @@ export class NodeGeneratorService {
       const positions = exit.positions;
       const attributes = exit.attributes;
       const node = new Exit({
-        id: exit.uuid,
+        id: exit.uid,
         name: exit.name,
         type: exit.type,
         top: positions.y,
         left: positions.x,
         attributes,
       });
-      this.nodeMap.set(exit.uuid, node);
+      this.nodeMap.set(exit.uid, node);
     });
   }
 

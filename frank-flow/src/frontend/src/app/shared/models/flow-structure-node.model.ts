@@ -1,7 +1,7 @@
 import { FlowNodeAttributes } from './flow-node-attributes.model';
 
 export class FlowStructureNode {
-  public uuid: string;
+  public uid: string;
   public attributes: FlowNodeAttributes = {};
   public line: number;
   public endLine: number;
@@ -50,7 +50,7 @@ export class FlowStructureNode {
 
     this.attributes = attributes ?? [];
     this.name = this.getName();
-    this.uuid = this.name + this.type;
+    this.uid = this.name + this.type;
     this.positions = this.getPositions();
   }
 }
