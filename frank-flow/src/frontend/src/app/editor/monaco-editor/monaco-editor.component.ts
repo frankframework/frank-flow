@@ -28,6 +28,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   @ViewChild('editorContainer') editorContainer!: ElementRef;
 
   @Output() codeChange = new EventEmitter<string>();
+  @Output()
+  finishedLoading: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
   currentFile!: File;
@@ -104,6 +106,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.initializeNewFileSubscription();
     this.initializeResizeObserver();
     this.initializeThemeObserver();
+    this.finishedLoading.emit(true);
   }
 
   initializeEditor(): void {
