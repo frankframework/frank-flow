@@ -7,6 +7,7 @@ import { Node } from '../../flow/node/nodes/node.model';
 import { Forward } from '../models/forward.model';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
 import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
+import { FlowStructure } from '../models/flow-structure.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,23 +23,26 @@ export class NodeGeneratorService {
     this.forwards = [];
   }
 
-  generateNodes(
-    firstPipe: string,
-    listeners: FlowStructureNode[],
-    pipes: FlowStructureNode[],
-    exits: FlowStructureNode[]
-  ): void {
-    this.generateListeners(listeners, firstPipe);
-    this.generatePipeline(pipes);
-    this.generateExits(exits);
+  generateNodes(firstPipe: string, flowStructure: FlowStructure): void {
+    this.generateListeners(
+      flowStructure.listeners,
+      flowStructure.pipes,
+      firstPipe
+    );
+    this.generatePipeline(flowStructure.pipes, flowStructure.nodes);
+    this.generateExits(flowStructure.exits);
   }
 
-  generateListeners(listeners: FlowStructureNode[], firstPipe: string): void {
+  generateListeners(
+    listeners: FlowStructureNode[],
+    pipes: FlowStructureNode[],
+    firstPipe: string
+  ): void {
     listeners.forEach((listener) => {
       const positions = listener.positions;
       const attributes = listener.attributes;
       const listenerNode = new Listener({
-        id: listener.name,
+        id: listener.uid,
         name: listener.name,
         type: listener.type,
         top: positions.y,
@@ -46,17 +50,23 @@ export class NodeGeneratorService {
         attributes,
       });
 
-      this.forwards.push(new Forward(listener.name, firstPipe));
-      this.nodeMap.set(listener.name, listenerNode);
+      const forwardTarget = pipes.find(
+        (targetPipe) => targetPipe.name === firstPipe
+      );
+      this.forwards.push(new Forward(listener.uid, forwardTarget?.uid!));
+      this.nodeMap.set(listener.uid, listenerNode);
     });
   }
 
-  generatePipeline(pipes: FlowStructureNode[]): void {
+  generatePipeline(
+    pipes: FlowStructureNode[],
+    nodes: FlowStructureNode[]
+  ): void {
     pipes.forEach((pipe: FlowStructureNode) => {
       const positions = pipe.positions;
       const attributes = pipe.attributes;
       const node = new Pipe({
-        id: pipe.name,
+        id: pipe.uid,
         name: pipe.name,
         type: pipe.type,
         top: positions.y,
@@ -69,14 +79,17 @@ export class NodeGeneratorService {
           Object.entries(forward.attributes).forEach(
             ([key, attribute]: [string, FlowNodeAttribute]) => {
               if (key === 'path') {
-                this.forwards.push(new Forward(pipe.name, attribute.value));
+                const forwardTarget = nodes.find(
+                  (targetNode) => targetNode.name === attribute.value
+                );
+                this.forwards.push(new Forward(pipe.uid, forwardTarget?.uid!));
               }
             }
           );
         });
       }
 
-      this.nodeMap.set(pipe.name, node);
+      this.nodeMap.set(pipe.uid, node);
     });
   }
 
@@ -85,14 +98,14 @@ export class NodeGeneratorService {
       const positions = exit.positions;
       const attributes = exit.attributes;
       const node = new Exit({
-        id: exit.name,
+        id: exit.uid,
         name: exit.name,
         type: exit.type,
         top: positions.y,
         left: positions.x,
         attributes,
       });
-      this.nodeMap.set(exit.name, node);
+      this.nodeMap.set(exit.uid, node);
     });
   }
 
