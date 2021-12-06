@@ -17,7 +17,7 @@ import { ChangedAttribute } from '../models/changed-attribute.model';
   providedIn: 'root',
 })
 export class FlowStructureService {
-  monacoEditorComponent?: MonacoEditorComponent;
+  public monacoEditorComponent?: MonacoEditorComponent;
   private currentFile!: File;
   private flowStructure!: FlowStructure;
   private waitingOnNewStructure = false;
@@ -69,10 +69,13 @@ export class FlowStructureService {
     }
   }
 
-  addConnection(sourceName: string, targetName: string): void {
-    const endLine = this.getEndLineOfSourceElement(sourceName);
+  addConnection(sourceId: string, targetId: string): void {
+    const endLine = this.getEndLineOfSourceElement(sourceId);
+    const target = this.flowStructure.nodes.find(
+      (node) => node.uuid == targetId
+    );
 
-    const text = `\t\t\t\t<Forward name="success" path="${targetName}" />\n`;
+    const text = `\t\t\t\t<Forward name="success" path="${target?.name}" />\n`;
     const range = {
       startLineNumber: endLine,
       startColumn: 0,
@@ -83,20 +86,20 @@ export class FlowStructureService {
     this.monacoEditorComponent?.applyEdits([{ range, text }]);
   }
 
-  getEndLineOfSourceElement(sourceName: string): number {
+  getEndLineOfSourceElement(sourceId: string): number {
     const currentPipe = this.flowStructure.pipes.find(
-      (pipe: FlowStructureNode) => pipe.name === sourceName
+      (pipe: FlowStructureNode) => pipe.uuid === sourceId
     );
 
     return currentPipe!.endLine;
   }
 
   deleteConnection(
-    sourceName: string,
-    targetName: string,
+    sourceId: string,
+    targetId: string,
     doubleClickEvent = false
   ): void {
-    const targetForward = this.getTargetForward(sourceName, targetName);
+    const targetForward = this.getTargetForward(sourceId, targetId);
 
     const text = '';
     const range = {
@@ -109,30 +112,22 @@ export class FlowStructureService {
     this.monacoEditorComponent?.applyEdits([{ range, text }], doubleClickEvent);
   }
 
-  getTargetForward(sourceName: string, targetName: string): FlowStructureNode {
-    const sourcePipe = this.flowStructure.pipes.find(
-      (pipe: FlowStructureNode) => pipe.name === sourceName
-    );
-
-    return (sourcePipe?.forwards ?? []).find(
-      (forward: FlowStructureNode) =>
-        forward.attributes['path'].value === targetName
-    );
-  }
-
   moveConnection(
-    originalSourceName: string,
-    originalTargetName: string,
-    newTargetName: string
+    originalSourceId: string,
+    originalTargetId: string,
+    newTargetId: string
   ): void {
     const targetForward = this.getTargetForward(
-      originalSourceName,
-      originalTargetName
+      originalSourceId,
+      originalTargetId
     );
 
     const pathAttribute = targetForward.attributes['path'];
+    const newTarget = this.flowStructure.nodes.find(
+      (node) => node.uuid === newTargetId
+    );
 
-    const text = `path="${newTargetName}"`;
+    const text = `path="${newTarget?.name}"`;
     const range = {
       startLineNumber: pathAttribute.line,
       startColumn: pathAttribute.startColumn,
@@ -141,6 +136,20 @@ export class FlowStructureService {
     };
 
     this.monacoEditorComponent?.applyEdits([{ range, text }]);
+  }
+
+  getTargetForward(sourceId: string, targetId: string): FlowStructureNode {
+    const sourcePipe = this.flowStructure.pipes.find(
+      (pipe: FlowStructureNode) => pipe.uuid === sourceId
+    );
+    const targetPipe = this.flowStructure.nodes.find(
+      (pipe: FlowStructureNode) => pipe.uuid === targetId
+    );
+
+    return (sourcePipe?.forwards ?? []).find(
+      (forward: FlowStructureNode) =>
+        forward.attributes['path'].value === targetPipe?.name
+    );
   }
 
   changeFirstPipe(newFirstPipe: string): void {
@@ -236,49 +245,65 @@ export class FlowStructureService {
   }
 
   editListenerPositions(nodeId: string, xPos: number, yPos: number): void {
-    this.editNodePositions('listeners', nodeId, xPos, yPos);
+    this.editNodePositions({
+      nodeId,
+      xPos,
+      yPos,
+    });
   }
 
   editExitPositions(nodeId: string, xPos: number, yPos: number): void {
-    this.editNodePositions('exits', nodeId, xPos, yPos);
+    this.editNodePositions({
+      nodeId,
+      xPos,
+      yPos,
+    });
   }
 
   editPipePositions(nodeId: string, xPos: number, yPos: number): void {
-    this.editNodePositions('pipes', nodeId, xPos, yPos);
+    this.editNodePositions({
+      nodeId,
+      xPos,
+      yPos,
+    });
   }
 
-  editNodePositions(
-    structureNodes: string,
-    nodeId: string,
-    xPos: number,
-    yPos: number
-  ): void {
-    this.editAttributes(nodeId, [
-      { name: 'x', value: xPos },
-      { name: 'y', value: yPos },
-    ]);
+  editNodePositions(options: {
+    nodeId: string;
+    xPos: number;
+    yPos: number;
+  }): void {
+    this.editAttributes({
+      nodeId: options.nodeId,
+      attributes: [
+        { name: 'x', value: options.xPos },
+        { name: 'y', value: options.yPos },
+      ],
+      flowUpdate: false,
+    });
   }
 
-  editAttributes(
-    nodeId: string,
-    attributes: ChangedAttribute[],
-    flowUpdate: boolean = false
-  ): void {
-    this.flowUpdate = flowUpdate;
+  editAttributes(options: {
+    nodeId: string;
+    attributes: ChangedAttribute[];
+    flowUpdate: boolean;
+  }): void {
+    this.flowUpdate = options.flowUpdate;
     let nodeAttributes: ChangedAttribute[] = [];
 
-    attributes.forEach((attribute) => {
-      nodeAttributes = this.editAttributeQueue.get(nodeId) ?? nodeAttributes;
+    options.attributes.forEach((attribute) => {
+      nodeAttributes =
+        this.editAttributeQueue.get(options.nodeId) ?? nodeAttributes;
       if (nodeAttributes.length > 0) {
         nodeAttributes = this.addChangedAttributeToNode({
-          nodeId,
+          nodeId: options.nodeId,
           nodeAttributes,
           attribute,
         });
       } else {
         nodeAttributes.push(attribute);
       }
-      this.editAttributeQueue.set(nodeId, nodeAttributes);
+      this.editAttributeQueue.set(options.nodeId, nodeAttributes);
     });
     this.attemptEditAttributes();
   }
@@ -329,7 +354,7 @@ export class FlowStructureService {
     | void {
     for (const [nodeId, editAttributes] of this.editAttributeQueue.entries()) {
       const node = this.currentFile.flowStructure?.nodes.find(
-        (node: any) => node.name === nodeId
+        (node: FlowStructureNode) => node.uuid === nodeId
       );
 
       const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];

@@ -77,11 +77,11 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   onAnyCloseEvent(): void {
     this.editRelatedAttributesBasedOnName();
-    this.flowStructureService.editAttributes(
-      this.flowNode.getId(),
-      this.changedAttributes,
-      !!this.getChangedNameAttribute()
-    );
+    this.flowStructureService.editAttributes({
+      nodeId: this.flowNode.getId(),
+      attributes: this.changedAttributes,
+      flowUpdate: !!this.getChangedNameAttribute(),
+    });
   }
 
   editRelatedAttributesBasedOnName(): void {

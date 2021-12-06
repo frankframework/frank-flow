@@ -200,9 +200,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         if (structure && structure.firstPipe) {
           this.nodeGeneratorService.generateNodes(
             structure.firstPipe,
-            structure.listeners,
-            structure.pipes,
-            structure.exits
+            structure
           );
         }
 

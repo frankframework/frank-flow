@@ -1,14 +1,15 @@
 import { FlowNodeAttributes } from './flow-node-attributes.model';
 
 export class FlowStructureNode {
-  attributes: FlowNodeAttributes = {};
-  line: number;
-  endLine: number;
-  column: number;
-  type: string;
-  forwards?: any[];
-  name: string;
-  positions: { x: number; y: number };
+  public uuid: string;
+  public attributes: FlowNodeAttributes = {};
+  public line: number;
+  public endLine: number;
+  public column: number;
+  public type: string;
+  public forwards?: any[];
+  public name: string;
+  public positions: { x: number; y: number };
 
   private getName(): string {
     if (this.attributes['name']) {
@@ -49,6 +50,7 @@ export class FlowStructureNode {
 
     this.attributes = attributes ?? [];
     this.name = this.getName();
+    this.uuid = this.name + this.type;
     this.positions = this.getPositions();
   }
 }
