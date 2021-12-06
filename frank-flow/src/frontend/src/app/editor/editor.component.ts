@@ -10,6 +10,6 @@ export class EditorComponent {
   finishedLoading: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   triggerFinishedLoading(): void {
-    this.finishedLoading.emit(true);
+    this.finishedLoading.emit();
   }
 }

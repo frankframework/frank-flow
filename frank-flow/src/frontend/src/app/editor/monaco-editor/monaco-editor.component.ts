@@ -106,7 +106,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.initializeNewFileSubscription();
     this.initializeResizeObserver();
     this.initializeThemeObserver();
-    this.finishedLoading.emit(true);
+    this.finishedLoading.emit();
   }
 
   initializeEditor(): void {
