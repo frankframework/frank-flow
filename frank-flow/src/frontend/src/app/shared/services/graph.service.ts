@@ -49,7 +49,7 @@ export class GraphService {
 
       this.graph.add({
         group: 'nodes',
-        data: { id: node.getName(), weight: 70 },
+        data: { id: node.getId(), weight: 70 },
         position: { x, y },
         style: {
           height: 200,
