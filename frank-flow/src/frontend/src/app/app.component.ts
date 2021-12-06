@@ -16,7 +16,6 @@ export class AppComponent implements OnInit {
   public modeType = ModeType;
   public mode!: Mode;
   public settings!: Settings;
-  public monacoHasLoaded: any = false;
 
   constructor(
     private modeService: ModeService,
