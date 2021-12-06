@@ -244,30 +244,6 @@ export class FlowStructureService {
     return this.getUniqueNodeName(this.flowStructure.exits, name);
   }
 
-  editListenerPositions(nodeId: string, xPos: number, yPos: number): void {
-    this.editNodePositions({
-      nodeId,
-      xPos,
-      yPos,
-    });
-  }
-
-  editExitPositions(nodeId: string, xPos: number, yPos: number): void {
-    this.editNodePositions({
-      nodeId,
-      xPos,
-      yPos,
-    });
-  }
-
-  editPipePositions(nodeId: string, xPos: number, yPos: number): void {
-    this.editNodePositions({
-      nodeId,
-      xPos,
-      yPos,
-    });
-  }
-
   editNodePositions(options: {
     nodeId: string;
     xPos: number;

@@ -180,17 +180,11 @@ export class NodeComponent implements AfterViewInit {
   }
 
   handleDragStop(e: any): void {
-    if (this.nodeHasClass(e, 'color--info')) {
-      this.flowStructureService.editListenerPositions(
-        e.el.id,
-        e.pos[0],
-        e.pos[1]
-      );
-    } else if (this.nodeHasClass(e, 'color--danger')) {
-      this.flowStructureService.editExitPositions(e.el.id, e.pos[0], e.pos[1]);
-    } else {
-      this.flowStructureService.editPipePositions(e.el.id, e.pos[0], e.pos[1]);
-    }
+    this.flowStructureService.editNodePositions({
+      nodeId: e.el.id,
+      xPos: e.pos[0],
+      yPos: e.pos[1],
+    });
   }
 
   nodeHasClass(e: any, className: string) {
