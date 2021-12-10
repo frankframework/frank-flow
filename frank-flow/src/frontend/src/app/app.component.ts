@@ -13,9 +13,9 @@ import { CurrentFileService } from './shared/services/current-file.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  modeType = ModeType;
-  mode!: Mode;
-  settings!: Settings;
+  public modeType = ModeType;
+  public mode!: Mode;
+  public settings!: Settings;
 
   constructor(
     private modeService: ModeService,
@@ -27,7 +27,6 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.getMode();
     this.getSettings();
-    this.initializeLoadLastSessionFIle();
   }
 
   getMode(): void {
@@ -40,7 +39,7 @@ export class AppComponent implements OnInit {
       .subscribe((settings) => (this.settings = settings));
   }
 
-  initializeLoadLastSessionFIle(): void {
+  initializeLoadLastSessionFile(): void {
     const lastSessionFile = this.sessionService.getSessionFile();
     if (lastSessionFile) {
       this.currentFileService.fetchFileAndSetToCurrent(lastSessionFile);
