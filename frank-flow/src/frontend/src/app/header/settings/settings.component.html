@@ -6,6 +6,7 @@
 >
   <div class="settings-container">
     <h1>Settings</h1>
+    <h2>Appearance</h2>
     <div class="input-row">
       <label>Enable dark mode</label>
       <app-toggle
@@ -14,12 +15,27 @@
       ></app-toggle>
     </div>
     <div class="input-row">
-      <label>Show confirmation popups</label>
-      <app-toggle
-        [(state)]="settings.showPopups"
-        (stateChange)="setSettings()"
-      ></app-toggle>
+      <label for="edit-mode">Default edit mode</label>
+      <select
+        [(ngModel)]="settings.defaultMode"
+        (ngModelChange)="setSettings()"
+        id="edit-mode"
+      >
+        <option [value]="modeType.flowMode">Flow</option>
+        <option [value]="modeType.hybridMode">Hybrid</option>
+        <option [value]="modeType.editorMode">Editor</option>
+      </select>
     </div>
+<!--    // TODO: This was one of the first features implemented for settings, but it never got used. I'm making a feature to implement this in more places.-->
+<!--    <div class="input-row">-->
+<!--      <label>Show confirmation popups</label>-->
+<!--      <app-toggle-->
+<!--        [(state)]="settings.showPopups"-->
+<!--        (stateChange)="setSettings()"-->
+<!--      ></app-toggle>-->
+<!--    </div>-->
+    <hr/>
+    <h2>Explorer</h2>
     <div class="input-row">
       <label for="switch-without-saving-options"
         >What do you want to do with the current file when switching
@@ -35,16 +51,20 @@
         <option [value]="switchWithoutSavingOptions.discard">Discard</option>
       </select>
     </div>
+    <hr/>
+    <h2>Flow</h2>
     <div class="input-row">
-      <label for="edit-mode">Default edit mode</label>
+      <label for="edit-mode">Snap to grid</label>
       <select
-        [(ngModel)]="settings.defaultMode"
+        [(ngModel)]="settings.gridConfiguration"
         (ngModelChange)="setSettings()"
-        id="edit-mode"
+        id="grid-configuration"
       >
-        <option [value]="modeType.flowMode">Flow</option>
-        <option [value]="modeType.hybridMode">Hybrid</option>
-        <option [value]="modeType.editorMode">Editor</option>
+        <option [value]="gridConfiguration.free">Don't snap, move freely</option>
+        <option [value]="gridConfiguration.tenth">Snap every tenth of a square</option>
+        <option [value]="gridConfiguration.quarter">Snap every quarter of a square</option>
+        <option [value]="gridConfiguration.half">Snap on a half or whole square</option>
+        <option [value]="gridConfiguration.whole">Snap on a whole square</option>
       </select>
     </div>
     <div class="input-row">
