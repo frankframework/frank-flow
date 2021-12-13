@@ -1,25 +1,13 @@
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  HostListener,
-  Input,
-} from '@angular/core';
+import { AfterViewInit, Component, HostBinding, HostListener, Input, } from '@angular/core';
 import { Node } from './nodes/node.model';
-import {
-  AnchorSpec,
-  ConnectorSpec,
-  DragOptions,
-  DropOptions,
-  EndpointOptions,
-  jsPlumbInstance,
-} from 'jsplumb';
+import { AnchorSpec, ConnectorSpec, DragOptions, DropOptions, EndpointOptions, jsPlumbInstance, } from 'jsplumb';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
 import { SettingsService } from 'src/app/header/settings/settings.service';
 import { Settings } from 'src/app/header/settings/settings.model';
 import { ConnectionType } from 'src/app/header/settings/options/connection-type';
+import { GridConfiguration } from "../../header/settings/options/grid-configuration";
 
 @Component({
   selector: 'app-node',
@@ -43,21 +31,32 @@ export class NodeComponent implements AfterViewInit {
     );
   }
 
-  private dropOptions: DropOptions = {
+  public readonly cloud = faCloudDownloadAlt;
+
+  private readonly bezierConnectionSpecification: ConnectorSpec = [
+    'Bezier',
+    {
+      alwaysRespectStubs: true,
+      cornerRadius: 10,
+      stub: [10, 50],
+      midpoint: 0.0001,
+    },
+  ];
+
+  private readonly flowchartConnectionSpecification: ConnectorSpec = [
+    'Flowchart',
+    { alwaysRespectStubs: true, cornerRadius: 25 },
+  ];
+
+  private readonly straightConnectionSpecification: ConnectorSpec = ['Straight', {}];
+
+  private readonly dropOptions: DropOptions = {
     tolerance: 'touch',
     hoverClass: 'dropHover',
     activeClass: 'dragActive',
   } as DropOptions;
 
-  private dragOptions: DragOptions = {
-    containment: 'canvas',
-    grid: [20, 20],
-    stop: (e: any) => {
-      this.handleDragStop(e);
-    },
-  } as DragOptions;
-
-  private topEndpointOptions: EndpointOptions = {
+  private readonly topEndpointOptions: EndpointOptions = {
     endpoint: ['Dot', { radius: 7 }],
     paintStyle: { fill: '#ffcb3a' },
     isSource: false,
@@ -79,8 +78,14 @@ export class NodeComponent implements AfterViewInit {
     dropOptions: this.dropOptions,
   };
 
+  private dragOptions: DragOptions = {
+    containment: 'canvas',
+    stop: (e: any) => {
+      this.handleDragStop(e);
+    },
+  } as DragOptions;
+
   private settings!: Settings;
-  public readonly cloud = faCloudDownloadAlt;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
@@ -98,14 +103,17 @@ export class NodeComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     const id = this.node.getId();
-    this.bottomEndpointOptions.connector = this.getConnector();
+    this.createConnections();
+    this.createAnchors(id);
+    this.createGrid();
+    this.jsPlumbInstance.draggable(id, this.dragOptions);
+  }
 
+  createAnchors(id: string): void {
     this.nodeIsListener() ? this.makeNodeListener() : this.makeNodeTarget(id);
     if (!this.nodeIsExit()) {
       this.makeNodeSource(id);
     }
-
-    this.jsPlumbInstance.draggable(id, this.dragOptions);
   }
 
   nodeIsExit() {
@@ -149,33 +157,43 @@ export class NodeComponent implements AfterViewInit {
     return this.settings.verticalConnectors ? 'Top' : 'LeftMiddle';
   }
 
-  getConnector(): ConnectorSpec {
-    const bezierConnection: ConnectorSpec = [
-      'Bezier',
-      {
-        alwaysRespectStubs: true,
-        cornerRadius: 10,
-        stub: [10, 50],
-        midpoint: 0.0001,
-      },
-    ];
-    const flowchartConnection: ConnectorSpec = [
-      'Flowchart',
-      { alwaysRespectStubs: true, cornerRadius: 25 },
-    ];
-    const straightConnection: ConnectorSpec = ['Straight', {}];
+  createConnections() {
+    this.bottomEndpointOptions.connector = this.getConnectorSpecification();
+  }
 
+  getConnectorSpecification(): ConnectorSpec {
     switch (+this.settings.connectionType) {
       case ConnectionType.flowchart:
-        return flowchartConnection;
+        return this.flowchartConnectionSpecification;
       case ConnectionType.bezier:
-        return bezierConnection;
+        return this.bezierConnectionSpecification;
       case ConnectionType.straight:
-        return straightConnection;
+        return this.straightConnectionSpecification;
       default:
         throw new Error(
           'An error occurred when trying to set the connection type'
         );
+    }
+  }
+
+  createGrid(): void {
+    this.dragOptions = {...this.dragOptions, grid: this.getGridConfiguration()} as DragOptions;
+  }
+
+  getGridConfiguration(): [number, number] {
+    switch (+this.settings.gridConfiguration) {
+      case GridConfiguration.free:
+        return [0, 0];
+      case GridConfiguration.tenth:
+        return [10, 10];
+      case GridConfiguration.quarter:
+        return [25, 25];
+      case GridConfiguration.half:
+        return [50, 50];
+      case GridConfiguration.whole:
+        return [100, 100];
+      default:
+        throw new Error('An error occurred when trying to set the grid configuration');
     }
   }
 
