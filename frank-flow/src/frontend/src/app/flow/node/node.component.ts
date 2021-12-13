@@ -181,20 +181,7 @@ export class NodeComponent implements AfterViewInit {
   }
 
   getGridConfiguration(): [number, number] {
-    switch (+this.settings.gridConfiguration) {
-      case GridConfiguration.free:
-        return [0, 0];
-      case GridConfiguration.tenth:
-        return [10, 10];
-      case GridConfiguration.quarter:
-        return [25, 25];
-      case GridConfiguration.half:
-        return [50, 50];
-      case GridConfiguration.whole:
-        return [100, 100];
-      default:
-        throw new Error('An error occurred when trying to set the grid configuration');
-    }
+    return [+this.settings.gridConfiguration, +this.settings.gridConfiguration];
   }
 
   handleDragStop(e: any): void {
