@@ -150,10 +150,6 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
 
   showCanvasOrMessage(): void {
     this.fileIsLoading = this.currentFile?.xml === undefined;
-    console.log(this.currentFile);
-    console.log('boolean undefined: ', this.currentFile?.xml === undefined);
-    // xml: ''
-    //
     this.fileIsConfiguration =
       this.currentFile?.type === FileType.CONFIGURATION;
     this.fileIsEmpty = this.currentFile?.type === FileType.EMPTY;
