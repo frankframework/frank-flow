@@ -189,6 +189,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
       {
         next: (file: File) => {
           if (this.isNewlyLoadedFile(file)) {
+            file.firstLoad = false;
             this.setValue(file);
             this.currentFile = file;
           }
@@ -198,7 +199,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   isNewlyLoadedFile(file: File): boolean {
-    return !!(file.xml && !file.flowStructure);
+    return file.firstLoad!;
   }
 
   highlightText(range: monaco.IRange): void {
