@@ -76,6 +76,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
 
   public fileIsLoading!: boolean;
   public fileIsConfiguration!: boolean;
+  public fileIsEmpty!: boolean;
 
   constructor(
     private renderer: Renderer2,
@@ -97,7 +98,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.checkIfConfigIsLoaded();
+    this.showCanvasOrMessage();
     this.setPanzoomApiSubscription();
     this.setCurrentFileSubscription();
     this.setNodesSubscription();
@@ -131,7 +132,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
       {
         next: (currentFile: File) => {
           this.currentFile = currentFile;
-          this.checkIfConfigIsLoaded();
+          this.showCanvasOrMessage();
           this.setBasicCanvasSize();
         },
       }
@@ -147,10 +148,15 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
-  checkIfConfigIsLoaded(): void {
-    this.fileIsLoading = !this.currentFile?.xml;
+  showCanvasOrMessage(): void {
+    this.fileIsLoading = this.currentFile?.xml === undefined;
+    console.log(this.currentFile);
+    console.log('boolean undefined: ', this.currentFile?.xml === undefined);
+    // xml: ''
+    //
     this.fileIsConfiguration =
       this.currentFile?.type === FileType.CONFIGURATION;
+    this.fileIsEmpty = this.currentFile?.type === FileType.EMPTY;
   }
 
   handleKeyboardUpEvent(kbdEvent: KeyboardEvent): void {

@@ -1,7 +1,7 @@
 <div class="flow-container">
   <div>
     <pan-zoom
-      [hidden]="fileIsLoading || !fileIsConfiguration"
+      [hidden]="fileIsLoading || !fileIsConfiguration || fileIsEmpty"
       [config]="panzoomConfig"
     >
       <div class="panzoom">
@@ -59,11 +59,14 @@
 <app-options></app-options>
 
 <ng-template #noCanvas>
+  <div *ngIf="fileIsEmpty" class="flow-container__no-canvas-message">
+    No file selected, please select a file in the Explorer
+  </div>
   <div *ngIf="fileIsLoading" class="flow-container__no-canvas-message">
     The file is loading in. Please wait.
   </div>
   <div
-    *ngIf="!fileIsLoading && !fileIsConfiguration"
+    *ngIf="!fileIsConfiguration && !fileIsLoading && !fileIsEmpty"
     class="flow-container__no-canvas-message"
   >
     The selected file does not contain a flow.
