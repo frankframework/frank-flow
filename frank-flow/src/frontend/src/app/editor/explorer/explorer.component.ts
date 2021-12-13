@@ -62,45 +62,7 @@ export class ExplorerComponent {
   }
 
   deleteFile(): void {
-    this.currentDirectory = this.currentFileService.currentDirectory;
-    this.deleteFileOrFolder().then((response) => {
-      response.ok ? this.deleteFileSuccessfully() : this.deleteFileFailed();
-    });
-  }
-
-  deleteFileSuccessfully(): void {
-    const isFolder = this.currentDirectory.configuration;
-    this.toastr.success(
-      `The ${isFolder ? 'folder' : 'file'} ${
-        isFolder ? this.currentDirectory.path : this.currentFile.path
-      } has been removed.`,
-      `${isFolder ? 'Folder' : 'File'} removed!`
-    );
-    this.refreshFileTree();
-  }
-
-  deleteFileFailed(): void {
-    const isFolder = this.currentDirectory.configuration;
-    this.toastr.error(
-      `The ${isFolder ? 'folder' : 'file'} ${
-        isFolder ? this.currentDirectory.path : this.currentFile.path
-      } couldn't be removed.`,
-      `${isFolder ? 'Folder' : 'File'} removing`
-    );
-  }
-
-  deleteFileOrFolder(): Promise<Response> {
-    if (this.currentDirectory.configuration) {
-      return this.fileService.removeDirectoryForConfiguration(
-        this.currentDirectory.configuration,
-        this.currentDirectory.path
-      );
-    } else {
-      return this.fileService.removeFileForConfiguration(
-        this.currentFile.configuration,
-        this.currentFile.path
-      );
-    }
+    this.currentFileService.deleteFile();
   }
 
   refreshFileTree(): void {
