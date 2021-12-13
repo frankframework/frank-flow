@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { File } from '../models/file.model';
-import { CurrentFileService } from './current-file.service';
-import { FileService } from './file.service';
 
 @Injectable({
   providedIn: 'root',

@@ -15,6 +15,7 @@ import { File } from '../../shared/models/file.model';
 import { CurrentFileService } from '../../shared/services/current-file.service';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
+import { FileType } from '../../shared/enums/file-type.enum';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -25,22 +26,23 @@ let loadPromise: Promise<void>;
   styleUrls: ['./monaco-editor.component.scss'],
 })
 export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('editorContainer') editorContainer!: ElementRef;
+  @ViewChild('editorContainer')
+  public editorContainer!: ElementRef;
 
-  @Output() codeChange = new EventEmitter<string>();
   @Output()
-  finishedLoading: EventEmitter<boolean> = new EventEmitter<boolean>();
+  public codeChange = new EventEmitter<string>();
+  @Output()
+  public finishedLoading: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
-  currentFile!: File;
-
-  currentFileSubscription!: Subscription;
-  modeSubscription!: Subscription;
-  settingsSubscription!: Subscription;
+  private codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
+  private currentFile!: File;
+  private isReadOnly!: boolean;
+  private currentFileSubscription!: Subscription;
+  private modeSubscription!: Subscription;
+  private settingsSubscription!: Subscription;
 
   private flowNeedsUpdate: boolean = true;
   private applyEditsUpdate: boolean = false;
-
   private decorations: string[] = [];
 
   constructor(
@@ -145,7 +147,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   setValue(file: File | undefined): void {
-    if (file?.xml) {
+    if (file?.xml !== undefined) {
       this.currentFile = file;
       this.codeEditorInstance.getModel()?.setValue(file.xml);
     }
@@ -175,13 +177,17 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   setValueAsCurrentFile(): void {
     const value = this.codeEditorInstance.getModel()?.getValue();
 
-    if (this.currentFile) {
+    if (this.fileNeedsToBeSaved()) {
       this.currentFile.saved = false;
       this.currentFile.xml = value;
       this.currentFile.flowNeedsUpdate = this.flowNeedsUpdate;
       this.currentFileService.updateCurrentFile(this.currentFile);
     }
     this.flowNeedsUpdate = true;
+  }
+
+  fileNeedsToBeSaved(): boolean {
+    return this.currentFile && !this.isReadOnly;
   }
 
   initializeNewFileSubscription(): void {
@@ -191,6 +197,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
           if (this.isNewlyLoadedFile(file)) {
             file.firstLoad = false;
             this.setValue(file);
+            this.checkIfReadOnly(file);
             this.currentFile = file;
           }
         },
@@ -199,7 +206,12 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   isNewlyLoadedFile(file: File): boolean {
-    return file.firstLoad!;
+    return !!file.firstLoad;
+  }
+
+  checkIfReadOnly(file: File): void {
+    this.isReadOnly = file.type === FileType.EMPTY;
+    this.codeEditorInstance.updateOptions({ readOnly: this.isReadOnly });
   }
 
   highlightText(range: monaco.IRange): void {

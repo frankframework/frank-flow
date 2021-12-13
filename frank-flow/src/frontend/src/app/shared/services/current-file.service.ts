@@ -148,6 +148,18 @@ export class CurrentFileService {
     });
   }
 
+  resetCurrentFile(): void {
+    const emptyFile = {
+      path: '',
+      configuration: '',
+      xml: 'No file selected, please select a file in the Explorer',
+      saved: true,
+      firstLoad: true,
+      type: FileType.EMPTY,
+    };
+    this.updateCurrentFile(emptyFile);
+  }
+
   save(): void {
     if (this.fileCanBeSaved()) {
       this.fileService
@@ -202,9 +214,9 @@ export class CurrentFileService {
   }
 
   determineIfFileIsAConfiguration(file: File): void {
-    file.type = this.isFileAConfiguration(file)
-      ? FileType.CONFIGURATION
-      : FileType.FILE;
+    if (this.isFileAConfiguration(file)) {
+      file.type = FileType.CONFIGURATION;
+    }
   }
 
   isFileAConfiguration(file: File): boolean {
@@ -258,6 +270,57 @@ export class CurrentFileService {
       firstLoad: true,
     };
     this.setCurrentFile(currentFile);
+  }
+
+  deleteFile(): void {
+    this.deleteFileOrFolder().then((response) => {
+      response.ok ? this.deleteFileSuccessfully() : this.deleteFileFailed();
+    });
+  }
+
+  deleteFileSuccessfully(): void {
+    const isFolder = !!this.currentDirectory.configuration;
+    this.showDeleteSuccessfullMessage(isFolder);
+    this.resetCurrentFile();
+    this.resetCurrentDirectory();
+    this.refreshFileTree();
+  }
+
+  showDeleteSuccessfullMessage(isFolder: boolean): void {
+    this.toastr.success(
+      `The ${isFolder ? 'folder' : 'file'} ${
+        isFolder ? this.currentDirectory.path : this.currentFile.path
+      } has been removed.`,
+      `${isFolder ? 'Folder' : 'File'} removed!`
+    );
+  }
+
+  deleteFileFailed(): void {
+    const isFolder = this.currentDirectory.configuration;
+    this.toastr.error(
+      `The ${isFolder ? 'folder' : 'file'} ${
+        isFolder ? this.currentDirectory.path : this.currentFile.path
+      } couldn't be removed.`,
+      `${isFolder ? 'Folder' : 'File'} removing`
+    );
+  }
+
+  deleteFileOrFolder(): Promise<Response> {
+    if (this.currentDirectory.configuration) {
+      return this.fileService.removeDirectoryForConfiguration(
+        this.currentDirectory.configuration,
+        this.currentDirectory.path
+      );
+    } else {
+      return this.fileService.removeFileForConfiguration(
+        this.currentFile.configuration,
+        this.currentFile.path
+      );
+    }
+  }
+
+  refreshFileTree(): void {
+    this.fileService.fetchFiles();
   }
 
   setCurrentFile(file: File): void {
