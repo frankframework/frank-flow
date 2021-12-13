@@ -255,6 +255,7 @@ export class CurrentFileService {
       xml: content,
       saved: true,
       flowNeedsUpdate: true,
+      firstLoad: true,
     };
     this.setCurrentFile(currentFile);
   }

@@ -10,4 +10,5 @@ export interface File {
   saved?: boolean;
   flowNeedsUpdate?: boolean;
   type: FileType;
+  firstLoad?: boolean;
 }
