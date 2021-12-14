@@ -49,9 +49,10 @@ export class ModeComponent implements OnInit, OnDestroy {
   }
 
   subscribeToCurrentFile(): void {
-    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
-      (currentFile) => (this.currentFile = currentFile)
-    );
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe(
+        (currentFile) => (this.currentFile = currentFile)
+      );
   }
 
   setMode(modeType: ModeType): void {

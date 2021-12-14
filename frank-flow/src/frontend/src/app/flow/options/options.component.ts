@@ -124,9 +124,8 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   editFirstPipe(originalName: string, newName: string) {
-    const firstPipe = this.currentFile.flowStructure?.pipeline.attributes[
-      'firstPipe'
-    ];
+    const firstPipe =
+      this.currentFile.flowStructure?.pipeline.attributes['firstPipe'];
 
     if (firstPipe?.value === originalName) {
       this.flowStructureService.changeFirstPipe(newName);
@@ -187,7 +186,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
       (attribute) => attribute.name == name
     );
 
-    const value = (event as any) as string | number;
+    const value = event as any as string | number;
     if (index !== -1) {
       this.changedAttributes[index] = { name, value };
     } else {

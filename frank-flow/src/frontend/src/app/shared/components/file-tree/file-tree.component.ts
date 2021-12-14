@@ -128,9 +128,10 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
   }
 
   subscribeToCurrentFile(): void {
-    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
-      (currentFile) => (this.currentFile = currentFile)
-    );
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe(
+        (currentFile) => (this.currentFile = currentFile)
+      );
   }
 
   getSettings(): void {

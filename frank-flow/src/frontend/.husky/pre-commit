@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npx lint-staged --config frank-flow/src/frontend/package.json
+npx lint-staged --config frank-flow/src/frontend/.lintstagedrc

@@ -12,9 +12,8 @@ export class SettingsService {
 
   constructor() {
     const localStorageSettings = this.getSettingsLocalStorage();
-    const localStorageSettingsWithDefaults = this.addDefaultSettings(
-      localStorageSettings
-    );
+    const localStorageSettingsWithDefaults =
+      this.addDefaultSettings(localStorageSettings);
     this.settings = new BehaviorSubject<Settings>(
       localStorageSettingsWithDefaults
     );

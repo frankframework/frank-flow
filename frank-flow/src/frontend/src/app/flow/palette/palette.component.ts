@@ -29,14 +29,13 @@ export class PaletteComponent implements AfterViewInit, OnDestroy {
   }
 
   getXmlParseErrors(): void {
-    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
-      {
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe({
         next: (file: File) => {
           this.errors = file.errors;
           this.locked = this.XmlErrorsFound();
         },
-      }
-    );
+      });
   }
 
   XmlErrorsFound(): boolean {

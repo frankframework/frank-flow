@@ -40,9 +40,9 @@
       class="flow-container__actions"
       *ngIf="fileIsConfiguration; else noCanvas"
     >
-      <app-button (click)="zoomIn()" title="Zoom in">
-        <fa-icon icon="search-plus"></fa-icon>
-      </app-button>
+      <app-button (click)="zoomIn()" title="Zoom in"
+        ><fa-icon icon="search-plus"></fa-icon
+      ></app-button>
       <app-button (click)="zoomReset()" title="Reset zoom and pan">
         <fa-icon icon="home"></fa-icon>
       </app-button>

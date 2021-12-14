@@ -4,7 +4,7 @@ import { Settings } from './settings.model';
 import { ModeType } from '../modes/modeType.enum';
 import { SwitchWithoutSavingOption } from './options/switch-without-saving-option';
 import { ConnectionType } from './options/connection-type';
-import { GridConfiguration } from "./options/grid-configuration";
+import { GridConfiguration } from './options/grid-configuration';
 
 @Component({
   selector: 'app-settings',

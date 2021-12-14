@@ -122,21 +122,19 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   setCanvasElement(): void {
-    this.canvasElement = this.nodeContainerRef.nativeElement.getElementsByClassName(
-      'canvas'
-    )[0];
+    this.canvasElement =
+      this.nodeContainerRef.nativeElement.getElementsByClassName('canvas')[0];
   }
 
   setCurrentFileSubscription(): void {
-    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
-      {
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe({
         next: (currentFile: File) => {
           this.currentFile = currentFile;
           this.showCanvasOrMessage();
           this.setBasicCanvasSize();
         },
-      }
-    );
+      });
   }
 
   setNodesSubscription(): void {

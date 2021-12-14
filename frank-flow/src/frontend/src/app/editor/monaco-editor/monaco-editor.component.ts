@@ -87,9 +87,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
         };
 
         if (!(window as any).require) {
-          const loaderScript: HTMLScriptElement = document.createElement(
-            'script'
-          );
+          const loaderScript: HTMLScriptElement =
+            document.createElement('script');
           loaderScript.type = 'text/javascript';
           loaderScript.src = 'assets/monaco/vs/loader.js';
           loaderScript.addEventListener('load', onAmdLoader);
@@ -191,8 +190,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   initializeNewFileSubscription(): void {
-    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
-      {
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe({
         next: (file: File) => {
           if (this.isNewlyLoadedFile(file)) {
             file.firstLoad = false;
@@ -201,8 +200,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
             this.currentFile = file;
           }
         },
-      }
-    );
+      });
   }
 
   isNewlyLoadedFile(file: File): boolean {

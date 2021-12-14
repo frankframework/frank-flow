@@ -94,8 +94,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   subscribeToCurrentFile(): void {
-    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
-      {
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe({
         next: (currentFile: File): void => {
           this.errors = currentFile.errors;
           this.locked = this.XmlErrorsFound();
@@ -104,8 +104,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
             this.generateFlow(currentFile.flowStructure);
           }
         },
-      }
-    );
+      });
   }
 
   subscribeToSettings(): void {

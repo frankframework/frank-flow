@@ -153,10 +153,10 @@ function elementToCanvasNode(inputElementName: string): Promise<CanvasNode> {
       const height = domObject.css('height');
       const result = createCanvasNode(
         inputElementName,
-        (left as unknown) as string,
-        (top as unknown) as string,
-        (width as unknown) as string,
-        (height as unknown) as string
+        left as unknown as string,
+        top as unknown as string,
+        width as unknown as string,
+        height as unknown as string
       );
       if (result.error) {
         reject(result.error);
@@ -239,10 +239,10 @@ function requestCanvasConnectionArea(
       const width = domObject.css('width');
       const height = domObject.css('height');
       const result = createCanvasConnectionArea(
-        (left as unknown) as string,
-        (top as unknown) as string,
-        (width as unknown) as string,
-        (height as unknown) as string
+        left as unknown as string,
+        top as unknown as string,
+        width as unknown as string,
+        height as unknown as string
       );
       if (result.error) {
         reject(result.error);
@@ -325,7 +325,7 @@ function requestCanvasConnection(index: number): Promise<CanvasConnection> {
                   .invoke('css', 'transform')
                   .then((domTransform) => {
                     const parsedPropertyD = new ParsedPathDProperty(
-                      (domD as unknown) as string
+                      domD as unknown as string
                     );
                     if (parsedPropertyD.hasError()) {
                       reject(
@@ -333,9 +333,10 @@ function requestCanvasConnection(index: number): Promise<CanvasConnection> {
                       );
                       return;
                     }
-                    const parsedPropertyTransform = new ParsedClassTransformProperty(
-                      (domTransform as unknown) as string
-                    );
+                    const parsedPropertyTransform =
+                      new ParsedClassTransformProperty(
+                        domTransform as unknown as string
+                      );
                     if (parsedPropertyTransform.hasError()) {
                       reject(
                         'Property transform error: ' +
@@ -343,8 +344,8 @@ function requestCanvasConnection(index: number): Promise<CanvasConnection> {
                       );
                     }
                     const resultOrError = createCanvasConnection(
-                      (left as unknown) as string,
-                      (top as unknown) as string,
+                      left as unknown as string,
+                      top as unknown as string,
                       parsedPropertyD.getBeginX(),
                       parsedPropertyD.getBeginY(),
                       parsedPropertyD.getEndX(),

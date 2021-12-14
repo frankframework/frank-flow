@@ -1,13 +1,26 @@
-import { AfterViewInit, Component, HostBinding, HostListener, Input, } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  HostBinding,
+  HostListener,
+  Input,
+} from '@angular/core';
 import { Node } from './nodes/node.model';
-import { AnchorSpec, ConnectorSpec, DragOptions, DropOptions, EndpointOptions, jsPlumbInstance, } from 'jsplumb';
+import {
+  AnchorSpec,
+  ConnectorSpec,
+  DragOptions,
+  DropOptions,
+  EndpointOptions,
+  jsPlumbInstance,
+} from 'jsplumb';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
 import { SettingsService } from 'src/app/header/settings/settings.service';
 import { Settings } from 'src/app/header/settings/settings.model';
 import { ConnectionType } from 'src/app/header/settings/options/connection-type';
-import { GridConfiguration } from "../../header/settings/options/grid-configuration";
+import { GridConfiguration } from '../../header/settings/options/grid-configuration';
 
 @Component({
   selector: 'app-node',
@@ -48,7 +61,10 @@ export class NodeComponent implements AfterViewInit {
     { alwaysRespectStubs: true, cornerRadius: 25 },
   ];
 
-  private readonly straightConnectionSpecification: ConnectorSpec = ['Straight', {}];
+  private readonly straightConnectionSpecification: ConnectorSpec = [
+    'Straight',
+    {},
+  ];
 
   private readonly dropOptions: DropOptions = {
     tolerance: 'touch',
@@ -177,7 +193,10 @@ export class NodeComponent implements AfterViewInit {
   }
 
   createGrid(): void {
-    this.dragOptions = {...this.dragOptions, grid: this.getGridConfiguration()} as DragOptions;
+    this.dragOptions = {
+      ...this.dragOptions,
+      grid: this.getGridConfiguration(),
+    } as DragOptions;
   }
 
   getGridConfiguration(): [number, number] {
