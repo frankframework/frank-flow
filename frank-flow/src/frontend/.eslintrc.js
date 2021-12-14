@@ -17,11 +17,8 @@ module.exports = {
       },
       extends: [
         'plugin:@angular-eslint/recommended',
-        'eslint:recommended',
-        'plugin:@typescript-eslint/recommended',
-        'plugin:@typescript-eslint/recommended-requiring-type-checking',
         'plugin:@angular-eslint/template/process-inline-templates',
-        'plugin:prettier/recommended'
+        'plugin:prettier/recommended',
       ],
       rules: {
         '@angular-eslint/component-selector': [
@@ -44,8 +41,10 @@ module.exports = {
     },
     {
       files: ['*.html'],
-      extends: ['plugin:@angular-eslint/template/recommended',
-        'plugin:prettier/recommended'],
+      extends: [
+        'plugin:@angular-eslint/template/recommended',
+        'plugin:prettier/recommended',
+      ],
       rules: {},
     },
   ],

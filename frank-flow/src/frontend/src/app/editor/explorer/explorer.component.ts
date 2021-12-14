@@ -18,9 +18,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./explorer.component.scss'],
 })
 export class ExplorerComponent {
-  searchTerm!: string;
   currentFile!: File;
-  private currentDirectory!: File;
 
   constructor(
     library: FaIconLibrary,

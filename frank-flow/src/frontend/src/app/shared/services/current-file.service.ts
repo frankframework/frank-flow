@@ -252,9 +252,9 @@ export class CurrentFileService {
           this.setNewCurrentFile(file, result);
         }
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         console.error(error);
-        this.toastr.error(error, `File can't be fetched`);
+        this.toastr.error(error.message, `File can't be fetched`);
       });
   }
 
