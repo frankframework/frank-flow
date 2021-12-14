@@ -170,7 +170,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     info: ConnectionMadeEventInfo,
     originalEvent: Event
   ): void {
-    if (originalEvent == null || this.connectionIsMoving) {
+    if (originalEvent == undefined || this.connectionIsMoving) {
       this.connectionIsMoving = false;
       return;
     }
@@ -181,7 +181,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     info: OnConnectionBindInfo,
     originalEvent: Event
   ) {
-    if (originalEvent == null) {
+    if (originalEvent == undefined) {
       return;
     }
     this.flowStructureService.deleteConnection(info.sourceId, info.targetId);
@@ -189,7 +189,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   private onConnectionMoved(info: OnConnectionBindInfo, originalEvent: Event) {
-    if (originalEvent == null) {
+    if (originalEvent == undefined) {
       return;
     }
     this.flowStructureService.moveConnection(
@@ -201,7 +201,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   private onDoubleClick(info: OnConnectionBindInfo, originalEvent: Event) {
-    if (originalEvent == null) {
+    if (originalEvent == undefined) {
       return;
     }
     this.flowStructureService.deleteConnection(

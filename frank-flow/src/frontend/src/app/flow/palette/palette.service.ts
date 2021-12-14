@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Element } from '../../shared/models/element.model';
 import { ElementType } from '../../shared/models/element-type.model';
-import { FrankDocService } from '../../shared/services/frank-doc.service';
+import { FrankDocService as FrankDocumentService } from '../../shared/services/frank-doc.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +9,7 @@ import { FrankDocService } from '../../shared/services/frank-doc.service';
 export class PaletteService {
   data: Map<string, any[]> = new Map<string, any[]>();
 
-  constructor(private frankDocService: FrankDocService) {
+  constructor(private frankDocumentService: FrankDocumentService) {
     this.getData();
   }
 
@@ -30,17 +30,15 @@ export class PaletteService {
   }
 
   getElementTypesInGroup(group: any, data: any): ElementType {
-    return group.types
-      .map((groupType: any) =>
-        data.types
-          .find((type: any) => type.name === groupType)
-          .members.map((name: string) => ({
-            name,
-            type: groupType,
-            group: group.name,
-          }))
-      )
-      .flat(1);
+    return group.types.flatMap((groupType: any) =>
+      data.types
+        .find((type: any) => type.name === groupType)
+        .members.map((name: string) => ({
+          name,
+          type: groupType,
+          group: group.name,
+        }))
+    );
   }
 
   getElementsForTypes(types: ElementType, data: any): Element[] {

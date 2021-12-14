@@ -38,8 +38,8 @@ addEventListener('message', ({ data }) => {
 const parserWrite = (xml: string) => {
   try {
     parser.write(xml).close();
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -83,7 +83,7 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
   );
   bufferAttributes = {};
 
-  if (currentNode.type.match(/Pipe$/g)) {
+  if (currentNode.type.endsWith('Pipe')) {
     currentNode.forwards = [];
     flowStructure.nodes.push(currentNode);
   } else if (currentNode.type.toLocaleLowerCase() === 'forward') {
@@ -92,9 +92,9 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
         return pipe === unclosedNodes[unclosedNodes.length - 1];
       })
       ?.forwards?.push(currentNode);
-  } else if (currentNode.type.match(/Listener$/g)) {
+  } else if (currentNode.type.endsWith('Listener')) {
     flowStructure.nodes.push(currentNode);
-  } else if (currentNode.type.match(/Exit$/g)) {
+  } else if (currentNode.type.endsWith('Exit')) {
     flowStructure.nodes.push(currentNode);
   } else if (currentNode.type === 'Pipeline') {
     pipeline = currentNode;
@@ -116,7 +116,7 @@ parser.on('closetag', (tag: TagForOptions<{}>) => {
   ) {
     closingNode.endLine = parser.line;
   } else {
-    if (closingNode != null) {
+    if (closingNode != undefined) {
       unclosedNodes.push(closingNode);
     }
   }

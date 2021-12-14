@@ -38,7 +38,7 @@ export class NodeGeneratorService {
     pipes: FlowStructureNode[],
     firstPipe: string
   ): void {
-    listeners.forEach((listener) => {
+    for (const listener of listeners) {
       const positions = listener.positions;
       const attributes = listener.attributes;
       const listenerNode = new Listener({
@@ -55,7 +55,7 @@ export class NodeGeneratorService {
       );
       this.forwards.push(new Forward(listener.uid, forwardTarget?.uid!));
       this.nodeMap.set(listener.uid, listenerNode);
-    });
+    }
   }
 
   generatePipeline(
@@ -94,7 +94,7 @@ export class NodeGeneratorService {
   }
 
   generateExits(exits: any[]): void {
-    exits.forEach((exit) => {
+    for (const exit of exits) {
       const positions = exit.positions;
       const attributes = exit.attributes;
       const node = new Exit({
@@ -106,7 +106,7 @@ export class NodeGeneratorService {
         attributes,
       });
       this.nodeMap.set(exit.uid, node);
-    });
+    }
   }
 
   generateForwards(): void {

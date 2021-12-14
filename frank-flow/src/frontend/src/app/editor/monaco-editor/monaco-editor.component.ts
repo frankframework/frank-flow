@@ -92,7 +92,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
           loaderScript.type = 'text/javascript';
           loaderScript.src = 'assets/monaco/vs/loader.js';
           loaderScript.addEventListener('load', onAmdLoader);
-          document.body.appendChild(loaderScript);
+          document.body.append(loaderScript);
         } else {
           onAmdLoader();
         }
@@ -230,13 +230,16 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  debounce(func: any, wait: number): any {
+  debounce(function_: any, wait: number): any {
     let timeout: ReturnType<typeof setTimeout> | null;
     return () => {
       if (timeout) {
         clearTimeout(timeout);
       }
-      timeout = setTimeout(() => func.apply(this, arguments), wait);
+      timeout = setTimeout(
+        () => Reflect.apply(function_, this, arguments),
+        wait
+      );
     };
   }
 

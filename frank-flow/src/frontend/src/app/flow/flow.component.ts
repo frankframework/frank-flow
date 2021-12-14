@@ -47,7 +47,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   private canvasElement?: HTMLElement;
   private panZoomConfigOptions: PanZoomConfigOptions = {
     zoomLevels: 3,
-    scalePerZoomLevel: 2.0,
+    scalePerZoomLevel: 2,
     zoomStepDuration: 0.2,
     freeMouseWheel: false,
     invertMouseWheel: true,
@@ -119,7 +119,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
 
   setCanvasElement(): void {
     this.canvasElement =
-      this.nodeContainerRef.nativeElement.getElementsByClassName('canvas')[0];
+      this.nodeContainerRef.nativeElement.querySelectorAll('.canvas')[0];
   }
 
   setCurrentFileSubscription(): void {

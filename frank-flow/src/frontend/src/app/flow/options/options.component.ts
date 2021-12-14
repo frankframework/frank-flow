@@ -36,7 +36,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
-    private frankDocService: FrankDocService,
+    private frankDocumentService: FrankDocService,
     private flowStructureService: FlowStructureService,
     private currentFileService: CurrentFileService
   ) {}
@@ -53,7 +53,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   getFrankDoc(): void {
     this.frankDocSubscription = this.frankDocService
       .getFrankDoc()
-      .subscribe((frankDoc: any) => (this.frankDoc = frankDoc));
+      .subscribe((frankDocument: any) => (this.frankDoc = frankDocument));
   }
 
   getCurrentFile(): void {
@@ -208,17 +208,20 @@ export class OptionsComponent implements OnInit, OnDestroy {
     this.changedAttributes.splice(index);
   }
 
-  debounce(func: any, wait: number): any {
+  debounce(function_: any, wait: number): any {
     let timeout: ReturnType<typeof setTimeout> | null;
     return () => {
       if (timeout) {
         clearTimeout(timeout);
       }
-      timeout = setTimeout(() => func.apply(this, arguments), wait);
+      timeout = setTimeout(
+        () => Reflect.apply(function_, this, arguments),
+        wait
+      );
     };
   }
 
-  customTrackBy(index: number, obj: any): any {
+  customTrackBy(index: number, object: any): any {
     return index;
   }
 

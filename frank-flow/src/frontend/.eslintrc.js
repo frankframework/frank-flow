@@ -18,6 +18,7 @@ module.exports = {
       extends: [
         'plugin:@angular-eslint/recommended',
         'plugin:@angular-eslint/template/process-inline-templates',
+        'plugin:unicorn/recommended',
         'plugin:prettier/recommended',
       ],
       rules: {

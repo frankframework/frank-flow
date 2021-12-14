@@ -197,11 +197,9 @@ export class FlowStructureService {
       (pipe: FlowStructureNode) => pipe.name === name + (increment ?? '')
     );
 
-    if (nameIsUsed) {
-      return this.getUniqueNodeName(nodes, name, (increment ?? 1) + 1);
-    } else {
-      return name + (increment ?? '');
-    }
+    return nameIsUsed
+      ? this.getUniqueNodeName(nodes, name, (increment ?? 1) + 1)
+      : name + (increment ?? '');
   }
 
   addListener(pipeData: Listener): void {
@@ -267,7 +265,7 @@ export class FlowStructureService {
     this.flowUpdate = options.flowUpdate;
     let nodeAttributes: ChangedAttribute[] = [];
 
-    options.attributes.forEach((attribute) => {
+    for (const attribute of options.attributes) {
       nodeAttributes =
         this.editAttributeQueue.get(options.nodeId) ?? nodeAttributes;
       if (nodeAttributes.length > 0) {
@@ -280,7 +278,7 @@ export class FlowStructureService {
         nodeAttributes.push(attribute);
       }
       this.editAttributeQueue.set(options.nodeId, nodeAttributes);
-    });
+    }
     this.attemptEditAttributes();
   }
 
@@ -336,7 +334,7 @@ export class FlowStructureService {
       const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
 
       if (node) {
-        editAttributes.forEach((attribute) => {
+        for (const attribute of editAttributes) {
           const editOperation = this.editAttribute(
             attribute.name,
             attribute.value,
@@ -346,7 +344,7 @@ export class FlowStructureService {
           if (editOperation) {
             editOperations.push(editOperation);
           }
-        });
+        }
 
         return editOperations;
       }
@@ -382,7 +380,7 @@ export class FlowStructureService {
     attributeList: FlowNodeAttributes,
     search: string
   ): FlowNodeAttribute | undefined {
-    let attribute: FlowNodeAttribute | undefined = undefined;
+    let attribute: FlowNodeAttribute | undefined;
 
     Object.entries(attributeList).forEach(
       ([attributeKey, currentAttribute]: [string, FlowNodeAttribute]) => {
@@ -459,7 +457,7 @@ export class FlowStructureService {
   findLastAttribute(
     attributeList: FlowNodeAttributes
   ): FlowNodeAttribute | undefined {
-    let currentLastAttribute: FlowNodeAttribute | undefined = undefined;
+    let currentLastAttribute: FlowNodeAttribute | undefined;
 
     Object.entries(attributeList).forEach(
       ([attributeKey, attribute]: [string, FlowNodeAttribute]) => {

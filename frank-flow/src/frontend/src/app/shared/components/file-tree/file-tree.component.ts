@@ -100,7 +100,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
     Object.keys(content).map((key) => {
       if (key === '_files') {
         content._files.forEach((file: string) => {
-          if (!this.fileMatch || file.match(this.fileMatch)) {
+          if (!this.fileMatch || this.fileMatch.test(file)) {
             items.push({
               label: file,
               value: JSON.stringify({

@@ -40,7 +40,7 @@ export class SettingsService {
       if (settings[key as K] === undefined) {
         settings = {
           ...settings,
-          ...{ [key]: this.defaultSettings[key as K] },
+          [key]: this.defaultSettings[key as K],
         };
       }
     }

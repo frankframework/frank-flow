@@ -23,8 +23,8 @@ export class NodeService {
     return this.jsPlumbInstance;
   }
 
-  setRootViewContainerRef(viewContainerRef: ViewContainerRef): void {
-    this.rootViewContainer = viewContainerRef;
+  setRootViewContainerRef(viewContainerReference: ViewContainerRef): void {
+    this.rootViewContainer = viewContainerReference;
     this.jsPlumbInstance.ready(() => {
       this.jsPlumbInstance.setContainer('canvas');
     });

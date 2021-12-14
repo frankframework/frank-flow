@@ -56,13 +56,13 @@ export class CurrentFileService {
   }
 
   clearErrorToasts(): void {
-    this.toastr.toasts.forEach((toast) => {
+    for (const toast of this.toastr.toasts) {
       if (
         toast.toastRef.componentInstance.toastClasses.includes('toast-error')
       ) {
         toast.toastRef.manualClose();
       }
-    });
+    }
   }
 
   parsingErrorsFound(data: File): boolean {
@@ -84,7 +84,7 @@ export class CurrentFileService {
 
   groupSimilarErrors(errors: string[]): XmlParseError[] {
     const groupedErrors: XmlParseError[] = [];
-    errors.forEach((errorMessage, index) => {
+    for (const [index, errorMessage] of errors.entries()) {
       const lastError = groupedErrors[groupedErrors.length - 1];
       const error = this.parseErrorMessage(errorMessage);
       if (this.errorMessageEqualToLast(error, lastError)) {
@@ -96,7 +96,7 @@ export class CurrentFileService {
       } else {
         groupedErrors.push(error);
       }
-    });
+    }
     return groupedErrors;
   }
 
@@ -126,8 +126,8 @@ export class CurrentFileService {
 
   parseErrorMessage(error: string): XmlParseError {
     const [startLine, startColumn, message] = error
-      .split(/([0-9]+):([0-9]+):\s(.+)/)
-      .filter((i) => i);
+      .split(/(\d+):(\d+):\s(.+)/)
+      .filter((index) => index);
     return new XmlParseError({
       startLine: +startLine,
       startColumn: +startColumn,
@@ -305,17 +305,15 @@ export class CurrentFileService {
   }
 
   deleteFileOrFolder(): Promise<Response> {
-    if (this.currentDirectory.configuration) {
-      return this.fileService.removeDirectoryForConfiguration(
-        this.currentDirectory.configuration,
-        this.currentDirectory.path
-      );
-    } else {
-      return this.fileService.removeFileForConfiguration(
-        this.currentFile.configuration,
-        this.currentFile.path
-      );
-    }
+    return this.currentDirectory.configuration
+      ? this.fileService.removeDirectoryForConfiguration(
+          this.currentDirectory.configuration,
+          this.currentDirectory.path
+        )
+      : this.fileService.removeFileForConfiguration(
+          this.currentFile.configuration,
+          this.currentFile.path
+        );
   }
 
   refreshFileTree(): void {
