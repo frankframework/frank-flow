@@ -54,7 +54,7 @@
   left: 0;
   line-height: 1.2;
 
-  &:before {
+  &::before {
     content: '';
     position: absolute;
     inset: 0 8px;

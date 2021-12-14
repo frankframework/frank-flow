@@ -11,8 +11,8 @@ import { File } from '../../shared/models/file.model';
 })
 export class PaletteComponent implements AfterViewInit, OnDestroy {
   public search!: string;
+  public locked = false;
   private errors!: string[] | undefined;
-  public locked: boolean = false;
   private currentFileSubscription!: Subscription;
 
   constructor(
@@ -29,14 +29,13 @@ export class PaletteComponent implements AfterViewInit, OnDestroy {
   }
 
   getXmlParseErrors(): void {
-    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
-      {
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe({
         next: (file: File) => {
           this.errors = file.errors;
           this.locked = this.XmlErrorsFound();
         },
-      }
-    );
+      });
   }
 
   XmlErrorsFound(): boolean {

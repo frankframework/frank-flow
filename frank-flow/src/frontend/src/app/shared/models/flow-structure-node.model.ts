@@ -11,6 +11,26 @@ export class FlowStructureNode {
   public name: string;
   public positions: { x: number; y: number };
 
+  constructor(
+    line: number,
+    endLine: number,
+    column: number,
+    type: string,
+    attributes: FlowNodeAttributes,
+    forwards?: any[]
+  ) {
+    this.line = line;
+    this.endLine = endLine;
+    this.column = column;
+    this.type = type;
+    this.forwards = forwards;
+
+    this.attributes = attributes ?? [];
+    this.name = this.getName();
+    this.uid = this.name + this.type;
+    this.positions = this.getPositions();
+  }
+
   private getName(): string {
     if (this.attributes['name']) {
       return this.attributes['name'].value;
@@ -32,25 +52,5 @@ export class FlowStructureNode {
     }
 
     return { x, y };
-  }
-
-  constructor(
-    line: number,
-    endLine: number,
-    column: number,
-    type: string,
-    attributes: FlowNodeAttributes,
-    forwards: any[] | undefined = undefined
-  ) {
-    this.line = line;
-    this.endLine = endLine;
-    this.column = column;
-    this.type = type;
-    this.forwards = forwards;
-
-    this.attributes = attributes ?? [];
-    this.name = this.getName();
-    this.uid = this.name + this.type;
-    this.positions = this.getPositions();
   }
 }

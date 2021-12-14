@@ -27,7 +27,7 @@ export class GraphService {
     this.addNodesToGraph(nodeMap);
     try {
       this.connectAllNodes(forwards);
-    } catch (e) {
+    } catch {
       console.error(`Can't connect nodes, check if connection exists`);
     }
     this.generateGraphedNodes(nodeMap);
@@ -43,7 +43,7 @@ export class GraphService {
   }
 
   addNodesToGraph(nodeMap: Map<string, Node>): void {
-    nodeMap.forEach((node, key) => {
+    for (const node of nodeMap.values()) {
       const x = (node.getLeft() as number) ?? 0;
       const y = (node.getTop() as number) ?? 0;
 
@@ -56,7 +56,7 @@ export class GraphService {
           width: 200,
         },
       });
-    });
+    }
   }
 
   generateGraphedNodes(nodeMap: Map<string, Node>): void {
@@ -75,7 +75,7 @@ export class GraphService {
     let exitLeftMargin = 800;
     let exitTopPosition = 0;
 
-    graphNodes.forEach((graphNode: any, index: any) => {
+    for (let graphNode of graphNodes as any[]) {
       const node = nodeMap.get(graphNode.data.id);
 
       const xMultiplier = 300;
@@ -109,12 +109,12 @@ export class GraphService {
       if (node) {
         this.nodeService.addDynamicNode(node);
       }
-    });
+    }
     this.nodesSubject.next(nodeMap);
   }
 
   connectAllNodes(forwards: Forward[]): void {
-    forwards.forEach((forward, index) => {
+    for (const [index, forward] of forwards.entries()) {
       const source = forward.getSource();
       const target = forward.getDestination();
 
@@ -128,6 +128,6 @@ export class GraphService {
           },
         });
       }
-    });
+    }
   }
 }

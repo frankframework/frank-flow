@@ -3,8 +3,8 @@ import {
   faCog,
   faFile,
   faFolder,
-  faSave,
   faPen,
+  faSave,
 } from '@fortawesome/free-solid-svg-icons';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { ToastrService } from 'ngx-toastr';

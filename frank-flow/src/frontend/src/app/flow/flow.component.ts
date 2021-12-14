@@ -22,7 +22,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { CurrentFileService } from '../shared/services/current-file.service';
 import { File } from '../shared/models/file.model';
-import { FlowStructureNode } from '../shared/models/flow-structure-node.model';
 import { GraphService } from '../shared/services/graph.service';
 import { Node } from './node/nodes/node.model';
 import { Subscription } from 'rxjs';
@@ -38,20 +37,16 @@ type CanvasSize = { x: number; y: number };
   styleUrls: ['./flow.component.scss'],
 })
 export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
+  public fileIsLoading!: boolean;
+  public fileIsConfiguration!: boolean;
+  public fileIsEmpty!: boolean;
   private readonly canvasExpansionSize = 500;
-
   @ViewChild('nodeContainer', { read: ElementRef })
   private nodeContainerRef!: ElementRef;
-
-  @HostListener('window:keydown', ['$event'])
-  onKeyUp(kbdEvent: KeyboardEvent): void {
-    this.handleKeyboardUpEvent(kbdEvent);
-  }
-
   private canvasElement?: HTMLElement;
   private panZoomConfigOptions: PanZoomConfigOptions = {
     zoomLevels: 3,
-    scalePerZoomLevel: 2.0,
+    scalePerZoomLevel: 2,
     zoomStepDuration: 0.2,
     freeMouseWheel: false,
     invertMouseWheel: true,
@@ -63,7 +58,6 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
     neutralZoomLevel: 1,
     initialZoomLevel: 1,
   };
-
   public panzoomConfig: PanZoomConfig = new PanZoomConfig(
     this.panZoomConfigOptions
   );
@@ -73,10 +67,6 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   private currentFileSubscription!: Subscription;
   private graphSubscription!: Subscription;
   private panZoomAPI!: PanZoomAPI;
-
-  public fileIsLoading!: boolean;
-  public fileIsConfiguration!: boolean;
-  public fileIsEmpty!: boolean;
 
   constructor(
     private renderer: Renderer2,
@@ -95,6 +85,11 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
       faHome,
       faDotCircle
     );
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  onKeyUp(kbdEvent: KeyboardEvent): void {
+    this.handleKeyboardUpEvent(kbdEvent);
   }
 
   ngOnInit(): void {
@@ -122,21 +117,19 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   setCanvasElement(): void {
-    this.canvasElement = this.nodeContainerRef.nativeElement.getElementsByClassName(
-      'canvas'
-    )[0];
+    this.canvasElement =
+      this.nodeContainerRef.nativeElement.querySelectorAll('.canvas')[0];
   }
 
   setCurrentFileSubscription(): void {
-    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
-      {
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe({
         next: (currentFile: File) => {
           this.currentFile = currentFile;
           this.showCanvasOrMessage();
           this.setBasicCanvasSize();
         },
-      }
-    );
+      });
   }
 
   setNodesSubscription(): void {
@@ -258,19 +251,17 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   getMinimumCanvasSizeForFlowStructure(positions: CanvasSize): void {
-    this.currentFile?.flowStructure?.nodes?.forEach(
-      (node: FlowStructureNode) => {
-        positions.x = this.comparePositions(positions.x, node.positions.x);
-        positions.y = this.comparePositions(positions.y, node.positions.y);
-      }
-    );
+    for (const node of this.currentFile?.flowStructure?.nodes ?? []) {
+      positions.x = this.comparePositions(positions.x, node.positions.x);
+      positions.y = this.comparePositions(positions.y, node.positions.y);
+    }
   }
 
   getMinimumCanvasSizeForGraphService(positions: CanvasSize): void {
-    this.nodes?.forEach((node, key) => {
+    for (const [_, node] of this.nodes?.entries() ?? []) {
       positions.x = this.comparePositions(positions.x, node.getLeft() ?? 0);
       positions.y = this.comparePositions(positions.y, node.getTop() ?? 0);
-    });
+    }
   }
 
   getMinimumCanvasSizeWithNodeBuffer(positions: CanvasSize): void {

@@ -1,8 +1,8 @@
 import { Settings } from '../settings.model';
-import { ModeType } from '../../modes/modeType.enum';
+import { ModeType } from '../../modes/mode-type.enum';
 import { SwitchWithoutSavingOption } from './switch-without-saving-option';
 import { ConnectionType } from './connection-type';
-import { GridConfiguration } from "./grid-configuration";
+import { GridConfiguration } from './grid-configuration';
 
 export class DefaultSettings implements Settings {
   darkMode = false;

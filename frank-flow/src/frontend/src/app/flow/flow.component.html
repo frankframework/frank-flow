@@ -1,44 +1,44 @@
 <div class="flow-container">
   <div>
     <pan-zoom
-      [hidden]="fileIsLoading || !fileIsConfiguration || fileIsEmpty"
       [config]="panzoomConfig"
+      [hidden]="fileIsLoading || !fileIsConfiguration || fileIsEmpty"
     >
       <div class="panzoom">
         <app-canvas #nodeContainer [panzoomConfig]="panzoomConfig"></app-canvas>
         <div class="arrows arrows--horizontal">
           <fa-icon
+            (click)="decreaseRight()"
             icon="arrow-left"
             size="10x"
-            (click)="decreaseRight()"
             title="Shrink canvas"
           ></fa-icon>
           <fa-icon
+            (click)="expandRight()"
             icon="arrow-right"
             size="10x"
-            (click)="expandRight()"
             title="Expand canvas"
           ></fa-icon>
         </div>
         <div class="arrows arrows--vertical">
           <fa-icon
+            (click)="decreaseBottom()"
             icon="arrow-up"
             size="10x"
-            (click)="decreaseBottom()"
             title="Shrink canvas"
           ></fa-icon>
           <fa-icon
+            (click)="expandBottom()"
             icon="arrow-down"
             size="10x"
-            (click)="expandBottom()"
             title="Expand canvas"
           ></fa-icon>
         </div>
       </div>
     </pan-zoom>
     <div
-      class="flow-container__actions"
       *ngIf="fileIsConfiguration; else noCanvas"
+      class="flow-container__actions"
     >
       <app-button (click)="zoomIn()" title="Zoom in">
         <fa-icon icon="search-plus"></fa-icon>

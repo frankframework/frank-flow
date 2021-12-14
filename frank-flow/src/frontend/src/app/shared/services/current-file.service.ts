@@ -12,13 +12,12 @@ import { SessionService } from './session.service';
   providedIn: 'root',
 })
 export class CurrentFileService {
+  currentDirectory!: File;
   private editor!: monaco.editor.IStandaloneCodeEditor;
   private currentFile!: File;
   private currentFileSubject = new ReplaySubject<File>(1);
   public currentFileObservable = this.currentFileSubject.asObservable();
   private xmlToFlowStructureWorker!: Worker;
-
-  currentDirectory!: File;
 
   constructor(
     private fileService: FileService,
@@ -45,7 +44,7 @@ export class CurrentFileService {
   }
 
   initializeXmlToFlowStructureWorkerEventListener(): void {
-    this.xmlToFlowStructureWorker.onmessage = ({ data }) => {
+    this.xmlToFlowStructureWorker.addEventListener('message', ({ data }) => {
       this.clearErrorToasts();
       if (data) {
         if (this.parsingErrorsFound(data)) {
@@ -53,17 +52,17 @@ export class CurrentFileService {
         }
         this.currentFileSubject.next(data);
       }
-    };
+    });
   }
 
   clearErrorToasts(): void {
-    this.toastr.toasts.forEach((toast) => {
+    for (const toast of this.toastr.toasts) {
       if (
         toast.toastRef.componentInstance.toastClasses.includes('toast-error')
       ) {
         toast.toastRef.manualClose();
       }
-    });
+    }
   }
 
   parsingErrorsFound(data: File): boolean {
@@ -72,7 +71,7 @@ export class CurrentFileService {
 
   showParsingErrors(errors: string[]): void {
     const parsedErrors = this.groupSimilarErrors(errors);
-    parsedErrors.forEach((error: XmlParseError) => {
+    for (const error of parsedErrors) {
       this.toastr.error(
         error.getTemplateString(),
         'Parsing error found in XML',
@@ -80,12 +79,12 @@ export class CurrentFileService {
           disableTimeOut: true,
         }
       );
-    });
+    }
   }
 
   groupSimilarErrors(errors: string[]): XmlParseError[] {
     const groupedErrors: XmlParseError[] = [];
-    errors.forEach((errorMessage, index) => {
+    for (const errorMessage of errors) {
       const lastError = groupedErrors[groupedErrors.length - 1];
       const error = this.parseErrorMessage(errorMessage);
       if (this.errorMessageEqualToLast(error, lastError)) {
@@ -97,7 +96,7 @@ export class CurrentFileService {
       } else {
         groupedErrors.push(error);
       }
-    });
+    }
     return groupedErrors;
   }
 
@@ -127,8 +126,8 @@ export class CurrentFileService {
 
   parseErrorMessage(error: string): XmlParseError {
     const [startLine, startColumn, message] = error
-      .split(/([0-9]+):([0-9]+):\s(.+)/)
-      .filter((i) => i);
+      .split(/(\d+):(\d+):\s(.+)/)
+      .filter((index) => index);
     return new XmlParseError({
       startLine: +startLine,
       startColumn: +startColumn,
@@ -253,9 +252,9 @@ export class CurrentFileService {
           this.setNewCurrentFile(file, result);
         }
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         console.error(error);
-        this.toastr.error(error, `File can't be fetched`);
+        this.toastr.error(error.message, `File can't be fetched`);
       });
   }
 
@@ -306,17 +305,15 @@ export class CurrentFileService {
   }
 
   deleteFileOrFolder(): Promise<Response> {
-    if (this.currentDirectory.configuration) {
-      return this.fileService.removeDirectoryForConfiguration(
-        this.currentDirectory.configuration,
-        this.currentDirectory.path
-      );
-    } else {
-      return this.fileService.removeFileForConfiguration(
-        this.currentFile.configuration,
-        this.currentFile.path
-      );
-    }
+    return this.currentDirectory.configuration
+      ? this.fileService.removeDirectoryForConfiguration(
+          this.currentDirectory.configuration,
+          this.currentDirectory.path
+        )
+      : this.fileService.removeFileForConfiguration(
+          this.currentFile.configuration,
+          this.currentFile.path
+        );
   }
 
   refreshFileTree(): void {

@@ -32,18 +32,15 @@ import { SettingsService } from 'src/app/header/settings/settings.service';
 export class CanvasComponent implements AfterViewInit, OnDestroy {
   @Input()
   public panzoomConfig!: PanZoomConfig;
-  @ViewChild('canvas', { read: ViewContainerRef })
-  private viewContainerRef!: ViewContainerRef;
   @HostBinding('tabindex')
   public tabindex = 1;
-
+  public flowUpdate = false;
+  public locked!: boolean;
+  @ViewChild('canvas', { read: ViewContainerRef })
+  private viewContainerRef!: ViewContainerRef;
   private jsPlumbInstance!: jsPlumbInstance;
   private currentFileSubscription!: Subscription;
   private settingsSubscription!: Subscription;
-
-  public flowUpdate = false;
-  public locked!: boolean;
-
   private errors!: string[] | undefined;
   private connectionIsMoving = false;
   private modelChangedSubscription!: Subscription;
@@ -94,8 +91,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   subscribeToCurrentFile(): void {
-    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
-      {
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe({
         next: (currentFile: File): void => {
           this.errors = currentFile.errors;
           this.locked = this.XmlErrorsFound();
@@ -104,8 +101,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
             this.generateFlow(currentFile.flowStructure);
           }
         },
-      }
-    );
+      });
   }
 
   subscribeToSettings(): void {
@@ -141,51 +137,6 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     );
   }
 
-  private onConnection(
-    info: ConnectionMadeEventInfo,
-    originalEvent: Event
-  ): void {
-    if (originalEvent == null || this.connectionIsMoving) {
-      this.connectionIsMoving = false;
-      return;
-    }
-    this.flowStructureService.addConnection(info.sourceId, info.targetId);
-  }
-
-  private onConnectionDetached(
-    info: OnConnectionBindInfo,
-    originalEvent: Event
-  ) {
-    if (originalEvent == null) {
-      return;
-    }
-    this.flowStructureService.deleteConnection(info.sourceId, info.targetId);
-    this.connectionIsMoving = false;
-  }
-
-  private onConnectionMoved(info: OnConnectionBindInfo, originalEvent: Event) {
-    if (originalEvent == null) {
-      return;
-    }
-    this.flowStructureService.moveConnection(
-      info.originalSourceId,
-      info.originalTargetId,
-      info.newTargetId
-    );
-    this.connectionIsMoving = true;
-  }
-
-  private onDoubleClick(info: OnConnectionBindInfo, originalEvent: Event) {
-    if (originalEvent == null) {
-      return;
-    }
-    this.flowStructureService.deleteConnection(
-      info.sourceId,
-      info.targetId,
-      true
-    );
-  }
-
   generateFlow(structure: FlowStructure): void {
     if (this.flowUpdate) {
       return;
@@ -213,5 +164,50 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         this.flowUpdate = false;
       });
     });
+  }
+
+  private onConnection(
+    info: ConnectionMadeEventInfo,
+    originalEvent: Event
+  ): void {
+    if (originalEvent == undefined || this.connectionIsMoving) {
+      this.connectionIsMoving = false;
+      return;
+    }
+    this.flowStructureService.addConnection(info.sourceId, info.targetId);
+  }
+
+  private onConnectionDetached(
+    info: OnConnectionBindInfo,
+    originalEvent: Event
+  ) {
+    if (originalEvent == undefined) {
+      return;
+    }
+    this.flowStructureService.deleteConnection(info.sourceId, info.targetId);
+    this.connectionIsMoving = false;
+  }
+
+  private onConnectionMoved(info: OnConnectionBindInfo, originalEvent: Event) {
+    if (originalEvent == undefined) {
+      return;
+    }
+    this.flowStructureService.moveConnection(
+      info.originalSourceId,
+      info.originalTargetId,
+      info.newTargetId
+    );
+    this.connectionIsMoving = true;
+  }
+
+  private onDoubleClick(info: OnConnectionBindInfo, originalEvent: Event) {
+    if (originalEvent == undefined) {
+      return;
+    }
+    this.flowStructureService.deleteConnection(
+      info.sourceId,
+      info.targetId,
+      true
+    );
   }
 }

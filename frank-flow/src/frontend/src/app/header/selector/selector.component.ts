@@ -49,7 +49,7 @@ export class SelectorComponent implements AfterViewInit {
             currentFile.configuration + ': ' + currentFile.path
           );
         } else {
-          this.setDropDownLabel("Select a file");
+          this.setDropDownLabel('Select a file');
         }
       },
     });

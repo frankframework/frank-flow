@@ -12,9 +12,8 @@ export class SettingsService {
 
   constructor() {
     const localStorageSettings = this.getSettingsLocalStorage();
-    const localStorageSettingsWithDefaults = this.addDefaultSettings(
-      localStorageSettings
-    );
+    const localStorageSettingsWithDefaults =
+      this.addDefaultSettings(localStorageSettings);
     this.settings = new BehaviorSubject<Settings>(
       localStorageSettingsWithDefaults
     );
@@ -41,7 +40,7 @@ export class SettingsService {
       if (settings[key as K] === undefined) {
         settings = {
           ...settings,
-          ...{ [key]: this.defaultSettings[key as K] },
+          [key]: this.defaultSettings[key as K],
         };
       }
     }

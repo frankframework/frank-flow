@@ -1,7 +1,7 @@
-import { ModeType } from '../modes/modeType.enum';
+import { ModeType } from '../modes/mode-type.enum';
 import { SwitchWithoutSavingOption } from './options/switch-without-saving-option';
 import { ConnectionType } from './options/connection-type';
-import { GridConfiguration } from "./options/grid-configuration";
+import { GridConfiguration } from './options/grid-configuration';
 
 export interface Settings {
   darkMode: boolean;

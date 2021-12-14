@@ -6,13 +6,14 @@
     "start": "ng serve",
     "build": "ng build",
     "build:prod": "ng build --configuration production",
-    "build:analyze": "ng build --prod --stats-json && webpack-bundle-analyzer ../../target/frontend/stats.json",
+    "build:analyze": "ng build --configuration production -stats-json && webpack-bundle-analyzer ../../target/frontend/stats.json",
     "build:dev": "ng build --configuration dev",
     "watch": "ng build --configuration dev --watch",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prettier": "prettier -w ."
+    "prettier": "prettier -w .",
+    "prepare": "cd ../../.. && husky install frank-flow/src/frontend/.husky"
   },
   "private": true,
   "dependencies": {
@@ -57,7 +58,10 @@
     "@typescript-eslint/parser": "^5.6.0",
     "cypress": "^7.7.0",
     "eslint": "^8.4.1",
-    "husky": "^4.3.8",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-unicorn": "^39.0.0",
+    "husky": "^7.0.4",
     "jasmine-core": "^3.10.1",
     "jasmine-spec-reporter": "^7.0.0",
     "karma": "^6.3.4",
@@ -65,16 +69,10 @@
     "karma-coverage": "^2.0.3",
     "karma-jasmine": "^4.0.1",
     "karma-jasmine-html-reporter": "^1.7.0",
+    "lint-staged": "^12.1.2",
     "prettier": "^2.5.1",
-    "pretty-quick": "^3.1.0",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.3",
     "webpack-bundle-analyzer": "^4.5.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged && ng lint",
-      "pre-push": "ng test --browsers=Chrome --no-watch --no-progress"
-    }
   }
 }

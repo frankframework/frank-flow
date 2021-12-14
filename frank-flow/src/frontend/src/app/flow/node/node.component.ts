@@ -1,13 +1,25 @@
-import { AfterViewInit, Component, HostBinding, HostListener, Input, } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  HostBinding,
+  HostListener,
+  Input,
+} from '@angular/core';
 import { Node } from './nodes/node.model';
-import { AnchorSpec, ConnectorSpec, DragOptions, DropOptions, EndpointOptions, jsPlumbInstance, } from 'jsplumb';
+import {
+  AnchorSpec,
+  ConnectorSpec,
+  DragOptions,
+  DropOptions,
+  EndpointOptions,
+  jsPlumbInstance,
+} from 'jsplumb';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
 import { SettingsService } from 'src/app/header/settings/settings.service';
 import { Settings } from 'src/app/header/settings/settings.model';
 import { ConnectionType } from 'src/app/header/settings/options/connection-type';
-import { GridConfiguration } from "../../header/settings/options/grid-configuration";
 
 @Component({
   selector: 'app-node',
@@ -20,19 +32,7 @@ export class NodeComponent implements AfterViewInit {
   @Input() public generating!: boolean;
   @HostBinding('class') public cssClass: any;
   @HostBinding('style') public style: any;
-
-  @HostListener('dblclick') onDoubleClick(): void {
-    this.openOptions();
-  }
-  @HostListener('click') onClick(): void {
-    this.flowStructureService.highlightPipe(
-      this.node.getName(),
-      this.node.getType()
-    );
-  }
-
   public readonly cloud = faCloudDownloadAlt;
-
   private readonly bezierConnectionSpecification: ConnectorSpec = [
     'Bezier',
     {
@@ -42,20 +42,19 @@ export class NodeComponent implements AfterViewInit {
       midpoint: 0.0001,
     },
   ];
-
   private readonly flowchartConnectionSpecification: ConnectorSpec = [
     'Flowchart',
     { alwaysRespectStubs: true, cornerRadius: 25 },
   ];
-
-  private readonly straightConnectionSpecification: ConnectorSpec = ['Straight', {}];
-
+  private readonly straightConnectionSpecification: ConnectorSpec = [
+    'Straight',
+    {},
+  ];
   private readonly dropOptions: DropOptions = {
     tolerance: 'touch',
     hoverClass: 'dropHover',
     activeClass: 'dragActive',
   } as DropOptions;
-
   private readonly topEndpointOptions: EndpointOptions = {
     endpoint: ['Dot', { radius: 7 }],
     paintStyle: { fill: '#ffcb3a' },
@@ -65,7 +64,6 @@ export class NodeComponent implements AfterViewInit {
     isTarget: true,
     dropOptions: this.dropOptions,
   };
-
   private bottomEndpointOptions: EndpointOptions = {
     endpoint: ['Dot', { radius: 10 }],
     paintStyle: { fill: '#99cb3a' },
@@ -77,14 +75,12 @@ export class NodeComponent implements AfterViewInit {
     connectorOverlays: [['Arrow', { location: 1 }]],
     dropOptions: this.dropOptions,
   };
-
   private dragOptions: DragOptions = {
     containment: 'canvas',
-    stop: (e: any) => {
-      this.handleDragStop(e);
+    stop: (event: any) => {
+      this.handleDragStop(event);
     },
   } as DragOptions;
-
   private settings!: Settings;
 
   constructor(
@@ -93,6 +89,17 @@ export class NodeComponent implements AfterViewInit {
     private settingsService: SettingsService
   ) {
     this.getSettings();
+  }
+
+  @HostListener('dblclick') onDoubleClick(): void {
+    this.openOptions();
+  }
+
+  @HostListener('click') onClick(): void {
+    this.flowStructureService.highlightPipe(
+      this.node.getName(),
+      this.node.getType()
+    );
   }
 
   getSettings(): void {
@@ -177,23 +184,26 @@ export class NodeComponent implements AfterViewInit {
   }
 
   createGrid(): void {
-    this.dragOptions = {...this.dragOptions, grid: this.getGridConfiguration()} as DragOptions;
+    this.dragOptions = {
+      ...this.dragOptions,
+      grid: this.getGridConfiguration(),
+    } as DragOptions;
   }
 
   getGridConfiguration(): [number, number] {
     return [+this.settings.gridConfiguration, +this.settings.gridConfiguration];
   }
 
-  handleDragStop(e: any): void {
+  handleDragStop(event: any): void {
     this.flowStructureService.editNodePositions({
-      nodeId: e.el.id,
-      xPos: e.pos[0],
-      yPos: e.pos[1],
+      nodeId: event.el.id,
+      xPos: event.pos[0],
+      yPos: event.pos[1],
     });
   }
 
-  nodeHasClass(e: any, className: string) {
-    return e.el.classList[0] === className;
+  nodeHasClass(event: any, className: string) {
+    return event.el.classList[0] === className;
   }
 
   openOptions(): void {

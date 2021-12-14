@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Mode } from './header/modes/mode.model';
 import { ModeService } from './header/modes/mode.service';
-import { ModeType } from './header/modes/modeType.enum';
+import { ModeType } from './header/modes/mode-type.enum';
 import { SettingsService } from './header/settings/settings.service';
 import { Settings } from './header/settings/settings.model';
 import { SessionService } from './shared/services/session.service';
 import { CurrentFileService } from './shared/services/current-file.service';
 import { FileType } from './shared/enums/file-type.enum';
-import { File } from './shared/models/file.model';
 
 @Component({
   selector: 'app-root',
@@ -43,14 +42,12 @@ export class AppComponent implements OnInit {
 
   initializeLoadLastSessionFile(): void {
     const lastSessionFile = this.sessionService.getSessionFile();
-    if (this.lastSessionFileShouldBeLoaded(lastSessionFile)) {
-      this.currentFileService.fetchFileAndSetToCurrent(lastSessionFile!);
+    const lastSessionFileIsNotEmpty =
+      lastSessionFile && lastSessionFile.type !== FileType.EMPTY;
+    if (lastSessionFileIsNotEmpty) {
+      this.currentFileService.fetchFileAndSetToCurrent(lastSessionFile);
     } else {
       this.currentFileService.resetCurrentFile();
     }
-  }
-
-  lastSessionFileShouldBeLoaded(lastSessionFile: File | undefined) {
-    return lastSessionFile && lastSessionFile.type !== FileType.EMPTY;
   }
 }

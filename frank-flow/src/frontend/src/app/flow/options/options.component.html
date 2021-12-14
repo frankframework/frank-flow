@@ -1,24 +1,25 @@
 <ngx-smart-modal
   #optionsModal
+  (onAnyCloseEvent)="onAnyCloseEvent()"
   (onDataAdded)="onDataAdded()"
   (onOpen)="onOpen()"
-  (onAnyCloseEvent)="onAnyCloseEvent()"
   class="optionsModal"
   customClass="nsm-centered"
   identifier="optionsModal"
 >
   <div>
     <h2>
-      {{ structureNode?.type
-      }}<ng-container *ngIf="element?.name !== structureNode?.type">
-        ({{ element?.name }})</ng-container
-      >: {{ structureNode?.name }}
+      {{ structureNode?.type }}
+      <ng-container *ngIf="element?.name !== structureNode?.type">
+        ({{ element?.name }})
+      </ng-container>
+      : {{ structureNode?.name }}
     </h2>
-    <p class="description" [innerHTML]="element?.description"></p>
+    <p [innerHTML]="element?.description" class="description"></p>
     <a
       href="{{ frankDocElementsURI }}/{{ element?.name }}"
-      target="_blank"
       style="text-decoration: none"
+      target="_blank"
     >
       <app-button [block]="true"
         >Read more about {{ element?.name }}</app-button
@@ -27,32 +28,32 @@
     <hr />
     <!-- TODO: Name and type here, those are generic for all nodes. Other attributes can be seen as 'additional' -->
     <h2>Attributes</h2>
-    <div class="input-row" *ngIf="availableAttributes.length > 0">
+    <div *ngIf="availableAttributes.length > 0" class="input-row">
       <label for="selectAttribute">Add attribute:</label>
-      <select id="selectAttribute" [(ngModel)]="selectedAttribute" required>
-        <option selected [ngValue]="undefined" hidden disabled>
+      <select [(ngModel)]="selectedAttribute" id="selectAttribute" required>
+        <option [ngValue]="undefined" disabled hidden selected>
           Choose an attribute...
         </option>
         <option
           *ngFor="let availableAttribute of availableAttributes"
-          [ngValue]="availableAttribute"
           [hidden]="
             attributeIsUsed(availableAttribute?.name) ||
             availableAttribute?.deprecated
           "
+          [ngValue]="availableAttribute"
         >
           {{ availableAttribute?.name }}
         </option>
       </select>
     </div>
-    <div class="input-row" *ngIf="selectedAttribute">
+    <div *ngIf="selectedAttribute" class="input-row">
       <label for="newAttribute">New attribute value:</label>
       <input
-        id="newAttribute"
-        type="text"
+        (keyup.enter)="addAttribute()"
         [(ngModel)]="newAttributeValue"
         [placeholder]="selectedAttribute?.default ?? ''"
-        (keyup.enter)="addAttribute()"
+        id="newAttribute"
+        type="text"
       />
     </div>
     <div
@@ -62,8 +63,8 @@
       <label>Description of attribute</label>
       <p [innerHTML]="selectedAttribute?.description"></p>
     </div>
-    <div class="row" *ngIf="newAttributeValue">
-      <app-button [block]="true" (click)="addAttribute()"
+    <div *ngIf="newAttributeValue" class="row">
+      <app-button (click)="addAttribute()" [block]="true"
         >Add {{ selectedAttribute?.name }}</app-button
       >
     </div>
@@ -76,21 +77,21 @@
       "
     >
       <div
-        class="input-row"
         *ngIf="!disabledAttributes.includes(attribute.key)"
+        class="input-row"
       >
         <label for="name">{{ attribute.key }}:</label>
         <div class="input-row--input-with-button">
           <input
-            type="text"
-            [ngModel]="attributes[attribute.key].value"
-            (ngModelChange)="changeAttribute(attribute.key, $event)"
             (keyup.enter)="optionsModal.close()"
+            (ngModelChange)="changeAttribute(attribute.key, $event)"
+            [ngModel]="attributes[attribute.key].value"
+            type="text"
           />
           <app-button (click)="deleteAttribute(attribute.key)">
             <fa-icon
-              title="Delete attribute"
               [icon]="['fas', 'trash']"
+              title="Delete attribute"
             ></fa-icon>
           </app-button>
         </div>

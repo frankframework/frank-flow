@@ -5,7 +5,8 @@ export class CanvasNode {
     private top: number,
     private width: number,
     private height: number
-  ) {}
+  ) {
+  }
 
   getId(): string {
     return this.id;

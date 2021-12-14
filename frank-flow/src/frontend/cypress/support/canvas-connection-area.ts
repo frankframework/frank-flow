@@ -6,7 +6,8 @@ export class CanvasConnectionArea {
     private top: number,
     private width: number,
     private height: number
-  ) {}
+  ) {
+  }
 
   getLeft(): number {
     return this.left;
