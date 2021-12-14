@@ -4,7 +4,7 @@ import { FlowNodeAttributeOptions } from 'src/app/shared/models/flow-node-attrib
 import { FlowNodeAttributes } from 'src/app/shared/models/flow-node-attributes.model';
 import { FlowStructureNode } from 'src/app/shared/models/flow-structure-node.model';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
-import { FrankDocService } from 'src/app/shared/services/frank-doc.service';
+import { FrankDocumentService } from 'src/app/shared/services/frank-document.service';
 import { Node } from '../node/nodes/node.model';
 import { CurrentFileService } from '../../shared/services/current-file.service';
 import { File } from '../../shared/models/file.model';
@@ -36,7 +36,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
-    private frankDocService: FrankDocService,
+    private frankDocumentService: FrankDocumentService,
     private flowStructureService: FlowStructureService,
     private currentFileService: CurrentFileService
   ) {}
@@ -51,9 +51,9 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   getFrankDoc(): void {
-    this.frankDocSubscription = this.frankDocService
+    this.frankDocSubscription = this.frankDocumentService
       .getFrankDoc()
-      .subscribe((frankDoc: any) => (this.frankDoc = frankDoc));
+      .subscribe((frankDocument: any) => (this.frankDoc = frankDocument));
   }
 
   getCurrentFile(): void {
@@ -105,13 +105,13 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   editConnections(originalName: string, newName: string) {
     const sourceNodes = this.getConnectionsWithTarget(originalName);
-    sourceNodes?.forEach((sourceNode) => {
+    for (const sourceNode of sourceNodes ?? []) {
       this.flowStructureService.moveConnection(
         sourceNode.name,
         originalName,
         newName
       );
-    });
+    }
   }
 
   getConnectionsWithTarget(target: string): FlowStructureNode[] | undefined {
@@ -124,9 +124,8 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   editFirstPipe(originalName: string, newName: string) {
-    const firstPipe = this.currentFile.flowStructure?.pipeline.attributes[
-      'firstPipe'
-    ];
+    const firstPipe =
+      this.currentFile.flowStructure?.pipeline.attributes['firstPipe'];
 
     if (firstPipe?.value === originalName) {
       this.flowStructureService.changeFirstPipe(newName);
@@ -163,9 +162,9 @@ export class OptionsComponent implements OnInit, OnDestroy {
       this.element = this.frankDoc.elements.find((element: any) =>
         element.elementNames.includes(this.structureNode?.type)
       );
-      this.element?.attributes?.forEach((attribute: any) =>
-        this.availableAttributes.push(attribute)
-      );
+      for (const attribute of this.element?.attributes) {
+        this.availableAttributes.push(attribute);
+      }
     }
   }
 
@@ -187,7 +186,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
       (attribute) => attribute.name == name
     );
 
-    const value = (event as any) as string | number;
+    const value = event as any as string | number;
     if (index !== -1) {
       this.changedAttributes[index] = { name, value };
     } else {
@@ -209,17 +208,20 @@ export class OptionsComponent implements OnInit, OnDestroy {
     this.changedAttributes.splice(index);
   }
 
-  debounce(func: any, wait: number): any {
+  debounce(function_: any, wait: number): any {
     let timeout: ReturnType<typeof setTimeout> | null;
     return () => {
       if (timeout) {
         clearTimeout(timeout);
       }
-      timeout = setTimeout(() => func.apply(this, arguments), wait);
+      timeout = setTimeout(
+        () => Reflect.apply(function_, this, arguments),
+        wait
+      );
     };
   }
 
-  customTrackBy(index: number, obj: any): any {
+  customTrackBy(index: number, object: any): any {
     return index;
   }
 

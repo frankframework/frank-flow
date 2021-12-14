@@ -83,25 +83,6 @@ export class ConnectionsOnCanvas {
     });
   }
 
-  private getId(point: CanvasPoint): string {
-    let result: string = '';
-    this.connectionPointsByNodeId.forEach(
-      (connectionPoints: CanvasPoint[], nodeId: string) => {
-        connectionPoints.forEach((connectionPoint) => {
-          if (point.closeTo(connectionPoint)) {
-            result = nodeId;
-          }
-        });
-      }
-    );
-    if (result === '') {
-      throw new Error(
-        `Point ${point.toString()} is not close to a node\'s connection point`
-      );
-    }
-    return result;
-  }
-
   public numConnections(): number {
     let result = 0;
     this.endPointsByBegin.forEach((endNodes: string[], beginNode: string) => {
@@ -126,5 +107,24 @@ export class ConnectionsOnCanvas {
     });
     cy.log(`Returning result ${found}`);
     return found;
+  }
+
+  private getId(point: CanvasPoint): string {
+    let result: string = '';
+    this.connectionPointsByNodeId.forEach(
+      (connectionPoints: CanvasPoint[], nodeId: string) => {
+        connectionPoints.forEach((connectionPoint) => {
+          if (point.closeTo(connectionPoint)) {
+            result = nodeId;
+          }
+        });
+      }
+    );
+    if (result === '') {
+      throw new Error(
+        `Point ${point.toString()} is not close to a node\'s connection point`
+      );
+    }
+    return result;
   }
 }

@@ -20,9 +20,10 @@ export class SaveDialogComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
-      (currentFile) => (this.currentFile = currentFile)
-    );
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe(
+        (currentFile) => (this.currentFile = currentFile)
+      );
   }
 
   ngOnDestroy() {

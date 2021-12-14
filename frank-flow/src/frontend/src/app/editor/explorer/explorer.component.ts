@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
+  faPen,
   faPlus,
   faRedoAlt,
   faTrash,
-  faPen,
 } from '@fortawesome/free-solid-svg-icons';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FileService } from '../../shared/services/file.service';
@@ -18,9 +18,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./explorer.component.scss'],
 })
 export class ExplorerComponent {
-  searchTerm!: string;
   currentFile!: File;
-  private currentDirectory!: File;
 
   constructor(
     library: FaIconLibrary,

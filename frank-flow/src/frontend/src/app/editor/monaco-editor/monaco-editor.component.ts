@@ -41,8 +41,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   private modeSubscription!: Subscription;
   private settingsSubscription!: Subscription;
 
-  private flowNeedsUpdate: boolean = true;
-  private applyEditsUpdate: boolean = false;
+  private flowNeedsUpdate = true;
+  private applyEditsUpdate = false;
   private decorations: string[] = [];
 
   constructor(
@@ -87,13 +87,12 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
         };
 
         if (!(window as any).require) {
-          const loaderScript: HTMLScriptElement = document.createElement(
-            'script'
-          );
+          const loaderScript: HTMLScriptElement =
+            document.createElement('script');
           loaderScript.type = 'text/javascript';
           loaderScript.src = 'assets/monaco/vs/loader.js';
           loaderScript.addEventListener('load', onAmdLoader);
-          document.body.appendChild(loaderScript);
+          document.body.append(loaderScript);
         } else {
           onAmdLoader();
         }
@@ -133,12 +132,12 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   undo() {
-    this.codeEditorInstance.trigger('keyboard', 'undo', null);
+    this.codeEditorInstance.trigger('keyboard', 'undo', '');
     this.setValueAsCurrentFile();
   }
 
   redo() {
-    this.codeEditorInstance.trigger('keyboard', 'redo', null);
+    this.codeEditorInstance.trigger('keyboard', 'redo', '');
     this.setValueAsCurrentFile();
   }
 
@@ -155,14 +154,14 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
 
   applyEdits(
     editOperations: monaco.editor.IIdentifiedSingleEditOperation[],
-    flowUpdate: boolean = false
+    flowUpdate = false
   ): void {
     this.flowNeedsUpdate = flowUpdate;
     this.applyEditsUpdate = true;
 
     this.codeEditorInstance
       .getModel()
-      ?.pushEditOperations([], editOperations, () => null);
+      ?.pushEditOperations([], editOperations, () => []);
     this.codeEditorInstance.pushUndoStop();
 
     this.setValueAsCurrentFile();
@@ -191,8 +190,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   initializeNewFileSubscription(): void {
-    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
-      {
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe({
         next: (file: File) => {
           if (this.isNewlyLoadedFile(file)) {
             file.firstLoad = false;
@@ -201,8 +200,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
             this.currentFile = file;
           }
         },
-      }
-    );
+      });
   }
 
   isNewlyLoadedFile(file: File): boolean {
@@ -232,13 +230,16 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  debounce(func: any, wait: number): any {
+  debounce(function_: any, wait: number): any {
     let timeout: ReturnType<typeof setTimeout> | null;
     return () => {
       if (timeout) {
         clearTimeout(timeout);
       }
-      timeout = setTimeout(() => func.apply(this, arguments), wait);
+      timeout = setTimeout(
+        () => Reflect.apply(function_, this, arguments),
+        wait
+      );
     };
   }
 

@@ -94,13 +94,13 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
   parseFiles(
     configuration: string,
     content: any,
-    path: string = ''
+    path = ''
   ): TreeItem[] | undefined {
     const items: any[] = [];
     Object.keys(content).map((key) => {
       if (key === '_files') {
-        content._files.forEach((file: string) => {
-          if (!this.fileMatch || file.match(this.fileMatch)) {
+        for (const file of content._files) {
+          if (!this.fileMatch || this.fileMatch.test(file)) {
             items.push({
               label: file,
               value: JSON.stringify({
@@ -110,7 +110,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
               }),
             });
           }
-        });
+        }
       } else {
         items.push({
           label: key,
@@ -128,9 +128,10 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
   }
 
   subscribeToCurrentFile(): void {
-    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
-      (currentFile) => (this.currentFile = currentFile)
-    );
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe(
+        (currentFile) => (this.currentFile = currentFile)
+      );
   }
 
   getSettings(): void {
@@ -150,7 +151,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
         } else {
           this.currentFileService.switchToFileTreeItem(item);
         }
-        this.tree.selectItem(null);
+        this.tree.selectItem('');
         this.currentFileService.resetCurrentDirectory();
       } else if (item.type === FileType.FOLDER) {
         this.currentFileService.setCurrentDirectory(item);

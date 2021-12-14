@@ -14,11 +14,11 @@ import { File } from '../models/file.model';
 const MONACO_COLUMN_OFFSET = 1;
 const QUOTE_AND_EQUALS = 2;
 
-let parser = new saxes.SaxesParser();
+const parser = new saxes.SaxesParser();
 
 let flowStructure: FlowStructure;
 let errors: string[] = [];
-let unclosedNodes: FlowStructureNode[] = [];
+const unclosedNodes: FlowStructureNode[] = [];
 let bufferAttributes: FlowNodeAttributes;
 let pipeline: FlowStructureNode;
 let xml: string;
@@ -38,8 +38,8 @@ addEventListener('message', ({ data }) => {
 const parserWrite = (xml: string) => {
   try {
     parser.write(xml).close();
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -69,7 +69,7 @@ parser.on('opentagstart', (tag: SaxesStartTagPlain) => {
 const charBeforeParserIsTabOrSpace = () => {
   const tabCode = 9;
   const spaceCode = 32;
-  const charBeforeParser = xml.charCodeAt(parser.position - 1);
+  const charBeforeParser = xml.codePointAt(parser.position - 1);
   return charBeforeParser === tabCode || charBeforeParser === spaceCode;
 };
 
@@ -83,7 +83,7 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
   );
   bufferAttributes = {};
 
-  if (currentNode.type.match(/Pipe$/g)) {
+  if (currentNode.type.endsWith('Pipe')) {
     currentNode.forwards = [];
     flowStructure.nodes.push(currentNode);
   } else if (currentNode.type.toLocaleLowerCase() === 'forward') {
@@ -92,9 +92,9 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
         return pipe === unclosedNodes[unclosedNodes.length - 1];
       })
       ?.forwards?.push(currentNode);
-  } else if (currentNode.type.match(/Listener$/g)) {
+  } else if (currentNode.type.endsWith('Listener')) {
     flowStructure.nodes.push(currentNode);
-  } else if (currentNode.type.match(/Exit$/g)) {
+  } else if (currentNode.type.endsWith('Exit')) {
     flowStructure.nodes.push(currentNode);
   } else if (currentNode.type === 'Pipeline') {
     pipeline = currentNode;
@@ -108,7 +108,7 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
 });
 
 parser.on('closetag', (tag: TagForOptions<{}>) => {
-  let closingNode = unclosedNodes.pop();
+  const closingNode = unclosedNodes.pop();
   if (
     tag.attributes['name'] === closingNode?.name &&
     tag.name === closingNode?.type &&
@@ -116,7 +116,7 @@ parser.on('closetag', (tag: TagForOptions<{}>) => {
   ) {
     closingNode.endLine = parser.line;
   } else {
-    if (closingNode != null) {
+    if (closingNode != undefined) {
       unclosedNodes.push(closingNode);
     }
   }

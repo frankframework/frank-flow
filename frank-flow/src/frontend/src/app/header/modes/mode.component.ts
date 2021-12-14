@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Mode } from './mode.model';
 import { ModeService } from './mode.service';
-import { ModeType } from './modeType.enum';
+import { ModeType } from './mode-type.enum';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
   faCode,
@@ -49,9 +49,10 @@ export class ModeComponent implements OnInit, OnDestroy {
   }
 
   subscribeToCurrentFile(): void {
-    this.currentFileSubscription = this.currentFileService.currentFileObservable.subscribe(
-      (currentFile) => (this.currentFile = currentFile)
-    );
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe(
+        (currentFile) => (this.currentFile = currentFile)
+      );
   }
 
   setMode(modeType: ModeType): void {

@@ -7,7 +7,6 @@ import { ParsedPathDProperty } from '../support/parsed-path-d-property';
 import { ParsedClassTransformProperty } from '../support/parsed-path-transform-property';
 import { CanvasConnection } from 'cypress/support/canvas-connection';
 import { ConnectionsOnCanvas } from '../support/connections-on-canvas';
-import * as cypress from 'cypress';
 
 describe('Placement on canvas', () => {
   before(() => {
@@ -17,7 +16,7 @@ describe('Placement on canvas', () => {
     cy.fixture('expectedConnections.csv')
       .then((data) => createExpectedConnections(data))
       .as('expectedConnections');
-    cy.visit('', { timeout: 300000 });
+    cy.visit('', {timeout: 300000});
     // TODO: Calculate the number of connections here
     awaitFlowChartConnections(4);
   });
@@ -29,10 +28,8 @@ describe('Placement on canvas', () => {
     expectedConnections.forEach((expectedConnection) =>
       cy.log(`  ${expectedConnection.toString()}`)
     );
-    const expectedElements = this.expectedElements as Map<
-      string,
-      ExpectedCanvasNode
-    >;
+    const expectedElements = this.expectedElements as Map<string,
+      ExpectedCanvasNode>;
     cy.get('.canvas > app-node').should('have.length', expectedElements.size);
     expectedElements.forEach((element) => {
       requestCanvasNodeDomObject(element.id).should('exist');
@@ -153,10 +150,10 @@ function elementToCanvasNode(inputElementName: string): Promise<CanvasNode> {
       const height = domObject.css('height');
       const result = createCanvasNode(
         inputElementName,
-        (left as unknown) as string,
-        (top as unknown) as string,
-        (width as unknown) as string,
-        (height as unknown) as string
+        left as unknown as string,
+        top as unknown as string,
+        width as unknown as string,
+        height as unknown as string
       );
       if (result.error) {
         reject(result.error);
@@ -182,19 +179,19 @@ function createCanvasNode(
 ): { result?: CanvasNode; error?: string } {
   const theLeft = new ParsedNumPixels(left, 'left');
   if (!theLeft.hasNumber) {
-    return { error: theLeft.error };
+    return {error: theLeft.error};
   }
   const theTop = new ParsedNumPixels(top, 'top');
   if (!theTop.hasNumber) {
-    return { error: theTop.error };
+    return {error: theTop.error};
   }
   const theWidth = new ParsedNumPixels(width, 'width');
   if (!theWidth.hasNumber) {
-    return { error: theWidth.error };
+    return {error: theWidth.error};
   }
   const theHeight = new ParsedNumPixels(height, 'height');
   if (!theHeight.hasNumber) {
-    return { error: theHeight.error };
+    return {error: theHeight.error};
   }
   return {
     result: new CanvasNode(
@@ -223,9 +220,7 @@ function requestCanvasConnectionAreas(
   return Promise.all(result);
 }
 
-function requestCanvasConnectionAreasDomObject(): Cypress.Chainable<
-  JQuery<HTMLElement>
-> {
+function requestCanvasConnectionAreasDomObject(): Cypress.Chainable<JQuery<HTMLElement>> {
   return cy.get('.canvas > .jtk-endpoint');
 }
 
@@ -239,10 +234,10 @@ function requestCanvasConnectionArea(
       const width = domObject.css('width');
       const height = domObject.css('height');
       const result = createCanvasConnectionArea(
-        (left as unknown) as string,
-        (top as unknown) as string,
-        (width as unknown) as string,
-        (height as unknown) as string
+        left as unknown as string,
+        top as unknown as string,
+        width as unknown as string,
+        height as unknown as string
       );
       if (result.error) {
         reject(result.error);
@@ -261,19 +256,19 @@ function createCanvasConnectionArea(
 ): { result?: CanvasConnectionArea; error?: string } {
   const theLeft = new ParsedNumPixels(left, 'left');
   if (!theLeft.hasNumber) {
-    return { error: theLeft.error };
+    return {error: theLeft.error};
   }
   const theTop = new ParsedNumPixels(top, 'top');
   if (!theTop.hasNumber) {
-    return { error: theTop.error };
+    return {error: theTop.error};
   }
   const theWidth = new ParsedNumPixels(width, 'width');
   if (!theWidth.hasNumber) {
-    return { error: theWidth.error };
+    return {error: theWidth.error};
   }
   const theHeight = new ParsedNumPixels(height, 'height');
   if (!theHeight.hasNumber) {
-    return { error: theHeight.error };
+    return {error: theHeight.error};
   }
   return {
     result: new CanvasConnectionArea(
@@ -296,14 +291,14 @@ function requestCanvasConnections(
 }
 
 function awaitFlowChartConnections(numConnections: number) {
-  cy.get(connectionSearchString, { timeout: 10000 }).should('exist');
+  cy.get(connectionSearchString, {timeout: 10000}).should('exist');
   for (let i = 0; i < numConnections; ++i) {
     awaitFlowChartConnectionComplete(i);
   }
 }
 
 function awaitFlowChartConnectionComplete(index: number) {
-  cy.get(connectionSearchString, { timeout: 10000 }).eq(index).should('exist');
+  cy.get(connectionSearchString, {timeout: 10000}).eq(index).should('exist');
 }
 
 function requestCanvasConnection(index: number): Promise<CanvasConnection> {
@@ -325,7 +320,7 @@ function requestCanvasConnection(index: number): Promise<CanvasConnection> {
                   .invoke('css', 'transform')
                   .then((domTransform) => {
                     const parsedPropertyD = new ParsedPathDProperty(
-                      (domD as unknown) as string
+                      domD as unknown as string
                     );
                     if (parsedPropertyD.hasError()) {
                       reject(
@@ -333,18 +328,19 @@ function requestCanvasConnection(index: number): Promise<CanvasConnection> {
                       );
                       return;
                     }
-                    const parsedPropertyTransform = new ParsedClassTransformProperty(
-                      (domTransform as unknown) as string
-                    );
+                    const parsedPropertyTransform =
+                      new ParsedClassTransformProperty(
+                        domTransform as unknown as string
+                      );
                     if (parsedPropertyTransform.hasError()) {
                       reject(
                         'Property transform error: ' +
-                          parsedPropertyTransform.getErrorMsg()
+                        parsedPropertyTransform.getErrorMsg()
                       );
                     }
                     const resultOrError = createCanvasConnection(
-                      (left as unknown) as string,
-                      (top as unknown) as string,
+                      left as unknown as string,
+                      top as unknown as string,
                       parsedPropertyD.getBeginX(),
                       parsedPropertyD.getBeginY(),
                       parsedPropertyD.getEndX(),
@@ -382,35 +378,35 @@ function createCanvasConnection(
 ): { result?: CanvasConnection; error?: string } {
   const theLeft = new ParsedNumPixels(left, 'left');
   if (!theLeft.hasNumber) {
-    return { error: theLeft.error };
+    return {error: theLeft.error};
   }
   const theTop = new ParsedNumPixels(top, 'top');
   if (!theTop.hasNumber) {
-    return { error: theTop.error };
+    return {error: theTop.error};
   }
   const theBeginX = +beginX;
   if (Number.isNaN(theBeginX)) {
-    return { error: `Path begin x is not a number: ${beginX}` };
+    return {error: `Path begin x is not a number: ${beginX}`};
   }
   const theBeginY = +beginY;
   if (Number.isNaN(theBeginY)) {
-    return { error: `Path begin y is not a number: ${beginY}` };
+    return {error: `Path begin y is not a number: ${beginY}`};
   }
   const theEndX = +endX;
   if (Number.isNaN(theEndX)) {
-    return { error: `Path end x is not a number: ${endX}` };
+    return {error: `Path end x is not a number: ${endX}`};
   }
   const theEndY = +endY;
   if (Number.isNaN(theEndY)) {
-    return { error: `Path end y is not a number: ${endY}` };
+    return {error: `Path end y is not a number: ${endY}`};
   }
   const theTransformX = +transformX;
   if (Number.isNaN(theTransformX)) {
-    return { error: `Transform x is not a number: ${transformX}` };
+    return {error: `Transform x is not a number: ${transformX}`};
   }
   const theTransformY = +transformY;
   if (Number.isNaN(theTransformY)) {
-    return { error: `Transform y is not a number: ${transformY}` };
+    return {error: `Transform y is not a number: ${transformY}`};
   }
   const connection = new CanvasConnection(
     theLeft.theNumber,
@@ -422,7 +418,7 @@ function createCanvasConnection(
     theTransformX,
     theTransformY
   );
-  return { result: connection };
+  return {result: connection};
 }
 
 const connectionSearchString = '.canvas > svg.jtk-connector';
