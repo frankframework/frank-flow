@@ -24,10 +24,6 @@ export class ParsedClassTransformProperty {
     this.y = numbers[5];
   }
 
-  private unexpectedInput(s: string) {
-    return `Unexpected transform property ${s}. `;
-  }
-
   public hasError(): boolean {
     return this.errorMsg !== '';
   }
@@ -42,6 +38,10 @@ export class ParsedClassTransformProperty {
 
   public getY(): string {
     return this.y;
+  }
+
+  private unexpectedInput(s: string) {
+    return `Unexpected transform property ${s}. `;
   }
 }
 

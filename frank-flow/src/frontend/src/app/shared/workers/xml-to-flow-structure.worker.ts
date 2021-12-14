@@ -14,11 +14,11 @@ import { File } from '../models/file.model';
 const MONACO_COLUMN_OFFSET = 1;
 const QUOTE_AND_EQUALS = 2;
 
-let parser = new saxes.SaxesParser();
+const parser = new saxes.SaxesParser();
 
 let flowStructure: FlowStructure;
 let errors: string[] = [];
-let unclosedNodes: FlowStructureNode[] = [];
+const unclosedNodes: FlowStructureNode[] = [];
 let bufferAttributes: FlowNodeAttributes;
 let pipeline: FlowStructureNode;
 let xml: string;
@@ -108,7 +108,7 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
 });
 
 parser.on('closetag', (tag: TagForOptions<{}>) => {
-  let closingNode = unclosedNodes.pop();
+  const closingNode = unclosedNodes.pop();
   if (
     tag.attributes['name'] === closingNode?.name &&
     tag.name === closingNode?.type &&

@@ -10,15 +10,15 @@
     <div class="input-row">
       <label>Enable dark mode</label>
       <app-toggle
-        [(state)]="settings.darkMode"
         (stateChange)="setSettings()"
+        [(state)]="settings.darkMode"
       ></app-toggle>
     </div>
     <div class="input-row">
       <label for="edit-mode">Default edit mode</label>
       <select
-        [(ngModel)]="settings.defaultMode"
         (ngModelChange)="setSettings()"
+        [(ngModel)]="settings.defaultMode"
         id="edit-mode"
       >
         <option [value]="modeType.flowMode">Flow</option>
@@ -42,8 +42,8 @@
         files?</label
       >
       <select
-        [(ngModel)]="settings.switchWithoutSaving"
         (ngModelChange)="setSettings()"
+        [(ngModel)]="settings.switchWithoutSaving"
         id="switch-without-saving-options"
       >
         <option [value]="switchWithoutSavingOptions.ask">Ask me</option>
@@ -56,8 +56,8 @@
     <div class="input-row">
       <label for="edit-mode">Snap to grid</label>
       <select
-        [(ngModel)]="settings.gridConfiguration"
         (ngModelChange)="setSettings()"
+        [(ngModel)]="settings.gridConfiguration"
         id="grid-configuration"
       >
         <option [value]="gridConfiguration.free">
@@ -80,8 +80,8 @@
     <div class="input-row">
       <label for="edit-mode">Connection type</label>
       <select
-        [(ngModel)]="settings.connectionType"
         (ngModelChange)="setSettings()"
+        [(ngModel)]="settings.connectionType"
         id="connection-type"
       >
         <option [value]="connectionType.bezier">Bezier</option>
@@ -92,8 +92,8 @@
     <div class="input-row">
       <label>Enable vertical connectors</label>
       <app-toggle
-        [(state)]="settings.verticalConnectors"
         (stateChange)="setSettings()"
+        [(state)]="settings.verticalConnectors"
       ></app-toggle>
     </div>
   </div>

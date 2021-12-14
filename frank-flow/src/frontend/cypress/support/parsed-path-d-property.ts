@@ -40,10 +40,6 @@ export class ParsedPathDProperty {
     this.endY = items[9];
   }
 
-  private unexpectedFormat(s: string): string {
-    return `Unexpected format of string "${s}". `;
-  }
-
   public hasError(): boolean {
     return this.errorMsg !== '';
   }
@@ -66,5 +62,9 @@ export class ParsedPathDProperty {
 
   public getEndY(): string {
     return this.endY;
+  }
+
+  private unexpectedFormat(s: string): string {
+    return `Unexpected format of string "${s}". `;
   }
 }

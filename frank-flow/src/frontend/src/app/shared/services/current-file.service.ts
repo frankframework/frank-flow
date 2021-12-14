@@ -12,13 +12,12 @@ import { SessionService } from './session.service';
   providedIn: 'root',
 })
 export class CurrentFileService {
+  currentDirectory!: File;
   private editor!: monaco.editor.IStandaloneCodeEditor;
   private currentFile!: File;
   private currentFileSubject = new ReplaySubject<File>(1);
   public currentFileObservable = this.currentFileSubject.asObservable();
   private xmlToFlowStructureWorker!: Worker;
-
-  currentDirectory!: File;
 
   constructor(
     private fileService: FileService,

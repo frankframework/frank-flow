@@ -1,5 +1,6 @@
 export class ExpectedConnection {
-  constructor(private from: string, private to: string) {}
+  constructor(private from: string, private to: string) {
+  }
 
   getFrom() {
     return this.from.trim();

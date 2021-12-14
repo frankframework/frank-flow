@@ -41,8 +41,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   private modeSubscription!: Subscription;
   private settingsSubscription!: Subscription;
 
-  private flowNeedsUpdate: boolean = true;
-  private applyEditsUpdate: boolean = false;
+  private flowNeedsUpdate = true;
+  private applyEditsUpdate = false;
   private decorations: string[] = [];
 
   constructor(
@@ -154,7 +154,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
 
   applyEdits(
     editOperations: monaco.editor.IIdentifiedSingleEditOperation[],
-    flowUpdate: boolean = false
+    flowUpdate = false
   ): void {
     this.flowNeedsUpdate = flowUpdate;
     this.applyEditsUpdate = true;

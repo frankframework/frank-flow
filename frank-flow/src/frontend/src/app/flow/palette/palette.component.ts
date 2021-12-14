@@ -11,8 +11,8 @@ import { File } from '../../shared/models/file.model';
 })
 export class PaletteComponent implements AfterViewInit, OnDestroy {
   public search!: string;
+  public locked = false;
   private errors!: string[] | undefined;
-  public locked: boolean = false;
   private currentFileSubscription!: Subscription;
 
   constructor(

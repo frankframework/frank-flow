@@ -436,7 +436,7 @@ export class FlowStructureService {
     key: string,
     value: any,
     attributeList: FlowNodeAttributes,
-    flowUpdate: boolean = false
+    flowUpdate = false
   ): void {
     if (Object.entries(attributeList).length === 0) {
       return;

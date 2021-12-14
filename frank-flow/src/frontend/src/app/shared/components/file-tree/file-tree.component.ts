@@ -94,7 +94,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
   parseFiles(
     configuration: string,
     content: any,
-    path: string = ''
+    path = ''
   ): TreeItem[] | undefined {
     const items: any[] = [];
     Object.keys(content).map((key) => {

@@ -1,19 +1,19 @@
 <app-search [(term)]="search"></app-search>
 <app-group
   [items]="paletteService.data?.get('Listeners') | filter: search"
+  [locked]="locked"
   color="info"
   type="Listeners"
-  [locked]="locked"
 ></app-group>
 <app-group
   [items]="paletteService.data?.get('Pipes') | filter: search"
+  [locked]="locked"
   color="accent"
   type="Pipes"
-  [locked]="locked"
 ></app-group>
 <app-group
   [items]="paletteService.data?.get('Other') | filter: 'Exit' | filter: search"
+  [locked]="locked"
   color="danger"
   type="Other"
-  [locked]="locked"
 ></app-group>

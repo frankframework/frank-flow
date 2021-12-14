@@ -52,6 +52,6 @@ export class PaletteService {
         name: elementName,
         type,
       }));
-    }) as Element[];
+    });
   }
 }

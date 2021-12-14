@@ -32,18 +32,15 @@ import { SettingsService } from 'src/app/header/settings/settings.service';
 export class CanvasComponent implements AfterViewInit, OnDestroy {
   @Input()
   public panzoomConfig!: PanZoomConfig;
-  @ViewChild('canvas', { read: ViewContainerRef })
-  private viewContainerRef!: ViewContainerRef;
   @HostBinding('tabindex')
   public tabindex = 1;
-
+  public flowUpdate = false;
+  public locked!: boolean;
+  @ViewChild('canvas', { read: ViewContainerRef })
+  private viewContainerRef!: ViewContainerRef;
   private jsPlumbInstance!: jsPlumbInstance;
   private currentFileSubscription!: Subscription;
   private settingsSubscription!: Subscription;
-
-  public flowUpdate = false;
-  public locked!: boolean;
-
   private errors!: string[] | undefined;
   private connectionIsMoving = false;
   private modelChangedSubscription!: Subscription;
@@ -140,6 +137,35 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     );
   }
 
+  generateFlow(structure: FlowStructure): void {
+    if (this.flowUpdate) {
+      return;
+    }
+    this.jsPlumbInstance.ready(() => {
+      this.flowUpdate = true;
+      this.jsPlumbInstance.reset(true);
+      this.viewContainerRef.clear();
+      this.nodeGeneratorService.resetNodes();
+
+      setTimeout(() => {
+        if (structure && structure.firstPipe) {
+          this.nodeGeneratorService.generateNodes(
+            structure.firstPipe,
+            structure
+          );
+        }
+
+        this.graphService.makeGraph(
+          this.nodeGeneratorService.nodeMap,
+          this.nodeGeneratorService.forwards
+        );
+
+        this.nodeGeneratorService.generateForwards();
+        this.flowUpdate = false;
+      });
+    });
+  }
+
   private onConnection(
     info: ConnectionMadeEventInfo,
     originalEvent: Event
@@ -183,34 +209,5 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
       info.targetId,
       true
     );
-  }
-
-  generateFlow(structure: FlowStructure): void {
-    if (this.flowUpdate) {
-      return;
-    }
-    this.jsPlumbInstance.ready(() => {
-      this.flowUpdate = true;
-      this.jsPlumbInstance.reset(true);
-      this.viewContainerRef.clear();
-      this.nodeGeneratorService.resetNodes();
-
-      setTimeout(() => {
-        if (structure && structure.firstPipe) {
-          this.nodeGeneratorService.generateNodes(
-            structure.firstPipe,
-            structure
-          );
-        }
-
-        this.graphService.makeGraph(
-          this.nodeGeneratorService.nodeMap,
-          this.nodeGeneratorService.forwards
-        );
-
-        this.nodeGeneratorService.generateForwards();
-        this.flowUpdate = false;
-      });
-    });
   }
 }

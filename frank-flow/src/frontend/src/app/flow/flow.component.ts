@@ -38,16 +38,12 @@ type CanvasSize = { x: number; y: number };
   styleUrls: ['./flow.component.scss'],
 })
 export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
+  public fileIsLoading!: boolean;
+  public fileIsConfiguration!: boolean;
+  public fileIsEmpty!: boolean;
   private readonly canvasExpansionSize = 500;
-
   @ViewChild('nodeContainer', { read: ElementRef })
   private nodeContainerRef!: ElementRef;
-
-  @HostListener('window:keydown', ['$event'])
-  onKeyUp(kbdEvent: KeyboardEvent): void {
-    this.handleKeyboardUpEvent(kbdEvent);
-  }
-
   private canvasElement?: HTMLElement;
   private panZoomConfigOptions: PanZoomConfigOptions = {
     zoomLevels: 3,
@@ -63,7 +59,6 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
     neutralZoomLevel: 1,
     initialZoomLevel: 1,
   };
-
   public panzoomConfig: PanZoomConfig = new PanZoomConfig(
     this.panZoomConfigOptions
   );
@@ -73,10 +68,6 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   private currentFileSubscription!: Subscription;
   private graphSubscription!: Subscription;
   private panZoomAPI!: PanZoomAPI;
-
-  public fileIsLoading!: boolean;
-  public fileIsConfiguration!: boolean;
-  public fileIsEmpty!: boolean;
 
   constructor(
     private renderer: Renderer2,
@@ -95,6 +86,11 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
       faHome,
       faDotCircle
     );
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  onKeyUp(kbdEvent: KeyboardEvent): void {
+    this.handleKeyboardUpEvent(kbdEvent);
   }
 
   ngOnInit(): void {
