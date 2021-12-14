@@ -44,7 +44,7 @@ export class CurrentFileService {
   }
 
   initializeXmlToFlowStructureWorkerEventListener(): void {
-    this.xmlToFlowStructureWorker.onmessage = ({ data }) => {
+    this.xmlToFlowStructureWorker.addEventListener('message', ({ data }) => {
       this.clearErrorToasts();
       if (data) {
         if (this.parsingErrorsFound(data)) {
@@ -52,7 +52,7 @@ export class CurrentFileService {
         }
         this.currentFileSubject.next(data);
       }
-    };
+    });
   }
 
   clearErrorToasts(): void {
@@ -71,7 +71,7 @@ export class CurrentFileService {
 
   showParsingErrors(errors: string[]): void {
     const parsedErrors = this.groupSimilarErrors(errors);
-    parsedErrors.forEach((error: XmlParseError) => {
+    for (const error of parsedErrors) {
       this.toastr.error(
         error.getTemplateString(),
         'Parsing error found in XML',
@@ -79,12 +79,12 @@ export class CurrentFileService {
           disableTimeOut: true,
         }
       );
-    });
+    }
   }
 
   groupSimilarErrors(errors: string[]): XmlParseError[] {
     const groupedErrors: XmlParseError[] = [];
-    for (const [index, errorMessage] of errors.entries()) {
+    for (const errorMessage of errors) {
       const lastError = groupedErrors[groupedErrors.length - 1];
       const error = this.parseErrorMessage(errorMessage);
       if (this.errorMessageEqualToLast(error, lastError)) {

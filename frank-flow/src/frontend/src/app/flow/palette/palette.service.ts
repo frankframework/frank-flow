@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Element } from '../../shared/models/element.model';
 import { ElementType } from '../../shared/models/element-type.model';
-import { FrankDocService as FrankDocumentService } from '../../shared/services/frank-doc.service';
+import { FrankDocumentService as FrankDocumentService } from '../../shared/services/frank-document.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,18 +14,18 @@ export class PaletteService {
   }
 
   getData(): void {
-    this.frankDocService.getFrankDoc().subscribe({
+    this.frankDocumentService.getFrankDoc().subscribe({
       next: (data) => this.sortData(data),
     });
   }
 
   sortData(data: any): void {
     if (data.groups) {
-      data.groups.forEach((group: any) => {
+      for (const group of data.groups) {
         const elementTypes = this.getElementTypesInGroup(group, data);
         const elements = this.getElementsForTypes(elementTypes, data);
         this.data.set(group.name, elements.flat(1));
-      });
+      }
     }
   }
 

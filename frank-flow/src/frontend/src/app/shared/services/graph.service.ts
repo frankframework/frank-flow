@@ -43,7 +43,7 @@ export class GraphService {
   }
 
   addNodesToGraph(nodeMap: Map<string, Node>): void {
-    for (const [key, node] of nodeMap.entries()) {
+    for (const node of nodeMap.values()) {
       const x = (node.getLeft() as number) ?? 0;
       const y = (node.getTop() as number) ?? 0;
 
@@ -75,7 +75,7 @@ export class GraphService {
     let exitLeftMargin = 800;
     let exitTopPosition = 0;
 
-    graphNodes.forEach((graphNode: any, index: any) => {
+    for (let graphNode of graphNodes as any[]) {
       const node = nodeMap.get(graphNode.data.id);
 
       const xMultiplier = 300;
@@ -109,7 +109,7 @@ export class GraphService {
       if (node) {
         this.nodeService.addDynamicNode(node);
       }
-    });
+    }
     this.nodesSubject.next(nodeMap);
   }
 

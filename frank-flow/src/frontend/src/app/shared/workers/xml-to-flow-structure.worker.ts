@@ -69,7 +69,7 @@ parser.on('opentagstart', (tag: SaxesStartTagPlain) => {
 const charBeforeParserIsTabOrSpace = () => {
   const tabCode = 9;
   const spaceCode = 32;
-  const charBeforeParser = xml.charCodeAt(parser.position - 1);
+  const charBeforeParser = xml.codePointAt(parser.position - 1);
   return charBeforeParser === tabCode || charBeforeParser === spaceCode;
 };
 

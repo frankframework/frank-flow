@@ -6,8 +6,8 @@ import Exit from '../../flow/node/nodes/exit.model';
 import { Node } from '../../flow/node/nodes/node.model';
 import { Forward } from '../models/forward.model';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
-import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
 import { FlowStructure } from '../models/flow-structure.model';
+import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
 
 @Injectable({
   providedIn: 'root',
@@ -62,7 +62,7 @@ export class NodeGeneratorService {
     pipes: FlowStructureNode[],
     nodes: FlowStructureNode[]
   ): void {
-    pipes.forEach((pipe: FlowStructureNode) => {
+    for (const pipe of pipes) {
       const positions = pipe.positions;
       const attributes = pipe.attributes;
       const node = new Pipe({
@@ -75,22 +75,23 @@ export class NodeGeneratorService {
       });
 
       if (pipe.forwards) {
-        pipe.forwards.forEach((forward: FlowStructureNode) => {
-          Object.entries(forward.attributes).forEach(
-            ([key, attribute]: [string, FlowNodeAttribute]) => {
-              if (key === 'path') {
-                const forwardTarget = nodes.find(
-                  (targetNode) => targetNode.name === attribute.value
-                );
-                this.forwards.push(new Forward(pipe.uid, forwardTarget?.uid!));
-              }
+        for (const forward of pipe.forwards) {
+          for (const [key, attribute] of Object.entries(forward.attributes) as [
+            string,
+            FlowNodeAttribute
+          ][]) {
+            if (key === 'path') {
+              const forwardTarget = nodes.find(
+                (targetNode) => targetNode.name === attribute.value
+              );
+              this.forwards.push(new Forward(pipe.uid, forwardTarget?.uid!));
             }
-          );
-        });
+          }
+        }
       }
 
       this.nodeMap.set(pipe.uid, node);
-    });
+    }
   }
 
   generateExits(exits: any[]): void {
@@ -110,15 +111,15 @@ export class NodeGeneratorService {
   }
 
   generateForwards(): void {
-    setTimeout(() =>
-      this.forwards.forEach((forward) =>
+    setTimeout(() => {
+      for (const forward of this.forwards) {
         this.nodeService.addConnection({
           uuids: [
             forward.getSource() + '_bottom',
             forward.getDestination() + '_top',
           ],
-        })
-      )
-    );
+        });
+      }
+    });
   }
 }

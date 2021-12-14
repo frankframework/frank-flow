@@ -382,13 +382,13 @@ export class FlowStructureService {
   ): FlowNodeAttribute | undefined {
     let attribute: FlowNodeAttribute | undefined;
 
-    Object.entries(attributeList).forEach(
-      ([attributeKey, currentAttribute]: [string, FlowNodeAttribute]) => {
-        if (attributeKey === search) {
-          attribute = currentAttribute;
-        }
+    for (const [attributeKey, currentAttribute] of Object.entries(
+      attributeList
+    )) {
+      if (attributeKey === search) {
+        attribute = currentAttribute;
       }
-    );
+    }
 
     return attribute;
   }
@@ -459,18 +459,16 @@ export class FlowStructureService {
   ): FlowNodeAttribute | undefined {
     let currentLastAttribute: FlowNodeAttribute | undefined;
 
-    Object.entries(attributeList).forEach(
-      ([attributeKey, attribute]: [string, FlowNodeAttribute]) => {
-        if (!currentLastAttribute) {
-          currentLastAttribute = attribute;
-        }
-        if (attribute.line > currentLastAttribute.line) {
-          currentLastAttribute = attribute;
-        } else if (attribute.endColumn > currentLastAttribute.endColumn) {
-          currentLastAttribute = attribute;
-        }
+    for (const [attributeKey, attribute] of Object.entries(attributeList)) {
+      if (!currentLastAttribute) {
+        currentLastAttribute = attribute;
       }
-    );
+      if (attribute.line > currentLastAttribute.line) {
+        currentLastAttribute = attribute;
+      } else if (attribute.endColumn > currentLastAttribute.endColumn) {
+        currentLastAttribute = attribute;
+      }
+    }
 
     return currentLastAttribute;
   }

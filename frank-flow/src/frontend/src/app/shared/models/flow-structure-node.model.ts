@@ -17,7 +17,7 @@ export class FlowStructureNode {
     column: number,
     type: string,
     attributes: FlowNodeAttributes,
-    forwards: any[] | undefined
+    forwards?: any[]
   ) {
     this.line = line;
     this.endLine = endLine;

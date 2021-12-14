@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "build:prod": "ng build --configuration production",
-    "build:analyze": "ng build --prod --stats-json && webpack-bundle-analyzer ../../target/frontend/stats.json",
+    "build:analyze": "ng build --configuration production -stats-json && webpack-bundle-analyzer ../../target/frontend/stats.json",
     "build:dev": "ng build --configuration dev",
     "watch": "ng build --configuration dev --watch",
     "test": "ng test",

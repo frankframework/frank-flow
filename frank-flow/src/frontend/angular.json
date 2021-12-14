@@ -24,9 +24,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": [
-              "saxes, cytoscape"
-            ],
+            "allowedCommonJsDependencies": ["saxes, cytoscape"],
             "outputPath": "../../target/frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -41,9 +39,7 @@
                 "output": "/assets/monaco/"
               }
             ],
-            "styles": [
-              "src/assets/styles/_globals.scss"
-            ],
+            "styles": ["src/assets/styles/_globals.scss"],
             "scripts": [],
             "webWorkerTsConfig": "tsconfig.worker.json",
             "vendorChunk": true,
@@ -58,7 +54,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "with": "src/environments/environment.production.ts"
                 }
               ],
               "baseHref": "/frank-flow/",
@@ -140,9 +136,7 @@
                 "output": "/assets/monaco/"
               }
             ],
-            "styles": [
-              "src/assets/styles/_globals.scss"
-            ],
+            "styles": ["src/assets/styles/_globals.scss"],
             "scripts": [],
             "webWorkerTsConfig": "tsconfig.worker.json"
           }
@@ -150,10 +144,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         },
         "e2e": {

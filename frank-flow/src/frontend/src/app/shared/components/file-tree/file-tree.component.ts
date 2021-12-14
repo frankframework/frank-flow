@@ -99,7 +99,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
     const items: any[] = [];
     Object.keys(content).map((key) => {
       if (key === '_files') {
-        content._files.forEach((file: string) => {
+        for (const file of content._files) {
           if (!this.fileMatch || this.fileMatch.test(file)) {
             items.push({
               label: file,
@@ -110,7 +110,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
               }),
             });
           }
-        });
+        }
       } else {
         items.push({
           label: key,
@@ -151,7 +151,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
         } else {
           this.currentFileService.switchToFileTreeItem(item);
         }
-        this.tree.selectItem(null);
+        this.tree.selectItem('');
         this.currentFileService.resetCurrentDirectory();
       } else if (item.type === FileType.FOLDER) {
         this.currentFileService.setCurrentDirectory(item);

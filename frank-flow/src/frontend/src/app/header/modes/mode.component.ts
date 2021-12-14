@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Mode } from './mode.model';
 import { ModeService } from './mode.service';
-import { ModeType } from './modeType.enum';
+import { ModeType } from './mode-type.enum';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
   faCode,

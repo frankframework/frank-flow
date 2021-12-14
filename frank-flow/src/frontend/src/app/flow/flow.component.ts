@@ -22,7 +22,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { CurrentFileService } from '../shared/services/current-file.service';
 import { File } from '../shared/models/file.model';
-import { FlowStructureNode } from '../shared/models/flow-structure-node.model';
 import { GraphService } from '../shared/services/graph.service';
 import { Node } from './node/nodes/node.model';
 import { Subscription } from 'rxjs';
@@ -252,19 +251,17 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   getMinimumCanvasSizeForFlowStructure(positions: CanvasSize): void {
-    this.currentFile?.flowStructure?.nodes?.forEach(
-      (node: FlowStructureNode) => {
-        positions.x = this.comparePositions(positions.x, node.positions.x);
-        positions.y = this.comparePositions(positions.y, node.positions.y);
-      }
-    );
+    for (const node of this.currentFile?.flowStructure?.nodes ?? []) {
+      positions.x = this.comparePositions(positions.x, node.positions.x);
+      positions.y = this.comparePositions(positions.y, node.positions.y);
+    }
   }
 
   getMinimumCanvasSizeForGraphService(positions: CanvasSize): void {
-    this.nodes?.forEach((node, key) => {
+    for (const [_, node] of this.nodes?.entries() ?? []) {
       positions.x = this.comparePositions(positions.x, node.getLeft() ?? 0);
       positions.y = this.comparePositions(positions.y, node.getTop() ?? 0);
-    });
+    }
   }
 
   getMinimumCanvasSizeWithNodeBuffer(positions: CanvasSize): void {

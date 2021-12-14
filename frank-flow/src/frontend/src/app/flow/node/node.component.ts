@@ -77,8 +77,8 @@ export class NodeComponent implements AfterViewInit {
   };
   private dragOptions: DragOptions = {
     containment: 'canvas',
-    stop: (e: any) => {
-      this.handleDragStop(e);
+    stop: (event: any) => {
+      this.handleDragStop(event);
     },
   } as DragOptions;
   private settings!: Settings;
@@ -194,16 +194,16 @@ export class NodeComponent implements AfterViewInit {
     return [+this.settings.gridConfiguration, +this.settings.gridConfiguration];
   }
 
-  handleDragStop(e: any): void {
+  handleDragStop(event: any): void {
     this.flowStructureService.editNodePositions({
-      nodeId: e.el.id,
-      xPos: e.pos[0],
-      yPos: e.pos[1],
+      nodeId: event.el.id,
+      xPos: event.pos[0],
+      yPos: event.pos[1],
     });
   }
 
-  nodeHasClass(e: any, className: string) {
-    return e.el.classList[0] === className;
+  nodeHasClass(event: any, className: string) {
+    return event.el.classList[0] === className;
   }
 
   openOptions(): void {

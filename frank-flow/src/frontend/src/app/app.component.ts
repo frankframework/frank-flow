@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Mode } from './header/modes/mode.model';
 import { ModeService } from './header/modes/mode.service';
-import { ModeType } from './header/modes/modeType.enum';
+import { ModeType } from './header/modes/mode-type.enum';
 import { SettingsService } from './header/settings/settings.service';
 import { Settings } from './header/settings/settings.model';
 import { SessionService } from './shared/services/session.service';

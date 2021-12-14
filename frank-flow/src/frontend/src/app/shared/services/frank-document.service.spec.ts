@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FrankDocService as FrankDocumentService } from './frank-doc.service';
+import { FrankDocumentService as FrankDocumentService } from './frank-document.service';
 
 describe('FrankDocService', () => {
   let service: FrankDocumentService;

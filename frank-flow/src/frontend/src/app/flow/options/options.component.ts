@@ -4,7 +4,7 @@ import { FlowNodeAttributeOptions } from 'src/app/shared/models/flow-node-attrib
 import { FlowNodeAttributes } from 'src/app/shared/models/flow-node-attributes.model';
 import { FlowStructureNode } from 'src/app/shared/models/flow-structure-node.model';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
-import { FrankDocService } from 'src/app/shared/services/frank-doc.service';
+import { FrankDocumentService } from 'src/app/shared/services/frank-document.service';
 import { Node } from '../node/nodes/node.model';
 import { CurrentFileService } from '../../shared/services/current-file.service';
 import { File } from '../../shared/models/file.model';
@@ -36,7 +36,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
-    private frankDocumentService: FrankDocService,
+    private frankDocumentService: FrankDocumentService,
     private flowStructureService: FlowStructureService,
     private currentFileService: CurrentFileService
   ) {}
@@ -51,7 +51,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   getFrankDoc(): void {
-    this.frankDocSubscription = this.frankDocService
+    this.frankDocSubscription = this.frankDocumentService
       .getFrankDoc()
       .subscribe((frankDocument: any) => (this.frankDoc = frankDocument));
   }
@@ -105,13 +105,13 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   editConnections(originalName: string, newName: string) {
     const sourceNodes = this.getConnectionsWithTarget(originalName);
-    sourceNodes?.forEach((sourceNode) => {
+    for (const sourceNode of sourceNodes ?? []) {
       this.flowStructureService.moveConnection(
         sourceNode.name,
         originalName,
         newName
       );
-    });
+    }
   }
 
   getConnectionsWithTarget(target: string): FlowStructureNode[] | undefined {
@@ -162,9 +162,9 @@ export class OptionsComponent implements OnInit, OnDestroy {
       this.element = this.frankDoc.elements.find((element: any) =>
         element.elementNames.includes(this.structureNode?.type)
       );
-      this.element?.attributes?.forEach((attribute: any) =>
-        this.availableAttributes.push(attribute)
-      );
+      for (const attribute of this.element?.attributes) {
+        this.availableAttributes.push(attribute);
+      }
     }
   }
 

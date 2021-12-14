@@ -132,12 +132,12 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   undo() {
-    this.codeEditorInstance.trigger('keyboard', 'undo', null);
+    this.codeEditorInstance.trigger('keyboard', 'undo', '');
     this.setValueAsCurrentFile();
   }
 
   redo() {
-    this.codeEditorInstance.trigger('keyboard', 'redo', null);
+    this.codeEditorInstance.trigger('keyboard', 'redo', '');
     this.setValueAsCurrentFile();
   }
 
@@ -161,7 +161,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
 
     this.codeEditorInstance
       .getModel()
-      ?.pushEditOperations([], editOperations, () => null);
+      ?.pushEditOperations([], editOperations, () => []);
     this.codeEditorInstance.pushUndoStop();
 
     this.setValueAsCurrentFile();
