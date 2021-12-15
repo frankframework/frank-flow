@@ -52,8 +52,6 @@ jobs:
         run: mvn -f frank-flow
       - name: Cache Frank!Runner dependencies
         uses: actions/cache@v2
-        env:
-          cache-name: cache-frank-runner
         with:
           path: |
             frank-runner/build
