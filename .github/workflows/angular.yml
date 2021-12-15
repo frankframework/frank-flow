@@ -67,7 +67,7 @@ jobs:
         with:
           working-directory: frank-flow/frank-flow/src/frontend/
           build: npm run build
-          start: ./cypress/Frank/start.sh
+          start: ./cypress/Frank/restart.sh
           wait-on: "http://localhost:1000/frank-flow/"
           wait-on-timeout: 450
 #      - name: List all files
