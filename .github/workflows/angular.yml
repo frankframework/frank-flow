@@ -50,7 +50,7 @@ jobs:
         run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-runner/frank-flow.properties
       - name: Build backend
         run: mvn -f frank-flow
-      - name: Cache Frank!Runner dependencies
+      - name: Cache Frank!Runner dependencies test
         uses: actions/cache@v2
         with:
           path: |
