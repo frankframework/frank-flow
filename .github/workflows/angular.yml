@@ -62,6 +62,11 @@ jobs:
       - name: Start Frank!Runner
         working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
         run: ./restart.sh
+      - name: Comment Webpage Screenshot
+        uses: saadmk11/comment-webpage-screenshot@main
+        with:
+          upload_to: imgur # Or, imgur
+          capture_urls: "http://localhost:1000/frank-flow/"
 #      - name: Run cypress
 #        uses: cypress-io/github-action@v2.9.7
 #        with:
