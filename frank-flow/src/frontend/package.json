@@ -13,6 +13,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "prettier": "prettier -w .",
+    "runner": "./cypress/Frank/restart.sh",
     "prepare": "cd ../../.. && husky install frank-flow/src/frontend/.husky"
   },
   "private": true,

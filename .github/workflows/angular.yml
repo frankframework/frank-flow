@@ -33,16 +33,16 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-      - name: Cache npm dependencies
-        uses: actions/cache@v2
-        with:
-          path: "~/.npm"
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Install npm dependencies
-        working-directory: frank-flow/frank-flow/src/frontend
-        run: npm install
+      #      - name: Cache npm dependencies
+      #        uses: actions/cache@v2
+      #        with:
+      #          path: "~/.npm"
+      #          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      #          restore-keys: |
+      #            ${{ runner.os }}-node-
+      #      - name: Install npm dependencies
+      #        working-directory: frank-flow/frank-flow/src/frontend
+      #        run: npm install
       #      - name: Run unit tests
       #        working-directory: frank-flow/frank-flow/src/frontend
       #        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
@@ -67,7 +67,7 @@ jobs:
         with:
           working-directory: frank-flow/frank-flow/src/frontend/
           build: npm run build
-          start: ./cypress/Frank/restart.sh
+          start: npm run runner
           wait-on: "http://localhost:1000/frank-flow/"
           wait-on-timeout: 450
 #      - name: List all files
