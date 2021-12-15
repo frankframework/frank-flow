@@ -40,7 +40,7 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: Install dependencies
+      - name: Install npm dependencies
         working-directory: frank-flow/frank-flow/src/frontend
         run: npm install
 #        working-directory: frank-flow/frank-flow/src/frontend
