@@ -45,11 +45,11 @@ jobs:
       #        run: npm install
       #      - name: Run unit tests
       #        working-directory: frank-flow/frank-flow/src/frontend
-      #        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-      - name: Write frank-flow.properties
-        run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-runner/frank-flow.properties
+      #      #        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+      #      - name: Write frank-flow.properties
+      #        run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-runner/frank-flow.properties
       - name: Build backend
-        run: mvn -f frank-flow
+        run: mvn -f frank-flow -P frontend
       - name: Cache Frank!Runner dependencies
         uses: actions/cache@v2
         with:
@@ -66,7 +66,7 @@ jobs:
         uses: cypress-io/github-action@v2.9.7
         with:
           working-directory: frank-flow/frank-flow/src/frontend/
-          build: npm run build
+          #          build: npm run build
           start: npm run runner
           wait-on: "http://localhost:1000/frank-flow/"
           wait-on-timeout: 450
