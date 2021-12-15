@@ -41,6 +41,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install dependencies
+        working-directory: frank-flow/src/frontend
         run: npm install
 #        working-directory: frank-flow/frank-flow/src/frontend
 #        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
