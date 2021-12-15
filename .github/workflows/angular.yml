@@ -39,9 +39,8 @@ jobs:
         with:
           key: ${{ runner.OS }}-node-${{ hashFiles('frank-flow/frank-flow/src/frontend/package-lock.json') }}
           path: frank-flow/frank-flow/src/frontend/node_modules
-      - name: Install Dependencies
-        if: steps.node-cache.outputs.cache-hit != 'true'
-        run: npm ci frank-flow/frank-flow/src/frontend
+      - name: Install NPM Dependencies
+        run: npm install
 #      - name: Run unit tests
 #        working-directory: frank-flow/frank-flow/src/frontend
 #        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
