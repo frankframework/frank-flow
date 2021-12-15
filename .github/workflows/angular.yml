@@ -43,9 +43,9 @@ jobs:
       - name: Install npm dependencies
         working-directory: frank-flow/frank-flow/src/frontend
         run: npm install
-      - name: Run unit tests
-        working-directory: frank-flow/frank-flow/src/frontend
-        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+      #      - name: Run unit tests
+      #        working-directory: frank-flow/frank-flow/src/frontend
+      #        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
       - name: Write frank-flow.properties
         run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-runner/frank-flow.properties
       - name: Build backend
@@ -59,20 +59,17 @@ jobs:
           key: ${{ runner.os }}-frank-runner
           restore-keys: |
             ${{ runner.os }}-frank-runner
-      - name: Start Frank!Runner
-        working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
-        run: ./restart.sh
-      - name: Sleep for 30 seconds
-        run: sleep 120s
-        shell: bash
-      - name: Get Webpage Content
-        run: curl http://localhost:1000/frank-flow/
-#      - name: Run cypress
-#        uses: cypress-io/github-action@v2.9.7
-#        with:
-#          working-directory: frank-flow/frank-flow/src/frontend
-#          wait-on: "http://localhost:1000/frank-flow/"
-#          wait-on-timeout: 450
+      #      - name: Start Frank!Runner
+      #        working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
+      #        run: ./restart.sh
+      - name: Run cypress using the Frank!Runner
+        uses: cypress-io/github-action@v2.9.7
+        with:
+          working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
+          build: npm run build
+          start: ./start.sh
+          wait-on: "http://localhost:1000/frank-flow/"
+          wait-on-timeout: 450
 #      - name: List all files
 #        if: always()
 #        run: tree > allFiles.txt
