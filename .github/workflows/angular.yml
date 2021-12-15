@@ -55,7 +55,7 @@ jobs:
         with:
           path: |
             frank-runner/build
-            frank-runner/downloads
+            frank-runner/download
           key: ${{ runner.os }}-frank-runner
           restore-keys: |
             ${{ runner.os }}-frank-runner
