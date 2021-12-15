@@ -65,9 +65,9 @@ jobs:
       - name: Run cypress using the Frank!Runner
         uses: cypress-io/github-action@v2.9.7
         with:
-          working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
+          working-directory: frank-flow/frank-flow/src/frontend/
           build: npm run build
-          start: ./start.sh
+          start: ./cypress/Frank/start.sh
           wait-on: "http://localhost:1000/frank-flow/"
           wait-on-timeout: 450
 #      - name: List all files
