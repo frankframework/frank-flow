@@ -59,7 +59,7 @@ jobs:
           key: ${{ runner.os }}-frank-runner
           restore-keys: |
             ${{ runner.os }}-frank-runner
-      - name: Start Frank!Runner
+      - name: Start Frank!Runner port 8080
         working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
         run: ./restart.sh
       #      - name: Run cypress using the Frank!Runner
