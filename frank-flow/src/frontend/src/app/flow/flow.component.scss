@@ -1,8 +1,30 @@
-.flowContainer {
+.flow-container {
   display: grid;
   grid-template-columns: auto 256px;
   height: 100%;
   background-color: var(--border-color);
+
+  &__actions {
+    margin: 16px;
+    padding: 16px;
+    background: var(--bg-color-muted-shadow);
+    position: relative;
+    top: calc(64px - 100vh);
+    right: 0;
+    display: flex;
+    gap: 16px;
+    width: fit-content;
+  }
+
+  &__no-canvas-message {
+    margin: 16px;
+    padding: 16px;
+    background: var(--bg-color-muted-shadow);
+    color: var(--text-color);
+    display: flex;
+    gap: 16px;
+    width: fit-content;
+  }
 }
 
 .panzoom {

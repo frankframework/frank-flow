@@ -1,83 +1,178 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
   Renderer2,
   ViewChild,
-  AfterViewInit,
 } from '@angular/core';
-import { PanZoomConfig, PanZoomConfigOptions } from 'ngx-panzoom';
+import { PanZoomAPI, PanZoomConfig, PanZoomConfigOptions } from 'ngx-panzoom';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
   faArrowDown,
-  faArrowUp,
   faArrowLeft,
   faArrowRight,
+  faArrowUp,
+  faDotCircle,
+  faHome,
+  faSearchMinus,
+  faSearchPlus,
 } from '@fortawesome/free-solid-svg-icons';
-import { CodeService } from '../shared/services/code.service';
-import { Subscription } from 'rxjs';
+import { CurrentFileService } from '../shared/services/current-file.service';
 import { File } from '../shared/models/file.model';
 import { GraphService } from '../shared/services/graph.service';
+import { Node } from './node/nodes/node.model';
+import { Subscription } from 'rxjs';
+import { FileType } from '../shared/enums/file-type.enum';
+import { FlowStructureService } from '../shared/services/flow-structure.service';
 
 type canvasDirection = 'height' | 'width';
-type minimumPositions = { x: number; y: number };
+type CanvasSize = { x: number; y: number };
 
 @Component({
   selector: 'app-flow',
   templateUrl: './flow.component.html',
   styleUrls: ['./flow.component.scss'],
 })
-export class FlowComponent implements AfterViewInit {
+export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
+  public fileIsLoading!: boolean;
+  public fileIsConfiguration!: boolean;
+  public fileIsEmpty!: boolean;
   private readonly canvasExpansionSize = 500;
-  private readonly monacoUpdateQueueInterval = 520;
-  private readonly nodeBufferSpace = 300;
-
   @ViewChild('nodeContainer', { read: ElementRef })
   private nodeContainerRef!: ElementRef;
   private canvasElement?: HTMLElement;
   private panZoomConfigOptions: PanZoomConfigOptions = {
-    zoomLevels: 10,
+    zoomLevels: 3,
+    scalePerZoomLevel: 2,
     zoomStepDuration: 0.2,
-    freeMouseWheelFactor: 0.01,
-    zoomToFitZoomLevelFactor: 0.5,
+    freeMouseWheel: false,
+    invertMouseWheel: true,
+    zoomToFitZoomLevelFactor: 1,
     dragMouseButton: 'left',
+    zoomButtonIncrement: 0.1,
     zoomOnDoubleClick: false,
+    dynamicContentDimensions: true,
+    neutralZoomLevel: 1,
+    initialZoomLevel: 1,
   };
-
-  public currentFileSubscription!: Subscription;
   public panzoomConfig: PanZoomConfig = new PanZoomConfig(
     this.panZoomConfigOptions
   );
+  private currentFile!: File;
+  private nodes!: Map<string, Node>;
+  private panzoomApiSubscription!: Subscription;
+  private currentFileSubscription!: Subscription;
+  private graphSubscription!: Subscription;
+  private panZoomAPI!: PanZoomAPI;
 
   constructor(
     private renderer: Renderer2,
     private library: FaIconLibrary,
-    private codeService: CodeService,
-    private graphService: GraphService
+    private currentFileService: CurrentFileService,
+    private graphService: GraphService,
+    private flowStructureService: FlowStructureService
   ) {
-    this.library.addIcons(faArrowDown, faArrowUp, faArrowRight, faArrowLeft);
+    this.library.addIcons(
+      faArrowDown,
+      faArrowUp,
+      faArrowRight,
+      faArrowLeft,
+      faSearchMinus,
+      faSearchPlus,
+      faHome,
+      faDotCircle
+    );
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  onKeyUp(kbdEvent: KeyboardEvent): void {
+    this.handleKeyboardUpEvent(kbdEvent);
+  }
+
+  ngOnInit(): void {
+    this.showCanvasOrMessage();
+    this.setPanzoomApiSubscription();
+    this.setCurrentFileSubscription();
+    this.setNodesSubscription();
   }
 
   ngAfterViewInit(): void {
     this.setCanvasElement();
-    this.setCurrentFileSubscription();
     this.setBasicCanvasSize();
   }
 
+  ngOnDestroy(): void {
+    this.panzoomApiSubscription.unsubscribe();
+    this.currentFileSubscription.unsubscribe();
+    this.graphSubscription.unsubscribe();
+  }
+
+  setPanzoomApiSubscription(): void {
+    this.panzoomApiSubscription = this.panzoomConfig.api.subscribe(
+      (api: PanZoomAPI) => (this.panZoomAPI = api)
+    );
+  }
+
   setCanvasElement(): void {
-    this.canvasElement = this.nodeContainerRef.nativeElement.getElementsByClassName(
-      'canvas'
-    )[0];
+    this.canvasElement =
+      this.nodeContainerRef.nativeElement.querySelectorAll('.canvas')[0];
   }
 
   setCurrentFileSubscription(): void {
-    this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
-      {
-        next: (file: File) => {
-          setTimeout(() => {
-            this.setBasicCanvasSize();
-          }, this.monacoUpdateQueueInterval);
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe({
+        next: (currentFile: File) => {
+          this.currentFile = currentFile;
+          this.showCanvasOrMessage();
+          this.setBasicCanvasSize();
         },
-      }
+      });
+  }
+
+  setNodesSubscription(): void {
+    this.graphSubscription = this.graphService.nodesObservable.subscribe({
+      next: (nodes: Map<string, Node>) => {
+        this.nodes = nodes;
+        this.setBasicCanvasSize();
+      },
+    });
+  }
+
+  showCanvasOrMessage(): void {
+    this.fileIsLoading = this.currentFile?.xml === undefined;
+    this.fileIsConfiguration =
+      this.currentFile?.type === FileType.CONFIGURATION;
+    this.fileIsEmpty = this.currentFile?.type === FileType.EMPTY;
+  }
+
+  handleKeyboardUpEvent(kbdEvent: KeyboardEvent): void {
+    if (this.saveKeyCombination(kbdEvent)) {
+      kbdEvent.preventDefault();
+      this.currentFileService.save();
+    } else if (this.undoKeyCombination(kbdEvent)) {
+      kbdEvent.preventDefault();
+      this.flowStructureService.monacoEditorComponent?.undo();
+    } else if (this.redoKeyCombination(kbdEvent)) {
+      kbdEvent.preventDefault();
+      this.flowStructureService.monacoEditorComponent?.redo();
+    }
+  }
+
+  saveKeyCombination(kbdEvent: KeyboardEvent): boolean {
+    return kbdEvent.ctrlKey && kbdEvent.key === 's';
+  }
+
+  undoKeyCombination(kbdEvent: KeyboardEvent): boolean {
+    return kbdEvent.ctrlKey && kbdEvent.key === 'z';
+  }
+
+  redoKeyCombination(kbdEvent: KeyboardEvent): boolean {
+    return (
+      kbdEvent.ctrlKey &&
+      (kbdEvent.key === 'y' || (kbdEvent.shiftKey && kbdEvent.key === 'Z'))
     );
   }
 
@@ -98,10 +193,19 @@ export class FlowComponent implements AfterViewInit {
   }
 
   setBasicCanvasSize(): void {
-    const minimumPositions = this.calculateMinimumCanvasSize();
+    const minimumPositions = this.getMinimumCanvasSize();
+    const canvasSize = this.calculateIncrementedCanvasSize(minimumPositions);
 
-    this.renderCanvas('width', minimumPositions.x + this.nodeBufferSpace);
-    this.renderCanvas('height', minimumPositions.y + this.nodeBufferSpace);
+    this.renderCanvas('width', canvasSize.x);
+    this.renderCanvas('height', canvasSize.y);
+  }
+
+  calculateIncrementedCanvasSize(canvasSize: CanvasSize): CanvasSize {
+    canvasSize.y +=
+      this.canvasExpansionSize - (canvasSize.y % this.canvasExpansionSize);
+    canvasSize.x +=
+      this.canvasExpansionSize - (canvasSize.x % this.canvasExpansionSize);
+    return canvasSize;
   }
 
   changeCanvasSize(direction: canvasDirection, expansionValue: number): void {
@@ -123,7 +227,7 @@ export class FlowComponent implements AfterViewInit {
     direction: canvasDirection,
     expansionValue: number
   ): boolean {
-    const minimumPositions = this.calculateMinimumCanvasSize();
+    const minimumPositions = this.getMinimumCanvasSize();
     return (
       this.getNewCanvasSize(direction, expansionValue) >
       (direction === 'height' ? minimumPositions.y : minimumPositions.x)
@@ -138,21 +242,52 @@ export class FlowComponent implements AfterViewInit {
     );
   }
 
-  calculateMinimumCanvasSize(): minimumPositions {
-    let x = 0;
-    let y = 0;
-
-    this.graphService.nodeMap?.forEach((node, key) => {
-      x = this.comparePositions(x, node.getLeft() ?? 0);
-      y = this.comparePositions(y, node.getTop() ?? 0);
-    });
-
-    return { x, y };
+  getMinimumCanvasSize(): CanvasSize {
+    const minimumCanvasSize = { x: 0, y: 0 };
+    this.getMinimumCanvasSizeForFlowStructure(minimumCanvasSize);
+    this.getMinimumCanvasSizeForGraphService(minimumCanvasSize);
+    this.getMinimumCanvasSizeWithNodeBuffer(minimumCanvasSize);
+    return minimumCanvasSize;
   }
 
-  comparePositions(highestPosition: number, currentPosition: number): number {
-    return currentPosition > highestPosition
-      ? currentPosition
-      : highestPosition;
+  getMinimumCanvasSizeForFlowStructure(positions: CanvasSize): void {
+    for (const node of this.currentFile?.flowStructure?.nodes ?? []) {
+      positions.x = this.comparePositions(positions.x, node.positions.x);
+      positions.y = this.comparePositions(positions.y, node.positions.y);
+    }
+  }
+
+  getMinimumCanvasSizeForGraphService(positions: CanvasSize): void {
+    for (const [_, node] of this.nodes?.entries() ?? []) {
+      positions.x = this.comparePositions(positions.x, node.getLeft() ?? 0);
+      positions.y = this.comparePositions(positions.y, node.getTop() ?? 0);
+    }
+  }
+
+  getMinimumCanvasSizeWithNodeBuffer(positions: CanvasSize): void {
+    const maxWidthOfNode = 200;
+    const maxHeightOfNode = 100;
+    positions.x += maxWidthOfNode;
+    positions.y += maxHeightOfNode;
+  }
+
+  comparePositions(lastPosition: number, currentPosition: number): number {
+    return currentPosition > lastPosition ? currentPosition : lastPosition;
+  }
+
+  zoomIn(): void {
+    this.panZoomAPI.zoomIn('viewCenter');
+  }
+
+  zoomOut(): void {
+    this.panZoomAPI.zoomOut('viewCenter');
+  }
+
+  zoomReset(): void {
+    this.panZoomAPI.resetView();
+  }
+
+  panCenter(): void {
+    this.panZoomAPI.centerContent();
   }
 }

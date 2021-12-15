@@ -1,71 +1,141 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { FlowNodeAttribute } from 'src/app/shared/models/flow-node-attribute.model';
 import { FlowNodeAttributeOptions } from 'src/app/shared/models/flow-node-attribute-options.model';
 import { FlowNodeAttributes } from 'src/app/shared/models/flow-node-attributes.model';
 import { FlowStructureNode } from 'src/app/shared/models/flow-structure-node.model';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
-import { FrankDocService } from 'src/app/shared/services/frank-doc.service';
+import { FrankDocumentService } from 'src/app/shared/services/frank-document.service';
 import { Node } from '../node/nodes/node.model';
+import { CurrentFileService } from '../../shared/services/current-file.service';
+import { File } from '../../shared/models/file.model';
+import { ChangedAttribute } from '../../shared/models/changed-attribute.model';
+import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-options',
   templateUrl: './options.component.html',
   styleUrls: ['./options.component.scss'],
 })
-export class OptionsComponent {
-  disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
-  frankDoc: any;
-  attributeOptions: FlowNodeAttributeOptions[] = [];
-  node!: Node;
-  attributes!: FlowNodeAttributes;
-  changedAttributes: { attribute: string; value: string | number }[] = [];
-  selectedAttribute!: any;
-  newAttributeValue!: string;
-  nodeName!: string | undefined;
-  nodeDescription?: string;
+export class OptionsComponent implements OnInit, OnDestroy {
+  public disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
+  public availableAttributes: FlowNodeAttributeOptions[] = [];
+  public attributes!: FlowNodeAttributes;
+  public selectedAttribute!: any;
+  public newAttributeValue!: string;
+  public element?: any;
+  public structureNode!: FlowStructureNode;
+  public frankDocElementsURI =
+    environment.runnerUri + '/' + environment.frankDocElements;
+
+  private frankDoc: any;
+  private flowNode!: Node;
+  private changedAttributes: ChangedAttribute[] = [];
+  private currentFile!: File;
+  private frankDocSubscription!: Subscription;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
-    private frankDocService: FrankDocService,
-    private flowStructureService: FlowStructureService
-  ) {
+    private frankDocumentService: FrankDocumentService,
+    private flowStructureService: FlowStructureService,
+    private currentFileService: CurrentFileService
+  ) {}
+
+  ngOnInit(): void {
     this.getFrankDoc();
+    this.getCurrentFile();
+  }
+
+  ngOnDestroy(): void {
+    this.frankDocSubscription.unsubscribe();
   }
 
   getFrankDoc(): void {
-    this.frankDocService
+    this.frankDocSubscription = this.frankDocumentService
       .getFrankDoc()
-      .subscribe((frankDoc: any) => (this.frankDoc = frankDoc));
+      .subscribe((frankDocument: any) => (this.frankDoc = frankDocument));
+  }
+
+  getCurrentFile(): void {
+    this.currentFileService.currentFileObservable.subscribe({
+      next: (currentFile: File) => {
+        this.currentFile = currentFile;
+        this.getAttributesOnNode();
+      },
+    });
   }
 
   onDataAdded(): void {
-    this.node = this.ngxSmartModalService.getModalData('optionsModal');
+    this.flowNode = this.ngxSmartModalService.getModalData('optionsModal');
     this.resetPreviousData();
-    this.getAttributesForNode();
+  }
+
+  onOpen() {
+    this.getAttributesOnNode();
+    this.getAvailableAttributesForNode();
   }
 
   onAnyCloseEvent(): void {
-    this.flowStructureService.editAttributes(
-      'nodes',
-      this.node.getId(),
-      this.changedAttributes
+    this.editRelatedAttributesBasedOnName();
+    this.flowStructureService.editAttributes({
+      nodeId: this.flowNode.getId(),
+      attributes: this.changedAttributes,
+      flowUpdate: !!this.getChangedNameAttribute(),
+    });
+  }
+
+  editRelatedAttributesBasedOnName(): void {
+    const changedNameAttribute = this.getChangedNameAttribute();
+
+    if (changedNameAttribute) {
+      const originalName = this.flowNode.getName();
+      const newName = changedNameAttribute.value.toString();
+
+      this.editConnections(originalName, newName);
+      this.editFirstPipe(originalName, newName);
+    }
+  }
+
+  getChangedNameAttribute(): ChangedAttribute | undefined {
+    return this.changedAttributes.find(
+      (attribute: ChangedAttribute) =>
+        attribute.name === 'name' || attribute.name === 'path'
     );
   }
 
-  reloadAttributes() {
-    this.flowStructureService.refreshStructure();
-    setTimeout(() => {
-      this.attributes = this.getUpdatedAttributes().attributes;
-    }, 100);
+  editConnections(originalName: string, newName: string) {
+    const sourceNodes = this.getConnectionsWithTarget(originalName);
+    for (const sourceNode of sourceNodes ?? []) {
+      this.flowStructureService.moveConnection(
+        sourceNode.name,
+        originalName,
+        newName
+      );
+    }
+  }
+
+  getConnectionsWithTarget(target: string): FlowStructureNode[] | undefined {
+    return this.currentFile.flowStructure?.nodes.filter(
+      (node: FlowStructureNode) =>
+        node.forwards?.find(
+          (forward) => forward.attributes['path'].value === target
+        )
+    );
+  }
+
+  editFirstPipe(originalName: string, newName: string) {
+    const firstPipe =
+      this.currentFile.flowStructure?.pipeline.attributes['firstPipe'];
+
+    if (firstPipe?.value === originalName) {
+      this.flowStructureService.changeFirstPipe(newName);
+    }
   }
 
   resetPreviousData() {
     this.attributes = {};
     this.changedAttributes = [];
-    this.attributeOptions = [];
-    this.nodeName = '';
-    this.nodeDescription = '';
+    this.element = '';
     this.clearNewAttribute();
   }
 
@@ -74,91 +144,84 @@ export class OptionsComponent {
     this.newAttributeValue = '';
   }
 
-  getAttributesForNode(): void {
-    const attributes = this.node?.getAttributes();
+  getAttributesOnNode(): void {
+    const node = this.currentFile.flowStructure?.nodes.find(
+      (node: FlowStructureNode) => node.name === this.flowNode?.getName()
+    );
 
-    this.nodeName = this.node?.getName();
-    if (attributes) {
-      this.attributes = attributes;
-    }
-
-    const nodeType = this.node?.getType();
-
-    if (nodeType && this.frankDoc) {
-      const element = this.frankDoc.elements.find((node: any) =>
-        node.elementNames.includes(nodeType)
-      );
-      this.nodeDescription = element?.descriptionHeader;
-      element?.attributes?.forEach((attribute: any) =>
-        this.attributeOptions.push(attribute)
-      );
+    if (node) {
+      this.structureNode = node;
+      this.attributes = node.attributes;
     }
   }
 
-  getUpdatedAttributes(): any {
-    const structure = this.flowStructureService.getStructure();
+  getAvailableAttributesForNode(): void {
+    this.availableAttributes = [];
 
-    return structure.nodes.find(
-      (pipe: FlowStructureNode) => pipe.name === this.nodeName
-    );
+    if (this.areTypeAndFrankDocSet()) {
+      this.element = this.frankDoc.elements.find((element: any) =>
+        element.elementNames.includes(this.structureNode?.type)
+      );
+      for (const attribute of this.element?.attributes) {
+        this.availableAttributes.push(attribute);
+      }
+    }
+  }
+
+  areTypeAndFrankDocSet(): boolean {
+    return this.structureNode?.type && this.frankDoc;
   }
 
   addAttribute(): void {
     this.flowStructureService.createAttribute(
       this.selectedAttribute.name,
       this.newAttributeValue,
-      this.attributes,
-      false
+      this.attributes
     );
     this.clearNewAttribute();
-    this.reloadAttributes();
   }
 
-  changeAttribute(key: string, event: Event): void {
+  changeAttribute(name: string, event: Event): void {
     const index = this.changedAttributes?.findIndex(
-      (attribute) => attribute.attribute == key
+      (attribute) => attribute.name == name
     );
 
+    const value = event as any as string | number;
     if (index !== -1) {
-      this.changedAttributes[index] = { attribute: key, value: event as any };
+      this.changedAttributes[index] = { name, value };
     } else {
-      this.changedAttributes.push({ attribute: key, value: event as any });
+      this.changedAttributes.push({ name, value });
     }
   }
 
   deleteAttribute(key: string): void {
-    this.flowStructureService.refreshStructure();
     setTimeout(() => {
-      const attributeList = this.getUpdatedAttributes();
-      if (attributeList) {
-        this.removeChangedAttribute(key);
-        this.flowStructureService.deleteAttribute(
-          key,
-          attributeList.attributes
-        );
-      }
-      this.reloadAttributes();
+      this.removeChangedAttribute(key);
+      this.flowStructureService.deleteAttribute(key, this.attributes);
     });
   }
 
   removeChangedAttribute(key: string): void {
     const index = this.changedAttributes?.findIndex(
-      (attribute) => attribute.attribute == key
+      (attribute) => attribute.name == key
     );
     this.changedAttributes.splice(index);
   }
 
-  debounce(func: any, wait: number): any {
+  debounce(function_: any, wait: number): any {
     let timeout: ReturnType<typeof setTimeout> | null;
     return () => {
       if (timeout) {
         clearTimeout(timeout);
       }
-      timeout = setTimeout(() => func.apply(this, arguments), wait);
+      timeout = setTimeout(
+        () => Reflect.apply(function_, this, arguments),
+        wait
+      );
     };
   }
 
-  customTrackBy(index: number, obj: any): any {
+  customTrackBy(index: number, object: any): any {
     return index;
   }
 

@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { Configuration } from '../models/configuration.model';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { File } from '../models/file.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FileService {
-  BASE_PATH = window.location.href + 'api/configurations';
-  configurationFiles = new BehaviorSubject<Configuration[]>([]);
+  private readonly apiConfigurationsUrl =
+    environment.runnerUri + '/frank-flow/api/configurations';
+  private configurationFiles = new BehaviorSubject<Configuration[]>([]);
 
   constructor() {
     this.fetchFiles();
@@ -37,13 +39,13 @@ export class FileService {
   }
 
   getConfigurations(): Promise<string[]> {
-    return fetch(this.BASE_PATH)
+    return fetch(this.apiConfigurationsUrl)
       .then((response) => response.json())
       .catch((error) => console.error(error));
   }
 
   getFilesForConfiguration(configuration: string): Promise<any> {
-    return fetch(`${this.BASE_PATH}/${configuration}`)
+    return fetch(`${this.apiConfigurationsUrl}/${configuration}`)
       .then((response) => response.json())
       .catch((error) => console.error(error));
   }
@@ -56,35 +58,112 @@ export class FileService {
     configuration: string,
     path: string
   ): Promise<string | void> {
-    return fetch(`${this.BASE_PATH}/${configuration}/files/?path=${path}`)
+    return fetch(
+      `${this.apiConfigurationsUrl}/${configuration}/files/?path=${path}`
+    )
       .then((response) => response.text())
       .catch((error) => console.error(error));
+  }
+
+  createFileForConfiguration(
+    configuration: string,
+    path: string,
+    content: string
+  ): Promise<Response> {
+    const formData = new FormData();
+    formData.append('file', content);
+
+    return fetch(
+      `${this.apiConfigurationsUrl}/${configuration}/files/?path=${path}`,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+  }
+
+  changeFileNameForConfiguration(
+    file: File,
+    newName: string
+  ): Promise<Response> {
+    const formData = new FormData();
+    formData.append('newName', newName);
+
+    return fetch(
+      `${this.apiConfigurationsUrl}/${file.configuration}/files/?path=${file.path}`,
+      {
+        method: 'PATCH',
+        body: formData,
+      }
+    );
+  }
+
+  changeFolderNameForConfiguration(
+    folder: File,
+    newName: string
+  ): Promise<Response> {
+    const formData = new FormData();
+    formData.append('newName', newName);
+
+    return fetch(
+      `${this.apiConfigurationsUrl}/${folder.configuration}/directories/?path=${folder.path}`,
+      {
+        method: 'PATCH',
+        body: formData,
+      }
+    );
   }
 
   updateFileForConfiguration(
     configuration: string,
     path: string,
     content: string
-  ): Promise<boolean | void> {
+  ): Promise<Response> {
     const formData = new FormData();
     formData.append('file', content);
 
-    return fetch(`${this.BASE_PATH}/${configuration}/files/?path=${path}`, {
-      method: 'POST',
-      body: formData,
-    })
-      .then((response) => response.ok)
-      .catch((error) => console.error(error));
+    return fetch(
+      `${this.apiConfigurationsUrl}/${configuration}/files/?path=${path}`,
+      {
+        method: 'PUT',
+        body: formData,
+      }
+    );
   }
 
-  removeFileFromConfiguation(file: File): Promise<boolean | void> {
+  removeFileForConfiguration(
+    configuration: string,
+    path: string
+  ): Promise<Response> {
     return fetch(
-      `${this.BASE_PATH}/${file.configuration}/files/?path=${file.path}`,
+      `${this.apiConfigurationsUrl}/${configuration}/files/?path=${path}`,
       {
         method: 'DELETE',
       }
-    )
-      .then((response) => response.ok)
-      .catch((error) => console.error(error));
+    );
+  }
+
+  createDirectoryForConfiguration(
+    configuration: string,
+    path: string
+  ): Promise<Response> {
+    return fetch(
+      `${this.apiConfigurationsUrl}/${configuration}/directories/?path=${path}`,
+      {
+        method: 'POST',
+      }
+    );
+  }
+
+  removeDirectoryForConfiguration(
+    configuration: string,
+    path: string
+  ): Promise<Response> {
+    return fetch(
+      `${this.apiConfigurationsUrl}/${configuration}/directories/?path=${path}`,
+      {
+        method: 'DELETE',
+      }
+    );
   }
 }

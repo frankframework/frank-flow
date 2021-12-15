@@ -1,6 +1,6 @@
 describe('Check canvas loaded', function () {
   before(function () {
-    cy.visit('', { timeout: 300000 });
+    cy.visit('', { timeout: 300_000 });
   });
 
   it('Check head', function () {
@@ -16,7 +16,7 @@ describe('Check canvas loaded', function () {
   });
 
   it('Check canvas has contents', function () {
-    cy.get('.canvas > app-node', { timeout: 30000 });
+    cy.get('.canvas > app-node', { timeout: 30_000 });
   });
 
   it('Check whether API available', function () {

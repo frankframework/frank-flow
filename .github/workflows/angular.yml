@@ -36,15 +36,16 @@ jobs:
       - name: Cache npm dependencies
         uses: actions/cache@v2
         with:
-          path: '~/.npm'
+          path: "~/.npm"
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Install npm dependencies
         working-directory: frank-flow/frank-flow/src/frontend
         run: npm install
-#        working-directory: frank-flow/frank-flow/src/frontend
-#        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+      - name: Run unit tests
+        working-directory: frank-flow/frank-flow/src/frontend
+        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 #      - name: Write frank-flow.properties
 #        run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-runner/frank-flow.properties
 #      - name: Build backend

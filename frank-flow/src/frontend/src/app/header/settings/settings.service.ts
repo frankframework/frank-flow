@@ -7,14 +7,13 @@ import { DefaultSettings } from './options/default-settings.model';
   providedIn: 'root',
 })
 export class SettingsService {
-  settings: BehaviorSubject<Settings>;
-  defaultSettings = new DefaultSettings();
+  private settings: BehaviorSubject<Settings>;
+  private defaultSettings = new DefaultSettings();
 
   constructor() {
     const localStorageSettings = this.getSettingsLocalStorage();
-    const localStorageSettingsWithDefaults = this.addDefaultSettings(
-      localStorageSettings
-    );
+    const localStorageSettingsWithDefaults =
+      this.addDefaultSettings(localStorageSettings);
     this.settings = new BehaviorSubject<Settings>(
       localStorageSettingsWithDefaults
     );
@@ -41,7 +40,7 @@ export class SettingsService {
       if (settings[key as K] === undefined) {
         settings = {
           ...settings,
-          ...{ [key]: this.defaultSettings[key as K] },
+          [key]: this.defaultSettings[key as K],
         };
       }
     }

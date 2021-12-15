@@ -1,13 +1,12 @@
 import { ExpectedCanvasNode } from '../support/expected-canvas-node';
 import { CanvasNode } from '../support/canvas-node';
-import { ParsedNumPixels } from '../support/parsed-num-pixels';
+import { ParsedNumPixels as ParsedNumberPixels } from '../support/parsed-num-pixels';
 import { CanvasConnectionArea } from '../support/canvas-connection-area';
 import { ExpectedConnection } from '../support/expected-connection';
 import { ParsedPathDProperty } from '../support/parsed-path-d-property';
 import { ParsedClassTransformProperty } from '../support/parsed-path-transform-property';
 import { CanvasConnection } from 'cypress/support/canvas-connection';
 import { ConnectionsOnCanvas } from '../support/connections-on-canvas';
-import * as cypress from 'cypress';
 
 describe('Placement on canvas', () => {
   before(() => {
@@ -17,7 +16,7 @@ describe('Placement on canvas', () => {
     cy.fixture('expectedConnections.csv')
       .then((data) => createExpectedConnections(data))
       .as('expectedConnections');
-    cy.visit('', { timeout: 300000 });
+    cy.visit('', { timeout: 300_000 });
     // TODO: Calculate the number of connections here
     awaitFlowChartConnections(4);
   });
@@ -26,22 +25,21 @@ describe('Placement on canvas', () => {
     const expectedConnections = this
       .expectedConnections as ExpectedConnection[];
     cy.log('Expected connections are:');
-    expectedConnections.forEach((expectedConnection) =>
-      cy.log(`  ${expectedConnection.toString()}`)
-    );
+    for (const expectedConnection of expectedConnections)
+      cy.log(`  ${expectedConnection.toString()}`);
     const expectedElements = this.expectedElements as Map<
       string,
       ExpectedCanvasNode
     >;
     cy.get('.canvas > app-node').should('have.length', expectedElements.size);
-    expectedElements.forEach((element) => {
+    for (const element of expectedElements.values()) {
       requestCanvasNodeDomObject(element.id).should('exist');
-    });
+    }
     const actualElements = checkAndGetCanvasElements([
       ...expectedElements.values(),
     ]);
-    actualElements.then((actualElementsValue) =>
-      actualElementsValue.forEach((actualElement) => {
+    actualElements.then((actualElementsValue) => {
+      for (const actualElement of actualElementsValue) {
         const expectedElement = expectedElements.get(actualElement.getId());
         assert(
           actualElement.getLeft() === expectedElement?.x,
@@ -51,8 +49,8 @@ describe('Placement on canvas', () => {
           actualElement.getTop() === expectedElement?.y,
           `y-coordinate match for ${expectedElement?.id}`
         );
-      })
-    );
+      }
+    });
     // We assume that canvas elements have one or two connection points.
     // Pipes have one connection point, while exits and listeners have one.
     // We assume that there is one listener and one exit, and that
@@ -61,7 +59,7 @@ describe('Placement on canvas', () => {
       2 * expectedElements.size - 2
     );
     canvasConnectionAreas.then((areas) => {
-      areas.forEach((area) => cy.log(area.toString()));
+      for (const area of areas) cy.log(area.toString());
     });
     const canvasConnections = requestCanvasConnections(
       expectedConnections.length
@@ -69,11 +67,11 @@ describe('Placement on canvas', () => {
     canvasConnections
       .then((conn) => {
         cy.log('Have the points that are connected');
-        conn.forEach((c) => {
+        for (const c of conn) {
           cy.log(c.toString());
-        });
+        }
       })
-      .catch((e) => expect(e).to.equal(null));
+      .catch((error) => expect(error).to.equal(undefined));
     actualElements
       .then((theActualElements) => {
         canvasConnectionAreas
@@ -92,21 +90,21 @@ describe('Placement on canvas', () => {
                   expect(connections.numConnections()).to.equal(
                     expectedConnections.length
                   );
-                  expectedConnections.forEach((expectedConnection) => {
+                  for (const expectedConnection of expectedConnections) {
                     expect(
                       connections.hasExpectedConnection(expectedConnection)
                     ).to.be.true;
-                  });
+                  }
                   cy.log('Done checking node connections');
-                } catch (e) {
-                  expect(e).to.equal(null);
+                } catch (error) {
+                  expect(error).to.equal(undefined);
                 }
               })
-              .catch((e) => expect(e).to.equal(null));
+              .catch((error) => expect(error).to.equal(undefined));
           })
-          .catch((e) => expect(e).to.equal(null));
+          .catch((error) => expect(error).to.equal(undefined));
       })
-      .catch((e) => expect(e).to.equal(null));
+      .catch((error) => expect(error).to.equal(undefined));
   });
 });
 
@@ -114,20 +112,20 @@ function createExpectedCanvasElements(
   data: string
 ): Map<string, ExpectedCanvasNode> {
   const result = new Map<string, ExpectedCanvasNode>();
-  data.split('\n').forEach((s) => {
+  for (const s of data.split('\n')) {
     const newExpectedCanvasElement = new ExpectedCanvasNode(s);
     result.set(newExpectedCanvasElement.id, newExpectedCanvasElement);
-  });
+  }
   return result;
 }
 
 function createExpectedConnections(data: string): ExpectedConnection[] {
   const result: ExpectedConnection[] = [];
-  data.split('\n').forEach((s) => {
+  for (const s of data.split('\n')) {
     const endpoints = s.split(',');
     const connection = new ExpectedConnection(endpoints[0], endpoints[1]);
     result.push(connection);
-  });
+  }
   return result;
 }
 
@@ -135,11 +133,11 @@ function checkAndGetCanvasElements(
   expected: Array<ExpectedCanvasNode>
 ): Promise<Array<CanvasNode>> {
   const promises: Array<Promise<CanvasNode>> = new Array<Promise<CanvasNode>>();
-  expected.forEach((item) => promises.push(elementToCanvasNode(item.id)));
+  for (const item of expected) promises.push(elementToCanvasNode(item.id));
   const result = Promise.all(promises);
   result.then((items) => {
     cy.log('Have the actual canvas elements in CanvasElement objects:');
-    items.forEach((item) => cy.log(item.toString()));
+    for (const item of items) cy.log(item.toString());
   });
   return result;
 }
@@ -153,10 +151,10 @@ function elementToCanvasNode(inputElementName: string): Promise<CanvasNode> {
       const height = domObject.css('height');
       const result = createCanvasNode(
         inputElementName,
-        (left as unknown) as string,
-        (top as unknown) as string,
-        (width as unknown) as string,
-        (height as unknown) as string
+        left as unknown as string,
+        top as unknown as string,
+        width as unknown as string,
+        height as unknown as string
       );
       if (result.error) {
         reject(result.error);
@@ -180,19 +178,19 @@ function createCanvasNode(
   width: string,
   height: string
 ): { result?: CanvasNode; error?: string } {
-  const theLeft = new ParsedNumPixels(left, 'left');
+  const theLeft = new ParsedNumberPixels(left, 'left');
   if (!theLeft.hasNumber) {
     return { error: theLeft.error };
   }
-  const theTop = new ParsedNumPixels(top, 'top');
+  const theTop = new ParsedNumberPixels(top, 'top');
   if (!theTop.hasNumber) {
     return { error: theTop.error };
   }
-  const theWidth = new ParsedNumPixels(width, 'width');
+  const theWidth = new ParsedNumberPixels(width, 'width');
   if (!theWidth.hasNumber) {
     return { error: theWidth.error };
   }
-  const theHeight = new ParsedNumPixels(height, 'height');
+  const theHeight = new ParsedNumberPixels(height, 'height');
   if (!theHeight.hasNumber) {
     return { error: theHeight.error };
   }
@@ -208,15 +206,15 @@ function createCanvasNode(
 }
 
 function requestCanvasConnectionAreas(
-  numConnectionPoints: number
+  numberConnectionPoints: number
 ): Promise<CanvasConnectionArea[]> {
   requestCanvasConnectionAreasDomObject().should(
     'have.length',
-    numConnectionPoints
+    numberConnectionPoints
   );
   let result = new Array<Promise<CanvasConnectionArea>>();
   let current = requestCanvasConnectionAreasDomObject().first();
-  for (let i = 0; i < numConnectionPoints; ++i) {
+  for (let index = 0; index < numberConnectionPoints; ++index) {
     result.push(requestCanvasConnectionArea(current));
     current = current.next();
   }
@@ -239,10 +237,10 @@ function requestCanvasConnectionArea(
       const width = domObject.css('width');
       const height = domObject.css('height');
       const result = createCanvasConnectionArea(
-        (left as unknown) as string,
-        (top as unknown) as string,
-        (width as unknown) as string,
-        (height as unknown) as string
+        left as unknown as string,
+        top as unknown as string,
+        width as unknown as string,
+        height as unknown as string
       );
       if (result.error) {
         reject(result.error);
@@ -259,19 +257,19 @@ function createCanvasConnectionArea(
   width: string,
   height: string
 ): { result?: CanvasConnectionArea; error?: string } {
-  const theLeft = new ParsedNumPixels(left, 'left');
+  const theLeft = new ParsedNumberPixels(left, 'left');
   if (!theLeft.hasNumber) {
     return { error: theLeft.error };
   }
-  const theTop = new ParsedNumPixels(top, 'top');
+  const theTop = new ParsedNumberPixels(top, 'top');
   if (!theTop.hasNumber) {
     return { error: theTop.error };
   }
-  const theWidth = new ParsedNumPixels(width, 'width');
+  const theWidth = new ParsedNumberPixels(width, 'width');
   if (!theWidth.hasNumber) {
     return { error: theWidth.error };
   }
-  const theHeight = new ParsedNumPixels(height, 'height');
+  const theHeight = new ParsedNumberPixels(height, 'height');
   if (!theHeight.hasNumber) {
     return { error: theHeight.error };
   }
@@ -286,24 +284,24 @@ function createCanvasConnectionArea(
 }
 
 function requestCanvasConnections(
-  numConnections: number
+  numberConnections: number
 ): Promise<CanvasConnection[]> {
   const promises: Promise<CanvasConnection>[] = [];
-  for (let i = 0; i < numConnections; ++i) {
-    promises.push(requestCanvasConnection(i));
+  for (let index = 0; index < numberConnections; ++index) {
+    promises.push(requestCanvasConnection(index));
   }
   return Promise.all(promises);
 }
 
-function awaitFlowChartConnections(numConnections: number) {
-  cy.get(connectionSearchString, { timeout: 10000 }).should('exist');
-  for (let i = 0; i < numConnections; ++i) {
-    awaitFlowChartConnectionComplete(i);
+function awaitFlowChartConnections(numberConnections: number) {
+  cy.get(connectionSearchString, { timeout: 10_000 }).should('exist');
+  for (let index = 0; index < numberConnections; ++index) {
+    awaitFlowChartConnectionComplete(index);
   }
 }
 
 function awaitFlowChartConnectionComplete(index: number) {
-  cy.get(connectionSearchString, { timeout: 10000 }).eq(index).should('exist');
+  cy.get(connectionSearchString, { timeout: 10_000 }).eq(index).should('exist');
 }
 
 function requestCanvasConnection(index: number): Promise<CanvasConnection> {
@@ -325,7 +323,7 @@ function requestCanvasConnection(index: number): Promise<CanvasConnection> {
                   .invoke('css', 'transform')
                   .then((domTransform) => {
                     const parsedPropertyD = new ParsedPathDProperty(
-                      (domD as unknown) as string
+                      domD as unknown as string
                     );
                     if (parsedPropertyD.hasError()) {
                       reject(
@@ -333,9 +331,10 @@ function requestCanvasConnection(index: number): Promise<CanvasConnection> {
                       );
                       return;
                     }
-                    const parsedPropertyTransform = new ParsedClassTransformProperty(
-                      (domTransform as unknown) as string
-                    );
+                    const parsedPropertyTransform =
+                      new ParsedClassTransformProperty(
+                        domTransform as unknown as string
+                      );
                     if (parsedPropertyTransform.hasError()) {
                       reject(
                         'Property transform error: ' +
@@ -343,8 +342,8 @@ function requestCanvasConnection(index: number): Promise<CanvasConnection> {
                       );
                     }
                     const resultOrError = createCanvasConnection(
-                      (left as unknown) as string,
-                      (top as unknown) as string,
+                      left as unknown as string,
+                      top as unknown as string,
                       parsedPropertyD.getBeginX(),
                       parsedPropertyD.getBeginY(),
                       parsedPropertyD.getEndX(),
@@ -380,11 +379,11 @@ function createCanvasConnection(
   transformX: string,
   transformY: string
 ): { result?: CanvasConnection; error?: string } {
-  const theLeft = new ParsedNumPixels(left, 'left');
+  const theLeft = new ParsedNumberPixels(left, 'left');
   if (!theLeft.hasNumber) {
     return { error: theLeft.error };
   }
-  const theTop = new ParsedNumPixels(top, 'top');
+  const theTop = new ParsedNumberPixels(top, 'top');
   if (!theTop.hasNumber) {
     return { error: theTop.error };
   }

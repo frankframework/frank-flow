@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { jqxDropDownButtonComponent } from 'jqwidgets-ng/jqxdropdownbutton';
 import { jqxTreeComponent } from 'jqwidgets-ng/jqxtree';
 import { File } from '../../shared/models/file.model';
-import { CodeService } from '../../shared/services/code.service';
+import { CurrentFileService } from '../../shared/services/current-file.service';
 import { Settings } from '../settings/settings.model';
 import { SettingsService } from '../settings/settings.service';
 import TreeItem = jqwidgets.TreeItem;
@@ -24,7 +24,7 @@ export class SelectorComponent implements AfterViewInit {
 
   constructor(
     private settingsService: SettingsService,
-    private codeService: CodeService
+    private currentFileService: CurrentFileService
   ) {}
 
   ngAfterViewInit(): void {
@@ -41,13 +41,15 @@ export class SelectorComponent implements AfterViewInit {
   }
 
   getCurrentFile(): void {
-    this.codeService.curFileObservable.subscribe({
+    this.currentFileService.currentFileObservable.subscribe({
       next: (currentFile) => {
         this.currentFile = currentFile;
         if (currentFile.path) {
           this.setDropDownLabel(
             currentFile.configuration + ': ' + currentFile.path
           );
+        } else {
+          this.setDropDownLabel('Select a file');
         }
       },
     });

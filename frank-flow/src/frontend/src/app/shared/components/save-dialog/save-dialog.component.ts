@@ -1,35 +1,47 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { CodeService } from '../../services/code.service';
+import { CurrentFileService } from '../../services/current-file.service';
 import { File } from '../../models/file.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-save-dialog',
   templateUrl: './save-dialog.component.html',
   styleUrls: ['./save-dialog.component.scss'],
 })
-export class SaveDialogComponent {
+export class SaveDialogComponent implements OnInit, OnDestroy {
   item!: File;
   currentFile!: File | undefined;
+  private currentFileSubscription!: Subscription;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
-    private codeService: CodeService
+    private currentFileService: CurrentFileService
   ) {}
+
+  ngOnInit() {
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe(
+        (currentFile) => (this.currentFile = currentFile)
+      );
+  }
+
+  ngOnDestroy() {
+    this.currentFileSubscription.unsubscribe();
+  }
 
   onDataAdded(): void {
     this.item = this.ngxSmartModalService.getModalData('saveDialog');
-    this.currentFile = this.codeService.getCurrentFile();
   }
 
   save(): void {
-    this.codeService.save();
-    this.codeService.switchCurrentFile(this.item);
+    this.currentFileService.save();
+    this.currentFileService.switchToFileTreeItem(this.item);
     this.ngxSmartModalService.close('saveDialog');
   }
 
   discard(): void {
-    this.codeService.switchCurrentFile(this.item);
+    this.currentFileService.switchToFileTreeItem(this.item);
     this.ngxSmartModalService.close('saveDialog');
   }
 }

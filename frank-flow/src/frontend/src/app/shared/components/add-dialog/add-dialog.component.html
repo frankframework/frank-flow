@@ -13,18 +13,15 @@
     </h1>
   </div>
   <div class="input-row">
-    <label> Do you want create a folder? </label>
-    <app-toggle
-      [(state)]="isFolder"
-      (stateChange)="isFolder = $event"
-    ></app-toggle>
+    <label> Do you want to create a folder? </label>
+    <app-toggle [(state)]="isFolder"></app-toggle>
   </div>
   <input
     #inputElement
+    (keyup.enter)="add()"
     [(ngModel)]="fileName"
     [placeholder]="(isFolder ? 'Folder' : 'File') + ' name'"
     type="text"
-    (keyup.enter)="add()"
   />
   <div class="button-actions">
     <app-button (click)="add()">Add</app-button>

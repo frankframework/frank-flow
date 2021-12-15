@@ -1,9 +1,14 @@
 import { Component } from '@angular/core';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faPlus, faRedoAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPen,
+  faPlus,
+  faRedoAlt,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FileService } from '../../shared/services/file.service';
-import { CodeService } from '../../shared/services/code.service';
+import { CurrentFileService } from '../../shared/services/current-file.service';
 import { File } from '../../shared/models/file.model';
 import { ToastrService } from 'ngx-toastr';
 
@@ -13,51 +18,49 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./explorer.component.scss'],
 })
 export class ExplorerComponent {
-  searchTerm!: string;
   currentFile!: File;
 
   constructor(
     library: FaIconLibrary,
     private ngxSmartModalService: NgxSmartModalService,
     private fileService: FileService,
-    private codeService: CodeService,
+    private currentFileService: CurrentFileService,
     private toastr: ToastrService
   ) {
-    library.addIcons(faPlus, faRedoAlt, faTrash);
+    library.addIcons(faPlus, faRedoAlt, faTrash, faPen);
     this.getCurrentFile();
   }
 
   getCurrentFile(): void {
-    this.codeService.curFileObservable.subscribe(
+    this.currentFileService.currentFileObservable.subscribe(
       (currentFile: File) => (this.currentFile = currentFile)
     );
   }
 
   openAddDialog(): void {
+    const currentDirectory = this.currentFileService.currentDirectory;
+
+    if (currentDirectory?.configuration) {
+      this.ngxSmartModalService
+        .getModal('addDialog')
+        .setData(this.currentFile, true)
+        .open();
+    } else {
+      this.toastr.error('Please select a folder first', "Can't add item");
+    }
+  }
+
+  openEditDialog(): void {
+    const currentDirectory = this.currentFileService.currentDirectory;
+
     this.ngxSmartModalService
-      .getModal('addDialog')
+      .getModal('editDialog')
       .setData(this.currentFile, true)
       .open();
   }
 
   deleteFile(): void {
-    this.fileService
-      .removeFileFromConfiguation(this.currentFile)
-      .then((response) => {
-        if (response) {
-          this.toastr.success(
-            `The file ${this.currentFile.path} has been removed.`,
-            'File removed!'
-          );
-          this.refreshFileTree();
-          this.codeService.getFirstFile();
-        } else {
-          this.toastr.error(
-            `The file ${this.currentFile.path} couldn't be removed.`,
-            'Error removing'
-          );
-        }
-      });
+    this.currentFileService.deleteFile();
   }
 
   refreshFileTree(): void {

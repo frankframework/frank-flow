@@ -1,42 +1,59 @@
 <ngx-smart-modal
   #optionsModal
-  (onDataAdded)="onDataAdded()"
   (onAnyCloseEvent)="onAnyCloseEvent()"
+  (onDataAdded)="onDataAdded()"
+  (onOpen)="onOpen()"
   class="optionsModal"
   customClass="nsm-centered"
   identifier="optionsModal"
 >
   <div>
-    <h1>{{ node?.getName() }}</h1>
-    <hr />
-    <h2>{{ node?.getType() }}</h2>
-    <p>{{ nodeDescription }}</p>
+    <h2>
+      {{ structureNode?.type }}
+      <ng-container *ngIf="element?.name !== structureNode?.type">
+        ({{ element?.name }})
+      </ng-container>
+      : {{ structureNode?.name }}
+    </h2>
+    <p [innerHTML]="element?.description" class="description"></p>
+    <a
+      href="{{ frankDocElementsURI }}/{{ element?.name }}"
+      style="text-decoration: none"
+      target="_blank"
+    >
+      <app-button [block]="true"
+        >Read more about {{ element?.name }}</app-button
+      >
+    </a>
     <hr />
     <!-- TODO: Name and type here, those are generic for all nodes. Other attributes can be seen as 'additional' -->
     <h2>Attributes</h2>
-    <div class="input-row" *ngIf="attributeOptions.length > 0">
+    <div *ngIf="availableAttributes.length > 0" class="input-row">
       <label for="selectAttribute">Add attribute:</label>
-      <select id="selectAttribute" [(ngModel)]="selectedAttribute" required>
-        <option selected [ngValue]="undefined" hidden disabled>
+      <select [(ngModel)]="selectedAttribute" id="selectAttribute" required>
+        <option [ngValue]="undefined" disabled hidden selected>
           Choose an attribute...
         </option>
         <option
-          *ngFor="let attributeOption of attributeOptions"
-          [ngValue]="attributeOption"
-          [hidden]="attributeIsUsed(attributeOption?.name)"
+          *ngFor="let availableAttribute of availableAttributes"
+          [hidden]="
+            attributeIsUsed(availableAttribute?.name) ||
+            availableAttribute?.deprecated
+          "
+          [ngValue]="availableAttribute"
         >
-          {{ attributeOption?.name }}
+          {{ availableAttribute?.name }}
         </option>
       </select>
     </div>
-    <div class="input-row" *ngIf="selectedAttribute">
+    <div *ngIf="selectedAttribute" class="input-row">
       <label for="newAttribute">New attribute value:</label>
       <input
-        id="newAttribute"
-        type="text"
+        (keyup.enter)="addAttribute()"
         [(ngModel)]="newAttributeValue"
         [placeholder]="selectedAttribute?.default ?? ''"
-        (keyup.enter)="addAttribute()"
+        id="newAttribute"
+        type="text"
       />
     </div>
     <div
@@ -44,10 +61,10 @@
       class="row"
     >
       <label>Description of attribute</label>
-      <div [innerHTML]="selectedAttribute?.description"></div>
+      <p [innerHTML]="selectedAttribute?.description"></p>
     </div>
-    <div class="row" *ngIf="newAttributeValue">
-      <app-button (click)="addAttribute()"
+    <div *ngIf="newAttributeValue" class="row">
+      <app-button (click)="addAttribute()" [block]="true"
         >Add {{ selectedAttribute?.name }}</app-button
       >
     </div>
@@ -60,17 +77,24 @@
       "
     >
       <div
-        class="input-row"
         *ngIf="!disabledAttributes.includes(attribute.key)"
+        class="input-row"
       >
         <label for="name">{{ attribute.key }}:</label>
-        <input
-          type="text"
-          id="name"
-          [ngModel]="attributes[attribute.key].value"
-          (ngModelChange)="changeAttribute(attribute.key, $event)"
-        />
-        <app-button (click)="deleteAttribute(attribute.key)">Delete</app-button>
+        <div class="input-row--input-with-button">
+          <input
+            (keyup.enter)="optionsModal.close()"
+            (ngModelChange)="changeAttribute(attribute.key, $event)"
+            [ngModel]="attributes[attribute.key].value"
+            type="text"
+          />
+          <app-button (click)="deleteAttribute(attribute.key)">
+            <fa-icon
+              [icon]="['fas', 'trash']"
+              title="Delete attribute"
+            ></fa-icon>
+          </app-button>
+        </div>
       </div>
     </ng-container>
   </div>

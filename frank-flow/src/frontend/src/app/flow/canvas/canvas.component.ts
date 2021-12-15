@@ -2,15 +2,18 @@ import {
   AfterViewInit,
   Component,
   HostBinding,
-  HostListener,
   Input,
   OnDestroy,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { NodeService } from '../node/node.service';
-import { CodeService } from '../../shared/services/code.service';
-import { jsPlumbInstance } from 'jsplumb';
+import { CurrentFileService } from '../../shared/services/current-file.service';
+import {
+  ConnectionMadeEventInfo,
+  jsPlumbInstance,
+  OnConnectionBindInfo,
+} from 'jsplumb';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
 import { GraphService } from '../../shared/services/graph.service';
@@ -18,9 +21,8 @@ import { NodeGeneratorService } from '../../shared/services/node-generator.servi
 import { FlowStructure } from '../../shared/models/flow-structure.model';
 import { PanZoomConfig } from 'ngx-panzoom/lib/panzoom-config';
 import { PanZoomModel } from 'ngx-panzoom/lib/panzoom-model';
-import { ToastrService } from 'ngx-toastr';
-import { FlowGenerationData } from '../../shared/models/flow-generation-data.model';
-import { XmlParseError } from '../../shared/models/xml-parse-error.model';
+import { File } from '../../shared/models/file.model';
+import { SettingsService } from 'src/app/header/settings/settings.service';
 
 @Component({
   selector: 'app-canvas',
@@ -28,218 +30,119 @@ import { XmlParseError } from '../../shared/models/xml-parse-error.model';
   styleUrls: ['./canvas.component.scss'],
 })
 export class CanvasComponent implements AfterViewInit, OnDestroy {
-  private readonly LAST_ZOOM_LEVEL = 0.25;
-
-  @Input() panzoomConfig!: PanZoomConfig;
-
+  @Input()
+  public panzoomConfig!: PanZoomConfig;
+  @HostBinding('tabindex')
+  public tabindex = 1;
+  public flowUpdate = false;
+  public locked!: boolean;
   @ViewChild('canvas', { read: ViewContainerRef })
-  viewContainerRef!: ViewContainerRef;
-
-  jsPlumbInstance!: jsPlumbInstance;
-  currentFileSubscription!: Subscription;
-  flowUpdate = false;
-  flowGenerator!: Worker;
-  errorsFound!: boolean;
-
-  @HostBinding('tabindex') tabindex = 1;
-
-  @HostListener('window:keydown', ['$event'])
-  onKeyUp(kbdEvent: KeyboardEvent): void {
-    this.handleKeyboardUpEvent(kbdEvent);
-  }
-
+  private viewContainerRef!: ViewContainerRef;
+  private jsPlumbInstance!: jsPlumbInstance;
+  private currentFileSubscription!: Subscription;
+  private settingsSubscription!: Subscription;
+  private errors!: string[] | undefined;
+  private connectionIsMoving = false;
   private modelChangedSubscription!: Subscription;
+  private currentFile!: File;
 
   constructor(
     private nodeService: NodeService,
-    private codeService: CodeService,
+    private currentFileService: CurrentFileService,
     private flowStructureService: FlowStructureService,
     private graphService: GraphService,
     private nodeGeneratorService: NodeGeneratorService,
-    private toastr: ToastrService
+    private settingsService: SettingsService
   ) {
     this.jsPlumbInstance = this.nodeService.getInstance();
     this.setConnectionEventListeners();
   }
 
   onModelChanged(model: PanZoomModel): void {
-    this.jsPlumbInstance.setZoom(
-      model.zoomLevel ? model.zoomLevel / 2 : this.LAST_ZOOM_LEVEL
-    );
+    const zoom = this.calculateZoomLevel(model.zoomLevel);
+    this.jsPlumbInstance.setZoom(zoom);
+  }
+
+  calculateZoomLevel(zoomLevel: number): number {
+    const neutralZoomLevel = 1;
+    const minZoomLevel = 0.5;
+    const zoomStep = 0.5;
+    const zoomOutLevel = minZoomLevel + zoomLevel * zoomStep;
+    const isZoomingIn = zoomLevel > neutralZoomLevel;
+    return isZoomingIn ? zoomLevel : zoomOutLevel;
   }
 
   ngAfterViewInit(): void {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
-    this.createGeneratorWorker();
-    this.setCurrentFileListener();
-    this.setGeneratorWorkerListener();
+    this.subscribeToCurrentFile();
+    this.subscribeToSettings();
     if (this.panzoomConfig) {
       this.modelChangedSubscription = this.panzoomConfig.modelChanged.subscribe(
         (model: PanZoomModel) => this.onModelChanged(model)
       );
     }
-    this.codeService.reloadFile();
   }
 
   ngOnDestroy(): void {
     this.currentFileSubscription.unsubscribe();
-    this.jsPlumbInstance.reset(true);
+    this.settingsSubscription.unsubscribe();
+    this.jsPlumbInstance.reset();
     this.viewContainerRef.clear();
   }
 
-  createGeneratorWorker(): void {
-    if (Worker) {
-      this.flowGenerator = new Worker(
-        new URL('../../shared/workers/flow-generator.worker', import.meta.url),
-        {
-          name: 'flow-generator',
-          type: 'module',
-        }
-      );
-    }
-  }
-
-  handleKeyboardUpEvent(kbdEvent: KeyboardEvent): void {
-    if (kbdEvent.ctrlKey && kbdEvent.key === 'z') {
-      this.codeService.undo();
-    } else if (kbdEvent.ctrlKey && kbdEvent.key === 'y') {
-      this.codeService.redo();
-    } else if (kbdEvent.ctrlKey && kbdEvent.key === 's') {
-      kbdEvent.preventDefault();
-      this.codeService.save();
-    }
-  }
-
-  setGeneratorWorkerListener(): void {
-    this.flowGenerator.onmessage = ({ data }) => {
-      this.toastr.clear();
-      if (data) {
-        this.flowStructureService.errorSubject.next(data.errors);
-
-        if (this.parsingErrorsFound(data)) {
-          this.showParsingErrors(data.errors);
-        } else {
-          this.flowStructureService.setStructure(data.structure);
-          this.generateFlow(data.structure);
-        }
-      }
-    };
-  }
-
-  parsingErrorsFound(data: FlowGenerationData): boolean {
-    this.errorsFound = data.errors.length > 0;
-    return this.errorsFound;
-  }
-
-  showParsingErrors(errors: string[]): void {
-    const parsedErrors = this.groupSimilarErrors(errors);
-    parsedErrors.forEach((error: XmlParseError) => {
-      this.toastr.error(
-        error.getTemplateString(),
-        'Parsing error found in XML',
-        {
-          disableTimeOut: true,
-        }
-      );
-    });
-  }
-
-  groupSimilarErrors(errors: string[]): XmlParseError[] {
-    const groupedErrors: XmlParseError[] = [];
-    errors.forEach((errorMessage, index) => {
-      const lastError = groupedErrors[groupedErrors.length - 1];
-      const error = this.parseErrorMessage(errorMessage);
-      if (this.errorMessageEqualToLast(error, lastError)) {
-        if (this.errorColumnFollowsLast(error, lastError)) {
-          lastError.endColumn = error.startColumn;
-        } else if (this.errorLineFollowsLast(error, lastError)) {
-          lastError.endLine = error.startLine;
-        }
-      } else {
-        groupedErrors.push(error);
-      }
-    });
-    return groupedErrors;
-  }
-
-  errorMessageEqualToLast(
-    error: XmlParseError,
-    lastError: XmlParseError
-  ): boolean {
-    return lastError && lastError.message === error.message;
-  }
-
-  errorColumnFollowsLast(
-    error: XmlParseError,
-    lastError: XmlParseError
-  ): boolean {
-    return (
-      lastError.endLine === error.startLine &&
-      lastError.endColumn + 1 === error.startColumn
-    );
-  }
-
-  errorLineFollowsLast(
-    error: XmlParseError,
-    lastError: XmlParseError
-  ): boolean {
-    return lastError.endLine + 1 === error.startLine && error.startColumn === 1;
-  }
-
-  parseErrorMessage(error: string): XmlParseError {
-    const [startLine, startColumn, message] = error
-      .split(/([0-9]+):([0-9]+):\s(.+)/)
-      .filter((i) => i);
-    return new XmlParseError({
-      startLine: +startLine,
-      startColumn: +startColumn,
-      message,
-    });
-  }
-
-  setCurrentFileListener(): void {
-    this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
-      {
-        next: (data): void => {
-          this.flowGenerator.postMessage(data.data);
+  subscribeToCurrentFile(): void {
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe({
+        next: (currentFile: File): void => {
+          this.errors = currentFile.errors;
+          this.locked = this.XmlErrorsFound();
+          this.currentFile = currentFile;
+          if (currentFile.flowStructure && currentFile.flowNeedsUpdate) {
+            this.generateFlow(currentFile.flowStructure);
+          }
         },
-      }
-    );
+      });
+  }
+
+  subscribeToSettings(): void {
+    this.settingsSubscription = this.settingsService
+      .getSettings()
+      .subscribe(() => {
+        if (this.flowStructureIsReceived()) {
+          this.generateFlow(this.currentFile.flowStructure!);
+        }
+      });
+  }
+
+  flowStructureIsReceived(): boolean {
+    return !!(this.currentFile && this.currentFile.flowStructure);
+  }
+
+  XmlErrorsFound(): boolean {
+    return this.errors !== undefined && this.errors.length > 0;
   }
 
   setConnectionEventListeners(): void {
-    this.jsPlumbInstance.bind('connection', (info, originalEvent) => {
-      if (originalEvent) {
-        const sourceName = info.sourceEndpoint.anchor.elementId;
-        const targetName = info.targetEndpoint.anchor.elementId;
-
-        this.flowStructureService.addConnection(sourceName, targetName);
-      }
-    });
-
-    this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) => {
-      if (originalEvent) {
-        const sourceName = info.sourceEndpoint.anchor.elementId;
-        const targetName = info.targetEndpoint.anchor.elementId;
-
-        this.flowStructureService.deleteConnection(sourceName, targetName);
-      }
-    });
-
-    this.jsPlumbInstance.bind('dblclick', (info, originalEvent) => {
-      if (originalEvent) {
-        const sourceName = info.source.children[0].children[2].innerHTML.trim();
-        const targetName = info.target.children[0].children[2].innerHTML.trim();
-
-        if (sourceName && targetName) {
-          this.flowStructureService.deleteConnection(sourceName, targetName);
-        }
-      }
-    });
+    this.jsPlumbInstance.bind('connection', (info, originalEvent) =>
+      this.onConnection(info, originalEvent)
+    );
+    this.jsPlumbInstance.bind('connectionDetached', (info, originalEvent) =>
+      this.onConnectionDetached(info, originalEvent)
+    );
+    this.jsPlumbInstance.bind('connectionMoved', (info, originalEvent) =>
+      this.onConnectionMoved(info, originalEvent)
+    );
+    this.jsPlumbInstance.bind('dblclick', (info, originalEvent) =>
+      this.onDoubleClick(info, originalEvent)
+    );
   }
 
   generateFlow(structure: FlowStructure): void {
+    if (this.flowUpdate) {
+      return;
+    }
     this.jsPlumbInstance.ready(() => {
+      this.flowUpdate = true;
       this.jsPlumbInstance.reset(true);
       this.viewContainerRef.clear();
       this.nodeGeneratorService.resetNodes();
@@ -248,9 +151,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         if (structure && structure.firstPipe) {
           this.nodeGeneratorService.generateNodes(
             structure.firstPipe,
-            structure.listeners,
-            structure.pipes,
-            structure.exits
+            structure
           );
         }
 
@@ -260,7 +161,53 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         );
 
         this.nodeGeneratorService.generateForwards();
+        this.flowUpdate = false;
       });
     });
+  }
+
+  private onConnection(
+    info: ConnectionMadeEventInfo,
+    originalEvent: Event
+  ): void {
+    if (originalEvent == undefined || this.connectionIsMoving) {
+      this.connectionIsMoving = false;
+      return;
+    }
+    this.flowStructureService.addConnection(info.sourceId, info.targetId);
+  }
+
+  private onConnectionDetached(
+    info: OnConnectionBindInfo,
+    originalEvent: Event
+  ) {
+    if (originalEvent == undefined) {
+      return;
+    }
+    this.flowStructureService.deleteConnection(info.sourceId, info.targetId);
+    this.connectionIsMoving = false;
+  }
+
+  private onConnectionMoved(info: OnConnectionBindInfo, originalEvent: Event) {
+    if (originalEvent == undefined) {
+      return;
+    }
+    this.flowStructureService.moveConnection(
+      info.originalSourceId,
+      info.originalTargetId,
+      info.newTargetId
+    );
+    this.connectionIsMoving = true;
+  }
+
+  private onDoubleClick(info: OnConnectionBindInfo, originalEvent: Event) {
+    if (originalEvent == undefined) {
+      return;
+    }
+    this.flowStructureService.deleteConnection(
+      info.sourceId,
+      info.targetId,
+      true
+    );
   }
 }

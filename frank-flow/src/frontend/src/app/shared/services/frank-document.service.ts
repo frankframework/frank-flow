@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Observable, Subject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class FrankDocService {
-  frankDoc = new Subject<any>();
+export class FrankDocumentService {
+  private readonly frankDocUrl =
+    environment.runnerUri + '/' + environment.frankDocJsonPath;
+  private frankDoc = new ReplaySubject<any>(1);
 
   constructor() {
     this.fetchFrankDoc();
   }
 
   fetchFrankDoc(): void {
-    fetch(window.location.origin + '/' + environment.frankDocJsonPath, {
+    fetch(this.frankDocUrl, {
       method: 'GET',
       headers: {
         Accept: 'application/json',

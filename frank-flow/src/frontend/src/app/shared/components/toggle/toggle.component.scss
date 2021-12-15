@@ -21,7 +21,7 @@
   background-color: var(--border-color);
   transition: 0.4s;
 
-  &:before {
+  &::before {
     position: absolute;
     content: '';
     height: 28px;
@@ -35,7 +35,7 @@
   &.round {
     border-radius: 34px;
 
-    &:before {
+    &::before {
       border-radius: 50%;
     }
   }
@@ -44,7 +44,7 @@
 input:checked + .slider {
   background-color: var(--primary);
 
-  &:before {
+  &::before {
     transform: translateX(26px);
   }
 }

@@ -1,170 +1,191 @@
+/// <reference path="../../../../node_modules/monaco-editor/monaco.d.ts" />
+
 import { Injectable } from '@angular/core';
 import { MonacoEditorComponent } from 'src/app/editor/monaco-editor/monaco-editor.component';
 import Exit from 'src/app/flow/node/nodes/exit.model';
-import { Subject, Subscription } from 'rxjs';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
 import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
 import { FlowNodeAttributes } from '../models/flow-node-attributes.model';
-import { FlowGenerationData } from '../models/flow-generation-data.model';
 import Listener from '../../flow/node/nodes/listener.model';
 import Pipe from '../../flow/node/nodes/pipe.model';
+import { CurrentFileService } from './current-file.service';
+import { File } from '../models/file.model';
+import { FlowStructure } from '../models/flow-structure.model';
+import { ChangedAttribute } from '../models/changed-attribute.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FlowStructureService {
-  structure: any = {};
-  structureSubject: Subject<any> = new Subject<any>();
-  errorSubject: Subject<string[]> = new Subject<string[]>();
-  positionsUpdate = false;
+  public monacoEditorComponent?: MonacoEditorComponent;
+  private currentFile!: File;
+  private flowStructure!: FlowStructure;
+  private waitingOnNewStructure = false;
+  private editAttributeQueue: Map<string, ChangedAttribute[]> = new Map();
+  private flowUpdate!: boolean;
 
-  flowGenerator?: Worker;
-  monacoEditorComponent?: MonacoEditorComponent;
-  structureSubscription?: Subscription;
-
-  errorObservable = () => this.errorSubject.asObservable();
-
-  constructor() {
-    this.initializeWorker();
+  constructor(private currentFileService: CurrentFileService) {
+    this.getCurrentFile();
   }
 
-  initializeWorker(): void {
-    if (Worker) {
-      this.flowGenerator = new Worker(
-        new URL('../../shared/workers/flow-generator.worker', import.meta.url),
-        {
-          name: 'flow-generator',
-          type: 'module',
+  getCurrentFile(): void {
+    this.currentFileService.currentFileObservable.subscribe({
+      next: (currentFile: File): void => {
+        this.currentFile = currentFile;
+        if (currentFile.flowStructure) {
+          this.setFlowStructure(currentFile.flowStructure);
         }
-      );
+      },
+    });
+  }
 
-      this.flowGenerator.onmessage = ({ data }) => {
-        if (data) {
-          if (!this.parsingErrorsFound(data)) {
-            this.structure = data.structure;
-            this.structureSubject.next(data.structure);
-          }
-        }
-      };
+  setFlowStructure(flowStructure: FlowStructure): void {
+    if (this.flowStructure !== flowStructure) {
+      this.flowStructure = flowStructure;
+      this.waitingOnNewStructure = false;
+      this.attemptEditAttributes();
     }
   }
 
-  parsingErrorsFound(data: FlowGenerationData): boolean {
-    return data.errors.length > 0;
-  }
-
-  updateStructure(): void {
-    this.flowGenerator?.postMessage(
-      this.monacoEditorComponent?.codeEditorInstance.getValue()
-    );
-  }
-
-  setStructure(structure: any): void {
-    this.structureSubject.next(structure);
-    this.structure = structure;
-  }
-
-  getStructure(): any {
-    return this.structure;
-  }
-
-  refreshStructure(): void {
-    this.flowGenerator?.postMessage(
-      this.monacoEditorComponent?.codeEditorInstance.getValue()
-    );
-  }
-
-  setEditorComponent(monacoEditorComponent: MonacoEditorComponent): void {
+  setMonacoEditorComponent(monacoEditorComponent: MonacoEditorComponent): void {
     this.monacoEditorComponent = monacoEditorComponent;
   }
 
-  addConnection(sourceName: string, targetName: string): void {
-    this.positionsUpdate = true;
-    const pipes = this.structure.pipes;
-    const newForward =
-      '\n\t\t\t\t<Forward name="success" path="' + targetName + '" />';
-    let lastForward;
-    const currentPipe = pipes.find(
-      (pipe: FlowStructureNode) => pipe.attributes['name'].value === sourceName
+  highlightPipe(nodeName: string, nodeType: string) {
+    const currentNode = this.flowStructure.nodes.find(
+      (node: FlowStructureNode) =>
+        node.name === nodeName && node.type === nodeType
     );
-    const forwards = currentPipe.forwards;
-    if (forwards) {
-      lastForward = forwards[forwards.length - 1];
-    }
 
-    if (currentPipe) {
-      if (lastForward) {
-        this.monacoEditorComponent?.applyEdit(
-          {
-            startLineNumber: lastForward.line,
-            startColumn: lastForward.column,
-            endColumn: lastForward.column,
-            endLineNumber: lastForward.line,
-          },
-          newForward,
-          false
-        );
-      } else {
-        this.monacoEditorComponent?.applyEdit(
-          {
-            startLineNumber: currentPipe.line,
-            startColumn: currentPipe.column,
-            endColumn: currentPipe.column,
-            endLineNumber: currentPipe.line,
-          },
-          newForward,
-          false
-        );
-      }
+    if (currentNode) {
+      const range: monaco.IRange = {
+        startLineNumber: currentNode.line,
+        startColumn: 0,
+        endColumn: 0,
+        endLineNumber: currentNode.endLine + 1,
+      };
+
+      this.monacoEditorComponent?.highlightText(range);
     }
   }
 
-  deleteConnection(sourceName: string, targetName: string): void {
-    const sourcePipe = this.structure.pipes.find(
-      (pipe: FlowStructureNode) => pipe.name === sourceName
-    );
-    const targetForward = sourcePipe.forwards.find(
-      (forward: FlowStructureNode) =>
-        forward.attributes['path'].value === targetName
+  addConnection(sourceId: string, targetId: string): void {
+    const endLine = this.getEndLineOfSourceElement(sourceId);
+    const target = this.flowStructure.nodes.find(
+      (node) => node.uid == targetId
     );
 
-    if (targetForward) {
-      this.monacoEditorComponent?.applyEdit(
-        {
-          startLineNumber: targetForward.line,
-          startColumn: 0,
-          endColumn: targetForward.column,
-          endLineNumber: targetForward.line,
-        },
-        '',
-        false
-      );
-    }
+    const text = `\t\t\t\t<Forward name="success" path="${target?.name}" />\n`;
+    const range = {
+      startLineNumber: endLine,
+      startColumn: 0,
+      endColumn: 0,
+      endLineNumber: endLine,
+    };
+
+    this.monacoEditorComponent?.applyEdits([{ range, text }]);
+  }
+
+  getEndLineOfSourceElement(sourceId: string): number {
+    const currentPipe = this.flowStructure.pipes.find(
+      (pipe: FlowStructureNode) => pipe.uid === sourceId
+    );
+
+    return currentPipe!.endLine;
+  }
+
+  deleteConnection(
+    sourceId: string,
+    targetId: string,
+    doubleClickEvent = false
+  ): void {
+    const targetForward = this.getTargetForward(sourceId, targetId);
+
+    const text = '';
+    const range = {
+      startLineNumber: targetForward.line,
+      startColumn: 0,
+      endColumn: 0,
+      endLineNumber: targetForward.line + 1,
+    };
+
+    this.monacoEditorComponent?.applyEdits([{ range, text }], doubleClickEvent);
+  }
+
+  moveConnection(
+    originalSourceId: string,
+    originalTargetId: string,
+    newTargetId: string
+  ): void {
+    const targetForward = this.getTargetForward(
+      originalSourceId,
+      originalTargetId
+    );
+
+    const pathAttribute = targetForward.attributes['path'];
+    const newTarget = this.flowStructure.nodes.find(
+      (node) => node.uid === newTargetId
+    );
+
+    const text = `path="${newTarget?.name}"`;
+    const range = {
+      startLineNumber: pathAttribute.line,
+      startColumn: pathAttribute.startColumn,
+      endColumn: pathAttribute.endColumn,
+      endLineNumber: pathAttribute.line,
+    };
+
+    this.monacoEditorComponent?.applyEdits([{ range, text }]);
+  }
+
+  getTargetForward(sourceId: string, targetId: string): FlowStructureNode {
+    const sourcePipe = this.flowStructure.pipes.find(
+      (pipe: FlowStructureNode) => pipe.uid === sourceId
+    );
+    const targetPipe = this.flowStructure.nodes.find(
+      (pipe: FlowStructureNode) => pipe.uid === targetId
+    );
+
+    return (sourcePipe?.forwards ?? []).find(
+      (forward: FlowStructureNode) =>
+        forward.attributes['path'].value === targetPipe?.name
+    );
+  }
+
+  changeFirstPipe(newFirstPipe: string): void {
+    const firstPipe = this.flowStructure.pipeline.attributes['firstPipe'];
+
+    const text = `firstPipe="${newFirstPipe}"`;
+    const range = {
+      startLineNumber: firstPipe.line,
+      startColumn: firstPipe.startColumn,
+      endColumn: firstPipe.endColumn,
+      endLineNumber: firstPipe.line,
+    };
+
+    this.monacoEditorComponent?.applyEdits([{ range, text }]);
   }
 
   addPipe(pipeData: Pipe): void {
-    const pipes = this.structure.pipes;
-    const lastPipe = pipes[pipes.length - 1] ?? this.structure.pipeline;
+    const pipes = this.flowStructure.pipes;
+    const lastPipe = pipes[pipes.length - 1] ?? this.flowStructure.pipeline;
     const line =
       (pipes[pipes.length - 1] ? lastPipe.endLine : lastPipe.line) + 1;
     const pipeName = this.getUniquePipeName(pipeData.getName());
 
-    const pipeTemplate = `\t\t\t<${pipeData.getType()} name="${pipeName}">\n\t\t\t</${pipeData.getType()}>\n`;
+    const text = `\t\t\t<${pipeData.getType()} name="${pipeName}">\n\t\t\t</${pipeData.getType()}>\n`;
+    const range = {
+      startLineNumber: line,
+      startColumn: 0,
+      endColumn: 0,
+      endLineNumber: line,
+    };
 
-    this.monacoEditorComponent?.applyEdit(
-      {
-        startLineNumber: line,
-        startColumn: lastPipe.startColumn,
-        endColumn: lastPipe.endColumn,
-        endLineNumber: line,
-      },
-      pipeTemplate,
-      false
-    );
+    this.monacoEditorComponent?.applyEdits([{ range, text }], true);
   }
 
   getUniquePipeName(name: string): string {
-    return this.getUniqueNodeName(this.structure.pipes, name);
+    return this.getUniqueNodeName(this.flowStructure.pipes, name);
   }
 
   getUniqueNodeName(
@@ -176,117 +197,156 @@ export class FlowStructureService {
       (pipe: FlowStructureNode) => pipe.name === name + (increment ?? '')
     );
 
-    if (nameIsUsed) {
-      return this.getUniqueNodeName(nodes, name, (increment ?? 1) + 1);
-    } else {
-      return name + (increment ?? '');
-    }
+    return nameIsUsed
+      ? this.getUniqueNodeName(nodes, name, (increment ?? 1) + 1)
+      : name + (increment ?? '');
   }
 
   addListener(pipeData: Listener): void {
-    const receivers = this.structure.receivers;
-    const lastReceiver = receivers[receivers.length - 1];
+    const line = this.flowStructure.pipeline.line;
     const listenerName = this.getUniqueListenerName(pipeData.getName());
 
-    const listenerTemplate = `\t\t<Receiver name="${listenerName}">
-        \t<${pipeData.getType()} name="${listenerName}" />
-        </Receiver>\n`;
+    const text = `\t\t<Receiver name="${listenerName}Receiver">\n\t\t\t<${pipeData.getType()} name="${listenerName}" />\n\t\t</Receiver>\n`;
+    const range = {
+      startLineNumber: line,
+      startColumn: 0,
+      endColumn: 0,
+      endLineNumber: line,
+    };
 
-    this.monacoEditorComponent?.applyEdit(
-      {
-        startLineNumber: lastReceiver.endLine + 1,
-        startColumn: lastReceiver.startColumn,
-        endColumn: lastReceiver.endColumn,
-        endLineNumber: lastReceiver.endLine + 1,
-      },
-      listenerTemplate,
-      false
-    );
+    this.monacoEditorComponent?.applyEdits([{ range, text }], true);
   }
 
   getUniqueListenerName(name: string): string {
-    return this.getUniqueNodeName(this.structure.listeners, name);
+    return this.getUniqueNodeName(this.flowStructure.listeners, name);
   }
 
   addExit(exitData: Exit): void {
-    const exits = this.structure.exits;
-    const lastExit =
-      exits[exits.length - 1] ??
-      this.structure.pipes[this.structure.pipes.length - 1];
-    lastExit.line = exits[exits.length - 1] ? lastExit.line : lastExit.endLine;
+    const exits = this.flowStructure.exits;
+    const lastExit = exits[exits.length - 1] ?? this.flowStructure.pipeline;
+    const line = lastExit.line + 1;
     const exitName = this.getUniqueExitPath(exitData.getName());
 
-    const exitTemplate = `\t\t\t<${exitData.getType()} path="${exitName}" />\n`;
+    const text = `\t\t\t<${exitData.getType()} path="${exitName}" />\n`;
+    const range = {
+      startLineNumber: line,
+      startColumn: 0,
+      endColumn: 0,
+      endLineNumber: line,
+    };
 
-    this.monacoEditorComponent?.applyEdit(
-      {
-        startLineNumber: lastExit.line + 1,
-        startColumn: lastExit.startColumn,
-        endColumn: lastExit.endColumn,
-        endLineNumber: lastExit.line + 1,
-      },
-      exitTemplate,
-      false
-    );
+    this.monacoEditorComponent?.applyEdits([{ range, text }], true);
   }
 
   getUniqueExitPath(name: string): string {
-    return this.getUniqueNodeName(this.structure.exits, name);
+    return this.getUniqueNodeName(this.flowStructure.exits, name);
   }
 
-  editListenerPositions(nodeId: string, xPos: number, yPos: number): void {
-    this.editNodePositions('listeners', nodeId, xPos, yPos);
+  editNodePositions(options: {
+    nodeId: string;
+    xPos: number;
+    yPos: number;
+  }): void {
+    this.editAttributes({
+      nodeId: options.nodeId,
+      attributes: [
+        { name: 'x', value: options.xPos },
+        { name: 'y', value: options.yPos },
+      ],
+      flowUpdate: false,
+    });
   }
 
-  editExitPositions(nodeId: string, xPos: number, yPos: number): void {
-    this.editNodePositions('exits', nodeId, xPos, yPos);
-  }
+  editAttributes(options: {
+    nodeId: string;
+    attributes: ChangedAttribute[];
+    flowUpdate: boolean;
+  }): void {
+    this.flowUpdate = options.flowUpdate;
+    let nodeAttributes: ChangedAttribute[] = [];
 
-  editPipePositions(nodeId: string, xPos: number, yPos: number): void {
-    this.editNodePositions('pipes', nodeId, xPos, yPos);
-  }
-
-  editNodePositions(
-    structureNodes: string,
-    nodeId: string,
-    xPos: number,
-    yPos: number
-  ): void {
-    this.editAttributes(structureNodes, nodeId, [
-      { attribute: 'x', value: xPos },
-      { attribute: 'y', value: yPos },
-    ]);
-  }
-
-  editAttributes(
-    structureNodes: string,
-    nodeId: string,
-    attributes: { attribute: string; value: string | number }[]
-  ): void {
-    this.structureSubscription?.unsubscribe();
-    const currentAttribute = attributes.pop();
-    if (currentAttribute) {
-      if (attributes) {
-        this.structureSubscription = this.structureSubject
-          .asObservable()
-          .subscribe({
-            next: (data) => {
-              this.structure = data;
-              this.editAttributes(structureNodes, nodeId, attributes);
-            },
-          });
+    for (const attribute of options.attributes) {
+      nodeAttributes =
+        this.editAttributeQueue.get(options.nodeId) ?? nodeAttributes;
+      if (nodeAttributes.length > 0) {
+        nodeAttributes = this.addChangedAttributeToNode({
+          nodeId: options.nodeId,
+          nodeAttributes,
+          attribute,
+        });
+      } else {
+        nodeAttributes.push(attribute);
       }
-      const node = this.structure[structureNodes]?.find(
-        (node: any) => node.name === nodeId
+      this.editAttributeQueue.set(options.nodeId, nodeAttributes);
+    }
+    this.attemptEditAttributes();
+  }
+
+  addChangedAttributeToNode(options: {
+    nodeId: string;
+    nodeAttributes: ChangedAttribute[];
+    attribute: ChangedAttribute;
+  }) {
+    const indexOfSameAttribute = this.getIndexOfSameAttribute(
+      options.nodeId,
+      options.attribute.name
+    );
+    if (indexOfSameAttribute !== undefined) {
+      options.nodeAttributes[indexOfSameAttribute] = options.attribute;
+    } else {
+      options.nodeAttributes.push(options.attribute);
+    }
+    return options.nodeAttributes;
+  }
+
+  getIndexOfSameAttribute(nodeId: string, name: string): number | undefined {
+    const sameAttributeIndex = this.editAttributeQueue
+      .get(nodeId)
+      ?.findIndex((changedAttribute) => changedAttribute.name === name);
+    return sameAttributeIndex !== undefined && sameAttributeIndex >= 0
+      ? sameAttributeIndex
+      : undefined;
+  }
+
+  attemptEditAttributes(): void {
+    if (this.canApplyEditAttributes()) {
+      this.waitingOnNewStructure = true;
+      const editOperations = this.getEditOperationsForChangedAttributes();
+      if (editOperations) {
+        this.monacoEditorComponent?.applyEdits(editOperations, this.flowUpdate);
+      }
+      this.editAttributeQueue.clear();
+    }
+  }
+
+  canApplyEditAttributes(): boolean {
+    return !this.waitingOnNewStructure && this.editAttributeQueue.size > 0;
+  }
+
+  getEditOperationsForChangedAttributes():
+    | monaco.editor.IIdentifiedSingleEditOperation[]
+    | void {
+    for (const [nodeId, editAttributes] of this.editAttributeQueue.entries()) {
+      const node = this.currentFile.flowStructure?.nodes.find(
+        (node: FlowStructureNode) => node.uid === nodeId
       );
+
+      const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
+
       if (node) {
-        this.editAttribute(
-          currentAttribute.attribute,
-          currentAttribute.value,
-          node.attributes,
-          attributes.length !== 0
-        );
-        this.updateStructure();
+        for (const attribute of editAttributes) {
+          const editOperation = this.editAttribute(
+            attribute.name,
+            attribute.value,
+            node.attributes
+          );
+
+          if (editOperation) {
+            editOperations.push(editOperation);
+          }
+        }
+
+        return editOperations;
       }
     }
   }
@@ -294,28 +354,25 @@ export class FlowStructureService {
   editAttribute(
     key: string,
     value: any,
-    attributeList: FlowNodeAttributes,
-    flowUpdate = false
-  ): void {
+    attributeList: FlowNodeAttributes
+  ): monaco.editor.IIdentifiedSingleEditOperation | void {
     const attribute = this.findAttribute(attributeList, key);
 
     if (attribute) {
       const escapedValue = this.escapeSpecialChars(value);
-      const valueTemplate = `${key}="${escapedValue}"`;
       this.escapeAttribute(attribute);
 
-      this.monacoEditorComponent?.applyEdit(
-        {
-          startLineNumber: attribute.line,
-          startColumn: attribute.startColumn,
-          endColumn: attribute.endColumn,
-          endLineNumber: attribute.line,
-        },
-        valueTemplate,
-        flowUpdate
-      );
+      const text = `${key}="${escapedValue}"`;
+      const range = {
+        startLineNumber: attribute.line,
+        startColumn: attribute.startColumn,
+        endColumn: attribute.endColumn,
+        endLineNumber: attribute.line,
+      };
+
+      return { text, range };
     } else {
-      this.createAttribute(key, value, attributeList, flowUpdate);
+      this.createAttribute(key, value, attributeList);
     }
   }
 
@@ -323,15 +380,15 @@ export class FlowStructureService {
     attributeList: FlowNodeAttributes,
     search: string
   ): FlowNodeAttribute | undefined {
-    let attribute: FlowNodeAttribute | undefined = undefined;
+    let attribute: FlowNodeAttribute | undefined;
 
-    Object.entries(attributeList).forEach(
-      ([attributeKey, currentAttribute]: [string, FlowNodeAttribute]) => {
-        if (attributeKey === search) {
-          attribute = currentAttribute;
-        }
+    for (const [attributeKey, currentAttribute] of Object.entries(
+      attributeList
+    )) {
+      if (attributeKey === search) {
+        attribute = currentAttribute;
       }
-    );
+    }
 
     return attribute;
   }
@@ -361,19 +418,15 @@ export class FlowStructureService {
     const attribute = this.findAttribute(attributeList, key);
 
     if (attribute) {
-      const newValue = ``;
+      const text = ``;
       this.escapeAttribute(attribute);
-
-      this.monacoEditorComponent?.applyEdit(
-        {
-          startLineNumber: attribute.line,
-          startColumn: attribute.startColumn,
-          endColumn: attribute.endColumn,
-          endLineNumber: attribute.line,
-        },
-        newValue,
-        flowUpdate
-      );
+      const range = {
+        startLineNumber: attribute.line,
+        startColumn: attribute.startColumn,
+        endColumn: attribute.endColumn,
+        endLineNumber: attribute.line,
+      };
+      this.monacoEditorComponent?.applyEdits([{ range, text }], flowUpdate);
     }
   }
 
@@ -381,46 +434,41 @@ export class FlowStructureService {
     key: string,
     value: any,
     attributeList: FlowNodeAttributes,
-    flowUpdate: boolean
+    flowUpdate = false
   ): void {
     if (Object.entries(attributeList).length === 0) {
       return;
     }
 
-    const newValue = ` ${key}="${this.escapeSpecialChars(value)}"`;
+    const text = ` ${key}="${this.escapeSpecialChars(value)}"`;
     const lastAttribute = this.findLastAttribute(attributeList);
-
     if (lastAttribute) {
-      this.monacoEditorComponent?.applyEdit(
-        {
-          startLineNumber: lastAttribute.line,
-          endLineNumber: lastAttribute.line,
-          startColumn: lastAttribute.endColumn,
-          endColumn: lastAttribute.endColumn,
-        },
-        newValue,
-        flowUpdate
-      );
+      const range = {
+        startLineNumber: lastAttribute.line,
+        endLineNumber: lastAttribute.line,
+        startColumn: lastAttribute.endColumn,
+        endColumn: lastAttribute.endColumn,
+      };
+
+      this.monacoEditorComponent?.applyEdits([{ text, range }], flowUpdate);
     }
   }
 
   findLastAttribute(
     attributeList: FlowNodeAttributes
   ): FlowNodeAttribute | undefined {
-    let currentLastAttribute: FlowNodeAttribute | undefined = undefined;
+    let currentLastAttribute: FlowNodeAttribute | undefined;
 
-    Object.entries(attributeList).forEach(
-      ([attributeKey, attribute]: [string, FlowNodeAttribute]) => {
-        if (!currentLastAttribute) {
-          currentLastAttribute = attribute;
-        }
-        if (attribute.line > currentLastAttribute.line) {
-          currentLastAttribute = attribute;
-        } else if (attribute.endColumn > currentLastAttribute.endColumn) {
-          currentLastAttribute = attribute;
-        }
+    for (const [attributeKey, attribute] of Object.entries(attributeList)) {
+      if (!currentLastAttribute) {
+        currentLastAttribute = attribute;
       }
-    );
+      if (attribute.line > currentLastAttribute.line) {
+        currentLastAttribute = attribute;
+      } else if (attribute.endColumn > currentLastAttribute.endColumn) {
+        currentLastAttribute = attribute;
+      }
+    }
 
     return currentLastAttribute;
   }

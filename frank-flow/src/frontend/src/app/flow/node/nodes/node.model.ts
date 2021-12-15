@@ -47,6 +47,7 @@ export class Node {
   getLeft(): number | undefined {
     return this.left;
   }
+
   getAttributes(): FlowNodeAttributes | undefined {
     return this.attributes;
   }
@@ -69,9 +70,9 @@ export class Node {
       const factory = factoryResolver.resolveComponentFactory(NodeComponent);
       const component = factory.create(rootViewContainer.injector);
 
-      (component.instance as NodeComponent).node = this;
-      (component.instance as NodeComponent).jsPlumbInstance = jsPlumb;
-      (component.instance as NodeComponent).generating = generating;
+      component.instance.node = this;
+      component.instance.jsPlumbInstance = jsPlumb;
+      component.instance.generating = generating;
 
       const style = `left: ${this.getLeft()}px; top: ${this.getTop()}px;`;
       component.instance.cssClass = this.classes;

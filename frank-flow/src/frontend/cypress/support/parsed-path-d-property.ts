@@ -10,17 +10,17 @@ export class ParsedPathDProperty {
       this.errorMsg = this.unexpectedFormat(s) + 'Should start with "path"';
       return;
     }
-    let remainder = s.substr(4);
+    let remainder = s.slice(4);
     if (!(remainder.startsWith('("') && remainder.endsWith('")'))) {
       this.errorMsg = this.unexpectedFormat(s) + 'Should have "("" and "")"';
       return;
     }
-    remainder = remainder.substr(2, remainder.length - 4);
+    remainder = remainder.slice(2, -4);
     const items = remainder.split(' ');
-    const len = items.length;
-    if (len != 10) {
+    const length = items.length;
+    if (length != 10) {
       this.errorMsg =
-        this.unexpectedFormat(s) + `Expected 10 items but got ${len}`;
+        this.unexpectedFormat(s) + `Expected 10 items but got ${length}`;
       return;
     }
     if (items[0] !== 'M') {
@@ -38,10 +38,6 @@ export class ParsedPathDProperty {
     this.beginY = items[2];
     this.endX = items[8];
     this.endY = items[9];
-  }
-
-  private unexpectedFormat(s: string): string {
-    return `Unexpected format of string "${s}". `;
   }
 
   public hasError(): boolean {
@@ -66,5 +62,9 @@ export class ParsedPathDProperty {
 
   public getEndY(): string {
     return this.endY;
+  }
+
+  private unexpectedFormat(s: string): string {
+    return `Unexpected format of string "${s}". `;
   }
 }

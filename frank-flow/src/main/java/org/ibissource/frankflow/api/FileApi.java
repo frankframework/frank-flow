@@ -22,12 +22,15 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
@@ -42,9 +45,13 @@ import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.ibissource.frankflow.util.FileUtils;
 import org.ibissource.frankflow.util.MimeTypeUtil;
+  
+
 
 @Path("/configurations/{name}/files")
 public class FileApi {
+
+
 	@Context Request request;
 
 	@GET
@@ -84,28 +91,8 @@ public class FileApi {
 	@PUT
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createFolder(@PathParam("name") String configurationName, @QueryParam("path") String path) {
-		File rootFolder = FileUtils.getDir(configurationName);
-		File file = getFile(rootFolder, path);
-		if(file.exists()) {
-			if(file.isDirectory()) {
-				throw new ApiException("directory already exists", Response.Status.CONFLICT);
-			} else {
-				throw new ApiException("path is a file", Response.Status.CONFLICT);
-			}
-		}
+	public Response createFolder(@PathParam("name") String configurationName, @QueryParam("path") String path,  MultipartBody inputDataMap) {
 
-		if(FileUtils.createDir(file)) {
-			return Response.status(Response.Status.CREATED).build();
-		}
-
-		return Response.status(Response.Status.OK).build();
-	}
-
-	@POST
-	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response saveFile(@PathParam("name") String configurationName, @QueryParam("path") String path, MultipartBody inputDataMap) {
 		if(inputDataMap == null) {
 			throw new ApiException("Missing form-data post parameters");
 		}
@@ -128,6 +115,72 @@ public class FileApi {
 			if (response != null) { //If ETag matches the response will be non-null;
 				throw new WebApplicationException(response.build());
 			}
+
+			
+			try (InputStream is = fileAttachment.getObject(InputStream.class)) {
+				Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				return Response.status(Response.Status.OK).tag(eTag).build();
+			} catch (IOException e) {
+				throw new ApiException("an error occured while saving file ["+path+"]", e);
+			}
+		}
+
+
+		return Response.status(Response.Status.OK).build();
+	}
+
+	@PATCH
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response renameFolder(@PathParam("name") String configurationName, @QueryParam("path") String path, @FormParam("newName") String newName) {
+
+        if(newName == null || newName == "") {
+            throw new ApiException("an unexpected error occured, property [newName] does not exist or is empty");
+        }
+
+
+        File rootFolder = FileUtils.getDir(configurationName);
+        File file = getFile(rootFolder, path);
+
+		if(path.contains("/")) {
+			path = path.replaceFirst("(?<=/?.{0,10}/)[^/]*(?!/)$", newName);
+		} else {
+			path = newName;
+		}
+
+        File destFile = getFile(rootFolder, path);
+
+        if(!file.exists()) {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+        if(file.isDirectory()) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+
+
+        if(file.renameTo(destFile)) {
+		    return Response.status(Response.Status.OK).entity(path).type(MediaType.TEXT_PLAIN).build();
+        } else {
+            throw new ApiException("an unexpected error occured, file can't be renamed");
+        }
+	}
+
+	@POST
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response saveFile(@PathParam("name") String configurationName, @QueryParam("path") String path, MultipartBody inputDataMap) {
+		if(inputDataMap == null) {
+			throw new ApiException("Missing form-data post parameters");
+		}
+		Attachment fileAttachment = inputDataMap.getAttachment("file");
+		if(fileAttachment == null) {
+			throw new ApiException("Missing form-data [file] parameter");
+		}
+
+		File rootFolder = FileUtils.getDir(configurationName);
+		File file = getFile(rootFolder, path);
+		if(file.exists()) {
+			throw new ApiException("file already exists", Response.Status.CONFLICT);
 		}
 
 		try (InputStream is = fileAttachment.getObject(InputStream.class)) {

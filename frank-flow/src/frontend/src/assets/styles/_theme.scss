@@ -12,7 +12,7 @@ $themes: (
       'dark-cyan': $dark-cyan,
     ),
     'shades': (
-      'shade-0': #ffffff,
+      'shade-0': #fff,
       'shade-1': #f3f3f3,
       'shade-2': #c3c3c3,
       'shade-3': #969696,
@@ -38,7 +38,7 @@ $themes: (
       'shade-3': #969696,
       'shade-4': #c3c3c3,
       'shade-5': #f3f3f3,
-      'shade-6': #ffffff,
+      'shade-6': #fff,
     ),
   ),
 );
@@ -46,7 +46,6 @@ $themes: (
 @each $theme-name, $theme-vars in $themes {
   $shades: map-get($theme-vars, 'shades');
   $colors: map-get($theme-vars, 'colors');
-
   $theme: (
     'bg-color': map-get($shades, 'shade-0'),
     'bg-color-muted': map-get($shades, 'shade-1'),
@@ -81,6 +80,7 @@ $themes: (
     // define a css variable for each theme color
     @each $name, $color in $theme {
       --#{$name}: #{$color};
+      --#{$name}-shadow: #{transparentize($color, 0.5)};
     }
   }
 }

@@ -6,6 +6,7 @@ import Exit from '../../flow/node/nodes/exit.model';
 import { Node } from '../../flow/node/nodes/node.model';
 import { Forward } from '../models/forward.model';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
+import { FlowStructure } from '../models/flow-structure.model';
 import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
 
 @Injectable({
@@ -22,90 +23,103 @@ export class NodeGeneratorService {
     this.forwards = [];
   }
 
-  generateNodes(
-    firstPipe: string,
-    listeners: FlowStructureNode[],
-    pipes: FlowStructureNode[],
-    exits: FlowStructureNode[]
-  ): void {
-    this.generateListeners(listeners, firstPipe);
-    this.generatePipeline(pipes);
-    this.generateExits(exits);
+  generateNodes(firstPipe: string, flowStructure: FlowStructure): void {
+    this.generateListeners(
+      flowStructure.listeners,
+      flowStructure.pipes,
+      firstPipe
+    );
+    this.generatePipeline(flowStructure.pipes, flowStructure.nodes);
+    this.generateExits(flowStructure.exits);
   }
 
-  generateListeners(listeners: FlowStructureNode[], firstPipe: string): void {
-    listeners.forEach((listener) => {
-      const [x, y] = listener.positions;
+  generateListeners(
+    listeners: FlowStructureNode[],
+    pipes: FlowStructureNode[],
+    firstPipe: string
+  ): void {
+    for (const listener of listeners) {
+      const positions = listener.positions;
       const attributes = listener.attributes;
       const listenerNode = new Listener({
-        id: listener.name,
+        id: listener.uid,
         name: listener.name,
         type: listener.type,
-        top: y,
-        left: x,
+        top: positions.y,
+        left: positions.x,
         attributes,
       });
 
-      this.forwards.push(new Forward(listener.name, firstPipe));
-      this.nodeMap.set(listener.name, listenerNode);
-    });
+      const forwardTarget = pipes.find(
+        (targetPipe) => targetPipe.name === firstPipe
+      );
+      this.forwards.push(new Forward(listener.uid, forwardTarget?.uid!));
+      this.nodeMap.set(listener.uid, listenerNode);
+    }
   }
 
-  generatePipeline(pipes: FlowStructureNode[]): void {
-    pipes.forEach((pipe: FlowStructureNode) => {
-      const [x, y] = pipe.positions;
+  generatePipeline(
+    pipes: FlowStructureNode[],
+    nodes: FlowStructureNode[]
+  ): void {
+    for (const pipe of pipes) {
+      const positions = pipe.positions;
       const attributes = pipe.attributes;
       const node = new Pipe({
-        id: pipe.name,
+        id: pipe.uid,
         name: pipe.name,
         type: pipe.type,
-        top: y,
-        left: x,
+        top: positions.y,
+        left: positions.x,
         attributes,
       });
 
       if (pipe.forwards) {
-        pipe.forwards.forEach((forward: FlowStructureNode) => {
-          Object.entries(forward.attributes).forEach(
-            ([key, attribute]: [string, FlowNodeAttribute]) => {
-              if (key === 'path') {
-                this.forwards.push(new Forward(pipe.name, attribute.value));
-              }
+        for (const forward of pipe.forwards) {
+          for (const [key, attribute] of Object.entries(forward.attributes) as [
+            string,
+            FlowNodeAttribute
+          ][]) {
+            if (key === 'path') {
+              const forwardTarget = nodes.find(
+                (targetNode) => targetNode.name === attribute.value
+              );
+              this.forwards.push(new Forward(pipe.uid, forwardTarget?.uid!));
             }
-          );
-        });
+          }
+        }
       }
 
-      this.nodeMap.set(pipe.name, node);
-    });
+      this.nodeMap.set(pipe.uid, node);
+    }
   }
 
   generateExits(exits: any[]): void {
-    exits.forEach((exit) => {
-      const [x, y] = exit.positions;
+    for (const exit of exits) {
+      const positions = exit.positions;
       const attributes = exit.attributes;
       const node = new Exit({
-        id: exit.name,
+        id: exit.uid,
         name: exit.name,
         type: exit.type,
-        top: y,
-        left: x,
+        top: positions.y,
+        left: positions.x,
         attributes,
       });
-      this.nodeMap.set(exit.name, node);
-    });
+      this.nodeMap.set(exit.uid, node);
+    }
   }
 
   generateForwards(): void {
-    setTimeout(() =>
-      this.forwards.forEach((forward) =>
+    setTimeout(() => {
+      for (const forward of this.forwards) {
         this.nodeService.addConnection({
           uuids: [
             forward.getSource() + '_bottom',
             forward.getDestination() + '_top',
           ],
-        })
-      )
-    );
+        });
+      }
+    });
   }
 }

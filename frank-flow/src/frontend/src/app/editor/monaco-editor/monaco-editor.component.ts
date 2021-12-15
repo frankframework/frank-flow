@@ -4,8 +4,6 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  Input,
-  OnChanges,
   OnDestroy,
   Output,
   ViewChild,
@@ -14,11 +12,10 @@ import { ModeService } from '../../header/modes/mode.service';
 import { SettingsService } from '../../header/settings/settings.service';
 import { Settings } from '../../header/settings/settings.model';
 import { File } from '../../shared/models/file.model';
-import { CodeService } from '../../shared/services/code.service';
-import { FileService } from '../../shared/services/file.service';
-import { ToastrService } from 'ngx-toastr';
+import { CurrentFileService } from '../../shared/services/current-file.service';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
+import { FileType } from '../../shared/enums/file-type.enum';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -28,49 +25,44 @@ let loadPromise: Promise<void>;
   templateUrl: './monaco-editor.component.html',
   styleUrls: ['./monaco-editor.component.scss'],
 })
-export class MonacoEditorComponent
-  implements AfterViewInit, OnChanges, OnDestroy {
-  @ViewChild('editorContainer') editorContainer!: ElementRef;
+export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('editorContainer')
+  public editorContainer!: ElementRef;
 
-  @Input() code = '';
-  @Output() codeChange = new EventEmitter<string>();
+  @Output()
+  public codeChange = new EventEmitter<string>();
+  @Output()
+  public finishedLoading: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
-  currentFile = new File();
-  fileObservableUpdate = false;
+  private codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
+  private currentFile!: File;
+  private isReadOnly!: boolean;
+  private currentFileSubscription!: Subscription;
+  private modeSubscription!: Subscription;
+  private settingsSubscription!: Subscription;
 
-  currentFileSubscription!: Subscription;
-  modeSubscription!: Subscription;
-  settingsSubscription!: Subscription;
-
-  updateQueue: File[] = [];
+  private flowNeedsUpdate = true;
+  private applyEditsUpdate = false;
+  private decorations: string[] = [];
 
   constructor(
     private monacoElement: ElementRef,
     private modeService: ModeService,
     private settingsService: SettingsService,
-    private codeService: CodeService,
-    private fileService: FileService,
-    private toastr: ToastrService,
+    private currentFileService: CurrentFileService,
     private flowStructureService: FlowStructureService
   ) {
-    this.flowStructureService.setEditorComponent(this);
+    this.flowStructureService.setMonacoEditorComponent(this);
   }
 
   ngAfterViewInit(): void {
     this.loadMonaco();
   }
 
-  ngOnChanges(): void {
-    if (this.codeEditorInstance) {
-      this.codeEditorInstance.setValue(this.code);
-    }
-  }
-
   ngOnDestroy(): void {
-    this.currentFileSubscription.unsubscribe();
-    this.modeSubscription.unsubscribe();
-    this.settingsSubscription.unsubscribe();
+    this.currentFileSubscription?.unsubscribe();
+    this.modeSubscription?.unsubscribe();
+    this.settingsSubscription?.unsubscribe();
   }
 
   loadMonaco(): void {
@@ -95,13 +87,12 @@ export class MonacoEditorComponent
         };
 
         if (!(window as any).require) {
-          const loaderScript: HTMLScriptElement = document.createElement(
-            'script'
-          );
+          const loaderScript: HTMLScriptElement =
+            document.createElement('script');
           loaderScript.type = 'text/javascript';
           loaderScript.src = 'assets/monaco/vs/loader.js';
           loaderScript.addEventListener('load', onAmdLoader);
-          document.body.appendChild(loaderScript);
+          document.body.append(loaderScript);
         } else {
           onAmdLoader();
         }
@@ -112,11 +103,11 @@ export class MonacoEditorComponent
   initializeMonaco(): void {
     this.initializeEditor();
     this.initializeActions();
-    this.initializeFile();
-    this.initUpdateQueue();
-    this.initializeTwoWayBinding();
+    this.initializeOnKeyUpEvent();
+    this.initializeNewFileSubscription();
     this.initializeResizeObserver();
     this.initializeThemeObserver();
+    this.finishedLoading.emit();
   }
 
   initializeEditor(): void {
@@ -131,114 +122,124 @@ export class MonacoEditorComponent
 
   initializeActions(): void {
     this.codeEditorInstance.addAction({
-      id: 'memento-undo-action',
-      label: 'Undo',
-      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_Z],
-      contextMenuGroupId: 'memento',
-      contextMenuOrder: 2,
-      run: () => this.setValue(this.codeService.undo()),
-    });
-
-    this.codeEditorInstance.addAction({
-      id: 'memento-redo-action',
-      label: 'Redo',
-      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_Y],
-      contextMenuGroupId: 'memento',
-      contextMenuOrder: 3,
-      run: () => this.setValue(this.codeService.redo()),
-    });
-    this.codeEditorInstance.addAction({
       id: 'file-save-action',
       label: 'Save',
-      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
       contextMenuGroupId: 'file',
       contextMenuOrder: 3,
       run: () => this.save(),
     });
   }
 
-  save(): void {
-    this.codeService.save();
+  undo() {
+    this.codeEditorInstance.trigger('keyboard', 'undo', '');
+    this.setValueAsCurrentFile();
   }
 
-  initializeFile(): void {
-    this.setValue(this.codeService.getCurrentFile());
+  redo() {
+    this.codeEditorInstance.trigger('keyboard', 'redo', '');
+    this.setValueAsCurrentFile();
+  }
+
+  save(): void {
+    this.currentFileService.save();
   }
 
   setValue(file: File | undefined): void {
-    if (file?.data != null) {
-      const position = this.codeEditorInstance.getPosition();
+    if (file?.xml !== undefined) {
       this.currentFile = file;
-      this.codeEditorInstance.getModel()?.setValue(file.data);
-      if (position) {
-        this.codeEditorInstance.setPosition(position);
-      }
+      this.codeEditorInstance.getModel()?.setValue(file.xml);
     }
   }
 
-  applyEdit(range: monaco.IRange, text: string, flowUpdate: boolean): void {
-    const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
+  applyEdits(
+    editOperations: monaco.editor.IIdentifiedSingleEditOperation[],
+    flowUpdate = false
+  ): void {
+    this.flowNeedsUpdate = flowUpdate;
+    this.applyEditsUpdate = true;
 
-    const editOperation: monaco.editor.IIdentifiedSingleEditOperation = {
-      range,
-      text,
-    };
+    this.codeEditorInstance
+      .getModel()
+      ?.pushEditOperations([], editOperations, () => []);
+    this.codeEditorInstance.pushUndoStop();
 
-    editOperations.push(editOperation);
-
-    this.fileObservableUpdate = flowUpdate;
-    this.codeEditorInstance.getModel()?.applyEdits(editOperations);
+    this.setValueAsCurrentFile();
   }
 
-  initializeTwoWayBinding(): void {
-    const model = this.codeEditorInstance.getModel();
-
-    if (model) {
-      model.onDidChangeContent(
-        this.debounce(() => {
-          if (this.currentFile && !this.fileObservableUpdate) {
-            this.fileObservableUpdate = true;
-            this.currentFile.data = this.codeEditorInstance.getValue();
-            this.currentFile.saved = false;
-            this.codeService.setCurrentFile(this.currentFile);
-          } else {
-            this.fileObservableUpdate = false;
-          }
-        }, 500)
-      );
-    }
-    this.currentFileSubscription = this.codeService.curFileObservable.subscribe(
-      {
-        next: (file: File) => {
-          if (file.data != null) {
-            this.updateQueue.push(file);
-            this.currentFile = file;
-          }
-        },
-      }
+  initializeOnKeyUpEvent(): void {
+    this.codeEditorInstance?.onKeyUp(
+      this.debounce(() => this.setValueAsCurrentFile(), 500)
     );
   }
 
-  // TODO: Refactor: Only run que when there are items in it. Update que based on observer, not on interval.
-  initUpdateQueue(): void {
-    setInterval(() => {
-      const file = this.updateQueue.shift();
-      if (file && file.data != null && !this.fileObservableUpdate) {
-        this.fileObservableUpdate = true;
-        this.setValue(file);
-      } else if (file && this.fileObservableUpdate) {
-        this.fileObservableUpdate = false;
-      }
-    }, 510);
+  setValueAsCurrentFile(): void {
+    const value = this.codeEditorInstance.getModel()?.getValue();
+
+    if (this.fileNeedsToBeSaved()) {
+      this.currentFile.saved = false;
+      this.currentFile.xml = value;
+      this.currentFile.flowNeedsUpdate = this.flowNeedsUpdate;
+      this.currentFileService.updateCurrentFile(this.currentFile);
+    }
+    this.flowNeedsUpdate = true;
   }
 
-  debounce(func: any, wait: number): any {
+  fileNeedsToBeSaved(): boolean {
+    return this.currentFile && !this.isReadOnly;
+  }
+
+  initializeNewFileSubscription(): void {
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe({
+        next: (file: File) => {
+          if (this.isNewlyLoadedFile(file)) {
+            file.firstLoad = false;
+            this.setValue(file);
+            this.checkIfReadOnly(file);
+            this.currentFile = file;
+          }
+        },
+      });
+  }
+
+  isNewlyLoadedFile(file: File): boolean {
+    return !!file.firstLoad;
+  }
+
+  checkIfReadOnly(file: File): void {
+    this.isReadOnly = file.type === FileType.EMPTY;
+    this.codeEditorInstance.updateOptions({ readOnly: this.isReadOnly });
+  }
+
+  highlightText(range: monaco.IRange): void {
+    this.decorations = this.codeEditorInstance.deltaDecorations(
+      this.decorations,
+      [
+        {
+          range,
+          options: {
+            inlineClassName: 'monaco-editor__line--highlighted',
+          },
+        },
+      ]
+    );
+    this.codeEditorInstance.setPosition({
+      lineNumber: range.startLineNumber,
+      column: range.startColumn,
+    });
+  }
+
+  debounce(function_: any, wait: number): any {
     let timeout: ReturnType<typeof setTimeout> | null;
     return () => {
       if (timeout) {
         clearTimeout(timeout);
       }
-      timeout = setTimeout(() => func.apply(this, arguments), wait);
+      timeout = setTimeout(
+        () => Reflect.apply(function_, this, arguments),
+        wait
+      );
     };
   }
 

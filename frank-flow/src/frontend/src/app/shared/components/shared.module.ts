@@ -7,6 +7,8 @@ import { FileTreeComponent } from './file-tree/file-tree.component';
 import { jqxTreeModule } from 'jqwidgets-ng/jqxtree';
 import { SaveDialogComponent } from './save-dialog/save-dialog.component';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
+import { AddDialogComponent } from './add-dialog/add-dialog.component';
+import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
 
 @NgModule({
   declarations: [
@@ -14,12 +16,16 @@ import { NgxSmartModalModule } from 'ngx-smart-modal';
     ToggleComponent,
     FileTreeComponent,
     SaveDialogComponent,
+    AddDialogComponent,
+    EditDialogComponent,
   ],
   exports: [
     ButtonComponent,
     ToggleComponent,
     FileTreeComponent,
     SaveDialogComponent,
+    AddDialogComponent,
+    EditDialogComponent,
   ],
   imports: [
     CommonModule,
