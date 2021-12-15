@@ -5,7 +5,7 @@
 target
 lib
 bin
-frank-flow.properties
+frank-flow/src/frontend/frank-flow.properties
 .project
 .classpath
 .c9/
