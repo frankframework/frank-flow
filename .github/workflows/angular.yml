@@ -63,7 +63,7 @@ jobs:
         working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
         run: ./restart.sh
       - name: Sleep for 30 seconds
-        run: sleep 30s
+        run: sleep 120s
         shell: bash
       - name: Get Webpage Content
         run: curl http://localhost:1000/frank-flow/
