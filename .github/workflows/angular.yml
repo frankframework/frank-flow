@@ -66,8 +66,8 @@ jobs:
         uses: cypress-io/github-action@v2.9.7
         with:
           working-directory: frank-flow/frank-flow/src/frontend/
-          build: npm run build
-          start: npm run runner
+          build: yarn build
+          start: yarn run runner
           wait-on: "http://localhost:8080/frank-flow/"
           wait-on-timeout: 450
       #      - name: List all files
