@@ -59,23 +59,23 @@ jobs:
           key: ${{ runner.os }}-frank-runner
           restore-keys: |
             ${{ runner.os }}-frank-runner
-      - name: Start Frank!Runner port 8080
-        working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
-        run: ./restart.sh
-      #      - name: Run cypress using the Frank!Runner
-      #        uses: cypress-io/github-action@v2.9.7
-      #        with:
-      #          working-directory: frank-flow/frank-flow/src/frontend/
-      #          build: npm run build
-      #          start: npm run runner
-      #          wait-on: "http://localhost:1000/frank-flow/"
-      #          wait-on-timeout: 450
+      # - name: Start Frank!Runner port 8080
+      #   working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
+      #   run: ./restart.sh
+      - name: Run cypress using the Frank!Runner
+        uses: cypress-io/github-action@v2.9.7
+        with:
+          working-directory: frank-flow/frank-flow/src/frontend/
+          build: npm run build
+          start: npm run runner
+          wait-on: "http://localhost:8080/frank-flow/"
+          wait-on-timeout: 450
       #      - name: List all files
       #        if: always()
       #        run: tree > allFiles.txt
-      - name: Store (logging) information as artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: logs
-          path: |
-            frank-runner/build/apache-tomcat-9.0.50/logs/catalina.out
+      # - name: Store (logging) information as artifacts
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: logs
+      #     path: |
+      #       frank-runner/build/apache-tomcat-9.0.50/logs/catalina.out
