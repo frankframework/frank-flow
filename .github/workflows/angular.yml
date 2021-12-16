@@ -49,7 +49,7 @@ jobs:
       - name: Write frank-flow.properties
         run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-flow/frank-flow/src/frontend/cypress/Frank/frank-flow.properties
       - name: Build backend
-        run: mvn -f frank-flow -P frontend
+        run: mvn -f frank-flow
       - name: Cache Frank!Runner dependencies
         uses: actions/cache@v2
         with:
@@ -66,7 +66,7 @@ jobs:
         uses: cypress-io/github-action@v2.9.7
         with:
           working-directory: frank-flow/frank-flow/src/frontend/
-          #          build: yarn build:prod
+          build: yarn build:prod
           start: yarn run runner
           wait-on: "http://localhost:8080/frank-flow/"
           wait-on-timeout: 60
