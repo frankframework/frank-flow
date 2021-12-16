@@ -1,16 +1,16 @@
 name: Angular CI
 
-on: push
-#  push:
-#    branches:
-#      - master
-#    paths:
-#      - "frank-flow/src/frontend/**"
-#  pull_request:
-#      branches:
-#        - master
-#      paths:
-#        - "frank-flow/src/frontend/**"
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "frank-flow/src/frontend/**"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "frank-flow/src/frontend/**"
 
 jobs:
   cypress-test:
@@ -33,19 +33,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-      #      - name: Cache npm dependencies
-      #        uses: actions/cache@v2
-      #        with:
-      #          path: "~/.npm"
-      #          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      #          restore-keys: |
-      #            ${{ runner.os }}-node-
-      #      - name: Install npm dependencies
-      #        working-directory: frank-flow/frank-flow/src/frontend
-      #        run: npm install
-      #      - name: Run unit tests
-      #        working-directory: frank-flow/frank-flow/src/frontend
-      #        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
       - name: Write frank-flow.properties
         run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-runner/frank-flow.properties
       - name: Build backend
@@ -59,9 +46,6 @@ jobs:
           key: ${{ runner.os }}-frank-runner
           restore-keys: |
             ${{ runner.os }}-frank-runner
-      # - name: Start Frank!Runner port 8080
-      #   working-directory: frank-flow/frank-flow/src/frontend/cypress/Frank
-      #   run: ./restart.sh
       - name: Run cypress using the Frank!Runner
         uses: cypress-io/github-action@v2.9.7
         with:
@@ -70,9 +54,6 @@ jobs:
           start: yarn run runner
           wait-on: "http://localhost:8080/frank-flow/"
           wait-on-timeout: 240
-      #      - name: List all files
-      #        if: always()
-      #        run: tree > allFiles.txt
       - name: Store (logging) information as artifacts
         uses: actions/upload-artifact@v2
         with:
