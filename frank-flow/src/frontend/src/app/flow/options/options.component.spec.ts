@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OptionsComponent } from './options.component';
 import { NgxSmartModalComponent, NgxSmartModalModule } from 'ngx-smart-modal';
+import { ToastrModule } from 'ngx-toastr';
 
 describe('OptionsComponent', () => {
   let component: OptionsComponent;
@@ -10,7 +11,7 @@ describe('OptionsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [OptionsComponent, NgxSmartModalComponent],
-      imports: [NgxSmartModalModule.forChild()],
+      imports: [NgxSmartModalModule.forChild(), ToastrModule.forRoot()],
     }).compileComponents();
   });
 

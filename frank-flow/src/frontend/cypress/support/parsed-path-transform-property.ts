@@ -9,12 +9,12 @@ export class ParsedClassTransformProperty {
         this.unexpectedInput(s) + `Should start with "${startWord}"`;
       return;
     }
-    let remainder = s.substr(startWord.length);
+    let remainder = s.slice(startWord.length);
     if (!remainder.startsWith('(') && remainder.endsWith(')')) {
       this.errorMsg = this.unexpectedInput(s) + 'Should have "(" and ")"';
       return;
     }
-    remainder = remainder.substr(1, remainder.length - 2);
+    remainder = remainder.slice(1, -2);
     const numbers = remainder.split(',');
     if (numbers.length !== 6) {
       this.errorMsg = this.unexpectedInput(s) + 'Should have six numbers';

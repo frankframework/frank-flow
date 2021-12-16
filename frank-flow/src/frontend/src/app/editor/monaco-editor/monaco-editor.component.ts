@@ -60,9 +60,9 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.currentFileSubscription.unsubscribe();
-    this.modeSubscription.unsubscribe();
-    this.settingsSubscription.unsubscribe();
+    this.currentFileSubscription?.unsubscribe();
+    this.modeSubscription?.unsubscribe();
+    this.settingsSubscription?.unsubscribe();
   }
 
   loadMonaco(): void {
