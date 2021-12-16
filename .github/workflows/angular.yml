@@ -47,7 +47,7 @@ jobs:
       #        working-directory: frank-flow/frank-flow/src/frontend
       #        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
       - name: Write frank-flow.properties
-        run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-flow/frank-flow/src/frontend/frank-flow.properties
+        run: echo "frank-flow.frontend-path = $(pwd)/frank-runner" > frank-flow/frank-flow/src/frontend/frank-flow.properties
       - name: Build backend
         run: mvn -f frank-flow
       - name: Cache Frank!Runner dependencies
