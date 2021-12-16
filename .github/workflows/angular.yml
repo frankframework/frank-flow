@@ -1,0 +1,63 @@
+name: Angular CI
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "frank-flow/src/frontend/**"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - "frank-flow/src/frontend/**"
+
+jobs:
+  cypress-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout frank-flow repository
+        uses: actions/checkout@v2
+        with:
+          path: frank-flow
+      - name: Setup Node
+        uses: actions/setup-node@v2
+      - name: Checkout frank-runner
+        uses: actions/checkout@v2
+        with:
+          repository: ibissource/frank-runner
+          path: frank-runner
+      - name: Working directory
+        run: pwd
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+      - name: Write frank-flow.properties
+        run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-runner/frank-flow.properties
+      - name: Build backend
+        run: mvn -f frank-flow
+      - name: Cache Frank!Runner dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            frank-runner/build
+            frank-runner/download
+          key: ${{ runner.os }}-frank-runner
+          restore-keys: |
+            ${{ runner.os }}-frank-runner
+      - name: Run cypress using the Frank!Runner
+        uses: cypress-io/github-action@v2.9.7
+        with:
+          working-directory: frank-flow/frank-flow/src/frontend/
+          build: yarn build
+          start: yarn run runner
+          wait-on: "http://localhost:8080/frank-flow/"
+          wait-on-timeout: 240
+      - name: Store (logging) information as artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: |
+            frank-runner/build/apache-tomcat-9.0.50/logs/catalina.out
+            frank-flow/frank-flow/frontend/cypress/screenshots/

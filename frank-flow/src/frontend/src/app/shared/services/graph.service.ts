@@ -75,7 +75,7 @@ export class GraphService {
     let exitLeftMargin = 800;
     let exitTopPosition = 0;
 
-    for (let graphNode of graphNodes as any[]) {
+    for (const graphNode of graphNodes as any[]) {
       const node = nodeMap.get(graphNode.data.id);
 
       const xMultiplier = 300;

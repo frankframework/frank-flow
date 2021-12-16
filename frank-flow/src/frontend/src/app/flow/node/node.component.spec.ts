@@ -4,6 +4,7 @@ import { NodeComponent } from './node.component';
 import PipeModel from './nodes/pipe.model';
 import { jsPlumb } from 'jsplumb';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
+import { ToastrModule } from 'ngx-toastr';
 
 describe('NodeComponent', () => {
   let component: NodeComponent;
@@ -12,7 +13,7 @@ describe('NodeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [NodeComponent],
-      imports: [NgxSmartModalModule.forChild()],
+      imports: [NgxSmartModalModule.forChild(), ToastrModule.forRoot()],
     }).compileComponents();
   });
 

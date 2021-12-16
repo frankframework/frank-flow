@@ -10,13 +10,13 @@ export class ConnectionsOnCanvas {
 
   constructor(nodes: CanvasNode[], connectionAreas: CanvasConnectionArea[]) {
     this.connectionPointsByNodeId = new Map<string, CanvasPoint[]>();
-    nodes.forEach((node) => {
+    for (const node of nodes) {
       this.connectionPointsByNodeId.set(node.getId(), []);
-    });
-    connectionAreas.forEach((area) => {
+    }
+    for (const area of connectionAreas) {
       const areaCenter = area.getCenter();
       let foundId: string = '';
-      nodes.forEach((node) => {
+      for (const node of nodes) {
         if (areaCenter.atNode(node)) {
           if (foundId !== '') {
             throw new Error(
@@ -32,22 +32,21 @@ export class ConnectionsOnCanvas {
             );
           }
         }
-      });
-    });
+      }
+    }
     cy.log('Connection points by node id:');
-    this.connectionPointsByNodeId.forEach((points, id) =>
-      this.logPointsOfId(points, id)
-    );
+    for (const [id, points] of this.connectionPointsByNodeId.entries())
+      this.logPointsOfId(points, id);
     cy.log('End connection points by node id');
   }
 
   logPointsOfId(points: CanvasPoint[], id: string) {
-    const pointsStr: string = points.map((p) => p.toString()).join(', ');
-    cy.log(`id: ${id}, points: ${pointsStr}`);
+    const pointsString: string = points.map((p) => p.toString()).join(', ');
+    cy.log(`id: ${id}, points: ${pointsString}`);
   }
 
   public setCanvasConnections(connections: CanvasConnection[]): void {
-    connections.forEach((conn) => {
+    for (const conn of connections) {
       cy.log(
         `ConnectionsOnCanvas.setCanvasConnections() processes connection ${conn.toString()}`
       );
@@ -55,39 +54,39 @@ export class ConnectionsOnCanvas {
       let endId: string = '';
       try {
         beginId = this.getId(conn.getBeginPoint());
-      } catch (e) {
+      } catch (error) {
         cy.log(
           `Could not find node for begin point of connection ${conn.toString()}`
         );
-        throw e;
+        throw error;
       }
       try {
         endId = this.getId(conn.getEndPoint());
-      } catch (e) {
+      } catch (error) {
         cy.log(
           `Could not find node for end point of connection ${conn.toString()}`
         );
-        throw e;
+        throw error;
       }
       if (this.endPointsByBegin.has(beginId)) {
         this.endPointsByBegin.get(beginId)?.push(endId);
       } else {
         this.endPointsByBegin.set(beginId, [endId]);
       }
-    });
+    }
     cy.log(
       'ConnectionsOnCanvas.setCanvasConnections() endPointsByBegin has the following value:'
     );
-    this.endPointsByBegin.forEach((endNodes: string[], beginNode: string) => {
+    for (const [endNodes, beginNode] of this.endPointsByBegin) {
       cy.log(`  ${beginNode} ==> ${endNodes.toString()}`);
-    });
+    }
   }
 
   public numConnections(): number {
     let result = 0;
-    this.endPointsByBegin.forEach((endNodes: string[], beginNode: string) => {
-      result += endNodes.length;
-    });
+    for (const beginNodes of this.endPointsByBegin.values()) {
+      result += beginNodes.length;
+    }
     return result;
   }
 
@@ -100,26 +99,24 @@ export class ConnectionsOnCanvas {
     }
     const actualEndNodes = this?.endPointsByBegin.get(expected.getFrom());
     let found = false;
-    actualEndNodes?.forEach((endNode) => {
+    for (const endNode of actualEndNodes ?? []) {
       if (endNode === expectedNode) {
         found = true;
       }
-    });
+    }
     cy.log(`Returning result ${found}`);
     return found;
   }
 
   private getId(point: CanvasPoint): string {
     let result: string = '';
-    this.connectionPointsByNodeId.forEach(
-      (connectionPoints: CanvasPoint[], nodeId: string) => {
-        connectionPoints.forEach((connectionPoint) => {
-          if (point.closeTo(connectionPoint)) {
-            result = nodeId;
-          }
-        });
+    for (const [nodeId, connectionPoints] of this.connectionPointsByNodeId) {
+      for (const connectionPoint of connectionPoints) {
+        if (point.closeTo(connectionPoint)) {
+          result = nodeId;
+        }
       }
-    );
+    }
     if (result === '') {
       throw new Error(
         `Point ${point.toString()} is not close to a node\'s connection point`

@@ -5,7 +5,8 @@
   "screenshotsFolder": "cypress/screenshots",
   "pluginsFile": "cypress/plugins/index.js",
   "fixturesFolder": "cypress/fixtures",
-  "baseUrl": "http://localhost:1000/frank-flow/",
+  "baseUrl": "http://localhost:8080/frank-flow/",
   "chromeWebSecurity": false,
-  "requestTimeout": 30000
+  "requestTimeout": 30000,
+  "video": false
 }

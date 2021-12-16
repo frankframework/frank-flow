@@ -54,9 +54,9 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.currentFileSubscription.unsubscribe();
-    this.fileSubscription.unsubscribe();
-    this.settingsSubscription.unsubscribe();
+    this.currentFileSubscription?.unsubscribe();
+    this.fileSubscription?.unsubscribe();
+    this.settingsSubscription?.unsubscribe();
   }
 
   getFiles(): void {
