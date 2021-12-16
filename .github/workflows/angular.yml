@@ -69,7 +69,7 @@ jobs:
           build: yarn build
           start: yarn run runner
           wait-on: "http://localhost:8080/frank-flow/"
-          wait-on-timeout: 120
+          wait-on-timeout: 240
       #      - name: List all files
       #        if: always()
       #        run: tree > allFiles.txt
