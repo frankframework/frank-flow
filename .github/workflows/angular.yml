@@ -73,9 +73,10 @@ jobs:
       #      - name: List all files
       #        if: always()
       #        run: tree > allFiles.txt
-      # - name: Store (logging) information as artifacts
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: logs
-      #     path: |
-      #       frank-runner/build/apache-tomcat-9.0.50/logs/catalina.out
+      - name: Store (logging) information as artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: |
+            frank-runner/build/apache-tomcat-9.0.50/logs/catalina.out
+            frank-flow/frank-flow/frontend/cypress/screenshots/
