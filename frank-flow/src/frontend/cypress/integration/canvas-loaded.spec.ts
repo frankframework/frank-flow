@@ -11,13 +11,13 @@ describe('Check canvas loaded', function () {
     cy.get('body');
   });
 
-  it('Check canvas', function () {
-    cy.get('.canvas');
-  });
-
-  it('Check canvas has contents', function () {
-    cy.get('.canvas > app-node', { timeout: 30_000 });
-  });
+  // it('Check canvas', function () {
+  //   cy.get('.canvas');
+  // });
+  //
+  // it('Check canvas has contents', function () {
+  //   cy.get('.canvas > app-node', { timeout: 30_000 });
+  // });
 
   it('Check whether API available', function () {
     cy.request('/api/configurations', { log: true }).then((response) => {
