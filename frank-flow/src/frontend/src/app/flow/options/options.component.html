@@ -9,11 +9,10 @@
 >
   <div>
     <h2>
-      {{ structureNode?.type }}
-      <ng-container *ngIf="element?.name !== structureNode?.type">
-        ({{ element?.name }})
-      </ng-container>
-      : {{ structureNode?.name }}
+      {{ structureNode?.type
+      }}<ng-container *ngIf="element?.name !== structureNode?.type"
+        >({{ element?.name }}) </ng-container
+      >: {{ structureNode?.name }}
     </h2>
     <p [innerHTML]="element?.description" class="description"></p>
     <a
@@ -97,5 +96,12 @@
         </div>
       </div>
     </ng-container>
+    <hr />
+    <div class="input-row">
+      <label>Permanently delete this {{ structureNode?.type }}</label>
+      <app-button (click)="deleteNode()" [block]="true"
+        >Delete {{ structureNode?.name }}</app-button
+      >
+    </div>
   </div>
 </ngx-smart-modal>

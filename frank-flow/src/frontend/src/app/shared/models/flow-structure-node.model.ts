@@ -10,6 +10,7 @@ export class FlowStructureNode {
   public forwards?: any[];
   public name: string;
   public positions: { x: number; y: number };
+  public parent?: FlowStructureNode;
 
   constructor(
     line: number,
