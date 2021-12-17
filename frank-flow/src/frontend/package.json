@@ -51,7 +51,7 @@
     "@angular-eslint/template-parser": "^13.0.1",
     "@angular/cli": "^13.1.1",
     "@angular/compiler-cli": "^13.1.0",
-    "@briebug/cypress-schematic": "^5.0.0",
+    "@briebug/cypress-schematic": "^5.0.1",
     "@types/cytoscape": "^3.19.2",
     "@types/jasmine": "^3.10.2",
     "@types/node": "^16.11.12",
