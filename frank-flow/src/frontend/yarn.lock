@@ -1688,13 +1688,13 @@
   dependencies:
     "@types/node" "*"
 
-"@typescript-eslint/eslint-plugin@^5.6.0":
-  version "5.6.0"
-  resolved "https://registry.npmjs.org/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.6.0.tgz"
-  integrity sha512-MIbeMy5qfLqtgs1hWd088k1hOuRsN9JrHUPwVVKCD99EOUqScd7SrwoZl4Gso05EAP9w1kvLWUVGJOVpRPkDPA==
+"@typescript-eslint/eslint-plugin@^5.7.0":
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.7.0.tgz#12d54709f8ea1da99a01d8a992cd0474ad0f0aa9"
+  integrity sha512-8RTGBpNn5a9M628wBPrCbJ+v3YTEOE2qeZb7TDkGKTDXSj36KGRg92SpFFaR/0S3rSXQxM0Og/kV9EyadsYSBg==
   dependencies:
-    "@typescript-eslint/experimental-utils" "5.6.0"
-    "@typescript-eslint/scope-manager" "5.6.0"
+    "@typescript-eslint/experimental-utils" "5.7.0"
+    "@typescript-eslint/scope-manager" "5.7.0"
     debug "^4.3.2"
     functional-red-black-tree "^1.0.1"
     ignore "^5.1.8"
@@ -1714,15 +1714,15 @@
     eslint-scope "^5.1.1"
     eslint-utils "^3.0.0"
 
-"@typescript-eslint/experimental-utils@5.6.0":
-  version "5.6.0"
-  resolved "https://registry.npmjs.org/@typescript-eslint/experimental-utils/-/experimental-utils-5.6.0.tgz"
-  integrity sha512-VDoRf3Qj7+W3sS/ZBXZh3LBzp0snDLEgvp6qj0vOAIiAPM07bd5ojQ3CTzF/QFl5AKh7Bh1ycgj6lFBJHUt/DA==
+"@typescript-eslint/experimental-utils@5.7.0":
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-5.7.0.tgz#2b1633e6613c3238036156f70c32634843ad034f"
+  integrity sha512-u57eZ5FbEpzN5kSjmVrSesovWslH2ZyNPnaXQMXWgH57d5+EVHEt76W75vVuI9qKZ5BMDKNfRN+pxcPEjQjb2A==
   dependencies:
     "@types/json-schema" "^7.0.9"
-    "@typescript-eslint/scope-manager" "5.6.0"
-    "@typescript-eslint/types" "5.6.0"
-    "@typescript-eslint/typescript-estree" "5.6.0"
+    "@typescript-eslint/scope-manager" "5.7.0"
+    "@typescript-eslint/types" "5.7.0"
+    "@typescript-eslint/typescript-estree" "5.7.0"
     eslint-scope "^5.1.1"
     eslint-utils "^3.0.0"
 
@@ -5510,10 +5510,10 @@ mkdirp@^1.0.3, mkdirp@^1.0.4, mkdirp@~1.0.4:
   resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-1.0.4.tgz"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
-monaco-editor@^0.30.1:
-  version "0.30.1"
-  resolved "https://registry.npmjs.org/monaco-editor/-/monaco-editor-0.30.1.tgz"
-  integrity sha512-B/y4+b2O5G2gjuxIFtCE2EkM17R2NM7/3F8x0qcPsqy4V83bitJTIO4TIeZpYlzu/xy6INiY/+84BEm6+7Cmzg==
+monaco-editor@^0.31.1:
+  version "0.31.1"
+  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.31.1.tgz#67f597b3e45679d1f551237e12a3a42c4438b97b"
+  integrity sha512-FYPwxGZAeP6mRRyrr5XTGHD9gRXVjy7GUzF4IPChnyt3fS5WrNxIkS8DNujWf6EQy0Zlzpxw8oTVE+mWI2/D1Q==
 
 ms@2.0.0:
   version "2.0.0"
@@ -7700,10 +7700,10 @@ typed-assert@^1.0.8:
   resolved "https://registry.npmjs.org/typed-assert/-/typed-assert-1.0.8.tgz"
   integrity sha512-5NkbXZUlmCE73Fs7gvkp1XXJWHYetPkg60QnQ2NXQmBYNFxbBr2zA8GCtaH4K2s2WhOmSlgiSTmrjrcm5tnM5g==
 
-typescript@^4.5.3:
-  version "4.5.3"
-  resolved "https://registry.npmjs.org/typescript/-/typescript-4.5.3.tgz"
-  integrity sha512-eVYaEHALSt+s9LbvgEv4Ef+Tdq7hBiIZgii12xXJnukryt3pMgJf6aKhoCZ3FWQsu6sydEnkg11fYXLzhLBjeQ==
+typescript@^4.5.4:
+  version "4.5.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.4.tgz#a17d3a0263bf5c8723b9c52f43c5084edf13c2e8"
+  integrity sha512-VgYs2A2QIRuGphtzFV7aQJduJ2gyfTljngLzjpfW9FoYZF6xuw1W0vW9ghCKLfcWrCFxK81CSGRAvS1pn4fIUg==
 
 ua-parser-js@^0.7.30:
   version "0.7.31"
