@@ -51,7 +51,7 @@ jobs:
         with:
           working-directory: frank-flow/frank-flow/src/frontend/
           build: yarn build
-          start: yarn run runner
+          start: yarn runner
           wait-on: "http://localhost:8080/frank-flow/"
           wait-on-timeout: 240
       - name: Store (logging) information as artifacts
