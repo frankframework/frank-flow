@@ -1239,10 +1239,10 @@
     "@babel/helper-validator-identifier" "^7.15.7"
     to-fast-properties "^2.0.0"
 
-"@briebug/cypress-schematic@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.npmjs.org/@briebug/cypress-schematic/-/cypress-schematic-5.0.0.tgz"
-  integrity sha512-CMjPSihkS9BpI3J4uRs/KINahh7QgG98bv9oIyTjNPQhX+n13iuhQTXgFukxwd6CylPWOTQOLS/mnKqf6LvMGg==
+"@briebug/cypress-schematic@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@briebug/cypress-schematic/-/cypress-schematic-5.0.1.tgz#c1877761af4dc76bb42cc89c90417a7a777c856a"
+  integrity sha512-FYdNwQnKaZTKoVT4cUffSy25v/waDNE6ZThrRLykchjk7fY6sAscdvMiG1LCdQ+95x+4+495rYbaQ3R9MfB0kw==
   dependencies:
     "@angular-devkit/architect" "^0.1001.0"
     "@angular-devkit/core" "^10.1.0"
@@ -5476,10 +5476,10 @@ mkdirp@^1.0.3, mkdirp@^1.0.4, mkdirp@~1.0.4:
   resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-1.0.4.tgz"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
-monaco-editor@^0.30.1:
-  version "0.30.1"
-  resolved "https://registry.npmjs.org/monaco-editor/-/monaco-editor-0.30.1.tgz"
-  integrity sha512-B/y4+b2O5G2gjuxIFtCE2EkM17R2NM7/3F8x0qcPsqy4V83bitJTIO4TIeZpYlzu/xy6INiY/+84BEm6+7Cmzg==
+monaco-editor@^0.31.1:
+  version "0.31.1"
+  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.31.1.tgz#67f597b3e45679d1f551237e12a3a42c4438b97b"
+  integrity sha512-FYPwxGZAeP6mRRyrr5XTGHD9gRXVjy7GUzF4IPChnyt3fS5WrNxIkS8DNujWf6EQy0Zlzpxw8oTVE+mWI2/D1Q==
 
 ms@2.0.0:
   version "2.0.0"
