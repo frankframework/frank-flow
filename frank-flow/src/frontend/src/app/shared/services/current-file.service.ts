@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { XmlParseError } from '../models/xml-parse-error.model';
 import { FileType } from '../enums/file-type.enum';
 import { SessionService } from './session.service';
+import { PanZoomService } from './pan-zoom.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,8 @@ export class CurrentFileService {
   constructor(
     private fileService: FileService,
     private toastr: ToastrService,
-    private sessionService: SessionService
+    private sessionService: SessionService,
+    private panZoomService: PanZoomService
   ) {
     this.initializeXmlToFlowStructureWorker();
     this.initializeXmlToFlowStructureWorkerEventListener();
@@ -269,6 +271,11 @@ export class CurrentFileService {
       firstLoad: true,
     };
     this.setCurrentFile(currentFile);
+    this.resetPanZoom();
+  }
+
+  resetPanZoom(): void {
+    this.panZoomService.reset();
   }
 
   deleteFile(): void {

@@ -8,7 +8,6 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { PanZoomAPI, PanZoomConfig, PanZoomConfigOptions } from 'ngx-panzoom';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
   faArrowDown,
@@ -27,6 +26,7 @@ import { Node } from './node/nodes/node.model';
 import { Subscription } from 'rxjs';
 import { FileType } from '../shared/enums/file-type.enum';
 import { FlowStructureService } from '../shared/services/flow-structure.service';
+import { PanZoomService } from '../shared/services/pan-zoom.service';
 
 type canvasDirection = 'height' | 'width';
 type CanvasSize = { x: number; y: number };
@@ -37,43 +37,29 @@ type CanvasSize = { x: number; y: number };
   styleUrls: ['./flow.component.scss'],
 })
 export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
+  private readonly canvasExpansionSize = 500;
+
+  @ViewChild('nodeContainer', { read: ElementRef })
+  private nodeContainerRef!: ElementRef;
+
+  private canvasElement?: HTMLElement;
+  private currentFile!: File;
+  private nodes!: Map<string, Node>;
+  private currentFileSubscription!: Subscription;
+  private graphSubscription!: Subscription;
+
   public fileIsLoading!: boolean;
   public fileIsConfiguration!: boolean;
   public fileIsEmpty!: boolean;
-  private readonly canvasExpansionSize = 500;
-  @ViewChild('nodeContainer', { read: ElementRef })
-  private nodeContainerRef!: ElementRef;
-  private canvasElement?: HTMLElement;
-  private panZoomConfigOptions: PanZoomConfigOptions = {
-    zoomLevels: 3,
-    scalePerZoomLevel: 2,
-    zoomStepDuration: 0.2,
-    freeMouseWheel: false,
-    invertMouseWheel: true,
-    zoomToFitZoomLevelFactor: 1,
-    dragMouseButton: 'left',
-    zoomButtonIncrement: 0.1,
-    zoomOnDoubleClick: false,
-    dynamicContentDimensions: true,
-    neutralZoomLevel: 1,
-    initialZoomLevel: 1,
-  };
-  public panzoomConfig: PanZoomConfig = new PanZoomConfig(
-    this.panZoomConfigOptions
-  );
-  private currentFile!: File;
-  private nodes!: Map<string, Node>;
-  private panzoomApiSubscription!: Subscription;
-  private currentFileSubscription!: Subscription;
-  private graphSubscription!: Subscription;
-  private panZoomAPI!: PanZoomAPI;
+  public panZoomConfig = this.panZoomService.panZoomConfig;
 
   constructor(
     private renderer: Renderer2,
     private library: FaIconLibrary,
     private currentFileService: CurrentFileService,
     private graphService: GraphService,
-    private flowStructureService: FlowStructureService
+    private flowStructureService: FlowStructureService,
+    private panZoomService: PanZoomService
   ) {
     this.library.addIcons(
       faArrowDown,
@@ -94,7 +80,6 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.showCanvasOrMessage();
-    this.setPanzoomApiSubscription();
     this.setCurrentFileSubscription();
     this.setNodesSubscription();
   }
@@ -105,15 +90,8 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.panzoomApiSubscription.unsubscribe();
     this.currentFileSubscription.unsubscribe();
     this.graphSubscription.unsubscribe();
-  }
-
-  setPanzoomApiSubscription(): void {
-    this.panzoomApiSubscription = this.panzoomConfig.api.subscribe(
-      (api: PanZoomAPI) => (this.panZoomAPI = api)
-    );
   }
 
   setCanvasElement(): void {
@@ -276,18 +254,18 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   zoomIn(): void {
-    this.panZoomAPI.zoomIn('viewCenter');
+    this.panZoomService.zoomIn();
   }
 
   zoomOut(): void {
-    this.panZoomAPI.zoomOut('viewCenter');
+    this.panZoomService.zoomOut();
   }
 
   zoomReset(): void {
-    this.panZoomAPI.resetView();
+    this.panZoomService.reset();
   }
 
   panCenter(): void {
-    this.panZoomAPI.centerContent();
+    this.panZoomService.panCenter();
   }
 }
