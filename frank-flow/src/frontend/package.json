@@ -33,7 +33,7 @@
     "cytoscape": "^3.20.0",
     "jqwidgets-ng": "^13.1.0",
     "jsplumb": "^2.15.6",
-    "monaco-editor": "^0.30.1",
+    "monaco-editor": "^0.31.1",
     "ngx-panzoom": "^13.0.0",
     "ngx-smart-modal": "^7.4.1",
     "ngx-toastr": "^14.2.1",
@@ -43,7 +43,7 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^13.1.1",
+    "@angular-devkit/build-angular": "^13.1.2",
     "@angular-eslint/builder": "^13.0.1",
     "@angular-eslint/eslint-plugin": "^13.0.1",
     "@angular-eslint/eslint-plugin-template": "^13.0.1",
