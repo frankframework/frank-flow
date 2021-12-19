@@ -36,7 +36,7 @@ export class NodeComponent implements AfterViewInit {
   @HostBinding('style') public style: any;
   public readonly cloud = faCloudDownloadAlt;
   public isActive = () =>
-    this.flowStructureService.selectedNode?.name === this.node.getName();
+    this.flowStructureService.selectedNode?.uid === this.node.getId();
 
   private readonly bezierConnectionSpecification: ConnectorSpec = [
     'Bezier',
