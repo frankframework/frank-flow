@@ -93,6 +93,9 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
       })
       ?.forwards?.push(currentNode);
   } else if (currentNode.type.endsWith('Listener')) {
+    currentNode.parent = flowStructure.nodes.find((pipe: FlowStructureNode) => {
+      return pipe === unclosedNodes[unclosedNodes.length - 1];
+    });
     flowStructure.nodes.push(currentNode);
   } else if (currentNode.type.endsWith('Exit')) {
     flowStructure.nodes.push(currentNode);

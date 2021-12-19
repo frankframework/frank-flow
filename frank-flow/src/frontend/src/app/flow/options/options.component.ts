@@ -146,7 +146,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   getAttributesOnNode(): void {
     const node = this.currentFile.flowStructure?.nodes.find(
-      (node: FlowStructureNode) => node.name === this.flowNode?.getName()
+      (node: FlowStructureNode) => node.uid === this.flowNode?.getId()
     );
 
     if (node) {
@@ -227,5 +227,9 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   attributeIsUsed(attributeName: string | undefined): boolean {
     return Object.keys(this.attributes).includes(attributeName ?? '');
+  }
+
+  deleteNode() {
+    this.flowStructureService.deleteNode(this.structureNode);
   }
 }

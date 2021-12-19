@@ -18,6 +18,8 @@ import { ChangedAttribute } from '../models/changed-attribute.model';
 })
 export class FlowStructureService {
   public monacoEditorComponent?: MonacoEditorComponent;
+  public selectedNode?: FlowStructureNode;
+
   private currentFile!: File;
   private flowStructure!: FlowStructure;
   private waitingOnNewStructure = false;
@@ -51,22 +53,38 @@ export class FlowStructureService {
     this.monacoEditorComponent = monacoEditorComponent;
   }
 
-  highlightPipe(nodeName: string, nodeType: string) {
-    const currentNode = this.flowStructure.nodes.find(
-      (node: FlowStructureNode) =>
-        node.name === nodeName && node.type === nodeType
+  selectNode(nodeId: string): void {
+    this.selectedNode = this.flowStructure.nodes.find(
+      (node: FlowStructureNode) => node.uid === nodeId
     );
+    this.highlightNodeInXml();
+  }
 
-    if (currentNode) {
+  highlightNodeInXml() {
+    if (this.selectedNode) {
       const range: monaco.IRange = {
-        startLineNumber: currentNode.line,
+        startLineNumber: this.selectedNode.line,
         startColumn: 0,
         endColumn: 0,
-        endLineNumber: currentNode.endLine + 1,
+        endLineNumber: this.selectedNode.endLine + 1,
       };
 
       this.monacoEditorComponent?.highlightText(range);
     }
+  }
+
+  resetSelectNode() {
+    this.selectedNode = undefined;
+    this.resetHighlightNodeInXml();
+  }
+
+  resetHighlightNodeInXml() {
+    this.monacoEditorComponent?.highlightText({
+      startLineNumber: 0,
+      startColumn: 0,
+      endLineNumber: 0,
+      endColumn: 0,
+    });
   }
 
   addConnection(sourceId: string, targetId: string): void {
@@ -471,5 +489,17 @@ export class FlowStructureService {
     }
 
     return currentLastAttribute;
+  }
+
+  deleteNode(node: FlowStructureNode): void {
+    node = node.parent ?? node;
+    const text = ``;
+    const range = {
+      startLineNumber: node.line,
+      endLineNumber: node.endLine + 1,
+      startColumn: 0,
+      endColumn: 0,
+    };
+    this.monacoEditorComponent?.applyEdits([{ text, range }], true);
   }
 }

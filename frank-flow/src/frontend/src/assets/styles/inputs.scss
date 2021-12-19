@@ -28,7 +28,8 @@ select {
 
   input,
   select,
-  label {
+  label,
+  app-button {
     width: 50%;
     appearance: none;
   }
@@ -37,6 +38,10 @@ select {
     width: 50%;
     display: flex;
     gap: 8px;
+
+    app-button {
+      width: auto;
+    }
 
     input,
     select {
