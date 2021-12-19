@@ -12,6 +12,7 @@ import { CurrentFileService } from './current-file.service';
 import { File } from '../models/file.model';
 import { FlowStructure } from '../models/flow-structure.model';
 import { ChangedAttribute } from '../models/changed-attribute.model';
+import { PanZoomService } from './pan-zoom.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,10 @@ export class FlowStructureService {
   private editAttributeQueue: Map<string, ChangedAttribute[]> = new Map();
   private flowUpdate!: boolean;
 
-  constructor(private currentFileService: CurrentFileService) {
+  constructor(
+    private currentFileService: CurrentFileService,
+    private panZoomService: PanZoomService
+  ) {
     this.getCurrentFile();
   }
 
@@ -53,7 +57,35 @@ export class FlowStructureService {
     this.monacoEditorComponent = monacoEditorComponent;
   }
 
-  selectNode(nodeId: string): void {
+  selectNodeByPosition(position: monaco.Position): void {
+    this.selectedNode = this.flowStructure.nodes.find(
+      (node: FlowStructureNode): boolean =>
+        this.isNodeAtPosition(node, position)
+    );
+    this.resetHighlightNodeInXml();
+    this.panToNode();
+  }
+
+  isNodeAtPosition(
+    node: FlowStructureNode,
+    position: monaco.Position
+  ): boolean {
+    return (
+      node.line <= position.lineNumber &&
+      node.endLine >= position.lineNumber &&
+      node.type !== 'Receiver'
+    );
+  }
+
+  panToNode(): void {
+    if (this.selectedNode) {
+      const x = +this.selectedNode?.attributes['flow:x'].value;
+      const y = +this.selectedNode?.attributes['flow:y'].value;
+      this.panZoomService.panTo(x, y);
+    }
+  }
+
+  selectNodeById(nodeId: string): void {
     this.selectedNode = this.flowStructure.nodes.find(
       (node: FlowStructureNode) => node.uid === nodeId
     );
@@ -68,7 +100,10 @@ export class FlowStructureService {
         endColumn: 0,
         endLineNumber: this.selectedNode.endLine + 1,
       };
-
+      this.monacoEditorComponent?.setPosition({
+        lineNumber: range.startLineNumber,
+        column: range.startColumn,
+      });
       this.monacoEditorComponent?.highlightText(range);
     }
   }
