@@ -1,11 +1,11 @@
 <div class="flow-container">
   <div>
     <pan-zoom
-      [config]="panzoomConfig"
+      [config]="panZoomConfig"
       [hidden]="fileIsLoading || !fileIsConfiguration || fileIsEmpty"
     >
       <div class="panzoom">
-        <app-canvas #nodeContainer [panzoomConfig]="panzoomConfig"></app-canvas>
+        <app-canvas #nodeContainer [panzoomConfig]="panZoomConfig"></app-canvas>
         <div class="arrows arrows--horizontal">
           <fa-icon
             (click)="decreaseRight()"
