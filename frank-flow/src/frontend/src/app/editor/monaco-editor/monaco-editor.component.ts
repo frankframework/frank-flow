@@ -44,6 +44,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   private flowNeedsUpdate = true;
   private applyEditsUpdate = false;
   private decorations: string[] = [];
+  private positionUpdate = false;
 
   constructor(
     private monacoElement: ElementRef,
@@ -105,6 +106,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.initializeActions();
     this.initializeOnKeyUpEvent();
     this.initializeNewFileSubscription();
+    this.initializeOnDidChangeCursorPosition();
     this.initializeResizeObserver();
     this.initializeThemeObserver();
     this.finishedLoading.emit();
@@ -212,6 +214,28 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.codeEditorInstance.updateOptions({ readOnly: this.isReadOnly });
   }
 
+  initializeOnDidChangeCursorPosition(): void {
+    this.codeEditorInstance.onDidChangeCursorPosition(
+      this.debounce(() => {
+        if (!this.positionUpdate) {
+          this.highlightNode();
+        }
+        this.positionUpdate = false;
+      }, 500)
+    );
+  }
+
+  highlightNode(): void {
+    const position = this.codeEditorInstance.getPosition();
+    if (position && this.positionIsNotDefault(position)) {
+      this.flowStructureService.selectNodeByPosition(position);
+    }
+  }
+
+  positionIsNotDefault(position: monaco.Position): boolean {
+    return position.lineNumber !== 1 || position.column !== 1;
+  }
+
   highlightText(range: monaco.IRange): void {
     this.decorations = this.codeEditorInstance.deltaDecorations(
       this.decorations,
@@ -224,10 +248,11 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
         },
       ]
     );
-    this.codeEditorInstance.setPosition({
-      lineNumber: range.startLineNumber,
-      column: range.startColumn,
-    });
+  }
+
+  setPosition(position: monaco.IPosition): void {
+    this.positionUpdate = true;
+    this.codeEditorInstance.setPosition(position);
   }
 
   debounce(function_: any, wait: number): any {
