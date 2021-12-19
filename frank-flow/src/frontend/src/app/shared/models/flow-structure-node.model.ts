@@ -44,11 +44,11 @@ export class FlowStructureNode {
     let x = 0;
     let y = 0;
 
-    if (this.attributes['x']) {
-      x = +this.attributes['x'].value;
+    if (this.attributes['flow:x']) {
+      x = +this.attributes['flow:x'].value;
     }
-    if (this.attributes['y']) {
-      y = +this.attributes['y'].value;
+    if (this.attributes['flow:y']) {
+      y = +this.attributes['flow:y'].value;
     }
 
     return { x, y };
