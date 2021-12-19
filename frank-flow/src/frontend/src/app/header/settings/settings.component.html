@@ -26,6 +26,13 @@
         <option [value]="modeType.editorMode">Editor</option>
       </select>
     </div>
+    <div class="input-row">
+      <label for="edit-mode">Use last edit mode</label>
+      <app-toggle
+        [(state)]="settings.useLastMode"
+        (stateChange)="setSettings()"
+      ></app-toggle>
+    </div>
     <!--    // TODO: This was one of the first features implemented for settings, but it never got used. I'm making a feature to implement this in more places.-->
     <!--    <div class="input-row">-->
     <!--      <label>Show confirmation popups</label>-->
