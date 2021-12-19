@@ -25,18 +25,19 @@ import { ConnectionType } from 'src/app/header/settings/options/connection-type'
   selector: 'app-node',
   templateUrl: './node.component.html',
   styleUrls: ['./node.component.scss'],
-  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
-  host: { '[class.isActive]': 'isActive()' },
 })
 export class NodeComponent implements AfterViewInit {
   @Input() public node!: Node;
   @Input() public jsPlumbInstance!: jsPlumbInstance;
   @Input() public generating!: boolean;
-  @HostBinding('class') public cssClass: any;
-  @HostBinding('style') public style: any;
+  @HostBinding('style') public style?: string;
+  @HostBinding('class') public cssClass?: string;
+  @HostBinding('class.isActive')
+  public get isActive() {
+    return this.flowStructureService.selectedNode?.uid === this.node?.getId();
+  }
+
   public readonly cloud = faCloudDownloadAlt;
-  public isActive = () =>
-    this.flowStructureService.selectedNode?.uid === this.node.getId();
 
   private readonly bezierConnectionSpecification: ConnectorSpec = [
     'Bezier',
@@ -101,7 +102,7 @@ export class NodeComponent implements AfterViewInit {
   }
 
   @HostListener('click') onClick(): void {
-    this.flowStructureService.selectNode(this.node.getId());
+    this.flowStructureService.selectNodeById(this.node.getId());
   }
 
   getSettings(): void {

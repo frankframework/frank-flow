@@ -49,4 +49,8 @@ export class PanZoomService {
   panCenter(): void {
     this.panZoomAPI.centerContent();
   }
+
+  panTo(x: number, y: number): void {
+    this.panZoomAPI.panToPoint({ x, y });
+  }
 }
