@@ -53,15 +53,14 @@ export class FlowStructureService {
     this.monacoEditorComponent = monacoEditorComponent;
   }
 
-  selectElement(nodeName: string, nodeType: string) {
+  selectNode(nodeId: string): void {
     this.selectedNode = this.flowStructure.nodes.find(
-      (node: FlowStructureNode) =>
-        node.name === nodeName && node.type === nodeType
+      (node: FlowStructureNode) => node.uid === nodeId
     );
-    this.highlightSelectedElement();
+    this.highlightNodeInXml();
   }
 
-  highlightSelectedElement() {
+  highlightNodeInXml() {
     if (this.selectedNode) {
       const range: monaco.IRange = {
         startLineNumber: this.selectedNode.line,
@@ -74,12 +73,12 @@ export class FlowStructureService {
     }
   }
 
-  resetSelectElement() {
+  resetSelectNode() {
     this.selectedNode = undefined;
-    this.resetHighlightSelectedElement();
+    this.resetHighlightNodeInXml();
   }
 
-  resetHighlightSelectedElement() {
+  resetHighlightNodeInXml() {
     this.monacoEditorComponent?.highlightText({
       startLineNumber: 0,
       startColumn: 0,

@@ -146,9 +146,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   getAttributesOnNode(): void {
     const node = this.currentFile.flowStructure?.nodes.find(
-      (node: FlowStructureNode) =>
-        node.name === this.flowNode?.getName() &&
-        node.type === this.flowNode?.getType()
+      (node: FlowStructureNode) => node.uid === this.flowNode?.getId()
     );
 
     if (node) {

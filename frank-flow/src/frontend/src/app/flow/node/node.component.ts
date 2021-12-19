@@ -101,10 +101,7 @@ export class NodeComponent implements AfterViewInit {
   }
 
   @HostListener('click') onClick(): void {
-    this.flowStructureService.selectElement(
-      this.node.getName(),
-      this.node.getType()
-    );
+    this.flowStructureService.selectNode(this.node.getId());
   }
 
   getSettings(): void {
