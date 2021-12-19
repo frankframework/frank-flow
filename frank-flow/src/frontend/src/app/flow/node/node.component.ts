@@ -25,6 +25,8 @@ import { ConnectionType } from 'src/app/header/settings/options/connection-type'
   selector: 'app-node',
   templateUrl: './node.component.html',
   styleUrls: ['./node.component.scss'],
+  // eslint-disable-next-line @angular-eslint/no-host-metadata-property
+  host: { '[class.isActive]': 'isActive()' },
 })
 export class NodeComponent implements AfterViewInit {
   @Input() public node!: Node;
@@ -33,6 +35,9 @@ export class NodeComponent implements AfterViewInit {
   @HostBinding('class') public cssClass: any;
   @HostBinding('style') public style: any;
   public readonly cloud = faCloudDownloadAlt;
+  public isActive = () =>
+    this.flowStructureService.selectedNode?.uid === this.node.getId();
+
   private readonly bezierConnectionSpecification: ConnectorSpec = [
     'Bezier',
     {
@@ -96,10 +101,7 @@ export class NodeComponent implements AfterViewInit {
   }
 
   @HostListener('click') onClick(): void {
-    this.flowStructureService.highlightPipe(
-      this.node.getName(),
-      this.node.getType()
-    );
+    this.flowStructureService.selectNode(this.node.getId());
   }
 
   getSettings(): void {
