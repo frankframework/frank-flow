@@ -2,21 +2,33 @@ import { FlowStructureNode } from './flow-structure-node.model';
 
 export class FlowStructure {
   nodes: FlowStructureNode[];
-  firstPipe: string;
+  firstPipe?: string;
   listeners: FlowStructureNode[];
   pipes: FlowStructureNode[];
   exits: FlowStructureNode[];
   pipeline!: FlowStructureNode;
   receivers: FlowStructureNode[];
+  implicitFirstPipe!: boolean;
 
-  constructor(nodes: FlowStructureNode[] = [], firstPipe = '') {
+  constructor(nodes: FlowStructureNode[] = [], firstPipe?: string) {
     this.nodes = nodes;
-    this.firstPipe = firstPipe;
 
+    this.firstPipe = this.getFirstPipe(firstPipe);
     this.listeners = this.getListeners();
     this.pipes = this.getPipes();
     this.exits = this.getExits();
     this.receivers = this.getReceivers();
+  }
+
+  getFirstPipe(firstPipe?: string): string | undefined {
+    if (firstPipe) {
+      return firstPipe;
+    }
+    const implicitFirstPipe = this.nodes?.find((node) =>
+      node.type.endsWith('Pipe')
+    )?.name;
+    this.implicitFirstPipe = !!implicitFirstPipe;
+    return implicitFirstPipe;
   }
 
   getListeners(): FlowStructureNode[] {

@@ -18,7 +18,13 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./options.component.scss'],
 })
 export class OptionsComponent implements OnInit, OnDestroy {
-  public disabledAttributes = ['line', 'startColumn', 'endColumn', 'x', 'y'];
+  public disabledAttributes = [
+    'line',
+    'startColumn',
+    'endColumn',
+    'flow:x',
+    'flow:y',
+  ];
   public availableAttributes: FlowNodeAttributeOptions[] = [];
   public attributes!: FlowNodeAttributes;
   public selectedAttribute!: any;
