@@ -79,9 +79,11 @@ export class FlowStructureService {
 
   panToNode(): void {
     if (this.selectedNode) {
-      const x = +this.selectedNode?.attributes['flow:x'].value;
-      const y = +this.selectedNode?.attributes['flow:y'].value;
-      this.panZoomService.panTo(x, y);
+      const x = +this.selectedNode?.attributes['flow:x']?.value;
+      const y = +this.selectedNode?.attributes['flow:y']?.value;
+      if (x && y) {
+        this.panZoomService.panTo(x, y);
+      }
     }
   }
 
