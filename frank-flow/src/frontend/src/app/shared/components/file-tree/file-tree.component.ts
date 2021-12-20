@@ -141,7 +141,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
   }
 
   onItemClick(event: any): void {
-    const itemValue = this.tree.getItem(event?.args?.element).value;
+    const itemValue = this.tree?.getItem(event?.args?.element)?.value;
     if (itemValue) {
       const item: File = JSON.parse(itemValue);
 
