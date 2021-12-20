@@ -7,6 +7,7 @@ export interface Settings {
   darkMode: boolean;
   showPopups: boolean;
   defaultMode: ModeType;
+  useLastMode: boolean;
   switchWithoutSaving: SwitchWithoutSavingOption;
   connectionType: ConnectionType;
   verticalConnectors: boolean;
