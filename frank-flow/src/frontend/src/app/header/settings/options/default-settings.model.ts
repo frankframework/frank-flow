@@ -7,6 +7,7 @@ import { GridConfiguration } from './grid-configuration';
 export class DefaultSettings implements Settings {
   darkMode = false;
   defaultMode = ModeType.flowMode;
+  useLastMode = false;
   showPopups = true;
   switchWithoutSaving = SwitchWithoutSavingOption.ask;
   connectionType = ConnectionType.bezier;
