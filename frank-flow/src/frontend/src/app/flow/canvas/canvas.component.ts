@@ -148,10 +148,10 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
       this.nodeGeneratorService.resetNodes();
 
       setTimeout(() => {
-        if (structure && structure.firstPipe) {
+        if (structure) {
           this.nodeGeneratorService.generateNodes(
-            structure.firstPipe,
-            structure
+            structure,
+            structure.firstPipe
           );
         }
 

@@ -3,7 +3,7 @@
     <Receiver name="TestFrankFlow">
       <JavaListener name="TestFrankFlow" flow:x="100" flow:y="100"/>
     </Receiver>
-    <Pipeline firstPipe="FirstPipe">
+    <Pipeline>
       <FixedResultPipe
         name="FirstPipe"
         returnString="&lt;FirstPipe/&gt;"
@@ -26,8 +26,7 @@
         <Forward name="FirstPipe" path="SecondPipe"/>
         <Forward name="SecondPipe" path="EXIT"/>
       </XmlSwitchPipe>
-      <Exit path="EXIT" state="success"
-            flow:x="150" flow:y="700"
+      <Exit path="EIT" state="success"
       />
     </Pipeline>
   </Adapter>
