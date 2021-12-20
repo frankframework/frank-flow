@@ -23,7 +23,7 @@ export class NodeGeneratorService {
     this.forwards = [];
   }
 
-  generateNodes(firstPipe: string, flowStructure: FlowStructure): void {
+  generateNodes(flowStructure: FlowStructure, firstPipe?: string): void {
     this.generateListeners(
       flowStructure.listeners,
       flowStructure.pipes,
@@ -36,7 +36,7 @@ export class NodeGeneratorService {
   generateListeners(
     listeners: FlowStructureNode[],
     pipes: FlowStructureNode[],
-    firstPipe: string
+    firstPipe?: string
   ): void {
     for (const listener of listeners) {
       const positions = listener.positions;
@@ -53,7 +53,9 @@ export class NodeGeneratorService {
       const forwardTarget = pipes.find(
         (targetPipe) => targetPipe.name === firstPipe
       );
-      this.forwards.push(new Forward(listener.uid, forwardTarget?.uid!));
+      if (forwardTarget) {
+        this.forwards.push(new Forward(listener.uid, forwardTarget.uid));
+      }
       this.nodeMap.set(listener.uid, listenerNode);
     }
   }

@@ -3,7 +3,7 @@
     <Receiver name="TestFrankFlow">
       <JavaListener name="TestFrankFlow" flow:x="100" flow:y="100"/>
     </Receiver>
-    <Pipeline firstPipe="FirstPipe">
+    <Pipeline>
       <FixedResultPipe
         name="FirstPipe"
         returnString="&lt;FirstPipe/&gt;"

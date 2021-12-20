@@ -20,6 +20,8 @@ import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
 import { SettingsService } from 'src/app/header/settings/settings.service';
 import { Settings } from 'src/app/header/settings/settings.model';
 import { ConnectionType } from 'src/app/header/settings/options/connection-type';
+import { CurrentFileService } from '../../shared/services/current-file.service';
+import { File } from '../../shared/models/file.model';
 
 @Component({
   selector: 'app-node',
@@ -63,20 +65,20 @@ export class NodeComponent implements AfterViewInit {
   } as DropOptions;
   private readonly topEndpointOptions: EndpointOptions = {
     endpoint: ['Dot', { radius: 7 }],
-    paintStyle: { fill: '#ffcb3a' },
+    paintStyle: { fill: '#fdc300' },
     isSource: false,
     scope: 'jsPlumb_DefaultScope',
-    maxConnections: 1,
+    maxConnections: -1,
     isTarget: true,
     dropOptions: this.dropOptions,
   };
   private bottomEndpointOptions: EndpointOptions = {
     endpoint: ['Dot', { radius: 10 }],
-    paintStyle: { fill: '#99cb3a' },
+    paintStyle: { fill: '#8bc34a' },
     isSource: true,
     scope: 'jsPlumb_DefaultScope',
-    connectorStyle: { stroke: '#99cb3a', strokeWidth: 3 },
-    maxConnections: 30,
+    connectorStyle: { stroke: '#8bc34a', strokeWidth: 3 },
+    maxConnections: -1,
     isTarget: false,
     connectorOverlays: [['Arrow', { location: 1 }]],
     dropOptions: this.dropOptions,
@@ -88,14 +90,14 @@ export class NodeComponent implements AfterViewInit {
     },
   } as DragOptions;
   private settings!: Settings;
+  private currentFile!: File;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
     private flowStructureService: FlowStructureService,
-    private settingsService: SettingsService
-  ) {
-    this.getSettings();
-  }
+    private settingsService: SettingsService,
+    private currentFileService: CurrentFileService
+  ) {}
 
   @HostListener('dblclick') onDoubleClick(): void {
     this.openOptions();
@@ -105,13 +107,9 @@ export class NodeComponent implements AfterViewInit {
     this.flowStructureService.selectNodeById(this.node.getId());
   }
 
-  getSettings(): void {
-    this.settingsService
-      .getSettings()
-      .subscribe((settings) => (this.settings = settings));
-  }
-
   ngAfterViewInit(): void {
+    this.getSettings();
+    this.getCurrentFile();
     const id = this.node.getId();
     this.createConnections();
     this.createAnchors(id);
@@ -119,8 +117,22 @@ export class NodeComponent implements AfterViewInit {
     this.jsPlumbInstance.draggable(id, this.dragOptions);
   }
 
+  getSettings(): void {
+    this.settingsService
+      .getSettings()
+      .subscribe((settings) => (this.settings = settings));
+  }
+
+  getCurrentFile(): void {
+    this.currentFileService.currentFileObservable.subscribe(
+      (currentFile) => (this.currentFile = currentFile)
+    );
+  }
+
   createAnchors(id: string): void {
-    this.nodeIsListener() ? this.makeNodeListener() : this.makeNodeTarget(id);
+    this.nodeIsListener()
+      ? this.createListenerEndpoint()
+      : this.createTargetEndpoint(id);
     if (!this.nodeIsExit()) {
       this.makeNodeSource(id);
     }
@@ -134,9 +146,15 @@ export class NodeComponent implements AfterViewInit {
     return this.cssClass === 'shape--oval color--info';
   }
 
-  makeNodeListener(): void {
-    this.bottomEndpointOptions.isSource = false;
-    this.bottomEndpointOptions.connectionsDetachable = false;
+  createListenerEndpoint(): void {
+    this.bottomEndpointOptions.connectorStyle = {
+      stroke: '#00abff',
+      strokeWidth: 3,
+    };
+    if (this.currentFile.flowStructure?.implicitFirstPipe) {
+      (this.bottomEndpointOptions.connectorStyle as any).dashstyle = '2 2';
+    }
+    this.bottomEndpointOptions.paintStyle = { fill: '#00abff' };
   }
 
   makeNodeSource(id: string): void {
@@ -151,7 +169,7 @@ export class NodeComponent implements AfterViewInit {
     );
   }
 
-  makeNodeTarget(id: string): void {
+  createTargetEndpoint(id: string): void {
     this.jsPlumbInstance.addEndpoint(
       id,
       { anchor: this.getTargetAnchor(), uuid: id + '_top', maxConnections: -1 },
