@@ -134,7 +134,7 @@ export class NodeComponent implements AfterViewInit {
       ? this.createListenerEndpoint()
       : this.createTargetEndpoint(id);
     if (!this.nodeIsExit()) {
-      this.makeNodeSource(id);
+      this.createSourceEndpoint(id);
     }
   }
 
@@ -157,7 +157,7 @@ export class NodeComponent implements AfterViewInit {
     this.bottomEndpointOptions.paintStyle = { fill: '#00abff' };
   }
 
-  makeNodeSource(id: string): void {
+  createSourceEndpoint(id: string): void {
     this.jsPlumbInstance.addEndpoint(
       id,
       {
