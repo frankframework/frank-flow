@@ -5,6 +5,7 @@ export class FlowStructureNode {
   public attributes: FlowNodeAttributes = {};
   public line: number;
   public endLine: number;
+  public startColumn;
   public column: number;
   public type: string;
   public forwards?: any[];
@@ -15,6 +16,7 @@ export class FlowStructureNode {
   constructor(
     line: number,
     endLine: number,
+    startColumn: number,
     column: number,
     type: string,
     attributes: FlowNodeAttributes,
@@ -22,6 +24,7 @@ export class FlowStructureNode {
   ) {
     this.line = line;
     this.endLine = endLine;
+    this.startColumn = startColumn;
     this.column = column;
     this.type = type;
     this.forwards = forwards;
