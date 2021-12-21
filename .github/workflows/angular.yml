@@ -1,11 +1,6 @@
 name: Angular CI
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - "frank-flow/src/frontend/**"
   pull_request:
     branches:
       - master

@@ -5,10 +5,6 @@ automerge_label = "automerge"
 method = "squash"
 delete_branch_on_merge = true
 
-[merge.automerge_dependencies]
-versions = ["minor", "patch"]
-usernames = ["dependabot"]
-
 [approve]
 auto_approve_usernames = ["dependabot"]
 
