@@ -160,6 +160,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   ): void {
     this.flowNeedsUpdate = flowUpdate;
     this.applyEditsUpdate = true;
+    this.positionUpdate = true;
 
     this.codeEditorInstance
       .getModel()
