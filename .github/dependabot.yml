@@ -8,3 +8,7 @@ updates:
     directory: "/frank-flow/src/frontend/"
     schedule:
       interval: "daily"
+    labels:
+      - "dependencies"
+      - "javascript"
+      - "automerge"
