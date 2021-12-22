@@ -180,8 +180,10 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   addAttribute(): void {
     this.flowStructureService.createAttribute(
-      this.selectedAttribute.name,
-      this.newAttributeValue,
+      {
+        name: this.selectedAttribute,
+        value: this.newAttributeValue,
+      },
       this.attributes
     );
     this.clearNewAttribute();
