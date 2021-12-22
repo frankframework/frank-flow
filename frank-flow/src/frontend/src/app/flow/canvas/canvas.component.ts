@@ -174,7 +174,9 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
       this.connectionIsMoving = false;
       return;
     }
-    this.flowStructureService.addConnection(info.sourceId, info.targetId);
+    this.sourceIsListener(info.source)
+      ? this.flowStructureService.setFirstPipeById(info.targetId)
+      : this.flowStructureService.addConnection(info.sourceId, info.targetId);
   }
 
   private onConnectionDetached(
@@ -184,7 +186,12 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     if (originalEvent == undefined) {
       return;
     }
-    this.flowStructureService.deleteConnection(info.sourceId, info.targetId);
+    this.sourceIsListener(info.source)
+      ? this.flowStructureService.removeFirstPipe()
+      : this.flowStructureService.deleteConnection(
+          info.sourceId,
+          info.targetId
+        );
     this.connectionIsMoving = false;
   }
 
@@ -192,11 +199,13 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     if (originalEvent == undefined) {
       return;
     }
-    this.flowStructureService.moveConnection(
-      info.originalSourceId,
-      info.originalTargetId,
-      info.newTargetId
-    );
+    this.sourceIsListener(info.source)
+      ? this.flowStructureService.setFirstPipeById(info.targetId)
+      : this.flowStructureService.moveConnection(
+          info.originalSourceId,
+          info.originalTargetId,
+          info.newTargetId
+        );
     this.connectionIsMoving = true;
   }
 
@@ -204,10 +213,16 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     if (originalEvent == undefined) {
       return;
     }
-    this.flowStructureService.deleteConnection(
-      info.sourceId,
-      info.targetId,
-      true
-    );
+    this.sourceIsListener(info.source)
+      ? this.flowStructureService.removeFirstPipe()
+      : this.flowStructureService.deleteConnection(
+          info.sourceId,
+          info.targetId,
+          true
+        );
+  }
+
+  sourceIsListener(source: Element): boolean {
+    return source.className.includes('color--info shape--oval') as boolean;
   }
 }
