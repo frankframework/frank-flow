@@ -23,6 +23,7 @@ let bufferAttributes: FlowNodeAttributes;
 let pipeline: FlowStructureNode;
 let xml: string;
 let tagStartLine: number;
+let tagStartColumn: number;
 let originalFile: File;
 
 addEventListener('message', ({ data }) => {
@@ -63,7 +64,12 @@ parser.on('end', () => {
 
 parser.on('opentagstart', (tag: SaxesStartTagPlain) => {
   tagStartLine = parser.line;
-  tagStartLine += charBeforeParserIsTabOrSpace() ? 0 : -1;
+  tagStartColumn = parser.column;
+  tagStartLine +=
+    charBeforeParserIsTabOrSpace() || charBeforeParserIsGreaterThanCharacter()
+      ? 0
+      : -1;
+  tagStartColumn += charBeforeParserIsGreaterThanCharacter() ? -1 : 0;
 });
 
 const charBeforeParserIsTabOrSpace = () => {
@@ -73,10 +79,17 @@ const charBeforeParserIsTabOrSpace = () => {
   return charBeforeParser === tabCode || charBeforeParser === spaceCode;
 };
 
+const charBeforeParserIsGreaterThanCharacter = () => {
+  const greaterThanCode = 62;
+  const charBeforeParser = xml.codePointAt(parser.position - 1);
+  return charBeforeParser === greaterThanCode;
+};
+
 parser.on('opentag', (tag: TagForOptions<{}>) => {
   const currentNode = new FlowStructureNode(
     tagStartLine,
     parser.line,
+    tagStartColumn + MONACO_COLUMN_OFFSET,
     parser.column + MONACO_COLUMN_OFFSET,
     tag.name,
     bufferAttributes
