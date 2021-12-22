@@ -228,38 +228,39 @@ export class FlowStructureService {
   }
 
   setFirstPipe(firstPipe: string): void {
-    const pipelineAttributes = this.flowStructure.pipeline.attributes;
-    const attributeName = 'firstPipe';
+    const pipeline = this.flowStructure.pipeline;
+    const firstPipeAttribute = { name: 'firstPipe', value: firstPipe };
 
-    if (this.attributeListIsEmpty(pipelineAttributes)) {
-      this.createFirstAttribute(
-        attributeName,
-        firstPipe,
-        this.flowStructure.pipeline,
-        true
-      );
+    if (this.attributeListIsEmpty(pipeline.attributes)) {
+      this.createFirstAttribute(firstPipeAttribute, pipeline, true);
     } else {
-      const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
-      const editAttributeOperation = this.editAttribute(
-        attributeName,
-        firstPipe,
-        pipelineAttributes,
-        true
-      );
-      if (editAttributeOperation) {
-        editOperations.push(editAttributeOperation);
-      }
-      this.monacoEditorComponent?.applyEdits(editOperations, true);
+      this.editSingleAttribute(firstPipeAttribute, pipeline.attributes, true);
     }
   }
 
+  editSingleAttribute(
+    changedAttribute: ChangedAttribute,
+    attributeList: FlowNodeAttributes,
+    flowUpdate = false
+  ): void {
+    const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
+    const editAttributeOperation = this.editAttribute(
+      changedAttribute,
+      attributeList,
+      flowUpdate
+    );
+    if (editAttributeOperation) {
+      editOperations.push(editAttributeOperation);
+    }
+    this.monacoEditorComponent?.applyEdits(editOperations, true);
+  }
+
   createFirstAttribute(
-    attributeName: string,
-    attributeValue: string,
+    attribute: ChangedAttribute,
     node: FlowStructureNode,
     flowUpdate = false
   ): void {
-    const text = ` ${attributeName}="${attributeValue}"`;
+    const text = ` ${attribute.name}="${attribute.value}"`;
     const range = {
       startLineNumber: node.line,
       startColumn: node.startColumn,
@@ -453,11 +454,7 @@ export class FlowStructureService {
 
       if (node) {
         for (const attribute of editAttributes) {
-          const editOperation = this.editAttribute(
-            attribute.name,
-            attribute.value,
-            node.attributes
-          );
+          const editOperation = this.editAttribute(attribute, node.attributes);
 
           if (editOperation) {
             editOperations.push(editOperation);
@@ -470,18 +467,17 @@ export class FlowStructureService {
   }
 
   editAttribute(
-    key: string,
-    value: any,
+    changedAttribute: ChangedAttribute,
     attributeList: FlowNodeAttributes,
     flowUpdate = false
   ): monaco.editor.IIdentifiedSingleEditOperation | void {
-    const attribute = this.findAttribute(attributeList, key);
+    const attribute = this.findAttribute(attributeList, changedAttribute.name);
 
     if (attribute) {
-      const escapedValue = this.escapeSpecialChars(value);
+      const escapedValue = this.escapeSpecialChars(changedAttribute.value);
       this.escapeAttribute(attribute);
 
-      const text = `${key}="${escapedValue}"`;
+      const text = `${changedAttribute.name}="${escapedValue}"`;
       const range = {
         startLineNumber: attribute.line,
         startColumn: attribute.startColumn,
@@ -491,7 +487,7 @@ export class FlowStructureService {
 
       return { text, range };
     } else {
-      this.createAttribute(key, value, attributeList, flowUpdate);
+      this.createAttribute(changedAttribute, attributeList, flowUpdate);
     }
   }
 
@@ -530,11 +526,11 @@ export class FlowStructureService {
   }
 
   deleteAttribute(
-    key: string,
+    attributeName: string,
     attributeList: FlowNodeAttributes,
     flowUpdate = false
   ): void {
-    const attribute = this.findAttribute(attributeList, key);
+    const attribute = this.findAttribute(attributeList, attributeName);
 
     if (attribute) {
       const text = ``;
@@ -550,15 +546,16 @@ export class FlowStructureService {
   }
 
   createAttribute(
-    key: string,
-    value: any,
+    changedAttribute: ChangedAttribute,
     attributeList: FlowNodeAttributes,
     flowUpdate = false
   ): void {
     if (this.attributeListIsEmpty(attributeList)) {
       return;
     }
-    const text = ` ${key}="${this.escapeSpecialChars(value)}"`;
+    const text = ` ${changedAttribute.name}="${this.escapeSpecialChars(
+      changedAttribute.value
+    )}"`;
     const lastAttribute = this.findLastAttribute(attributeList);
 
     if (lastAttribute) {
