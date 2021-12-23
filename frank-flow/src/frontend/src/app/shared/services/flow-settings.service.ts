@@ -3,6 +3,10 @@ import { CurrentFileService } from './current-file.service';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
 import { ReplaySubject } from 'rxjs';
 import { FlowSettings } from '../models/flow-settings.model';
+import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
+import { ForwardStyle } from '../../header/settings/options/forward-style';
+import { GridSize } from '../../header/settings/options/grid-size';
+import { FlowDirection } from '../enums/flow-direction.model';
 
 @Injectable({
   providedIn: 'root',
@@ -31,14 +35,52 @@ export class FlowSettingsService {
     const flowSettingAttributes = configurationAttributes.filter(([key, _]) =>
       key.startsWith('flow:')
     );
-    let flowSettings = {};
+    let flowSettings: FlowSettings = {};
     for (const [name, attribute] of flowSettingAttributes) {
-      const key = name.replace('flow:', '');
-      const value = this.getValueFromString(attribute.value);
-      flowSettings = { ...flowSettings, [key]: value };
+      this.assignAttributeToSetting(name, attribute, flowSettings);
     }
-
     this.flowSettings.next(flowSettings);
+  }
+
+  assignAttributeToSetting(
+    name: string,
+    attribute: FlowNodeAttribute,
+    flowSettings: FlowSettings
+  ) {
+    const key = name.replace('flow:', '');
+    const value = this.getValueFromString(attribute.value);
+    switch (key) {
+      case 'direction':
+        if (
+          this.typeHasValue({
+            value,
+            type: FlowDirection,
+            name: 'direction',
+          })
+        ) {
+          flowSettings.direction = value;
+        }
+        break;
+      case 'forwardStyle':
+        if (
+          this.typeHasValue({
+            value,
+            type: ForwardStyle,
+            name: 'forwardStyle',
+          })
+        ) {
+          flowSettings.forwardStyle = value;
+        }
+        break;
+      case 'gridSize':
+        if (this.typeHasValue({ value, type: GridSize, name: 'gridSize' })) {
+          flowSettings.gridSize = value;
+        }
+        break;
+      default:
+        console.error(`Unknown flow setting: ${key}`);
+        break;
+    }
   }
 
   getValueFromString(string: string): any {
@@ -51,5 +93,19 @@ export class FlowSettingsService {
     } else {
       return string;
     }
+  }
+
+  typeHasValue(options: { value: any; type: any; name: string }): boolean {
+    const typeIncludesValue = Object.values(options.type).includes(
+      options.value
+    );
+    if (!typeIncludesValue) {
+      console.error(
+        `Invalid value for ${options.name}: ${
+          options.value
+        }. Valid values are: ${Object.values(options.type).join(', ')}`
+      );
+    }
+    return typeIncludesValue;
   }
 }
