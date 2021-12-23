@@ -1,4 +1,4 @@
-export enum GridConfiguration {
+export enum gridSize {
   free = 0,
   tenth = 10,
   quarter = 25,

@@ -1,8 +1,9 @@
-import { ConnectionType } from '../../header/settings/options/connection-type';
-import { GridConfiguration } from '../../header/settings/options/grid-configuration';
+import { ForwardStyle } from '../../header/settings/options/forward-style';
+import { gridSize } from '../../header/settings/options/grid-size';
+import { FlowDirection } from '../enums/flow-direction.model';
 
 export interface FlowSettings {
-  connectionType?: ConnectionType;
-  verticalConnectors?: boolean;
-  gridConfiguration?: GridConfiguration;
+  forwardStyle?: ForwardStyle;
+  direction?: FlowDirection;
+  gridSize?: gridSize;
 }
