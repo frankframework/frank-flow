@@ -35,7 +35,7 @@ export class FlowSettingsService {
     const flowSettingAttributes = configurationAttributes.filter(([key, _]) =>
       key.startsWith('flow:')
     );
-    let flowSettings: FlowSettings = {};
+    const flowSettings: FlowSettings = {};
     for (const [name, attribute] of flowSettingAttributes) {
       this.assignAttributeToSetting(name, attribute, flowSettings);
     }

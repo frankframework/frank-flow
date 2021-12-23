@@ -228,11 +228,10 @@ export class NodeComponent implements AfterViewInit {
     switch (this.settings.forwardStyle) {
       case ForwardStyle.flowchart:
         return this.flowchartConnectionSpecification;
-      case ForwardStyle.bezier:
-        return this.bezierConnectionSpecification;
       case ForwardStyle.straight:
         return this.straightConnectionSpecification;
       default:
+      case ForwardStyle.bezier:
         return this.bezierConnectionSpecification;
     }
   }
