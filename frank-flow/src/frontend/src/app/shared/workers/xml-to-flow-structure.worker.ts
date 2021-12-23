@@ -1,8 +1,8 @@
 /// <reference lib="webworker" />
 
-import * as saxes from 'saxes';
 import {
   AttributeEventForOptions,
+  SaxesParser,
   SaxesStartTagPlain,
   TagForOptions,
 } from 'saxes';
@@ -15,12 +15,12 @@ import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
 const MONACO_COLUMN_OFFSET = 1;
 const QUOTE_AND_EQUALS = 2;
 
-const parser = new saxes.SaxesParser();
+const parser = new SaxesParser();
 
 let flowStructure: FlowStructure;
 let errors: string[] = [];
 const unclosedNodes: FlowStructureNode[] = [];
-let bufferAttributes: FlowNodeAttributes;
+let bufferAttributes: FlowNodeAttributes = {};
 let pipeline: FlowStructureNode;
 let xml: string;
 let tagStartLine: number;
