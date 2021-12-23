@@ -103,5 +103,12 @@
         (stateChange)="setSettings()"
       ></app-toggle>
     </div>
+    <div class="input-row">
+      <label>Ignore settings defined in configuration</label>
+      <app-toggle
+        [(state)]="settings.ignoreConfigurationSettings"
+        (stateChange)="setSettings()"
+      ></app-toggle>
+    </div>
   </div>
 </ngx-smart-modal>

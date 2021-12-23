@@ -13,4 +13,5 @@ export class DefaultSettings implements Settings {
   connectionType = ConnectionType.bezier;
   verticalConnectors = true;
   gridConfiguration = GridConfiguration.tenth;
+  ignoreConfigurationSettings = false;
 }

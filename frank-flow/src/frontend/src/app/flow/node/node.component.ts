@@ -22,6 +22,7 @@ import { Settings } from 'src/app/header/settings/settings.model';
 import { ConnectionType } from 'src/app/header/settings/options/connection-type';
 import { CurrentFileService } from '../../shared/services/current-file.service';
 import { File } from '../../shared/models/file.model';
+import { FlowSettingsService } from '../../shared/services/flow-settings.service';
 
 @Component({
   selector: 'app-node',
@@ -90,12 +91,14 @@ export class NodeComponent implements AfterViewInit {
     },
   } as DragOptions;
   private settings!: Settings;
+  private flowSettings!: any;
   private currentFile!: File;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
     private flowStructureService: FlowStructureService,
     private settingsService: SettingsService,
+    private flowSettingsService: FlowSettingsService,
     private currentFileService: CurrentFileService
   ) {}
 
@@ -109,6 +112,7 @@ export class NodeComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.getSettings();
+    this.getFlowSettings();
     this.getCurrentFile();
     const id = this.node.getId();
     this.createConnections();
@@ -118,9 +122,25 @@ export class NodeComponent implements AfterViewInit {
   }
 
   getSettings(): void {
-    this.settingsService
-      .getSettings()
-      .subscribe((settings) => (this.settings = settings));
+    this.settingsService.getSettings().subscribe((settings) => {
+      this.settings = settings;
+      this.mergeSettings();
+    });
+  }
+
+  getFlowSettings(): void {
+    this.flowSettingsService.flowSettingsObservable.subscribe({
+      next: (flowSettings) => {
+        this.flowSettings = flowSettings;
+        this.mergeSettings();
+      },
+    });
+  }
+
+  mergeSettings(): void {
+    if (!this.settings.ignoreConfigurationSettings) {
+      this.settings = { ...this.settings, ...this.flowSettings };
+    }
   }
 
   getCurrentFile(): void {
@@ -190,7 +210,7 @@ export class NodeComponent implements AfterViewInit {
   }
 
   getConnectorSpecification(): ConnectorSpec {
-    switch (+this.settings.connectionType) {
+    switch (this.settings.connectionType) {
       case ConnectionType.flowchart:
         return this.flowchartConnectionSpecification;
       case ConnectionType.bezier:

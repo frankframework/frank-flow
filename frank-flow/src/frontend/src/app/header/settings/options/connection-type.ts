@@ -1,5 +1,5 @@
 export enum ConnectionType {
-  flowchart,
-  bezier,
-  straight,
+  flowchart = 'flowchart',
+  bezier = 'bezier',
+  straight = 'straight',
 }
