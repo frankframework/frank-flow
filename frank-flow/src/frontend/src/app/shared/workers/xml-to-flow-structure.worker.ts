@@ -22,9 +22,11 @@ let errors: string[] = [];
 const unclosedNodes: FlowStructureNode[] = [];
 let bufferAttributes: FlowNodeAttributes = {};
 let pipeline: FlowStructureNode;
+let configuration: FlowStructureNode;
 let xml: string;
 let tagStartLine: number;
 let tagStartColumn: number;
+
 let originalFile: File;
 
 addEventListener('message', ({ data }) => {
@@ -36,7 +38,6 @@ addEventListener('message', ({ data }) => {
     parserWrite(data.xml);
   }
 });
-
 const parserWrite = (xml: string) => {
   try {
     parser.write(xml).close();
@@ -55,6 +56,7 @@ parser.on('end', () => {
     flowStructure.firstPipe
   );
   newFlowStructure.pipeline = pipeline;
+  newFlowStructure.configuration = configuration;
 
   postMessage({
     ...originalFile,
@@ -72,20 +74,17 @@ parser.on('opentagstart', (tag: SaxesStartTagPlain) => {
       : -1;
   tagStartColumn += charBeforeParserIsGreaterThanCharacter() ? -1 : 0;
 });
-
 const charBeforeParserIsTabOrSpace = () => {
   const tabCode = 9;
   const spaceCode = 32;
   const charBeforeParser = xml.codePointAt(parser.position - 1);
   return charBeforeParser === tabCode || charBeforeParser === spaceCode;
 };
-
 const charBeforeParserIsGreaterThanCharacter = () => {
   const greaterThanCode = 62;
   const charBeforeParser = xml.codePointAt(parser.position - 1);
   return charBeforeParser === greaterThanCode;
 };
-
 parser.on('opentag', (tag: TagForOptions<{}>) => {
   const currentNode = new FlowStructureNode(
     tagStartLine,
@@ -95,8 +94,8 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     tag.name,
     bufferAttributes
   );
-  bufferAttributes = {};
 
+  bufferAttributes = {};
   if (currentNode.type.endsWith('Pipe')) {
     currentNode.forwards = [];
     flowStructure.nodes.push(currentNode);
@@ -113,10 +112,18 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     flowStructure.nodes.push(currentNode);
   } else if (currentNode.type.endsWith('Exit')) {
     flowStructure.nodes.push(currentNode);
-  } else if (currentNode.type === 'Pipeline') {
-    pipeline = currentNode;
-  } else if (currentNode.type === 'Receiver') {
-    flowStructure.nodes.push(currentNode);
+  } else {
+    switch (currentNode.type) {
+      case 'Pipeline':
+        pipeline = currentNode;
+        break;
+      case 'Receiver':
+        flowStructure.nodes.push(currentNode);
+        break;
+      case 'Configuration':
+        configuration = currentNode;
+        break;
+    }
   }
 
   if (!tag.isSelfClosing) {
