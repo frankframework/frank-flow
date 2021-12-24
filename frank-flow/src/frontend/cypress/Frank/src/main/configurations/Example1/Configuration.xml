@@ -1,4 +1,8 @@
-<Configuration>
+<Configuration 
+    flow:direction="vertical"
+    flow:forwardStyle="flowchart"
+    flow:gridSize="50"
+    >
   <Adapter name="TestFrankFlow">
     <Receiver name="TestFrankFlow">
       <JavaListener name="TestFrankFlow" flow:x="100" flow:y="100"/>

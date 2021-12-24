@@ -7,16 +7,17 @@ import { DefaultSettings } from './options/default-settings.model';
   providedIn: 'root',
 })
 export class SettingsService {
-  private settings: BehaviorSubject<Settings>;
+  private settings!: BehaviorSubject<Settings>;
   private defaultSettings = new DefaultSettings();
 
   constructor() {
-    const localStorageSettings = this.getSettingsLocalStorage();
-    const localStorageSettingsWithDefaults =
-      this.addDefaultSettings(localStorageSettings);
-    this.settings = new BehaviorSubject<Settings>(
-      localStorageSettingsWithDefaults
-    );
+    this.initializeSettings();
+  }
+
+  initializeSettings() {
+    const savedSettings = this.getSettingsLocalStorage();
+    const settingsWithDefaults = this.addDefaultSettings(savedSettings);
+    this.settings = new BehaviorSubject<Settings>(settingsWithDefaults);
   }
 
   setSettings(settings: Settings): void {

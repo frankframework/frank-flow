@@ -3,8 +3,9 @@ import { SettingsService } from './settings.service';
 import { Settings } from './settings.model';
 import { ModeType } from '../modes/mode-type.enum';
 import { SwitchWithoutSavingOption } from './options/switch-without-saving-option';
-import { ConnectionType } from './options/connection-type';
-import { GridConfiguration } from './options/grid-configuration';
+import { ForwardStyle } from './options/forward-style';
+import { GridSize } from './options/grid-size';
+import { FlowDirection } from '../../shared/enums/flow-direction.model';
 
 @Component({
   selector: 'app-settings',
@@ -14,9 +15,10 @@ import { GridConfiguration } from './options/grid-configuration';
 export class SettingsComponent implements OnInit {
   public settings!: Settings;
   public modeType = ModeType;
-  public connectionType = ConnectionType;
-  public gridConfiguration = GridConfiguration;
+  public forwardStyle = ForwardStyle;
+  public gridSize = GridSize;
   public switchWithoutSavingOptions = SwitchWithoutSavingOption;
+  public flowDirection = FlowDirection;
 
   constructor(private settingsService: SettingsService) {}
 
