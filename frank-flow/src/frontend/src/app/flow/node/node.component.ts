@@ -19,9 +19,12 @@ import { FlowStructureService } from 'src/app/shared/services/flow-structure.ser
 import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
 import { SettingsService } from 'src/app/header/settings/settings.service';
 import { Settings } from 'src/app/header/settings/settings.model';
-import { ConnectionType } from 'src/app/header/settings/options/connection-type';
+import { ForwardStyle } from 'src/app/header/settings/options/forward-style';
 import { CurrentFileService } from '../../shared/services/current-file.service';
 import { File } from '../../shared/models/file.model';
+import { FlowSettingsService } from '../../shared/services/flow-settings.service';
+import { DefaultSettings } from '../../header/settings/options/default-settings.model';
+import { FlowSettings } from '../../shared/models/flow-settings.model';
 
 @Component({
   selector: 'app-node',
@@ -41,6 +44,7 @@ export class NodeComponent implements AfterViewInit {
 
   public readonly cloud = faCloudDownloadAlt;
 
+  private defaultSettings = new DefaultSettings();
   private readonly bezierConnectionSpecification: ConnectorSpec = [
     'Bezier',
     {
@@ -90,12 +94,14 @@ export class NodeComponent implements AfterViewInit {
     },
   } as DragOptions;
   private settings!: Settings;
+  private flowSettings!: FlowSettings;
   private currentFile!: File;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
     private flowStructureService: FlowStructureService,
     private settingsService: SettingsService,
+    private flowSettingsService: FlowSettingsService,
     private currentFileService: CurrentFileService
   ) {}
 
@@ -109,6 +115,7 @@ export class NodeComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.getSettings();
+    this.getFlowSettings();
     this.getCurrentFile();
     const id = this.node.getId();
     this.createConnections();
@@ -118,9 +125,25 @@ export class NodeComponent implements AfterViewInit {
   }
 
   getSettings(): void {
-    this.settingsService
-      .getSettings()
-      .subscribe((settings) => (this.settings = settings));
+    this.settingsService.getSettings().subscribe((settings) => {
+      this.settings = settings;
+      this.mergeSettings();
+    });
+  }
+
+  getFlowSettings(): void {
+    this.flowSettingsService.flowSettingsObservable.subscribe({
+      next: (flowSettings) => {
+        this.flowSettings = flowSettings;
+        this.mergeSettings();
+      },
+    });
+  }
+
+  mergeSettings(): void {
+    if (!this.settings.ignoreConfigurationSettings) {
+      this.settings = { ...this.settings, ...this.flowSettings };
+    }
   }
 
   getCurrentFile(): void {
@@ -178,11 +201,23 @@ export class NodeComponent implements AfterViewInit {
   }
 
   getSourceAnchor(): AnchorSpec {
-    return this.settings.verticalConnectors ? 'Bottom' : 'RightMiddle';
+    switch (this.settings.direction) {
+      case 'vertical':
+        return 'Bottom';
+      case 'horizontal':
+      default:
+        return 'RightMiddle';
+    }
   }
 
   getTargetAnchor(): AnchorSpec {
-    return this.settings.verticalConnectors ? 'Top' : 'LeftMiddle';
+    switch (this.settings.direction) {
+      case 'vertical':
+        return 'Top';
+      case 'horizontal':
+      default:
+        return 'LeftMiddle';
+    }
   }
 
   createConnections() {
@@ -190,17 +225,14 @@ export class NodeComponent implements AfterViewInit {
   }
 
   getConnectorSpecification(): ConnectorSpec {
-    switch (+this.settings.connectionType) {
-      case ConnectionType.flowchart:
+    switch (this.settings.forwardStyle) {
+      case ForwardStyle.flowchart:
         return this.flowchartConnectionSpecification;
-      case ConnectionType.bezier:
-        return this.bezierConnectionSpecification;
-      case ConnectionType.straight:
+      case ForwardStyle.straight:
         return this.straightConnectionSpecification;
       default:
-        throw new Error(
-          'An error occurred when trying to set the connection type'
-        );
+      case ForwardStyle.bezier:
+        return this.bezierConnectionSpecification;
     }
   }
 
@@ -212,7 +244,8 @@ export class NodeComponent implements AfterViewInit {
   }
 
   getGridConfiguration(): [number, number] {
-    return [+this.settings.gridConfiguration, +this.settings.gridConfiguration];
+    const gridSize = this.settings.gridSize ?? this.defaultSettings.gridSize;
+    return [+gridSize, +gridSize];
   }
 
   handleDragStop(event: any): void {

@@ -2,13 +2,14 @@ import { FlowStructureNode } from './flow-structure-node.model';
 
 export class FlowStructure {
   nodes: FlowStructureNode[];
-  firstPipe?: string;
   listeners: FlowStructureNode[];
   pipes: FlowStructureNode[];
   exits: FlowStructureNode[];
-  pipeline!: FlowStructureNode;
   receivers: FlowStructureNode[];
+  pipeline!: FlowStructureNode;
   implicitFirstPipe!: boolean;
+  firstPipe?: string;
+  configuration?: FlowStructureNode;
 
   constructor(nodes: FlowStructureNode[] = [], firstPipe?: string) {
     this.nodes = nodes;
