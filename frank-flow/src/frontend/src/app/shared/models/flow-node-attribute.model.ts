@@ -3,4 +3,7 @@ export interface FlowNodeAttribute {
   line: number;
   endColumn: number;
   startColumn: number;
+  indexOnLine: number;
+  onLineWithOthers: boolean;
+  onTagStartLine: boolean;
 }

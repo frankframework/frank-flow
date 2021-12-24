@@ -535,14 +535,56 @@ export class FlowStructureService {
     if (attribute) {
       const text = ``;
       this.escapeAttribute(attribute);
-      const range = {
-        startLineNumber: attribute.line,
-        startColumn: attribute.startColumn,
-        endColumn: attribute.endColumn,
-        endLineNumber: attribute.line,
-      };
+      const range = this.getDeleteAttributeRange(attribute);
       this.monacoEditorComponent?.applyEdits([{ range, text }], flowUpdate);
     }
+  }
+
+  getDeleteAttributeRange(attribute: FlowNodeAttribute): monaco.IRange {
+    if (attribute.onTagStartLine) {
+      return this.getDeleteAttributeWithLeadingWhitespaceRange(attribute);
+    } else {
+      if (attribute.onLineWithOthers) {
+        return attribute.indexOnLine === 0
+          ? this.getDeleteAttributeWithTrailingWhitespaceRange(attribute)
+          : this.getDeleteAttributeWithLeadingWhitespaceRange(attribute);
+      } else {
+        return this.getDeleteSingleAttributeOnLineRange(attribute);
+      }
+    }
+  }
+
+  getDeleteAttributeWithLeadingWhitespaceRange(
+    attribute: FlowNodeAttribute
+  ): monaco.IRange {
+    return {
+      startLineNumber: attribute.line,
+      startColumn: attribute.startColumn - 1,
+      endColumn: attribute.endColumn,
+      endLineNumber: attribute.line,
+    };
+  }
+
+  getDeleteAttributeWithTrailingWhitespaceRange(
+    attribute: FlowNodeAttribute
+  ): monaco.IRange {
+    return {
+      startLineNumber: attribute.line,
+      startColumn: attribute.startColumn,
+      endColumn: attribute.endColumn + 1,
+      endLineNumber: attribute.line,
+    };
+  }
+
+  getDeleteSingleAttributeOnLineRange(
+    attribute: FlowNodeAttribute
+  ): monaco.IRange {
+    return {
+      startLineNumber: attribute.line,
+      startColumn: 0,
+      endColumn: 0,
+      endLineNumber: attribute.line + 1,
+    };
   }
 
   createAttribute(

@@ -1,8 +1,8 @@
 /// <reference lib="webworker" />
 
-import * as saxes from 'saxes';
 import {
   AttributeEventForOptions,
+  SaxesParser,
   SaxesStartTagPlain,
   TagForOptions,
 } from 'saxes';
@@ -10,16 +10,17 @@ import { FlowNodeAttributes } from '../models/flow-node-attributes.model';
 import { FlowStructure } from '../models/flow-structure.model';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
 import { File } from '../models/file.model';
+import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
 
 const MONACO_COLUMN_OFFSET = 1;
 const QUOTE_AND_EQUALS = 2;
 
-const parser = new saxes.SaxesParser();
+const parser = new SaxesParser();
 
 let flowStructure: FlowStructure;
 let errors: string[] = [];
 const unclosedNodes: FlowStructureNode[] = [];
-let bufferAttributes: FlowNodeAttributes;
+let bufferAttributes: FlowNodeAttributes = {};
 let pipeline: FlowStructureNode;
 let configuration: FlowStructureNode;
 let xml: string;
@@ -160,7 +161,21 @@ parser.on('attribute', (attribute: AttributeEventForOptions<{}>) => {
     line: parser.line,
     endColumn: parser.column + MONACO_COLUMN_OFFSET,
     startColumn,
-  };
+    indexOnLine: 0,
+    onLineWithOthers: false,
+    onTagStartLine: tagStartLine === parser.line,
+  } as FlowNodeAttribute;
+
+  const bufferAttributesObject = Object.entries(bufferAttributes);
+  const [lastAttributeKey, lastAttributeValue] =
+    bufferAttributesObject[bufferAttributesObject.length - 1] ?? [];
+
+  if (lastAttributeValue?.line === parser.line) {
+    bufferAttributes[lastAttributeKey].onLineWithOthers = true;
+    newAttribute.onLineWithOthers = true;
+    newAttribute.indexOnLine =
+      bufferAttributes[lastAttributeKey].indexOnLine + 1;
+  }
 
   bufferAttributes = { ...bufferAttributes, [attribute.name]: newAttribute };
 });
