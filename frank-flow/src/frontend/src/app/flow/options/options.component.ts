@@ -181,7 +181,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   addAttribute(): void {
     this.flowStructureService.createAttribute(
       {
-        name: this.selectedAttribute,
+        name: this.selectedAttribute.name,
         value: this.newAttributeValue,
       },
       this.attributes
