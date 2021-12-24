@@ -1,5 +1,5 @@
 export enum SwitchWithoutSavingOption {
-  ask,
-  save,
-  discard,
+  ask = 'ask',
+  save = 'save',
+  discard = 'discard',
 }

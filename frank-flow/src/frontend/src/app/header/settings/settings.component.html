@@ -63,43 +63,46 @@
     <div class="input-row">
       <label for="edit-mode">Snap to grid</label>
       <select
-        [(ngModel)]="settings.gridConfiguration"
+        [(ngModel)]="settings.gridSize"
         (ngModelChange)="setSettings()"
         id="grid-configuration"
       >
-        <option [value]="gridConfiguration.free">
-          Don't snap, move freely
-        </option>
-        <option [value]="gridConfiguration.tenth">
-          Snap every tenth of a square
-        </option>
-        <option [value]="gridConfiguration.quarter">
+        <option [value]="gridSize.free">Don't snap, move freely</option>
+        <option [value]="gridSize.tenth">Snap every tenth of a square</option>
+        <option [value]="gridSize.quarter">
           Snap every quarter of a square
         </option>
-        <option [value]="gridConfiguration.half">
-          Snap on a half or whole square
-        </option>
-        <option [value]="gridConfiguration.whole">
-          Snap on a whole square
-        </option>
+        <option [value]="gridSize.half">Snap on a half or whole square</option>
+        <option [value]="gridSize.whole">Snap on a whole square</option>
       </select>
     </div>
     <div class="input-row">
-      <label for="edit-mode">Connection type</label>
+      <label for="edit-mode">Forward style</label>
       <select
-        [(ngModel)]="settings.connectionType"
+        [(ngModel)]="settings.forwardStyle"
         (ngModelChange)="setSettings()"
         id="connection-type"
       >
-        <option [value]="connectionType.bezier">Bezier</option>
-        <option [value]="connectionType.flowchart">Flowchart</option>
-        <option [value]="connectionType.straight">Straight</option>
+        <option [value]="forwardStyle.bezier">Bezier</option>
+        <option [value]="forwardStyle.flowchart">Flowchart</option>
+        <option [value]="forwardStyle.straight">Straight</option>
       </select>
     </div>
     <div class="input-row">
-      <label>Enable vertical connectors</label>
+      <label for="edit-mode">Flow direction</label>
+      <select
+        [(ngModel)]="settings.direction"
+        (ngModelChange)="setSettings()"
+        id="forward-direction"
+      >
+        <option [value]="flowDirection.vertical">Vertical</option>
+        <option [value]="flowDirection.horizontal">Horizontal</option>
+      </select>
+    </div>
+    <div class="input-row">
+      <label>Ignore settings defined in configuration</label>
       <app-toggle
-        [(state)]="settings.verticalConnectors"
+        [(state)]="settings.ignoreConfigurationSettings"
         (stateChange)="setSettings()"
       ></app-toggle>
     </div>
