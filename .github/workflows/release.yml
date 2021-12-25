@@ -32,4 +32,4 @@ jobs:
         with:
           node-version: 16.x
       - name: Run semantic release
-        run: yarn semantic-release --dry-run
+        run: npx semantic-release --dry-run
