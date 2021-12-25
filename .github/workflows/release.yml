@@ -2,12 +2,14 @@ name: Semantic Release
 
 on:
   workflow_run:
+    branches:
+      - master
     workflows: [ "Frontend CI" ]
     types:
       - completed
 
 jobs:
-  cypress-test:
+  semantic-release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout frank-flow repository
