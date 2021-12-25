@@ -1,0 +1,31 @@
+name: Semantic Release
+
+on:
+  workflow_run:
+    branches:
+      - master
+    workflows: [ "Frontend CI" ]
+    types:
+      - completed
+
+jobs:
+  semantic-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout frank-flow repository
+        uses: actions/checkout@v2
+        with:
+          path: frank-flow
+      - name: Setup Node
+        uses: actions/setup-node@v2
+      - name: Checkout frank-runner
+        uses: actions/checkout@v2
+        with:
+          repository: ibissource/frank-runner
+          path: frank-runner
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+      - name: Run semantic release
+        run: yarn semantic-release --dry-run
