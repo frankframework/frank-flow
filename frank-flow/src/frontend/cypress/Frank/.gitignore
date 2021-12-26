@@ -1,7 +1,0 @@
-/target/
-
-# Ignore Frank for testing. Changes can still be comitted explicitly.
-/src/
-build.xml
-frank-runner.properties
-pom.xml
