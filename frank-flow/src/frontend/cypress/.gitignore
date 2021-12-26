@@ -1,0 +1,9 @@
+# Cypress output
+/videos/
+/Frank/target/
+
+# Ignore Frank for testing. Changes can still be comitted explicitly.
+/Frank/src/
+/Frank/build.xml
+/Frank/frank-runner.properties
+/Frank/pom.xml
