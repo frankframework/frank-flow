@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>org.ibissource</groupId>
 			<artifactId>ibis-adapterframework-webapp</artifactId>
-			<version>7.7-20211216.094411</version>
+			<version>[7.7-20211216.094411,)</version>
 			<!--
 			Keep this version and the frank-flow version as high as possible to prevent a lot of pom version's being
 			downloaded when you have an empty local repository. This will also make the CI/CD pipeline faster as it
