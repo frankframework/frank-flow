@@ -1,4 +1,8 @@
 {
+  "repositoryUrl": "https://github.com/ibissource/frank-flow.git",
+  "release": {
+    "branches": ["master", "1.0.x"]
+  },
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
