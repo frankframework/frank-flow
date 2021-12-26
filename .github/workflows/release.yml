@@ -7,6 +7,10 @@ on:
     types:
       - completed
 
+defaults:
+  run:
+    working-directory: frank-flow/
+
 jobs:
   on-success:
     runs-on: ubuntu-latest
