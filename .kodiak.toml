@@ -11,4 +11,3 @@ auto_approve_usernames = ["dependabot"]
 
 [update]
 always = true
-ignored_usernames = ["dependabot"]
