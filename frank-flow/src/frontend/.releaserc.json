@@ -17,12 +17,12 @@
       {
         "replacements": [
           {
-            "files": ["../../../pom.xml"],
+            "files": ["../../../../pom.xml"],
             "from": "<artifactId>frank-flow-parent</artifactId>\n\t<version>.*</version>",
             "to": "<artifactId>frank-flow-parent</artifactId>\n\t<version>${nextRelease.version}</version>",
             "results": [
               {
-                "file": "../../../pom.xml",
+                "file": "../../../../pom.xml",
                 "hasChanged": true,
                 "numMatches": 1,
                 "numReplacements": 1
