@@ -19,6 +19,7 @@ jobs:
       - name: Checkout frank-flow repository
         uses: actions/checkout@v2
         with:
+          fetch-depth: 0
           path: frank-flow
       - name: Use Node.js 16.x
         uses: actions/setup-node@v2
