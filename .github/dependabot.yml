@@ -8,7 +8,7 @@ updates:
     schedule:
       interval: "daily"
     commit-message:
-      prefix: "build(java dependencies):"
+      prefix: "build"
       include: "scope"
   - package-ecosystem: "npm"
     directory: "/frank-flow/src/frontend/"
@@ -19,5 +19,6 @@ updates:
       - "javascript"
       - "automerge"
     commit-message:
-      prefix: "build(javascript dependencies):"
+      prefix: "build"
       include: "scope"
+
