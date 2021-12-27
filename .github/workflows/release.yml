@@ -20,6 +20,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          persist-credentials: false
           path: frank-flow
       - name: Use Node.js 16.x
         uses: actions/setup-node@v2
@@ -36,5 +37,5 @@ jobs:
         run: yarn
       - name: Run semantic release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: yarn release
