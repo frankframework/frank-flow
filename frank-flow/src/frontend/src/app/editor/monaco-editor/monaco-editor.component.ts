@@ -45,6 +45,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   private applyEditsUpdate = false;
   private decorations: string[] = [];
   private positionUpdate = false;
+  private contentChanged = false;
 
   constructor(
     private monacoElement: ElementRef,
@@ -104,6 +105,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   initializeMonaco(): void {
     this.initializeEditor();
     this.initializeActions();
+    this.initializeOnChangeEvent();
     this.initializeOnKeyUpEvent();
     this.initializeNewFileSubscription();
     this.initializeOnDidChangeCursorPosition();
@@ -170,6 +172,12 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.setValueAsCurrentFile();
   }
 
+  initializeOnChangeEvent(): void {
+    const model = this.codeEditorInstance.getModel();
+
+    model?.onDidChangeContent(() => (this.contentChanged = true));
+  }
+
   initializeOnKeyUpEvent(): void {
     this.codeEditorInstance?.onKeyUp(
       this.debounce(() => this.setValueAsCurrentFile(), 500)
@@ -177,19 +185,19 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   setValueAsCurrentFile(): void {
-    const value = this.codeEditorInstance.getModel()?.getValue();
-
-    if (this.fileNeedsToBeSaved()) {
+    if (this.fileNeedsUpdate()) {
+      const value = this.codeEditorInstance.getModel()?.getValue();
       this.currentFile.saved = false;
       this.currentFile.xml = value;
       this.currentFile.flowNeedsUpdate = this.flowNeedsUpdate;
       this.currentFileService.updateCurrentFile(this.currentFile);
+      this.contentChanged = false;
+      this.flowNeedsUpdate = true;
     }
-    this.flowNeedsUpdate = true;
   }
 
-  fileNeedsToBeSaved(): boolean {
-    return this.currentFile && !this.isReadOnly;
+  fileNeedsUpdate(): boolean {
+    return this.currentFile && !this.isReadOnly && this.contentChanged;
   }
 
   initializeNewFileSubscription(): void {
