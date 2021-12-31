@@ -224,12 +224,12 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/cdk@^11.0.0 || ^12.0.0-0":
-  version "12.2.13"
-  resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-12.2.13.tgz"
-  integrity sha512-zSKRhECyFqhingIeyRInIyTvYErt4gWo+x5DQr0b7YLUbU8DZSwWnG4w76Ke2s4U8T7ry1jpJBHoX/e8YBpGMg==
+"@angular/cdk@^13.0.0 || ^14.0.0-0":
+  version "13.1.1"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-13.1.1.tgz#bfc1050df357a26bda03410d821ae05826dcf88e"
+  integrity sha512-66PyWg+zKdxTe3b1pc1RduT8hsMs/hJ0aD0JX0pSEWVq7O0OJWJ5f0z+Mk03T9tAERA3NK1GifcKEDq5k7R2Zw==
   dependencies:
-    tslib "^2.2.0"
+    tslib "^2.3.0"
   optionalDependencies:
     parse5 "^5.0.0"
 
@@ -296,12 +296,12 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/elements@^11.0.0 || ^12.0.0-0":
-  version "12.2.14"
-  resolved "https://registry.npmjs.org/@angular/elements/-/elements-12.2.14.tgz"
-  integrity sha512-rTlmWeEofpj0+Jtxv08I3k4BTVw/RnUk4ZeUNizClMdX62NHgAAbxUxfBx4H8SLbzU/uj9dcw+qT4IIBv2l3cw==
+"@angular/elements@^13.0.0 || ^14.0.0-0":
+  version "13.1.1"
+  resolved "https://registry.yarnpkg.com/@angular/elements/-/elements-13.1.1.tgz#43fbf7791fdea546d78bc91266804d3abd7f4221"
+  integrity sha512-d9tDTvyz5ZK30H1RwE54EbFSMZ2nA5uRWJMWdD4AImSM72v+gQR2pNmt1Wp+cZ1K34i5LJdg1FhMqvfUTjQGZQ==
   dependencies:
-    tslib "^2.2.0"
+    tslib "^2.3.0"
 
 "@angular/forms@^13.1.0":
   version "13.1.0"
@@ -5911,13 +5911,13 @@ jest-worker@^27.0.2:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jqwidgets-ng@^13.1.0:
-  version "13.1.0"
-  resolved "https://registry.npmjs.org/jqwidgets-ng/-/jqwidgets-ng-13.1.0.tgz"
-  integrity sha512-6VxRll1Y56erGU/IZ4/mmC3JGH8ITGZC1OXXv4o5plCbqY5z6+gOAg7/6933UmpnU3qNODcz3giKANjDHuJ1bg==
+jqwidgets-ng@^13.1.1:
+  version "13.1.1"
+  resolved "https://registry.yarnpkg.com/jqwidgets-ng/-/jqwidgets-ng-13.1.1.tgz#4ddc05223ad617c46d57c9083f1346ff45835204"
+  integrity sha512-9VQnfDl4DEjGzN724bLiGOePKrEzQXOs8hkpwUoN8oUZ1URbJjURrPacAeHxJUkydHuIBRuskLoCkgXyY6nW7g==
   dependencies:
-    "@angular/cdk" "^11.0.0 || ^12.0.0-0"
-    "@angular/elements" "^11.0.0 || ^12.0.0-0"
+    "@angular/cdk" "^13.0.0 || ^14.0.0-0"
+    "@angular/elements" "^13.0.0 || ^14.0.0-0"
 
 js-tokens@^4.0.0:
   version "4.0.0"
@@ -9546,7 +9546,7 @@ ts-node@^10.4.0:
     make-error "^1.1.1"
     yn "3.1.1"
 
-tslib@2.3.1, tslib@^2.0.0, tslib@^2.1.0, tslib@^2.2.0, tslib@^2.3.0, tslib@^2.3.1:
+tslib@2.3.1, tslib@^2.0.0, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.3.1:
   version "2.3.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
