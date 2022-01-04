@@ -2,6 +2,8 @@
   "release": {
     "branches": ["master", "1.0.x"]
   },
+  "repositoryUrl": "https://github.com/ibisscource/frank-flow",
+  "debug": "true",
   "plugins": [
     [
       "@semantic-release/commit-analyzer",
@@ -10,46 +12,6 @@
         "releaseRules": [{ "type": "build", "release": "patch" }]
       }
     ],
-    "@semantic-release/release-notes-generator",
-    "@semantic-release/npm",
-    [
-      "@google/semantic-release-replace-plugin",
-      {
-        "replacements": [
-          {
-            "files": ["../../../../pom.xml"],
-            "from": "<artifactId>frank-flow-parent</artifactId>\n\t<version>.*</version>",
-            "to": "<artifactId>frank-flow-parent</artifactId>\n\t<version>${nextRelease.version}</version>",
-            "results": [
-              {
-                "file": "../../../../pom.xml",
-                "hasChanged": true,
-                "numMatches": 1,
-                "numReplacements": 1
-              }
-            ],
-            "countMatches": true
-          }
-        ]
-      }
-    ],
-    [
-      "@semantic-release/changelog",
-      {
-        "changelogFile": "../../../../CHANGELOG.md"
-      }
-    ],
-    [
-      "@semantic-release/git",
-      {
-        "assets": [
-          "../../../CHANGELOG.md",
-          "../../../../CHANGELOG.md",
-          "../../../pom.xml",
-          "package.json"
-        ],
-        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-      }
-    ]
+    "@semantic-release/npm"
   ]
 }
