@@ -2,7 +2,6 @@
   "release": {
     "branches": ["master", "1.0.x"]
   },
-  "repositoryUrl": "https://github.com/ibisscource/frank-flow",
   "debug": "true",
   "plugins": [
     [
