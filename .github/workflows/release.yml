@@ -24,12 +24,7 @@ jobs:
           node-version: 16.x
       - name: Install dependencies
         run: yarn global add semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/exec
-      - name: Run semantic release for node
-        working-directory: frank-flow/frank-flow/src/frontend
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: semantic-release
-      - name: Runsemantic release for project
+      - name: Run semantic release
         working-directory: frank-flow
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
