@@ -7,10 +7,6 @@ on:
     types:
       - completed
 
-defaults:
-  run:
-    working-directory: frank-flow/frank-flow/src/frontend
-
 jobs:
   on-success:
     runs-on: ubuntu-latest
@@ -26,16 +22,15 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-      - name: Cache npm dependencies
-        uses: actions/cache@v2
-        with:
-          path: '~/.npm'
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
       - name: Install dependencies
-        run: yarn
-      - name: Run semantic release
+        run: yarn global add semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/exec
+      - name: Run semantic release for node
+        working-directory: frank-flow/frank-flow/src/frontend
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: yarn release
+        run: semantic-release
+      - name: Runsemantic release for project
+        working-directory: frank-flow
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: chmod +x ./prepare-release.sh && semantic-release
