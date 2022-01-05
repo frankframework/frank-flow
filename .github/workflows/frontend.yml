@@ -26,7 +26,8 @@ jobs:
       - name: Write frank-flow.properties
         run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-runner/frank-flow.properties
       - name: Build backend
-        run: mvn -f frank-flow
+        working-directory: frank-flow
+        run: mvn install
       - name: Cache Frank!Runner dependencies
         uses: actions/cache@v2
         with:
