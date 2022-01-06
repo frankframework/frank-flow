@@ -7,11 +7,16 @@
     [
       "@semantic-release/commit-analyzer",
       {
-        "preset": "angular",
-        "releaseRules": [{ "type": "build", "release": "patch" }]
+        "preset": "metahub",
+        "releaseRules": "conventional-changelog-metahub/release-rules"
       }
     ],
-    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "metahub"
+      }
+    ],
     [
       "@semantic-release/changelog",
       {
@@ -24,6 +29,7 @@
         "prepareCmd": "./prepare-release.sh ${nextRelease.version}"
       }
     ],
+    "@semantic-release/github",
     [
       "@semantic-release/git",
       {

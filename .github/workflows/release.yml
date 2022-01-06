@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: 16.x
       - name: Install dependencies
-        run: yarn global add semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/exec
+        run: yarn global add semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/exec conventional-changelog-metahub
       - name: Run semantic release
         working-directory: frank-flow
         env:
