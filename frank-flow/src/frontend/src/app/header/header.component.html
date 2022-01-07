@@ -1,6 +1,6 @@
 <div class="header">
   <div class="header__logo">
-    <img src="./assets/images/frank-flow-logo.svg" />
+    <img src="./assets/images/frank-flow-logo.svg" alt="Frank!Flow" />
   </div>
   <div class="header__actions">
     <app-button
@@ -22,18 +22,14 @@
     <app-button
       (click)="openEditFileDialog()"
       color="dark"
-      title="Modify this file"
+      title="Modify this file or folder"
     >
       <fa-icon icon="pen"></fa-icon>
     </app-button>
   </div>
   <div class="header__actions--right">
     <app-modes></app-modes>
-    <app-button
-      (click)="openSettings()"
-      color="dark"
-      title="Open settings menu"
-    >
+    <app-button (click)="openSettings()" color="dark" title="Open settings">
       <fa-icon icon="cog"></fa-icon>
     </app-button>
   </div>
