@@ -8,7 +8,41 @@ updates:
     schedule:
       interval: "daily"
     commit-message:
-      prefix: "build"
+      prefix: "fix(dependencies):"
+      prefix-development: "chore(devDependencies):"
+      include: "scope"
+  - package-ecosystem: "maven"
+    directory: "/frank-flow/"
+    labels:
+      - "dependencies"
+      - "java"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "fix(dependencies):"
+      prefix-development: "chore(devDependencies):"
+      include: "scope"
+  - package-ecosystem: "maven"
+    directory: "/frank-flow-launcher/"
+    labels:
+      - "dependencies"
+      - "java"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "fix(dependencies):"
+      prefix-development: "chore(devDependencies):"
+      include: "scope"
+  - package-ecosystem: "maven"
+    directory: "/frank-flow-webapp/"
+    labels:
+      - "dependencies"
+      - "java"
+    schedule:
+      interval: "daily"
+    commit-message:
+      prefix: "fix(dependencies):"
+      prefix-development: "chore(devDependencies):"
       include: "scope"
   - package-ecosystem: "npm"
     directory: "/frank-flow/src/frontend/"
@@ -19,6 +53,7 @@ updates:
       - "javascript"
       - "automerge"
     commit-message:
-      prefix: "build"
+      prefix: "fix(dependencies):"
+      prefix-development: "chore(devDependencies):"
       include: "scope"
 
