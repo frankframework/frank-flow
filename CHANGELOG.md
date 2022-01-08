@@ -1,3 +1,20 @@
+## [2.1.5](https://github.com/ibissource/frank-flow/compare/v2.1.4...v2.1.5) (2022-01-08)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([#411](https://github.com/ibissource/frank-flow/issues/411)) ([8c1ead7](https://github.com/ibissource/frank-flow/commit/8c1ead7756773bd20fb06ff7f005729735a6dc5d))
+
+
+### ♻️ Chores
+
+* remove personal access token from workflow ([9000f03](https://github.com/ibissource/frank-flow/commit/9000f030ad49c4190b6377c02b8f24570da6d21b))
+
+
+### 🗑 Reverts
+
+* remove personal access token from workflow ([8fff351](https://github.com/ibissource/frank-flow/commit/8fff351e5ef58c2d2646804d68f74e1705cd5736))
+
 ## [2.1.4](https://github.com/ibissource/frank-flow/compare/v2.1.3...v2.1.4) (2022-01-06)
 
 
