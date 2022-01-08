@@ -27,5 +27,5 @@ jobs:
       - name: Run semantic release
         working-directory: frank-flow
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: chmod +x ./prepare-release.sh && semantic-release
