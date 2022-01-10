@@ -10,6 +10,7 @@ import { FlowModule } from './flow/flow.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './shared/components/shared.module';
+import { ExplorerModule } from './explorer/explorer.module';
 
 const toastrConfig = {
   positionClass: 'toast-bottom-right',
@@ -31,6 +32,7 @@ const toastrConfig = {
     BrowserAnimationsModule,
     ToastrModule.forRoot(toastrConfig),
     SharedModule,
+    ExplorerModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
