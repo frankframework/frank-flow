@@ -286,13 +286,12 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   onResize(): void {
-    const parentElement = this.monacoElement.nativeElement.parentElement;
+    const parentElement = this.editorContainer.nativeElement;
     if (parentElement) {
       setTimeout(() =>
         this.codeEditorInstance.layout({
           height: parentElement.offsetHeight,
-          width:
-            parentElement.offsetWidth - parentElement.children[0].offsetWidth,
+          width: parentElement.offsetWidth,
         })
       );
     }
