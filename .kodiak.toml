@@ -2,7 +2,7 @@ version = 1
 
 [merge]
 automerge_label = "automerge"
-method = "squash"
+method = "rebase"
 delete_branch_on_merge = true
 notify_on_conflict = false
 
