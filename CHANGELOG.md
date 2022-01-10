@@ -1,3 +1,17 @@
+## [2.1.6](https://github.com/ibissource/frank-flow/compare/v2.1.5...v2.1.6) (2022-01-10)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/cli in /frank-flow/src/frontend ([#420](https://github.com/ibissource/frank-flow/issues/420)) ([ce612a7](https://github.com/ibissource/frank-flow/commit/ce612a78713aeaba5f6e0ccf032a3e15ff66be4e))
+* **deps-dev:** bump karma in /frank-flow/src/frontend ([#419](https://github.com/ibissource/frank-flow/issues/419)) ([fd4d5c6](https://github.com/ibissource/frank-flow/commit/fd4d5c6f1e6d50479fdc548f8da66d2da5f21a78))
+
+
+### ♻️ Chores
+
+* change commit messages for dependabot and add all poms ([83d1a07](https://github.com/ibissource/frank-flow/commit/83d1a077d970bf82fd070c39bf10690f543e0f45))
+* remove commit message from dependabot ([344f8cc](https://github.com/ibissource/frank-flow/commit/344f8cc9333969ba38a7d9db9ed96c4cc0073d48))
+
 ## [2.1.5](https://github.com/ibissource/frank-flow/compare/v2.1.4...v2.1.5) (2022-01-08)
 
 
