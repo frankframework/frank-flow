@@ -7,6 +7,7 @@
 >
   <app-header></app-header>
   <div class="main-container">
+    <app-explorer></app-explorer>
     <app-editor
       (finishedLoading)="initializeLoadLastSessionFile()"
       [class.shareSpace]="mode.is(modeType.hybridMode)"
