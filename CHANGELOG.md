@@ -1,3 +1,11 @@
+## [2.1.7](https://github.com/ibissource/frank-flow/compare/v2.1.6...v2.1.7) (2022-01-10)
+
+
+### 🛠 Builds
+
+* **deps:** bump maven-assembly-plugin in /frank-flow-launcher ([#413](https://github.com/ibissource/frank-flow/issues/413)) ([6718a1f](https://github.com/ibissource/frank-flow/commit/6718a1f451fedee78de0cc2be38a98824cf3a0fb))
+* **deps:** bump maven-jar-plugin from 3.2.0 to 3.2.1 ([#416](https://github.com/ibissource/frank-flow/issues/416)) ([7e0480b](https://github.com/ibissource/frank-flow/commit/7e0480b7a43aab0f167670dcf55dd85908d3224e))
+
 ## [2.1.6](https://github.com/ibissource/frank-flow/compare/v2.1.5...v2.1.6) (2022-01-10)
 
 
