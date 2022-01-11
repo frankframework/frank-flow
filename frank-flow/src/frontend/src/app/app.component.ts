@@ -7,6 +7,10 @@ import { Settings } from './header/settings/settings.model';
 import { SessionService } from './shared/services/session.service';
 import { CurrentFileService } from './shared/services/current-file.service';
 import { FileType } from './shared/enums/file-type.enum';
+import {
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +21,9 @@ export class AppComponent implements OnInit {
   public modeType = ModeType;
   public mode!: Mode;
   public settings!: Settings;
+
+  foldArrow = () =>
+    this.settings.showExplorer ? faAngleDoubleLeft : faAngleDoubleRight;
 
   constructor(
     private modeService: ModeService,
@@ -49,5 +56,10 @@ export class AppComponent implements OnInit {
     } else {
       this.currentFileService.resetCurrentFile();
     }
+  }
+
+  toggleExplorer() {
+    this.settings.showExplorer = !this.settings.showExplorer;
+    this.settingsService.setSettings(this.settings);
   }
 }

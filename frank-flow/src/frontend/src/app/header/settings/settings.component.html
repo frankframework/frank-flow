@@ -44,6 +44,13 @@
     <hr />
     <h2>Explorer</h2>
     <div class="input-row">
+      <label>Show Explorer</label>
+      <app-toggle
+        [(state)]="settings.showExplorer"
+        (stateChange)="setSettings()"
+      ></app-toggle>
+    </div>
+    <div class="input-row">
       <label for="switch-without-saving-options"
         >What do you want to do with the current file when switching
         files?</label

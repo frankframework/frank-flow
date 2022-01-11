@@ -15,4 +15,5 @@ export class DefaultSettings implements Settings {
   direction = FlowDirection.vertical;
   gridSize = GridSize.tenth;
   ignoreConfigurationSettings = false;
+  showExplorer = true;
 }
