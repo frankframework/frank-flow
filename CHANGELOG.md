@@ -1,3 +1,27 @@
+# [2.2.0](https://github.com/ibissource/frank-flow/compare/v2.1.9...v2.2.0) (2022-01-11)
+
+
+### ✨ Features
+
+* always show and explorer ([af6f018](https://github.com/ibissource/frank-flow/commit/af6f018e1ac0bad087adf8d5626c40a86afa69ba))
+* make Explorer collapsable ([6911d00](https://github.com/ibissource/frank-flow/commit/6911d009f3ef8ba74152a3c552af6033bc47c9ee))
+* remove Selector and restyle Header ([e07105e](https://github.com/ibissource/frank-flow/commit/e07105eb6212f2da0ff4dc17a46b00e9e656177d))
+
+
+### 🐛 Bug Fixes
+
+* make delete button in edit-modal big again ([004b925](https://github.com/ibissource/frank-flow/commit/004b92557096df9334f65f1ff157be0d25115193))
+
+
+### 📦 Code Refactoring
+
+* move explorer out of the editor component ([607ee19](https://github.com/ibissource/frank-flow/commit/607ee19cdb08c0c0208345dce88add82b38a81e4))
+
+
+### ♻️ Chores
+
+* change kodiak merge stratagy to rebase ([21a3259](https://github.com/ibissource/frank-flow/commit/21a32594c1c8ca196f7e068d9566d7aad8a0b94b))
+
 ## [2.1.9](https://github.com/ibissource/frank-flow/compare/v2.1.8...v2.1.9) (2022-01-11)
 
 
