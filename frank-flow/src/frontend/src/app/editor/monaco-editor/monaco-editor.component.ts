@@ -301,6 +301,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.settingsSubscription = this.settingsService.getSettings().subscribe({
       next: (settings) => {
         this.onThemeChange(settings);
+        this.onResize();
       },
     });
   }
