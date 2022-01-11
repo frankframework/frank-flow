@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {
   faCog,
-  faFile,
-  faFolder,
   faPen,
+  faPlus,
   faSave,
 } from '@fortawesome/free-solid-svg-icons';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -11,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { CurrentFileService } from '../shared/services/current-file.service';
 import { File } from '../shared/models/file.model';
+import { FileType } from '../shared/enums/file-type.enum';
 
 @Component({
   selector: 'app-header',
@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit {
     private ngxSmartModalService: NgxSmartModalService,
     private currentFileService: CurrentFileService
   ) {
-    library.addIcons(faFile, faFolder, faSave, faCog, faPen);
+    library.addIcons(faPlus, faSave, faCog, faPen);
   }
 
   ngOnInit(): void {
@@ -64,6 +64,16 @@ export class HeaderComponent implements OnInit {
         .open();
     } else {
       this.toastr.error('Please select a folder first', "Can't add item");
+    }
+  }
+
+  currentFileTitle() {
+    if (this.currentFile?.type === FileType.EMPTY) {
+      return 'No file selected';
+    } else if (this.currentFile) {
+      return this.currentFile.configuration + ': ' + this.currentFile.path;
+    } else {
+      return 'Loading file...';
     }
   }
 }
