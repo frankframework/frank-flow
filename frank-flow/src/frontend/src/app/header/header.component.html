@@ -1,16 +1,15 @@
+<div class="logo">
+  <img src="./assets/images/frank-flow-logo.svg" />
+</div>
 <div class="header">
-  <div class="header__logo">
-    <img src="./assets/images/frank-flow-logo.svg" />
-  </div>
   <div class="header__actions">
     <app-button
       (click)="openAddDialog()"
       color="dark"
       title="Add a file or folder"
     >
-      <fa-icon icon="file"></fa-icon>
+      <fa-icon icon="plus"></fa-icon>
     </app-button>
-    <app-selector></app-selector>
     <app-button
       (click)="save()"
       [selected]="!currentFile?.saved"
@@ -26,6 +25,9 @@
     >
       <fa-icon icon="pen"></fa-icon>
     </app-button>
+    <div class="current-file-title">
+      {{ currentFileTitle() }}
+    </div>
   </div>
   <div class="header__actions--right">
     <app-modes></app-modes>
