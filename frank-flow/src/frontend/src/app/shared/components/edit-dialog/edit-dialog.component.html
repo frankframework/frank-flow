@@ -28,6 +28,6 @@
       {{ currentDirectory?.path ? 'folder' : 'file' }} wil be permanently
       deleted
     </label>
-    <app-button (click)="delete()">Delete</app-button>
+    <app-button [block]="true" (click)="delete()">Delete</app-button>
   </div>
 </ngx-smart-modal>
