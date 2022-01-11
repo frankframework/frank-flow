@@ -1,3 +1,39 @@
+## [2.1.9](https://github.com/ibissource/frank-flow/compare/v2.1.8...v2.1.9) (2022-01-11)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([#423](https://github.com/ibissource/frank-flow/issues/423)) ([32a8a02](https://github.com/ibissource/frank-flow/commit/32a8a02e7ac7efdb8d2c65deed8cc02a4f468a90))
+
+## [2.1.8](https://github.com/ibissource/frank-flow/compare/v2.1.7...v2.1.8) (2022-01-10)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([#422](https://github.com/ibissource/frank-flow/issues/422)) ([a0e7d52](https://github.com/ibissource/frank-flow/commit/a0e7d52fc357e67f1304d93eb219479b9f813fe4))
+
+## [2.1.7](https://github.com/ibissource/frank-flow/compare/v2.1.6...v2.1.7) (2022-01-10)
+
+
+### 🛠 Builds
+
+* **deps:** bump maven-assembly-plugin in /frank-flow-launcher ([#413](https://github.com/ibissource/frank-flow/issues/413)) ([6718a1f](https://github.com/ibissource/frank-flow/commit/6718a1f451fedee78de0cc2be38a98824cf3a0fb))
+* **deps:** bump maven-jar-plugin from 3.2.0 to 3.2.1 ([#416](https://github.com/ibissource/frank-flow/issues/416)) ([7e0480b](https://github.com/ibissource/frank-flow/commit/7e0480b7a43aab0f167670dcf55dd85908d3224e))
+
+## [2.1.6](https://github.com/ibissource/frank-flow/compare/v2.1.5...v2.1.6) (2022-01-10)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/cli in /frank-flow/src/frontend ([#420](https://github.com/ibissource/frank-flow/issues/420)) ([ce612a7](https://github.com/ibissource/frank-flow/commit/ce612a78713aeaba5f6e0ccf032a3e15ff66be4e))
+* **deps-dev:** bump karma in /frank-flow/src/frontend ([#419](https://github.com/ibissource/frank-flow/issues/419)) ([fd4d5c6](https://github.com/ibissource/frank-flow/commit/fd4d5c6f1e6d50479fdc548f8da66d2da5f21a78))
+
+
+### ♻️ Chores
+
+* change commit messages for dependabot and add all poms ([83d1a07](https://github.com/ibissource/frank-flow/commit/83d1a077d970bf82fd070c39bf10690f543e0f45))
+* remove commit message from dependabot ([344f8cc](https://github.com/ibissource/frank-flow/commit/344f8cc9333969ba38a7d9db9ed96c4cc0073d48))
+
 ## [2.1.5](https://github.com/ibissource/frank-flow/compare/v2.1.4...v2.1.5) (2022-01-08)
 
 
