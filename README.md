@@ -42,9 +42,23 @@ You can select an element by double clicking it on the canvas. The options of th
 
 While the Flow can help you manipulate your adapter, there are still some people that want some more control or are used to editing the adapter in XML-code. The Editor had a lot of features similar to Visual Studio Code because it is based on the [Monaco Editor](https://microsoft.github.io/monaco-editor/)
 
-### 🔄 Hybrid
+### 🔁 Hybrid
 
 The Hybrid mode is a combination of the Editor and the Flow modes. It will show you every modification you make in real-time. For example, if you add an element to the Flow, it will automatically get inserted into the XML and the other way around. This mode is a great way to learn XML or to get an overview of an already existing configuration. 
+
+### ⚙️ Configuration Flow Settings
+
+One of the important things that may get overlooked, is the shareability of the configurations. After creating a configuration in the Flow, it will have a specific layout that would (hopefully) look pleasing. To ensure that others see the Flow the same way as you do, it could be useful to add your Flow settings to the configuration. This can be done by placing them as attributes in the  `configuration` tag of your configuration.
+
+The available settings are:
+
+| Attribute           | Available values                  |
+| ------------------- | --------------------------------- |
+| `flow:direction`    | `bezier`, `flowchart`, `straight` |
+| `flow:forwardStyle` | `horizontal`, `vertical`          |
+| `flow:gridSize`     | `0`, `10`, `25`, `50`, `100`      |
+
+
 
 ## How to use the Frank!Flow
 
