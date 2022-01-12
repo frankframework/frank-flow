@@ -239,5 +239,6 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   deleteNode() {
     this.flowStructureService.deleteNode(this.structureNode);
+    this.ngxSmartModalService.close('optionsModal');
   }
 }
