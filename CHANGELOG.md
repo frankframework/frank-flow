@@ -1,3 +1,10 @@
+## [2.2.3](https://github.com/ibissource/frank-flow/compare/v2.2.2...v2.2.3) (2022-01-12)
+
+
+### 🛠 Builds
+
+* **deps:** bump maven-compiler-plugin from 3.8.1 to 3.9.0 ([01e4c36](https://github.com/ibissource/frank-flow/commit/01e4c363f17060b134cbc6aa020a84a695f61cf2))
+
 ## [2.2.2](https://github.com/ibissource/frank-flow/compare/v2.2.1...v2.2.2) (2022-01-12)
 
 
