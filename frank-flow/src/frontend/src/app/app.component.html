@@ -22,7 +22,10 @@
       ></app-flow>
     </div>
     <div [style.left]="settings.showExplorer ? '256px' : 0" class="actions">
-      <app-button (click)="toggleExplorer()">
+      <app-button
+        (click)="toggleExplorer()"
+        [title]="(settings.showExplorer ? 'Hide' : 'Show') + ' Explorer'"
+      >
         <fa-icon [icon]="foldArrow()"></fa-icon>
       </app-button>
     </div>
