@@ -1,3 +1,22 @@
+# [2.3.0](https://github.com/ibissource/frank-flow/compare/v2.2.3...v2.3.0) (2022-01-13)
+
+
+### ✨ Features
+
+* add descriptions to the labels and options in the Settings ([93aadb0](https://github.com/ibissource/frank-flow/commit/93aadb0594a7738e309c6728f1aa6e8ccc0d6f70))
+* add hover text to Explorer toggle ([c673689](https://github.com/ibissource/frank-flow/commit/c6736890633f1ff0a778aa0f57903ab8c69693ed))
+* add hover text to Toggle component ([6991fb2](https://github.com/ibissource/frank-flow/commit/6991fb23304a23beb2a6bd787e47c70afeb2a54f))
+
+
+### 🐛 Bug Fixes
+
+* close Options after a Node had been deleted ([3dca833](https://github.com/ibissource/frank-flow/commit/3dca833351107a8fe17e6a97f94d8e8e6f02a250))
+
+
+### 📦 Code Refactoring
+
+* move the floating actions into it's own component ([3cda8c7](https://github.com/ibissource/frank-flow/commit/3cda8c7cc6f3eef13f3916c87ec59564bf91a20f))
+
 ## [2.2.3](https://github.com/ibissource/frank-flow/compare/v2.2.2...v2.2.3) (2022-01-12)
 
 
