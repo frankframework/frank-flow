@@ -7,9 +7,9 @@ import {
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { NgxSmartModalService } from 'ngx-smart-modal';
-import { FileService } from '../../shared/services/file.service';
-import { CurrentFileService } from '../../shared/services/current-file.service';
-import { File } from '../../shared/models/file.model';
+import { FileService } from '../shared/services/file.service';
+import { CurrentFileService } from '../shared/services/current-file.service';
+import { File } from '../shared/models/file.model';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({

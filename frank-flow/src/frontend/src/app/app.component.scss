@@ -2,16 +2,39 @@
   height: 100%;
   width: 100%;
 
-  .main-container {
+  .body {
     height: calc(100% - 64px);
-    display: flex;
 
-    .useAllSpace {
-      width: 100%;
+    .modes {
+      display: flex;
+      height: 100%;
+
+      .useAllSpace {
+        width: 100%;
+      }
+
+      .shareSpace {
+        width: 50%;
+      }
     }
 
-    .shareSpace {
-      width: 50%;
+    app-explorer {
+      flex-grow: 1;
+      width: 256px;
+      height: 100%;
+      display: block;
+      float: left;
+    }
+
+    .actions {
+      margin: 16px;
+      padding: 16px;
+      background: var(--bg-color-muted-shadow);
+      position: relative;
+      top: calc(-64px - 32px);
+      display: flex;
+      gap: 16px;
+      width: fit-content;
     }
   }
 }

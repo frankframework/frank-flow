@@ -6,18 +6,26 @@
   class="root"
 >
   <app-header></app-header>
-  <div class="main-container">
-    <app-editor
-      (finishedLoading)="initializeLoadLastSessionFile()"
-      [class.shareSpace]="mode.is(modeType.hybridMode)"
-      [class.useAllSpace]="mode.is(modeType.editorMode)"
-      [hidden]="mode.is(modeType.flowMode)"
-    ></app-editor>
-    <app-flow
-      *ngIf="mode.is(modeType.flowMode) || mode.is(modeType.hybridMode)"
-      [class.shareSpace]="mode.is(modeType.hybridMode)"
-      [class.useAllSpace]="mode.is(modeType.flowMode)"
-    ></app-flow>
+  <div class="body">
+    <app-explorer *ngIf="settings.showExplorer"></app-explorer>
+    <div class="modes">
+      <app-editor
+        (finishedLoading)="initializeLoadLastSessionFile()"
+        [class.shareSpace]="mode.is(modeType.hybridMode)"
+        [class.useAllSpace]="mode.is(modeType.editorMode)"
+        [hidden]="mode.is(modeType.flowMode)"
+      ></app-editor>
+      <app-flow
+        *ngIf="mode.is(modeType.flowMode) || mode.is(modeType.hybridMode)"
+        [class.shareSpace]="mode.is(modeType.hybridMode)"
+        [class.useAllSpace]="mode.is(modeType.flowMode)"
+      ></app-flow>
+    </div>
+    <div [style.left]="settings.showExplorer ? '256px' : 0" class="actions">
+      <app-button (click)="toggleExplorer()">
+        <fa-icon [icon]="foldArrow()"></fa-icon>
+      </app-button>
+    </div>
   </div>
   <app-add-dialog></app-add-dialog>
 </div>
