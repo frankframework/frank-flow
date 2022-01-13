@@ -1,17 +1,15 @@
 name: Semantic Release
 
 on:
-  workflow_run:
+  push:
     branches: [ "master" ]
-    workflows: [ "Frontend CI" ]
-    types:
-      - completed
 
 jobs:
-  on-success:
+  release:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+      - name: Pause until all workflows are completed
+        uses: willgarcia/workflow-wait-action@v0.1.0
       - name: Checkout frank-flow repository
         uses: actions/checkout@v2
         with:
@@ -27,5 +25,5 @@ jobs:
       - name: Run semantic release
         working-directory: frank-flow
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: chmod +x ./prepare-release.sh && semantic-release
