@@ -252,20 +252,4 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   comparePositions(lastPosition: number, currentPosition: number): number {
     return currentPosition > lastPosition ? currentPosition : lastPosition;
   }
-
-  zoomIn(): void {
-    this.panZoomService.zoomIn();
-  }
-
-  zoomOut(): void {
-    this.panZoomService.zoomOut();
-  }
-
-  zoomReset(): void {
-    this.panZoomService.reset();
-  }
-
-  panCenter(): void {
-    this.panZoomService.panCenter();
-  }
 }
