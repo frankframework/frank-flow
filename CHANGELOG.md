@@ -1,3 +1,11 @@
+## [2.3.1](https://github.com/ibissource/frank-flow/compare/v2.3.0...v2.3.1) (2022-01-13)
+
+
+### 🛠 Builds
+
+* **deps:** bump engine.io in /frank-flow/src/frontend ([f304e76](https://github.com/ibissource/frank-flow/commit/f304e76725b031cb77e94dd712d2fa663e3bb422))
+* **deps:** bump follow-redirects in /frank-flow/src/frontend ([5ceb731](https://github.com/ibissource/frank-flow/commit/5ceb73145849c13e2fc06d4e11270fa2f584c115))
+
 # [2.3.0](https://github.com/ibissource/frank-flow/compare/v2.2.3...v2.3.0) (2022-01-13)
 
 
