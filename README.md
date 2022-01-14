@@ -20,7 +20,7 @@ You can select a configuration by clicking on it. The Flow will be loaded on the
 
 ### 🎨 Palette
 
-The palette contains all the usable listeners, pipes, validators and an exit out of which the adapters are build. These elements can be searched and are categorized respectively.
+The palette contains all the usable listeners, pipes and an exit out of which the adapters are built. These elements are categorized by type and are searchable with the search bar above.
 
 The element will be added to the canvas by clicking on it.
 
@@ -40,7 +40,7 @@ You can select an element by double clicking it on the canvas. The options of th
 
 ### ⌨ Editor
 
-While the Flow can help you manipulate your adapter, there are still some people that want some more control or are used to editing the adapter in XML-code. The Editor had a lot of features similar to Visual Studio Code because it is based on the [Monaco Editor](https://microsoft.github.io/monaco-editor/)
+While the Flow can help you manipulate your adapter, there are still some people that want some more control or are used to editing the adapter in XML-code. The Editor has a lot of features similar to Visual Studio Code because it is based on the [Monaco Editor](https://microsoft.github.io/monaco-editor/)
 
 ### 🔁 Hybrid
 
@@ -122,7 +122,7 @@ There are some basic requirements that are needed to test or develop the Frank!F
 
 There are some tools that have to be used during development. These tools are needed for linters that keep the code clean and formatted the same way. The tools get run automatically by a Git hook.
 
-To install the tools go to the folder `frank-flow/src/frontend` this is needed because of the way this mono repo has been structured. This might change in the feature. Run `yarn` in this folder and everything should be good to go!
+To install the tools go to the folder `frank-flow/src/frontend`. Run `yarn` in this folder and everything should be good to go. This is needed because of the way this mono repo has been structured. This structure might change in the feature.
 
 ### Frontend
 
@@ -130,11 +130,11 @@ The code for the frontend is located at `frank-flow/src/frontend`. This folder c
 
 #### Building the frontend
 
-There are two ways to build the application, for development and for production. The difference lays in the way the code gets transpiled.
+There are two ways to build the application, for development and for production. The difference lays in the way the code gets optimized.
 
 ##### Development
 
-The dist folder is located at  `frank-flow/target/frontend`, set the absolute path of this folder as [frontend path in the properties file](#configuration) so the Frank!Runner knows what to serve. To build a development version you can run `yarn build:dev` or `yarn watch` if you want to build continually. The code won’t be minified which will make it easier to debug.
+The dist folder is located at  `frank-flow/target/frontend`. Set the absolute path of this folder as [frontend path in the properties file](#configuration) so the Frank!Runner knows which files to serve. To build a development version you can run `yarn build:dev` or `yarn watch` if you want to build continually. The code won’t be minified which will make it easier to debug.
 
 ##### Production
 
@@ -146,7 +146,7 @@ To analyze the size of the build and which files are making it so big, run `yarn
 
 ### Backend
 
-The backend is used to serve the frontend and as an API for getting files from the file-system. The code is located at `frank-flow/main/java`.
+The backend is used to serve the frontend and as an API for getting files from the file-system. The code is located at `frank-flow/src/main/java`.
 
 #### Building the backend
 
@@ -162,11 +162,11 @@ The other option to run `mvn install -P frontend`. This command builds both the 
 
 ### Configuration
 
-The Frank!Flow has some configuration options which are mainly used for the backend. The configuration options can be set by placing them in a `frank-flow.properties` file. This file should be placed in the location from where the Frank!Flow gets start. While developing with the Frank!Runner this would be in the root of the folder `frank-runner`.
+The Frank!Flow has some configuration options which are mainly used for the backend. The configuration options can be set by placing them in a `frank-flow.properties` file. Every property should be on it's own line and be followed by an equals sign (`=`) and a value. The properties file should be placed in the location from where the Frank!Flow gets start. While developing with the Frank!Runner this would be in the root of the folder `frank-runner`.
 
-| Property                   | Description                                      | Example                                                      |
-| -------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
-| `frank-flow.frontend-path` | The location of the dist folder for the frontend | `frank-flow.frontend-path = /home/user/Projects/frank-flow/frank-flow/target/frontend` |
-| `frank-flow.context-path`  | The URL at which the Frank!Flow will be served   | `frank-flow.context-path = /frank-flow/`                     |
-| `frank-flow.port`          | The port which the build-in Tomcat should use    | `frank-flow.port = 8080`                                     |
-| `frank-flow.war`           | The webapp war                                   | `frank-flow.war = /frank-flow-webapp.war`                    |
+| Property                   | Description                                      | Default value                        |
+| -------------------------- | ------------------------------------------------ |--------------------------------------|
+| `frank-flow.frontend-path` | The location of the dist folder for the frontend | The frontend in the JAR will be used |
+| `frank-flow.context-path`  | The URL at which the Frank!Flow will be served   | `/frank-flow/`                       |
+| `frank-flow.port`          | The port which the build-in Tomcat should use    | `8080`                               |
+| `frank-flow.war`           | The webapp war                                   | `/frank-flow-webapp.war`             |
