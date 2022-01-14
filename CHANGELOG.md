@@ -1,3 +1,53 @@
+## [2.3.2](https://github.com/ibissource/frank-flow/compare/v2.3.1...v2.3.2) (2022-01-13)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([2e6456d](https://github.com/ibissource/frank-flow/commit/2e6456d716f6841b98730eca9cf670400477978a))
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([9b394fc](https://github.com/ibissource/frank-flow/commit/9b394fcba7693c1e77132f317fad2614de761bb8))
+* **deps-dev:** bump karma in /frank-flow/src/frontend ([bc993f4](https://github.com/ibissource/frank-flow/commit/bc993f494f9b4dc8bd6968083cfcdeb120174628))
+
+## [2.3.1](https://github.com/ibissource/frank-flow/compare/v2.3.0...v2.3.1) (2022-01-13)
+
+
+### 🛠 Builds
+
+* **deps:** bump engine.io in /frank-flow/src/frontend ([f304e76](https://github.com/ibissource/frank-flow/commit/f304e76725b031cb77e94dd712d2fa663e3bb422))
+* **deps:** bump follow-redirects in /frank-flow/src/frontend ([5ceb731](https://github.com/ibissource/frank-flow/commit/5ceb73145849c13e2fc06d4e11270fa2f584c115))
+
+# [2.3.0](https://github.com/ibissource/frank-flow/compare/v2.2.3...v2.3.0) (2022-01-13)
+
+
+### ✨ Features
+
+* add descriptions to the labels and options in the Settings ([93aadb0](https://github.com/ibissource/frank-flow/commit/93aadb0594a7738e309c6728f1aa6e8ccc0d6f70))
+* add hover text to Explorer toggle ([c673689](https://github.com/ibissource/frank-flow/commit/c6736890633f1ff0a778aa0f57903ab8c69693ed))
+* add hover text to Toggle component ([6991fb2](https://github.com/ibissource/frank-flow/commit/6991fb23304a23beb2a6bd787e47c70afeb2a54f))
+
+
+### 🐛 Bug Fixes
+
+* close Options after a Node had been deleted ([3dca833](https://github.com/ibissource/frank-flow/commit/3dca833351107a8fe17e6a97f94d8e8e6f02a250))
+
+
+### 📦 Code Refactoring
+
+* move the floating actions into it's own component ([3cda8c7](https://github.com/ibissource/frank-flow/commit/3cda8c7cc6f3eef13f3916c87ec59564bf91a20f))
+
+## [2.2.3](https://github.com/ibissource/frank-flow/compare/v2.2.2...v2.2.3) (2022-01-12)
+
+
+### 🛠 Builds
+
+* **deps:** bump maven-compiler-plugin from 3.8.1 to 3.9.0 ([01e4c36](https://github.com/ibissource/frank-flow/commit/01e4c363f17060b134cbc6aa020a84a695f61cf2))
+
+## [2.2.2](https://github.com/ibissource/frank-flow/compare/v2.2.1...v2.2.2) (2022-01-12)
+
+
+### 🛠 Builds
+
+* **deps:** bump maven-jar-plugin from 3.2.1 to 3.2.2 ([f589138](https://github.com/ibissource/frank-flow/commit/f589138c95f2e7ab7c03f19aeeaf09fc1c0aa34a))
+
 ## [2.2.1](https://github.com/ibissource/frank-flow/compare/v2.2.0...v2.2.1) (2022-01-11)
 
 
