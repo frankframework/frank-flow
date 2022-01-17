@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Mode } from './header/modes/mode.model';
 import { ModeService } from './header/modes/mode.service';
 import { ModeType } from './header/modes/mode-type.enum';
@@ -11,6 +11,7 @@ import {
   faAngleDoubleLeft,
   faAngleDoubleRight,
 } from '@fortawesome/free-solid-svg-icons';
+import { File } from './shared/models/file.model';
 
 @Component({
   selector: 'app-root',
@@ -22,8 +23,15 @@ export class AppComponent implements OnInit {
   public mode!: Mode;
   public settings!: Settings;
 
+  @HostListener('window:beforeunload', ['$event'])
+  unloadHandler(event: Event) {
+    event.returnValue = !this.currentFile?.saved;
+  }
+
   foldArrow = () =>
     this.settings.showExplorer ? faAngleDoubleLeft : faAngleDoubleRight;
+
+  private currentFile!: File;
 
   constructor(
     private modeService: ModeService,
@@ -33,18 +41,25 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getMode();
-    this.getSettings();
+    this.subscribeToMode();
+    this.subscribeToSettings();
+    this.subscribeToCurrentFile();
   }
 
-  getMode(): void {
+  subscribeToMode(): void {
     this.modeService.getMode().subscribe((mode) => (this.mode = mode));
   }
 
-  getSettings(): void {
+  subscribeToSettings(): void {
     this.settingsService
       .getSettings()
       .subscribe((settings) => (this.settings = settings));
+  }
+
+  subscribeToCurrentFile(): void {
+    this.currentFileService.currentFileObservable.subscribe(
+      (currentFile) => (this.currentFile = currentFile)
+    );
   }
 
   initializeLoadLastSessionFile(): void {
