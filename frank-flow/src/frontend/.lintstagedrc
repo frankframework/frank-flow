@@ -1,4 +1,4 @@
 {
-  "*": "npx prettier --ignore-unknown --write",
-  "*.{ts, html}": "npx eslint --fix"
+  "*": "prettier --ignore-unknown --write",
+  "*.{ts, html}": "eslint --fix"
 }
