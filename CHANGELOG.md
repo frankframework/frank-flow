@@ -1,3 +1,24 @@
+# [2.4.0](https://github.com/ibissource/frank-flow/compare/v2.3.4...v2.4.0) (2022-01-18)
+
+
+### ✨ Features
+
+* add additional information about the flow settings. ([ac61b97](https://github.com/ibissource/frank-flow/commit/ac61b9778147b1e01d1b7c298aca993865d4d978))
+* make the configuration tag look like one ([d4a73ec](https://github.com/ibissource/frank-flow/commit/d4a73ec8a0a1acb69175382d112cec0fbf194de0))
+
+
+### 🐛 Bug Fixes
+
+* add a missing hyphen ([c5cda4f](https://github.com/ibissource/frank-flow/commit/c5cda4f49c1b094d81da42b6b481f31c69b13add))
+* typo in readme ([5ad0dd6](https://github.com/ibissource/frank-flow/commit/5ad0dd6982103ac23bb8a3784bab7655c0bb31bb))
+
+
+### 📚 Documentation
+
+* **readme:** add Configuration Flow Settings ([e7ffb3e](https://github.com/ibissource/frank-flow/commit/e7ffb3ef1cd07c6daacc549a023bc5bff3da5dce))
+* **readme:** process feedback for better sentences, grammer and content ([06a7a13](https://github.com/ibissource/frank-flow/commit/06a7a1379790fd97ae1b699d9a4d570d3565a977))
+* **readme:** update features, insctructions and remove outdated information ([f84ffa5](https://github.com/ibissource/frank-flow/commit/f84ffa5638994910612142bdd6dd51583f5d577a))
+
 ## [2.3.4](https://github.com/ibissource/frank-flow/compare/v2.3.3...v2.3.4) (2022-01-17)
 
 
