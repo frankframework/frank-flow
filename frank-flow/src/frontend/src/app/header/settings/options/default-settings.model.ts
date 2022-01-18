@@ -16,4 +16,5 @@ export class DefaultSettings implements Settings {
   gridSize = GridSize.tenth;
   ignoreConfigurationSettings = false;
   showExplorer = true;
+  showUnsavedChangesWarning = true;
 }

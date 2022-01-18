@@ -3,6 +3,7 @@ import { SwitchWithoutSavingOption } from './options/switch-without-saving-optio
 import { FlowSettings } from '../../shared/models/flow-settings.model';
 
 export interface Settings extends FlowSettings {
+  showUnsavedChangesWarning: boolean;
   showExplorer: boolean;
   darkMode: boolean;
   showPopups: boolean;
