@@ -25,7 +25,9 @@ export class AppComponent implements OnInit {
 
   @HostListener('window:beforeunload', ['$event'])
   unloadHandler(event: Event) {
-    event.returnValue = !this.currentFile?.saved;
+    if (!this.currentFile?.saved && this.settings.showUnsavedChangesWarning) {
+      event.preventDefault();
+    }
   }
 
   foldArrow = () =>

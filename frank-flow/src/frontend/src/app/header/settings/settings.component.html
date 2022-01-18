@@ -105,6 +105,16 @@
         </option>
       </select>
     </div>
+    <div class="input-row">
+      <label
+        title="A warning will appear if the tab is closed while changes are unsaved"
+        >Show warning for unsaved changes</label
+      >
+      <app-toggle
+        [(state)]="settings.showUnsavedChangesWarning"
+        (stateChange)="setSettings()"
+      ></app-toggle>
+    </div>
     <hr />
     <h2>Flow</h2>
     <div class="input-row">
