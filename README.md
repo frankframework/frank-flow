@@ -48,7 +48,7 @@ The Hybrid mode is a combination of the Editor and the Flow modes. It will show 
 
 ### ⚙️ Configuration Flow Settings
 
-One of the important things that may get overlooked, is the shareability of the configurations. After creating a configuration in the Flow, it will have a specific layout that would (hopefully) look pleasing. To ensure that others see the Flow the same way as you do, it could be useful to add your Flow settings to the configuration. This can be done by placing them as attributes in the  `configuration` tag of your configuration. Momentarily, this can only be done via the Editor.
+One of the important things that may get overlooked, is the shareability of the configurations. After creating a configuration in the Flow, it will have a specific layout that would (hopefully) look pleasing. To ensure that others see the Flow the same way as you do, it could be useful to add your Flow settings to the configuration. This can be done by placing them as attributes in the `<Configuration>` tag of your configuration. Momentarily, this can only be done via the Editor.
 
 The available settings are:
 
