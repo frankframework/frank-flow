@@ -1,3 +1,10 @@
+## [2.5.2](https://github.com/ibissource/frank-flow/compare/v2.5.1...v2.5.2) (2022-01-20)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/cli in /frank-flow/src/frontend ([3f00934](https://github.com/ibissource/frank-flow/commit/3f00934ea5add9de6d57ad51cc018f6eb05e0e9d))
+
 ## [2.5.1](https://github.com/ibissource/frank-flow/compare/v2.5.0...v2.5.1) (2022-01-20)
 
 
