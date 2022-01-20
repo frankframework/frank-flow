@@ -1,3 +1,11 @@
+## [2.5.3](https://github.com/ibissource/frank-flow/compare/v2.5.2...v2.5.3) (2022-01-20)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/cytoscape in /frank-flow/src/frontend ([c9edb42](https://github.com/ibissource/frank-flow/commit/c9edb42a983b0195dfd8e56bcf46abc79b0e3c58))
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([be79a25](https://github.com/ibissource/frank-flow/commit/be79a2504ba28d6a77fc238a840a6ff7dac40622))
+
 ## [2.5.2](https://github.com/ibissource/frank-flow/compare/v2.5.1...v2.5.2) (2022-01-20)
 
 
