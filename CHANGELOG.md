@@ -1,3 +1,22 @@
+# [2.5.0](https://github.com/ibissource/frank-flow/compare/v2.4.2...v2.5.0) (2022-01-20)
+
+
+### ✨ Features
+
+* add setting for the warning for unsaved changes ([a6d4df9](https://github.com/ibissource/frank-flow/commit/a6d4df98289f23065f74277ace55a30e0dcaab64))
+* add warning when closing tab while having unsaved changes ([94f363c](https://github.com/ibissource/frank-flow/commit/94f363c107a236a4cde3b61e45858aa0af6c2891))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/cli in /frank-flow/src/frontend ([8207c94](https://github.com/ibissource/frank-flow/commit/8207c94d765468e9b9f0a963cb294922544894db))
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([c84b9bd](https://github.com/ibissource/frank-flow/commit/c84b9bd77a3a51cd2643ffcf832fd4acdb5fa257))
+
+
+### ♻️ Chores
+
+* change lint stage config to not use npx anymore ([d151e3c](https://github.com/ibissource/frank-flow/commit/d151e3c45138523ac83e12fc591f707012e518e2))
+
 ## [2.4.2](https://github.com/ibissource/frank-flow/compare/v2.4.1...v2.4.2) (2022-01-20)
 
 
