@@ -1,40 +1,43 @@
 :host {
   position: relative;
-  display: block;
+  display: grid;
+  grid-template-columns: 256px auto;
   height: 64px;
+}
+
+.logo {
+  height: 100%;
+  width: 256px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('~src/assets/images/header-profile.png');
 }
 
 .header {
   background: var(--dark-cyan);
   width: 100%;
-  height: 100%;
+  height: 64px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  &__logo {
-    height: 100%;
-    width: 256px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-image: url('~src/assets/images/header-profile.png');
-  }
+  padding: 0 16px;
 
   &__actions {
     display: flex;
     gap: 16px;
 
-    app-selector {
-      width: 25vw;
-    }
-
     &--right {
       display: flex;
       justify-content: space-between;
       gap: 16px;
-      margin: 16px;
       width: 224px;
     }
+  }
+
+  .current-file-title {
+    color: var(--text-color);
+    line-height: 32px;
   }
 }

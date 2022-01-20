@@ -10,6 +10,7 @@ import { SharedModule } from '../shared/components/shared.module';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxPanZoomModule } from 'ngx-panzoom';
+import { ActionsComponent } from './actions/actions.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { NgxPanZoomModule } from 'ngx-panzoom';
     CanvasComponent,
     NodeComponent,
     OptionsComponent,
+    ActionsComponent,
   ],
   exports: [FlowComponent],
   imports: [
