@@ -1,3 +1,11 @@
+## [2.4.2](https://github.com/ibissource/frank-flow/compare/v2.4.1...v2.4.2) (2022-01-20)
+
+
+### 🛠 Builds
+
+* **deps:** update log4j to version 2.17.1 ([4e0fc61](https://github.com/ibissource/frank-flow/commit/4e0fc61e3365d9f0c614c0f50109a46f16faa811))
+* **deps:** update spring to 5.3.15 ([4c1b4cf](https://github.com/ibissource/frank-flow/commit/4c1b4cfa9a2258bafcfcb33e33eac4bc979f054d))
+
 ## [2.4.1](https://github.com/ibissource/frank-flow/compare/v2.4.0...v2.4.1) (2022-01-18)
 
 
