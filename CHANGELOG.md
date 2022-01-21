@@ -1,3 +1,10 @@
+## [2.5.5](https://github.com/ibissource/frank-flow/compare/v2.5.4...v2.5.5) (2022-01-21)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump typescript in /frank-flow/src/frontend ([958575f](https://github.com/ibissource/frank-flow/commit/958575fc51eb4028a075520df6c80425995995c1))
+
 ## [2.5.4](https://github.com/ibissource/frank-flow/compare/v2.5.3...v2.5.4) (2022-01-20)
 
 
