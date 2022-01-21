@@ -6,7 +6,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { jqxTreeComponent } from 'jqwidgets-ng/jqxtree';
-import { ToastrService } from 'ngx-toastr';
 import { CurrentFileService } from '../../services/current-file.service';
 import { FileService } from '../../services/file.service';
 import { File } from '../../models/file.model';
@@ -41,8 +40,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
     private fileService: FileService,
     private currentFileService: CurrentFileService,
     private ngxSmartModalService: NgxSmartModalService,
-    private settingsService: SettingsService,
-    private toastr: ToastrService
+    private settingsService: SettingsService
   ) {}
 
   ngAfterViewInit(): void {
@@ -145,25 +143,33 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
     if (itemValue) {
       const item: File = JSON.parse(itemValue);
 
+      if (this.filesAreEqual(this.currentFile, item)) {
+        return;
+      }
+
       if (item.type === FileType.FILE) {
         if (this.fileNeedsToBeSaved()) {
-          this.switchWithoutSavingDecision(item);
+          this.switchUnsavedChangesDecision(item);
         } else {
           this.currentFileService.switchToFileTreeItem(item);
         }
-        this.tree.selectItem('');
-        this.currentFileService.resetCurrentDirectory();
       } else if (item.type === FileType.FOLDER) {
         this.currentFileService.setCurrentDirectory(item);
       }
     }
   }
 
+  filesAreEqual(file1: File, file2: File): boolean {
+    return (
+      file1.configuration === file2.configuration && file1.path === file2.path
+    );
+  }
+
   fileNeedsToBeSaved(): boolean {
     return this.currentFile && !this.currentFile?.saved;
   }
 
-  switchWithoutSavingDecision(item: File): void {
+  switchUnsavedChangesDecision(item: File): void {
     switch (this.settings.switchWithoutSaving) {
       case SwitchWithoutSavingOption.ask:
         this.ngxSmartModalService
