@@ -44,11 +44,9 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
   ) {}
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.getFiles();
-      this.subscribeToCurrentFile();
-      this.getSettings();
-    });
+    this.getFiles();
+    this.subscribeToCurrentFile();
+    this.getSettings();
   }
 
   ngOnDestroy(): void {
@@ -81,12 +79,6 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
         }),
       })
     );
-
-    setTimeout(() => {
-      if (this.tree && this.tree.refresh) {
-        this.tree.refresh();
-      }
-    });
   }
 
   parseFiles(
