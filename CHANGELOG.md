@@ -1,3 +1,10 @@
+## [2.5.6](https://github.com/ibissource/frank-flow/compare/v2.5.5...v2.5.6) (2022-01-21)
+
+
+### 🛠 Builds
+
+* **deps:** bump log4js from 6.3.0 to 6.4.0 in /frank-flow/src/frontend ([bda283d](https://github.com/ibissource/frank-flow/commit/bda283d5f43299195eae7c3ee8916468cd85180c))
+
 ## [2.5.5](https://github.com/ibissource/frank-flow/compare/v2.5.4...v2.5.5) (2022-01-21)
 
 
