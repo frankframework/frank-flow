@@ -1,3 +1,10 @@
+## [2.5.7](https://github.com/ibissource/frank-flow/compare/v2.5.6...v2.5.7) (2022-01-22)
+
+
+### 🛠 Builds
+
+* **deps:** bump nanoid in /frank-flow/src/frontend ([ca21ebe](https://github.com/ibissource/frank-flow/commit/ca21ebec3be0a708e54177bb9a7d75ec558a25ec))
+
 ## [2.5.6](https://github.com/ibissource/frank-flow/compare/v2.5.5...v2.5.6) (2022-01-21)
 
 
