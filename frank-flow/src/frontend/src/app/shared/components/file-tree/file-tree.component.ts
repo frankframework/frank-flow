@@ -3,6 +3,7 @@ import {
   Component,
   Input,
   OnDestroy,
+  OnInit,
   ViewChild,
 } from '@angular/core';
 import { jqxTreeComponent } from 'jqwidgets-ng/jqxtree';
@@ -23,13 +24,13 @@ import TreeItem = jqwidgets.TreeItem;
   templateUrl: './file-tree.component.html',
   styleUrls: ['./file-tree.component.scss'],
 })
-export class FileTreeComponent implements AfterViewInit, OnDestroy {
+export class FileTreeComponent implements OnInit, OnDestroy {
   @Input() public width: string | number = '100%';
   @Input() public height: string | number = '100%';
   @Input() public fileMatch?: RegExp;
   @ViewChild('treeReference', { static: false }) public tree!: jqxTreeComponent;
 
-  public treeSource!: TreeItem[];
+  public treeSource: TreeItem[] = [];
 
   private currentFile!: File;
   private settings!: Settings;
@@ -47,7 +48,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
     private settingsService: SettingsService
   ) {}
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.getFiles();
     this.subscribeToCurrentFile();
     this.getSettings();
