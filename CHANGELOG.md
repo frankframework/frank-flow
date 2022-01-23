@@ -1,3 +1,15 @@
+## [2.5.8](https://github.com/ibissource/frank-flow/compare/v2.5.7...v2.5.8) (2022-01-23)
+
+
+### 🛠 Builds
+
+* **deps:** bump tomcat.version from 9.0.48 to 9.0.58 ([cfe4c53](https://github.com/ibissource/frank-flow/commit/cfe4c5369895282bb3e7d1ed3d7e1fa834611441))
+
+
+### ♻️ Chores
+
+* remove explicit submodules from dependabot, they'll get scanned anyway ([48dbb1f](https://github.com/ibissource/frank-flow/commit/48dbb1f7fcefb0a76c0fd2086ece97adbda7f128))
+
 ## [2.5.7](https://github.com/ibissource/frank-flow/compare/v2.5.6...v2.5.7) (2022-01-22)
 
 
