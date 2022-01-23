@@ -1,3 +1,43 @@
+## [2.5.9](https://github.com/ibissource/frank-flow/compare/v2.5.8...v2.5.9) (2022-01-23)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([9760343](https://github.com/ibissource/frank-flow/commit/97603438f8b6b3aea56c66902977593d64b91351))
+
+## [2.5.8](https://github.com/ibissource/frank-flow/compare/v2.5.7...v2.5.8) (2022-01-23)
+
+
+### 🛠 Builds
+
+* **deps:** bump tomcat.version from 9.0.48 to 9.0.58 ([cfe4c53](https://github.com/ibissource/frank-flow/commit/cfe4c5369895282bb3e7d1ed3d7e1fa834611441))
+
+
+### ♻️ Chores
+
+* remove explicit submodules from dependabot, they'll get scanned anyway ([48dbb1f](https://github.com/ibissource/frank-flow/commit/48dbb1f7fcefb0a76c0fd2086ece97adbda7f128))
+
+## [2.5.7](https://github.com/ibissource/frank-flow/compare/v2.5.6...v2.5.7) (2022-01-22)
+
+
+### 🛠 Builds
+
+* **deps:** bump nanoid in /frank-flow/src/frontend ([ca21ebe](https://github.com/ibissource/frank-flow/commit/ca21ebec3be0a708e54177bb9a7d75ec558a25ec))
+
+## [2.5.6](https://github.com/ibissource/frank-flow/compare/v2.5.5...v2.5.6) (2022-01-21)
+
+
+### 🛠 Builds
+
+* **deps:** bump log4js from 6.3.0 to 6.4.0 in /frank-flow/src/frontend ([bda283d](https://github.com/ibissource/frank-flow/commit/bda283d5f43299195eae7c3ee8916468cd85180c))
+
+## [2.5.5](https://github.com/ibissource/frank-flow/compare/v2.5.4...v2.5.5) (2022-01-21)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump typescript in /frank-flow/src/frontend ([958575f](https://github.com/ibissource/frank-flow/commit/958575fc51eb4028a075520df6c80425995995c1))
+
 ## [2.5.4](https://github.com/ibissource/frank-flow/compare/v2.5.3...v2.5.4) (2022-01-20)
 
 
