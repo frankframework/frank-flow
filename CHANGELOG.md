@@ -1,3 +1,10 @@
+## [2.5.9](https://github.com/ibissource/frank-flow/compare/v2.5.8...v2.5.9) (2022-01-23)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([9760343](https://github.com/ibissource/frank-flow/commit/97603438f8b6b3aea56c66902977593d64b91351))
+
 ## [2.5.8](https://github.com/ibissource/frank-flow/compare/v2.5.7...v2.5.8) (2022-01-23)
 
 
