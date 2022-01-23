@@ -7,27 +7,6 @@ updates:
     labels:
         - "dependencies"
         - "java"
-  - package-ecosystem: "maven"
-    directory: "/frank-flow/"
-    schedule:
-      interval: "daily"
-    labels:
-        - "dependencies"
-        - "java"
-  - package-ecosystem: "maven"
-    directory: "/frank-flow-launcher/"
-    schedule:
-      interval: "daily"
-    labels:
-        - "dependencies"
-        - "java"
-  - package-ecosystem: "maven"
-    directory: "/frank-flow-webapp/"
-    schedule:
-      interval: "daily"
-    labels:
-        - "dependencies"
-        - "java"
   - package-ecosystem: "npm"
     directory: "/frank-flow/src/frontend/"
     schedule:
