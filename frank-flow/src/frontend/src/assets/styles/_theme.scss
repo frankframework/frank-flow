@@ -51,6 +51,7 @@ $themes: (
     'bg-color-muted': map-get($shades, 'shade-1'),
     'border-color': map-get($shades, 'shade-2'),
     'text-color': map-get($shades, 'shade-4'),
+    'high-contrast-text-color': map-get($shades, 'shade-5'),
   );
 
   .root.#{$theme-name} {

@@ -1,5 +1,5 @@
 .button {
-  color: var(--text-color);
+  color: var(--high-contrast-text-color);
   border: 1px solid var(--border-color);
   height: 36px;
   min-width: 36px;
@@ -14,7 +14,6 @@
   &:hover {
     background-color: var(--primary);
     border-color: var(--primary);
-    color: var(--text-color);
   }
 
   &--default {
@@ -28,7 +27,7 @@
 
   &--dark {
     background: var(--dark-cyan);
-    color: #fafafa;
+    color: #f3f3f3;
   }
 }
 

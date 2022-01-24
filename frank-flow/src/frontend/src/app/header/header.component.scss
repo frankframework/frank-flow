@@ -3,6 +3,8 @@
   display: grid;
   grid-template-columns: 256px auto;
   height: 64px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  z-index: 20;
 }
 
 .logo {
@@ -37,7 +39,7 @@
   }
 
   .current-file-title {
-    color: #fafafa;
+    color: #f3f3f3;
     line-height: 40px;
   }
 }
