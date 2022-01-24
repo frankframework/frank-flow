@@ -6,17 +6,21 @@
   border-radius: 10px;
   color: var(--accent);
   background: var(--accent-whiten);
-  border: 2px solid var(--accent-dark);
+  border: 1px solid var(--accent-dark);
   font-size: 14px;
+  transition: transform 0.4s, box-shadow 0.4s;
+  box-shadow: 2px 2px 4px var(--accent-shadow);
 
   &:hover {
     cursor: grab;
   }
 
-  &.jtk-drag,
   &.isActive {
-    box-shadow: 5px 5px 0 0 var(--accent-shadow);
-    cursor: grabbing;
+    box-shadow: 5px 5px 10px var(--accent-shadow);
+  }
+  &.jtk-drag {
+    box-shadow: 15px 15px 30px var(--accent-shadow);
+    transform: scale(1.1);
   }
 
   &.shape--oval {
@@ -66,55 +70,70 @@
   &.color--primary {
     color: var(--primary);
     background: var(--primary-whiten);
-    border: 2px solid var(--primary-dark);
+    border: 1px solid var(--primary-dark);
+    box-shadow: 2px 2px 4px var(--primary-shadow);
 
-    &.jtk-drag,
     &.isActive {
-      box-shadow: 5px 5px 0 0 var(--primary-shadow);
+      box-shadow: 5px 5px 10px var(--primary-shadow);
+    }
+    &.jtk-drag {
+      box-shadow: 15px 15px 30px var(--primary-shadow);
     }
   }
 
   &.color--info {
     color: var(--info);
     background: var(--info-lighter-45);
-    border: 2px solid var(--info-dark);
+    border: 1px solid var(--info-dark);
+    box-shadow: 2px 2px 4px var(--info-shadow);
 
-    &.jtk-drag,
     &.isActive {
-      box-shadow: 5px 5px 0 0 var(--info-shadow);
+      box-shadow: 5px 5px 10px var(--info-shadow);
+    }
+    &.jtk-drag {
+      box-shadow: 15px 15px 30px var(--info-shadow);
     }
   }
 
   &.color--success {
     color: var(--success);
     background: var(--success-whiten);
-    border: 2px solid var(--success-dark);
+    border: 1px solid var(--success-dark);
+    box-shadow: 2px 2px 4px var(--success-shadow);
 
-    &.jtk-drag,
     &.isActive {
-      box-shadow: 5px 5px 0 0 var(--success-shadow);
+      box-shadow: 5px 5px 10px var(--success-shadow);
+    }
+    &.jtk-drag {
+      box-shadow: 15px 15px 30px var(--success-shadow);
     }
   }
 
   &.color--warning {
     color: var(--warning);
     background: var(--warning-whiten);
-    border: 2px solid var(--warning-dark);
+    border: 1px solid var(--warning-dark);
+    box-shadow: 2px 2px 4px var(--warning-dark);
 
-    &.jtk-drag,
     &.isActive {
-      box-shadow: 5px 5px 0 0 var(--warning-shadow);
+      box-shadow: 5px 5px 10px var(--warning-shadow);
+    }
+    &.jtk-drag {
+      box-shadow: 15px 15px 30px var(--warning-shadow);
     }
   }
 
   &.color--danger {
     color: var(--danger);
     background: var(--danger-lighter-35);
-    border: 2px solid var(--danger-dark);
+    border: 1px solid var(--danger-dark);
+    box-shadow: 2px 2px 4px var(--danger-shadow);
 
-    &.jtk-drag,
     &.isActive {
-      box-shadow: 5px 5px 0 0 var(--danger-shadow);
+      box-shadow: 5px 5px 10px var(--danger-shadow);
+    }
+    &.jtk-drag {
+      box-shadow: 15px 15px 30px var(--danger-shadow);
     }
   }
 
