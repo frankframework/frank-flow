@@ -112,6 +112,10 @@ export class FileTreeComponent implements OnInit, OnDestroy {
         items.push({
           label: key,
           items: this.parseFiles(configuration, content[key], path + key + '/'),
+          expanded: this.isSelectedItemInFolder(
+            configuration,
+            path + key + '/'
+          ),
           value: JSON.stringify({
             configuration,
             path: path + key,
@@ -132,6 +136,13 @@ export class FileTreeComponent implements OnInit, OnDestroy {
         type: FileType.FILE,
       },
       this.currentFile ?? {}
+    );
+  }
+
+  isSelectedItemInFolder(configuration: string, path: string): boolean {
+    return (
+      this.currentFile?.configuration === configuration &&
+      this.currentFile?.path.startsWith(path)
     );
   }
 
