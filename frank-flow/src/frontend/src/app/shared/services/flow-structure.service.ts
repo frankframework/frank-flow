@@ -13,6 +13,7 @@ import { File } from '../models/file.model';
 import { FlowStructure } from '../models/flow-structure.model';
 import { ChangedAttribute } from '../models/changed-attribute.model';
 import { PanZoomService } from './pan-zoom.service';
+import Sender from '../../flow/node/nodes/sender.model';
 
 @Injectable({
   providedIn: 'root',
@@ -359,6 +360,28 @@ export class FlowStructureService {
 
   getUniqueExitPath(name: string): string {
     return this.getUniqueNodeName(this.flowStructure.exits, name);
+  }
+
+  addSender(node: Sender): void {
+    const pipes = this.flowStructure.pipes;
+    const lastPipe = pipes[pipes.length - 1] ?? this.flowStructure.pipeline;
+    const line =
+      (pipes[pipes.length - 1] ? lastPipe.endLine : lastPipe.line) + 1;
+    const senderName = this.getUniqueSenderName(node.getName());
+
+    const text = `\t\t<SenderPipe name="${senderName}Pipe">\n\t\t\t<${node.getType()} name="${senderName}" />\n\t\t</SenderPipe>\n`;
+    const range = {
+      startLineNumber: line,
+      startColumn: 0,
+      endColumn: 0,
+      endLineNumber: line,
+    };
+
+    this.monacoEditorComponent?.applyEdits([{ range, text }], true);
+  }
+
+  getUniqueSenderName(name: string): string {
+    return this.getUniqueNodeName(this.flowStructure.senders, name);
   }
 
   editNodePositions(options: {

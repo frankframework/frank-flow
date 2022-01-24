@@ -6,6 +6,7 @@ export class FlowStructure {
   pipes: FlowStructureNode[];
   exits: FlowStructureNode[];
   receivers: FlowStructureNode[];
+  senders: FlowStructureNode[];
   pipeline!: FlowStructureNode;
   implicitFirstPipe!: boolean;
   firstPipe?: string;
@@ -19,6 +20,7 @@ export class FlowStructure {
     this.pipes = this.getPipes();
     this.exits = this.getExits();
     this.receivers = this.getReceivers();
+    this.senders = this.getSenders();
   }
 
   getFirstPipe(firstPipe?: string): string | undefined {
@@ -60,6 +62,14 @@ export class FlowStructure {
     return (
       this.nodes.filter(
         (node: FlowStructureNode) => node.type === 'Receiver'
+      ) ?? []
+    );
+  }
+
+  getSenders(): FlowStructureNode[] {
+    return (
+      this.nodes.filter((node: FlowStructureNode) =>
+        node.type.match(/Senders/g)
       ) ?? []
     );
   }
