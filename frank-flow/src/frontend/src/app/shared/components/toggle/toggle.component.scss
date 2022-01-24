@@ -20,8 +20,10 @@
   bottom: 0;
   background-color: var(--border-color);
   transition: 0.4s;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
 
   &::before {
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     position: absolute;
     content: '';
     height: 28px;

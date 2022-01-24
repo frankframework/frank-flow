@@ -6,34 +6,6 @@
     >
       <div class="panzoom">
         <app-canvas #nodeContainer [panzoomConfig]="panZoomConfig"></app-canvas>
-        <div class="arrows arrows--horizontal">
-          <fa-icon
-            (click)="decreaseRight()"
-            icon="arrow-left"
-            size="10x"
-            title="Shrink canvas"
-          ></fa-icon>
-          <fa-icon
-            (click)="expandRight()"
-            icon="arrow-right"
-            size="10x"
-            title="Expand canvas"
-          ></fa-icon>
-        </div>
-        <div class="arrows arrows--vertical">
-          <fa-icon
-            (click)="decreaseBottom()"
-            icon="arrow-up"
-            size="10x"
-            title="Shrink canvas"
-          ></fa-icon>
-          <fa-icon
-            (click)="expandBottom()"
-            icon="arrow-down"
-            size="10x"
-            title="Expand canvas"
-          ></fa-icon>
-        </div>
       </div>
     </pan-zoom>
     <app-actions
