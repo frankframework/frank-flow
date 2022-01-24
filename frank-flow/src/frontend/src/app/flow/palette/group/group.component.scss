@@ -35,13 +35,13 @@
 
   &__header {
     padding: 16px;
-    border-bottom: 2px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
   }
 
   &__list {
-    border-bottom: 2px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
     padding: 8px 0;
     overflow-y: auto;
 
