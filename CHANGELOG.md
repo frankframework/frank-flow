@@ -1,3 +1,16 @@
+## [2.5.10](https://github.com/ibissource/frank-flow/compare/v2.5.9...v2.5.10) (2022-01-25)
+
+
+### 🐛 Bug Fixes
+
+* remove center canvas button which caused unpredictable behavior ([e6bf7ce](https://github.com/ibissource/frank-flow/commit/e6bf7ce89aaf92e8a9e532fa1526ce1ab5fffb6a))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([628744e](https://github.com/ibissource/frank-flow/commit/628744e9f88e50b7c68bb84dd31264104352a662))
+* **deps-dev:** bump karma in /frank-flow/src/frontend ([4dcaf42](https://github.com/ibissource/frank-flow/commit/4dcaf4255c6da2d3568c7b9c0a3e77f049633fe3))
+
 ## [2.5.9](https://github.com/ibissource/frank-flow/compare/v2.5.8...v2.5.9) (2022-01-23)
 
 
