@@ -2,12 +2,14 @@
 @import '~ngx-toastr/toastr';
 
 .toast-container .ngx-toastr {
-  border-radius: 0;
+  border-radius: 10px;
   background-position: 15px center;
-  box-shadow: 5px 5px 0 $shadow-color;
+  box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.5);
+  transition: all 0.4s;
 
   &:hover {
-    box-shadow: 5px 5px 0 $shadow-color;
+    transform: scale(1.05);
+    box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.5);
   }
 }
 
