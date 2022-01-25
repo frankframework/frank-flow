@@ -7,7 +7,7 @@
 
 * {
   box-sizing: border-box;
-  transition: background-color 0.4s;
+  transition: background-color 0.2s;
 }
 
 html,
@@ -22,15 +22,5 @@ body {
 }
 
 .monaco-editor__line--highlighted {
-  background: var(--accent-shadow);
-}
-
-.jtk-connector {
-  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
-  z-index: 5;
-}
-
-.jtk-endpoint {
-  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
-  z-index: 6;
+  background: var(--accent-transparant);
 }

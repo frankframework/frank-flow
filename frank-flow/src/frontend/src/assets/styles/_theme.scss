@@ -58,30 +58,44 @@ $themes: (
     // define a css variable for each shade
     @each $name, $color in $shades {
       --#{$name}: #{$color};
-      --#{$name}-shadow: #{transparentize($color, 0.5)};
     }
 
     // define a css variable for each color
     @each $name, $color in $colors {
       --#{$name}: #{$color};
-      --#{$name}-dark: #{darken($color, 10%)};
-      --#{$name}-darker: #{darken($color, 20%)};
-      --#{$name}-blacken: #{darken($color, 50%)};
-      --#{$name}-light: #{lighten($color, 10%)};
-      --#{$name}-lighter: #{lighten($color, 20%)};
-      --#{$name}-whiten: #{lighten($color, 50%)};
-      --#{$name}-shadow: #{desaturate(transparentize($color, 0.5), 50%)};
+      --shadow-highest-#{$name}: 0
+        12px
+        24px
+        #{transparentize(darken($color, 15%), 0.2)};
+      --shadow-high-#{$name}: 0
+        9px
+        18px
+        #{transparentize(darken($color, 15%), 0.2)};
+      --shadow-medium-#{$name}: 0
+        7px
+        14px
+        #{transparentize(darken($color, 15%), 0.2)};
+      --shadow-low-#{$name}: 0
+        4px
+        8px
+        #{transparentize(darken($color, 15%), 0.2)};
+      --shadow-lowest-#{$name}: 0
+        2px
+        4px
+        #{transparentize(darken($color, 15%), 0.2)};
+      --#{$name}-transparant: #{transparentize($color, 0.5)};
 
-      // define 10 lighter shades
-      @for $i from 1 through 20 {
-        --#{$name}-lighter-#{$i * 5}: #{lighten($color, $i * 5%)};
+      // define 20 shades for each color
+      @for $i from 1 through 10 {
+        --#{$name}-lighter-#{$i}: #{lighten($color, $i * 5%)};
+        --#{$name}-darker-#{$i}: #{darken($color, $i * 5%)};
       }
     }
 
     // define a css variable for each theme color
     @each $name, $color in $theme {
       --#{$name}: #{$color};
-      --#{$name}-shadow: #{transparentize($color, 0.5)};
+      --#{$name}-transparant: #{transparentize($color, 0.5)};
     }
   }
 }

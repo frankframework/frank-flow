@@ -4,25 +4,35 @@ input[type='text'] {
   padding: 8px;
   width: 100%;
   height: 36px;
-  border: 1px solid var(--border-color);
-  background-color: var(--bg-color);
+  border: none;
+  background-color: var(--bg-color-muted);
   color: var(--text-color);
   border-radius: 5px;
-  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: var(--border-color);
+  }
 
   &:focus {
-    outline: 0;
+    outline: 2px solid var(--primary);
+    background-color: var(--bg-color-muted);
   }
 }
 
 select {
   padding: 0 8px;
   height: 36px;
-  border: 1px solid var(--border-color);
-  background-color: var(--bg-color);
+  border: none;
+  background-color: var(--bg-color-muted);
   color: var(--text-color);
   border-radius: 36px;
-  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-lowest);
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: var(--border-color);
+  }
 }
 
 .input-row {
@@ -58,9 +68,5 @@ select {
 .input-row {
   &:not(:nth-last-of-type(1)) {
     margin-bottom: 8px;
-  }
-
-  label {
-    font-weight: bold;
   }
 }

@@ -8,8 +8,8 @@
   .nsm-content {
     background-color: var(--bg-color);
     color: var(--text-color);
-    border: 1px solid var(--border-color);
-    box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.5);
+    border: none;
+    box-shadow: var(--shadow-highest);
     padding: 1em;
     border-radius: 10px;
     overflow: auto;
@@ -27,7 +27,8 @@
       hr {
         border: none;
         height: 2px;
-        background: var(--border-color);
+        background: var(--bg-color-muted);
+        margin: 15px 0;
       }
 
       .button-actions {
@@ -51,5 +52,5 @@
 }
 
 .overlay.nsm-overlay-open {
-  background: var(--bg-color-muted-shadow);
+  background: var(--bg-color-muted-transparant);
 }
