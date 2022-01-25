@@ -3,10 +3,10 @@ import {
   Component,
   Input,
   OnDestroy,
+  OnInit,
   ViewChild,
 } from '@angular/core';
 import { jqxTreeComponent } from 'jqwidgets-ng/jqxtree';
-import { ToastrService } from 'ngx-toastr';
 import { CurrentFileService } from '../../services/current-file.service';
 import { FileService } from '../../services/file.service';
 import { File } from '../../models/file.model';
@@ -24,33 +24,34 @@ import TreeItem = jqwidgets.TreeItem;
   templateUrl: './file-tree.component.html',
   styleUrls: ['./file-tree.component.scss'],
 })
-export class FileTreeComponent implements AfterViewInit, OnDestroy {
-  @Input() width: string | number = '100%';
-  @Input() height: string | number = '100%';
-  @Input() fileMatch?: RegExp;
-  @ViewChild('treeReference', { static: false }) tree!: jqxTreeComponent;
-  searchTerm!: string;
-  treeSource!: TreeItem[];
-  currentFile!: File;
-  currentFileSubscription!: Subscription;
-  fileSubscription!: Subscription;
-  settings!: Settings;
-  settingsSubscription!: Subscription;
+export class FileTreeComponent implements OnInit, OnDestroy {
+  @Input() public width: string | number = '100%';
+  @Input() public height: string | number = '100%';
+  @Input() public fileMatch?: RegExp;
+  @ViewChild('treeReference', { static: false }) public tree!: jqxTreeComponent;
+
+  public treeSource: TreeItem[] = [];
+
+  private currentFile!: File;
+  private settings!: Settings;
+  private files!: any;
+  private currentFileSubscription!: Subscription;
+  private fileSubscription!: Subscription;
+  private settingsSubscription!: Subscription;
+
+  private userSelectedNewFile = false;
 
   constructor(
     private fileService: FileService,
     private currentFileService: CurrentFileService,
     private ngxSmartModalService: NgxSmartModalService,
-    private settingsService: SettingsService,
-    private toastr: ToastrService
+    private settingsService: SettingsService
   ) {}
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.getFiles();
-      this.subscribeToCurrentFile();
-      this.getSettings();
-    });
+  ngOnInit(): void {
+    this.getFiles();
+    this.subscribeToCurrentFile();
+    this.getSettings();
   }
 
   ngOnDestroy(): void {
@@ -61,34 +62,29 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
 
   getFiles(): void {
     this.fileSubscription = this.fileService.getFiles().subscribe({
-      next: (configurationFiles) => this.updateFileTree(configurationFiles),
+      next: (files) => {
+        this.files = files;
+        this.updateFileTree();
+      },
     });
   }
 
-  updateFileTree(configurationFiles: any): void {
+  updateFileTree(): void {
     this.currentFileService.resetCurrentDirectory();
-    this.addFilesToTree(configurationFiles);
+    this.addFilesToTree();
   }
 
-  addFilesToTree(configurationFiles: any): void {
-    this.treeSource = configurationFiles.map(
-      (configuration: Configuration) => ({
-        label: configuration.name,
-        expanded: true,
-        items: this.parseFiles(configuration.name, configuration.content),
-        value: JSON.stringify({
-          configuration: configuration.name,
-          path: '',
-          type: FileType.FOLDER,
-        }),
-      })
-    );
-
-    setTimeout(() => {
-      if (this.tree && this.tree.refresh) {
-        this.tree.refresh();
-      }
-    });
+  addFilesToTree(): void {
+    this.treeSource = this.files.map((configuration: Configuration) => ({
+      label: configuration.name,
+      expanded: true,
+      items: this.parseFiles(configuration.name, configuration.content),
+      value: JSON.stringify({
+        configuration: configuration.name,
+        path: '',
+        type: FileType.FOLDER,
+      }),
+    }));
   }
 
   parseFiles(
@@ -103,6 +99,7 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
           if (!this.fileMatch || this.fileMatch.test(file)) {
             items.push({
               label: file,
+              selected: this.isItemSelected(configuration, path + file),
               value: JSON.stringify({
                 configuration,
                 path: path + file,
@@ -115,6 +112,10 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
         items.push({
           label: key,
           items: this.parseFiles(configuration, content[key], path + key + '/'),
+          expanded: this.isSelectedItemInFolder(
+            configuration,
+            path + key + '/'
+          ),
           value: JSON.stringify({
             configuration,
             path: path + key,
@@ -127,11 +128,34 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
     return items;
   }
 
+  isItemSelected(configuration: string, path: string): boolean {
+    return this.filesAreEqual(
+      {
+        configuration,
+        path,
+        type: FileType.FILE,
+      },
+      this.currentFile ?? {}
+    );
+  }
+
+  isSelectedItemInFolder(configuration: string, path: string): boolean {
+    return (
+      this.currentFile?.configuration === configuration &&
+      this.currentFile?.path.startsWith(path)
+    );
+  }
+
   subscribeToCurrentFile(): void {
     this.currentFileSubscription =
-      this.currentFileService.currentFileObservable.subscribe(
-        (currentFile) => (this.currentFile = currentFile)
-      );
+      this.currentFileService.currentFileObservable.subscribe((currentFile) => {
+        this.currentFile = currentFile;
+        if (this.userSelectedNewFile) {
+          this.userSelectedNewFile = false;
+        } else {
+          this.updateFileTree();
+        }
+      });
   }
 
   getSettings(): void {
@@ -141,34 +165,43 @@ export class FileTreeComponent implements AfterViewInit, OnDestroy {
   }
 
   onItemClick(event: any): void {
+    this.userSelectedNewFile = true;
     const itemValue = this.tree?.getItem(event?.args?.element)?.value;
     if (itemValue) {
       const item: File = JSON.parse(itemValue);
 
+      if (this.filesAreEqual(this.currentFile, item)) {
+        return;
+      }
+
       if (item.type === FileType.FILE) {
         if (this.fileNeedsToBeSaved()) {
-          this.switchWithoutSavingDecision(item);
+          this.switchUnsavedChangesDecision(item);
         } else {
           this.currentFileService.switchToFileTreeItem(item);
         }
-        this.tree.selectItem('');
-        this.currentFileService.resetCurrentDirectory();
       } else if (item.type === FileType.FOLDER) {
         this.currentFileService.setCurrentDirectory(item);
       }
     }
   }
 
+  filesAreEqual(file1: File, file2: File): boolean {
+    return (
+      file1.configuration === file2.configuration && file1.path === file2.path
+    );
+  }
+
   fileNeedsToBeSaved(): boolean {
     return this.currentFile && !this.currentFile?.saved;
   }
 
-  switchWithoutSavingDecision(item: File): void {
+  switchUnsavedChangesDecision(item: File): void {
     switch (this.settings.switchWithoutSaving) {
       case SwitchWithoutSavingOption.ask:
         this.ngxSmartModalService
           .getModal('saveDialog')
-          .setData(item, true)
+          .setData({ item, fileTreeComponent: this }, true)
           .open();
         break;
       case SwitchWithoutSavingOption.save:
