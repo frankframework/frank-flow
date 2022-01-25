@@ -1,3 +1,18 @@
+# [2.6.0](https://github.com/ibissource/frank-flow/compare/v2.5.10...v2.6.0) (2022-01-25)
+
+
+### ✨ Features
+
+* allways select the current file in the file-tree ([e617830](https://github.com/ibissource/frank-flow/commit/e617830afb27c4cdf2521d094a2392eee99f514f))
+* expand folder in which selected item is located ([7774681](https://github.com/ibissource/frank-flow/commit/7774681559f03eb29a3fa5d22aa10a4e47c7141f))
+
+
+### 🐛 Bug Fixes
+
+* changes after view has been checked error ([2cdf2ce](https://github.com/ibissource/frank-flow/commit/2cdf2ce443d4a4d506e799b7f278c8fdaaae9e90))
+* don't do anything if selected file is reselected ([fdb8a15](https://github.com/ibissource/frank-flow/commit/fdb8a15bae7ed3e17bc634fbf944dc76ff92b61c))
+* remove code that can done otherwise ([cf495eb](https://github.com/ibissource/frank-flow/commit/cf495ebd95fa9065bc7b8b495ee443c6f52c2987))
+
 ## [2.5.10](https://github.com/ibissource/frank-flow/compare/v2.5.9...v2.5.10) (2022-01-25)
 
 
