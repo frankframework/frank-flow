@@ -45,8 +45,4 @@ export class ActionsComponent {
   zoomReset(): void {
     this.panZoomService.reset();
   }
-
-  panCenter(): void {
-    this.panZoomService.panCenter();
-  }
 }
