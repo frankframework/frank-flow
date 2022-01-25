@@ -1,6 +1,6 @@
 :host {
   background: var(--bg-color-muted);
-  box-shadow: 15px 0 30px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-medium);
   position: relative;
   z-index: 10;
 }

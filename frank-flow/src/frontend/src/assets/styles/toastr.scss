@@ -4,12 +4,12 @@
 .toast-container .ngx-toastr {
   border-radius: 10px;
   background-position: 15px center;
-  box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.5);
-  transition: all 0.4s;
+  box-shadow: var(--shadow-high);
+  transition: all 0.2s;
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow-highest);
   }
 }
 

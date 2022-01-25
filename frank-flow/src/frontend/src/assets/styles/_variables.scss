@@ -5,4 +5,16 @@ $info-color: #00abff;
 $warning-color: #ffc107;
 $danger-color: #ec4758;
 $dark-cyan: #2f4050;
-$shadow-color: #000000;
+$shadow-highest: 0 12px 24px rgb(0 0 0 / 20%);
+$shadow-high: 0 9px 18px rgb(0 0 0 / 20%);
+$shadow-medium: 0 7px 14px rgb(0 0 0 / 20%);
+$shadow-low: 0 4px 8px rgb(0 0 0 / 20%);
+$shadow-lowest: 0 2px 4px rgb(0 0 0 / 20%);
+
+body {
+  --shadow-highest: 0 12px 24px rgb(0 0 0 / 20%);
+  --shadow-high: 0 9px 18px rgb(0 0 0 / 20%);
+  --shadow-medium: 0 7px 14px rgb(0 0 0 / 20%);
+  --shadow-low: 0 4px 8px rgb(0 0 0 / 20%);
+  --shadow-lowest: 0 2px 4px rgb(0 0 0 / 20%);
+}

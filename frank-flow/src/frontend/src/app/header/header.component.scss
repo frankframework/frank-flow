@@ -3,7 +3,7 @@
   display: grid;
   grid-template-columns: 256px auto;
   height: 64px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-medium);
   z-index: 20;
 }
 

@@ -7,15 +7,15 @@
   overflow: hidden;
   align-content: start;
   grid-row-gap: 16px;
-  box-shadow: -15px 0 30px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-medium);
   position: relative;
   z-index: 10;
 }
 
 app-group {
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-lowest);
 }
 
 app-search {
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-lowest);
 }
