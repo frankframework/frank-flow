@@ -25,6 +25,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
     'flow:x',
     'flow:y',
   ];
+  public nonRemovableAttributes = ['name'];
   public availableAttributes: FlowNodeAttributeOptions[] = [];
   public attributes!: FlowNodeAttributes;
   public selectedAttribute!: any;
