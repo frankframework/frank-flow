@@ -182,7 +182,7 @@ export class FlowStructureService {
       (node) => node.uid === newTargetId
     );
 
-    const text = `path="${newTarget?.name}"`;
+    const text = `path="${newTarget?.name ?? newTargetId}"`;
     const range = {
       startLineNumber: pathAttribute.line,
       startColumn: pathAttribute.startColumn,
@@ -197,13 +197,13 @@ export class FlowStructureService {
     const sourcePipe = this.flowStructure.pipes.find(
       (pipe: FlowStructureNode) => pipe.uid === sourceId
     );
-    const targetPipe = this.flowStructure.nodes.find(
-      (pipe: FlowStructureNode) => pipe.uid === targetId
+    const targetNode = this.flowStructure.nodes.find(
+      (node: FlowStructureNode) => node.uid === targetId
     );
 
     return (sourcePipe?.forwards ?? []).find(
       (forward: FlowStructureNode) =>
-        forward.attributes['path'].value === targetPipe?.name
+        forward.attributes['path'].value === targetNode?.name
     );
   }
 
