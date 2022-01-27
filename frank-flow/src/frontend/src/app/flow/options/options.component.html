@@ -79,8 +79,14 @@
         *ngIf="!disabledAttributes.includes(attribute.key)"
         class="input-row"
       >
-        <label for="name">{{ attribute.key }}:</label>
-        <div class="input-row--input-with-button">
+        <label>{{ attribute.key }}:</label>
+        <div
+          class="input-row--input-with-button"
+          *ngIf="
+            !nonRemovableAttributes.includes(attribute.key);
+            else inputOnly
+          "
+        >
           <input
             (keyup.enter)="optionsModal.close()"
             (ngModelChange)="changeAttribute(attribute.key, $event)"
@@ -94,6 +100,14 @@
             ></fa-icon>
           </app-button>
         </div>
+        <ng-template #inputOnly>
+          <input
+            (keyup.enter)="optionsModal.close()"
+            (ngModelChange)="changeAttribute(attribute.key, $event)"
+            [ngModel]="attributes[attribute.key].value"
+            type="text"
+          />
+        </ng-template>
       </div>
     </ng-container>
     <hr />
