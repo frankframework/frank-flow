@@ -1,3 +1,18 @@
+## [2.6.3](https://github.com/ibissource/frank-flow/compare/v2.6.2...v2.6.3) (2022-01-27)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([a578c05](https://github.com/ibissource/frank-flow/commit/a578c052bca7b4fc6ad589d4c86b0d4035e40e4b))
+
+## [2.6.2](https://github.com/ibissource/frank-flow/compare/v2.6.1...v2.6.2) (2022-01-27)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([b6c0f42](https://github.com/ibissource/frank-flow/commit/b6c0f42aaff85e97b9b1ffb8a9eac7d195db87f7))
+* **deps:** bump jqwidgets-ng in /frank-flow/src/frontend ([86f35f3](https://github.com/ibissource/frank-flow/commit/86f35f310b8fad84d56052a2325dca6f5351b2a1))
+
 ## [2.6.1](https://github.com/ibissource/frank-flow/compare/v2.6.0...v2.6.1) (2022-01-26)
 
 
