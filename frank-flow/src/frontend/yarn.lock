@@ -5122,10 +5122,10 @@ jest-worker@^27.0.2:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jqwidgets-ng@^13.1.1:
-  version "13.1.1"
-  resolved "https://registry.yarnpkg.com/jqwidgets-ng/-/jqwidgets-ng-13.1.1.tgz#4ddc05223ad617c46d57c9083f1346ff45835204"
-  integrity sha512-9VQnfDl4DEjGzN724bLiGOePKrEzQXOs8hkpwUoN8oUZ1URbJjURrPacAeHxJUkydHuIBRuskLoCkgXyY6nW7g==
+jqwidgets-ng@^13.2.0:
+  version "13.2.0"
+  resolved "https://registry.yarnpkg.com/jqwidgets-ng/-/jqwidgets-ng-13.2.0.tgz#8a26d59878e32305f7632592704067645d09a4d2"
+  integrity sha512-xgkJyvLI8slTo8ntOqLaP8XuDukV9+4Rq1Nt1JDo5YEDcaAokPLZvopKxRCl1vv7E+avm+nlQXgOHtB1ry7KjQ==
   dependencies:
     "@angular/cdk" "^13.0.0 || ^14.0.0-0"
     "@angular/elements" "^13.0.0 || ^14.0.0-0"
