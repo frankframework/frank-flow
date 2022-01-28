@@ -1,3 +1,18 @@
+# [2.7.0](https://github.com/ibissource/frank-flow/compare/v2.6.3...v2.7.0) (2022-01-28)
+
+
+### ✨ Features
+
+* remove all forwards pointing to a node when it gets deleted ([00c0b0d](https://github.com/ibissource/frank-flow/commit/00c0b0dc5a784a93d0d79207735bbdbf2642cc0d))
+* remove firstpipe if the same node gets removed ([87643a4](https://github.com/ibissource/frank-flow/commit/87643a490b707785077557fde163261bc61511f9))
+
+
+### 🐛 Bug Fixes
+
+* change forwards to the new name of a node when it is changed ([3bcb596](https://github.com/ibissource/frank-flow/commit/3bcb596486acf7a989406c6badf48fb5bc0906fa))
+* moving a forward will change the target of an existing forward ([f636223](https://github.com/ibissource/frank-flow/commit/f63622300e5c1752e81e549ddd6a7e9b4805a790))
+* moving the listener to another pipe ([89d3384](https://github.com/ibissource/frank-flow/commit/89d3384d68c5e4dda345b281d5ccca5c125bff12))
+
 ## [2.6.3](https://github.com/ibissource/frank-flow/compare/v2.6.2...v2.6.3) (2022-01-27)
 
 
