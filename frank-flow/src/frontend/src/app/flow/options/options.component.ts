@@ -94,11 +94,10 @@ export class OptionsComponent implements OnInit, OnDestroy {
     const changedNameAttribute = this.getChangedNameAttribute();
 
     if (changedNameAttribute) {
-      const originalName = this.flowNode.getName();
       const newName = changedNameAttribute.value.toString();
 
-      this.editConnections(originalName, newName);
-      this.editFirstPipe(originalName, newName);
+      this.editConnections(newName);
+      this.editFirstPipe(newName);
     }
   }
 
@@ -109,31 +108,32 @@ export class OptionsComponent implements OnInit, OnDestroy {
     );
   }
 
-  editConnections(originalName: string, newName: string) {
-    const sourceNodes = this.getConnectionsWithTarget(originalName);
+  editConnections(newName: string) {
+    const sourceNodes = this.getConnectionsWithTarget();
     for (const sourceNode of sourceNodes ?? []) {
       this.flowStructureService.moveConnection(
-        sourceNode.name,
-        originalName,
+        sourceNode.uid,
+        this.flowNode.getId(),
         newName
       );
     }
   }
 
-  getConnectionsWithTarget(target: string): FlowStructureNode[] | undefined {
+  getConnectionsWithTarget(): FlowStructureNode[] | undefined {
     return this.currentFile.flowStructure?.nodes.filter(
       (node: FlowStructureNode) =>
         node.forwards?.find(
-          (forward) => forward.attributes['path'].value === target
+          (forward) =>
+            forward.attributes['path'].value === this.flowNode.getName()
         )
     );
   }
 
-  editFirstPipe(originalName: string, newName: string) {
+  editFirstPipe(newName: string) {
     const firstPipe =
       this.currentFile.flowStructure?.pipeline.attributes['firstPipe'];
 
-    if (firstPipe?.value === originalName) {
+    if (firstPipe?.value === this.flowNode.getName()) {
       this.flowStructureService.changeFirstPipe(newName);
     }
   }
