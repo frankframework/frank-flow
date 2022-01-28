@@ -200,7 +200,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
       return;
     }
     this.sourceIsListener(info.originalSourceId)
-      ? this.flowStructureService.setFirstPipeById(info.targetId)
+      ? this.flowStructureService.setFirstPipeById(info.newTargetId)
       : this.flowStructureService.moveConnection(
           info.originalSourceId,
           info.originalTargetId,
