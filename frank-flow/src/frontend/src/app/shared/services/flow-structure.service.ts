@@ -636,14 +636,39 @@ export class FlowStructureService {
   }
 
   deleteNode(node: FlowStructureNode): void {
+    const forwardsWithTarget = this.findForwardsWithTarget(node);
+    const editOperations =
+      forwardsWithTarget?.map(this.getDeleteOperationForNode) ?? [];
+
     node = node.parent ?? node;
-    const text = ``;
-    const range = {
-      startLineNumber: node.line,
-      endLineNumber: node.endLine + 1,
-      startColumn: 0,
-      endColumn: 0,
+    const nodeDeleteOperastion = this.getDeleteOperationForNode(node);
+    editOperations.push(nodeDeleteOperastion);
+    this.monacoEditorComponent?.applyEdits(editOperations, true);
+  }
+
+  findForwardsWithTarget(node: FlowStructureNode): FlowStructureNode[] {
+    const forwardsWithTarget = [];
+    for (const currentNode of this.flowStructure.nodes) {
+      for (const forward of currentNode.forwards ?? []) {
+        if (forward.attributes['path'].value === node.name) {
+          forwardsWithTarget.push(forward);
+        }
+      }
+    }
+    return forwardsWithTarget;
+  }
+
+  getDeleteOperationForNode(
+    node: FlowStructureNode
+  ): monaco.editor.IIdentifiedSingleEditOperation {
+    return {
+      range: {
+        startLineNumber: node.line,
+        endLineNumber: node.endLine + 1,
+        startColumn: 0,
+        endColumn: 0,
+      },
+      text: '',
     };
-    this.monacoEditorComponent?.applyEdits([{ text, range }], true);
   }
 }
