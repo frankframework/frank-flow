@@ -1,3 +1,11 @@
+## [2.7.1](https://github.com/ibissource/frank-flow/compare/v2.7.0...v2.7.1) (2022-01-28)
+
+
+### 🐛 Bug Fixes
+
+* add path to non removable attributes ([c48314c](https://github.com/ibissource/frank-flow/commit/c48314c92a32ce709072a82cf226068ba75f65a7))
+* remove delete button for attributes that can't be removed ([68a8ff7](https://github.com/ibissource/frank-flow/commit/68a8ff7cb28de8b9aceac662a79ac76ecc59b953))
+
 # [2.7.0](https://github.com/ibissource/frank-flow/compare/v2.6.3...v2.7.0) (2022-01-28)
 
 
