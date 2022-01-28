@@ -217,10 +217,10 @@ export class FlowStructureService {
     }
   }
 
-  removeFirstPipe(): void {
+  removeFirstPipe(flowUpdate = true): void {
     const pipelineAttributes = this.flowStructure.pipeline.attributes;
     if (pipelineAttributes['firstPipe']?.value) {
-      this.deleteAttribute('firstPipe', pipelineAttributes, true);
+      this.deleteAttribute('firstPipe', pipelineAttributes, flowUpdate);
     } else {
       this.currentFile.flowNeedsUpdate = true;
       this.currentFileService.updateCurrentFile(this.currentFile);
@@ -637,8 +637,15 @@ export class FlowStructureService {
 
   deleteNode(node: FlowStructureNode): void {
     const forwardsWithTarget = this.findForwardsWithTarget(node);
-    const editOperations =
-      forwardsWithTarget?.map(this.getDeleteOperationForNode) ?? [];
+    const editOperations = forwardsWithTarget.map((forwards) =>
+      this.getDeleteOperationForNode(forwards)
+    );
+
+    if (
+      this.flowStructure.pipeline.attributes['firstPipe']?.value === node.name
+    ) {
+      this.removeFirstPipe(false);
+    }
 
     node = node.parent ?? node;
     const nodeDeleteOperastion = this.getDeleteOperationForNode(node);
