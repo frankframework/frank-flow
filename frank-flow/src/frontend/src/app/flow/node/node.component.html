@@ -10,3 +10,8 @@
   </div>
   <div class="node__badges"></div>
 </div>
+<div *ngIf="nodeHasSenders()">
+  <div *ngFor="let sender of node.getSenders()" class="node__name node__sender">
+    {{ sender.name }}
+  </div>
+</div>

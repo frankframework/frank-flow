@@ -142,5 +142,16 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
+    &__sender {
+      width: fit-content;
+      background-color: var(--success);
+      color: var(--info-dark);
+      box-shadow: 1px 1px 0 0 var(--info-shadow);
+      border-radius: 10px;
+      border: 1px solid var(--accent-dark);
+      margin-top: 2px;
+      padding: 5px;
+    }
   }
 }

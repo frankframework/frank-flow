@@ -67,6 +67,7 @@ export class NodeGeneratorService {
     for (const pipe of pipes) {
       const positions = pipe.positions;
       const attributes = pipe.attributes;
+      const senders = pipe.senders;
       const node = new Pipe({
         id: pipe.uid,
         name: pipe.name,
@@ -74,6 +75,7 @@ export class NodeGeneratorService {
         top: positions.y,
         left: positions.x,
         attributes,
+        senders,
       });
 
       if (pipe.forwards) {

@@ -95,8 +95,18 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     bufferAttributes
   );
 
+  checkNodeType(currentNode);
+
+  if (!tag.isSelfClosing) {
+    unclosedNodes.push(currentNode);
+  }
+});
+
+const checkNodeType = (currentNode: FlowStructureNode) => {
   bufferAttributes = {};
-  if (currentNode.type.endsWith('Pipe')) {
+  if (currentNode.type.endsWith('Sender')) {
+    unclosedNodes[unclosedNodes.length - 1].senders?.push(currentNode);
+  } else if (currentNode.type.endsWith('Pipe')) {
     currentNode.forwards = [];
     flowStructure.nodes.push(currentNode);
   } else if (currentNode.type.toLocaleLowerCase() === 'forward') {
@@ -125,11 +135,7 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
         break;
     }
   }
-
-  if (!tag.isSelfClosing) {
-    unclosedNodes.push(currentNode);
-  }
-});
+};
 
 parser.on('closetag', (tag: TagForOptions<{}>) => {
   const closingNode = unclosedNodes.pop();

@@ -12,6 +12,7 @@ export class FlowStructureNode {
   public name: string;
   public positions: { x: number; y: number };
   public parent?: FlowStructureNode;
+  public senders: FlowStructureNode[];
 
   constructor(
     line: number,
@@ -33,6 +34,7 @@ export class FlowStructureNode {
     this.name = this.getName();
     this.uid = this.name + this.type;
     this.positions = this.getPositions();
+    this.senders = [];
   }
 
   private getName(): string {
