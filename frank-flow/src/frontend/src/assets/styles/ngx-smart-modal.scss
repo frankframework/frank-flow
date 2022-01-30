@@ -52,5 +52,6 @@
 }
 
 .overlay.nsm-overlay-open {
-  background: var(--bg-color-muted-transparant);
+  background: rgb(0 0 0 / 20%);
+  backdrop-filter: blur(5px);
 }
