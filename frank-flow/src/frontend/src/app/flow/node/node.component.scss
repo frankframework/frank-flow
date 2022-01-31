@@ -35,6 +35,11 @@
         grid-row-start: 3;
         grid-column-start: 1;
       }
+
+      &__badges {
+        grid-row-start: 4;
+        grid-column-start: 1;
+      }
     }
   }
 
@@ -54,6 +59,11 @@
 
       &__name {
         grid-row-start: 3;
+        grid-column-start: 1;
+      }
+
+      &__badges {
+        grid-row-start: 4;
         grid-column-start: 1;
       }
     }
@@ -143,15 +153,26 @@
       text-overflow: ellipsis;
     }
 
+    &__badges {
+      grid-column-start: 2;
+      grid-row-start: 3;
+      width: 100%;
+      overflow: hidden;
+    }
+
     &__sender {
-      width: fit-content;
-      background-color: var(--success);
-      color: var(--info-dark);
-      box-shadow: 1px 1px 0 0 var(--info-shadow);
-      border-radius: 10px;
-      border: 1px solid var(--accent-dark);
-      margin-top: 2px;
-      padding: 5px;
+      font-size: 11px;
+      color: var(--success);
+      background: var(--success-lighter-35);
+      border-radius: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 2px;
+
+      &:nth-child(even) {
+        margin-left: 5px;
+      }
     }
   }
 }

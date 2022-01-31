@@ -75,10 +75,6 @@ export class Node {
     generating: boolean
   ): void {
     jsPlumb.ready(() => {
-      if (this.senders && this.senders.length > 0) {
-        this.classes = 'color--success';
-      }
-
       const factory = factoryResolver.resolveComponentFactory(NodeComponent);
       const component = factory.create(rootViewContainer.injector);
 

@@ -95,14 +95,14 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     bufferAttributes
   );
 
-  checkNodeType(currentNode);
+  addNodeToFlowStructure(currentNode);
 
   if (!tag.isSelfClosing) {
     unclosedNodes.push(currentNode);
   }
 });
 
-const checkNodeType = (currentNode: FlowStructureNode) => {
+const addNodeToFlowStructure = (currentNode: FlowStructureNode) => {
   bufferAttributes = {};
   if (currentNode.type.endsWith('Sender')) {
     unclosedNodes[unclosedNodes.length - 1].senders?.push(currentNode);

@@ -8,10 +8,14 @@
   <div [title]="node.getName()" class="node__name">
     {{ node.getName() }}
   </div>
-  <div class="node__badges"></div>
-</div>
-<div *ngIf="nodeHasSenders()">
-  <div *ngFor="let sender of node.getSenders()" class="node__name node__sender">
-    {{ sender.name }}
+  <div class="node__badges">
+    <div *ngIf="senders.length === 1; else senderCount" class="node__sender">
+      {{ senders[0]?.name }}
+    </div>
+    <ng-template #senderCount>
+      <div *ngIf="senders.length > 1" class="node__sender">
+        {{ senders.length }} senders
+      </div>
+    </ng-template>
   </div>
 </div>

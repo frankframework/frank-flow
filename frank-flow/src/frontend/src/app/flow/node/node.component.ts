@@ -41,6 +41,9 @@ export class NodeComponent implements AfterViewInit {
   public get isActive() {
     return this.flowStructureService.selectedNode?.uid === this.node?.getId();
   }
+  public get senders() {
+    return this.node.getSenders() ?? [];
+  }
 
   public readonly cloud = faCloudDownloadAlt;
 
@@ -122,8 +125,6 @@ export class NodeComponent implements AfterViewInit {
     this.createAnchors(id);
     this.createGrid();
     this.jsPlumbInstance.draggable(id, this.dragOptions);
-
-    console.log('node:', this.node);
   }
 
   getSettings(): void {
@@ -260,11 +261,6 @@ export class NodeComponent implements AfterViewInit {
 
   nodeHasClass(event: any, className: string) {
     return event.el.classList[0] === className;
-  }
-
-  nodeHasSenders(): boolean {
-    const senders = this.node.getSenders();
-    return senders != undefined && senders.length > 0;
   }
 
   openOptions(): void {
