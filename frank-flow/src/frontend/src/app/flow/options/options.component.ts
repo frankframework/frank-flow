@@ -169,9 +169,26 @@ export class OptionsComponent implements OnInit, OnDestroy {
       this.element = this.frankDoc.elements.find((element: any) =>
         element.elementNames.includes(this.structureNode?.type)
       );
-      for (const attribute of this.element?.attributes) {
+
+      for (const attribute of this.element?.attributes ?? []) {
         this.availableAttributes.push(attribute);
       }
+
+      this.getAvailableAttributesFromParent(this.element?.parent);
+    }
+  }
+
+  getAvailableAttributesFromParent(fullParentName: string): void {
+    const parent = this.frankDoc.elements.find(
+      (element: any) => element.fullName === fullParentName
+    );
+
+    for (const attribute of parent.attributes ?? []) {
+      this.availableAttributes.push(attribute);
+    }
+
+    if (parent?.parent) {
+      this.getAvailableAttributesFromParent(parent.parent);
     }
   }
 
