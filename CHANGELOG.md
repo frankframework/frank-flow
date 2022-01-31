@@ -1,3 +1,84 @@
+## [2.7.2](https://github.com/ibissource/frank-flow/compare/v2.7.1...v2.7.2) (2022-01-28)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([3be3425](https://github.com/ibissource/frank-flow/commit/3be3425459ad3e7ed554cfb7eb026323702e5776))
+
+## [2.7.1](https://github.com/ibissource/frank-flow/compare/v2.7.0...v2.7.1) (2022-01-28)
+
+
+### 🐛 Bug Fixes
+
+* add path to non removable attributes ([c48314c](https://github.com/ibissource/frank-flow/commit/c48314c92a32ce709072a82cf226068ba75f65a7))
+* remove delete button for attributes that can't be removed ([68a8ff7](https://github.com/ibissource/frank-flow/commit/68a8ff7cb28de8b9aceac662a79ac76ecc59b953))
+
+# [2.7.0](https://github.com/ibissource/frank-flow/compare/v2.6.3...v2.7.0) (2022-01-28)
+
+
+### ✨ Features
+
+* remove all forwards pointing to a node when it gets deleted ([00c0b0d](https://github.com/ibissource/frank-flow/commit/00c0b0dc5a784a93d0d79207735bbdbf2642cc0d))
+* remove firstpipe if the same node gets removed ([87643a4](https://github.com/ibissource/frank-flow/commit/87643a490b707785077557fde163261bc61511f9))
+
+
+### 🐛 Bug Fixes
+
+* change forwards to the new name of a node when it is changed ([3bcb596](https://github.com/ibissource/frank-flow/commit/3bcb596486acf7a989406c6badf48fb5bc0906fa))
+* moving a forward will change the target of an existing forward ([f636223](https://github.com/ibissource/frank-flow/commit/f63622300e5c1752e81e549ddd6a7e9b4805a790))
+* moving the listener to another pipe ([89d3384](https://github.com/ibissource/frank-flow/commit/89d3384d68c5e4dda345b281d5ccca5c125bff12))
+
+## [2.6.3](https://github.com/ibissource/frank-flow/compare/v2.6.2...v2.6.3) (2022-01-27)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([a578c05](https://github.com/ibissource/frank-flow/commit/a578c052bca7b4fc6ad589d4c86b0d4035e40e4b))
+
+## [2.6.2](https://github.com/ibissource/frank-flow/compare/v2.6.1...v2.6.2) (2022-01-27)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([b6c0f42](https://github.com/ibissource/frank-flow/commit/b6c0f42aaff85e97b9b1ffb8a9eac7d195db87f7))
+* **deps:** bump jqwidgets-ng in /frank-flow/src/frontend ([86f35f3](https://github.com/ibissource/frank-flow/commit/86f35f310b8fad84d56052a2325dca6f5351b2a1))
+
+## [2.6.1](https://github.com/ibissource/frank-flow/compare/v2.6.0...v2.6.1) (2022-01-26)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([72c1095](https://github.com/ibissource/frank-flow/commit/72c109527e5836afb99260a8ac055a72e4ee9b2c))
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([57d104c](https://github.com/ibissource/frank-flow/commit/57d104cebceafd1b5e453340522a87ef3748cda2))
+
+# [2.6.0](https://github.com/ibissource/frank-flow/compare/v2.5.10...v2.6.0) (2022-01-25)
+
+
+### ✨ Features
+
+* allways select the current file in the file-tree ([e617830](https://github.com/ibissource/frank-flow/commit/e617830afb27c4cdf2521d094a2392eee99f514f))
+* expand folder in which selected item is located ([7774681](https://github.com/ibissource/frank-flow/commit/7774681559f03eb29a3fa5d22aa10a4e47c7141f))
+
+
+### 🐛 Bug Fixes
+
+* changes after view has been checked error ([2cdf2ce](https://github.com/ibissource/frank-flow/commit/2cdf2ce443d4a4d506e799b7f278c8fdaaae9e90))
+* don't do anything if selected file is reselected ([fdb8a15](https://github.com/ibissource/frank-flow/commit/fdb8a15bae7ed3e17bc634fbf944dc76ff92b61c))
+* remove code that can done otherwise ([cf495eb](https://github.com/ibissource/frank-flow/commit/cf495ebd95fa9065bc7b8b495ee443c6f52c2987))
+
+## [2.5.10](https://github.com/ibissource/frank-flow/compare/v2.5.9...v2.5.10) (2022-01-25)
+
+
+### 🐛 Bug Fixes
+
+* remove center canvas button which caused unpredictable behavior ([e6bf7ce](https://github.com/ibissource/frank-flow/commit/e6bf7ce89aaf92e8a9e532fa1526ce1ab5fffb6a))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([628744e](https://github.com/ibissource/frank-flow/commit/628744e9f88e50b7c68bb84dd31264104352a662))
+* **deps-dev:** bump karma in /frank-flow/src/frontend ([4dcaf42](https://github.com/ibissource/frank-flow/commit/4dcaf4255c6da2d3568c7b9c0a3e77f049633fe3))
+
 ## [2.5.9](https://github.com/ibissource/frank-flow/compare/v2.5.8...v2.5.9) (2022-01-23)
 
 

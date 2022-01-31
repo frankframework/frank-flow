@@ -3,6 +3,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { CurrentFileService } from '../../services/current-file.service';
 import { File } from '../../models/file.model';
 import { Subscription } from 'rxjs';
+import { FileTreeComponent } from '../file-tree/file-tree.component';
 
 @Component({
   selector: 'app-save-dialog',
@@ -10,9 +11,11 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./save-dialog.component.scss'],
 })
 export class SaveDialogComponent implements OnInit, OnDestroy {
-  item!: File;
-  currentFile!: File | undefined;
+  public item!: File;
+  public currentFile!: File | undefined;
+  private fileTreeComponent!: FileTreeComponent;
   private currentFileSubscription!: Subscription;
+  private actionClicked = false;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
@@ -31,17 +34,29 @@ export class SaveDialogComponent implements OnInit, OnDestroy {
   }
 
   onDataAdded(): void {
-    this.item = this.ngxSmartModalService.getModalData('saveDialog');
+    const options = this.ngxSmartModalService.getModalData('saveDialog');
+    this.item = options.item;
+    this.fileTreeComponent = options.fileTreeComponent;
   }
 
   save(): void {
+    this.actionClicked = true;
     this.currentFileService.save();
     this.currentFileService.switchToFileTreeItem(this.item);
     this.ngxSmartModalService.close('saveDialog');
   }
 
   discard(): void {
+    this.actionClicked = true;
     this.currentFileService.switchToFileTreeItem(this.item);
     this.ngxSmartModalService.close('saveDialog');
+  }
+
+  cancel(): void {
+    if (this.actionClicked) {
+      this.actionClicked = false;
+      return;
+    }
+    this.fileTreeComponent.updateFileTree();
   }
 }

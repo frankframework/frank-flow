@@ -273,6 +273,7 @@ export class CurrentFileService {
       firstLoad: true,
     };
     this.setCurrentFile(currentFile);
+    this.resetCurrentDirectory();
     this.resetPanZoom();
   }
 

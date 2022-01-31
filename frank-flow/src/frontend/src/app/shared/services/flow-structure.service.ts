@@ -183,7 +183,7 @@ export class FlowStructureService {
       (node) => node.uid === newTargetId
     );
 
-    const text = `path="${newTarget?.name}"`;
+    const text = `path="${newTarget?.name ?? newTargetId}"`;
     const range = {
       startLineNumber: pathAttribute.line,
       startColumn: pathAttribute.startColumn,
@@ -198,13 +198,13 @@ export class FlowStructureService {
     const sourcePipe = this.flowStructure.pipes.find(
       (pipe: FlowStructureNode) => pipe.uid === sourceId
     );
-    const targetPipe = this.flowStructure.nodes.find(
-      (pipe: FlowStructureNode) => pipe.uid === targetId
+    const targetNode = this.flowStructure.nodes.find(
+      (node: FlowStructureNode) => node.uid === targetId
     );
 
     return (sourcePipe?.forwards ?? []).find(
       (forward: FlowStructureNode) =>
-        forward.attributes['path'].value === targetPipe?.name
+        forward.attributes['path'].value === targetNode?.name
     );
   }
 
@@ -218,10 +218,10 @@ export class FlowStructureService {
     }
   }
 
-  removeFirstPipe(): void {
+  removeFirstPipe(flowUpdate = true): void {
     const pipelineAttributes = this.flowStructure.pipeline.attributes;
     if (pipelineAttributes['firstPipe']?.value) {
-      this.deleteAttribute('firstPipe', pipelineAttributes, true);
+      this.deleteAttribute('firstPipe', pipelineAttributes, flowUpdate);
     } else {
       this.currentFile.flowNeedsUpdate = true;
       this.currentFileService.updateCurrentFile(this.currentFile);
@@ -659,14 +659,46 @@ export class FlowStructureService {
   }
 
   deleteNode(node: FlowStructureNode): void {
+    const forwardsWithTarget = this.findForwardsWithTarget(node);
+    const editOperations = forwardsWithTarget.map((forwards) =>
+      this.getDeleteOperationForNode(forwards)
+    );
+
+    if (
+      this.flowStructure.pipeline.attributes['firstPipe']?.value === node.name
+    ) {
+      this.removeFirstPipe(false);
+    }
+
     node = node.parent ?? node;
-    const text = ``;
-    const range = {
-      startLineNumber: node.line,
-      endLineNumber: node.endLine + 1,
-      startColumn: 0,
-      endColumn: 0,
+    const nodeDeleteOperastion = this.getDeleteOperationForNode(node);
+    editOperations.push(nodeDeleteOperastion);
+    this.monacoEditorComponent?.applyEdits(editOperations, true);
+  }
+
+  findForwardsWithTarget(node: FlowStructureNode): FlowStructureNode[] {
+    const forwardsWithTarget = [];
+    for (const currentNode of this.flowStructure.nodes) {
+      for (const forward of currentNode.forwards ?? []) {
+        if (forward.attributes['path'].value === node.name) {
+          forwardsWithTarget.push(forward);
+        }
+      }
+    }
+    return forwardsWithTarget;
+  }
+
+  getDeleteOperationForNode(
+    node: FlowStructureNode
+  ): monaco.editor.IIdentifiedSingleEditOperation {
+    return {
+      range: {
+        startLineNumber: node.line,
+        endLineNumber: node.endLine + 1,
+        startColumn: 0,
+        endColumn: 0,
+      },
+      text: '',
     };
-    this.monacoEditorComponent?.applyEdits([{ text, range }], true);
   }
 }
