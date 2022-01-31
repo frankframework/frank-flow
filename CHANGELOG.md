@@ -1,3 +1,10 @@
+## [2.7.3](https://github.com/ibissource/frank-flow/compare/v2.7.2...v2.7.3) (2022-01-31)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([758d84c](https://github.com/ibissource/frank-flow/commit/758d84c6f79be1914a01f2fb7d7446ddece46550))
+
 ## [2.7.2](https://github.com/ibissource/frank-flow/compare/v2.7.1...v2.7.2) (2022-01-28)
 
 
