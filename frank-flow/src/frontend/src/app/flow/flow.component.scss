@@ -14,13 +14,17 @@
   &__no-canvas-message {
     margin: 16px;
     padding: 16px;
+    box-shadow: var(--shadow-medium);
     background: var(--bg-color-muted-transparant);
     color: var(--text-color);
-    display: flex;
-    gap: 16px;
     width: fit-content;
     border-radius: 5px;
     backdrop-filter: blur(5px);
+
+    span {
+      height: 36px;
+      line-height: 36px;
+    }
   }
 }
 

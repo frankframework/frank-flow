@@ -20,15 +20,15 @@
 
 <ng-template #noCanvas>
   <div *ngIf="fileIsEmpty" class="flow-container__no-canvas-message">
-    No file selected, please select a file in the Explorer
+    <span>No file selected, please select a file in the Explorer</span>
   </div>
   <div *ngIf="fileIsLoading" class="flow-container__no-canvas-message">
-    The file is loading in. Please wait.
+    <span>The file is loading in. Please wait.</span>
   </div>
   <div
     *ngIf="!fileIsConfiguration && !fileIsLoading && !fileIsEmpty"
     class="flow-container__no-canvas-message"
   >
-    The selected file does not contain a flow.
+    <span>The selected file does not contain a flow.</span>
   </div>
 </ng-template>
