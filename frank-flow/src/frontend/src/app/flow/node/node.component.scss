@@ -32,12 +32,6 @@
       grid-template-columns: auto;
       text-align: center;
 
-      &__icon {
-        &--sender {
-          display: none; // Icon looks bad here, search for another solution
-        }
-      }
-
       &__type {
         grid-row-start: 2;
         grid-column-start: 1;
@@ -63,12 +57,6 @@
     .node {
       grid-template-columns: auto;
       text-align: center;
-
-      &__icon {
-        &--sender {
-          display: none; // Icon looks bad here, search for another solution
-        }
-      }
 
       &__type {
         grid-row-start: 2;
@@ -203,6 +191,8 @@
     }
 
     &__sender {
+      display: inline-block;
+      max-width: 100%;
       font-size: 11px;
       color: var(--success);
       background: var(--success-lighter-7);
