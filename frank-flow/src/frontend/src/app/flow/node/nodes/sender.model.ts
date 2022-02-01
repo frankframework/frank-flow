@@ -11,6 +11,6 @@ export default class Sender extends Node {
     attributes?: FlowNodeAttributes;
   }) {
     super(options);
-    this.classes = 'shape--oval color--success';
+    this.classes = 'color--success';
   }
 }

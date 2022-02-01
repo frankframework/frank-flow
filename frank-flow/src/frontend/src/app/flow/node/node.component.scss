@@ -32,6 +32,12 @@
       grid-template-columns: auto;
       text-align: center;
 
+      &__icon {
+        &--sender {
+          display: none; // Icon looks bad here, search for another solution
+        }
+      }
+
       &__type {
         grid-row-start: 2;
         grid-column-start: 1;
@@ -57,6 +63,12 @@
     .node {
       grid-template-columns: auto;
       text-align: center;
+
+      &__icon {
+        &--sender {
+          display: none; // Icon looks bad here, search for another solution
+        }
+      }
 
       &__type {
         grid-row-start: 2;
@@ -111,11 +123,11 @@
 
   &.color--success {
     color: var(--success);
-    background: var(--success-lighter-4);
+    background: var(--success-lighter-7);
     border: 1px solid var(--success-darker-1);
 
     &.isActive {
-      background: var(--success-lighter-5);
+      background: var(--success-lighter-8);
       border: 3px solid var(--success-darker-1);
     }
 
@@ -161,6 +173,10 @@
 
     &__icon {
       grid-column-start: 1;
+
+      &--sender {
+        grid-row-start: 3;
+      }
     }
 
     &__type {
@@ -189,16 +205,13 @@
     &__sender {
       font-size: 11px;
       color: var(--success);
-      background: var(--success-lighter-35);
+      background: var(--success-lighter-7);
+      border: 1px solid var(--success-darker-1);
       border-radius: 5px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       padding: 2px;
-
-      &:nth-child(even) {
-        margin-left: 5px;
-      }
     }
   }
 }

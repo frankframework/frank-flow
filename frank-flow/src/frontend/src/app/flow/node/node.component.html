@@ -1,6 +1,6 @@
 <div class="node">
   <div class="node__icon">
-    <fa-icon [icon]="cloud"></fa-icon>
+    <fa-icon [icon]="puzzlePiece"></fa-icon>
   </div>
   <div [title]="node.getType()" class="node__type">
     {{ node.getType() }}
@@ -8,12 +8,23 @@
   <div [title]="node.getName()" class="node__name">
     {{ node.getName() }}
   </div>
+  <div class="node__icon--sender" *ngIf="senders.length > 0">
+    <fa-icon [icon]="paperPlane"></fa-icon>
+  </div>
   <div class="node__badges">
-    <div *ngIf="senders.length === 1; else senderCount" class="node__sender">
+    <div
+      [title]="senders[0]?.name"
+      *ngIf="senders.length === 1; else senderCount"
+      class="node__sender"
+    >
       {{ senders[0]?.name }}
     </div>
     <ng-template #senderCount>
-      <div *ngIf="senders.length > 1" class="node__sender">
+      <div
+        [title]="senders.length + ' senders'"
+        *ngIf="senders.length > 1"
+        class="node__sender"
+      >
         {{ senders.length }} senders
       </div>
     </ng-template>
