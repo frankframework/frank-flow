@@ -1,5 +1,8 @@
 :host {
   background: var(--bg-color-muted);
+  box-shadow: var(--shadow-medium);
+  position: relative;
+  z-index: 10;
 }
 
 .search-box {

@@ -1,22 +1,26 @@
 .button {
-  color: var(--text-color);
-  border: 2px solid var(--border-color);
-  height: 32px;
-  min-width: 32px;
+  color: var(--high-contrast-text-color);
+  border: none;
+  height: 36px;
+  min-width: 36px;
   text-transform: capitalize;
   font-weight: bold;
   padding: 4px;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
   font-size: 16px;
+  border-radius: 5px;
 
   &:hover {
-    background-color: var(--primary);
-    border-color: var(--primary);
-    color: var(--text-color);
+    color: var(--high-contrast-text-color);
+    background-color: var(--border-color);
+  }
+
+  &:active {
+    background: var(--primary);
   }
 
   &--default {
-    background-color: var(--bg-color);
+    background-color: var(--bg-color-muted);
   }
 
   &--block {
@@ -26,10 +30,10 @@
 
   &--dark {
     background: var(--dark-cyan);
-    color: #fafafa;
+    color: #f3f3f3;
   }
 }
 
 .selected {
-  border-color: var(--primary);
+  background: var(--primary);
 }

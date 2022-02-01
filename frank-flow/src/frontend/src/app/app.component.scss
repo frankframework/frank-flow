@@ -29,12 +29,15 @@
     .actions {
       margin: 16px;
       padding: 16px;
-      background: var(--bg-color-muted-shadow);
+      background: var(--bg-color-muted-transparant);
       position: relative;
       top: calc(-64px - 32px);
       display: flex;
       gap: 16px;
       width: fit-content;
+      border-radius: 5px;
+      box-shadow: var(--shadow-medium);
+      backdrop-filter: blur(5px);
     }
   }
 }

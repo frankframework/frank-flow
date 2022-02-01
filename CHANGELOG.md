@@ -1,3 +1,24 @@
+## [2.7.5](https://github.com/ibissource/frank-flow/compare/v2.7.4...v2.7.5) (2022-01-31)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump eslint in /frank-flow/src/frontend ([8e13599](https://github.com/ibissource/frank-flow/commit/8e1359939a69d6b4859b3a3050d47fdb8be433c7))
+
+## [2.7.4](https://github.com/ibissource/frank-flow/compare/v2.7.3...v2.7.4) (2022-01-31)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([9444aaa](https://github.com/ibissource/frank-flow/commit/9444aaa174b03719947d05bda0f584447a5ca35e))
+
+## [2.7.3](https://github.com/ibissource/frank-flow/compare/v2.7.2...v2.7.3) (2022-01-31)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([758d84c](https://github.com/ibissource/frank-flow/commit/758d84c6f79be1914a01f2fb7d7446ddece46550))
+
 ## [2.7.2](https://github.com/ibissource/frank-flow/compare/v2.7.1...v2.7.2) (2022-01-28)
 
 

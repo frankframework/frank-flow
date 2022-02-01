@@ -19,17 +19,19 @@
   right: 0;
   bottom: 0;
   background-color: var(--border-color);
-  transition: 0.4s;
+  transition: 0.2s;
+  box-shadow: inset var(--shadow-lowest);
 
   &::before {
+    box-shadow: var(--shadow-lowest);
     position: absolute;
     content: '';
     height: 28px;
     width: 29px;
     left: 4px;
     bottom: 4px;
-    background-color: var(--bg-color);
-    transition: 0.4s;
+    background-color: var(--bg-color-muted);
+    transition: 0.2s;
   }
 
   &.round {

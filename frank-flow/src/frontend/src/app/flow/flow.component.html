@@ -6,34 +6,6 @@
     >
       <div class="panzoom">
         <app-canvas #nodeContainer [panzoomConfig]="panZoomConfig"></app-canvas>
-        <div class="arrows arrows--horizontal">
-          <fa-icon
-            (click)="decreaseRight()"
-            icon="arrow-left"
-            size="10x"
-            title="Shrink canvas"
-          ></fa-icon>
-          <fa-icon
-            (click)="expandRight()"
-            icon="arrow-right"
-            size="10x"
-            title="Expand canvas"
-          ></fa-icon>
-        </div>
-        <div class="arrows arrows--vertical">
-          <fa-icon
-            (click)="decreaseBottom()"
-            icon="arrow-up"
-            size="10x"
-            title="Shrink canvas"
-          ></fa-icon>
-          <fa-icon
-            (click)="expandBottom()"
-            icon="arrow-down"
-            size="10x"
-            title="Expand canvas"
-          ></fa-icon>
-        </div>
       </div>
     </pan-zoom>
     <app-actions
@@ -48,15 +20,15 @@
 
 <ng-template #noCanvas>
   <div *ngIf="fileIsEmpty" class="flow-container__no-canvas-message">
-    No file selected, please select a file in the Explorer
+    <span>No file selected, please select a file in the Explorer</span>
   </div>
   <div *ngIf="fileIsLoading" class="flow-container__no-canvas-message">
-    The file is loading in. Please wait.
+    <span>The file is loading in. Please wait.</span>
   </div>
   <div
     *ngIf="!fileIsConfiguration && !fileIsLoading && !fileIsEmpty"
     class="flow-container__no-canvas-message"
   >
-    The selected file does not contain a flow.
+    <span>The selected file does not contain a flow.</span>
   </div>
 </ng-template>

@@ -7,7 +7,7 @@
 
 * {
   box-sizing: border-box;
-  transition: background-color 0.4s;
+  transition: background-color 0.2s;
 }
 
 html,
@@ -18,8 +18,9 @@ body {
   overflow: hidden;
   color: var(--text-color);
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
 }
 
 .monaco-editor__line--highlighted {
-  background: var(--accent-shadow);
+  background: var(--accent-transparant);
 }

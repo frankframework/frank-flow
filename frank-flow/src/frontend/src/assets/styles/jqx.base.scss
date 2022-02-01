@@ -1,7 +1,7 @@
 @import '~jqwidgets-ng/jqwidgets/styles/jqx.base.css';
 
 .jqx-widget-content {
-  color: var(--text-color);
+  color: var(--high-contrast-text-color);
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 14px;
   border: none;
@@ -9,39 +9,42 @@
   background: var(--bg-color-muted);
 }
 
-.jqx-dropdownbutton-popup {
-  .jqx-widget-content {
-    background: var(--bg-color-muted);
+.jqx-tree-item {
+  border: none;
+
+  &-li {
+    text-indent: 0;
+    background-color: transparent;
+    border: none;
+  }
+
+  &-selected {
+    color: inherit;
+    right: 0;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  &-arrow {
+    &-expand,
+    &-collapse {
+      margin-top: 1px !important; // Overwrite inline styling
+    }
   }
 }
 
-.jqx-tree-item {
-  border: none;
-  padding: 0;
-}
+.jqx-fill-state {
+  &-hover {
+    background: var(--bg-color-muted);
+  }
 
-.jqx-tree-item-li {
-  text-indent: 0;
-  background-color: transparent;
-  border: none;
-}
+  &-pressed {
+    background: var(--bg-color-muted);
 
-.jqx-tree-item-selected {
-  color: inherit;
-  right: 0;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.jqx-fill-state-hover {
-  background: var(--bg-color-muted);
-}
-
-.jqx-fill-state-pressed {
-  background: var(--bg-color-muted);
-
-  &.jqx-tree-item {
-    background: var(--primary);
+    &.jqx-tree-item {
+      background: var(--primary);
+      border-radius: 5px;
+    }
   }
 }
 
@@ -61,14 +64,8 @@
     width: 1px;
     background: var(--shade-2);
   }
-}
 
-.jqx-tree-dropdown-root {
-  padding: 0 9px;
-}
-
-.jqx-tree-item-arrow-expand,
-.jqx-tree-item-arrow-collapse {
-  transform-origin: center;
-  transform: scale(0.75);
+  &-root {
+    padding: 0 9px;
+  }
 }

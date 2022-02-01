@@ -8,10 +8,10 @@
   .nsm-content {
     background-color: var(--bg-color);
     color: var(--text-color);
-    border: 2px solid var(--border-color);
-    box-shadow: 5px 5px 0 0 $shadow-color;
+    border: none;
+    box-shadow: var(--shadow-highest);
     padding: 1em;
-    border-radius: 0;
+    border-radius: 10px;
     overflow: auto;
 
     .nsm-body {
@@ -22,6 +22,13 @@
 
       h1 {
         word-wrap: anywhere;
+      }
+
+      hr {
+        border: none;
+        height: 2px;
+        background: var(--bg-color-muted);
+        margin: 15px 0;
       }
 
       .button-actions {
@@ -42,4 +49,9 @@
       }
     }
   }
+}
+
+.overlay.nsm-overlay-open {
+  background: rgb(0 0 0 / 20%);
+  backdrop-filter: blur(5px);
 }

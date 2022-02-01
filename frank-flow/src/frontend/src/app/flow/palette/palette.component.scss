@@ -7,4 +7,15 @@
   overflow: hidden;
   align-content: start;
   grid-row-gap: 16px;
+  box-shadow: var(--shadow-medium);
+  position: relative;
+  z-index: 10;
+}
+
+app-group {
+  box-shadow: var(--shadow-lowest);
+}
+
+app-search {
+  box-shadow: var(--shadow-lowest);
 }

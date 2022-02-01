@@ -11,6 +11,8 @@
   position: relative;
   width: 2000px;
   height: 2000px;
+  box-shadow: var(--shadow-lowest);
+  border-radius: 10px;
 }
 
 .overlay {
@@ -19,6 +21,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 100;
+  z-index: 50;
+  border-radius: 10px;
   background: rgb(0 0 0 / 50%);
 }
