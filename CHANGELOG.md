@@ -1,3 +1,12 @@
+## [2.8.1](https://github.com/ibissource/frank-flow/compare/v2.8.0...v2.8.1) (2022-02-03)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([18925e7](https://github.com/ibissource/frank-flow/commit/18925e7fd61770b762007b59729deb3e2b4a204d))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([cd772a7](https://github.com/ibissource/frank-flow/commit/cd772a7b7107bcb0ba0846faacaa0f4fe8107d4c))
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([e34e5cf](https://github.com/ibissource/frank-flow/commit/e34e5cf41a28e58ab94b7ad5ad8663b2b54c3db5))
+
 # [2.8.0](https://github.com/ibissource/frank-flow/compare/v2.7.5...v2.8.0) (2022-02-03)
 
 
