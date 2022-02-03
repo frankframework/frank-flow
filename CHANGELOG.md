@@ -1,3 +1,28 @@
+# [2.8.0](https://github.com/ibissource/frank-flow/compare/v2.7.5...v2.8.0) (2022-02-03)
+
+
+### ✨ Features
+
+* add background blur to transparent elements ([eafe2b9](https://github.com/ibissource/frank-flow/commit/eafe2b90086a1412701c5578bebe252bd143a5c9))
+* add shadow to connections, fix hr in modal and style toastr ([152e2f9](https://github.com/ibissource/frank-flow/commit/152e2f9898d036cc4e0f83214c044e734c3c64ae))
+* add shadows to header and sidebars and change file-tree ([561cc1c](https://github.com/ibissource/frank-flow/commit/561cc1caba47ab66203d5dbf69b892224efb77cf))
+* change scss variables and implement shadows and buttons differently ([f825e80](https://github.com/ibissource/frank-flow/commit/f825e80939aea14bf6321acbe17c452693e83cc9))
+* change some font and border sizes and aligning ([7ef1a12](https://github.com/ibissource/frank-flow/commit/7ef1a12572a2958f38eff26d0b84a1c290c88cfb))
+* change some font and border sizes and aligning ([c12ce11](https://github.com/ibissource/frank-flow/commit/c12ce117d29c5035c9b521b57c5ac16e2d2dc301))
+* change the styling to a more modern look ([e66a53f](https://github.com/ibissource/frank-flow/commit/e66a53f02f6ed6233c97c5932f7908ffbf1f6f17))
+* make the no convas message as big as the actions (with lager buttons) ([364cbc0](https://github.com/ibissource/frank-flow/commit/364cbc0aac6cdc2150be0f20327680c6e1f510b6))
+* remove padding when node is active so content doesn't move ([65a5390](https://github.com/ibissource/frank-flow/commit/65a5390abf53924cebe7a3e77f6c3d258d204e07))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([cc779ea](https://github.com/ibissource/frank-flow/commit/cc779ea33b4850fc4ecbdafe7c1862f93fdc3892))
+
+
+### 🗑 Reverts
+
+* change frank-runner.properties back ([0706ee7](https://github.com/ibissource/frank-flow/commit/0706ee713091b917e898592e2c41cf8bddf643c9))
+
 ## [2.7.5](https://github.com/ibissource/frank-flow/compare/v2.7.4...v2.7.5) (2022-01-31)
 
 
