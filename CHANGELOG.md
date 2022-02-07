@@ -1,3 +1,11 @@
+## [2.8.3](https://github.com/ibissource/frank-flow/compare/v2.8.2...v2.8.3) (2022-02-07)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([318a9fa](https://github.com/ibissource/frank-flow/commit/318a9fa8ab36f11788e13baacf2f82ee27dd0ed5))
+* **deps-dev:** bump karma-coverage in /frank-flow/src/frontend ([921001f](https://github.com/ibissource/frank-flow/commit/921001f779ec36f6def8adbf83fb6f64592f1627))
+
 ## [2.8.2](https://github.com/ibissource/frank-flow/compare/v2.8.1...v2.8.2) (2022-02-03)
 
 
