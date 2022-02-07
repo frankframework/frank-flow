@@ -1,3 +1,11 @@
+## [2.8.4](https://github.com/ibissource/frank-flow/compare/v2.8.3...v2.8.4) (2022-02-07)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump ts-node in /frank-flow/src/frontend ([a79b1c3](https://github.com/ibissource/frank-flow/commit/a79b1c3c27c54485e2b228e93b0c876ec0c96083))
+* **deps:** bump monaco-editor in /frank-flow/src/frontend ([4796162](https://github.com/ibissource/frank-flow/commit/47961628f5de0b7f435f41e93d12e65a4463609c))
+
 ## [2.8.3](https://github.com/ibissource/frank-flow/compare/v2.8.2...v2.8.3) (2022-02-07)
 
 
