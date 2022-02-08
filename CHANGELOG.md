@@ -1,3 +1,11 @@
+## [2.8.6](https://github.com/ibissource/frank-flow/compare/v2.8.5...v2.8.6) (2022-02-08)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([6ac4d24](https://github.com/ibissource/frank-flow/commit/6ac4d245c991ebcbf2a090a635c96728a850c42c))
+* **deps:** bump cytoscape in /frank-flow/src/frontend ([54f0922](https://github.com/ibissource/frank-flow/commit/54f092203e7011246e473815fe3ab1c7958c72b9))
+
 ## [2.8.5](https://github.com/ibissource/frank-flow/compare/v2.8.4...v2.8.5) (2022-02-07)
 
 
