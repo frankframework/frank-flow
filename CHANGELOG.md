@@ -1,3 +1,11 @@
+## [2.8.7](https://github.com/ibissource/frank-flow/compare/v2.8.6...v2.8.7) (2022-02-08)
+
+
+### 🛠 Builds
+
+* **deps:** bump [@fortawesome](https://github.com/fortawesome)/free-regular-svg-icons ([6bb8088](https://github.com/ibissource/frank-flow/commit/6bb808898cb95116d5116ba11c794bb5cf7d7ff9))
+* **deps:** bump rxjs from 7.5.2 to 7.5.3 in /frank-flow/src/frontend ([02d3786](https://github.com/ibissource/frank-flow/commit/02d37867645a1b7819667c286e916d251d3410ca))
+
 ## [2.8.6](https://github.com/ibissource/frank-flow/compare/v2.8.5...v2.8.6) (2022-02-08)
 
 
