@@ -1,3 +1,11 @@
+## [2.8.11](https://github.com/ibissource/frank-flow/compare/v2.8.10...v2.8.11) (2022-02-10)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([f68f69d](https://github.com/ibissource/frank-flow/commit/f68f69d37acb8519ccef2b756857c8a2f41845ae))
+* **deps-dev:** bump karma in /frank-flow/src/frontend ([ffa77cc](https://github.com/ibissource/frank-flow/commit/ffa77ccd908e0fd3175a3e590d5757582e6061e0))
+
 ## [2.8.10](https://github.com/ibissource/frank-flow/compare/v2.8.9...v2.8.10) (2022-02-10)
 
 
