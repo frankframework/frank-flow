@@ -1,3 +1,122 @@
+## [2.8.12](https://github.com/ibissource/frank-flow/compare/v2.8.11...v2.8.12) (2022-02-10)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([f2cf4e2](https://github.com/ibissource/frank-flow/commit/f2cf4e2cbe05a3a8c461fdef35c46b3e528423f1))
+* **deps-dev:** bump karma-coverage in /frank-flow/src/frontend ([2e3d674](https://github.com/ibissource/frank-flow/commit/2e3d674a8ddcd1563d17fa4525842e6cb943cf42))
+
+## [2.8.11](https://github.com/ibissource/frank-flow/compare/v2.8.10...v2.8.11) (2022-02-10)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([f68f69d](https://github.com/ibissource/frank-flow/commit/f68f69d37acb8519ccef2b756857c8a2f41845ae))
+* **deps-dev:** bump karma in /frank-flow/src/frontend ([ffa77cc](https://github.com/ibissource/frank-flow/commit/ffa77ccd908e0fd3175a3e590d5757582e6061e0))
+
+## [2.8.10](https://github.com/ibissource/frank-flow/compare/v2.8.9...v2.8.10) (2022-02-10)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([5e68fbd](https://github.com/ibissource/frank-flow/commit/5e68fbd5d79035cc395f780590980fcc1ddc09cd))
+
+## [2.8.9](https://github.com/ibissource/frank-flow/compare/v2.8.8...v2.8.9) (2022-02-09)
+
+
+### 🛠 Builds
+
+* **deps:** bump rxjs from 7.5.3 to 7.5.4 in /frank-flow/src/frontend ([24959da](https://github.com/ibissource/frank-flow/commit/24959dacc9b4bc5486ed1e688b86599a676b0707))
+
+## [2.8.8](https://github.com/ibissource/frank-flow/compare/v2.8.7...v2.8.8) (2022-02-09)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump karma in /frank-flow/src/frontend ([e025f28](https://github.com/ibissource/frank-flow/commit/e025f28fa4ac9d10b29f2f0d417ff2380acea9ab))
+
+## [2.8.7](https://github.com/ibissource/frank-flow/compare/v2.8.6...v2.8.7) (2022-02-08)
+
+
+### 🛠 Builds
+
+* **deps:** bump [@fortawesome](https://github.com/fortawesome)/free-regular-svg-icons ([6bb8088](https://github.com/ibissource/frank-flow/commit/6bb808898cb95116d5116ba11c794bb5cf7d7ff9))
+* **deps:** bump rxjs from 7.5.2 to 7.5.3 in /frank-flow/src/frontend ([02d3786](https://github.com/ibissource/frank-flow/commit/02d37867645a1b7819667c286e916d251d3410ca))
+
+## [2.8.6](https://github.com/ibissource/frank-flow/compare/v2.8.5...v2.8.6) (2022-02-08)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([6ac4d24](https://github.com/ibissource/frank-flow/commit/6ac4d245c991ebcbf2a090a635c96728a850c42c))
+* **deps:** bump cytoscape in /frank-flow/src/frontend ([54f0922](https://github.com/ibissource/frank-flow/commit/54f092203e7011246e473815fe3ab1c7958c72b9))
+
+## [2.8.5](https://github.com/ibissource/frank-flow/compare/v2.8.4...v2.8.5) (2022-02-07)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([2b978f8](https://github.com/ibissource/frank-flow/commit/2b978f80fb596cf6a4b45c143d61c256266c7a45))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([4ce2441](https://github.com/ibissource/frank-flow/commit/4ce2441a74773b4088c23a33bb290af50e700dbf))
+
+## [2.8.4](https://github.com/ibissource/frank-flow/compare/v2.8.3...v2.8.4) (2022-02-07)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump ts-node in /frank-flow/src/frontend ([a79b1c3](https://github.com/ibissource/frank-flow/commit/a79b1c3c27c54485e2b228e93b0c876ec0c96083))
+* **deps:** bump monaco-editor in /frank-flow/src/frontend ([4796162](https://github.com/ibissource/frank-flow/commit/47961628f5de0b7f435f41e93d12e65a4463609c))
+
+## [2.8.3](https://github.com/ibissource/frank-flow/compare/v2.8.2...v2.8.3) (2022-02-07)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([318a9fa](https://github.com/ibissource/frank-flow/commit/318a9fa8ab36f11788e13baacf2f82ee27dd0ed5))
+* **deps-dev:** bump karma-coverage in /frank-flow/src/frontend ([921001f](https://github.com/ibissource/frank-flow/commit/921001f779ec36f6def8adbf83fb6f64592f1627))
+
+## [2.8.2](https://github.com/ibissource/frank-flow/compare/v2.8.1...v2.8.2) (2022-02-03)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump karma in /frank-flow/src/frontend ([3e24ce7](https://github.com/ibissource/frank-flow/commit/3e24ce715c7205bdd6e5f6bb4c68593697abce58))
+* **deps:** bump monaco-editor in /frank-flow/src/frontend ([f49fd5d](https://github.com/ibissource/frank-flow/commit/f49fd5d10170993460323bcc4ed286ac839a5fca))
+
+## [2.8.1](https://github.com/ibissource/frank-flow/compare/v2.8.0...v2.8.1) (2022-02-03)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([18925e7](https://github.com/ibissource/frank-flow/commit/18925e7fd61770b762007b59729deb3e2b4a204d))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([cd772a7](https://github.com/ibissource/frank-flow/commit/cd772a7b7107bcb0ba0846faacaa0f4fe8107d4c))
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([e34e5cf](https://github.com/ibissource/frank-flow/commit/e34e5cf41a28e58ab94b7ad5ad8663b2b54c3db5))
+
+# [2.8.0](https://github.com/ibissource/frank-flow/compare/v2.7.5...v2.8.0) (2022-02-03)
+
+
+### ✨ Features
+
+* add background blur to transparent elements ([eafe2b9](https://github.com/ibissource/frank-flow/commit/eafe2b90086a1412701c5578bebe252bd143a5c9))
+* add shadow to connections, fix hr in modal and style toastr ([152e2f9](https://github.com/ibissource/frank-flow/commit/152e2f9898d036cc4e0f83214c044e734c3c64ae))
+* add shadows to header and sidebars and change file-tree ([561cc1c](https://github.com/ibissource/frank-flow/commit/561cc1caba47ab66203d5dbf69b892224efb77cf))
+* change scss variables and implement shadows and buttons differently ([f825e80](https://github.com/ibissource/frank-flow/commit/f825e80939aea14bf6321acbe17c452693e83cc9))
+* change some font and border sizes and aligning ([7ef1a12](https://github.com/ibissource/frank-flow/commit/7ef1a12572a2958f38eff26d0b84a1c290c88cfb))
+* change some font and border sizes and aligning ([c12ce11](https://github.com/ibissource/frank-flow/commit/c12ce117d29c5035c9b521b57c5ac16e2d2dc301))
+* change the styling to a more modern look ([e66a53f](https://github.com/ibissource/frank-flow/commit/e66a53f02f6ed6233c97c5932f7908ffbf1f6f17))
+* make the no convas message as big as the actions (with lager buttons) ([364cbc0](https://github.com/ibissource/frank-flow/commit/364cbc0aac6cdc2150be0f20327680c6e1f510b6))
+* remove padding when node is active so content doesn't move ([65a5390](https://github.com/ibissource/frank-flow/commit/65a5390abf53924cebe7a3e77f6c3d258d204e07))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([cc779ea](https://github.com/ibissource/frank-flow/commit/cc779ea33b4850fc4ecbdafe7c1862f93fdc3892))
+
+
+### 🗑 Reverts
+
+* change frank-runner.properties back ([0706ee7](https://github.com/ibissource/frank-flow/commit/0706ee713091b917e898592e2c41cf8bddf643c9))
+
 ## [2.7.5](https://github.com/ibissource/frank-flow/compare/v2.7.4...v2.7.5) (2022-01-31)
 
 
