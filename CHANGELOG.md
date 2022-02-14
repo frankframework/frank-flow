@@ -1,3 +1,11 @@
+## [2.8.14](https://github.com/ibissource/frank-flow/compare/v2.8.13...v2.8.14) (2022-02-14)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-eslint](https://github.com/angular-eslint)/eslint-plugin-template ([ef0de1d](https://github.com/ibissource/frank-flow/commit/ef0de1d055997158bb5602650fcb441e9d33c563))
+* **deps:** bump follow-redirects in /frank-flow/src/frontend ([3736bd9](https://github.com/ibissource/frank-flow/commit/3736bd94864f584712b0cb0a12b04aaf7c0a8295))
+
 ## [2.8.13](https://github.com/ibissource/frank-flow/compare/v2.8.12...v2.8.13) (2022-02-14)
 
 
