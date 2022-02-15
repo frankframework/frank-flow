@@ -1,3 +1,10 @@
+## [2.8.18](https://github.com/ibissource/frank-flow/compare/v2.8.17...v2.8.18) (2022-02-15)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-eslint](https://github.com/angular-eslint)/builder ([bc26e82](https://github.com/ibissource/frank-flow/commit/bc26e82a6666f2e9cfd8cb09bf78e2df2e7f8320))
+
 ## [2.8.17](https://github.com/ibissource/frank-flow/compare/v2.8.16...v2.8.17) (2022-02-15)
 
 
