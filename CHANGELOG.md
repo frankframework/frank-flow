@@ -1,3 +1,10 @@
+## [2.8.17](https://github.com/ibissource/frank-flow/compare/v2.8.16...v2.8.17) (2022-02-15)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([d851864](https://github.com/ibissource/frank-flow/commit/d85186444e5b6396cb83559b86f13db18ecac0e1))
+
 ## [2.8.16](https://github.com/ibissource/frank-flow/compare/v2.8.15...v2.8.16) (2022-02-15)
 
 
