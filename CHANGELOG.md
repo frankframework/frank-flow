@@ -1,3 +1,10 @@
+## [2.8.16](https://github.com/ibissource/frank-flow/compare/v2.8.15...v2.8.16) (2022-02-15)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/config-conventional ([63282bc](https://github.com/ibissource/frank-flow/commit/63282bc43092fd82de413bbfc09c2ac2bea01934))
+
 ## [2.8.15](https://github.com/ibissource/frank-flow/compare/v2.8.14...v2.8.15) (2022-02-15)
 
 
