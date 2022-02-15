@@ -197,13 +197,21 @@
     aria-query "^4.2.2"
     axobject-query "^2.2.0"
 
-"@angular-eslint/eslint-plugin@13.0.1", "@angular-eslint/eslint-plugin@^13.0.1":
+"@angular-eslint/eslint-plugin@13.0.1":
   version "13.0.1"
   resolved "https://registry.npmjs.org/@angular-eslint/eslint-plugin/-/eslint-plugin-13.0.1.tgz"
   integrity sha512-WxqgMLTfE45dqjzg/Nq0dOEDwzpdB+zYOWrA41MT3jt0UbukFEx8+FMrAgBLIeDaHzwWomiAEV5Tm5mQAKA4VA==
   dependencies:
     "@angular-eslint/utils" "13.0.1"
     "@typescript-eslint/experimental-utils" "5.3.0"
+
+"@angular-eslint/eslint-plugin@^13.1.0":
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-13.1.0.tgz#cb3a1d4dfff5334459c7f3b4b3a124c84673b833"
+  integrity sha512-WiggBWPhhpSjcYVHJiawCduCsydM/RPudUE8zxv0Nmj/APuzNgvUr6E//uYTrhNv9EIJoZutRovw7R4Y/yXj4Q==
+  dependencies:
+    "@angular-eslint/utils" "13.1.0"
+    "@typescript-eslint/experimental-utils" "5.11.0"
 
 "@angular-eslint/schematics@^13.0.1":
   version "13.0.1"
@@ -216,12 +224,12 @@
     strip-json-comments "3.1.1"
     tmp "0.2.1"
 
-"@angular-eslint/template-parser@^13.0.1":
-  version "13.0.1"
-  resolved "https://registry.npmjs.org/@angular-eslint/template-parser/-/template-parser-13.0.1.tgz"
-  integrity sha512-GEJzVLS4Sb4UdurqaPD1/ucGhagGAQCp17CIgjpcXRwzxBZ9OLqbO/rx8diRbADp+1rceVq4BhADsg3VdsOsuw==
+"@angular-eslint/template-parser@^13.1.0":
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/template-parser/-/template-parser-13.1.0.tgz#5161dc061610212b730d929de9b3d7d365de8335"
+  integrity sha512-gKV+kms+kYm1HdToH3j4HL1RrjvMHscVkhwjoV1WbJColnfDivVAZ6/5/J92/A/8r7vJptQkftsbiaGKDyg47w==
   dependencies:
-    "@angular-eslint/bundled-angular-compiler" "13.0.1"
+    "@angular-eslint/bundled-angular-compiler" "13.1.0"
     eslint-scope "^5.1.0"
 
 "@angular-eslint/utils@13.0.1":
@@ -231,6 +239,14 @@
   dependencies:
     "@angular-eslint/bundled-angular-compiler" "13.0.1"
     "@typescript-eslint/experimental-utils" "5.3.0"
+
+"@angular-eslint/utils@13.1.0":
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/utils/-/utils-13.1.0.tgz#3023c0c66d02a5e80dbcf5b11b1c4767f5811bd2"
+  integrity sha512-iLmYMXNk+1sFMIlYXN8/Z5UcNAOno38v10lzo4bMjCpzXKkMa0O2b+4qi+469iUJAU6RAZ5weUL+S2Wtlr0ooA==
+  dependencies:
+    "@angular-eslint/bundled-angular-compiler" "13.1.0"
+    "@typescript-eslint/experimental-utils" "5.11.0"
 
 "@angular/animations@^13.1.0":
   version "13.1.0"
