@@ -1,3 +1,21 @@
+## [2.8.16](https://github.com/ibissource/frank-flow/compare/v2.8.15...v2.8.16) (2022-02-15)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/config-conventional ([63282bc](https://github.com/ibissource/frank-flow/commit/63282bc43092fd82de413bbfc09c2ac2bea01934))
+
+## [2.8.15](https://github.com/ibissource/frank-flow/compare/v2.8.14...v2.8.15) (2022-02-15)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-eslint](https://github.com/angular-eslint)/eslint-plugin ([2bff470](https://github.com/ibissource/frank-flow/commit/2bff4701e2c24207270b6a01291f466de7290061))
+* **deps-dev:** bump [@angular-eslint](https://github.com/angular-eslint)/template-parser ([dd08502](https://github.com/ibissource/frank-flow/commit/dd08502d1cf83d272578962df042a04921c105aa))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([86281db](https://github.com/ibissource/frank-flow/commit/86281dbdb5c0449141d8070361eb6a7e0846f531))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([cda7413](https://github.com/ibissource/frank-flow/commit/cda7413567f80602d277acdcf2741745b6f8a188))
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([088fe27](https://github.com/ibissource/frank-flow/commit/088fe27c82146ea0a0070770566b23a15f4b57c2))
+
 ## [2.8.14](https://github.com/ibissource/frank-flow/compare/v2.8.13...v2.8.14) (2022-02-14)
 
 
