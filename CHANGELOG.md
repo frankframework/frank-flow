@@ -1,3 +1,10 @@
+## [2.8.20](https://github.com/ibissource/frank-flow/compare/v2.8.19...v2.8.20) (2022-02-16)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump eslint-plugin-unicorn in /frank-flow/src/frontend ([45e1b7e](https://github.com/ibissource/frank-flow/commit/45e1b7eb68ab24001dae482c144a018dc4215bcd))
+
 ## [2.8.19](https://github.com/ibissource/frank-flow/compare/v2.8.18...v2.8.19) (2022-02-16)
 
 
