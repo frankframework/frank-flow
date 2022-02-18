@@ -1,3 +1,10 @@
+## [2.8.21](https://github.com/ibissource/frank-flow/compare/v2.8.20...v2.8.21) (2022-02-18)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-eslint](https://github.com/angular-eslint)/schematics ([8943385](https://github.com/ibissource/frank-flow/commit/8943385f32927e98f7b4612ac7d0344f22d70eb1))
+
 ## [2.8.20](https://github.com/ibissource/frank-flow/compare/v2.8.19...v2.8.20) (2022-02-16)
 
 
