@@ -1,3 +1,10 @@
+## [2.8.22](https://github.com/ibissource/frank-flow/compare/v2.8.21...v2.8.22) (2022-02-18)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([e70fb47](https://github.com/ibissource/frank-flow/commit/e70fb47d3696126eaa231aba8831f5c9a127d51e))
+
 ## [2.8.21](https://github.com/ibissource/frank-flow/compare/v2.8.20...v2.8.21) (2022-02-18)
 
 
