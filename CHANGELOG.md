@@ -1,3 +1,10 @@
+## [2.8.24](https://github.com/ibissource/frank-flow/compare/v2.8.23...v2.8.24) (2022-02-19)
+
+
+### 🛠 Builds
+
+* **deps:** bump maven-site-plugin from 3.10.0 to 3.11.0 ([799c290](https://github.com/ibissource/frank-flow/commit/799c290fd837ad7ed2f395102f0261c28d7f3898))
+
 ## [2.8.23](https://github.com/ibissource/frank-flow/compare/v2.8.22...v2.8.23) (2022-02-18)
 
 
