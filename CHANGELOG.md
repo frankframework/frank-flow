@@ -1,3 +1,10 @@
+## [2.8.27](https://github.com/ibissource/frank-flow/compare/v2.8.26...v2.8.27) (2022-02-22)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump jasmine-core in /frank-flow/src/frontend ([388a321](https://github.com/ibissource/frank-flow/commit/388a321e6cb84099d7e79397ea84ce11c38a0779))
+
 ## [2.8.26](https://github.com/ibissource/frank-flow/compare/v2.8.25...v2.8.26) (2022-02-21)
 
 
