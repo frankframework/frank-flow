@@ -1,3 +1,10 @@
+## [2.8.30](https://github.com/ibissource/frank-flow/compare/v2.8.29...v2.8.30) (2022-02-24)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([223fb90](https://github.com/ibissource/frank-flow/commit/223fb909b8205592e13e544b7bf7ff69027c7aed))
+
 ## [2.8.29](https://github.com/ibissource/frank-flow/compare/v2.8.28...v2.8.29) (2022-02-24)
 
 
