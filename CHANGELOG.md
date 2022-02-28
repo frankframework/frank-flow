@@ -1,3 +1,10 @@
+## [2.8.31](https://github.com/ibissource/frank-flow/compare/v2.8.30...v2.8.31) (2022-02-28)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump eslint in /frank-flow/src/frontend ([910557f](https://github.com/ibissource/frank-flow/commit/910557f448bb371a60e867f92f6d62db15cfdce1))
+
 ## [2.8.30](https://github.com/ibissource/frank-flow/compare/v2.8.29...v2.8.30) (2022-02-24)
 
 
