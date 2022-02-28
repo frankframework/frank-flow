@@ -1,3 +1,11 @@
+## [2.8.33](https://github.com/ibissource/frank-flow/compare/v2.8.32...v2.8.33) (2022-02-28)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([4f63ad8](https://github.com/ibissource/frank-flow/commit/4f63ad8afe8f75245a48fbf1702e9590265c9c7b))
+* **deps:** bump log4j2.version from 2.17.1 to 2.17.2 ([0a39733](https://github.com/ibissource/frank-flow/commit/0a397334da7f95c54c06b4e87cfb9cb8ea16cf44))
+
 ## [2.8.32](https://github.com/ibissource/frank-flow/compare/v2.8.31...v2.8.32) (2022-02-28)
 
 
