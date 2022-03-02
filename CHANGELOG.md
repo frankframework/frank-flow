@@ -1,3 +1,5 @@
+## [2.8.34](https://github.com/ibissource/frank-flow/compare/v2.8.33...v2.8.34) (2022-03-02)
+
 ## [2.8.33](https://github.com/ibissource/frank-flow/compare/v2.8.32...v2.8.33) (2022-02-28)
 
 
