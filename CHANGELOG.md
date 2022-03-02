@@ -1,3 +1,11 @@
+## [2.8.36](https://github.com/ibissource/frank-flow/compare/v2.8.35...v2.8.36) (2022-03-02)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump ts-node in /frank-flow/src/frontend ([2cccd7c](https://github.com/ibissource/frank-flow/commit/2cccd7ccdf884bf5102cdb42d97cacb3cc80f9dc))
+* **deps:** bump tomcat.version from 9.0.58 to 9.0.59 ([83033c8](https://github.com/ibissource/frank-flow/commit/83033c8731715b322c768325733e2fc1f71ce263))
+
 ## [2.8.35](https://github.com/ibissource/frank-flow/compare/v2.8.34...v2.8.35) (2022-03-02)
 
 
