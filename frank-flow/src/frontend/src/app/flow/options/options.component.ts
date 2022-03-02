@@ -28,21 +28,26 @@ export class OptionsComponent implements OnInit, OnDestroy {
   public nonRemovableAttributes = ['name', 'path'];
   public availableAttributes: FlowNodeAttributeOptions[] = [];
   public availableNestedElements?: any[];
+  public availableTypesForNestedElement?: any[];
   public attributes!: FlowNodeAttributes;
   public selectedAttribute!: any;
   public newAttributeValue!: string;
+  public selectedNewNestedElement!: any;
+  public selectedNewNestedElementName!: string | undefined;
+  public newNestedElementName!: string;
   public frankDocElement?: any;
   public frankDocParentElements: any[] = [];
   public structureNode!: FlowStructureNode;
   public frankDocElementsURI =
     environment.runnerUri + '/' + environment.frankDocElements;
+  public selectedNestedElement!: any;
 
   private frankDoc: any;
   private flowNode!: Node;
   private changedAttributes: ChangedAttribute[] = [];
   private currentFile!: File;
   private frankDocSubscription!: Subscription;
-  private currentStructureNode!: FlowStructureNode;
+  private currentFileSubscription!: Subscription;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
@@ -58,6 +63,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.frankDocSubscription.unsubscribe();
+    this.currentFileSubscription.unsubscribe();
   }
 
   getFrankDoc(): void {
@@ -67,12 +73,13 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   getCurrentFile(): void {
-    this.currentFileService.currentFileObservable.subscribe({
-      next: (currentFile: File) => {
-        this.currentFile = currentFile;
-        this.getAttributesOnNode();
-      },
-    });
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe({
+        next: (currentFile: File) => {
+          this.currentFile = currentFile;
+          this.getAttributesOnNode();
+        },
+      });
   }
 
   onDataAdded(): void {
@@ -151,11 +158,19 @@ export class OptionsComponent implements OnInit, OnDestroy {
     this.frankDocElement = '';
     this.frankDocParentElements = [];
     this.clearNewAttribute();
+    this.clearNewNestedElement();
   }
 
   clearNewAttribute() {
     this.selectedAttribute = undefined;
     this.newAttributeValue = '';
+  }
+
+  clearNewNestedElement() {
+    this.selectedNestedElement = undefined;
+    this.selectedNewNestedElement = undefined;
+    this.selectedNewNestedElementName = undefined;
+    this.newNestedElementName = '';
   }
 
   getAttributesOnNode(): void {
@@ -165,7 +180,6 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
     if (node) {
       this.structureNode = node;
-      this.currentStructureNode = node;
       this.attributes = node.attributes;
     }
   }
@@ -207,8 +221,8 @@ export class OptionsComponent implements OnInit, OnDestroy {
   getAvailableNestedElementsForNode(): void {
     this.availableNestedElements = [];
 
-    for (const nestedElement of this.frankDocElement?.children ?? []) {
-      this.availableNestedElements.push(nestedElement);
+    for (const child of this.frankDocElement?.children) {
+      this.availableNestedElements.push(child);
     }
 
     for (const parent of this.frankDocParentElements ?? []) {
@@ -284,11 +298,48 @@ export class OptionsComponent implements OnInit, OnDestroy {
     this.ngxSmartModalService.close('optionsModal');
   }
 
-  currentStructureNodeIs(structureNode: FlowStructureNode): boolean {
-    return this.currentStructureNode === structureNode;
+  setNestedElement(element: any): void {
+    this.clearNewNestedElement();
+    this.selectedNestedElement = element;
+    if (element) {
+      this.getAvailableTypesForNestedElement(element);
+      this.checkIfOnlyOneTypeIsAvailable();
+    }
   }
 
-  setCurrentStructureNode(structureNode: FlowStructureNode): void {
-    this.currentStructureNode = structureNode;
+  getAvailableTypesForNestedElement(element: any): void {
+    this.availableTypesForNestedElement = [];
+
+    const type = this.frankDoc.types.find(
+      (type: any) => type.name === element.type
+    );
+
+    for (const member of Object.values(type.members) ?? []) {
+      for (const element of this.frankDoc.elements ?? []) {
+        if (element.fullName === member) {
+          this.availableTypesForNestedElement.push(element);
+        }
+      }
+    }
   }
+
+  checkIfOnlyOneTypeIsAvailable(): void {
+    if (this.availableTypesForNestedElement?.length === 1) {
+      this.selectedNewNestedElement = this.availableTypesForNestedElement[0];
+    }
+    this.checkIfOnlyOneElementNameIsAvailable();
+  }
+
+  checkIfOnlyOneElementNameIsAvailable(): void {
+    this.selectedNewNestedElementName =
+      this.selectedNewNestedElement?.elementNames.length === 1
+        ? this.selectedNewNestedElement?.elementNames[0]
+        : undefined;
+  }
+
+  nestedElementIs(element: any): boolean {
+    return this.selectedNestedElement === element;
+  }
+
+  addNestedElement() {}
 }

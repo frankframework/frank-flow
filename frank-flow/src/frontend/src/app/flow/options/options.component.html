@@ -11,31 +11,32 @@
     <h2>
       {{ structureNode?.type
       }}<ng-container *ngIf="frankDocElement?.name !== structureNode?.type">
-        ({{ frankDocElement?.name }})</ng-container
-      >: {{ structureNode?.name }}
+        ({{ frankDocElement?.name }}) </ng-container
+      >:
+      {{ structureNode?.name }}
     </h2>
   </div>
   <div class="sidebar">
     <h3
-      (click)="setCurrentStructureNode(structureNode)"
-      [class.active]="currentStructureNodeIs(structureNode)"
+      (click)="setNestedElement(undefined)"
+      [class.active]="nestedElementIs(undefined)"
     >
       General
     </h3>
     <h3
       *ngFor="let nestedElement of availableNestedElements"
-      (click)="setCurrentStructureNode(nestedElement)"
-      [class.active]="currentStructureNodeIs(nestedElement)"
+      (click)="setNestedElement(nestedElement)"
+      [class.active]="nestedElementIs(nestedElement)"
     >
       {{ nestedElement.roleName }}
     </h3>
   </div>
-  <div class="content" *ngIf="currentStructureNodeIs(structureNode)">
+  <div class="content" *ngIf="nestedElementIs(undefined)">
     <h3>
-      Info about {{ structureNode?.type
-      }}<ng-container *ngIf="frankDocElement?.name !== structureNode?.type">
-        ({{ frankDocElement?.name }})</ng-container
-      >
+      Info about {{ structureNode?.type }}
+      <ng-container *ngIf="frankDocElement?.name !== structureNode?.type">
+        ({{ frankDocElement?.name }})
+      </ng-container>
     </h3>
     <div class="content-section">
       <p [innerHTML]="frankDocElement?.description" class="description"></p>
@@ -145,117 +146,188 @@
       </div>
     </div>
   </div>
-  <div class="content" *ngIf="!currentStructureNodeIs(structureNode)">
-    <h3>
-      Info about {{ structureNode?.type
-      }}<ng-container *ngIf="frankDocElement?.name !== structureNode?.type">
-        ({{ frankDocElement?.name }})</ng-container
-      >
-    </h3>
-    <div class="content-section">
-      <p [innerHTML]="frankDocElement?.description" class="description"></p>
-      <a
-        href="{{ frankDocElementsURI }}/{{ frankDocElement?.name }}"
-        target="_blank"
-      >
-        Read more about {{ frankDocElement?.name }}...
-      </a>
-    </div>
-    <h3>Attributes</h3>
-    <div class="content-section">
-      <ng-container
-        *ngFor="
-          let attribute of attributes | keyvalue;
-          trackBy: customTrackBy;
-          index as i
-        "
-      >
-        <div
-          *ngIf="!disabledAttributes.includes(attribute.key)"
-          class="input-row"
-        >
-          <label>{{ attribute.key }}:</label>
-          <div
-            class="input-row--input-with-button"
-            *ngIf="
-              !nonRemovableAttributes.includes(attribute.key);
-              else inputOnly
-            "
+  <div class="content" *ngIf="!nestedElementIs(undefined)">
+    <app-nested-element
+      *ngFor="let flowNodeElement of structureNode.nestedElements?.[selectedNestedElement.roleName]"
+      [parent]="structureNode"
+      [element]="selectedNestedElement"
+    ></app-nested-element>
+    <ng-container
+      *ngIf="selectedNestedElement.multiple || !structureNode.nestedElements?.[selectedNestedElement.roleName]"
+    >
+      <h3>Add a {{ selectedNestedElement.roleName }}</h3>
+      <div class="content-section">
+        <div class="input-row">
+          <label for="newNestedElement"
+            >Add a new {{ selectedNestedElement.roleName }}:</label
           >
-            <input
-              (keyup.enter)="optionsModal.close()"
-              (ngModelChange)="changeAttribute(attribute.key, $event)"
-              [ngModel]="attributes[attribute.key].value"
-              type="text"
-            />
-            <app-button (click)="deleteAttribute(attribute.key)">
-              <fa-icon
-                [icon]="['fas', 'trash']"
-                title="Delete attribute"
-              ></fa-icon>
-            </app-button>
-          </div>
-          <ng-template #inputOnly>
-            <input
-              (keyup.enter)="optionsModal.close()"
-              (ngModelChange)="changeAttribute(attribute.key, $event)"
-              [ngModel]="attributes[attribute.key].value"
-              type="text"
-            />
-          </ng-template>
+          <select
+            [(ngModel)]="selectedNewNestedElement"
+            required
+            id="newNestedElement"
+            (ngModelChange)="checkIfOnlyOneElementNameIsAvailable()"
+          >
+            <option [ngValue]="undefined" disabled hidden selected>
+              Choose a {{ selectedNestedElement.roleName }}...
+            </option>
+            <option
+              *ngFor="let element of availableTypesForNestedElement"
+              [ngValue]="element"
+            >
+              {{ element.name }}
+            </option>
+          </select>
         </div>
-      </ng-container>
-    </div>
-    <div class="content-section">
-      <div *ngIf="availableAttributes.length > 0" class="input-row">
-        <label for="selectAttribute">Add a new attribute:</label>
-        <select [(ngModel)]="selectedAttribute" id="selectAttribute" required>
-          <option [ngValue]="undefined" disabled hidden selected>
-            Choose an attribute...
-          </option>
-          <option
-            *ngFor="let availableAttribute of availableAttributes"
-            [hidden]="
-              attributeIsUsed(availableAttribute?.name) ||
-              availableAttribute?.deprecated
-            "
-            [ngValue]="availableAttribute"
+        <div class="input-row" *ngIf="selectedNewNestedElement">
+          <label for="newNestedElementElementName"
+            >Select an element name for
+            {{ selectedNewNestedElement.name }}:</label
           >
-            {{ availableAttribute?.name }}
-          </option>
-        </select>
+          <select
+            [(ngModel)]="selectedNewNestedElementName"
+            required
+            id="newNestedElementElementName"
+          >
+            <option [ngValue]="undefined" disabled hidden selected>
+              Choose an element name...
+            </option>
+            <option
+              *ngFor="let elementName of selectedNewNestedElement.elementNames"
+              [ngValue]="elementName"
+            >
+              {{ elementName }}
+            </option>
+          </select>
+        </div>
+        <div class="input-row" *ngIf="selectedNewNestedElementName">
+          <label for="newNestedElementName"
+            >Give the new {{ selectedNewNestedElementName }} a name:</label
+          >
+          <input
+            (keyup.enter)="addNestedElement()"
+            [(ngModel)]="newNestedElementName"
+            id="newNestedElementName"
+            type="text"
+          />
+        </div>
+        <div class="row" *ngIf="selectedNewNestedElementName">
+          <app-button (click)="addNestedElement()" [block]="true">
+            Add {{ selectedNewNestedElementName }}</app-button
+          >
+        </div>
       </div>
-      <div *ngIf="selectedAttribute" class="input-row">
-        <label for="newAttribute">New attribute value:</label>
-        <input
-          (keyup.enter)="addAttribute()"
-          [(ngModel)]="newAttributeValue"
-          [placeholder]="selectedAttribute?.default ?? ''"
-          id="newAttribute"
-          type="text"
-        />
-      </div>
-      <div
-        *ngIf="selectedAttribute && selectedAttribute?.description"
-        class="row"
-      >
-        <label>Description of attribute</label>
-        <p [innerHTML]="selectedAttribute?.description"></p>
-      </div>
-      <div *ngIf="newAttributeValue" class="row">
-        <app-button (click)="addAttribute()" [block]="true"
-          >Add {{ selectedAttribute?.name }}</app-button
-        >
-      </div>
-    </div>
-    <h3>Other options</h3>
-    <div class="content-section">
-      <div class="input-row">
-        <label>Permanently delete this {{ structureNode?.type }}</label>
-        <app-button (click)="deleteNode()" [block]="true"
-          >Delete {{ structureNode?.name }}</app-button
-        >
-      </div>
-    </div>
+    </ng-container>
+
+    <!--    <h3>-->
+    <!--      Info about {{ structureNode?.type-->
+    <!--      }}<ng-container *ngIf="frankDocElement?.name !== structureNode?.type">-->
+    <!--        ({{ frankDocElement?.name }})</ng-container-->
+    <!--      >-->
+    <!--    </h3>-->
+    <!--    <div class="content-section">-->
+    <!--      <p [innerHTML]="frankDocElement?.description" class="description"></p>-->
+    <!--      <a-->
+    <!--        href="{{ frankDocElementsURI }}/{{ frankDocElement?.name }}"-->
+    <!--        target="_blank"-->
+    <!--      >-->
+    <!--        Read more about {{ frankDocElement?.name }}...-->
+    <!--      </a>-->
+    <!--    </div>-->
+    <!--    <h3>Attributes</h3>-->
+    <!--    <div class="content-section">-->
+    <!--      <ng-container-->
+    <!--        *ngFor="-->
+    <!--          let attribute of attributes | keyvalue;-->
+    <!--          trackBy: customTrackBy;-->
+    <!--          index as i-->
+    <!--        "-->
+    <!--      >-->
+    <!--        <div-->
+    <!--          *ngIf="!disabledAttributes.includes(attribute.key)"-->
+    <!--          class="input-row"-->
+    <!--        >-->
+    <!--          <label>{{ attribute.key }}:</label>-->
+    <!--          <div-->
+    <!--            class="input-row&#45;&#45;input-with-button"-->
+    <!--            *ngIf="-->
+    <!--              !nonRemovableAttributes.includes(attribute.key);-->
+    <!--              else inputOnly-->
+    <!--            "-->
+    <!--          >-->
+    <!--            <input-->
+    <!--              (keyup.enter)="optionsModal.close()"-->
+    <!--              (ngModelChange)="changeAttribute(attribute.key, $event)"-->
+    <!--              [ngModel]="attributes[attribute.key].value"-->
+    <!--              type="text"-->
+    <!--            />-->
+    <!--            <app-button (click)="deleteAttribute(attribute.key)">-->
+    <!--              <fa-icon-->
+    <!--                [icon]="['fas', 'trash']"-->
+    <!--                title="Delete attribute"-->
+    <!--              ></fa-icon>-->
+    <!--            </app-button>-->
+    <!--          </div>-->
+    <!--          <ng-template #inputOnly>-->
+    <!--            <input-->
+    <!--              (keyup.enter)="optionsModal.close()"-->
+    <!--              (ngModelChange)="changeAttribute(attribute.key, $event)"-->
+    <!--              [ngModel]="attributes[attribute.key].value"-->
+    <!--              type="text"-->
+    <!--            />-->
+    <!--          </ng-template>-->
+    <!--        </div>-->
+    <!--      </ng-container>-->
+    <!--    </div>-->
+    <!--    <div class="content-section">-->
+    <!--      <div *ngIf="availableAttributes.length > 0" class="input-row">-->
+    <!--        <label for="selectAttribute">Add a new attribute:</label>-->
+    <!--        <select [(ngModel)]="selectedAttribute" id="selectAttribute" required>-->
+    <!--          <option [ngValue]="undefined" disabled hidden selected>-->
+    <!--            Choose an attribute...-->
+    <!--          </option>-->
+    <!--          <option-->
+    <!--            *ngFor="let availableAttribute of availableAttributes"-->
+    <!--            [hidden]="-->
+    <!--              attributeIsUsed(availableAttribute?.name) ||-->
+    <!--              availableAttribute?.deprecated-->
+    <!--            "-->
+    <!--            [ngValue]="availableAttribute"-->
+    <!--          >-->
+    <!--            {{ availableAttribute?.name }}-->
+    <!--          </option>-->
+    <!--        </select>-->
+    <!--      </div>-->
+    <!--      <div *ngIf="selectedAttribute" class="input-row">-->
+    <!--        <label for="newAttribute">New attribute value:</label>-->
+    <!--        <input-->
+    <!--          (keyup.enter)="addAttribute()"-->
+    <!--          [(ngModel)]="newAttributeValue"-->
+    <!--          [placeholder]="selectedAttribute?.default ?? ''"-->
+    <!--          id="newAttribute"-->
+    <!--          type="text"-->
+    <!--        />-->
+    <!--      </div>-->
+    <!--      <div-->
+    <!--        *ngIf="selectedAttribute && selectedAttribute?.description"-->
+    <!--        class="row"-->
+    <!--      >-->
+    <!--        <label>Description of attribute</label>-->
+    <!--        <p [innerHTML]="selectedAttribute?.description"></p>-->
+    <!--      </div>-->
+    <!--      <div *ngIf="newAttributeValue" class="row">-->
+    <!--        <app-button (click)="addAttribute()" [block]="true"-->
+    <!--          >Add {{ selectedAttribute?.name }}</app-button-->
+    <!--        >-->
+    <!--      </div>-->
+    <!--    </div>-->
+    <!--    <h3>Other options</h3>-->
+    <!--    <div class="content-section">-->
+    <!--      <div class="input-row">-->
+    <!--        <label>Permanently delete this {{ structureNode?.type }}</label>-->
+    <!--        <app-button (click)="deleteNode()" [block]="true"-->
+    <!--          >Delete {{ structureNode?.name }}</app-button-->
+    <!--        >-->
+    <!--      </div>-->
+    <!--    </div>-->
   </div>
 </ngx-smart-modal>

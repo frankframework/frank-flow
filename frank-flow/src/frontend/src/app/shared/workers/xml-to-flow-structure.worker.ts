@@ -106,6 +106,15 @@ const addNodeToFlowStructure = (currentNode: FlowStructureNode) => {
   bufferAttributes = {};
   if (currentNode.type.endsWith('Sender')) {
     unclosedNodes[unclosedNodes.length - 1].senders?.push(currentNode);
+    if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.['sender']) {
+      unclosedNodes[unclosedNodes.length - 1].nestedElements = {
+        ...unclosedNodes[unclosedNodes.length - 1].nestedElements,
+        ['sender']: [],
+      };
+    }
+    unclosedNodes[unclosedNodes.length - 1].nestedElements['sender'].push(
+      currentNode
+    );
   } else if (currentNode.type.endsWith('Pipe')) {
     currentNode.forwards = [];
     flowStructure.nodes.push(currentNode);

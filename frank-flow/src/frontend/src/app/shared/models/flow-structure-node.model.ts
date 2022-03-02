@@ -1,4 +1,5 @@
 import { FlowNodeAttributes } from './flow-node-attributes.model';
+import { FlowNodeNestedElements } from './flow-node-nested-elements.model';
 
 export class FlowStructureNode {
   public uid: string;
@@ -12,6 +13,7 @@ export class FlowStructureNode {
   public name: string;
   public positions: { x: number; y: number };
   public parent?: FlowStructureNode;
+  public nestedElements: FlowNodeNestedElements = {};
   public senders: FlowStructureNode[];
 
   constructor(
