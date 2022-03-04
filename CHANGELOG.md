@@ -1,3 +1,10 @@
+## [2.8.38](https://github.com/ibissource/frank-flow/compare/v2.8.37...v2.8.38) (2022-03-04)
+
+
+### 🛠 Builds
+
+* **deps:** bump zone.js in /frank-flow/src/frontend ([77b21ca](https://github.com/ibissource/frank-flow/commit/77b21cadea079511cd8208a9432674595f0da4e0))
+
 ## [2.8.37](https://github.com/ibissource/frank-flow/compare/v2.8.36...v2.8.37) (2022-03-03)
 
 
