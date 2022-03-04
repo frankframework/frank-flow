@@ -221,7 +221,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   getAvailableNestedElementsForNode(): void {
     this.availableNestedElements = [];
 
-    for (const child of this.frankDocElement?.children) {
+    for (const child of this.frankDocElement?.children ?? []) {
       this.availableNestedElements.push(child);
     }
 
