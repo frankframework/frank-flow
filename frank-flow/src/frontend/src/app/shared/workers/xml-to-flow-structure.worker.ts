@@ -119,6 +119,15 @@ const addNodeToFlowStructure = (currentNode: FlowStructureNode) => {
     currentNode.forwards = [];
     flowStructure.nodes.push(currentNode);
   } else if (currentNode.type.toLocaleLowerCase() === 'forward') {
+    if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.['forward']) {
+      unclosedNodes[unclosedNodes.length - 1].nestedElements = {
+        ...unclosedNodes[unclosedNodes.length - 1].nestedElements,
+        ['forward']: [],
+      };
+    }
+    unclosedNodes[unclosedNodes.length - 1].nestedElements['forward'].push(
+      currentNode
+    );
     flowStructure.nodes
       .find((pipe: FlowStructureNode) => {
         return pipe === unclosedNodes[unclosedNodes.length - 1];

@@ -701,4 +701,46 @@ export class FlowStructureService {
       text: '',
     };
   }
+
+  createNestedElement(
+    parameter: { type: string; name: string },
+    parent: FlowStructureNode
+  ): void {
+    const lastNestedElement = this.findLastNestedElement(parent);
+    let text = `\t\t\t\t<${parameter.type} name="${parameter.name}">\n\t\t\t\t</${parameter.type}>\n`;
+
+    const range = lastNestedElement
+      ? {
+          startLineNumber: lastNestedElement.endLine + 1,
+          endLineNumber: lastNestedElement.endLine + 1,
+          startColumn: 0,
+          endColumn: 0,
+        }
+      : {
+          startLineNumber: parent.line + 1,
+          endLineNumber: parent.line + 1,
+          startColumn: 0,
+          endColumn: 0,
+        };
+
+    this.monacoEditorComponent?.applyEdits([{ text, range }], true);
+  }
+
+  findLastNestedElement(
+    parent: FlowStructureNode
+  ): FlowStructureNode | undefined {
+    let currentLastNestedElement: FlowStructureNode | undefined;
+
+    for (const [category, nodes] of Object.entries(parent.nestedElements)) {
+      const lastNode = nodes[nodes.length - 1];
+      if (!currentLastNestedElement) {
+        currentLastNestedElement = lastNode;
+      }
+      if (lastNode.endLine > currentLastNestedElement.endLine) {
+        currentLastNestedElement = lastNode;
+      }
+    }
+
+    return currentLastNestedElement;
+  }
 }

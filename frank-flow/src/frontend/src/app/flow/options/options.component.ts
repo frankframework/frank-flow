@@ -341,5 +341,16 @@ export class OptionsComponent implements OnInit, OnDestroy {
     return this.selectedNestedElement === element;
   }
 
-  addNestedElement() {}
+  addNestedElement() {
+    if (this.newNestedElementName && this.selectedNewNestedElementName) {
+      this.flowStructureService.createNestedElement(
+        {
+          type: this.selectedNewNestedElementName,
+          name: this.newNestedElementName,
+        },
+        this.structureNode
+      );
+      this.clearNewNestedElement();
+    }
+  }
 }
