@@ -1,3 +1,10 @@
+## [2.8.40](https://github.com/ibissource/frank-flow/compare/v2.8.39...v2.8.40) (2022-03-07)
+
+
+### 🛠 Builds
+
+* **deps:** bump ngx-toastr in /frank-flow/src/frontend ([64230e9](https://github.com/ibissource/frank-flow/commit/64230e9fcd13e69ebc6acd2c35baa6759915d2e2))
+
 ## [2.8.39](https://github.com/ibissource/frank-flow/compare/v2.8.38...v2.8.39) (2022-03-07)
 
 
