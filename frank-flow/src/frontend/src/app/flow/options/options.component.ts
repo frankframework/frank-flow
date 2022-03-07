@@ -41,6 +41,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   public frankDocElementsURI =
     environment.runnerUri + '/' + environment.frankDocElements;
   public selectedNestedElement!: any;
+  public showNestedElements = false;
 
   private frankDoc: any;
   private flowNode!: Node;
@@ -102,6 +103,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
       attributes: this.changedAttributes,
       flowUpdate: !!this.getChangedNameAttribute(),
     });
+    this.showNestedElements = false;
   }
 
   editRelatedAttributesBasedOnName(): void {
@@ -158,6 +160,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
     this.frankDocElement = '';
     this.frankDocParentElements = [];
     this.clearNewAttribute();
+    this.selectedNestedElement = undefined;
     this.clearNewNestedElement();
   }
 
@@ -167,7 +170,6 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   clearNewNestedElement() {
-    this.selectedNestedElement = undefined;
     this.selectedNewNestedElement = undefined;
     this.selectedNewNestedElementName = undefined;
     this.newNestedElementName = '';
@@ -219,6 +221,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   getAvailableNestedElementsForNode(): void {
+    this.showNestedElements = true;
     this.availableNestedElements = [];
 
     for (const child of this.frankDocElement?.children ?? []) {

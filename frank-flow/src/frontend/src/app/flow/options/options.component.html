@@ -9,10 +9,11 @@
 >
   <div class="header">
     <h2>
-      {{ structureNode?.type
-      }}<ng-container *ngIf="frankDocElement?.name !== structureNode?.type">
-        ({{ frankDocElement?.name }}) </ng-container
-      >:
+      {{ structureNode?.type }}
+      <ng-container *ngIf="frankDocElement?.name !== structureNode?.type">
+        ({{ frankDocElement?.name }})
+      </ng-container>
+      :
       {{ structureNode?.name }}
     </h2>
   </div>
@@ -147,11 +148,13 @@
     </div>
   </div>
   <div class="content" *ngIf="!nestedElementIs(undefined)">
-    <app-nested-element
-      *ngFor="let flowNodeElement of structureNode.nestedElements?.[selectedNestedElement.roleName]"
-      [parent]="structureNode"
-      [element]="selectedNestedElement"
-    ></app-nested-element>
+    <ng-container *ngIf="showNestedElements">
+      <app-nested-element
+        *ngFor="let flowNodeElement of structureNode.nestedElements?.[selectedNestedElement.roleName]"
+        [parent]="structureNode"
+        [element]="flowNodeElement"
+      ></app-nested-element>
+    </ng-container>
     <ng-container
       *ngIf="selectedNestedElement.multiple || !structureNode.nestedElements?.[selectedNestedElement.roleName]"
     >

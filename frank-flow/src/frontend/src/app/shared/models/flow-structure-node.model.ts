@@ -34,7 +34,7 @@ export class FlowStructureNode {
 
     this.attributes = attributes ?? [];
     this.name = this.getName();
-    this.uid = this.name + this.type;
+    this.uid = `${this.type}(${this.name}):line${this.line}-column${this.column}`;
     this.positions = this.getPositions();
     this.senders = [];
   }

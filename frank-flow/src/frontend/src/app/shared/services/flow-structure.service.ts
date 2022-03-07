@@ -658,21 +658,24 @@ export class FlowStructureService {
     return currentLastAttribute;
   }
 
-  deleteNode(node: FlowStructureNode): void {
-    const forwardsWithTarget = this.findForwardsWithTarget(node);
-    const editOperations = forwardsWithTarget.map((forwards) =>
-      this.getDeleteOperationForNode(forwards)
-    );
+  deleteNode(node: FlowStructureNode, nestedElement = true): void {
+    let editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
+    if (!nestedElement) {
+      const forwardsWithTarget = this.findForwardsWithTarget(node);
+      editOperations = forwardsWithTarget.map((forwards) =>
+        this.getDeleteOperationForNode(forwards)
+      );
 
-    if (
-      this.flowStructure.pipeline.attributes['firstPipe']?.value === node.name
-    ) {
-      this.removeFirstPipe(false);
+      if (
+        this.flowStructure.pipeline.attributes['firstPipe']?.value === node.name
+      ) {
+        this.removeFirstPipe(false);
+      }
     }
 
     node = node.parent ?? node;
-    const nodeDeleteOperastion = this.getDeleteOperationForNode(node);
-    editOperations.push(nodeDeleteOperastion);
+    const nodeDeleteOperation = this.getDeleteOperationForNode(node);
+    editOperations.push(nodeDeleteOperation);
     this.monacoEditorComponent?.applyEdits(editOperations, true);
   }
 

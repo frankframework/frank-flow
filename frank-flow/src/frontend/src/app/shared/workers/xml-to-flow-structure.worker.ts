@@ -74,17 +74,20 @@ parser.on('opentagstart', (tag: SaxesStartTagPlain) => {
       : -1;
   tagStartColumn += charBeforeParserIsGreaterThanCharacter() ? -1 : 0;
 });
+
 const charBeforeParserIsTabOrSpace = () => {
   const tabCode = 9;
   const spaceCode = 32;
   const charBeforeParser = xml.codePointAt(parser.position - 1);
   return charBeforeParser === tabCode || charBeforeParser === spaceCode;
 };
+
 const charBeforeParserIsGreaterThanCharacter = () => {
   const greaterThanCode = 62;
   const charBeforeParser = xml.codePointAt(parser.position - 1);
   return charBeforeParser === greaterThanCode;
 };
+
 parser.on('opentag', (tag: TagForOptions<{}>) => {
   const currentNode = new FlowStructureNode(
     tagStartLine,
@@ -95,14 +98,6 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     bufferAttributes
   );
 
-  addNodeToFlowStructure(currentNode);
-
-  if (!tag.isSelfClosing) {
-    unclosedNodes.push(currentNode);
-  }
-});
-
-const addNodeToFlowStructure = (currentNode: FlowStructureNode) => {
   bufferAttributes = {};
   if (currentNode.type.endsWith('Sender')) {
     unclosedNodes[unclosedNodes.length - 1].senders?.push(currentNode);
@@ -117,7 +112,6 @@ const addNodeToFlowStructure = (currentNode: FlowStructureNode) => {
     );
   } else if (currentNode.type.endsWith('Pipe')) {
     currentNode.forwards = [];
-    flowStructure.nodes.push(currentNode);
   } else if (currentNode.type.toLocaleLowerCase() === 'forward') {
     if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.['forward']) {
       unclosedNodes[unclosedNodes.length - 1].nestedElements = {
@@ -137,23 +131,24 @@ const addNodeToFlowStructure = (currentNode: FlowStructureNode) => {
     currentNode.parent = flowStructure.nodes.find((pipe: FlowStructureNode) => {
       return pipe === unclosedNodes[unclosedNodes.length - 1];
     });
-    flowStructure.nodes.push(currentNode);
-  } else if (currentNode.type.endsWith('Exit')) {
-    flowStructure.nodes.push(currentNode);
   } else {
     switch (currentNode.type) {
-      case 'Pipeline':
-        pipeline = currentNode;
-        break;
-      case 'Receiver':
-        flowStructure.nodes.push(currentNode);
-        break;
       case 'Configuration':
         configuration = currentNode;
-        break;
+        return;
+      case 'Adapter':
+        return;
+      case 'Pipeline':
+        pipeline = currentNode;
+        return;
     }
   }
-};
+
+  flowStructure.nodes.push(currentNode);
+  if (!tag.isSelfClosing) {
+    unclosedNodes.push(currentNode);
+  }
+});
 
 parser.on('closetag', (tag: TagForOptions<{}>) => {
   const closingNode = unclosedNodes.pop();

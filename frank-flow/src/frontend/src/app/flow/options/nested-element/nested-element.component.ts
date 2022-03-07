@@ -9,7 +9,6 @@ import { FlowStructureService } from '../../../shared/services/flow-structure.se
 import { FlowNodeAttributes } from '../../../shared/models/flow-node-attributes.model';
 import { FlowNodeAttributeOptions } from '../../../shared/models/flow-node-attribute-options.model';
 import { environment } from '../../../../environments/environment';
-import { Node } from '../../node/nodes/node.model';
 
 @Component({
   selector: 'app-nested-element',
@@ -17,7 +16,7 @@ import { Node } from '../../node/nodes/node.model';
   styleUrls: ['./nested-element.component.scss'],
 })
 export class NestedElementComponent implements OnInit, OnDestroy {
-  @Input() _element!: any | null;
+  @Input() _element!: FlowStructureNode;
   @Input() parent!: FlowStructureNode;
 
   @Input() set element(value: any | null) {
@@ -33,16 +32,10 @@ export class NestedElementComponent implements OnInit, OnDestroy {
   private currentFileSubscription!: Subscription;
   private frankDoc!: any;
   private currentFile!: File;
-  private frankDocElement!: any | undefined;
+  public frankDocElement!: any | undefined;
   private changedAttributes: ChangedAttribute[] = [];
 
-  public disabledAttributes = [
-    'line',
-    'startColumn',
-    'endColumn',
-    'flow:x',
-    'flow:y',
-  ];
+  public disabledAttributes = ['line', 'startColumn', 'endColumn'];
   public nonRemovableAttributes = ['name', 'path'];
   public availableAttributes: FlowNodeAttributeOptions[] = [];
   public availableNestedElements?: any[];
@@ -55,8 +48,6 @@ export class NestedElementComponent implements OnInit, OnDestroy {
     environment.runnerUri + '/' + environment.frankDocElements;
   public selectedNestedElement!: string;
 
-  private flowNode!: Node;
-
   constructor(
     private frankDocumentService: FrankDocumentService,
     private currentFileService: CurrentFileService,
@@ -66,6 +57,11 @@ export class NestedElementComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getFrankDoc();
     this.getCurrentFile();
+    this.getAttributesOnElement();
+    this.getFrankDocElement();
+    this.getFrankDocParentElements(this.frankDocElement?.fullName);
+    this.getAvailableAttributesForElement();
+    this.getAvailableNestedElementsForNode();
   }
 
   ngOnDestroy(): void {
@@ -85,32 +81,19 @@ export class NestedElementComponent implements OnInit, OnDestroy {
       this.currentFileService.currentFileObservable.subscribe({
         next: (currentFile: File) => {
           this.currentFile = currentFile;
-          this.getAttributesOnNode();
+          this.getAttributesOnElement();
         },
       });
   }
 
-  onOpen() {
-    this.getAttributesOnNode();
-    this.getFrankDocElement();
-    this.getFrankDocParentElements(this.frankDocElement?.fullName);
-    this.getAvailableAttributesForNode();
-    this.getAvailableNestedElementsForNode();
-  }
-
-  onAnyCloseEvent(): void {
-    // this.flowStructureService.editAttributes({
-    //   nodeId: this.flowNode.getId(),
-    //   attributes: this.changedAttributes,
-    //   flowUpdate: !!this.getChangedNameAttribute(),
-    // });
-  }
-
   getChangedNameAttribute(): ChangedAttribute | undefined {
-    return this.changedAttributes.find(
-      (attribute: ChangedAttribute) =>
-        attribute.name === 'name' || attribute.name === 'path'
+    return this.changedAttributes.find((attribute: ChangedAttribute) =>
+      this.isNameOrPath(attribute)
     );
+  }
+
+  isNameOrPath(attribute: ChangedAttribute): boolean {
+    return attribute.name === 'name' || attribute.name === 'path';
   }
 
   resetPreviousData() {
@@ -126,15 +109,9 @@ export class NestedElementComponent implements OnInit, OnDestroy {
     this.newAttributeValue = '';
   }
 
-  getAttributesOnNode(): void {
-    const node = this.currentFile.flowStructure?.nodes.find(
-      (node: FlowStructureNode) => node.uid === this.flowNode?.getId()
-    );
-
-    if (node) {
-      this.structureNode = node;
-      this.attributes = node.attributes;
-    }
+  getAttributesOnElement(): void {
+    this.structureNode = this.element;
+    this.attributes = this.element.attributes;
   }
 
   getFrankDocElement() {
@@ -155,7 +132,7 @@ export class NestedElementComponent implements OnInit, OnDestroy {
     }
   }
 
-  getAvailableAttributesForNode(): void {
+  getAvailableAttributesForElement(): void {
     this.availableAttributes = [];
 
     for (const attribute of this.frankDocElement?.attributes ?? []) {
@@ -188,12 +165,14 @@ export class NestedElementComponent implements OnInit, OnDestroy {
   }
 
   addAttribute(): void {
+    const attribute = {
+      name: this.selectedAttribute.name,
+      value: this.newAttributeValue,
+    };
     this.flowStructureService.createAttribute(
-      {
-        name: this.selectedAttribute.name,
-        value: this.newAttributeValue,
-      },
-      this.attributes
+      attribute,
+      this.attributes,
+      this.isNameOrPath(attribute)
     );
     this.clearNewAttribute();
   }
@@ -247,11 +226,16 @@ export class NestedElementComponent implements OnInit, OnDestroy {
   }
 
   deleteNode() {
-    this.flowStructureService.deleteNode(this.structureNode);
-    // TODO: lala
+    this.flowStructureService.deleteNode(this.structureNode, true);
   }
 
   saveChanges(): void {
-    console.log('save ' + this.element);
+    if (this.structureNode) {
+      this.flowStructureService.editAttributes({
+        nodeId: this.structureNode.uid,
+        attributes: this.changedAttributes,
+        flowUpdate: !!this.getChangedNameAttribute(),
+      });
+    }
   }
 }

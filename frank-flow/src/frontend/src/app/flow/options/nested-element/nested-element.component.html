@@ -1,3 +1,92 @@
-<p>nested-element works!</p>
-<h1>{{ parent?.name }}</h1>
-<p>{{ element?.roleName }}</p>
+<h3>Info about {{ structureNode?.type }}: {{ structureNode?.name }}</h3>
+<div class="content-section">
+  <p [innerHTML]="frankDocElement?.description" class="description"></p>
+  <a
+    href="{{ frankDocElementsURI }}/{{ frankDocElement?.name }}"
+    target="_blank"
+  >
+    Read more about {{ frankDocElement?.name }}...
+  </a>
+</div>
+<h3>Attributes</h3>
+<div class="content-section">
+  <ng-container
+    *ngFor="
+      let attribute of attributes | keyvalue;
+      trackBy: customTrackBy;
+      index as i
+    "
+  >
+    <div *ngIf="!disabledAttributes.includes(attribute.key)" class="input-row">
+      <label>{{ attribute.key }}:</label>
+      <div
+        class="input-row--input-with-button"
+        *ngIf="!nonRemovableAttributes.includes(attribute.key); else inputOnly"
+      >
+        <input
+          (ngModelChange)="changeAttribute(attribute.key, $event)"
+          [ngModel]="attributes[attribute.key].value"
+          type="text"
+        />
+        <app-button (click)="deleteAttribute(attribute.key)">
+          <fa-icon [icon]="['fas', 'trash']" title="Delete attribute"></fa-icon>
+        </app-button>
+      </div>
+      <ng-template #inputOnly>
+        <input
+          (ngModelChange)="changeAttribute(attribute.key, $event)"
+          [ngModel]="attributes[attribute.key].value"
+          type="text"
+        />
+      </ng-template>
+    </div>
+  </ng-container>
+</div>
+<div class="content-section">
+  <div *ngIf="availableAttributes.length > 0" class="input-row">
+    <label for="selectAttribute">Add a new attribute:</label>
+    <select [(ngModel)]="selectedAttribute" id="selectAttribute" required>
+      <option [ngValue]="undefined" disabled hidden selected>
+        Choose an attribute...
+      </option>
+      <option
+        *ngFor="let availableAttribute of availableAttributes"
+        [hidden]="
+          attributeIsUsed(availableAttribute?.name) ||
+          availableAttribute?.deprecated
+        "
+        [ngValue]="availableAttribute"
+      >
+        {{ availableAttribute?.name }}
+      </option>
+    </select>
+  </div>
+  <div *ngIf="selectedAttribute" class="input-row">
+    <label for="newAttribute">New attribute value:</label>
+    <input
+      (keyup.enter)="addAttribute()"
+      [(ngModel)]="newAttributeValue"
+      [placeholder]="selectedAttribute?.default ?? ''"
+      id="newAttribute"
+      type="text"
+    />
+  </div>
+  <div *ngIf="selectedAttribute && selectedAttribute?.description" class="row">
+    <label>Description of attribute</label>
+    <p [innerHTML]="selectedAttribute?.description"></p>
+  </div>
+  <div *ngIf="newAttributeValue" class="row">
+    <app-button (click)="addAttribute()" [block]="true"
+      >Add {{ selectedAttribute?.name }}</app-button
+    >
+  </div>
+</div>
+<h3>Other options</h3>
+<div class="content-section">
+  <div class="input-row">
+    <label>Permanently delete this {{ structureNode?.type }}</label>
+    <app-button (click)="deleteNode()" [block]="true"
+      >Delete {{ structureNode?.name }}</app-button
+    >
+  </div>
+</div>
