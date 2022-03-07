@@ -36,7 +36,7 @@
     "monaco-editor": "^0.32.1",
     "ngx-panzoom": "^13.0.0",
     "ngx-smart-modal": "^7.4.1",
-    "ngx-toastr": "^14.2.1",
+    "ngx-toastr": "^14.2.2",
     "rxjs": "~7.5.4",
     "saxes": "^6.0.0",
     "tslib": "^2.3.1",
