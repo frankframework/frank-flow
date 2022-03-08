@@ -1,3 +1,10 @@
+## [2.8.43](https://github.com/ibissource/frank-flow/compare/v2.8.42...v2.8.43) (2022-03-08)
+
+
+### 🛠 Builds
+
+* **deps:** bump rxjs from 7.5.4 to 7.5.5 in /frank-flow/src/frontend ([4a9b557](https://github.com/ibissource/frank-flow/commit/4a9b557d309c6b17d904785167847b1f75c0dde5))
+
 ## [2.8.42](https://github.com/ibissource/frank-flow/compare/v2.8.41...v2.8.42) (2022-03-08)
 
 
