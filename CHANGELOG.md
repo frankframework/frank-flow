@@ -1,3 +1,11 @@
+## [2.8.45](https://github.com/ibissource/frank-flow/compare/v2.8.44...v2.8.45) (2022-03-10)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([d407cf8](https://github.com/ibissource/frank-flow/commit/d407cf899654e4bf149e958088976b1839cdec41))
+* **deps-dev:** bump karma-chrome-launcher in /frank-flow/src/frontend ([70c54d8](https://github.com/ibissource/frank-flow/commit/70c54d8e3401797093a0f9654ef7110b0bdf02d6))
+
 ## [2.8.44](https://github.com/ibissource/frank-flow/compare/v2.8.43...v2.8.44) (2022-03-10)
 
 
