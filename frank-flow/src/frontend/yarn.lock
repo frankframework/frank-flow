@@ -10,14 +10,6 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     sourcemap-codec "1.4.8"
 
-"@angular-devkit/architect@0.1302.5":
-  version "0.1302.5"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.1302.5.tgz#24284a44dcfcfd6bd5ee00a086f10f8d58316ad3"
-  integrity sha512-r07oo8GgUGY28SR3PCM1qNfLE6PNx6SfzBlG4p0OrQQ68ln8HipsEysDGakOWjNFK18SCGWOXAUNrUj8GnV+5g==
-  dependencies:
-    "@angular-devkit/core" "13.2.5"
-    rxjs "6.6.7"
-
 "@angular-devkit/architect@0.1302.6":
   version "0.1302.6"
   resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.1302.6.tgz#76c5c18580c1c387be01dd7bcbcb34a8b5ac62bd"
@@ -134,18 +126,6 @@
     fast-json-stable-stringify "2.1.0"
     magic-string "0.25.7"
     rxjs "6.6.2"
-    source-map "0.7.3"
-
-"@angular-devkit/core@13.2.5":
-  version "13.2.5"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-13.2.5.tgz#376f3d205a75cd381191ddabfe3c368e0e9a7d82"
-  integrity sha512-WuWp/1R0FtCHPBcJLF13lTLHETtDGFUX0ULfGPRaYB5OVCSQcovVp5UbZTTy/Ss3ub3EOEmJlU8kMJfBrWuq+A==
-  dependencies:
-    ajv "8.9.0"
-    ajv-formats "2.1.1"
-    fast-json-stable-stringify "2.1.0"
-    magic-string "0.25.7"
-    rxjs "6.6.7"
     source-map "0.7.3"
 
 "@angular-devkit/core@13.2.6":
@@ -6124,10 +6104,10 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   resolved "https://registry.npmjs.org/mkdirp/-/mkdirp-1.0.4.tgz"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
-monaco-editor@^0.32.1:
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.32.1.tgz#75a9bba379a923fd8e9ce99cddcab3a4e7657615"
-  integrity sha512-LUt2wsUvQmEi2tfTOK+tjAPvt7eQ+K5C4rZPr6SeuyzjAuAHrIvlUloTcOiGjZW3fn3a/jFQCONrEJbNOaCqbA==
+monaco-editor@^0.33.0:
+  version "0.33.0"
+  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.33.0.tgz#842e244f3750a2482f8a29c676b5684e75ff34af"
+  integrity sha512-VcRWPSLIUEgQJQIE0pVT8FcGBIgFoxz7jtqctE+IiCxWugD0DwgyQBcZBhdSrdMC84eumoqMZsGl2GTreOzwqw==
 
 ms@2.0.0:
   version "2.0.0"
