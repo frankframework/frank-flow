@@ -1,3 +1,18 @@
+# [2.9.0](https://github.com/ibissource/frank-flow/compare/v2.8.46...v2.9.0) (2022-03-14)
+
+
+### ✨ Features
+
+* add setting for lock on node ([3d178a0](https://github.com/ibissource/frank-flow/commit/3d178a014b1ce74c60ec468c521d0f26834b883b))
+* change default flow settings ([1146e68](https://github.com/ibissource/frank-flow/commit/1146e6875e33d3e654e40b2e3a0cb4fb5af9e450))
+* change setting name from Panzoom to pan ([2484cbf](https://github.com/ibissource/frank-flow/commit/2484cbf6d6d5bcb130738297dba782d52c480c97))
+
+
+### 🛠 Builds
+
+* **deps:** bump maven-compiler-plugin from 3.10.0 to 3.10.1 ([7f93101](https://github.com/ibissource/frank-flow/commit/7f93101705c4e66cb74b44a4644645903652bf48))
+* **deps:** bump maven-dependency-plugin from 3.2.0 to 3.3.0 ([f05dd48](https://github.com/ibissource/frank-flow/commit/f05dd48a6e2abc03aed56bce560a093d7753ecc5))
+
 ## [2.8.46](https://github.com/ibissource/frank-flow/compare/v2.8.45...v2.8.46) (2022-03-11)
 
 
