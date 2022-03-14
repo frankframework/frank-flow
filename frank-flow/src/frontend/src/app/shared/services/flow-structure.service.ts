@@ -74,7 +74,7 @@ export class FlowStructureService {
         this.isNodeAtPosition(node, position)
     );
     this.resetHighlightNodeInXml();
-    if (this.settings.automaticPanzoom) {
+    if (this.settings.automaticPan) {
       this.panToNode();
     }
   }
