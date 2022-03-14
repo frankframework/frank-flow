@@ -1,3 +1,10 @@
+# [2.10.0](https://github.com/ibissource/frank-flow/compare/v2.9.0...v2.10.0) (2022-03-14)
+
+
+### ✨ Features
+
+* change around the x and y in editor ([cdb6217](https://github.com/ibissource/frank-flow/commit/cdb6217c3444ef5722893ae4fa5697749ee2e078))
+
 # [2.9.0](https://github.com/ibissource/frank-flow/compare/v2.8.46...v2.9.0) (2022-03-14)
 
 
