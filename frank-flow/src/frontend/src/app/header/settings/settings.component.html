@@ -202,11 +202,11 @@
     <h2>Assistance</h2>
     <div class="input-row">
       <label
-        title="When pressing code in the editor the flow automatically locks onto the corresponding node in the flowchart"
-        >Automatically move flow to selected code</label
+        title="Automatically pan to the node in the Canvas when the cursor position is at the corresponding element in the Editor"
+        >Automatically pan to selected node</label
       >
       <app-toggle
-        [(state)]="settings.automaticPanzoom"
+        [(state)]="settings.automaticPan"
         (stateChange)="setSettings()"
       ></app-toggle>
     </div>
