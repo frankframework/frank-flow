@@ -198,5 +198,17 @@
         (stateChange)="setSettings()"
       ></app-toggle>
     </div>
+    <hr />
+    <h2>Assistance</h2>
+    <div class="input-row">
+      <label
+        title="When pressing code in the editor the flow automatically locks onto the corresponding node in the flowchart"
+        >Automatically move flow to selected code</label
+      >
+      <app-toggle
+        [(state)]="settings.automaticPanzoom"
+        (stateChange)="setSettings()"
+      ></app-toggle>
+    </div>
   </div>
 </ngx-smart-modal>

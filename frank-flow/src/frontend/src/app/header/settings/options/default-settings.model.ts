@@ -17,4 +17,5 @@ export class DefaultSettings implements Settings {
   ignoreConfigurationSettings = false;
   showExplorer = true;
   showUnsavedChangesWarning = true;
+  automaticPanzoom = false;
 }
