@@ -11,4 +11,5 @@ export interface Settings extends FlowSettings {
   useLastMode: boolean;
   switchWithoutSaving: SwitchWithoutSavingOption;
   ignoreConfigurationSettings: boolean;
+  automaticPanzoom: boolean;
 }
