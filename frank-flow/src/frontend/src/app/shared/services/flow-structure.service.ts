@@ -382,8 +382,8 @@ export class FlowStructureService {
     this.editAttributes({
       nodeId: options.nodeId,
       attributes: [
-        { name: 'flow:x', value: options.xPos },
         { name: 'flow:y', value: options.yPos },
+        { name: 'flow:x', value: options.xPos },
       ],
       flowUpdate: false,
     });
