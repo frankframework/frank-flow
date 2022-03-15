@@ -98,11 +98,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   onAnyCloseEvent(): void {
     this.editRelatedAttributesBasedOnName();
-    this.flowStructureService.editAttributes({
-      nodeId: this.flowNode.getId(),
-      attributes: this.changedAttributes,
-      flowUpdate: !!this.getChangedNameAttribute(),
-    });
+    this.saveAttributes();
     this.showNestedElements = false;
   }
 
@@ -238,6 +234,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   addAttribute(): void {
+    this.saveAttributes();
     this.flowStructureService.createAttribute(
       {
         name: this.selectedAttribute.name,
@@ -355,5 +352,13 @@ export class OptionsComponent implements OnInit, OnDestroy {
       );
       this.clearNewNestedElement();
     }
+  }
+
+  saveAttributes() {
+    this.flowStructureService.editAttributes({
+      nodeId: this.flowNode.getId(),
+      attributes: this.changedAttributes,
+      flowUpdate: !!this.getChangedNameAttribute(),
+    });
   }
 }
