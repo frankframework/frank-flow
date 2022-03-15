@@ -1,3 +1,11 @@
+## [2.10.2](https://github.com/ibissource/frank-flow/compare/v2.10.1...v2.10.2) (2022-03-15)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([a6bb9f0](https://github.com/ibissource/frank-flow/commit/a6bb9f0067c2edb8d682f2dec3eebc2a8c4de886))
+* **deps:** bump [@fortawesome](https://github.com/fortawesome)/free-regular-svg-icons ([538c730](https://github.com/ibissource/frank-flow/commit/538c7307bca6adb1472cb5793419757851dd8b03))
+
 ## [2.10.1](https://github.com/ibissource/frank-flow/compare/v2.10.0...v2.10.1) (2022-03-14)
 
 
