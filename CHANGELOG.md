@@ -1,3 +1,18 @@
+## [2.10.5](https://github.com/ibissource/frank-flow/compare/v2.10.4...v2.10.5) (2022-03-16)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/jasmine in /frank-flow/src/frontend ([215789b](https://github.com/ibissource/frank-flow/commit/215789b09a0911efff64b4bff0b9075cf872c03b))
+
+## [2.10.4](https://github.com/ibissource/frank-flow/compare/v2.10.3...v2.10.4) (2022-03-16)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/cli in /frank-flow/src/frontend ([3e82598](https://github.com/ibissource/frank-flow/commit/3e82598b542d33e2bb606140861b3eda4773355e))
+* **deps-dev:** bump prettier in /frank-flow/src/frontend ([78097c7](https://github.com/ibissource/frank-flow/commit/78097c7ce995d51fb3174b731c07e80aa2de1dcd))
+
 ## [2.10.3](https://github.com/ibissource/frank-flow/compare/v2.10.2...v2.10.3) (2022-03-15)
 
 
