@@ -1,3 +1,15 @@
+# [2.11.0](https://github.com/ibissource/frank-flow/compare/v2.10.5...v2.11.0) (2022-03-16)
+
+
+### ✨ Features
+
+* add dragging hand when moving node ([8987e14](https://github.com/ibissource/frank-flow/commit/8987e14b875b4ed4cddf066a13a974ca03288cff))
+
+
+### 🛠 Builds
+
+* **deps:** bump tomcat.version from 9.0.59 to 9.0.60 ([e9bd464](https://github.com/ibissource/frank-flow/commit/e9bd46443701526a590b5f2194a576e45a5ce5cc))
+
 ## [2.10.5](https://github.com/ibissource/frank-flow/compare/v2.10.4...v2.10.5) (2022-03-16)
 
 
