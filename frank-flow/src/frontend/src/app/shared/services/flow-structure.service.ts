@@ -15,6 +15,7 @@ import { ChangedAttribute } from '../models/changed-attribute.model';
 import { PanZoomService } from './pan-zoom.service';
 import { SettingsService } from '../../header/settings/settings.service';
 import { Settings } from '../../header/settings/settings.model';
+import { FlowSettings } from '../models/flow-settings.model';
 
 @Injectable({
   providedIn: 'root',
@@ -389,6 +390,18 @@ export class FlowStructureService {
     });
   }
 
+  editConfigurationSettings(flowSettings: FlowSettings): void {
+    this.editAttributes({
+      nodeId: 'ConfigurationSettingsUpdate',
+      attributes: [
+        { name: 'flow:direction', value: flowSettings.direction! },
+        { name: 'flow:forwardStyle', value: flowSettings.forwardStyle! },
+        { name: 'flow:gridSize', value: flowSettings.gridSize! },
+      ],
+      flowUpdate: true,
+    });
+  }
+
   editAttributes(options: {
     nodeId: string;
     attributes: ChangedAttribute[];
@@ -459,10 +472,13 @@ export class FlowStructureService {
     | monaco.editor.IIdentifiedSingleEditOperation[]
     | void {
     for (const [nodeId, editAttributes] of this.editAttributeQueue.entries()) {
-      const node = this.currentFile.flowStructure?.nodes.find(
-        (node: FlowStructureNode) => node.uid === nodeId
-      );
-
+      let node: FlowStructureNode | undefined;
+      node =
+        nodeId === 'ConfigurationSettingsUpdate'
+          ? this.currentFile.flowStructure?.configuration
+          : this.currentFile.flowStructure?.nodes.find(
+              (node: FlowStructureNode) => node.uid === nodeId
+            );
       const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
 
       if (node) {
