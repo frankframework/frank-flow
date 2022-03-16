@@ -25,6 +25,13 @@
     >
       <fa-icon icon="pen"></fa-icon>
     </app-button>
+    <app-button
+      (click)="openConfigurationSettings()"
+      color="dark"
+      title="Modify configuration settings"
+    >
+      <fa-icon icon="cogs"></fa-icon>
+    </app-button>
     <div class="current-file-title">
       {{ currentFileTitle() }}
     </div>
@@ -41,5 +48,6 @@
   </div>
 </div>
 <app-settings></app-settings>
+<app-configuration-settings></app-configuration-settings>
 <app-save-dialog></app-save-dialog>
 <app-edit-dialog></app-edit-dialog>
