@@ -1,3 +1,11 @@
+## [2.11.3](https://github.com/ibissource/frank-flow/compare/v2.11.2...v2.11.3) (2022-03-17)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([9fc5d47](https://github.com/ibissource/frank-flow/commit/9fc5d47affe276a5edf46a61a9f15b7ecd5e80c7))
+* **deps-dev:** bump eslint-plugin-unicorn in /frank-flow/src/frontend ([0422fb1](https://github.com/ibissource/frank-flow/commit/0422fb1830bc62a72ecca456c05f02185314c606))
+
 ## [2.11.2](https://github.com/ibissource/frank-flow/compare/v2.11.1...v2.11.2) (2022-03-17)
 
 
