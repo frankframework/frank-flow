@@ -19,8 +19,7 @@
   }
 
   &.isActive {
-    background: var(--accent-lighter-5);
-    border: 3px solid var(--accent-darker-3);
+    border: 5px solid var(--primary);
     padding: calc(0.5em - 2px);
   }
 
