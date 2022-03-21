@@ -403,8 +403,11 @@ export class FlowStructureService {
   }
 
   deleteFlowSetting(deleteFlowSetting: string) {
-    const configurationAttributes =
-      this.flowStructure.configuration!.attributes;
+    if (this.flowStructure.configuration == undefined) {
+      return;
+    }
+    const configurationAttributes = this.flowStructure.configuration.attributes;
+
     this.deleteAttribute(deleteFlowSetting, configurationAttributes, true);
   }
 
@@ -478,8 +481,7 @@ export class FlowStructureService {
     | monaco.editor.IIdentifiedSingleEditOperation[]
     | void {
     for (const [nodeId, editAttributes] of this.editAttributeQueue.entries()) {
-      let node: FlowStructureNode | undefined;
-      node = this.currentFile.flowStructure?.nodes.find(
+      const node = this.currentFile.flowStructure?.nodes.find(
         (node: FlowStructureNode) => node.uid === nodeId
       );
       const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];

@@ -19,7 +19,7 @@
     <div *ngIf="flowSettings">
       <div class="input-row">
         <label
-          for="edit-mode"
+          for="grid-configuration"
           title="Automatically snap a node to a defined grid for easy layout"
           >Snap to grid</label
         >
@@ -49,17 +49,15 @@
           <app-button
             *ngIf="flowSettings.gridSize !== undefined"
             (click)="deleteConfigurationSetting('gridSize')"
+            title="Delete setting from configuration"
           >
-            <fa-icon
-              [icon]="['fas', 'trash']"
-              title="Delete attribute"
-            ></fa-icon>
+            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
           </app-button>
         </div>
       </div>
       <div class="input-row">
         <label
-          for="edit-mode"
+          for="grid-configuration"
           title="The style of the connections between nodes"
           >Forward style</label
         >
@@ -96,17 +94,15 @@
           <app-button
             *ngIf="flowSettings.forwardStyle"
             (click)="deleteConfigurationSetting('forwardStyle')"
+            title="Delete setting from configuration"
           >
-            <fa-icon
-              [icon]="['fas', 'trash']"
-              title="Delete attribute"
-            ></fa-icon>
+            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
           </app-button>
         </div>
       </div>
       <div class="input-row">
         <label
-          for="edit-mode"
+          for="grid-configuration"
           title="The direction will change the location of the anchor-points on the nodes"
           >Flow direction</label
         >
@@ -137,17 +133,17 @@
           <app-button
             *ngIf="flowSettings.direction"
             (click)="deleteConfigurationSetting('direction')"
+            title="Delete setting from configuration"
           >
-            <fa-icon
-              [icon]="['fas', 'trash']"
-              title="Delete attribute"
-            ></fa-icon>
+            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
           </app-button>
         </div>
       </div>
     </div>
     <div *ngIf="!flowSettings">
-      Please wait with editing until the configuration is loaded
+      No configuration element has been found. Please make shure the
+      configuration file includes either &lt;Configuration&gt; or
+      &lt;Module&gt;.
     </div>
   </div>
 </ngx-smart-modal>
