@@ -92,9 +92,11 @@
             (ngModelChange)="changeAttribute(attribute.key, $event)"
             [ngModel]="attributes[attribute.key].value"
             type="text"
-            title="Delete attribute"
           />
-          <app-button (click)="deleteAttribute(attribute.key)">
+          <app-button
+            (click)="deleteAttribute(attribute.key)"
+            title="Delete attribute"
+          >
             <fa-icon [icon]="['fas', 'trash']"></fa-icon>
           </app-button>
         </div>
