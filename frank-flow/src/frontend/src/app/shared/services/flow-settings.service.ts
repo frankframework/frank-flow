@@ -12,8 +12,8 @@ import { FlowDirection } from '../enums/flow-direction.model';
   providedIn: 'root',
 })
 export class FlowSettingsService {
-  private flowSettings: ReplaySubject<FlowSettings> =
-    new ReplaySubject<FlowSettings>(1);
+  private flowSettings: ReplaySubject<FlowSettings | undefined> =
+    new ReplaySubject<FlowSettings | undefined>(1);
   public flowSettingsObservable = this.flowSettings.asObservable();
 
   constructor(private currentFileService: CurrentFileService) {
@@ -25,6 +25,8 @@ export class FlowSettingsService {
       next: (file) => {
         if (file.flowStructure?.configuration) {
           this.getSettingsFromConfiguration(file.flowStructure.configuration);
+        } else {
+          this.flowSettings.next(undefined!);
         }
       },
     });
