@@ -89,12 +89,15 @@ const charBeforeParserIsGreaterThanCharacter = () => {
 };
 
 parser.on('opentag', (tag: TagForOptions<{}>) => {
+  const path = unclosedNodes.map((node) => node.name).join('>');
+
   const currentNode = new FlowStructureNode(
     tagStartLine,
     parser.line,
     tagStartColumn + MONACO_COLUMN_OFFSET,
     parser.column + MONACO_COLUMN_OFFSET,
     tag.name,
+    path,
     bufferAttributes
   );
 
@@ -144,11 +147,24 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     }
   }
 
+  checkIfNameAlreadyExists(currentNode);
   flowStructure.nodes.push(currentNode);
   if (!tag.isSelfClosing) {
     unclosedNodes.push(currentNode);
   }
 });
+
+const checkIfNameAlreadyExists = (node: FlowStructureNode) => {
+  const uid = node.uid;
+  const nodes = flowStructure.nodes;
+  const nodeWithSameName = nodes.find(
+    (node: FlowStructureNode) => node.uid === uid
+  );
+  if (nodeWithSameName) {
+    const error = `${node.line}:${node.column}: ${node.name} already exists in this element.`;
+    errors.push(error);
+  }
+};
 
 parser.on('closetag', (tag: TagForOptions<{}>) => {
   const closingNode = unclosedNodes.pop();

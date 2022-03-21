@@ -15,6 +15,7 @@ export class FlowStructureNode {
   public parent?: FlowStructureNode;
   public nestedElements: FlowNodeNestedElements = {};
   public senders: FlowStructureNode[];
+  public path: string;
 
   constructor(
     line: number,
@@ -22,6 +23,7 @@ export class FlowStructureNode {
     startColumn: number,
     column: number,
     type: string,
+    path: string,
     attributes: FlowNodeAttributes,
     forwards?: any[]
   ) {
@@ -31,10 +33,11 @@ export class FlowStructureNode {
     this.column = column;
     this.type = type;
     this.forwards = forwards;
-
     this.attributes = attributes ?? [];
+    this.path = path;
+
     this.name = this.getName();
-    this.uid = `${this.type}(${this.name}):line${this.line}-column${this.column}`;
+    this.uid = `${this.type}(${this.name})${this.path ? `@${this.path}` : ''}`;
     this.positions = this.getPositions();
     this.senders = [];
   }
