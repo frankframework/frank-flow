@@ -1,3 +1,11 @@
+## [2.11.4](https://github.com/ibissource/frank-flow/compare/v2.11.3...v2.11.4) (2022-03-21)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([244dd50](https://github.com/ibissource/frank-flow/commit/244dd50c3293b8fdbf18ae4db319233952527498))
+* **deps:** bump [@fortawesome](https://github.com/fortawesome)/angular-fontawesome ([eb26d91](https://github.com/ibissource/frank-flow/commit/eb26d916f0eacc37ec26216d20a33c1f772a5875))
+
 ## [2.11.3](https://github.com/ibissource/frank-flow/compare/v2.11.2...v2.11.3) (2022-03-17)
 
 
