@@ -4,5 +4,9 @@
   .link {
     cursor: pointer;
     font-weight: bold;
+
+    &:hover {
+      color: var(--primary);
+    }
   }
 }
