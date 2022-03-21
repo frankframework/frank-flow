@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgxSmartModalService } from 'ngx-smart-modal';
 import { ForwardStyle } from '../settings/options/forward-style';
 import { GridSize } from '../settings/options/grid-size';
 import { FlowDirection } from '../../shared/enums/flow-direction.model';
@@ -19,7 +20,8 @@ export class ConfigurationSettingsComponent implements OnInit {
 
   constructor(
     private flowSettingsService: FlowSettingsService,
-    private flowStructureService: FlowStructureService
+    private flowStructureService: FlowStructureService,
+    private ngxSmartModalService: NgxSmartModalService
   ) {}
 
   ngOnInit(): void {
@@ -33,7 +35,23 @@ export class ConfigurationSettingsComponent implements OnInit {
     });
   }
 
-  setConfigurationSettings(): void {
-    this.flowStructureService.editConfigurationSettings(this.flowSettings);
+  setConfigurationSettings(
+    settingName: string,
+    settingValue: string | number | undefined
+  ): void {
+    if (settingValue === undefined) return;
+    this.flowStructureService.setFlowSetting(
+      'flow:' + settingName,
+      settingValue
+    );
+  }
+
+  deleteConfigurationSetting(attributeName: string) {
+    this.flowStructureService.deleteFlowSetting('flow:' + attributeName);
+  }
+
+  closeFlowSettingsAndOpenSettingsModal() {
+    this.ngxSmartModalService.getModal('configurationSettingsModal').close();
+    this.ngxSmartModalService.getModal('settingsModal').open();
   }
 }

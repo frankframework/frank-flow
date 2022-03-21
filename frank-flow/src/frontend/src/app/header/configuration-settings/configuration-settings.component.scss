@@ -1,3 +1,8 @@
 .configurationSettingsModal ::ng-deep .nsm-content {
   width: 30vw;
+
+  .link {
+    cursor: pointer;
+    font-weight: bold;
+  }
 }

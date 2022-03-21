@@ -20,6 +20,7 @@ import { FileType } from '../shared/enums/file-type.enum';
 })
 export class HeaderComponent implements OnInit {
   currentFile!: File;
+  fileType = FileType;
 
   constructor(
     private library: FaIconLibrary,

@@ -26,6 +26,7 @@
       <fa-icon icon="pen"></fa-icon>
     </app-button>
     <app-button
+      *ngIf="currentFile?.type === fileType.CONFIGURATION"
       (click)="openConfigurationSettings()"
       color="dark"
       title="Modify configuration settings"
