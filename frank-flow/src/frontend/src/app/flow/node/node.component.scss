@@ -2,27 +2,13 @@
   position: absolute;
   width: 200px;
   height: 100px;
-  padding: 0.5em;
+  padding: 10px;
   border-radius: 10px;
   color: var(--accent);
   background: var(--accent-lighter-9);
   border: 1px solid var(--accent-darker-1);
   font-size: 14px;
   transition: box-shadow 0.2s, transform 0.2s;
-
-  &:hover {
-    cursor: grab;
-  }
-
-  &:active {
-    cursor: grabbing;
-  }
-
-  &.isActive {
-    background: var(--accent-lighter-10);
-    border: 3px solid var(--accent-darker-1);
-    padding: calc(0.5em - 2px);
-  }
 
   &.jtk-drag {
     box-shadow: var(--shadow-high-accent);
@@ -78,11 +64,6 @@
     background: var(--primary-lighter-4);
     border: 1px solid var(--primary-darker-1);
 
-    &.isActive {
-      background: var(--primary-lighter-5);
-      border: 3px solid var(--primary-darker-1);
-    }
-
     &.jtk-drag {
       box-shadow: var(--shadow-high-primary);
     }
@@ -92,11 +73,6 @@
     color: var(--info);
     background: var(--info-lighter-8);
     border: 1px solid var(--info-darker-1);
-
-    &.isActive {
-      background: var(--info-lighter-9);
-      border: 3px solid var(--info-darker-1);
-    }
 
     &.jtk-drag {
       box-shadow: var(--shadow-high-info);
@@ -108,11 +84,6 @@
     background: var(--success-lighter-4);
     border: 1px solid var(--success-darker-1);
 
-    &.isActive {
-      background: var(--success-lighter-5);
-      border: 3px solid var(--success-darker-1);
-    }
-
     &.jtk-drag {
       box-shadow: var(--shadow-high-success);
     }
@@ -123,11 +94,6 @@
     background: var(--warning-lighter-4);
     border: 1px solid var(--warning-darker-1);
 
-    &.isActive {
-      background: var(--warning-lighter-5);
-      border: 3px solid var(--warning-darker-1);
-    }
-
     &.jtk-drag {
       box-shadow: var(--shadow-high-warning);
     }
@@ -137,11 +103,6 @@
     color: var(--danger);
     background: var(--danger-lighter-6);
     border: 1px solid var(--danger-darker-1);
-
-    &.isActive {
-      background: var(--danger-lighter-7);
-      border: 3px solid var(--danger-darker-1);
-    }
 
     &.jtk-drag {
       box-shadow: var(--shadow-high-danger);
@@ -172,5 +133,18 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+  }
+
+  &:hover {
+    cursor: grab;
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  &.isActive {
+    border: 5px solid var(--primary);
+    padding: calc(10px - 4px);
   }
 }
