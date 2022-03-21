@@ -1,3 +1,53 @@
+## [2.11.3](https://github.com/ibissource/frank-flow/compare/v2.11.2...v2.11.3) (2022-03-17)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([9fc5d47](https://github.com/ibissource/frank-flow/commit/9fc5d47affe276a5edf46a61a9f15b7ecd5e80c7))
+* **deps-dev:** bump eslint-plugin-unicorn in /frank-flow/src/frontend ([0422fb1](https://github.com/ibissource/frank-flow/commit/0422fb1830bc62a72ecca456c05f02185314c606))
+
+## [2.11.2](https://github.com/ibissource/frank-flow/compare/v2.11.1...v2.11.2) (2022-03-17)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([3cd9f36](https://github.com/ibissource/frank-flow/commit/3cd9f36860bc2fa34e061e972165b4ccf0744d92))
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([f48158d](https://github.com/ibissource/frank-flow/commit/f48158ddce89fed4a75ba588246b11faf0ba1333))
+
+## [2.11.1](https://github.com/ibissource/frank-flow/compare/v2.11.0...v2.11.1) (2022-03-16)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([fd3fbe5](https://github.com/ibissource/frank-flow/commit/fd3fbe563749bc441d80783e567f67ec8bee3f6c))
+
+# [2.11.0](https://github.com/ibissource/frank-flow/compare/v2.10.5...v2.11.0) (2022-03-16)
+
+
+### ✨ Features
+
+* add dragging hand when moving node ([8987e14](https://github.com/ibissource/frank-flow/commit/8987e14b875b4ed4cddf066a13a974ca03288cff))
+
+
+### 🛠 Builds
+
+* **deps:** bump tomcat.version from 9.0.59 to 9.0.60 ([e9bd464](https://github.com/ibissource/frank-flow/commit/e9bd46443701526a590b5f2194a576e45a5ce5cc))
+
+## [2.10.5](https://github.com/ibissource/frank-flow/compare/v2.10.4...v2.10.5) (2022-03-16)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/jasmine in /frank-flow/src/frontend ([215789b](https://github.com/ibissource/frank-flow/commit/215789b09a0911efff64b4bff0b9075cf872c03b))
+
+## [2.10.4](https://github.com/ibissource/frank-flow/compare/v2.10.3...v2.10.4) (2022-03-16)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/cli in /frank-flow/src/frontend ([3e82598](https://github.com/ibissource/frank-flow/commit/3e82598b542d33e2bb606140861b3eda4773355e))
+* **deps-dev:** bump prettier in /frank-flow/src/frontend ([78097c7](https://github.com/ibissource/frank-flow/commit/78097c7ce995d51fb3174b731c07e80aa2de1dcd))
+
 ## [2.10.3](https://github.com/ibissource/frank-flow/compare/v2.10.2...v2.10.3) (2022-03-15)
 
 
