@@ -1,3 +1,15 @@
+## [2.11.6](https://github.com/ibissource/frank-flow/compare/v2.11.5...v2.11.6) (2022-03-21)
+
+
+### 🐛 Bug Fixes
+
+* add pointer cursor to buttons ([3d16beb](https://github.com/ibissource/frank-flow/commit/3d16beb906e352bbf75e6ece286fd772170f6191))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([e8cd2da](https://github.com/ibissource/frank-flow/commit/e8cd2da699d4a62c326540b78b2371759fd3d436))
+
 ## [2.11.5](https://github.com/ibissource/frank-flow/compare/v2.11.4...v2.11.5) (2022-03-21)
 
 
