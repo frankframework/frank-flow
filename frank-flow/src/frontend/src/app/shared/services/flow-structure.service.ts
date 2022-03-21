@@ -14,6 +14,8 @@ import { FlowStructure } from '../models/flow-structure.model';
 import { ChangedAttribute } from '../models/changed-attribute.model';
 import { PanZoomService } from './pan-zoom.service';
 import Sender from '../../flow/node/nodes/sender.model';
+import { SettingsService } from '../../header/settings/settings.service';
+import { Settings } from '../../header/settings/settings.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +23,7 @@ import Sender from '../../flow/node/nodes/sender.model';
 export class FlowStructureService {
   public monacoEditorComponent?: MonacoEditorComponent;
   public selectedNode?: FlowStructureNode;
+  public settings!: Settings;
 
   private currentFile!: File;
   private flowStructure!: FlowStructure;
@@ -30,9 +33,17 @@ export class FlowStructureService {
 
   constructor(
     private currentFileService: CurrentFileService,
-    private panZoomService: PanZoomService
+    private panZoomService: PanZoomService,
+    private settingsService: SettingsService
   ) {
     this.getCurrentFile();
+    this.subscribeToSettings();
+  }
+
+  subscribeToSettings(): void {
+    this.settingsService
+      .getSettings()
+      .subscribe((settings) => (this.settings = settings));
   }
 
   getCurrentFile(): void {
@@ -64,7 +75,9 @@ export class FlowStructureService {
         this.isNodeAtPosition(node, position)
     );
     this.resetHighlightNodeInXml();
-    this.panToNode();
+    if (this.settings.automaticPan) {
+      this.panToNode();
+    }
   }
 
   isNodeAtPosition(
@@ -392,8 +405,8 @@ export class FlowStructureService {
     this.editAttributes({
       nodeId: options.nodeId,
       attributes: [
-        { name: 'flow:x', value: options.xPos },
         { name: 'flow:y', value: options.yPos },
+        { name: 'flow:x', value: options.xPos },
       ],
       flowUpdate: false,
     });

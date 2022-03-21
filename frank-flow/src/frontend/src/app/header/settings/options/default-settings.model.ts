@@ -11,10 +11,11 @@ export class DefaultSettings implements Settings {
   useLastMode = false;
   showPopups = true;
   switchWithoutSaving = SwitchWithoutSavingOption.ask;
-  forwardStyle = ForwardStyle.bezier;
-  direction = FlowDirection.vertical;
+  forwardStyle = ForwardStyle.flowchart;
+  direction = FlowDirection.horizontal;
   gridSize = GridSize.tenth;
   ignoreConfigurationSettings = false;
   showExplorer = true;
   showUnsavedChangesWarning = true;
+  automaticPan = false;
 }

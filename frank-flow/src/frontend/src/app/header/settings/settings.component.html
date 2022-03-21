@@ -198,5 +198,17 @@
         (stateChange)="setSettings()"
       ></app-toggle>
     </div>
+    <hr />
+    <h2>Assistance</h2>
+    <div class="input-row">
+      <label
+        title="Automatically pan to the node in the Canvas when the cursor position is at the corresponding element in the Editor"
+        >Automatically pan to selected node</label
+      >
+      <app-toggle
+        [(state)]="settings.automaticPan"
+        (stateChange)="setSettings()"
+      ></app-toggle>
+    </div>
   </div>
 </ngx-smart-modal>
