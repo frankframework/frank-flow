@@ -4,14 +4,14 @@
 	<parent>
 		<groupId>org.ibissource</groupId>
 		<artifactId>frank-flow-parent</artifactId>
-		<version>2.11.3-SNAPSHOT</version>
+		<version>2.11.5-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>frank-flow</artifactId>
 	<name>Frank!Flow</name>
 
 	<properties>
-		<spring.version>5.3.15</spring.version>
+		<spring.version>5.3.17</spring.version>
 	</properties>
 
 	<dependencies>
