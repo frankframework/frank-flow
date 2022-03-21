@@ -19,6 +19,10 @@
     background: var(--primary);
   }
 
+  &:hover {
+    cursor: pointer;
+  }
+
   &--default {
     background-color: var(--bg-color-muted);
   }
