@@ -1,3 +1,10 @@
+## [2.11.5](https://github.com/ibissource/frank-flow/compare/v2.11.4...v2.11.5) (2022-03-21)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([38e17b0](https://github.com/ibissource/frank-flow/commit/38e17b0645ecf0b3ff21fad47d9bf5c961f46a42))
+
 ## [2.11.4](https://github.com/ibissource/frank-flow/compare/v2.11.3...v2.11.4) (2022-03-21)
 
 
