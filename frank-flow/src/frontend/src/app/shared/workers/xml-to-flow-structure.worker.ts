@@ -115,7 +115,7 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     );
   } else if (currentNode.type.endsWith('Pipe')) {
     currentNode.forwards = [];
-  } else if (currentNode.type.toLocaleLowerCase() === 'forward') {
+  } else if (currentNode.type === 'Forward') {
     if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.['forward']) {
       unclosedNodes[unclosedNodes.length - 1].nestedElements = {
         ...unclosedNodes[unclosedNodes.length - 1].nestedElements,
@@ -147,14 +147,22 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     }
   }
 
-  checkIfNameAlreadyExists(currentNode);
+  checkIfTypeStartWithUppercase(currentNode);
+  checkIfIdAlreadyExists(currentNode);
   flowStructure.nodes.push(currentNode);
   if (!tag.isSelfClosing) {
     unclosedNodes.push(currentNode);
   }
 });
 
-const checkIfNameAlreadyExists = (node: FlowStructureNode) => {
+const checkIfTypeStartWithUppercase = (node: FlowStructureNode) => {
+  if (node.type.charAt(0) !== node.type.charAt(0).toUpperCase()) {
+    const error = `${node.line}:${node.column}: ${node.name} needs to start with an uppercase letter.`;
+    errors.push(error);
+  }
+};
+
+const checkIfIdAlreadyExists = (node: FlowStructureNode) => {
   const uid = node.uid;
   const nodes = flowStructure.nodes;
   const nodeWithSameName = nodes.find(

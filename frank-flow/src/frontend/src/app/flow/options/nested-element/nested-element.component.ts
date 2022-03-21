@@ -118,6 +118,15 @@ export class NestedElementComponent implements OnInit, OnDestroy {
     this.frankDocElement = this.frankDoc.elements.find((element: any) =>
       element.elementNames.includes(this.structureNode?.type)
     );
+
+    /**
+     * TODO: Remove this if Jaco accepts the error.
+     * This is only a fix for element names with lowercase like the old "forward".
+     * We need to change this to the new "Forward" at some point. Maybe by conversion or - like now - with an error.
+     */
+    // this.frankDocElement = this.frankDoc.elements.find((element: any) =>
+    //   element.elementNames.find((elementName: string) => elementName.toLowerCase() === this.structureNode?.type.toLowerCase())
+    // );
   }
 
   getFrankDocParentElements(fullParentName: string | undefined) {
