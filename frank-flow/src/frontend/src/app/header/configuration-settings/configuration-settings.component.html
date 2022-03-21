@@ -1,0 +1,149 @@
+<ngx-smart-modal
+  #configurationSettingsModal
+  class="configurationSettingsModal"
+  customClass="nsm-centered"
+  identifier="configurationSettingsModal"
+>
+  <div class="configurationSettings-container">
+    <h1>Flow settings</h1>
+    <p>
+      These options change the way the Flow will appear for this particular
+      configuration. The settings are saved in the configuration itself, so
+      others will see the Flow the same way as you do. If you only want to
+      change your view of the Flow, change the main
+      <span class="link" (click)="closeFlowSettingsAndOpenSettingsModal()"
+        >Settings</span
+      >.
+    </p>
+    <p>Hover over the labels for some more information.</p>
+    <div *ngIf="flowSettings">
+      <div class="input-row">
+        <label
+          for="grid-configuration"
+          title="Automatically snap a node to a defined grid for easy layout"
+          >Snap to grid</label
+        >
+        <div class="input-row--input-with-button">
+          <select
+            [(ngModel)]="flowSettings.gridSize"
+            (ngModelChange)="
+              setConfigurationSettings('gridSize', flowSettings.gridSize)
+            "
+            id="grid-configuration"
+          >
+            <option [value]="undefined" hidden disabled selected>
+              Choose a grid setting...
+            </option>
+            <option [value]="gridSize.free">Don't snap, move freely</option>
+            <option [value]="gridSize.tenth">
+              Snap every tenth of a square
+            </option>
+            <option [value]="gridSize.quarter">
+              Snap every quarter of a square
+            </option>
+            <option [value]="gridSize.half">
+              Snap on a half or whole square
+            </option>
+            <option [value]="gridSize.whole">Snap on a whole square</option>
+          </select>
+          <app-button
+            *ngIf="flowSettings.gridSize !== undefined"
+            (click)="deleteConfigurationSetting('gridSize')"
+            title="Delete setting from configuration"
+          >
+            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+          </app-button>
+        </div>
+      </div>
+      <div class="input-row">
+        <label
+          for="grid-configuration"
+          title="The style of the connections between nodes"
+          >Forward style</label
+        >
+        <div class="input-row--input-with-button">
+          <select
+            [(ngModel)]="flowSettings.forwardStyle"
+            (ngModelChange)="
+              setConfigurationSettings(
+                'forwardStyle',
+                flowSettings.forwardStyle
+              )
+            "
+            id="connection-type"
+          >
+            <option [value]="undefined" hidden disabled selected>
+              Choose a forward style...
+            </option>
+            <option [value]="forwardStyle.bezier" title="A curvy direct line">
+              Bezier
+            </option>
+            <option
+              [value]="forwardStyle.flowchart"
+              title="Straight lines with 90° bends, somewhat avoid nodes"
+            >
+              Flowchart
+            </option>
+            <option
+              [value]="forwardStyle.straight"
+              title="A straight direct line, like in a network"
+            >
+              Straight
+            </option>
+          </select>
+          <app-button
+            *ngIf="flowSettings.forwardStyle"
+            (click)="deleteConfigurationSetting('forwardStyle')"
+            title="Delete setting from configuration"
+          >
+            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+          </app-button>
+        </div>
+      </div>
+      <div class="input-row">
+        <label
+          for="grid-configuration"
+          title="The direction will change the location of the anchor-points on the nodes"
+          >Flow direction</label
+        >
+        <div class="input-row--input-with-button">
+          <select
+            [(ngModel)]="flowSettings.direction"
+            (ngModelChange)="
+              setConfigurationSettings('direction', flowSettings.direction)
+            "
+            id="forward-direction"
+          >
+            <option [value]="undefined" hidden disabled selected>
+              Choose a flow direction...
+            </option>
+            <option
+              [value]="flowDirection.vertical"
+              title="Anchor-points on the top and bottom"
+            >
+              Vertical
+            </option>
+            <option
+              [value]="flowDirection.horizontal"
+              title="Anchor-points on the left and right"
+            >
+              Horizontal
+            </option>
+          </select>
+          <app-button
+            *ngIf="flowSettings.direction"
+            (click)="deleteConfigurationSetting('direction')"
+            title="Delete setting from configuration"
+          >
+            <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+          </app-button>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!flowSettings">
+      No configuration element has been found. Please make shure the
+      configuration file includes either &lt;Configuration&gt; or
+      &lt;Module&gt;.
+    </div>
+  </div>
+</ngx-smart-modal>

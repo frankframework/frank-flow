@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
   faCog,
+  faCogs,
   faPen,
   faPlus,
   faSave,
@@ -19,6 +20,7 @@ import { FileType } from '../shared/enums/file-type.enum';
 })
 export class HeaderComponent implements OnInit {
   currentFile!: File;
+  fileType = FileType;
 
   constructor(
     private library: FaIconLibrary,
@@ -26,7 +28,7 @@ export class HeaderComponent implements OnInit {
     private ngxSmartModalService: NgxSmartModalService,
     private currentFileService: CurrentFileService
   ) {
-    library.addIcons(faPlus, faSave, faCog, faPen);
+    library.addIcons(faPlus, faSave, faCog, faPen, faCogs);
   }
 
   ngOnInit(): void {
@@ -52,6 +54,10 @@ export class HeaderComponent implements OnInit {
       .getModal('editDialog')
       .setData(this.currentFile, true)
       .open();
+  }
+
+  openConfigurationSettings(): void {
+    this.ngxSmartModalService.getModal('configurationSettingsModal').open();
   }
 
   openAddDialog(): void {

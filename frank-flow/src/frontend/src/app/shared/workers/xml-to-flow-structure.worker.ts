@@ -121,6 +121,7 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
         flowStructure.nodes.push(currentNode);
         break;
       case 'Configuration':
+      case 'Module':
         configuration = currentNode;
         break;
     }
