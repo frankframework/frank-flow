@@ -16,7 +16,7 @@ export class ConfigurationSettingsComponent implements OnInit {
   public forwardStyle = ForwardStyle;
   public gridSize = GridSize;
   public flowDirection = FlowDirection;
-  public flowSettings!: FlowSettings;
+  public flowSettings!: FlowSettings | undefined;
 
   constructor(
     private flowSettingsService: FlowSettingsService,
@@ -27,6 +27,7 @@ export class ConfigurationSettingsComponent implements OnInit {
   ngOnInit(): void {
     this.getConfigurationSettings();
   }
+
   getConfigurationSettings(): void {
     this.flowSettingsService.flowSettingsObservable.subscribe({
       next: (flowSettings) => {

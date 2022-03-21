@@ -94,7 +94,7 @@ export class NodeComponent implements AfterViewInit {
     },
   } as DragOptions;
   private settings!: Settings;
-  private flowSettings!: FlowSettings;
+  private flowSettings!: FlowSettings | undefined;
   private currentFile!: File;
 
   constructor(
