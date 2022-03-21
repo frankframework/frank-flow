@@ -1,3 +1,21 @@
+# [2.12.0](https://github.com/ibissource/frank-flow/compare/v2.11.6...v2.12.0) (2022-03-21)
+
+
+### ✨ Features
+
+* add configuration settings modal ([0517adc](https://github.com/ibissource/frank-flow/commit/0517adce02433856005f6091d0aff6e63fe1f0fe))
+* make highlight easier to see ([11b88e4](https://github.com/ibissource/frank-flow/commit/11b88e4be2b28226139393c03cfa220696e4f826))
+* refactor flow-structure and add delete ([87f0718](https://github.com/ibissource/frank-flow/commit/87f071839a034ba465e46c4902e48a32e158fd76))
+
+
+### 🐛 Bug Fixes
+
+* add hover to link in flow settings modal ([edcc4ef](https://github.com/ibissource/frank-flow/commit/edcc4efd01a16959178c2aa9c5410ccbda4333e1))
+* add yellow highlight to all nodes and fix padding ([4be4c54](https://github.com/ibissource/frank-flow/commit/4be4c540b37043cf7a155cc838cc6c07e02c8d0c))
+* apply requested changes ([63ab279](https://github.com/ibissource/frank-flow/commit/63ab279f6d42c6fa5bf10900274695b99bc38749))
+* flowSettings kept the settings from the previous configuration, if the current file wasn't one ([178bab4](https://github.com/ibissource/frank-flow/commit/178bab408c6f163711ad3fa9a20f0b4765d2f55f))
+* remove outline on select when using Chrome-browser ([ae49f46](https://github.com/ibissource/frank-flow/commit/ae49f4601230bb4887228cb9530e4f90b17184a0))
+
 ## [2.11.6](https://github.com/ibissource/frank-flow/compare/v2.11.5...v2.11.6) (2022-03-21)
 
 
