@@ -1,3 +1,10 @@
+## [2.12.1](https://github.com/ibissource/frank-flow/compare/v2.12.0...v2.12.1) (2022-03-22)
+
+
+### 🛠 Builds
+
+* **deps:** bump [@fortawesome](https://github.com/fortawesome)/free-regular-svg-icons ([1f2b22d](https://github.com/ibissource/frank-flow/commit/1f2b22dc2427eacbe80befb84df02b10cc900708))
+
 # [2.12.0](https://github.com/ibissource/frank-flow/compare/v2.11.6...v2.12.0) (2022-03-21)
 
 
