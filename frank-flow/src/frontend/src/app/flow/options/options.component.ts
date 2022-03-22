@@ -97,9 +97,13 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   onAnyCloseEvent(): void {
-    this.editRelatedAttributesBasedOnName();
-    this.saveAttributes();
+    this.save();
     this.showNestedElements = false;
+  }
+
+  save() {
+    this.saveAttributes();
+    this.editRelatedAttributesBasedOnName();
   }
 
   editRelatedAttributesBasedOnName(): void {
@@ -110,6 +114,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
       this.editConnections(newName);
       this.editFirstPipe(newName);
+      this.editFlowNode(newName);
     }
   }
 
@@ -148,6 +153,10 @@ export class OptionsComponent implements OnInit, OnDestroy {
     if (firstPipe?.value === this.flowNode.getName()) {
       this.flowStructureService.changeFirstPipe(newName);
     }
+  }
+
+  editFlowNode(newName: string) {
+    this.flowNode.setName(newName);
   }
 
   resetPreviousData() {
@@ -234,7 +243,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   addAttribute(): void {
-    this.saveAttributes();
+    this.save();
     this.flowStructureService.createAttribute(
       {
         name: this.selectedAttribute.name,
@@ -259,6 +268,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   deleteAttribute(key: string): void {
+    this.save();
     setTimeout(() => {
       this.removeChangedAttribute(key);
       this.flowStructureService.deleteAttribute(key, this.attributes);

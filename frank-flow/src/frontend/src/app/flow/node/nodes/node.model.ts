@@ -68,6 +68,11 @@ export class Node {
     this.left = left;
   }
 
+  setName(name: string) {
+    this.id = this.id.replace(this.name, name);
+    this.name = name;
+  }
+
   generateNode(
     rootViewContainer: ViewContainerRef,
     factoryResolver: ComponentFactoryResolver,
