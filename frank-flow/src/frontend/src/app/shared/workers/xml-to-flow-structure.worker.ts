@@ -43,6 +43,7 @@ const parserWrite = (xml: string) => {
     parser.write(xml).close();
   } catch (error) {
     console.error(error);
+    parser.close();
   }
 };
 
