@@ -177,11 +177,7 @@ const checkIfIdAlreadyExists = (node: FlowStructureNode) => {
 
 parser.on('closetag', (tag: TagForOptions<{}>) => {
   const closingNode = unclosedNodes.pop();
-  if (
-    tag.attributes['name'] === closingNode?.name &&
-    tag.name === closingNode?.type &&
-    !tag.isSelfClosing
-  ) {
+  if (tag.name === closingNode?.type && !tag.isSelfClosing) {
     closingNode.endLine = parser.line;
   } else {
     if (closingNode != undefined) {
