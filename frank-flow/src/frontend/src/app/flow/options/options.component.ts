@@ -244,14 +244,16 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   addAttribute(): void {
     this.save();
-    this.flowStructureService.createAttribute(
-      {
-        name: this.selectedAttribute.name,
-        value: this.newAttributeValue,
-      },
-      this.attributes
-    );
-    this.clearNewAttribute();
+    setTimeout(() => {
+      this.flowStructureService.createAttribute(
+        {
+          name: this.selectedAttribute.name,
+          value: this.newAttributeValue,
+        },
+        this.attributes
+      );
+      this.clearNewAttribute();
+    });
   }
 
   changeAttribute(name: string, event: Event): void {
@@ -270,8 +272,18 @@ export class OptionsComponent implements OnInit, OnDestroy {
   deleteAttribute(key: string): void {
     this.save();
     setTimeout(() => {
+      this.removeChangedAttribute(key);
       this.flowStructureService.deleteAttribute(key, this.attributes);
     });
+  }
+
+  removeChangedAttribute(key: string): void {
+    const index = this.changedAttributes?.findIndex(
+      (attribute) => attribute.name == key
+    );
+    if (index >= 0) {
+      this.changedAttributes.splice(index, 1);
+    }
   }
 
   debounce(function_: any, wait: number): any {
