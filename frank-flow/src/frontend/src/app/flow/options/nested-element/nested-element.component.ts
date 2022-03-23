@@ -96,15 +96,6 @@ export class NestedElementComponent implements OnInit, OnDestroy {
     return attribute.name === 'name' || attribute.name === 'path';
   }
 
-  //TODO remove later
-  resetPreviousData() {
-    this.attributes = {};
-    this.changedAttributes = [];
-    this.frankDocElement = '';
-    this.frankDocParentElements = [];
-    this.clearNewAttribute();
-  }
-
   clearNewAttribute() {
     this.selectedAttribute = undefined;
     this.newAttributeValue = '';
