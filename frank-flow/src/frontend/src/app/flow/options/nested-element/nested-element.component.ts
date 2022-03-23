@@ -96,6 +96,7 @@ export class NestedElementComponent implements OnInit, OnDestroy {
     return attribute.name === 'name' || attribute.name === 'path';
   }
 
+  //TODO remove later
   resetPreviousData() {
     this.attributes = {};
     this.changedAttributes = [];
@@ -210,7 +211,9 @@ export class NestedElementComponent implements OnInit, OnDestroy {
     const index = this.changedAttributes?.findIndex(
       (attribute) => attribute.name == key
     );
-    this.changedAttributes.splice(index);
+    if (index >= 0) {
+      this.changedAttributes.splice(index, 1);
+    }
   }
 
   debounce(function_: any, wait: number): any {

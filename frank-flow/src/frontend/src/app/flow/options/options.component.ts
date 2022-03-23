@@ -270,16 +270,8 @@ export class OptionsComponent implements OnInit, OnDestroy {
   deleteAttribute(key: string): void {
     this.save();
     setTimeout(() => {
-      this.removeChangedAttribute(key);
       this.flowStructureService.deleteAttribute(key, this.attributes);
     });
-  }
-
-  removeChangedAttribute(key: string): void {
-    const index = this.changedAttributes?.findIndex(
-      (attribute) => attribute.name == key
-    );
-    this.changedAttributes.splice(index);
   }
 
   debounce(function_: any, wait: number): any {
