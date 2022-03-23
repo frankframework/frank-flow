@@ -1,3 +1,10 @@
+## [2.12.4](https://github.com/ibissource/frank-flow/compare/v2.12.3...v2.12.4) (2022-03-23)
+
+
+### 🛠 Builds
+
+* **deps:** bump minimist in /frank-flow/src/frontend ([c675838](https://github.com/ibissource/frank-flow/commit/c675838e79458d2bd6f5c2350142ca980dd1a372))
+
 ## [2.12.3](https://github.com/ibissource/frank-flow/compare/v2.12.2...v2.12.3) (2022-03-23)
 
 
