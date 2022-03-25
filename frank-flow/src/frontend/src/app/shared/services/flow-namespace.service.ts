@@ -11,51 +11,36 @@ import { FlowStructureService } from './flow-structure.service';
 export class FlowNamespaceService {
   public monacoEditorComponent?: MonacoEditorComponent;
   private currentFile!: File;
-  private flowStructure!: FlowStructure;
 
   constructor(
     private currentFileService: CurrentFileService,
     private flowStructureService: FlowStructureService
   ) {
-    this.getCurrentFile();
+    this.getflowStructure();
   }
 
-  getCurrentFile(): void {
+  getflowStructure(): void {
     this.currentFileService.currentFileObservable.subscribe({
       next: (currentFile: File): void => {
         this.currentFile = currentFile;
-        if (currentFile.flowStructure) {
-          this.flowStructure = currentFile.flowStructure;
-        }
       },
     });
   }
 
   handleNameSpace() {
-    if (!this.checkNameSpace()) {
+    if (this.checkNameSpace()) {
       return;
     }
     this.setNameSpace();
   }
 
   checkNameSpace(): boolean {
-    if (this.flowStructure.configuration !== undefined) {
-      for (const [attributeKey] of Object.entries(
-        this.flowStructure.configuration?.attributes
-      )) {
-        if (attributeKey === 'xmlns:flow') {
-          return false;
-        }
-      }
-    }
-    return true;
+    return !!this.currentFile.flowStructure?.configuration?.attributes[
+      'xmlns:flow'
+    ];
   }
 
   setNameSpace() {
-    const configuration = this.flowStructure.configuration;
-
-    if (configuration) {
-      this.flowStructureService.setFlowSetting('xmlns:flow', 'urn:frank-flow');
-    }
+    this.flowStructureService.setFlowSetting('xmlns:flow', 'urn:frank-flow');
   }
 }
