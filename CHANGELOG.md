@@ -1,3 +1,20 @@
+## [2.12.5](https://github.com/ibissource/frank-flow/compare/v2.12.4...v2.12.5) (2022-03-25)
+
+
+### 🐛 Bug Fixes
+
+* add pointer to nodelist and make it not selectable ([6f65b85](https://github.com/ibissource/frank-flow/commit/6f65b85f3cc9da5c7875017c26191cde1ba0bb5c))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump prettier in /frank-flow/src/frontend ([63abc8b](https://github.com/ibissource/frank-flow/commit/63abc8b6e6c5b924a31c286a407b0996cfae7af4))
+
+
+### ♻️ Chores
+
+* temporary change release workflow to manual dispatch ([eff8a3a](https://github.com/ibissource/frank-flow/commit/eff8a3a81fc9a96817d4f84b86eb28d9c3868a55))
+
 ## [2.12.4](https://github.com/ibissource/frank-flow/compare/v2.12.3...v2.12.4) (2022-03-23)
 
 
