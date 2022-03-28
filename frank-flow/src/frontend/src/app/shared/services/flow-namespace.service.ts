@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CurrentFileService } from './current-file.service';
-import { File } from '../../shared/models/file.model';
-import { FlowStructure } from '../models/flow-structure.model';
+import { File } from '../models/file.model';
 import { MonacoEditorComponent } from 'src/app/editor/monaco-editor/monaco-editor.component';
 import { FlowStructureService } from './flow-structure.service';
 
@@ -16,10 +15,10 @@ export class FlowNamespaceService {
     private currentFileService: CurrentFileService,
     private flowStructureService: FlowStructureService
   ) {
-    this.getflowStructure();
+    this.getCurrentFile();
   }
 
-  getflowStructure(): void {
+  getCurrentFile(): void {
     this.currentFileService.currentFileObservable.subscribe({
       next: (currentFile: File): void => {
         this.currentFile = currentFile;
