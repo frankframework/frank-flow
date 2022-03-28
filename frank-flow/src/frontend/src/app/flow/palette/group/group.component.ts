@@ -5,6 +5,7 @@ import { FlowStructureService } from '../../../shared/services/flow-structure.se
 import Listener from '../../node/nodes/listener.model';
 import Pipe from '../../node/nodes/pipe.model';
 import Exit from '../../node/nodes/exit.model';
+import Sender from '../../node/nodes/sender.model';
 
 @Component({
   selector: 'app-group',
@@ -29,27 +30,46 @@ export class GroupComponent {
     this.foldGroup = !this.foldGroup;
   }
 
-  addNode(pipe: any): void {
+  addNode(node: any): void {
     if (this.locked) {
       return;
     }
-    if (this.type === 'Listeners') {
-      const listener = new Listener({
-        id: pipe.name,
-        name: pipe.name,
-        type: pipe.name,
-      });
-      this.flowStructureService.addListener(listener);
-    } else if (this.type === 'Pipes') {
-      const newPipe = new Pipe({
-        id: pipe.name,
-        name: pipe.name,
-        type: pipe.name,
-      });
-      this.flowStructureService.addPipe(newPipe);
-    } else if (this.type === 'Other' && pipe.name === 'Exit') {
-      const exit = new Exit({ id: pipe.name, name: 'Exit', type: 'Exit' });
-      this.flowStructureService.addExit(exit);
+    switch (this.type) {
+      case 'Listeners': {
+        const listener = new Listener({
+          id: node.name,
+          name: node.name,
+          type: node.name,
+        });
+        this.flowStructureService.addListener(listener);
+
+        break;
+      }
+      case 'Pipes': {
+        const newPipe = new Pipe({
+          id: node.name,
+          name: node.name,
+          type: node.name,
+        });
+        this.flowStructureService.addPipe(newPipe);
+
+        break;
+      }
+      case 'Senders': {
+        const sender = new Sender({
+          id: node.name,
+          name: node.name,
+          type: node.name,
+        });
+        this.flowStructureService.addSender(sender);
+
+        break;
+      }
+      default:
+        if (this.type === 'Other' && node.name === 'Exit') {
+          const exit = new Exit({ id: node.name, name: 'Exit', type: 'Exit' });
+          this.flowStructureService.addExit(exit);
+        }
     }
   }
 }

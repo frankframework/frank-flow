@@ -32,6 +32,11 @@
         grid-row-start: 3;
         grid-column-start: 1;
       }
+
+      &__badges {
+        grid-row-start: 4;
+        grid-column-start: 1;
+      }
     }
   }
 
@@ -51,6 +56,11 @@
 
       &__name {
         grid-row-start: 3;
+        grid-column-start: 1;
+      }
+
+      &__badges {
+        grid-row-start: 4;
         grid-column-start: 1;
       }
     }
@@ -82,7 +92,7 @@
 
   &.color--success {
     color: var(--success);
-    background: var(--success-lighter-4);
+    background: var(--success-lighter-7);
     border: 1px solid var(--success-darker-1);
 
     &.jtk-drag {
@@ -133,6 +143,27 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    &__badges {
+      grid-column-start: 2;
+      grid-row-start: 3;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    &__sender {
+      display: inline-block;
+      max-width: 100%;
+      font-size: 11px;
+      color: var(--success);
+      background: var(--success-lighter-7);
+      border: 1px solid var(--success-darker-1);
+      border-radius: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 2px;
     }
   }
 

@@ -43,6 +43,7 @@ const parserWrite = (xml: string) => {
     parser.write(xml).close();
   } catch (error) {
     console.error(error);
+    parser.close();
   }
 };
 
@@ -74,32 +75,57 @@ parser.on('opentagstart', (tag: SaxesStartTagPlain) => {
       : -1;
   tagStartColumn += charBeforeParserIsGreaterThanCharacter() ? -1 : 0;
 });
+
 const charBeforeParserIsTabOrSpace = () => {
   const tabCode = 9;
   const spaceCode = 32;
   const charBeforeParser = xml.codePointAt(parser.position - 1);
   return charBeforeParser === tabCode || charBeforeParser === spaceCode;
 };
+
 const charBeforeParserIsGreaterThanCharacter = () => {
   const greaterThanCode = 62;
   const charBeforeParser = xml.codePointAt(parser.position - 1);
   return charBeforeParser === greaterThanCode;
 };
+
 parser.on('opentag', (tag: TagForOptions<{}>) => {
+  const path = unclosedNodes.map((node) => node.name).join('>');
+
   const currentNode = new FlowStructureNode(
     tagStartLine,
     parser.line,
     tagStartColumn + MONACO_COLUMN_OFFSET,
     parser.column + MONACO_COLUMN_OFFSET,
     tag.name,
+    path,
     bufferAttributes
   );
 
   bufferAttributes = {};
-  if (currentNode.type.endsWith('Pipe')) {
+  if (currentNode.type.endsWith('Sender')) {
+    unclosedNodes[unclosedNodes.length - 1].senders?.push(currentNode);
+    if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.['sender']) {
+      unclosedNodes[unclosedNodes.length - 1].nestedElements = {
+        ...unclosedNodes[unclosedNodes.length - 1].nestedElements,
+        ['sender']: [],
+      };
+    }
+    unclosedNodes[unclosedNodes.length - 1].nestedElements['sender'].push(
+      currentNode
+    );
+  } else if (currentNode.type.endsWith('Pipe')) {
     currentNode.forwards = [];
-    flowStructure.nodes.push(currentNode);
-  } else if (currentNode.type.toLocaleLowerCase() === 'forward') {
+  } else if (currentNode.type === 'Forward') {
+    if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.['forward']) {
+      unclosedNodes[unclosedNodes.length - 1].nestedElements = {
+        ...unclosedNodes[unclosedNodes.length - 1].nestedElements,
+        ['forward']: [],
+      };
+    }
+    unclosedNodes[unclosedNodes.length - 1].nestedElements['forward'].push(
+      currentNode
+    );
     flowStructure.nodes
       .find((pipe: FlowStructureNode) => {
         return pipe === unclosedNodes[unclosedNodes.length - 1];
@@ -109,36 +135,50 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     currentNode.parent = flowStructure.nodes.find((pipe: FlowStructureNode) => {
       return pipe === unclosedNodes[unclosedNodes.length - 1];
     });
-    flowStructure.nodes.push(currentNode);
-  } else if (currentNode.type.endsWith('Exit')) {
-    flowStructure.nodes.push(currentNode);
   } else {
     switch (currentNode.type) {
-      case 'Pipeline':
-        pipeline = currentNode;
-        break;
-      case 'Receiver':
-        flowStructure.nodes.push(currentNode);
-        break;
       case 'Configuration':
       case 'Module':
         configuration = currentNode;
-        break;
+        return;
+      case 'Adapter':
+        return;
+      case 'Pipeline':
+        pipeline = currentNode;
+        return;
     }
   }
 
+  checkIfTypeStartWithUppercase(currentNode);
+  checkIfIdAlreadyExists(currentNode);
+  flowStructure.nodes.push(currentNode);
   if (!tag.isSelfClosing) {
     unclosedNodes.push(currentNode);
   }
 });
 
+const checkIfTypeStartWithUppercase = (node: FlowStructureNode) => {
+  if (node.type.charAt(0) !== node.type.charAt(0).toUpperCase()) {
+    const error = `${node.line}:${node.column}: ${node.name} needs to start with an uppercase letter.`;
+    errors.push(error);
+  }
+};
+
+const checkIfIdAlreadyExists = (node: FlowStructureNode) => {
+  const uid = node.uid;
+  const nodes = flowStructure.nodes;
+  const nodeWithSameName = nodes.find(
+    (node: FlowStructureNode) => node.uid === uid
+  );
+  if (nodeWithSameName) {
+    const error = `${node.line}:${node.column}: ${node.name} already exists in this element.`;
+    errors.push(error);
+  }
+};
+
 parser.on('closetag', (tag: TagForOptions<{}>) => {
   const closingNode = unclosedNodes.pop();
-  if (
-    tag.attributes['name'] === closingNode?.name &&
-    tag.name === closingNode?.type &&
-    !tag.isSelfClosing
-  ) {
+  if (tag.name === closingNode?.type && !tag.isSelfClosing) {
     closingNode.endLine = parser.line;
   } else {
     if (closingNode != undefined) {

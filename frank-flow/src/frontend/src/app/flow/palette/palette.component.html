@@ -12,6 +12,12 @@
   type="Pipes"
 ></app-group>
 <app-group
+  [items]="paletteService.data?.get('Senders') | filter: search"
+  [locked]="locked"
+  color="success"
+  type="Senders"
+></app-group>
+<app-group
   [items]="paletteService.data?.get('Other') | filter: 'Exit' | filter: search"
   [locked]="locked"
   color="danger"

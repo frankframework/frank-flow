@@ -13,6 +13,7 @@ import { File } from '../models/file.model';
 import { FlowStructure } from '../models/flow-structure.model';
 import { ChangedAttribute } from '../models/changed-attribute.model';
 import { PanZoomService } from './pan-zoom.service';
+import Sender from '../../flow/node/nodes/sender.model';
 import { SettingsService } from '../../header/settings/settings.service';
 import { Settings } from '../../header/settings/settings.model';
 
@@ -374,6 +375,28 @@ export class FlowStructureService {
     return this.getUniqueNodeName(this.flowStructure.exits, name);
   }
 
+  addSender(node: Sender): void {
+    const pipes = this.flowStructure.pipes;
+    const lastPipe = pipes[pipes.length - 1] ?? this.flowStructure.pipeline;
+    const line =
+      (pipes[pipes.length - 1] ? lastPipe.endLine : lastPipe.line) + 1;
+    const senderName = this.getUniqueSenderName(node.getName());
+
+    const text = `\t\t<SenderPipe name="${senderName}Pipe">\n\t\t\t<${node.getType()} name="${senderName}" />\n\t\t</SenderPipe>\n`;
+    const range = {
+      startLineNumber: line,
+      startColumn: 0,
+      endColumn: 0,
+      endLineNumber: line,
+    };
+
+    this.monacoEditorComponent?.applyEdits([{ range, text }], true);
+  }
+
+  getUniqueSenderName(name: string): string {
+    return this.getUniqueNodeName(this.flowStructure.senders, name);
+  }
+
   editNodePositions(options: {
     nodeId: string;
     xPos: number;
@@ -466,10 +489,10 @@ export class FlowStructureService {
     if (this.canApplyEditAttributes()) {
       this.waitingOnNewStructure = true;
       const editOperations = this.getEditOperationsForChangedAttributes();
-      if (editOperations) {
-        this.monacoEditorComponent?.applyEdits(editOperations, this.flowUpdate);
-      }
-      this.editAttributeQueue.clear();
+      this.monacoEditorComponent?.applyEdits(
+        editOperations ?? [],
+        this.flowUpdate
+      );
     }
   }
 
@@ -480,11 +503,11 @@ export class FlowStructureService {
   getEditOperationsForChangedAttributes():
     | monaco.editor.IIdentifiedSingleEditOperation[]
     | void {
+    const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
     for (const [nodeId, editAttributes] of this.editAttributeQueue.entries()) {
       const node = this.currentFile.flowStructure?.nodes.find(
         (node: FlowStructureNode) => node.uid === nodeId
       );
-      const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
 
       if (node) {
         for (const attribute of editAttributes) {
@@ -494,10 +517,10 @@ export class FlowStructureService {
             editOperations.push(editOperation);
           }
         }
-
-        return editOperations;
       }
     }
+    this.editAttributeQueue.clear();
+    return editOperations;
   }
 
   editAttribute(
@@ -669,21 +692,24 @@ export class FlowStructureService {
     return currentLastAttribute;
   }
 
-  deleteNode(node: FlowStructureNode): void {
-    const forwardsWithTarget = this.findForwardsWithTarget(node);
-    const editOperations = forwardsWithTarget.map((forwards) =>
-      this.getDeleteOperationForNode(forwards)
-    );
+  deleteNode(node: FlowStructureNode, nestedElement = true): void {
+    let editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
+    if (!nestedElement) {
+      const forwardsWithTarget = this.findForwardsWithTarget(node);
+      editOperations = forwardsWithTarget.map((forwards) =>
+        this.getDeleteOperationForNode(forwards)
+      );
 
-    if (
-      this.flowStructure.pipeline.attributes['firstPipe']?.value === node.name
-    ) {
-      this.removeFirstPipe(false);
+      if (
+        this.flowStructure.pipeline.attributes['firstPipe']?.value === node.name
+      ) {
+        this.removeFirstPipe(false);
+      }
     }
 
     node = node.parent ?? node;
-    const nodeDeleteOperastion = this.getDeleteOperationForNode(node);
-    editOperations.push(nodeDeleteOperastion);
+    const nodeDeleteOperation = this.getDeleteOperationForNode(node);
+    editOperations.push(nodeDeleteOperation);
     this.monacoEditorComponent?.applyEdits(editOperations, true);
   }
 
@@ -711,5 +737,47 @@ export class FlowStructureService {
       },
       text: '',
     };
+  }
+
+  createNestedElement(
+    parameter: { type: string; name: string },
+    parent: FlowStructureNode
+  ): void {
+    const lastNestedElement = this.findLastNestedElement(parent);
+    let text = `\t\t\t\t<${parameter.type} name="${parameter.name}">\n\t\t\t\t</${parameter.type}>\n`;
+
+    const range = lastNestedElement
+      ? {
+          startLineNumber: lastNestedElement.endLine + 1,
+          endLineNumber: lastNestedElement.endLine + 1,
+          startColumn: 0,
+          endColumn: 0,
+        }
+      : {
+          startLineNumber: parent.line + 1,
+          endLineNumber: parent.line + 1,
+          startColumn: 0,
+          endColumn: 0,
+        };
+
+    this.monacoEditorComponent?.applyEdits([{ text, range }], true);
+  }
+
+  findLastNestedElement(
+    parent: FlowStructureNode
+  ): FlowStructureNode | undefined {
+    let currentLastNestedElement: FlowStructureNode | undefined;
+
+    for (const [category, nodes] of Object.entries(parent.nestedElements)) {
+      const lastNode = nodes[nodes.length - 1];
+      if (!currentLastNestedElement) {
+        currentLastNestedElement = lastNode;
+      }
+      if (lastNode.endLine > currentLastNestedElement.endLine) {
+        currentLastNestedElement = lastNode;
+      }
+    }
+
+    return currentLastNestedElement;
   }
 }

@@ -16,7 +16,7 @@ import {
 } from 'jsplumb';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
-import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPuzzlePiece, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { SettingsService } from 'src/app/header/settings/settings.service';
 import { Settings } from 'src/app/header/settings/settings.model';
 import { ForwardStyle } from 'src/app/header/settings/options/forward-style';
@@ -42,8 +42,12 @@ export class NodeComponent implements AfterViewInit {
   public get isActive() {
     return this.flowStructureService.selectedNode?.uid === this.node?.getId();
   }
+  public get senders() {
+    return this.node.getSenders() ?? [];
+  }
 
-  public readonly cloud = faCloudDownloadAlt;
+  public readonly puzzlePiece = faPuzzlePiece;
+  public readonly paperPlane = faPaperPlane;
 
   private defaultSettings = new DefaultSettings();
   private readonly bezierConnectionSpecification: ConnectorSpec = [
