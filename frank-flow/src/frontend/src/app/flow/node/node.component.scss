@@ -95,11 +95,6 @@
     background: var(--success-lighter-7);
     border: 1px solid var(--success-darker-1);
 
-    &.isActive {
-      background: var(--success-lighter-8);
-      border: 3px solid var(--success-darker-1);
-    }
-
     &.jtk-drag {
       box-shadow: var(--shadow-high-success);
     }
