@@ -99,7 +99,8 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     parser.column + MONACO_COLUMN_OFFSET,
     tag.name,
     path,
-    bufferAttributes
+    bufferAttributes,
+    tag.isSelfClosing
   );
 
   bufferAttributes = {};
