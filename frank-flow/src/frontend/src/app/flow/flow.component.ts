@@ -21,7 +21,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { CurrentFileService } from '../shared/services/current-file.service';
 import { File } from '../shared/models/file.model';
-import { GraphService } from '../shared/services/graph.service';
+import { LayoutService } from '../shared/services/layout.service';
 import { Node } from './node/nodes/node.model';
 import { Subscription } from 'rxjs';
 import { FileType } from '../shared/enums/file-type.enum';
@@ -57,7 +57,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
     private renderer: Renderer2,
     private library: FaIconLibrary,
     private currentFileService: CurrentFileService,
-    private graphService: GraphService,
+    private graphService: LayoutService,
     private flowStructureService: FlowStructureService,
     private panZoomService: PanZoomService
   ) {

@@ -16,7 +16,7 @@ import {
 } from 'jsplumb';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from '../../shared/services/flow-structure.service';
-import { GraphService } from '../../shared/services/graph.service';
+import { LayoutService } from '../../shared/services/layout.service';
 import { NodeGeneratorService } from '../../shared/services/node-generator.service';
 import { FlowStructure } from '../../shared/models/flow-structure.model';
 import { PanZoomConfig } from 'ngx-panzoom/lib/panzoom-config';
@@ -50,7 +50,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     private nodeService: NodeService,
     private currentFileService: CurrentFileService,
     private flowStructureService: FlowStructureService,
-    private graphService: GraphService,
+    private graphService: LayoutService,
     private nodeGeneratorService: NodeGeneratorService,
     private settingsService: SettingsService
   ) {
@@ -155,10 +155,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
           );
         }
 
-        this.graphService.makeGraph(
-          this.nodeGeneratorService.nodeMap,
-          this.nodeGeneratorService.forwards
-        );
+        this.graphService.createLayout(this.nodeGeneratorService.nodeMap);
 
         this.nodeGeneratorService.generateForwards();
         this.flowUpdate = false;
