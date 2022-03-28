@@ -138,28 +138,61 @@ export class FlowStructureService {
   }
 
   addConnection(sourceId: string, targetId: string): void {
-    const endLine = this.getEndLineOfSourceElement(sourceId);
+    const sourceNode = this.getSourceNode(sourceId);
+    if (!sourceNode) {
+      return;
+    }
+
     const target = this.flowStructure.nodes.find(
       (node) => node.uid == targetId
     );
 
+    if (sourceNode.isSelfClosing) {
+      this.addClosingBracket(sourceNode);
+      this.addClosingTag(sourceNode);
+    }
+    const endline = sourceNode.endLine + (sourceNode.isSelfClosing ? 1 : 0);
     const text = `\t\t\t\t<Forward name="success" path="${target?.name}" />\n`;
     const range = {
-      startLineNumber: endLine,
+      startLineNumber: endline,
       startColumn: 0,
       endColumn: 0,
-      endLineNumber: endLine,
+      endLineNumber: endline,
     };
 
     this.monacoEditorComponent?.applyEdits([{ range, text }]);
   }
 
-  getEndLineOfSourceElement(sourceId: string): number {
-    const currentPipe = this.flowStructure.pipes.find(
+  getSourceNode(sourceId: string): FlowStructureNode | undefined {
+    const sourceNode = this.flowStructure.pipes.find(
       (pipe: FlowStructureNode) => pipe.uid === sourceId
     );
 
-    return currentPipe!.endLine;
+    return sourceNode;
+  }
+
+  addClosingBracket(sourceNode: FlowStructureNode): void {
+    const text = `>\n`;
+    const range = {
+      startLineNumber: sourceNode.endLine,
+      startColumn: sourceNode.column - 2,
+      endColumn: sourceNode.column,
+      endLineNumber: sourceNode.endLine,
+    };
+
+    this.monacoEditorComponent?.applyEdits([{ range, text }]);
+  }
+
+  addClosingTag(sourceNode: FlowStructureNode): void {
+    const text = `\t\t\t</${sourceNode.type}>\n`;
+    const range = {
+      startLineNumber: sourceNode.endLine + 1,
+      startColumn: 0,
+      endColumn: 0,
+      endLineNumber: sourceNode.endLine + 1,
+    };
+
+    this.monacoEditorComponent?.applyEdits([{ range, text }]);
   }
 
   deleteConnection(
@@ -305,7 +338,7 @@ export class FlowStructureService {
       (pipes[pipes.length - 1] ? lastPipe.endLine : lastPipe.line) + 1;
     const pipeName = this.getUniquePipeName(pipeData.getName());
 
-    const text = `\t\t\t<${pipeData.getType()} name="${pipeName}">\n\t\t\t</${pipeData.getType()}>\n`;
+    const text = `\t\t\t<${pipeData.getType()} name="${pipeName}" />\n`;
     const range = {
       startLineNumber: line,
       startColumn: 0,

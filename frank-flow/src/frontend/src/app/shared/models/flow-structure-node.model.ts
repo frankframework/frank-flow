@@ -12,6 +12,7 @@ export class FlowStructureNode {
   public name: string;
   public positions: { x: number; y: number };
   public parent?: FlowStructureNode;
+  public isSelfClosing: boolean;
 
   constructor(
     line: number,
@@ -20,6 +21,7 @@ export class FlowStructureNode {
     column: number,
     type: string,
     attributes: FlowNodeAttributes,
+    isSelfClosing: boolean,
     forwards?: any[]
   ) {
     this.line = line;
@@ -27,6 +29,7 @@ export class FlowStructureNode {
     this.startColumn = startColumn;
     this.column = column;
     this.type = type;
+    this.isSelfClosing = isSelfClosing;
     this.forwards = forwards;
 
     this.attributes = attributes ?? [];
