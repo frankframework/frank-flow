@@ -402,7 +402,7 @@ export class FlowStructureService {
     xPos: number;
     yPos: number;
   }): void {
-    this.editAttributes({
+    this.editNodeAttributes({
       nodeId: options.nodeId,
       attributes: [
         { name: 'flow:y', value: options.yPos },
@@ -412,7 +412,29 @@ export class FlowStructureService {
     });
   }
 
-  editAttributes(options: {
+  setFlowSetting(name: string, value: string | number): void {
+    const configuration = this.flowStructure.configuration;
+    if (configuration) {
+      const flowSetting = { name, value };
+
+      if (this.attributeListIsEmpty(configuration.attributes)) {
+        this.createFirstAttribute(flowSetting, configuration, true);
+      } else {
+        this.editSingleAttribute(flowSetting, configuration.attributes, true);
+      }
+    }
+  }
+
+  deleteFlowSetting(deleteFlowSetting: string) {
+    if (this.flowStructure.configuration == undefined) {
+      return;
+    }
+    const configurationAttributes = this.flowStructure.configuration.attributes;
+
+    this.deleteAttribute(deleteFlowSetting, configurationAttributes, true);
+  }
+
+  editNodeAttributes(options: {
     nodeId: string;
     attributes: ChangedAttribute[];
     flowUpdate: boolean;
@@ -486,6 +508,7 @@ export class FlowStructureService {
       const node = this.currentFile.flowStructure?.nodes.find(
         (node: FlowStructureNode) => node.uid === nodeId
       );
+
       if (node) {
         for (const attribute of editAttributes) {
           const editOperation = this.editAttribute(attribute, node.attributes);

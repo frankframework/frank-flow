@@ -104,6 +104,11 @@ export class OptionsComponent implements OnInit, OnDestroy {
   save() {
     this.saveAttributes();
     this.editRelatedAttributesBasedOnName();
+    this.flowStructureService.editNodeAttributes({
+      nodeId: this.flowNode.getId(),
+      attributes: this.changedAttributes,
+      flowUpdate: !!this.getChangedNameAttribute(),
+    });
   }
 
   editRelatedAttributesBasedOnName(): void {
@@ -371,7 +376,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   saveAttributes() {
-    this.flowStructureService.editAttributes({
+    this.flowStructureService.editNodeAttributes({
       nodeId: this.flowNode.getId(),
       attributes: this.changedAttributes,
       flowUpdate: !!this.getChangedNameAttribute(),

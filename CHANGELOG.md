@@ -1,3 +1,93 @@
+## [2.12.5](https://github.com/ibissource/frank-flow/compare/v2.12.4...v2.12.5) (2022-03-25)
+
+
+### 🐛 Bug Fixes
+
+* add pointer to nodelist and make it not selectable ([6f65b85](https://github.com/ibissource/frank-flow/commit/6f65b85f3cc9da5c7875017c26191cde1ba0bb5c))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump prettier in /frank-flow/src/frontend ([63abc8b](https://github.com/ibissource/frank-flow/commit/63abc8b6e6c5b924a31c286a407b0996cfae7af4))
+
+
+### ♻️ Chores
+
+* temporary change release workflow to manual dispatch ([eff8a3a](https://github.com/ibissource/frank-flow/commit/eff8a3a81fc9a96817d4f84b86eb28d9c3868a55))
+
+## [2.12.4](https://github.com/ibissource/frank-flow/compare/v2.12.3...v2.12.4) (2022-03-23)
+
+
+### 🛠 Builds
+
+* **deps:** bump minimist in /frank-flow/src/frontend ([c675838](https://github.com/ibissource/frank-flow/commit/c675838e79458d2bd6f5c2350142ca980dd1a372))
+
+## [2.12.3](https://github.com/ibissource/frank-flow/compare/v2.12.2...v2.12.3) (2022-03-23)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([5db8070](https://github.com/ibissource/frank-flow/commit/5db80709e17c5687a5af6bb419f06d1e6a05f122))
+
+## [2.12.2](https://github.com/ibissource/frank-flow/compare/v2.12.1...v2.12.2) (2022-03-22)
+
+
+### 🛠 Builds
+
+* **deps:** bump node-forge in /frank-flow/src/frontend ([ea9c24a](https://github.com/ibissource/frank-flow/commit/ea9c24a6284a71da9cec2a7104da3d4726e95c94))
+
+## [2.12.1](https://github.com/ibissource/frank-flow/compare/v2.12.0...v2.12.1) (2022-03-22)
+
+
+### 🛠 Builds
+
+* **deps:** bump [@fortawesome](https://github.com/fortawesome)/free-regular-svg-icons ([1f2b22d](https://github.com/ibissource/frank-flow/commit/1f2b22dc2427eacbe80befb84df02b10cc900708))
+
+# [2.12.0](https://github.com/ibissource/frank-flow/compare/v2.11.6...v2.12.0) (2022-03-21)
+
+
+### ✨ Features
+
+* add configuration settings modal ([0517adc](https://github.com/ibissource/frank-flow/commit/0517adce02433856005f6091d0aff6e63fe1f0fe))
+* make highlight easier to see ([11b88e4](https://github.com/ibissource/frank-flow/commit/11b88e4be2b28226139393c03cfa220696e4f826))
+* refactor flow-structure and add delete ([87f0718](https://github.com/ibissource/frank-flow/commit/87f071839a034ba465e46c4902e48a32e158fd76))
+
+
+### 🐛 Bug Fixes
+
+* add hover to link in flow settings modal ([edcc4ef](https://github.com/ibissource/frank-flow/commit/edcc4efd01a16959178c2aa9c5410ccbda4333e1))
+* add yellow highlight to all nodes and fix padding ([4be4c54](https://github.com/ibissource/frank-flow/commit/4be4c540b37043cf7a155cc838cc6c07e02c8d0c))
+* apply requested changes ([63ab279](https://github.com/ibissource/frank-flow/commit/63ab279f6d42c6fa5bf10900274695b99bc38749))
+* flowSettings kept the settings from the previous configuration, if the current file wasn't one ([178bab4](https://github.com/ibissource/frank-flow/commit/178bab408c6f163711ad3fa9a20f0b4765d2f55f))
+* remove outline on select when using Chrome-browser ([ae49f46](https://github.com/ibissource/frank-flow/commit/ae49f4601230bb4887228cb9530e4f90b17184a0))
+
+## [2.11.6](https://github.com/ibissource/frank-flow/compare/v2.11.5...v2.11.6) (2022-03-21)
+
+
+### 🐛 Bug Fixes
+
+* add pointer cursor to buttons ([3d16beb](https://github.com/ibissource/frank-flow/commit/3d16beb906e352bbf75e6ece286fd772170f6191))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([e8cd2da](https://github.com/ibissource/frank-flow/commit/e8cd2da699d4a62c326540b78b2371759fd3d436))
+
+## [2.11.5](https://github.com/ibissource/frank-flow/compare/v2.11.4...v2.11.5) (2022-03-21)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([38e17b0](https://github.com/ibissource/frank-flow/commit/38e17b0645ecf0b3ff21fad47d9bf5c961f46a42))
+
+## [2.11.4](https://github.com/ibissource/frank-flow/compare/v2.11.3...v2.11.4) (2022-03-21)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([244dd50](https://github.com/ibissource/frank-flow/commit/244dd50c3293b8fdbf18ae4db319233952527498))
+* **deps:** bump [@fortawesome](https://github.com/fortawesome)/angular-fontawesome ([eb26d91](https://github.com/ibissource/frank-flow/commit/eb26d916f0eacc37ec26216d20a33c1f772a5875))
+
 ## [2.11.3](https://github.com/ibissource/frank-flow/compare/v2.11.2...v2.11.3) (2022-03-17)
 
 

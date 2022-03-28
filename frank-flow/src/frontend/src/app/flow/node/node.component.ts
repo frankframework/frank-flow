@@ -25,6 +25,7 @@ import { File } from '../../shared/models/file.model';
 import { FlowSettingsService } from '../../shared/services/flow-settings.service';
 import { DefaultSettings } from '../../header/settings/options/default-settings.model';
 import { FlowSettings } from '../../shared/models/flow-settings.model';
+import { FlowNamespaceService } from 'src/app/shared/services/flow-namespace.service';
 
 @Component({
   selector: 'app-node',
@@ -98,7 +99,7 @@ export class NodeComponent implements AfterViewInit {
     },
   } as DragOptions;
   private settings!: Settings;
-  private flowSettings!: FlowSettings;
+  private flowSettings!: FlowSettings | undefined;
   private currentFile!: File;
 
   constructor(
@@ -106,7 +107,8 @@ export class NodeComponent implements AfterViewInit {
     private flowStructureService: FlowStructureService,
     private settingsService: SettingsService,
     private flowSettingsService: FlowSettingsService,
-    private currentFileService: CurrentFileService
+    private currentFileService: CurrentFileService,
+    private flowNamespaceService: FlowNamespaceService
   ) {}
 
   @HostListener('dblclick') onDoubleClick(): void {
@@ -258,6 +260,7 @@ export class NodeComponent implements AfterViewInit {
       xPos: event.pos[0],
       yPos: event.pos[1],
     });
+    this.flowNamespaceService.handleNameSpace();
   }
 
   nodeHasClass(event: any, className: string) {

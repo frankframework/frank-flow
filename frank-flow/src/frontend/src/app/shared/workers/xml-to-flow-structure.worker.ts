@@ -138,6 +138,7 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
   } else {
     switch (currentNode.type) {
       case 'Configuration':
+      case 'Module':
         configuration = currentNode;
         return;
       case 'Adapter':

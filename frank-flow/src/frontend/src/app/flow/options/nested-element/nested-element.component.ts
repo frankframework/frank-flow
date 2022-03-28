@@ -234,7 +234,7 @@ export class NestedElementComponent implements OnInit, OnDestroy {
 
   saveChanges(): void {
     if (this.structureNode) {
-      this.flowStructureService.editAttributes({
+      this.flowStructureService.editNodeAttributes({
         nodeId: this.structureNode.uid,
         attributes: this.changedAttributes,
         flowUpdate: !!this.getChangedNameAttribute(),
