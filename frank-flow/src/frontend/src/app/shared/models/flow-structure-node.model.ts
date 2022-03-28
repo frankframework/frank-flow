@@ -1,4 +1,5 @@
 import { FlowNodeAttributes } from './flow-node-attributes.model';
+import { FlowNodeNestedElements } from './flow-node-nested-elements.model';
 
 export class FlowStructureNode {
   public uid: string;
@@ -12,6 +13,9 @@ export class FlowStructureNode {
   public name: string;
   public positions: { x: number; y: number };
   public parent?: FlowStructureNode;
+  public nestedElements: FlowNodeNestedElements = {};
+  public senders: FlowStructureNode[];
+  public path: string;
   public isSelfClosing: boolean;
 
   constructor(
@@ -20,6 +24,7 @@ export class FlowStructureNode {
     startColumn: number,
     column: number,
     type: string,
+    path: string,
     attributes: FlowNodeAttributes,
     isSelfClosing: boolean,
     forwards?: any[]
@@ -31,11 +36,13 @@ export class FlowStructureNode {
     this.type = type;
     this.isSelfClosing = isSelfClosing;
     this.forwards = forwards;
-
     this.attributes = attributes ?? [];
+    this.path = path;
+
     this.name = this.getName();
-    this.uid = this.name + this.type;
+    this.uid = `${this.type}(${this.name})${this.path ? `@${this.path}` : ''}`;
     this.positions = this.getPositions();
+    this.senders = [];
   }
 
   private getName(): string {

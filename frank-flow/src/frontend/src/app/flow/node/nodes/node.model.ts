@@ -1,6 +1,7 @@
 import { ComponentFactoryResolver, ViewContainerRef } from '@angular/core';
 import { jsPlumbInstance } from 'jsplumb';
 import { FlowNodeAttributes } from 'src/app/shared/models/flow-node-attributes.model';
+import { FlowStructureNode } from 'src/app/shared/models/flow-structure-node.model';
 import { NodeComponent } from '../node.component';
 
 export class Node {
@@ -11,6 +12,7 @@ export class Node {
   private top?: number | undefined;
   private left?: number | undefined;
   private attributes?: FlowNodeAttributes | undefined;
+  private senders?: FlowStructureNode[];
 
   constructor(options: {
     id: string;
@@ -19,6 +21,7 @@ export class Node {
     top?: number;
     left?: number;
     attributes?: FlowNodeAttributes;
+    senders?: FlowStructureNode[];
   }) {
     this.id = options.id;
     this.name = options.name;
@@ -26,6 +29,7 @@ export class Node {
     this.top = options.top;
     this.left = options.left;
     this.attributes = options.attributes;
+    this.senders = options.senders;
   }
 
   getId(): string {
@@ -52,12 +56,21 @@ export class Node {
     return this.attributes;
   }
 
+  getSenders(): FlowStructureNode[] | undefined {
+    return this.senders;
+  }
+
   setTop(top: number): void {
     this.top = top;
   }
 
   setLeft(left: number): void {
     this.left = left;
+  }
+
+  setName(name: string) {
+    this.id = this.id.replace(this.name, name);
+    this.name = name;
   }
 
   generateNode(

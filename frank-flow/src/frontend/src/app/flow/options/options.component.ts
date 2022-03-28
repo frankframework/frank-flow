@@ -27,19 +27,28 @@ export class OptionsComponent implements OnInit, OnDestroy {
   ];
   public nonRemovableAttributes = ['name', 'path'];
   public availableAttributes: FlowNodeAttributeOptions[] = [];
+  public availableNestedElements?: any[];
+  public availableTypesForNestedElement?: any[];
   public attributes!: FlowNodeAttributes;
   public selectedAttribute!: any;
   public newAttributeValue!: string;
-  public element?: any;
+  public selectedNewNestedElement!: any;
+  public selectedNewNestedElementName!: string | undefined;
+  public newNestedElementName!: string;
+  public frankDocElement?: any;
+  public frankDocParentElements: any[] = [];
   public structureNode!: FlowStructureNode;
   public frankDocElementsURI =
     environment.runnerUri + '/' + environment.frankDocElements;
+  public selectedNestedElement!: any;
+  public showNestedElements = false;
 
   private frankDoc: any;
   private flowNode!: Node;
   private changedAttributes: ChangedAttribute[] = [];
   private currentFile!: File;
   private frankDocSubscription!: Subscription;
+  private currentFileSubscription!: Subscription;
 
   constructor(
     private ngxSmartModalService: NgxSmartModalService,
@@ -55,6 +64,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.frankDocSubscription.unsubscribe();
+    this.currentFileSubscription.unsubscribe();
   }
 
   getFrankDoc(): void {
@@ -64,12 +74,13 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   getCurrentFile(): void {
-    this.currentFileService.currentFileObservable.subscribe({
-      next: (currentFile: File) => {
-        this.currentFile = currentFile;
-        this.getAttributesOnNode();
-      },
-    });
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe({
+        next: (currentFile: File) => {
+          this.currentFile = currentFile;
+          this.getAttributesOnNode();
+        },
+      });
   }
 
   onDataAdded(): void {
@@ -79,10 +90,19 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   onOpen() {
     this.getAttributesOnNode();
+    this.getFrankDocElement();
+    this.getFrankDocParentElements(this.frankDocElement?.fullName);
     this.getAvailableAttributesForNode();
+    this.getAvailableNestedElementsForNode();
   }
 
   onAnyCloseEvent(): void {
+    this.save();
+    this.showNestedElements = false;
+  }
+
+  save() {
+    this.saveAttributes();
     this.editRelatedAttributesBasedOnName();
     this.flowStructureService.editNodeAttributes({
       nodeId: this.flowNode.getId(),
@@ -99,6 +119,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
       this.editConnections(newName);
       this.editFirstPipe(newName);
+      this.editFlowNode(newName);
     }
   }
 
@@ -139,16 +160,29 @@ export class OptionsComponent implements OnInit, OnDestroy {
     }
   }
 
+  editFlowNode(newName: string) {
+    this.flowNode.setName(newName);
+  }
+
   resetPreviousData() {
     this.attributes = {};
     this.changedAttributes = [];
-    this.element = '';
+    this.frankDocElement = '';
+    this.frankDocParentElements = [];
     this.clearNewAttribute();
+    this.selectedNestedElement = undefined;
+    this.clearNewNestedElement();
   }
 
   clearNewAttribute() {
     this.selectedAttribute = undefined;
     this.newAttributeValue = '';
+  }
+
+  clearNewNestedElement() {
+    this.selectedNewNestedElement = undefined;
+    this.selectedNewNestedElementName = undefined;
+    this.newNestedElementName = '';
   }
 
   getAttributesOnNode(): void {
@@ -162,32 +196,70 @@ export class OptionsComponent implements OnInit, OnDestroy {
     }
   }
 
+  getFrankDocElement() {
+    this.frankDocElement = this.frankDoc.elements.find((element: any) =>
+      element.elementNames.includes(this.structureNode?.type)
+    );
+  }
+
+  getFrankDocParentElements(fullParentName: string | undefined) {
+    const parent = this.frankDoc.elements.find(
+      (element: any) => element.fullName === fullParentName
+    );
+
+    this.frankDocParentElements.push(parent);
+
+    if (parent?.parent) {
+      this.getFrankDocParentElements(parent.parent);
+    }
+  }
+
   getAvailableAttributesForNode(): void {
     this.availableAttributes = [];
 
-    if (this.areTypeAndFrankDocSet()) {
-      this.element = this.frankDoc.elements.find((element: any) =>
-        element.elementNames.includes(this.structureNode?.type)
-      );
-      for (const attribute of this.element?.attributes) {
-        this.availableAttributes.push(attribute);
+    for (const attribute of this.frankDocElement?.attributes ?? []) {
+      this.availableAttributes.push(attribute);
+    }
+
+    for (const parent of this.frankDocParentElements ?? []) {
+      for (const attribute of parent.attributes ?? []) {
+        if (!this.availableAttributes.includes(attribute)) {
+          this.availableAttributes.push(attribute);
+        }
       }
     }
   }
 
-  areTypeAndFrankDocSet(): boolean {
-    return this.structureNode?.type && this.frankDoc;
+  getAvailableNestedElementsForNode(): void {
+    this.showNestedElements = true;
+    this.availableNestedElements = [];
+
+    for (const child of this.frankDocElement?.children ?? []) {
+      this.availableNestedElements.push(child);
+    }
+
+    for (const parent of this.frankDocParentElements ?? []) {
+      for (const nestedElement of parent.children ?? []) {
+        if (!this.availableNestedElements.includes(nestedElement)) {
+          this.availableNestedElements.push(nestedElement);
+        }
+      }
+    }
   }
 
   addAttribute(): void {
-    this.flowStructureService.createAttribute(
-      {
-        name: this.selectedAttribute.name,
-        value: this.newAttributeValue,
-      },
-      this.attributes
-    );
-    this.clearNewAttribute();
+    this.save();
+    // TODO: Remove timeout
+    setTimeout(() => {
+      this.flowStructureService.createAttribute(
+        {
+          name: this.selectedAttribute.name,
+          value: this.newAttributeValue,
+        },
+        this.attributes
+      );
+      this.clearNewAttribute();
+    }, 500);
   }
 
   changeAttribute(name: string, event: Event): void {
@@ -204,17 +276,21 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   deleteAttribute(key: string): void {
+    this.save();
+    // TODO: Remove timeout
     setTimeout(() => {
       this.removeChangedAttribute(key);
       this.flowStructureService.deleteAttribute(key, this.attributes);
-    });
+    }, 500);
   }
 
   removeChangedAttribute(key: string): void {
     const index = this.changedAttributes?.findIndex(
       (attribute) => attribute.name == key
     );
-    this.changedAttributes.splice(index);
+    if (index >= 0) {
+      this.changedAttributes.splice(index, 1);
+    }
   }
 
   debounce(function_: any, wait: number): any {
@@ -241,5 +317,69 @@ export class OptionsComponent implements OnInit, OnDestroy {
   deleteNode() {
     this.flowStructureService.deleteNode(this.structureNode);
     this.ngxSmartModalService.close('optionsModal');
+  }
+
+  setNestedElement(element: any): void {
+    this.clearNewNestedElement();
+    this.selectedNestedElement = element;
+    if (element) {
+      this.getAvailableTypesForNestedElement(element);
+      this.checkIfOnlyOneTypeIsAvailable();
+    }
+  }
+
+  getAvailableTypesForNestedElement(element: any): void {
+    this.availableTypesForNestedElement = [];
+
+    const type = this.frankDoc.types.find(
+      (type: any) => type.name === element.type
+    );
+
+    for (const member of Object.values(type.members) ?? []) {
+      for (const element of this.frankDoc.elements ?? []) {
+        if (element.fullName === member) {
+          this.availableTypesForNestedElement.push(element);
+        }
+      }
+    }
+  }
+
+  checkIfOnlyOneTypeIsAvailable(): void {
+    if (this.availableTypesForNestedElement?.length === 1) {
+      this.selectedNewNestedElement = this.availableTypesForNestedElement[0];
+    }
+    this.checkIfOnlyOneElementNameIsAvailable();
+  }
+
+  checkIfOnlyOneElementNameIsAvailable(): void {
+    this.selectedNewNestedElementName =
+      this.selectedNewNestedElement?.elementNames.length === 1
+        ? this.selectedNewNestedElement?.elementNames[0]
+        : undefined;
+  }
+
+  nestedElementIs(element: any): boolean {
+    return this.selectedNestedElement === element;
+  }
+
+  addNestedElement() {
+    if (this.newNestedElementName && this.selectedNewNestedElementName) {
+      this.flowStructureService.createNestedElement(
+        {
+          type: this.selectedNewNestedElementName,
+          name: this.newNestedElementName,
+        },
+        this.structureNode
+      );
+      this.clearNewNestedElement();
+    }
+  }
+
+  saveAttributes() {
+    this.flowStructureService.editNodeAttributes({
+      nodeId: this.flowNode.getId(),
+      attributes: this.changedAttributes,
+      flowUpdate: !!this.getChangedNameAttribute(),
+    });
   }
 }

@@ -8,6 +8,7 @@ import { Forward } from '../models/forward.model';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
 import { FlowStructure } from '../models/flow-structure.model';
 import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
+import Sender from '../../flow/node/nodes/sender.model';
 
 @Injectable({
   providedIn: 'root',
@@ -67,14 +68,20 @@ export class NodeGeneratorService {
     for (const pipe of pipes) {
       const positions = pipe.positions;
       const attributes = pipe.attributes;
-      const node = new Pipe({
+      const senders = pipe.senders;
+      const nodeOptions = {
         id: pipe.uid,
         name: pipe.name,
         type: pipe.type,
         top: positions.y,
         left: positions.x,
         attributes,
-      });
+        senders,
+      };
+      const node =
+        pipe.type === 'SenderPipe'
+          ? new Sender(nodeOptions)
+          : new Pipe(nodeOptions);
 
       if (pipe.forwards) {
         for (const forward of pipe.forwards) {

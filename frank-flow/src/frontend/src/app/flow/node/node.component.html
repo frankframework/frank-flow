@@ -1,6 +1,6 @@
 <div class="node">
   <div class="node__icon">
-    <fa-icon [icon]="cloud"></fa-icon>
+    <fa-icon [icon]="puzzlePiece"></fa-icon>
   </div>
   <div [title]="node.getType()" class="node__type">
     {{ node.getType() }}
@@ -8,5 +8,24 @@
   <div [title]="node.getName()" class="node__name">
     {{ node.getName() }}
   </div>
-  <div class="node__badges"></div>
+  <div class="node__badges">
+    <div
+      [title]="senders[0]?.name"
+      *ngIf="senders.length === 1; else senderCount"
+      class="node__sender"
+    >
+      <fa-icon size="xs" [icon]="paperPlane"></fa-icon> {{ senders[0]?.name }}
+    </div>
+    <ng-template #senderCount>
+      <div
+        [title]="senders.length + ' senders'"
+        *ngIf="senders.length > 1"
+        class="node__sender"
+      >
+        <fa-icon size="sm" [icon]="paperPlane"></fa-icon>
+        {{ senders.length }} senders
+        <!--        TODO: Pipe only can have one sender, this should be implemented for the parallelSender-->
+      </div>
+    </ng-template>
+  </div>
 </div>

@@ -50,6 +50,7 @@ $themes: (
     'bg-color': map-get($shades, 'shade-0'),
     'bg-color-muted': map-get($shades, 'shade-1'),
     'border-color': map-get($shades, 'shade-2'),
+    'highlight-color': map-get($shades, 'shade-3'),
     'text-color': map-get($shades, 'shade-4'),
     'high-contrast-text-color': map-get($shades, 'shade-5'),
   );

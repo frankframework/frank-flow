@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxPanZoomModule } from 'ngx-panzoom';
 import { ActionsComponent } from './actions/actions.component';
+import { NestedElementComponent } from './options/nested-element/nested-element.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { ActionsComponent } from './actions/actions.component';
     NodeComponent,
     OptionsComponent,
     ActionsComponent,
+    NestedElementComponent,
   ],
   exports: [FlowComponent],
   imports: [
