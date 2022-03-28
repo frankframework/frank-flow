@@ -9,6 +9,7 @@
   border: 1px solid var(--accent-darker-1);
   font-size: 14px;
   transition: box-shadow 0.2s, transform 0.2s;
+  user-select: none;
 
   &.jtk-drag {
     box-shadow: var(--shadow-high-accent);
