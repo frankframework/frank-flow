@@ -467,10 +467,10 @@ export class FlowStructureService {
     if (this.canApplyEditAttributes()) {
       this.waitingOnNewStructure = true;
       const editOperations = this.getEditOperationsForChangedAttributes();
-      if (editOperations) {
-        this.monacoEditorComponent?.applyEdits(editOperations, this.flowUpdate);
-      }
-      this.editAttributeQueue.clear();
+      this.monacoEditorComponent?.applyEdits(
+        editOperations ?? [],
+        this.flowUpdate
+      );
     }
   }
 
@@ -481,13 +481,11 @@ export class FlowStructureService {
   getEditOperationsForChangedAttributes():
     | monaco.editor.IIdentifiedSingleEditOperation[]
     | void {
+    const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
     for (const [nodeId, editAttributes] of this.editAttributeQueue.entries()) {
       const node = this.currentFile.flowStructure?.nodes.find(
         (node: FlowStructureNode) => node.uid === nodeId
       );
-
-      const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
-
       if (node) {
         for (const attribute of editAttributes) {
           const editOperation = this.editAttribute(attribute, node.attributes);
@@ -496,10 +494,10 @@ export class FlowStructureService {
             editOperations.push(editOperation);
           }
         }
-
-        return editOperations;
       }
     }
+    this.editAttributeQueue.clear();
+    return editOperations;
   }
 
   editAttribute(
