@@ -244,6 +244,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   addAttribute(): void {
     this.save();
+    // TODO: Remove timeout
     setTimeout(() => {
       this.flowStructureService.createAttribute(
         {
@@ -253,7 +254,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
         this.attributes
       );
       this.clearNewAttribute();
-    });
+    }, 500);
   }
 
   changeAttribute(name: string, event: Event): void {
@@ -271,10 +272,11 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   deleteAttribute(key: string): void {
     this.save();
+    // TODO: Remove timeout
     setTimeout(() => {
       this.removeChangedAttribute(key);
       this.flowStructureService.deleteAttribute(key, this.attributes);
-    });
+    }, 500);
   }
 
   removeChangedAttribute(key: string): void {
