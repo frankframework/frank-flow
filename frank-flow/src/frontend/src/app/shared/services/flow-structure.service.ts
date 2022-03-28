@@ -140,51 +140,66 @@ export class FlowStructureService {
 
   addConnection(sourceId: string, targetId: string): void {
     const sourceNode = this.getSourceNode(sourceId);
-    if (!sourceNode) {
-      return;
-    }
-
     const target = this.flowStructure.nodes.find(
       (node) => node.uid == targetId
     );
 
-    if (sourceNode.isSelfClosing) {
-      this.addClosingBracket(sourceNode);
-      this.addClosingTag(sourceNode);
-    }
-    const endline = sourceNode.endLine + (sourceNode.isSelfClosing ? 1 : 0);
+    const endLine =
+      (sourceNode?.endLine ?? 0) + (sourceNode?.isSelfClosing ? 1 : 0);
     const text = `\t\t\t\t<Forward name="success" path="${target?.name}" />\n`;
     const range = {
-      startLineNumber: endline,
+      startLineNumber: endLine,
       startColumn: 0,
       endColumn: 0,
-      endLineNumber: endline,
+      endLineNumber: endLine,
     };
 
-    this.monacoEditorComponent?.applyEdits([{ range, text }]);
+    if (sourceNode?.isSelfClosing) {
+      this.monacoEditorComponent?.applyEdits([
+        this.getClosingBracketEditOperation(sourceNode),
+        { range, text },
+        this.getClosingTagEditOperation(sourceNode),
+      ]);
+    } else {
+      this.monacoEditorComponent?.applyEdits([{ range, text }]);
+    }
   }
 
   getSourceNode(sourceId: string): FlowStructureNode | undefined {
-    const sourceNode = this.flowStructure.pipes.find(
+    return this.flowStructure.pipes.find(
       (pipe: FlowStructureNode) => pipe.uid === sourceId
     );
-
-    return sourceNode;
   }
 
-  addClosingBracket(sourceNode: FlowStructureNode): void {
-    const text = `>\n`;
+  getClosingBracketEditOperation(
+    sourceNode: FlowStructureNode
+  ): monaco.editor.ISingleEditOperation {
+    const text = `>`;
+    let column = sourceNode.column - 2;
+    if (this.hasSpaceBeforeClosingBracket(sourceNode)) {
+      column -= 1;
+    }
     const range = {
       startLineNumber: sourceNode.endLine,
-      startColumn: sourceNode.column - 2,
+      startColumn: column,
       endColumn: sourceNode.column,
       endLineNumber: sourceNode.endLine,
     };
 
-    this.monacoEditorComponent?.applyEdits([{ range, text }]);
+    return { range, text };
   }
 
-  addClosingTag(sourceNode: FlowStructureNode): void {
+  hasSpaceBeforeClosingBracket(sourceNode: FlowStructureNode): boolean {
+    const lastAttribute = this.findLastAttribute(sourceNode.attributes);
+    return (
+      sourceNode.column - (lastAttribute?.endColumn ?? 0) >= 3 &&
+      lastAttribute?.line === sourceNode.endLine
+    );
+  }
+
+  getClosingTagEditOperation(
+    sourceNode: FlowStructureNode
+  ): monaco.editor.ISingleEditOperation {
     const text = `\t\t\t</${sourceNode.type}>\n`;
     const range = {
       startLineNumber: sourceNode.endLine + 1,
@@ -193,7 +208,7 @@ export class FlowStructureService {
       endLineNumber: sourceNode.endLine + 1,
     };
 
-    this.monacoEditorComponent?.applyEdits([{ range, text }]);
+    return { range, text };
   }
 
   deleteConnection(
@@ -777,7 +792,9 @@ export class FlowStructureService {
     parent: FlowStructureNode
   ): void {
     const lastNestedElement = this.findLastNestedElement(parent);
-    let text = `\t\t\t\t<${parameter.type} name="${parameter.name}">\n\t\t\t\t</${parameter.type}>\n`;
+    let text = `\t\t\t\t<${parameter.type} name="${parameter.name}" />\n`;
+
+    const endLine = parent.endLine + (parent.isSelfClosing ? 1 : 0);
 
     const range = lastNestedElement
       ? {
@@ -787,13 +804,21 @@ export class FlowStructureService {
           endColumn: 0,
         }
       : {
-          startLineNumber: parent.line + 1,
-          endLineNumber: parent.line + 1,
+          startLineNumber: endLine,
+          endLineNumber: endLine,
           startColumn: 0,
           endColumn: 0,
         };
 
-    this.monacoEditorComponent?.applyEdits([{ text, range }], true);
+    if (parent.isSelfClosing) {
+      this.monacoEditorComponent?.applyEdits([
+        this.getClosingBracketEditOperation(parent),
+        { range, text },
+        this.getClosingTagEditOperation(parent),
+      ]);
+    } else {
+      this.monacoEditorComponent?.applyEdits([{ range, text }]);
+    }
   }
 
   findLastNestedElement(
