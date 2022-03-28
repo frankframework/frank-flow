@@ -1,3 +1,51 @@
+# [2.13.0](https://github.com/ibissource/frank-flow/compare/v2.12.5...v2.13.0) (2022-03-28)
+
+
+### ✨ Features
+
+* add a way to add senders wrapped in a sender pipe ([ccf5284](https://github.com/ibissource/frank-flow/commit/ccf52847d868faeb42c6df02da8cf34fa298a48e))
+* add nested element component ([005aed7](https://github.com/ibissource/frank-flow/commit/005aed72b9b7ed6ca578f267cd4f1ebbb1eed7d0))
+* change options modal: add available nested elements to sidebar ([336a6ca](https://github.com/ibissource/frank-flow/commit/336a6ca04ad5d440b38676a04351cafb6d979e0b))
+* change styling of senders and add icon before badge ([97ace69](https://github.com/ibissource/frank-flow/commit/97ace690d8a9374f6acdab681d929e34e4aa90e3))
+* change the badges of the senders so multiple senders will show a counter ([a39ab46](https://github.com/ibissource/frank-flow/commit/a39ab46b80315218b4f96904b37d0533f4a22295))
+* implement add nested element button ([362aac3](https://github.com/ibissource/frank-flow/commit/362aac334ef78873359d3b6eeca3d7519a9d9f43))
+* inherit the attributes of the parent element in the options window ([17aa814](https://github.com/ibissource/frank-flow/commit/17aa81405364c22b61a773ed04071f1870510441))
+* make it possible to add senders to canvas ([8b09c1c](https://github.com/ibissource/frank-flow/commit/8b09c1c6590736e2d39eb9c15000cf52e7e5081e))
+* make it possible to edit the nested elements ([1344de7](https://github.com/ibissource/frank-flow/commit/1344de79ece29b166c999c60a42f20a5c797b1d0))
+* move sender icon within the badge ([1de7f70](https://github.com/ibissource/frank-flow/commit/1de7f7049127beeef7ca4644656c4460f981fe72))
+* save attributes when adding an attribute ([7914295](https://github.com/ibissource/frank-flow/commit/791429558a3a043f2f92d8de4504f2aad41d072b))
+* show all available elements when creating a new nested element ([887383d](https://github.com/ibissource/frank-flow/commit/887383d3fb3a9716ecdad1eb16fd34c974e7aaf9))
+
+
+### 🐛 Bug Fixes
+
+* add closing tag to self closing element when an nested element is added ([dadb0d4](https://github.com/ibissource/frank-flow/commit/dadb0d4c0666de67e191000aa6f5ada62185bc83))
+* add timeout around add attribute ([236f8c4](https://github.com/ibissource/frank-flow/commit/236f8c4acede0d5fd6c48ecf46aa0736b0bd5d66))
+* add yellow highlight to sender ([1e6b460](https://github.com/ibissource/frank-flow/commit/1e6b46074168b9212d3f0f40e7726805d6d65a53))
+* adding attributes ([661d01a](https://github.com/ibissource/frank-flow/commit/661d01a171dd1667610cceeee179c464c5aa051a))
+* automatically add namespace when needed ([f9eda60](https://github.com/ibissource/frank-flow/commit/f9eda601b867347405c346c2a5ae1fa63be7c942))
+* beatify code for namespace service ([5bc8341](https://github.com/ibissource/frank-flow/commit/5bc8341039dc5fefbb85107aefacee9c8aaaf585))
+* elements that start with a lowercase letter would couse the options to break ([2f3175a](https://github.com/ibissource/frank-flow/commit/2f3175a4c9fd81c264d7ae65c52ee30e2ab17307))
+* fix adding forward on self closing tag ([47b09ab](https://github.com/ibissource/frank-flow/commit/47b09ab2c0f5be380ffb981baff6f833373e85cc))
+* fix for saving name attribute on node ([325f976](https://github.com/ibissource/frank-flow/commit/325f97674201afe9e148e8c15dbdb30349736de2))
+* make sure the attributes get saved ([56a9568](https://github.com/ibissource/frank-flow/commit/56a95687e3d46a4a89f6f35e2f4d6bfabcdc4bc3))
+* multiple attributes from multiple nodes can now be saved at once ([31455a5](https://github.com/ibissource/frank-flow/commit/31455a5a3ca4ac05875076ad6973d02497248247))
+* nested element now work with non inherited nested elements ([245e304](https://github.com/ibissource/frank-flow/commit/245e3046a2295c24205fc53c8230a772fb3c9de9))
+* remove name from unclosed elements, it doesnt matter and some dont have a name ([dd27157](https://github.com/ibissource/frank-flow/commit/dd2715790b27f556423d3f027e2f603345fd3a5e))
+* stop parser so it doesn't get stuck after an error ([4744424](https://github.com/ibissource/frank-flow/commit/4744424a3cb77f04daf98fddaaf27401a958db8b))
+* **temp:** add a delay to adding and deleting attributes ([4633853](https://github.com/ibissource/frank-flow/commit/4633853489c0a4d4a033557eebdfa12eecbf3ffc))
+
+
+### 📦 Code Refactoring
+
+* remove unused function ([a929d8a](https://github.com/ibissource/frank-flow/commit/a929d8ab36e47fde5695925e36c87866c33a8828))
+* shorten import and rename method ([3abf0b9](https://github.com/ibissource/frank-flow/commit/3abf0b9b941af234aae66f93ed330dd4dfa48274))
+
+
+### 💎 Styles
+
+* cleanup comments and add implicit perameter explicitly ([071faab](https://github.com/ibissource/frank-flow/commit/071faabda8e8365d3532f0ef61d02f6abf14af09))
+
 ## [2.12.5](https://github.com/ibissource/frank-flow/compare/v2.12.4...v2.12.5) (2022-03-25)
 
 
