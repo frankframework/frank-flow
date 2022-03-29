@@ -133,9 +133,16 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
       })
       ?.forwards?.push(currentNode);
   } else if (currentNode.type.endsWith('Listener')) {
-    currentNode.parent = flowStructure.nodes.find((pipe: FlowStructureNode) => {
-      return pipe === unclosedNodes[unclosedNodes.length - 1];
-    });
+    unclosedNodes[unclosedNodes.length - 1].senders?.push(currentNode);
+    if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.['listener']) {
+      unclosedNodes[unclosedNodes.length - 1].nestedElements = {
+        ...unclosedNodes[unclosedNodes.length - 1].nestedElements,
+        ['listener']: [],
+      };
+    }
+    unclosedNodes[unclosedNodes.length - 1].nestedElements['listener'].push(
+      currentNode
+    );
   } else {
     switch (currentNode.type) {
       case 'Configuration':
