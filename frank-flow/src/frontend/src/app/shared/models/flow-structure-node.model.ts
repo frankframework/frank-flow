@@ -17,6 +17,7 @@ export class FlowStructureNode {
   public senders: FlowStructureNode[];
   public path: string;
   public isSelfClosing: boolean;
+  public active: boolean;
 
   constructor(
     line: number,
@@ -40,7 +41,8 @@ export class FlowStructureNode {
     this.path = path;
 
     this.name = this.getName();
-    this.uid = `${this.type}(${this.name})${this.path ? `@${this.path}` : ''}`;
+    this.active = this.getActive();
+    this.uid = this.getUid();
     this.positions = this.getPositions();
     this.senders = [];
   }
@@ -52,6 +54,19 @@ export class FlowStructureNode {
       return this.attributes['path'].value;
     }
     return this.type;
+  }
+
+  private getActive(): boolean {
+    const activeIsFalse = this.attributes['active']?.value === 'false';
+    const activeIsEmpty = this.attributes['active']?.value === '';
+
+    return !(activeIsFalse || activeIsEmpty);
+  }
+
+  private getUid(): string {
+    return `${this.type}(${!this.active ? `#${this.name}#` : this.name})${
+      this.path ? `@${this.path}` : ''
+    }`;
   }
 
   private getPositions(): { x: number; y: number } {
