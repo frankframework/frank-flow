@@ -221,9 +221,9 @@ export class CurrentFileService {
   }
 
   isFileAConfiguration(file: File): boolean {
-    const containsConfiguration = file.xml?.includes(
-      '<Configuration'
-    ) as boolean;
+    const containsConfiguration =
+      file.xml?.includes('<Configuration') &&
+      !file.xml?.includes('<!DOCTYPE Configuration');
     const containsModule = file.xml?.includes('<Module') as boolean;
     const containsAdapter = file.xml?.includes('<Adapter') as boolean;
     return containsConfiguration || containsModule || containsAdapter;
