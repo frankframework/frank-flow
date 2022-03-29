@@ -38,8 +38,8 @@ export class LayoutService {
     let row,
       column = 0;
 
-    if (/Listener/g.test(type)) {
-      row = this.getAndAddRow('listener');
+    if (/Receiver/g.test(type)) {
+      row = this.getAndAddRow('receiver');
       column = 1;
     } else if (type === 'Exit' || type === 'Exits') {
       row = this.getAndAddRow('exit');
