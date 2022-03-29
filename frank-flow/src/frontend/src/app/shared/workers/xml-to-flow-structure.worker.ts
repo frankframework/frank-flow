@@ -90,7 +90,9 @@ const charBeforeParserIsGreaterThanCharacter = () => {
 };
 
 parser.on('opentag', (tag: TagForOptions<{}>) => {
-  const path = unclosedNodes.map((node) => node.name).join('>');
+  const path = unclosedNodes
+    .map((node) => (!node.active ? `#${node.name}#` : node.name))
+    .join('>');
 
   const currentNode = new FlowStructureNode(
     tagStartLine,
