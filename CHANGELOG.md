@@ -1,3 +1,28 @@
+# [2.14.0](https://github.com/ibissource/frank-flow/compare/v2.13.0...v2.14.0) (2022-03-29)
+
+
+### ✨ Features
+
+* add elements with active attribute as a node ([64a7a42](https://github.com/ibissource/frank-flow/commit/64a7a4280f7dfd9e5bdd16e5a3682bc4240ccd30))
+* add generic confirm popup ([8ca27b4](https://github.com/ibissource/frank-flow/commit/8ca27b4098e2d7584a966c23a45dbd29531136e7))
+* add listener as nested element to a receiver ([1da20a3](https://github.com/ibissource/frank-flow/commit/1da20a3035e1d49a01df3416d9b00ae3d3b90a02))
+* change placement algorithm to stack nodes vertically ([916e525](https://github.com/ibissource/frank-flow/commit/916e525737dbfd6e904385f7350260ae823ce753))
+* make it possible to add nested elements to elements that close on the same line ([3364d82](https://github.com/ibissource/frank-flow/commit/3364d82788a7d0b57868a74c65a6c4531214c739))
+* node types now have thier own column ([a39e2ed](https://github.com/ibissource/frank-flow/commit/a39e2edd6cdb66019c6776f44411c0de14d8d8a5))
+
+
+### 🐛 Bug Fixes
+
+* change text for delete confirm message ([9d2c139](https://github.com/ibissource/frank-flow/commit/9d2c13924448de4f1c8c228f3aa5b2ef09024547))
+* the configurations.xml wont be renderd as flow if it contains '<!DOCTYPE Configuration' ([cb9abca](https://github.com/ibissource/frank-flow/commit/cb9abca039b7431e963eeec2c4daac9c8e7701d5))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([bfe7a9d](https://github.com/ibissource/frank-flow/commit/bfe7a9d7f350ec24860fb2a28cf8daa122ac5eb5))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([25c1e46](https://github.com/ibissource/frank-flow/commit/25c1e463666f108d2434dc84625b32e53be9e59f))
+* **deps-dev:** bump eslint in /frank-flow/src/frontend ([0086e70](https://github.com/ibissource/frank-flow/commit/0086e70026468970117fc53717b4d51eee2ab60d))
+
 # [2.13.0](https://github.com/ibissource/frank-flow/compare/v2.12.5...v2.13.0) (2022-03-28)
 
 
