@@ -25,8 +25,8 @@ export class NodeGeneratorService {
   }
 
   generateNodes(flowStructure: FlowStructure, firstPipe?: string): void {
-    this.generateListeners(
-      flowStructure.listeners,
+    this.generateReceivers(
+      flowStructure.receivers,
       flowStructure.pipes,
       firstPipe
     );
@@ -34,18 +34,18 @@ export class NodeGeneratorService {
     this.generateExits(flowStructure.exits);
   }
 
-  generateListeners(
-    listeners: FlowStructureNode[],
+  generateReceivers(
+    receivers: FlowStructureNode[],
     pipes: FlowStructureNode[],
     firstPipe?: string
   ): void {
-    for (const listener of listeners) {
-      const positions = listener.positions;
-      const attributes = listener.attributes;
+    for (const receiver of receivers) {
+      const positions = receiver.positions;
+      const attributes = receiver.attributes;
       const listenerNode = new Listener({
-        id: listener.uid,
-        name: listener.name,
-        type: listener.type,
+        id: receiver.uid,
+        name: receiver.name,
+        type: receiver.type,
         top: positions.y,
         left: positions.x,
         attributes,
@@ -55,9 +55,9 @@ export class NodeGeneratorService {
         (targetPipe) => targetPipe.name === firstPipe
       );
       if (forwardTarget) {
-        this.forwards.push(new Forward(listener.uid, forwardTarget.uid));
+        this.forwards.push(new Forward(receiver.uid, forwardTarget.uid));
       }
-      this.nodeMap.set(listener.uid, listenerNode);
+      this.nodeMap.set(receiver.uid, listenerNode);
     }
   }
 
