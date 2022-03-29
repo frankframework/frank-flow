@@ -1,0 +1,19 @@
+<ngx-smart-modal
+  #confirmDialog
+  (onDataAdded)="onDataAdded()"
+  (onAnyCloseEvent)="cancel()"
+  class="confirmDialog"
+  customClass="nsm-centered"
+  identifier="confirmDialog"
+>
+  <div>
+    <h1>{{ title }}</h1>
+    <p>
+      {{ text }}
+    </p>
+  </div>
+  <div class="button-actions">
+    <app-button (click)="confirm()">Confirm</app-button>
+    <app-button (click)="cancel()">Cancel</app-button>
+  </div>
+</ngx-smart-modal>
