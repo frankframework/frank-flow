@@ -21,14 +21,19 @@
   width: 100%;
   height: 64px;
 
-  display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 16px;
+  overflow: hidden;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr auto;
 
   &__actions {
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
     gap: 16px;
+    grid-template-columns: 34px 34px 34px 34px 1fr;
 
     &--right {
       display: flex;
@@ -40,6 +45,9 @@
 
   .current-file-title {
     color: #f3f3f3;
-    line-height: 40px;
+    line-height: 36px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
