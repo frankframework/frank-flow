@@ -13,14 +13,11 @@
   &:hover {
     color: var(--high-contrast-text-color);
     background-color: var(--border-color);
+    cursor: pointer;
   }
 
   &:active {
     background: var(--primary);
-  }
-
-  &:hover {
-    cursor: pointer;
   }
 
   &--default {

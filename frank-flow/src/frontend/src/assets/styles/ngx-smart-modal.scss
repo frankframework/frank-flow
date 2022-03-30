@@ -3,7 +3,7 @@
 
 .nsm-dialog {
   max-width: fit-content;
-  min-width: 400px;
+  min-width: 40vw;
 
   .nsm-content {
     background-color: var(--bg-color);
@@ -13,11 +13,11 @@
     padding: 1em;
     border-radius: 10px;
     overflow: auto;
+    width: 40vw;
 
     .nsm-body {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr 3fr;
 
       h1 {
         word-wrap: anywhere;
@@ -34,6 +34,52 @@
         display: flex;
         justify-content: end;
         gap: 16px;
+        background-color: var(--bg-color);
+      }
+
+      button {
+        background-color: var(--bg-color);
+      }
+
+      .header {
+        grid-column: span 2;
+
+        h2 {
+          margin: 0;
+          margin-bottom: 0.5rem;
+        }
+      }
+
+      .sidebar {
+        grid-column-start: 1;
+
+        h3 {
+          color: var(--border-color);
+          cursor: pointer;
+
+          &:hover {
+            color: var(--text-color);
+          }
+
+          &.active {
+            color: var(--text-color);
+          }
+        }
+      }
+
+      .content {
+        grid-column-start: 2;
+
+        &-section {
+          padding: 1em;
+          background: var(--bg-color-muted);
+          border-radius: 10px;
+          box-shadow: var(--shadow-lowest);
+
+          &:not(:last-child) {
+            margin-bottom: 16px;
+          }
+        }
       }
     }
 
