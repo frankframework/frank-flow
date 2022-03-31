@@ -93,19 +93,15 @@
         </div>
       </ng-container>
     </div>
-    <div class="content-section">
-      <div *ngIf="availableAttributes.length > 0" class="input-row">
+    <div class="content-section" *ngIf="shownAvailableAttributes.length > 0">
+      <div class="input-row">
         <label for="selectAttribute">Add a new attribute:</label>
         <select [(ngModel)]="selectedAttribute" id="selectAttribute" required>
           <option [ngValue]="undefined" disabled hidden selected>
             Choose an attribute...
           </option>
           <option
-            *ngFor="let availableAttribute of availableAttributes"
-            [hidden]="
-              attributeIsUsed(availableAttribute?.name) ||
-              availableAttribute?.deprecated
-            "
+            *ngFor="let availableAttribute of shownAvailableAttributes"
             [ngValue]="availableAttribute"
           >
             {{ availableAttribute?.name }}
