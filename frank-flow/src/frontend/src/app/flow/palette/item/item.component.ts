@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPuzzlePiece } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-item',
@@ -7,7 +7,7 @@ import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./item.component.scss'],
 })
 export class ItemComponent {
-  cloud = faCloudDownloadAlt;
+  puzzlePiece = faPuzzlePiece;
 
   @Input() color!: string;
   @Input() name!: string;
