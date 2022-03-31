@@ -1,3 +1,31 @@
+# [2.15.0](https://github.com/ibissource/frank-flow/compare/v2.14.0...v2.15.0) (2022-03-31)
+
+
+### ✨ Features
+
+* change cloud to puzzle piece in palette items ([abe521d](https://github.com/ibissource/frank-flow/commit/abe521dcacb50f319ba58a340573a9fc42c25d7a))
+
+
+### 🐛 Bug Fixes
+
+* add trash icon to (nested) node options ([d0e2c7b](https://github.com/ibissource/frank-flow/commit/d0e2c7bd4abe254c918513549a05e22e98c9b701))
+* disable available attributes select if none vailable ([0b00a59](https://github.com/ibissource/frank-flow/commit/0b00a59c438db389e54a152681695e607f705d72))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([d3e7a66](https://github.com/ibissource/frank-flow/commit/d3e7a663fbba2043460134f1969ce1a4fb91fb65))
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([08e9f60](https://github.com/ibissource/frank-flow/commit/08e9f6028a3273da0b8cae8f780e6fed15e57fb5))
+* **deps-dev:** bump [@types](https://github.com/types)/jasmine in /frank-flow/src/frontend ([8f27a46](https://github.com/ibissource/frank-flow/commit/8f27a46a6b993dff7ab09574e60b66df4ec7b48f))
+* **deps-dev:** bump karma-jasmine in /frank-flow/src/frontend ([f18fc88](https://github.com/ibissource/frank-flow/commit/f18fc88891b7878c526e4f91e8adcfce93d12274))
+* **deps:** bump log4j to version 2.17.2 ([3cc7939](https://github.com/ibissource/frank-flow/commit/3cc793964aef46f9f5aec876fc33dcc579cd1c49))
+* **deps:** update spring to 5.3.18 and cxf to 3.4.6 ([4933267](https://github.com/ibissource/frank-flow/commit/49332676d1e411dbe5d1e27ea6257abe7f3f4fe8))
+
+
+### 📦 Code Refactoring
+
+* move observer from constructor to oninit and add unsubscribe ([b9f09bb](https://github.com/ibissource/frank-flow/commit/b9f09bbff171085d9b9723b08d189ab6da1a5024))
+
 # [2.14.0](https://github.com/ibissource/frank-flow/compare/v2.13.0...v2.14.0) (2022-03-29)
 
 
