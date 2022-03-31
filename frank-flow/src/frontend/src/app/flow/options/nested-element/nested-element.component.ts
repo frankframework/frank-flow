@@ -9,6 +9,8 @@ import { FlowStructureService } from '../../../shared/services/flow-structure.se
 import { FlowNodeAttributes } from '../../../shared/models/flow-node-attributes.model';
 import { FlowNodeAttributeOptions } from '../../../shared/models/flow-node-attribute-options.model';
 import { environment } from '../../../../environments/environment';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-nested-element',
@@ -49,12 +51,14 @@ export class NestedElementComponent implements OnInit, OnDestroy {
   public selectedNestedElement!: string;
 
   constructor(
+    private library: FaIconLibrary,
     private frankDocumentService: FrankDocumentService,
     private currentFileService: CurrentFileService,
     private flowStructureService: FlowStructureService
   ) {}
 
   ngOnInit(): void {
+    this.library.addIcons(faTrash);
     this.getFrankDoc();
     this.getCurrentFile();
     this.getAttributesOnElement();

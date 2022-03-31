@@ -11,6 +11,8 @@ import { File } from '../../shared/models/file.model';
 import { ChangedAttribute } from '../../shared/models/changed-attribute.model';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-options',
@@ -51,6 +53,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   private currentFileSubscription!: Subscription;
 
   constructor(
+    private library: FaIconLibrary,
     private ngxSmartModalService: NgxSmartModalService,
     private frankDocumentService: FrankDocumentService,
     private flowStructureService: FlowStructureService,
@@ -65,6 +68,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.library.addIcons(faTrash);
     this.getFrankDoc();
     this.getCurrentFile();
   }
