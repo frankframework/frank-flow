@@ -60,6 +60,13 @@ export class OptionsComponent implements OnInit, OnDestroy {
     private currentFileService: CurrentFileService
   ) {}
 
+  get shownAvailableAttributes() {
+    return this.availableAttributes?.filter(
+      (attribute) =>
+        !(this.attributeIsUsed(attribute?.name) || attribute?.deprecated)
+    );
+  }
+
   ngOnInit(): void {
     this.library.addIcons(faTrash);
     this.getFrankDoc();
