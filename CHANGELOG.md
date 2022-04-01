@@ -1,3 +1,10 @@
+## [2.15.1](https://github.com/ibissource/frank-flow/compare/v2.15.0...v2.15.1) (2022-04-01)
+
+
+### 🐛 Bug Fixes
+
+* error messaage about uppercase letter in type now contains type name ([67aa511](https://github.com/ibissource/frank-flow/commit/67aa5116feef797e1871e8cb70adbf3a18489fdd))
+
 # [2.15.0](https://github.com/ibissource/frank-flow/compare/v2.14.0...v2.15.0) (2022-03-31)
 
 
