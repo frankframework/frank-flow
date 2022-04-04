@@ -177,13 +177,23 @@
   resolved "https://registry.yarnpkg.com/@angular-eslint/bundled-angular-compiler/-/bundled-angular-compiler-13.2.0.tgz#c6d4d3655a5e438e76bd41d2694e905183324535"
   integrity sha512-ZA9JPERpeSo+G/bmp8GS/WjBbYkPDVzN6IINHz9SVdv//LWE58yymFFjRabHJx46iAEOe8P0CoKduuJWtEvNrQ==
 
-"@angular-eslint/eslint-plugin-template@13.1.0", "@angular-eslint/eslint-plugin-template@^13.1.0":
+"@angular-eslint/eslint-plugin-template@13.1.0":
   version "13.1.0"
   resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin-template/-/eslint-plugin-template-13.1.0.tgz#b5b8cc839c5c32d5bd55ba47bb58a80c0c4c4c42"
   integrity sha512-ceZAMjufE58aduOW/UwjrbCRWocYC0zOEJ2jUkPt6jlL8yzc+SC6UitO0VmMgUsCizHueav5/3gKy05xqwk/CA==
   dependencies:
     "@angular-eslint/bundled-angular-compiler" "13.1.0"
     "@typescript-eslint/experimental-utils" "5.11.0"
+    aria-query "^4.2.2"
+    axobject-query "^2.2.0"
+
+"@angular-eslint/eslint-plugin-template@^13.2.0":
+  version "13.2.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin-template/-/eslint-plugin-template-13.2.0.tgz#4466e15bc9df61258a35d130e879d51a5107b9a6"
+  integrity sha512-Ej9bNGbpf8oaQGglPVWAQkBSIHhQv0FeJ/vVnB2fhHUoK9BbkGUYpjAFSSRlnMhl6ktPWKCX3yJiW+F4uIUTIw==
+  dependencies:
+    "@angular-eslint/bundled-angular-compiler" "13.2.0"
+    "@typescript-eslint/experimental-utils" "5.17.0"
     aria-query "^4.2.2"
     axobject-query "^2.2.0"
 
@@ -2268,6 +2278,18 @@
     "@typescript-eslint/scope-manager" "5.17.0"
     "@typescript-eslint/types" "5.17.0"
     "@typescript-eslint/typescript-estree" "5.17.0"
+    eslint-scope "^5.1.1"
+    eslint-utils "^3.0.0"
+
+"@typescript-eslint/utils@5.18.0":
+  version "5.18.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/utils/-/utils-5.18.0.tgz#27fc84cf95c1a96def0aae31684cb43a37e76855"
+  integrity sha512-+hFGWUMMri7OFY26TsOlGa+zgjEy1ssEipxpLjtl4wSll8zy85x0GrUSju/FHdKfVorZPYJLkF3I4XPtnCTewA==
+  dependencies:
+    "@types/json-schema" "^7.0.9"
+    "@typescript-eslint/scope-manager" "5.18.0"
+    "@typescript-eslint/types" "5.18.0"
+    "@typescript-eslint/typescript-estree" "5.18.0"
     eslint-scope "^5.1.1"
     eslint-utils "^3.0.0"
 
