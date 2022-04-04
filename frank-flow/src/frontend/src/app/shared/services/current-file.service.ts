@@ -47,7 +47,6 @@ export class CurrentFileService {
 
   initializeXmlToFlowStructureWorkerEventListener(): void {
     this.xmlToFlowStructureWorker.addEventListener('message', ({ data }) => {
-      this.clearErrorToasts();
       if (data) {
         if (this.parsingErrorsFound(data)) {
           this.showParsingErrors(data.errors);
@@ -206,6 +205,7 @@ export class CurrentFileService {
     this.currentFile = file;
     this.sessionService.setSessionFile(file);
     this.determineIfFileIsAConfiguration(file);
+    this.clearErrorToasts();
 
     if (file.type === FileType.CONFIGURATION) {
       this.xmlToFlowStructureWorker.postMessage(file);
