@@ -27,13 +27,12 @@ export class FlowNamespaceService {
   }
 
   handleNameSpace() {
-    if (this.checkNameSpace()) {
-      return;
+    if (!this.namespacePresent()) {
+      this.setNameSpace();
     }
-    this.setNameSpace();
   }
 
-  checkNameSpace(): boolean {
+  namespacePresent(): boolean {
     return !!this.currentFile.flowStructure?.configuration?.attributes[
       'xmlns:flow'
     ];
