@@ -497,9 +497,9 @@ export class FlowStructureService {
       const flowSetting = { name, value };
 
       if (this.attributeListIsEmpty(configuration.attributes)) {
-        this.createFirstAttribute(flowSetting, configuration, true);
+        this.createFirstAttribute(flowSetting, configuration);
       } else {
-        this.editSingleAttribute(flowSetting, configuration.attributes, true);
+        this.editSingleAttribute(flowSetting, configuration.attributes);
       }
     }
   }

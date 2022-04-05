@@ -255,12 +255,12 @@ export class NodeComponent implements AfterViewInit {
   }
 
   handleDragStop(event: any): void {
+    this.flowNamespaceService.handleNameSpace();
     this.flowStructureService.editNodePositions({
       nodeId: event.el.id,
       xPos: event.pos[0],
       yPos: event.pos[1],
     });
-    this.flowNamespaceService.handleNameSpace();
   }
 
   nodeHasClass(event: any, className: string) {
