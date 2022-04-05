@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { NodeService } from '../../flow/node/node.service';
 import { Node } from '../../flow/node/nodes/node.model';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LayoutService {
-  private nodesSubject = new Subject<Map<string, Node>>();
+  private nodesSubject = new BehaviorSubject<Map<string, Node>>(new Map());
   public nodesObservable = this.nodesSubject.asObservable();
   private readonly LEFT_MARGIN = 100;
   private readonly TOP_MARGIN = 100;
@@ -19,19 +19,26 @@ export class LayoutService {
 
   createLayout(nodeMap: Map<string, Node>): void {
     this.rows.clear();
-    for (const node of nodeMap.values()) {
-      if (node?.getTop() === 0 && node.getLeft() === 0) {
-        const [row, column] = this.getRowAndColumn(node.getType());
-        node?.setLeft(
-          this.NODE_WIDTH * (column - 1) + this.LEFT_MARGIN * column
-        );
-        node?.setTop(this.NODE_HEIGHT * (row - 1) + this.TOP_MARGIN * row);
-      }
-      if (node) {
-        this.nodeService.addDynamicNode(node);
-      }
-    }
+    this.addNodesToCanvas(nodeMap);
     this.nodesSubject.next(nodeMap);
+  }
+
+  addNodesToCanvas(nodeMap: Map<string, Node>): void {
+    for (const node of nodeMap.values()) {
+      this.handlePositions(node);
+      this.nodeService.addDynamicNode(node);
+    }
+  }
+
+  handlePositions(node: Node): void {
+    const [row, column] = this.getRowAndColumn(node.getType());
+    if (this.nodeNeedsPositions(node)) {
+      const cachedLocations = this.getCachedLocations(node);
+      const [left, top] =
+        cachedLocations ?? this.calculatePositions(row, column);
+      node.setLeft(left);
+      node.setTop(top);
+    }
   }
 
   private getRowAndColumn(type: string) {
@@ -51,9 +58,26 @@ export class LayoutService {
     return [row, column];
   }
 
+  nodeNeedsPositions(node: Node): boolean {
+    return !node.getLeft() && !node.getTop();
+  }
+
   getNextRow(type: string) {
     const row = (this.rows.get(type) ?? 0) + 1;
     this.rows.set(type, row);
     return row;
+  }
+
+  getCachedLocations(node: Node): [number, number] | undefined {
+    const x = this.nodesSubject.value.get(node.getId())?.getLeft();
+    const y = this.nodesSubject.value.get(node.getId())?.getTop();
+
+    return x && y ? [x, y] : undefined;
+  }
+
+  calculatePositions(row: number, column: number) {
+    const left = this.NODE_WIDTH * (column - 1) + this.LEFT_MARGIN * column;
+    const top = this.NODE_HEIGHT * (row - 1) + this.TOP_MARGIN * row;
+    return [left, top];
   }
 }
