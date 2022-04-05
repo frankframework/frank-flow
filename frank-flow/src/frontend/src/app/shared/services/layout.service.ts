@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 export class LayoutService {
   private nodesSubject = new Subject<Map<string, Node>>();
   public nodesObservable = this.nodesSubject.asObservable();
-  private readonly LEFT_MARGIN = 150;
+  private readonly LEFT_MARGIN = 100;
   private readonly TOP_MARGIN = 100;
   private readonly NODE_HEIGHT = 100;
   private readonly NODE_WIDTH = 200;
@@ -35,26 +35,23 @@ export class LayoutService {
   }
 
   private getRowAndColumn(type: string) {
-    let row,
-      column = 0;
+    let row: number;
+    let column: number;
 
     if (/Receiver/g.test(type)) {
-      row = this.getAndAddRow('receiver');
+      row = this.getNextRow('receiver');
       column = 1;
     } else if (type === 'Exit' || type === 'Exits') {
-      row = this.getAndAddRow('exit');
-      column = 4;
-    } else if (/Sender/g.test(type)) {
-      row = this.getAndAddRow('sender');
+      row = this.getNextRow('exit');
       column = 3;
     } else {
-      row = this.getAndAddRow('pipe');
+      row = this.getNextRow('pipe');
       column = 2;
     }
     return [row, column];
   }
 
-  getAndAddRow(type: string) {
+  getNextRow(type: string) {
     const row = (this.rows.get(type) ?? 0) + 1;
     this.rows.set(type, row);
     return row;
