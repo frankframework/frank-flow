@@ -1,3 +1,35 @@
+# [2.16.0](https://github.com/ibissource/frank-flow/compare/v2.15.1...v2.16.0) (2022-04-06)
+
+
+### ✨ Features
+
+* add senders to the same row as the pipes in the layout ([1153019](https://github.com/ibissource/frank-flow/commit/1153019443a39c82acedc6a2b94a74b076135e19))
+* keep free space when node with generated position has been moved ([2cffde0](https://github.com/ibissource/frank-flow/commit/2cffde007d4e3ee630d4e1e51c7ae72d0e9737d1))
+
+
+### 🐛 Bug Fixes
+
+* active can now be filled with a property ([69551af](https://github.com/ibissource/frank-flow/commit/69551af49641ef462cc935aa05f6cb3fe26ab631))
+* implicit first pipe now works with receivers ([25076a1](https://github.com/ibissource/frank-flow/commit/25076a1dcc1139b9d2448ef420b8c0e97a35bd57))
+* namespace gets added before flow attributes ([c714842](https://github.com/ibissource/frank-flow/commit/c71484291cfcd973be938e195d2fd07217888b81))
+* remove errors when swithcing file ([e6c072d](https://github.com/ibissource/frank-flow/commit/e6c072dbd763ebf438ec00bf9ea75644b2ac9931))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-eslint](https://github.com/angular-eslint)/builder ([be28e1b](https://github.com/ibissource/frank-flow/commit/be28e1b357bc55c0a8ed68afab98e2cad45a05fe))
+* **deps-dev:** bump [@angular-eslint](https://github.com/angular-eslint)/eslint-plugin ([62ec9fe](https://github.com/ibissource/frank-flow/commit/62ec9fe187f1d8abf0a0932a98f43d19c272b795))
+* **deps-dev:** bump [@angular-eslint](https://github.com/angular-eslint)/eslint-plugin-template ([11c5ea9](https://github.com/ibissource/frank-flow/commit/11c5ea984a516faac73ecd377a2f8e9fb61fb18a))
+* **deps-dev:** bump [@angular-eslint](https://github.com/angular-eslint)/schematics ([836b59d](https://github.com/ibissource/frank-flow/commit/836b59d22c7a3f1131063d6ab864abb6732a8657))
+* **deps-dev:** bump [@angular-eslint](https://github.com/angular-eslint)/template-parser ([65a45de](https://github.com/ibissource/frank-flow/commit/65a45de37cacef7b9b27ce7b7b73a78106d725c7))
+* **deps-dev:** bump [@types](https://github.com/types)/jasmine in /frank-flow/src/frontend ([80d62c1](https://github.com/ibissource/frank-flow/commit/80d62c10964b1048cf2bad9034d946f1c23f7ddb))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([f34b1fd](https://github.com/ibissource/frank-flow/commit/f34b1fd7295e871d1ea333b98f27f80e037ff083))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([6d558b5](https://github.com/ibissource/frank-flow/commit/6d558b5fc0cc96cf665bd4a41889a433eca3142f))
+* **deps-dev:** bump eslint-plugin-unicorn in /frank-flow/src/frontend ([7d05303](https://github.com/ibissource/frank-flow/commit/7d053030162878fecebde9243693163fc85a6d07))
+* **deps-dev:** bump prettier in /frank-flow/src/frontend ([f787e14](https://github.com/ibissource/frank-flow/commit/f787e14c492e04e6f55a1385382f655db114c085))
+* **deps:** bump ngx-toastr in /frank-flow/src/frontend ([b95752d](https://github.com/ibissource/frank-flow/commit/b95752dcca1329f7d94511c5a9f9b8e38d0257f7))
+* **deps:** bump tomcat.version from 9.0.60 to 9.0.62 ([2b616ee](https://github.com/ibissource/frank-flow/commit/2b616ee0f42829ea4133aa0839813c86afa83ca3))
+
 ## [2.15.1](https://github.com/ibissource/frank-flow/compare/v2.15.0...v2.15.1) (2022-04-01)
 
 
