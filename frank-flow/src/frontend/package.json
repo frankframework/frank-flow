@@ -30,7 +30,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
-    "cytoscape": "^3.21.0",
+    "cytoscape": "^3.21.1",
     "jqwidgets-ng": "^13.2.0",
     "jsplumb": "^2.15.6",
     "monaco-editor": "^0.33.0",
