@@ -1,3 +1,14 @@
+## [2.16.1](https://github.com/ibissource/frank-flow/compare/v2.16.0...v2.16.1) (2022-04-12)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([a2010a8](https://github.com/ibissource/frank-flow/commit/a2010a83308069fd27c9ae14d3e0787b80634703))
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([7128008](https://github.com/ibissource/frank-flow/commit/7128008c24866c66001a85199f897d61ccdfcb17))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([1d97939](https://github.com/ibissource/frank-flow/commit/1d97939c460db9996fc68bf5144483f33095f06a))
+* **deps-dev:** bump eslint in /frank-flow/src/frontend ([37af978](https://github.com/ibissource/frank-flow/commit/37af97808989b92211a5826579682a497ff6d8ea))
+* **deps:** bump cytoscape in /frank-flow/src/frontend ([fc28e56](https://github.com/ibissource/frank-flow/commit/fc28e5683ec95d0ab65bde171b16b8959eda4f59))
+
 # [2.16.0](https://github.com/ibissource/frank-flow/compare/v2.15.1...v2.16.0) (2022-04-06)
 
 
