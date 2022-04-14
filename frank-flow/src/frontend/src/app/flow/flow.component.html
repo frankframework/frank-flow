@@ -26,9 +26,34 @@
     <span>The file is loading in. Please wait.</span>
   </div>
   <div
-    *ngIf="!fileIsConfiguration && !fileIsLoading && !fileIsEmpty"
+    *ngIf="
+      !fileIsConfiguration &&
+      !fileIsLoading &&
+      !fileIsEmpty &&
+      !fileIsOldSyntaxConfiguration
+    "
     class="flow-container__no-canvas-message"
   >
     <span>The selected file does not contain a flow.</span>
   </div>
+  <ng-container
+    *ngIf="
+      !fileIsConfiguration &&
+      !fileIsLoading &&
+      !fileIsEmpty &&
+      fileIsOldSyntaxConfiguration
+    "
+  >
+    <div class="flow-container__no-canvas-message">
+      <span
+        >Your configuration appears to use the old syntax. Would you like to
+        convert it?</span
+      >
+    </div>
+    <div class="flow-container__no-canvas-message">
+      <app-button (click)="convertConfiguration()"
+        >Convert Configuration</app-button
+      >
+    </div>
+  </ng-container>
 </ng-template>
