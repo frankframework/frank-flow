@@ -255,9 +255,6 @@ export class CurrentFileService {
       case FileType.CONFIGURATION:
         this.xmlToFlowStructureWorker.postMessage(file);
         break;
-      case FileType.OLD_SYNTAX_CONFIGURATION:
-        this.convertConfigurationSyntaxWorker.postMessage(file);
-        break;
       default:
         this.currentFileSubject.next(file);
         break;
@@ -287,9 +284,8 @@ export class CurrentFileService {
     const containsConfiguration =
       file.xml?.includes('<configuration') &&
       !file.xml?.includes('<!DOCTYPE configuration');
-    const containsModule = file.xml?.includes('<module') as boolean;
-    const containsAdapter = file.xml?.includes('<adapter') as boolean;
-    return containsConfiguration || containsModule || containsAdapter;
+    const containsModule = file.xml?.includes('className') as boolean;
+    return containsConfiguration || containsModule;
   }
 
   switchToFileTreeItem(fileTreeItem: File): void {
@@ -380,13 +376,13 @@ export class CurrentFileService {
   deleteFileOrFolder(): Promise<Response> {
     return this.currentDirectory.configuration
       ? this.fileService.removeDirectoryForConfiguration(
-          this.currentDirectory.configuration,
-          this.currentDirectory.path
-        )
+        this.currentDirectory.configuration,
+        this.currentDirectory.path
+      )
       : this.fileService.removeFileForConfiguration(
-          this.currentFile.configuration,
-          this.currentFile.path
-        );
+        this.currentFile.configuration,
+        this.currentFile.path
+      );
   }
 
   refreshFileTree(): void {
@@ -397,5 +393,11 @@ export class CurrentFileService {
     this.determineIfFileIsAConfiguration(file);
     this.updateCurrentFile(file);
     this.currentFileSubject.next(file);
+  }
+
+  convertOldConfigurationSyntax(): void {
+    if (this.currentFile.type === FileType.OLD_SYNTAX_CONFIGURATION) {
+      this.convertConfigurationSyntaxWorker.postMessage(this.currentFile);
+    }
   }
 }
