@@ -15,13 +15,13 @@ const TRAILING_QUOTE = 1;
 const parser = new SaxesParser();
 
 let errors: string[] = [];
+let originalFile: File;
 let xml: string;
 let newXml: string;
 
 let frankDocument: { elements: any; types: any };
-let originalFile: File;
 
-const unclosedElements: string[] = [];
+let unclosedElements: string[] = [];
 let newXmlOffset = 0;
 let tagStartIndex: number;
 let classNameAttributePosition: number;
@@ -33,6 +33,7 @@ addEventListener('message', ({ data }) => {
     return;
   }
   if (typeof data.xml === 'string') {
+    resetAllPreviousData();
     originalFile = data;
     errors = [];
     xml = data.xml;
@@ -40,6 +41,15 @@ addEventListener('message', ({ data }) => {
     parserWrite(data.xml);
   }
 });
+
+const resetAllPreviousData = () => {
+  unclosedElements = [];
+  newXmlOffset = 0;
+  tagStartIndex = 0;
+  classNameAttributePosition = 0;
+  classNameAttributePosition = 0;
+};
+
 const parserWrite = (xml: string) => {
   try {
     parser.write(xml).close();
@@ -58,6 +68,7 @@ parser.on('end', () => {
     ...originalFile,
     xml: newXml,
     saved: false,
+    firstLoad: true,
     errors: errors,
   } as File);
 });
