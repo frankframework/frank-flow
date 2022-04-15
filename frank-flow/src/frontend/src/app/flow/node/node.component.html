@@ -10,11 +10,11 @@
   </div>
   <div class="node__badges">
     <div
-      [title]="senders[0]?.name"
+      [title]="senders[0]?.type"
       *ngIf="senders.length === 1; else senderCount"
       class="node__sender"
     >
-      <fa-icon size="xs" [icon]="paperPlane"></fa-icon> {{ senders[0]?.name }}
+      <fa-icon size="xs" [icon]="paperPlane"></fa-icon> {{ senders[0]?.type }}
     </div>
     <ng-template #senderCount>
       <div
