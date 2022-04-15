@@ -8,6 +8,7 @@
   display: grid;
   background-color: var(--bg-color);
   color: var(--text-color);
+  user-select: none;
 
   &--primary {
     border-top: 2px solid var(--primary);
