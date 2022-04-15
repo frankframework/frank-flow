@@ -50,6 +50,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
 
   public fileIsLoading!: boolean;
   public fileIsConfiguration!: boolean;
+  public fileIsOldSyntaxConfiguration!: boolean;
   public fileIsEmpty!: boolean;
   public panZoomConfig = this.panZoomService.panZoomConfig;
 
@@ -123,6 +124,8 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
     this.fileIsLoading = this.currentFile?.xml === undefined;
     this.fileIsConfiguration =
       this.currentFile?.type === FileType.CONFIGURATION;
+    this.fileIsOldSyntaxConfiguration =
+      this.currentFile?.type === FileType.OLD_SYNTAX_CONFIGURATION;
     this.fileIsEmpty = this.currentFile?.type === FileType.EMPTY;
   }
 
@@ -251,5 +254,9 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
 
   comparePositions(lastPosition: number, currentPosition: number): number {
     return currentPosition > lastPosition ? currentPosition : lastPosition;
+  }
+
+  convertConfiguration() {
+    this.currentFileService.convertOldConfigurationSyntax();
   }
 }
