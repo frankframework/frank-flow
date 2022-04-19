@@ -1,7 +1,7 @@
 :host {
   position: relative;
   display: grid;
-  grid-template-columns: 256px auto;
+  grid-template-columns: 1fr;
   height: 64px;
   box-shadow: var(--shadow-medium);
   z-index: 20;
@@ -20,27 +20,26 @@
   background: var(--dark-cyan);
   width: 100%;
   height: 64px;
-
+  display: grid;
+  grid-template-columns: 256px auto 1fr auto;
   justify-content: space-between;
   align-items: center;
-  padding: 0 16px;
+  padding: 0;
   overflow: hidden;
-  display: grid;
   gap: 16px;
-  grid-template-columns: 1fr auto;
+  flex-grow: 1;
 
-  &__actions {
-    display: grid;
-    grid-auto-flow: column;
+  &--actions {
+    gap: 15px;
+    display: flex;
+  }
+
+  &--right {
+    display: flex;
+    justify-content: space-between;
     gap: 16px;
-    grid-template-columns: 34px 34px 34px 34px 1fr;
-
-    &--right {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      width: 224px;
-    }
+    width: 224px;
+    padding-right: 25px;
   }
 
   .current-file-title {

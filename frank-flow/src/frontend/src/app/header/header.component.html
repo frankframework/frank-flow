@@ -1,8 +1,8 @@
-<div class="logo">
-  <img src="./assets/images/frank-flow-logo.svg" />
-</div>
 <div class="header">
-  <div class="header__actions">
+  <div class="logo">
+    <img src="./assets/images/frank-flow-logo.svg" />
+  </div>
+  <div class="header--actions">
     <app-button
       (click)="openAddDialog()"
       color="dark"
@@ -26,18 +26,18 @@
       <fa-icon icon="pen"></fa-icon>
     </app-button>
     <app-button
-      *ngIf="currentFile?.type === fileType.CONFIGURATION"
+      [hidden]="!(currentFile?.type === fileType.CONFIGURATION)"
       (click)="openConfigurationSettings()"
       color="dark"
       title="Modify flow settings"
     >
       <fa-icon icon="cogs"></fa-icon>
     </app-button>
-    <div class="current-file-title" title="{{ currentFileTitle() }}">
-      {{ currentFileTitle() }}
-    </div>
   </div>
-  <div class="header__actions--right">
+  <div class="current-file-title" title="{{ currentFileTitle() }}">
+    {{ currentFileTitle() }}
+  </div>
+  <div class="header--right">
     <app-modes></app-modes>
     <app-button
       (click)="openSettings()"

@@ -10,252 +10,254 @@
       <p>Hover over the labels for some more information.</p>
     </div>
   </div>
-  <div class="sidebar">
-    <h3
-      (click)="setCurrentPage('appearance')"
-      [class.active]="currentSettingsTab === 'appearance'"
-    >
-      Appearance
-    </h3>
-    <h3
-      (click)="setCurrentPage('explorer')"
-      [class.active]="currentSettingsTab === 'explorer'"
-    >
-      Explorer
-    </h3>
-    <h3
-      (click)="setCurrentPage('flow')"
-      [class.active]="currentSettingsTab === 'flow'"
-    >
-      Flow
-    </h3>
-    <h3
-      (click)="setCurrentPage('assistance')"
-      [class.active]="currentSettingsTab === 'assistance'"
-    >
-      Assistance
-    </h3>
-  </div>
-  <div>
-    <div class="content" *ngIf="currentSettingsTab === 'appearance'">
-      <h2>Appearance</h2>
-      <div class="content-section">
-        <div class="input-row">
-          <label title="A dark theme which can be easier on the eyes"
-            >Enable dark mode</label
-          >
-          <app-toggle
-            [(state)]="settings.darkMode"
-            (stateChange)="setSettings()"
-          ></app-toggle>
-        </div>
-        <div class="input-row">
-          <label
-            for="edit-mode"
-            title="The edit mode in which the application will start"
-            >Default edit mode</label
-          >
-          <select
-            [(ngModel)]="settings.defaultMode"
-            (ngModelChange)="setSettings()"
-            id="edit-mode"
-          >
-            <option [value]="modeType.flowMode" title="Graphical editor">
-              Flow
-            </option>
-            <option
-              [value]="modeType.hybridMode"
-              title="Combination of Flow and Editor"
-            >
-              Hybrid
-            </option>
-            <option [value]="modeType.editorMode" title="(XML) Code editor">
-              Editor
-            </option>
-          </select>
-        </div>
-        <div class="input-row">
-          <label
-            for="edit-mode"
-            title="The application will start with the last used edit mode"
-            >Use last edit mode</label
-          >
-          <app-toggle
-            [(state)]="settings.useLastMode"
-            (stateChange)="setSettings()"
-          ></app-toggle>
-        </div>
-        <!--    // TODO: This was one of the first features implemented for settings, but it never got used. I'm making a feature to implement this in more places.-->
-        <!--    <div class="input-row">-->
-        <!--      <label>Show confirmation popups</label>-->
-        <!--      <app-toggle-->
-        <!--        [(state)]="settings.showPopups"-->
-        <!--        (stateChange)="setSettings()"-->
-        <!--      ></app-toggle>-->
-        <!--    </div>-->
-      </div>
+  <div class="sidebarModel-container">
+    <div class="sidebar">
+      <h3
+        (click)="setCurrentPage('appearance')"
+        [class.active]="currentSettingsTab === 'appearance'"
+      >
+        Appearance
+      </h3>
+      <h3
+        (click)="setCurrentPage('explorer')"
+        [class.active]="currentSettingsTab === 'explorer'"
+      >
+        Explorer
+      </h3>
+      <h3
+        (click)="setCurrentPage('flow')"
+        [class.active]="currentSettingsTab === 'flow'"
+      >
+        Flow
+      </h3>
+      <h3
+        (click)="setCurrentPage('assistance')"
+        [class.active]="currentSettingsTab === 'assistance'"
+      >
+        Assistance
+      </h3>
     </div>
-    <div class="content" *ngIf="currentSettingsTab === 'explorer'">
-      <h2>Explorer</h2>
-      <div class="content-section">
-        <div class="input-row">
-          <label
-            title="The Explorer shows all the configurations (and files) in the Frank"
-            >Show Explorer</label
-          >
-          <app-toggle
-            [(state)]="settings.showExplorer"
-            (stateChange)="setSettings()"
-          ></app-toggle>
-        </div>
-        <div class="input-row">
-          <label
-            for="switch-without-saving-options"
-            title="Choose an option for what you want to do with the unsaved changes"
-          >
-            Default option for switching files with unsaved changes
-          </label>
-          <select
-            [(ngModel)]="settings.switchWithoutSaving"
-            (ngModelChange)="setSettings()"
-            id="switch-without-saving-options"
-          >
-            <option
-              [value]="switchWithoutSavingOptions.ask"
-              title="The user will be asked to save or discard the changes"
+    <div>
+      <div class="content" *ngIf="currentSettingsTab === 'appearance'">
+        <h2>Appearance</h2>
+        <div class="content-section">
+          <div class="input-row">
+            <label title="A dark theme which can be easier on the eyes"
+              >Enable dark mode</label
             >
-              Ask me
-            </option>
-            <option
-              [value]="switchWithoutSavingOptions.save"
-              title="The changes will be saved"
+            <app-toggle
+              [(state)]="settings.darkMode"
+              (stateChange)="setSettings()"
+            ></app-toggle>
+          </div>
+          <div class="input-row">
+            <label
+              for="edit-mode"
+              title="The edit mode in which the application will start"
+              >Default edit mode</label
             >
-              Save
-            </option>
-            <option
-              [value]="switchWithoutSavingOptions.discard"
-              title="The changes will be discarded"
+            <select
+              [(ngModel)]="settings.defaultMode"
+              (ngModelChange)="setSettings()"
+              id="edit-mode"
             >
-              Discard
-            </option>
-          </select>
-        </div>
-        <div class="input-row">
-          <label
-            title="A warning will appear if the tab is closed while changes are unsaved"
-            >Show warning for unsaved changes</label
-          >
-          <app-toggle
-            [(state)]="settings.showUnsavedChangesWarning"
-            (stateChange)="setSettings()"
-          ></app-toggle>
+              <option [value]="modeType.flowMode" title="Graphical editor">
+                Flow
+              </option>
+              <option
+                [value]="modeType.hybridMode"
+                title="Combination of Flow and Editor"
+              >
+                Hybrid
+              </option>
+              <option [value]="modeType.editorMode" title="(XML) Code editor">
+                Editor
+              </option>
+            </select>
+          </div>
+          <div class="input-row">
+            <label
+              for="edit-mode"
+              title="The application will start with the last used edit mode"
+              >Use last edit mode</label
+            >
+            <app-toggle
+              [(state)]="settings.useLastMode"
+              (stateChange)="setSettings()"
+            ></app-toggle>
+          </div>
+          <!--    // TODO: This was one of the first features implemented for settings, but it never got used. I'm making a feature to implement this in more places.-->
+          <!--    <div class="input-row">-->
+          <!--      <label>Show confirmation popups</label>-->
+          <!--      <app-toggle-->
+          <!--        [(state)]="settings.showPopups"-->
+          <!--        (stateChange)="setSettings()"-->
+          <!--      ></app-toggle>-->
+          <!--    </div>-->
         </div>
       </div>
-    </div>
-    <div class="content" *ngIf="currentSettingsTab === 'flow'">
-      <h2>Flow</h2>
-      <div class="content-section">
-        <div class="input-row">
-          <label
-            for="edit-mode"
-            title="Automatically snap a node to a defined grid for easy layout"
-            >Snap to grid</label
-          >
-          <select
-            [(ngModel)]="settings.gridSize"
-            (ngModelChange)="setSettings()"
-            id="grid-configuration"
-          >
-            <option [value]="gridSize.free">Don't snap, move freely</option>
-            <option [value]="gridSize.tenth">
-              Snap every tenth of a square
-            </option>
-            <option [value]="gridSize.quarter">
-              Snap every quarter of a square
-            </option>
-            <option [value]="gridSize.half">
-              Snap on a half or whole square
-            </option>
-            <option [value]="gridSize.whole">Snap on a whole square</option>
-          </select>
-        </div>
-        <div class="input-row">
-          <label
-            for="edit-mode"
-            title="The style of the connections between nodes"
-            >Forward style</label
-          >
-          <select
-            [(ngModel)]="settings.forwardStyle"
-            (ngModelChange)="setSettings()"
-            id="connection-type"
-          >
-            <option [value]="forwardStyle.bezier" title="A curvy direct line">
-              Bezier
-            </option>
-            <option
-              [value]="forwardStyle.flowchart"
-              title="Straight lines with 90° bends, somewhat avoid nodes"
+      <div class="content" *ngIf="currentSettingsTab === 'explorer'">
+        <h2>Explorer</h2>
+        <div class="content-section">
+          <div class="input-row">
+            <label
+              title="The Explorer shows all the configurations (and files) in the Frank"
+              >Show Explorer</label
             >
-              Flowchart
-            </option>
-            <option
-              [value]="forwardStyle.straight"
-              title="A straight direct line, like in a network"
+            <app-toggle
+              [(state)]="settings.showExplorer"
+              (stateChange)="setSettings()"
+            ></app-toggle>
+          </div>
+          <div class="input-row">
+            <label
+              for="switch-without-saving-options"
+              title="Choose an option for what you want to do with the unsaved changes"
             >
-              Straight
-            </option>
-          </select>
-        </div>
-        <div class="input-row">
-          <label
-            for="edit-mode"
-            title="The direction will change the location of the anchor-points on the nodes"
-            >Flow direction</label
-          >
-          <select
-            [(ngModel)]="settings.direction"
-            (ngModelChange)="setSettings()"
-            id="forward-direction"
-          >
-            <option
-              [value]="flowDirection.vertical"
-              title="Anchor-points on the top and bottom"
+              Default option for switching files with unsaved changes
+            </label>
+            <select
+              [(ngModel)]="settings.switchWithoutSaving"
+              (ngModelChange)="setSettings()"
+              id="switch-without-saving-options"
             >
-              Vertical
-            </option>
-            <option
-              [value]="flowDirection.horizontal"
-              title="Anchor-points on the left and right"
+              <option
+                [value]="switchWithoutSavingOptions.ask"
+                title="The user will be asked to save or discard the changes"
+              >
+                Ask me
+              </option>
+              <option
+                [value]="switchWithoutSavingOptions.save"
+                title="The changes will be saved"
+              >
+                Save
+              </option>
+              <option
+                [value]="switchWithoutSavingOptions.discard"
+                title="The changes will be discarded"
+              >
+                Discard
+              </option>
+            </select>
+          </div>
+          <div class="input-row">
+            <label
+              title="A warning will appear if the tab is closed while changes are unsaved"
+              >Show warning for unsaved changes</label
             >
-              Horizontal
-            </option>
-          </select>
-        </div>
-        <div class="input-row">
-          <label
-            title="A configuration can contain settings which dictates how the flow should look, when enabled these settings will be ignored"
-            >Ignore settings defined in configuration</label
-          >
-          <app-toggle
-            [(state)]="settings.ignoreConfigurationSettings"
-            (stateChange)="setSettings()"
-          ></app-toggle>
+            <app-toggle
+              [(state)]="settings.showUnsavedChangesWarning"
+              (stateChange)="setSettings()"
+            ></app-toggle>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="content" *ngIf="currentSettingsTab === 'assistance'">
-      <h2>Assistance</h2>
-      <div class="content-section">
-        <div class="input-row">
-          <label
-            title="Automatically pan to the node in the Canvas when the cursor position is at the corresponding element in the Editor"
-            >Automatically pan to selected node</label
-          >
-          <app-toggle
-            [(state)]="settings.automaticPan"
-            (stateChange)="setSettings()"
-          ></app-toggle>
+      <div class="content" *ngIf="currentSettingsTab === 'flow'">
+        <h2>Flow</h2>
+        <div class="content-section">
+          <div class="input-row">
+            <label
+              for="edit-mode"
+              title="Automatically snap a node to a defined grid for easy layout"
+              >Snap to grid</label
+            >
+            <select
+              [(ngModel)]="settings.gridSize"
+              (ngModelChange)="setSettings()"
+              id="grid-configuration"
+            >
+              <option [value]="gridSize.free">Don't snap, move freely</option>
+              <option [value]="gridSize.tenth">
+                Snap every tenth of a square
+              </option>
+              <option [value]="gridSize.quarter">
+                Snap every quarter of a square
+              </option>
+              <option [value]="gridSize.half">
+                Snap on a half or whole square
+              </option>
+              <option [value]="gridSize.whole">Snap on a whole square</option>
+            </select>
+          </div>
+          <div class="input-row">
+            <label
+              for="edit-mode"
+              title="The style of the connections between nodes"
+              >Forward style</label
+            >
+            <select
+              [(ngModel)]="settings.forwardStyle"
+              (ngModelChange)="setSettings()"
+              id="connection-type"
+            >
+              <option [value]="forwardStyle.bezier" title="A curvy direct line">
+                Bezier
+              </option>
+              <option
+                [value]="forwardStyle.flowchart"
+                title="Straight lines with 90° bends, somewhat avoid nodes"
+              >
+                Flowchart
+              </option>
+              <option
+                [value]="forwardStyle.straight"
+                title="A straight direct line, like in a network"
+              >
+                Straight
+              </option>
+            </select>
+          </div>
+          <div class="input-row">
+            <label
+              for="edit-mode"
+              title="The direction will change the location of the anchor-points on the nodes"
+              >Flow direction</label
+            >
+            <select
+              [(ngModel)]="settings.direction"
+              (ngModelChange)="setSettings()"
+              id="forward-direction"
+            >
+              <option
+                [value]="flowDirection.vertical"
+                title="Anchor-points on the top and bottom"
+              >
+                Vertical
+              </option>
+              <option
+                [value]="flowDirection.horizontal"
+                title="Anchor-points on the left and right"
+              >
+                Horizontal
+              </option>
+            </select>
+          </div>
+          <div class="input-row">
+            <label
+              title="A configuration can contain settings which dictates how the flow should look, when enabled these settings will be ignored"
+              >Ignore settings defined in configuration</label
+            >
+            <app-toggle
+              [(state)]="settings.ignoreConfigurationSettings"
+              (stateChange)="setSettings()"
+            ></app-toggle>
+          </div>
+        </div>
+      </div>
+      <div class="content" *ngIf="currentSettingsTab === 'assistance'">
+        <h2>Assistance</h2>
+        <div class="content-section">
+          <div class="input-row">
+            <label
+              title="Automatically pan to the node in the Canvas when the cursor position is at the corresponding element in the Editor"
+              >Automatically pan to selected node</label
+            >
+            <app-toggle
+              [(state)]="settings.automaticPan"
+              (stateChange)="setSettings()"
+            ></app-toggle>
+          </div>
         </div>
       </div>
     </div>

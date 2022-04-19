@@ -1,3 +1,10 @@
 .editDialog ::ng-deep .nsm-content {
   width: 30vw;
+
+  .header {
+    width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
