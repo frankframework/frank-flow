@@ -12,6 +12,7 @@ input[type='text'] {
 
   &:hover {
     background-color: var(--border-color);
+    cursor: text;
   }
 
   &:focus {
@@ -32,6 +33,7 @@ select {
 
   &:hover {
     background-color: var(--border-color);
+    cursor: pointer;
   }
 
   &:focus-visible {
