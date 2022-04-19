@@ -1,3 +1,51 @@
+# [2.18.0](https://github.com/ibissource/frank-flow/compare/v2.17.0...v2.18.0) (2022-04-19)
+
+
+### ✨ Features
+
+* add the right cursor type to inputs ([7384343](https://github.com/ibissource/frank-flow/commit/7384343718c1c3865a3677c8b966b0b4361b798f))
+* change the styling of Settings modal ([56001d9](https://github.com/ibissource/frank-flow/commit/56001d9712d1a1f87e7ec7daa8178db65c46e693))
+* make pan to node work with receivers ([ca7d236](https://github.com/ibissource/frank-flow/commit/ca7d23693288dfa37bbc0db39033c1b46f1e39b1))
+
+
+### 🐛 Bug Fixes
+
+* buttons now don't overlap the input field in add modal ([f30e653](https://github.com/ibissource/frank-flow/commit/f30e653a49d96290b98660207dd3f45a4ac784aa))
+* change cursor to pointer while hovering over sidebar item ([b08b397](https://github.com/ibissource/frank-flow/commit/b08b397cdcc4c22503d9f64df53d01917623771a))
+* modify modal will now cut off long file names ([45492c2](https://github.com/ibissource/frank-flow/commit/45492c2fdeecc73a95dcb55092da3bc28fe15acc))
+* text in delete button now fits ([695494c](https://github.com/ibissource/frank-flow/commit/695494ca3d05c39fbec86cfaa5576fc7a76af8bb))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([cedee81](https://github.com/ibissource/frank-flow/commit/cedee815fcccfb57b78ea1ad5a2f5de4c66eacd8))
+* **deps-dev:** bump [@angular-eslint](https://github.com/angular-eslint)/schematics ([bdb281d](https://github.com/ibissource/frank-flow/commit/bdb281d08d32a7e1fa15acc4111b45eb56e98056))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([7ca3210](https://github.com/ibissource/frank-flow/commit/7ca3210b6cb22d0a9a2397d20221e05411534c73))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([84de202](https://github.com/ibissource/frank-flow/commit/84de20231fd0ababaaf9a2fdcf3c7e6bb67cf11f))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([ec368eb](https://github.com/ibissource/frank-flow/commit/ec368eb8fbf5aec917155ea3a2ef7d79f0e2de2e))
+* **deps:** bump ngx-toastr in /frank-flow/src/frontend ([0bc19df](https://github.com/ibissource/frank-flow/commit/0bc19dfdd00ef1558036e34f2d95493764bca831))
+
+
+### 📦 Code Refactoring
+
+* change header to be one grid and centered better ([3193d0c](https://github.com/ibissource/frank-flow/commit/3193d0c42b62a5c328f371e8898500b2173c44dd))
+* move modal with sidebar styles to its own class ([1d18d25](https://github.com/ibissource/frank-flow/commit/1d18d2510539b5f44f2e9951fd4b20527fad5852))
+
+
+### 📚 Documentation
+
+* add a demo video to the readme ([44522e6](https://github.com/ibissource/frank-flow/commit/44522e6a46e589cae41ffc636385aa10fce3d2a1))
+
+
+### ♻️ Chores
+
+* update kodiak to now update dependabot, it should do a repase itself ([cd02d62](https://github.com/ibissource/frank-flow/commit/cd02d621158f95e971fd399cfbc62c1bf5f26eb1))
+
+
+### 💎 Styles
+
+* add rule to allready existing hover ([d0d1232](https://github.com/ibissource/frank-flow/commit/d0d1232854e4c37e00a75450b3788357adaf7a01))
+
 # [2.17.0](https://github.com/ibissource/frank-flow/compare/v2.16.1...v2.17.0) (2022-04-18)
 
 

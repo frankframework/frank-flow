@@ -3,7 +3,7 @@
   (onAnyCloseEvent)="onAnyCloseEvent()"
   (onDataAdded)="onDataAdded()"
   (onOpen)="onOpen()"
-  class="optionsModal"
+  class="modal--sidebar"
   customClass="nsm-centered"
   identifier="optionsModal"
 >
@@ -136,10 +136,8 @@
     <h3>Other options</h3>
     <div class="content-section">
       <div class="input-row">
-        <label>Permanently delete this {{ structureNode?.type }}</label>
-        <app-button (click)="deleteNode()" [block]="true"
-          >Delete {{ structureNode?.name }}</app-button
-        >
+        <label>Delete this {{ structureNode?.type }}</label>
+        <app-button (click)="deleteNode()" [block]="true">Delete</app-button>
       </div>
     </div>
   </div>
