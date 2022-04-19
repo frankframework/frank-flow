@@ -35,6 +35,12 @@
   }
 }
 
+.sidebarModel-container {
+  .button {
+    background-color: var(--bg-color);
+  }
+}
+
 .selected {
   background: var(--primary);
 }
