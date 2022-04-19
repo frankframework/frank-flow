@@ -98,9 +98,7 @@ export class FlowStructureService {
     position: monaco.Position
   ): boolean {
     return (
-      node.line <= position.lineNumber &&
-      node.endLine >= position.lineNumber &&
-      node.type !== 'Receiver'
+      node.line <= position.lineNumber && node.endLine >= position.lineNumber
     );
   }
 
