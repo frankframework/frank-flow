@@ -6,7 +6,7 @@
   customClass="nsm-centered"
   identifier="addDialog"
 >
-  <div>
+  <div class="row">
     <h1>
       Add a new {{ isFolder ? 'folder' : 'file' }} to
       {{ currentDirectory?.configuration }}: {{ currentDirectory?.path }}
@@ -16,14 +16,16 @@
     <label> Do you want to create a folder? </label>
     <app-toggle [(state)]="isFolder"></app-toggle>
   </div>
-  <input
-    #inputElement
-    (keyup.enter)="add()"
-    [(ngModel)]="fileName"
-    [placeholder]="(isFolder ? 'Folder' : 'File') + ' name'"
-    type="text"
-  />
-  <div class="button-actions">
+  <div class="row">
+    <input
+      #inputElement
+      (keyup.enter)="add()"
+      [(ngModel)]="fileName"
+      [placeholder]="(isFolder ? 'Folder' : 'File') + ' name'"
+      type="text"
+    />
+  </div>
+  <div class="row button-actions">
     <app-button (click)="add()">Add</app-button>
     <app-button (click)="addDialog.close()">Cancel</app-button>
   </div>
