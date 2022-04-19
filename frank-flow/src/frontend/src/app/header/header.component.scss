@@ -1,7 +1,5 @@
 :host {
   position: relative;
-  display: grid;
-  grid-template-columns: 256px auto;
   height: 64px;
   box-shadow: var(--shadow-medium);
   z-index: 20;
@@ -20,11 +18,12 @@
   background: var(--dark-cyan);
   width: 100%;
   height: 64px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 16px;
+  line-height: 64px;
+  display: grid;
+  grid-template-columns: 256px auto 1fr auto;
+  overflow: hidden;
+  padding-right: 16px;
+  gap: 16px;
 
   &__actions {
     display: flex;
@@ -40,6 +39,8 @@
 
   .current-file-title {
     color: #f3f3f3;
-    line-height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
