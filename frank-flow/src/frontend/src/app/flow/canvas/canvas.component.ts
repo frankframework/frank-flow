@@ -171,7 +171,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
       this.connectionIsMoving = false;
       return;
     }
-    this.sourceIsListener(info.sourceId)
+    this.sourceIsReceiver(info.sourceId)
       ? this.flowStructureService.setFirstPipeById(info.targetId)
       : this.flowStructureService.addConnection(info.sourceId, info.targetId);
   }
@@ -183,7 +183,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     if (originalEvent == undefined) {
       return;
     }
-    this.sourceIsListener(info.sourceId)
+    this.sourceIsReceiver(info.sourceId)
       ? this.flowStructureService.removeFirstPipe()
       : this.flowStructureService.deleteConnection(
           info.sourceId,
@@ -196,7 +196,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     if (originalEvent == undefined) {
       return;
     }
-    this.sourceIsListener(info.originalSourceId)
+    this.sourceIsReceiver(info.originalSourceId)
       ? this.flowStructureService.setFirstPipeById(info.newTargetId)
       : this.flowStructureService.moveConnection(
           info.originalSourceId,
@@ -210,7 +210,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     if (originalEvent == undefined) {
       return;
     }
-    this.sourceIsListener(info.sourceId)
+    this.sourceIsReceiver(info.sourceId)
       ? this.flowStructureService.removeFirstPipe()
       : this.flowStructureService.deleteConnection(
           info.sourceId,
@@ -219,8 +219,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         );
   }
 
-  sourceIsListener(source: string): boolean {
-    return !!this.currentFile.flowStructure?.listeners.find(
+  sourceIsReceiver(source: string): boolean {
+    return !!this.currentFile.flowStructure?.receivers.find(
       (listener) => listener.uid === source
     );
   }

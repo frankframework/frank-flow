@@ -3,38 +3,36 @@
     flow:forwardStyle="flowchart"
     flow:gridSize="50" xmlns:flow="urn:frank-flow"
     >
-  <Adapter name="TestFrankFlow">
-    <Receiver name="TestFrankFlow" active="false" flow:x="100" flow:y="100">
-      <JavaListener name="TestFrankFlow" flow:x="100" flow:y="100"/>
-    </Receiver>
-    <Receiver name="TestFrankFlow" flow:x="400" flow:y="100">
-      <JavaListener name="TestFrankFlow" flow:x="100" flow:y="100"/>
-    </Receiver>
-    <Pipeline>
-      <FixedResultPipe
-        name="FirstPipe"
-        returnString="&lt;FirstPipe/&gt;"
-        flow:x="100" flow:y="300"
-      >
-        <Forward name="success" path="ThirdPipe"/>
-      </FixedResultPipe>
-      <FixedResultPipe
-        name="SecondPipe"
-        returnString="&lt;SecondPipe/&gt;"
-        flow:x="400" flow:y="500"
-      >
-        <Forward name="success" path="ThirdPipe"/>
-      </FixedResultPipe>
-      <XmlSwitchPipe
-        name="ThirdPipe"
-        xpathExpression="local-name(/*)"
-        flow:x="100" flow:y="500"
-      >
-        <Forward name="FirstPipe" path="SecondPipe"/>
-        <Forward name="SecondPipe" path="EXIT"/>
-      </XmlSwitchPipe>
-      <Exit path="EXIT" state="success" flow:x="150" flow:y="700" />
-    </Pipeline>
-  </Adapter>
+    <Adapter name="TestFrankFlow">
+        <Receiver name="JavaReceiver" active="false" flow:x="100" flow:y="100">
+            <JavaListener name="TestFrankFlow"/>
+        </Receiver>
+        <Receiver name="ApiReceiver" flow:x="400" flow:y="100">
+            <JavaListener name="TestFrankFlow"/>
+        </Receiver>
+        <Pipeline firstPipe="StransformString">
+            <XsltPipe name="StransformString" flow:x="100" flow:y="300">
+				<Forward name="success" path="CheckString" />
+			</XsltPipe>
+            <XsltPipe
+                name="StructuredAwnser"
+                returnString="&lt;SecondPipe/&gt;"
+                flow:x="400" flow:y="700"
+                >
+                <Forward name="success" path="EXIT"/>
+            </XsltPipe>
+            <XmlSwitchPipe
+                name="CheckString"
+                xpathExpression="local-name(/*)"
+                flow:x="100" flow:y="500"
+                >
+                <Forward name="FirstPipe" path="ReturnAwnser"/>
+				<Forward name="success" path="StructuredAwnser" />
+            </XmlSwitchPipe>
+            <FixedResultPipe name="ReturnAwnser" flow:x="100" flow:y="700">
+                <Forward name="success" path="EXIT" />
+            </FixedResultPipe>
+            <Exit path="EXIT" state="success" flow:x="150" flow:y="900" />
+        </Pipeline>
+    </Adapter>
 </Configuration>
-   

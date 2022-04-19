@@ -90,9 +90,7 @@ const charBeforeParserIsGreaterThanCharacter = () => {
 };
 
 parser.on('opentag', (tag: TagForOptions<{}>) => {
-  const path = unclosedNodes
-    .map((node) => (!node.active ? `#${node.name}#` : node.name))
-    .join('>');
+  const path = unclosedNodes.map((node) => `${node.id}`).join('>');
 
   const currentNode = new FlowStructureNode(
     tagStartLine,
@@ -169,7 +167,7 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
 
 const checkIfTypeStartWithUppercase = (node: FlowStructureNode) => {
   if (node.type.charAt(0) !== node.type.charAt(0).toUpperCase()) {
-    const error = `${node.line}:${node.column}: ${node.name} needs to start with an uppercase letter.`;
+    const error = `${node.line}:${node.column}: ${node.type} needs to start with an uppercase letter.`;
     errors.push(error);
   }
 };

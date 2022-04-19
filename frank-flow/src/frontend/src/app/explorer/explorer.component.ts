@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
   faPen,
@@ -11,30 +11,39 @@ import { FileService } from '../shared/services/file.service';
 import { CurrentFileService } from '../shared/services/current-file.service';
 import { File } from '../shared/models/file.model';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-explorer',
   templateUrl: './explorer.component.html',
   styleUrls: ['./explorer.component.scss'],
 })
-export class ExplorerComponent {
-  currentFile!: File;
+export class ExplorerComponent implements OnInit, OnDestroy {
+  private currentFile!: File;
+  private currentFileSubscription!: Subscription;
 
   constructor(
-    library: FaIconLibrary,
+    private library: FaIconLibrary,
     private ngxSmartModalService: NgxSmartModalService,
     private fileService: FileService,
     private currentFileService: CurrentFileService,
     private toastr: ToastrService
-  ) {
-    library.addIcons(faPlus, faRedoAlt, faTrash, faPen);
+  ) {}
+
+  ngOnInit() {
+    this.library.addIcons(faPlus, faRedoAlt, faTrash, faPen);
     this.getCurrentFile();
   }
 
+  ngOnDestroy() {
+    this.currentFileSubscription.unsubscribe();
+  }
+
   getCurrentFile(): void {
-    this.currentFileService.currentFileObservable.subscribe(
-      (currentFile: File) => (this.currentFile = currentFile)
-    );
+    this.currentFileSubscription =
+      this.currentFileService.currentFileObservable.subscribe(
+        (currentFile: File) => (this.currentFile = currentFile)
+      );
   }
 
   openAddDialog(): void {

@@ -8,6 +8,7 @@ import { XmlParseError } from '../models/xml-parse-error.model';
 import { FileType } from '../enums/file-type.enum';
 import { SessionService } from './session.service';
 import { PanZoomService } from './pan-zoom.service';
+import { FrankDocumentService } from './frank-document.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,15 +20,20 @@ export class CurrentFileService {
   private currentFileSubject = new ReplaySubject<File>(1);
   public currentFileObservable = this.currentFileSubject.asObservable();
   private xmlToFlowStructureWorker!: Worker;
+  private convertConfigurationSyntaxWorker!: Worker;
 
   constructor(
     private fileService: FileService,
+    private frankDocumentService: FrankDocumentService,
     private toastr: ToastrService,
     private sessionService: SessionService,
     private panZoomService: PanZoomService
   ) {
     this.initializeXmlToFlowStructureWorker();
     this.initializeXmlToFlowStructureWorkerEventListener();
+    this.initializeConvertConfigurationSyntaxWorker();
+    this.initializeConvertConfigurationSyntaxWorkerEventListener();
+    this.subscribeToFrankDocumentService();
   }
 
   initializeXmlToFlowStructureWorker(): void {
@@ -47,7 +53,6 @@ export class CurrentFileService {
 
   initializeXmlToFlowStructureWorkerEventListener(): void {
     this.xmlToFlowStructureWorker.addEventListener('message', ({ data }) => {
-      this.clearErrorToasts();
       if (data) {
         if (this.parsingErrorsFound(data)) {
           this.showParsingErrors(data.errors);
@@ -55,6 +60,35 @@ export class CurrentFileService {
         this.currentFileSubject.next(data);
       }
     });
+  }
+
+  initializeConvertConfigurationSyntaxWorker(): void {
+    if (Worker) {
+      this.convertConfigurationSyntaxWorker = new Worker(
+        new URL(
+          '../../shared/workers/convert-configuration-syntax.worker',
+          import.meta.url
+        ),
+        {
+          name: 'convert-configuration-syntax.worker',
+          type: 'module',
+        }
+      );
+    }
+  }
+
+  initializeConvertConfigurationSyntaxWorkerEventListener(): void {
+    this.convertConfigurationSyntaxWorker.addEventListener(
+      'message',
+      ({ data }) => {
+        if (data) {
+          if (this.parsingErrorsFound(data)) {
+            this.showParsingErrors(data.errors);
+          }
+          this.updateCurrentFile(data);
+        }
+      }
+    );
   }
 
   clearErrorToasts(): void {
@@ -129,12 +163,21 @@ export class CurrentFileService {
   parseErrorMessage(error: string): XmlParseError {
     const [startLine, startColumn, message] = error
       .split(/(\d+):(\d+):\s(.+)/)
-      .filter((index) => index);
+      .filter(Boolean);
     return new XmlParseError({
       startLine: +startLine,
       startColumn: +startColumn,
       message,
     });
+  }
+
+  subscribeToFrankDocumentService(): void {
+    this.frankDocumentService.getFrankDoc().subscribe((frankDocument) =>
+      this.convertConfigurationSyntaxWorker.postMessage({
+        event: 'init',
+        frankDoc: frankDocument,
+      })
+    );
   }
 
   setCurrentDirectory(currentDirectory: File): void {
@@ -206,17 +249,25 @@ export class CurrentFileService {
     this.currentFile = file;
     this.sessionService.setSessionFile(file);
     this.determineIfFileIsAConfiguration(file);
+    this.clearErrorToasts();
 
-    if (file.type === FileType.CONFIGURATION) {
-      this.xmlToFlowStructureWorker.postMessage(file);
-    } else {
-      this.currentFileSubject.next(file);
+    switch (file.type) {
+      case FileType.CONFIGURATION:
+        this.xmlToFlowStructureWorker.postMessage(file);
+        break;
+      default:
+        this.currentFileSubject.next(file);
+        break;
     }
   }
 
   determineIfFileIsAConfiguration(file: File): void {
     if (this.isFileAConfiguration(file)) {
       file.type = FileType.CONFIGURATION;
+    } else if (this.isFileAnOldSyntaxConfiguration(file)) {
+      file.type = FileType.OLD_SYNTAX_CONFIGURATION;
+    } else {
+      file.type = FileType.EMPTY;
     }
   }
 
@@ -227,6 +278,14 @@ export class CurrentFileService {
     const containsModule = file.xml?.includes('<Module') as boolean;
     const containsAdapter = file.xml?.includes('<Adapter') as boolean;
     return containsConfiguration || containsModule || containsAdapter;
+  }
+
+  isFileAnOldSyntaxConfiguration(file: File): boolean {
+    const containsConfiguration =
+      file.xml?.includes('<configuration') &&
+      !file.xml?.includes('<!DOCTYPE configuration');
+    const containsModule = file.xml?.includes('className') as boolean;
+    return containsConfiguration || containsModule;
   }
 
   switchToFileTreeItem(fileTreeItem: File): void {
@@ -317,13 +376,13 @@ export class CurrentFileService {
   deleteFileOrFolder(): Promise<Response> {
     return this.currentDirectory.configuration
       ? this.fileService.removeDirectoryForConfiguration(
-          this.currentDirectory.configuration,
-          this.currentDirectory.path
-        )
+        this.currentDirectory.configuration,
+        this.currentDirectory.path
+      )
       : this.fileService.removeFileForConfiguration(
-          this.currentFile.configuration,
-          this.currentFile.path
-        );
+        this.currentFile.configuration,
+        this.currentFile.path
+      );
   }
 
   refreshFileTree(): void {
@@ -334,5 +393,11 @@ export class CurrentFileService {
     this.determineIfFileIsAConfiguration(file);
     this.updateCurrentFile(file);
     this.currentFileSubject.next(file);
+  }
+
+  convertOldConfigurationSyntax(): void {
+    if (this.currentFile.type === FileType.OLD_SYNTAX_CONFIGURATION) {
+      this.convertConfigurationSyntaxWorker.postMessage(this.currentFile);
+    }
   }
 }

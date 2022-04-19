@@ -43,11 +43,11 @@ export class ConfigurationSettingsComponent implements OnInit {
     settingValue: string | number | undefined
   ): void {
     if (settingValue === undefined) return;
+    this.flowNamespaceService.handleNameSpace();
     this.flowStructureService.setFlowSetting(
       'flow:' + settingName,
       settingValue
     );
-    this.flowNamespaceService.handleNameSpace();
   }
 
   deleteConfigurationSetting(attributeName: string) {

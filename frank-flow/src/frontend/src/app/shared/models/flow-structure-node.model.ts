@@ -3,6 +3,7 @@ import { FlowNodeNestedElements } from './flow-node-nested-elements.model';
 
 export class FlowStructureNode {
   public uid: string;
+  public id: string;
   public attributes: FlowNodeAttributes = {};
   public line: number;
   public endLine: number;
@@ -17,7 +18,7 @@ export class FlowStructureNode {
   public senders: FlowStructureNode[];
   public path: string;
   public isSelfClosing: boolean;
-  public active: boolean;
+  public active: string;
 
   constructor(
     line: number,
@@ -42,6 +43,7 @@ export class FlowStructureNode {
 
     this.name = this.getName();
     this.active = this.getActive();
+    this.id = this.getId();
     this.uid = this.getUid();
     this.positions = this.getPositions();
     this.senders = [];
@@ -56,17 +58,18 @@ export class FlowStructureNode {
     return this.type;
   }
 
-  private getActive(): boolean {
-    const activeIsFalse = this.attributes['active']?.value === 'false';
-    const activeIsEmpty = this.attributes['active']?.value === '';
+  private getActive(): string {
+    return this.attributes['active']?.value === ''
+      ? 'empty'
+      : this.attributes['active']?.value;
+  }
 
-    return !(activeIsFalse || activeIsEmpty);
+  private getId(): string {
+    return `${this.type}(${this.name}${this.active ? `(${this.active})` : ''})`;
   }
 
   private getUid(): string {
-    return `${this.type}(${!this.active ? `#${this.name}#` : this.name})${
-      this.path ? `@${this.path}` : ''
-    }`;
+    return `${this.id}${this.path ? `@${this.path}` : ''}`;
   }
 
   private getPositions(): { x: number; y: number } {
