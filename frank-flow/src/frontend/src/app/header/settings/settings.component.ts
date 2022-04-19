@@ -19,6 +19,7 @@ export class SettingsComponent implements OnInit {
   public gridSize = GridSize;
   public switchWithoutSavingOptions = SwitchWithoutSavingOption;
   public flowDirection = FlowDirection;
+  public currentSettingsTab = 'appearance';
 
   constructor(private settingsService: SettingsService) {}
 
@@ -34,5 +35,9 @@ export class SettingsComponent implements OnInit {
 
   setSettings(): void {
     this.settingsService.setSettings(this.settings);
+  }
+
+  setCurrentPage(currentPage: string): void {
+    this.currentSettingsTab = currentPage;
   }
 }
