@@ -6,6 +6,8 @@ This project will help you visualize and edit your adapters in a flow format. Th
 
 The project has been tested in Mozilla Firefox and Google Chrome, other browsers will possibly give an inaccurate representation of the editor. If you'd like to report a bug, you can do so [here](https://github.com/ibissource/frank-flow/issues/new?assignees=&labels=bug&template=bug_report.md).
 
+Check out this short demo on how to use the Frank!Flow with [this](https://wearefrank.tv/watch/148) link.
+
 ## Features of the Frank!Flow
 
 First of all, the Frank!Flow consists of three 'modes' or 'views'. These are: Flow, Hybrid and Editor. Each of the modes focus on a specific use case, like editing visually or programatically. The modes are made with usability in mind, which means that the Flow is the most simple and the Editor is the most advanced.
