@@ -53,9 +53,9 @@ export class AppComponent implements OnInit {
   }
 
   subscribeToSettings(): void {
-    this.settingsService
-      .getSettings()
-      .subscribe((settings) => (this.settings = settings));
+    this.settingsService.settingsObservable.subscribe(
+      (settings) => (this.settings = settings)
+    );
   }
 
   subscribeToCurrentFile(): void {

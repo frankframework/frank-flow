@@ -159,9 +159,10 @@ export class FileTreeComponent implements OnInit, OnDestroy {
   }
 
   getSettings(): void {
-    this.settingsSubscription = this.settingsService
-      .getSettings()
-      .subscribe((settings) => (this.settings = settings));
+    this.settingsSubscription =
+      this.settingsService.settingsObservable.subscribe(
+        (settings) => (this.settings = settings)
+      );
   }
 
   onItemClick(event: any): void {

@@ -46,9 +46,9 @@ export class FlowStructureService {
   }
 
   subscribeToSettings(): void {
-    this.settingsService
-      .getSettings()
-      .subscribe((settings) => (this.settings = settings));
+    this.settingsService.settingsObservable.subscribe(
+      (settings) => (this.settings = settings)
+    );
   }
 
   subscribeToNodesMap(): void {

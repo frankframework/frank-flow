@@ -105,9 +105,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   subscribeToSettings(): void {
-    this.settingsSubscription = this.settingsService
-      .getSettings()
-      .subscribe(() => {
+    this.settingsSubscription =
+      this.settingsService.settingsObservable.subscribe(() => {
         if (this.flowStructureIsReceived()) {
           this.generateFlow(this.currentFile.flowStructure!);
         }

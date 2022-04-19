@@ -6,10 +6,10 @@ export interface Settings extends FlowSettings {
   showUnsavedChangesWarning: boolean;
   showExplorer: boolean;
   darkMode: boolean;
-  showPopups: boolean;
   defaultMode: ModeType;
   useLastMode: boolean;
   switchWithoutSaving: SwitchWithoutSavingOption;
   ignoreConfigurationSettings: boolean;
   automaticPan: boolean;
+  showConfirmPopup: boolean;
 }

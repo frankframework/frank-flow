@@ -22,12 +22,4 @@
       type="text"
     />
   </div>
-  <div class="input-row">
-    <label>
-      By clicking this button, the
-      {{ currentDirectory?.path ? 'folder' : 'file' }} wil be permanently
-      deleted
-    </label>
-    <app-button [block]="true" (click)="delete()">Delete</app-button>
-  </div>
 </ngx-smart-modal>

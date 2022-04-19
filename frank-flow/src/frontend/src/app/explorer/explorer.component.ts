@@ -69,17 +69,14 @@ export class ExplorerComponent implements OnInit, OnDestroy {
   }
 
   deleteFile(): void {
-    this.ngxSmartModalService
-      .getModal('confirmDialog')
-      .setData(
-        {
-          title: 'Are you sure?',
-          text: `Do you want to delete ${this.currentFile.path} from ${this.currentFile.configuration}? This action cannot be undone or reverted!`,
-          actionFunction: this.deleteFileFunction,
-        },
-        true
-      )
-      .open();
+    this.ngxSmartModalService.getModal('confirmDialog').setData(
+      {
+        title: 'Are you sure?',
+        text: `Do you want to delete ${this.currentFile.path} from ${this.currentFile.configuration}? This action cannot be undone or reverted!`,
+        actionFunction: this.deleteFileFunction,
+      },
+      true
+    );
   }
 
   deleteFileFunction = (): void => {

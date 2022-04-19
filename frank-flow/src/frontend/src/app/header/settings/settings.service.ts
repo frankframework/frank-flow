@@ -7,7 +7,8 @@ import { DefaultSettings } from './options/default-settings.model';
   providedIn: 'root',
 })
 export class SettingsService {
-  private settings!: BehaviorSubject<Settings>;
+  private settingsBehaviorSubject!: BehaviorSubject<Settings>;
+  public settingsObservable!: Observable<Settings>;
   private defaultSettings = new DefaultSettings();
 
   constructor() {
@@ -17,16 +18,19 @@ export class SettingsService {
   initializeSettings() {
     const savedSettings = this.getSettingsLocalStorage();
     const settingsWithDefaults = this.addDefaultSettings(savedSettings);
-    this.settings = new BehaviorSubject<Settings>(settingsWithDefaults);
+    this.settingsBehaviorSubject = new BehaviorSubject<Settings>(
+      settingsWithDefaults
+    );
+    this.settingsObservable = this.settingsBehaviorSubject.asObservable();
   }
 
   setSettings(settings: Settings): void {
-    this.settings.next(settings);
+    this.settingsBehaviorSubject.next(settings);
     localStorage.setItem('settings', JSON.stringify(settings));
   }
 
-  getSettings(): Observable<Settings> {
-    return this.settings.asObservable();
+  getSettings(): Settings {
+    return this.settingsBehaviorSubject.getValue();
   }
 
   getSettingsLocalStorage(): Settings {
