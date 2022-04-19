@@ -120,15 +120,6 @@ export class EditDialogComponent {
     );
   }
 
-  delete(): void {
-    this.removeFileOrFolder().then((response) => {
-      this.giveDeleteMessage(response);
-      this.clearDirectory();
-      this.fileService.fetchFiles();
-    });
-    this.ngxSmartModalService.close('editDialog');
-  }
-
   removeFileOrFolder(): Promise<Response> {
     return this.currentDirectory?.path
       ? this.fileService.removeDirectoryForConfiguration(

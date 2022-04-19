@@ -325,9 +325,20 @@ export class OptionsComponent implements OnInit, OnDestroy {
     return Object.keys(this.attributes).includes(attributeName ?? '');
   }
 
-  deleteNode() {
+  deleteNodeFunction = (): void => {
     this.flowStructureService.deleteNode(this.structureNode);
     this.ngxSmartModalService.close('optionsModal');
+  };
+
+  deleteNode(): void {
+    this.ngxSmartModalService.getModal('confirmDialog').setData(
+      {
+        title: 'Are you sure?',
+        text: `Do you want to delete ${this.structureNode.name} from the flow? This action can be reverted by pressing 'ctrl + z'`,
+        actionFunction: this.deleteNodeFunction,
+      },
+      true
+    );
   }
 
   setNestedElement(element: any): void {

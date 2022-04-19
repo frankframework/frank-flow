@@ -131,7 +131,7 @@ export class NodeComponent implements AfterViewInit {
   }
 
   getSettings(): void {
-    this.settingsService.getSettings().subscribe((settings) => {
+    this.settingsService.settingsObservable.subscribe((settings) => {
       this.settings = settings;
       this.mergeSettings();
     });

@@ -7,10 +7,18 @@
   identifier="confirmDialog"
 >
   <div>
-    <h1>{{ title }}</h1>
+    <h1>{{ modalData?.title }}</h1>
     <p>
-      {{ text }}
+      {{ modalData?.text }}
     </p>
+  </div>
+  <div>
+    <input
+      type="checkbox"
+      [checked]="!showConfirmPopup"
+      (change)="showConfirmPopup = !showConfirmPopup"
+    />
+    Don't show this message again
   </div>
   <div class="button-actions">
     <app-button (click)="confirm()">Confirm</app-button>

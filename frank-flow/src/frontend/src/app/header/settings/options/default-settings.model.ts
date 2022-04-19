@@ -9,7 +9,6 @@ export class DefaultSettings implements Settings {
   darkMode = false;
   defaultMode = ModeType.flowMode;
   useLastMode = false;
-  showPopups = true;
   switchWithoutSaving = SwitchWithoutSavingOption.ask;
   forwardStyle = ForwardStyle.flowchart;
   direction = FlowDirection.horizontal;
@@ -18,4 +17,5 @@ export class DefaultSettings implements Settings {
   showExplorer = true;
   showUnsavedChangesWarning = true;
   automaticPan = false;
+  showConfirmPopup = true;
 }

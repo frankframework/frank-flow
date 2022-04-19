@@ -22,9 +22,9 @@ export class ModeService {
   }
 
   getSettings(): void {
-    this.settingsService
-      .getSettings()
-      .subscribe((settings) => (this.settings = settings));
+    this.settingsService.settingsObservable.subscribe(
+      (settings) => (this.settings = settings)
+    );
   }
 
   initializeMode(): void {

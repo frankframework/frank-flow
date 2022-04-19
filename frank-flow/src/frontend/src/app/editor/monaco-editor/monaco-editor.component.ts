@@ -298,12 +298,13 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   initializeThemeObserver(): void {
-    this.settingsSubscription = this.settingsService.getSettings().subscribe({
-      next: (settings) => {
-        this.onThemeChange(settings);
-        this.onResize();
-      },
-    });
+    this.settingsSubscription =
+      this.settingsService.settingsObservable.subscribe({
+        next: (settings) => {
+          this.onThemeChange(settings);
+          this.onResize();
+        },
+      });
   }
 
   onThemeChange(settings: Settings): void {
