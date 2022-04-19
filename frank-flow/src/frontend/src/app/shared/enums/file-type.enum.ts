@@ -3,4 +3,5 @@ export enum FileType {
   FOLDER,
   CONFIGURATION,
   EMPTY,
+  OLD_SYNTAX_CONFIGURATION,
 }

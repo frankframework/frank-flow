@@ -16,6 +16,8 @@ import { PanZoomService } from './pan-zoom.service';
 import Sender from '../../flow/node/nodes/sender.model';
 import { SettingsService } from '../../header/settings/settings.service';
 import { Settings } from '../../header/settings/settings.model';
+import { LayoutService } from './layout.service';
+import { Node } from '../../flow/node/nodes/node.model';
 
 @Injectable({
   providedIn: 'root',
@@ -30,20 +32,31 @@ export class FlowStructureService {
   private waitingOnNewStructure = false;
   private editAttributeQueue: Map<string, ChangedAttribute[]> = new Map();
   private flowUpdate!: boolean;
+  private nodeMap: Map<string, Node> | undefined;
 
   constructor(
     private currentFileService: CurrentFileService,
     private panZoomService: PanZoomService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private graphService: LayoutService
   ) {
     this.getCurrentFile();
     this.subscribeToSettings();
+    this.subscribeToNodesMap();
   }
 
   subscribeToSettings(): void {
     this.settingsService
       .getSettings()
       .subscribe((settings) => (this.settings = settings));
+  }
+
+  subscribeToNodesMap(): void {
+    this.graphService.nodesObservable.subscribe({
+      next: (nodeMap) => {
+        this.nodeMap = nodeMap;
+      },
+    });
   }
 
   getCurrentFile(): void {
@@ -97,6 +110,14 @@ export class FlowStructureService {
       const y = +this.selectedNode.positions.y;
       if (x && y) {
         this.panZoomService.panTo(x, y);
+      } else {
+        const node = this.nodeMap?.get(this.selectedNode.uid);
+        if (node) {
+          const nodeLeft = node.getLeft();
+          const nodeTop = node.getTop();
+
+          if (nodeLeft && nodeTop) this.panZoomService.panTo(nodeLeft, nodeTop);
+        }
       }
     }
   }
