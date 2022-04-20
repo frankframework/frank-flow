@@ -48,7 +48,7 @@ export class LayoutService {
     if (/Receiver/g.test(type)) {
       row = this.getNextRow('receiver');
       column = 1;
-    } else if (type === 'Exit' || type === 'Exits') {
+    } else if (type === 'Exit') {
       row = this.getNextRow('exit');
       column = 3;
     } else {

@@ -53,7 +53,7 @@ export class FlowStructure {
   getExits(): FlowStructureNode[] {
     return (
       this.nodes.filter((node: FlowStructureNode) =>
-        node.type.match(/Exit/g)
+        node.type.match(/Exit$/)
       ) ?? []
     );
   }

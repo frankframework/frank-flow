@@ -18,7 +18,12 @@
   type="Senders"
 ></app-group>
 <app-group
-  [items]="paletteService.data?.get('Other') | filter: 'Exit' | filter: search"
+  [items]="
+    paletteService.data?.get('Other')
+      | filter: 'Exit'
+      | filter: 'Exits':true
+      | filter: search
+  "
   [locked]="locked"
   color="danger"
   type="Other"
