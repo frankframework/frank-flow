@@ -1,3 +1,24 @@
+# [2.19.0](https://github.com/ibissource/frank-flow/compare/v2.18.0...v2.19.0) (2022-04-20)
+
+
+### ✨ Features
+
+* add function to delete flow settings ([25ff8d8](https://github.com/ibissource/frank-flow/commit/25ff8d8ab0dccd21d24d2e691f253353d528326b))
+* add option to disable confirm popup ([1878307](https://github.com/ibissource/frank-flow/commit/1878307848165d76d9e9fbfdbaba60687c00f9a2))
+
+
+### 🐛 Bug Fixes
+
+* remove exits from palete and flow ([9b3f8c0](https://github.com/ibissource/frank-flow/commit/9b3f8c0262bf928dea5ecccf7a7092d71e0445d5))
+* remove the add file button from header ([d15dfb9](https://github.com/ibissource/frank-flow/commit/d15dfb9bde766e61900f213bc13c2ed607af4e76))
+* small refactor for clarity ([3795b9a](https://github.com/ibissource/frank-flow/commit/3795b9a1a6663c920daeb71eb620a129a7e8b657))
+* some errors overlapped the header, making it impossible to switch mode ([6cf6c73](https://github.com/ibissource/frank-flow/commit/6cf6c737908b3a6ec4ba250dbaf6b7b86946fab3))
+
+
+### 📦 Code Refactoring
+
+* make the palette filter nicer in code ([bca3c3e](https://github.com/ibissource/frank-flow/commit/bca3c3e99fbe51d4ca536328ff803414696cb915))
+
 # [2.18.0](https://github.com/ibissource/frank-flow/compare/v2.17.0...v2.18.0) (2022-04-19)
 
 
