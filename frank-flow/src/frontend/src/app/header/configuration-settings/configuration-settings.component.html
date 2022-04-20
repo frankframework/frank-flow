@@ -57,7 +57,7 @@
       </div>
       <div class="input-row">
         <label
-          for="grid-configuration"
+          for="connection-type"
           title="The style of the connections between nodes"
           >Forward style</label
         >
@@ -102,7 +102,7 @@
       </div>
       <div class="input-row">
         <label
-          for="grid-configuration"
+          for="forward-direction"
           title="The direction will change the location of the anchor-points on the nodes"
           >Flow direction</label
         >
@@ -139,9 +139,18 @@
           </app-button>
         </div>
       </div>
+      <div class="input-row">
+        <label
+          title="This will delete all the flow settings from your configuration. This will reset the flow to the default settings"
+          >Reset all Flow metadata. Including all settings and positions</label
+        >
+        <app-button (click)="resetFlowAttributes()" [block]="true"
+          >Reset</app-button
+        >
+      </div>
     </div>
     <div *ngIf="!flowSettings">
-      No configuration element has been found. Please make shure the
+      No configuration element has been found. Please make sure the
       configuration file includes either &lt;Configuration&gt; or
       &lt;Module&gt;.
     </div>
