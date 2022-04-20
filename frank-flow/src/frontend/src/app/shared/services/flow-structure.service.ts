@@ -533,21 +533,39 @@ export class FlowStructureService {
   }
 
   deleteFlowSettings() {
-    if (this.flowStructure.configuration === undefined) {
-      return;
-    }
-    const configurationAttributes = this.flowStructure.configuration.attributes;
-    const deleteFlowSettingsList = [
-      'flow:direction',
-      'flow:forwardStyle',
-      'flow:gridSize',
-      'xmlns:flow',
-    ];
-    const editOperations = this.getEditOperationsDeleteAttributes(
-      deleteFlowSettingsList,
-      configurationAttributes
-    );
+    const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
 
+    this.addConfigurationEditOperation(editOperations);
+    this.addFlowEditOperation(editOperations);
+
+    this.monacoEditorComponent?.applyEdits(editOperations, true);
+  }
+
+  addConfigurationEditOperation(
+    editOperations: monaco.editor.IIdentifiedSingleEditOperation[]
+  ): void {
+    const configuration = this.flowStructure.configuration;
+    if (configuration) {
+      const configurationAttributes = configuration.attributes;
+      const deleteFlowSettingsList = [
+        'flow:direction',
+        'flow:forwardStyle',
+        'flow:gridSize',
+        'xmlns:flow',
+      ];
+      const configurationEditOperations =
+        this.getEditOperationsDeleteAttributes(
+          deleteFlowSettingsList,
+          configurationAttributes
+        );
+
+      editOperations.push(...configurationEditOperations);
+    }
+  }
+
+  addFlowEditOperation(
+    editOperations: monaco.editor.IIdentifiedSingleEditOperation[]
+  ): void {
     const deleteFlowPositionsList = ['flow:y', 'flow:x'];
     for (const node of this.flowStructure.nodes) {
       const nodeAttributes = node.attributes;
@@ -557,8 +575,6 @@ export class FlowStructureService {
       );
       editOperations.push(...flowEditOperations);
     }
-
-    this.monacoEditorComponent?.applyEdits(editOperations, true);
   }
 
   getEditOperationsDeleteAttributes(
@@ -566,6 +582,17 @@ export class FlowStructureService {
     attributeList: FlowNodeAttributes
   ): monaco.editor.IIdentifiedSingleEditOperation[] {
     const ranges: monaco.editor.IIdentifiedSingleEditOperation[][] = [];
+
+    this.calculateAttributeRanges(attributeNames, attributeList, ranges);
+
+    return this.generateEditOperations(ranges, attributeNames);
+  }
+
+  calculateAttributeRanges(
+    attributeNames: string[],
+    attributeList: FlowNodeAttributes,
+    ranges: monaco.editor.IIdentifiedSingleEditOperation[][]
+  ): void {
     for (const attributeName of attributeNames) {
       const attribute = this.findAttribute(attributeList, attributeName);
       if (attribute) {
@@ -576,7 +603,12 @@ export class FlowStructureService {
         ranges[attribute.line][attribute.startColumn] = { text, range };
       }
     }
+  }
 
+  generateEditOperations(
+    ranges: monaco.editor.IIdentifiedSingleEditOperation[][],
+    attributeNames: string[]
+  ): monaco.editor.IIdentifiedSingleEditOperation[] {
     const editOperations: any[] = [];
     for (const [line, columns] of Object.entries(ranges)) {
       for (const column of Object.values(columns)) {
@@ -584,8 +616,7 @@ export class FlowStructureService {
         if (
           lastEditOperation &&
           lastEditOperation.range &&
-          lastEditOperation.range.startLineNumber === +line &&
-          column.range.startColumn <= lastEditOperation.range.endColumn
+          this.isSameLineAndConnected(lastEditOperation, +line, column.range)
         ) {
           lastEditOperation.range.endColumn = column.range.endColumn;
           continue;
@@ -597,6 +628,17 @@ export class FlowStructureService {
       }
     }
     return editOperations;
+  }
+
+  isSameLineAndConnected(
+    lastEditOperation: any,
+    line: number,
+    range: any
+  ): boolean {
+    return (
+      lastEditOperation.range.startLineNumber === line &&
+      range.startColumn <= lastEditOperation.range.endColumn
+    );
   }
 
   editNodeAttributes(options: {
