@@ -21,7 +21,7 @@
   [items]="
     paletteService.data?.get('Other')
       | filter: 'Exit'
-      | filter: 'Exits':true
+      | filter: 'Exits':false
       | filter: search
   "
   [locked]="locked"
