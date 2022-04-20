@@ -532,6 +532,73 @@ export class FlowStructureService {
     this.deleteAttribute(deleteFlowSetting, configurationAttributes, true);
   }
 
+  deleteFlowSettings() {
+    if (this.flowStructure.configuration === undefined) {
+      return;
+    }
+    const configurationAttributes = this.flowStructure.configuration.attributes;
+    const deleteFlowSettingsList = [
+      'flow:direction',
+      'flow:forwardStyle',
+      'flow:gridSize',
+      'xmlns:flow',
+    ];
+    const editOperations = this.getEditOperationsDeleteAttributes(
+      deleteFlowSettingsList,
+      configurationAttributes
+    );
+
+    const deleteFlowPositionsList = ['flow:y', 'flow:x'];
+    for (const node of this.flowStructure.nodes) {
+      const nodeAttributes = node.attributes;
+      const flowEditOperations = this.getEditOperationsDeleteAttributes(
+        deleteFlowPositionsList,
+        nodeAttributes
+      );
+      editOperations.push(...flowEditOperations);
+    }
+
+    this.monacoEditorComponent?.applyEdits(editOperations, true);
+  }
+
+  getEditOperationsDeleteAttributes(
+    attributeNames: string[],
+    attributeList: FlowNodeAttributes
+  ): monaco.editor.IIdentifiedSingleEditOperation[] {
+    const ranges: monaco.editor.IIdentifiedSingleEditOperation[][] = [];
+    for (const attributeName of attributeNames) {
+      const attribute = this.findAttribute(attributeList, attributeName);
+      if (attribute) {
+        const text = ``;
+        this.escapeAttribute(attribute);
+        const range = this.getDeleteAttributeRange(attribute);
+        ranges[attribute.line] = ranges[attribute.line] ?? [];
+        ranges[attribute.line][attribute.startColumn] = { text, range };
+      }
+    }
+
+    const editOperations: any[] = [];
+    for (const [line, columns] of Object.entries(ranges)) {
+      for (const column of Object.values(columns)) {
+        const lastEditOperation = editOperations[editOperations.length - 1];
+        if (
+          lastEditOperation &&
+          lastEditOperation.range &&
+          lastEditOperation.range.startLineNumber === +line &&
+          column.range.startColumn <= lastEditOperation.range.endColumn
+        ) {
+          lastEditOperation.range.endColumn = column.range.endColumn;
+          continue;
+        }
+        editOperations.push({
+          range: column.range,
+          text: column.text,
+        });
+      }
+    }
+    return editOperations;
+  }
+
   editNodeAttributes(options: {
     nodeId: string;
     attributes: ChangedAttribute[];

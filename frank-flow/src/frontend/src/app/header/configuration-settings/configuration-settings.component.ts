@@ -58,4 +58,8 @@ export class ConfigurationSettingsComponent implements OnInit {
     this.ngxSmartModalService.getModal('configurationSettingsModal').close();
     this.ngxSmartModalService.getModal('settingsModal').open();
   }
+
+  resetFlowAttributes() {
+    this.flowStructureService.deleteFlowSettings();
+  }
 }
