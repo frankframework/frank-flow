@@ -24,3 +24,7 @@ body {
 .monaco-editor__line--highlighted {
   background: var(--accent-transparant);
 }
+
+.toast-container {
+  z-index: 10;
+}
