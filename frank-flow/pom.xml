@@ -11,10 +11,17 @@
 	<name>Frank!Flow</name>
 
 	<properties>
-		<spring.version>5.3.18</spring.version>
+		<spring.version>5.3.19</spring.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.ibissource</groupId>
+			<artifactId>ibis-adapterframework-core</artifactId>
+			<version>[7.8-SNAPSHOT,)</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
@@ -103,6 +110,14 @@
 			<artifactId>cxf-rt-rs-client</artifactId>
 		</dependency>
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>ibissource</id>
+			<name>Ibissource</name>
+			<url>https://nexus.frankframework.org/content/repositories/public</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<resources>
