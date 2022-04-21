@@ -24,6 +24,15 @@ jobs:
           node-version: 16.x
       - name: Write frank-flow.properties
         run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-runner/frank-flow.properties
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-maven-dependencies
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - name: Build backend
         working-directory: frank-flow
         run: mvn install
