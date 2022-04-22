@@ -43,7 +43,7 @@ jobs:
           build: yarn build
           start: yarn runner
           wait-on: "http://localhost:8080/frank-flow/"
-          wait-on-timeout: 240
+          wait-on-timeout: 360
       - name: Store (logging) information as artifacts
         uses: actions/upload-artifact@v2
         with:
