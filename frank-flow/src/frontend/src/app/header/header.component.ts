@@ -5,6 +5,8 @@ import {
   faPen,
   faPlus,
   faSave,
+  faUndo,
+  faRedo,
 } from '@fortawesome/free-solid-svg-icons';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { ToastrService } from 'ngx-toastr';
@@ -12,6 +14,7 @@ import { NgxSmartModalService } from 'ngx-smart-modal';
 import { CurrentFileService } from '../shared/services/current-file.service';
 import { File } from '../shared/models/file.model';
 import { FileType } from '../shared/enums/file-type.enum';
+import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 
 @Component({
   selector: 'app-header',
@@ -26,9 +29,10 @@ export class HeaderComponent implements OnInit {
     private library: FaIconLibrary,
     private toastr: ToastrService,
     private ngxSmartModalService: NgxSmartModalService,
-    private currentFileService: CurrentFileService
+    private currentFileService: CurrentFileService,
+    private flowStructureService: FlowStructureService
   ) {
-    library.addIcons(faPlus, faSave, faCog, faPen, faCogs);
+    library.addIcons(faPlus, faSave, faCog, faPen, faCogs, faUndo, faRedo);
   }
 
   ngOnInit(): void {
@@ -68,5 +72,13 @@ export class HeaderComponent implements OnInit {
     } else {
       return 'Loading file...';
     }
+  }
+
+  undo(): void {
+    this.flowStructureService.monacoEditorComponent?.undo();
+  }
+
+  redo(): void {
+    this.flowStructureService.monacoEditorComponent?.redo();
   }
 }
