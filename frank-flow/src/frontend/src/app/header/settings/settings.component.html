@@ -252,16 +252,16 @@
           (stateChange)="setSettings()"
         ></app-toggle>
       </div>
-    </div>
-    <div class="input-row">
-      <label
-        title="This setting indicates whether or not you will see confirmation popups"
-        >Show confirmation popup</label
-      >
-      <app-toggle
-        [(state)]="settings.showConfirmPopup"
-        (stateChange)="setSettings()"
-      ></app-toggle>
+      <div class="input-row">
+        <label
+          title="This setting indicates whether or not you will see confirmation popups"
+          >Show confirmation popup</label
+        >
+        <app-toggle
+          [(state)]="settings.showConfirmPopup"
+          (stateChange)="setSettings()"
+        ></app-toggle>
+      </div>
     </div>
   </div>
 </ngx-smart-modal>

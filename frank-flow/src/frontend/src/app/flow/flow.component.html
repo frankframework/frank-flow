@@ -14,7 +14,9 @@
     >
     </app-actions>
   </div>
-  <app-palette></app-palette>
+  <app-palette
+    *ngIf="settings.showPalette && fileIsConfiguration"
+  ></app-palette>
 </div>
 <app-options></app-options>
 

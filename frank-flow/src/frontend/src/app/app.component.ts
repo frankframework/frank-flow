@@ -22,6 +22,8 @@ export class AppComponent implements OnInit {
   public modeType = ModeType;
   public mode!: Mode;
   public settings!: Settings;
+  public fileType = FileType;
+  public currentFile!: File;
 
   @HostListener('window:beforeunload', ['$event'])
   unloadHandler(event: Event) {
@@ -33,7 +35,8 @@ export class AppComponent implements OnInit {
   foldArrow = () =>
     this.settings.showExplorer ? faAngleDoubleLeft : faAngleDoubleRight;
 
-  private currentFile!: File;
+  foldArrowRight = () =>
+    this.settings.showPalette ? faAngleDoubleRight : faAngleDoubleLeft;
 
   constructor(
     private modeService: ModeService,
@@ -77,6 +80,11 @@ export class AppComponent implements OnInit {
 
   toggleExplorer() {
     this.settings.showExplorer = !this.settings.showExplorer;
+    this.settingsService.setSettings(this.settings);
+  }
+
+  togglePalette() {
+    this.settings.showPalette = !this.settings.showPalette;
     this.settingsService.setSettings(this.settings);
   }
 }
