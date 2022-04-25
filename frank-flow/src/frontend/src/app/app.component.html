@@ -21,13 +21,30 @@
         [class.useAllSpace]="mode.is(modeType.flowMode)"
       ></app-flow>
     </div>
-    <div [style.left]="settings.showExplorer ? '256px' : 0" class="actions">
-      <app-button
-        (click)="toggleExplorer()"
-        [title]="(settings.showExplorer ? 'Hide' : 'Show') + ' Explorer'"
+    <div class="actions">
+      <div
+        class="actions--item"
+        [style.left]="settings.showExplorer ? '256px' : 0"
       >
-        <fa-icon [icon]="foldArrow()"></fa-icon>
-      </app-button>
+        <app-button
+          (click)="toggleExplorer()"
+          [title]="(settings.showExplorer ? 'Hide' : 'Show') + ' Explorer'"
+        >
+          <fa-icon [icon]="foldArrow()"></fa-icon>
+        </app-button>
+      </div>
+      <div
+        class="actions--item"
+        [style.right]="settings.showPalette ? '256px' : 0"
+        *ngIf="currentFile?.type === fileType.CONFIGURATION"
+      >
+        <app-button
+          (click)="togglePalette()"
+          [title]="(settings.showPalette ? 'Hide' : 'Show') + ' Palette'"
+        >
+          <fa-icon [icon]="foldArrowRight()"></fa-icon>
+        </app-button>
+      </div>
     </div>
   </div>
   <app-add-dialog></app-add-dialog>

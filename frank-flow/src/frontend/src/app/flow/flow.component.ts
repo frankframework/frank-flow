@@ -27,6 +27,9 @@ import { Subscription } from 'rxjs';
 import { FileType } from '../shared/enums/file-type.enum';
 import { FlowStructureService } from '../shared/services/flow-structure.service';
 import { PanZoomService } from '../shared/services/pan-zoom.service';
+import { SettingsService } from '../header/settings/settings.service';
+import { Settings } from '../header/settings/settings.model';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 type canvasDirection = 'height' | 'width';
 type CanvasSize = { x: number; y: number };
@@ -53,6 +56,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   public fileIsOldSyntaxConfiguration!: boolean;
   public fileIsEmpty!: boolean;
   public panZoomConfig = this.panZoomService.panZoomConfig;
+  public settings!: Settings;
 
   constructor(
     private renderer: Renderer2,
@@ -60,7 +64,8 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
     private currentFileService: CurrentFileService,
     private graphService: LayoutService,
     private flowStructureService: FlowStructureService,
-    private panZoomService: PanZoomService
+    private panZoomService: PanZoomService,
+    private settingsService: SettingsService
   ) {
     this.library.addIcons(
       faArrowDown,
@@ -83,6 +88,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
     this.showCanvasOrMessage();
     this.setCurrentFileSubscription();
     this.setNodesSubscription();
+    this.subscribeToSettings();
   }
 
   ngAfterViewInit(): void {
@@ -118,6 +124,12 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
         this.setBasicCanvasSize();
       },
     });
+  }
+
+  subscribeToSettings(): void {
+    this.settingsService.settingsObservable.subscribe(
+      (settings) => (this.settings = settings)
+    );
   }
 
   showCanvasOrMessage(): void {

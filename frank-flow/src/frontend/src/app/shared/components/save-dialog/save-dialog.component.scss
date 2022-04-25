@@ -1,3 +1,7 @@
 .saveDialog ::ng-deep .nsm-content {
   width: 30vw;
+
+  strong {
+    word-break: break-word;
+  }
 }

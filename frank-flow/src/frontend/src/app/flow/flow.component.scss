@@ -1,6 +1,6 @@
 .flow-container {
   display: grid;
-  grid-template-columns: auto 256px;
+  grid-template-columns: 1fr auto;
   height: 100%;
   background-color: var(--border-color);
 
