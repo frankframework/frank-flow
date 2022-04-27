@@ -32,14 +32,17 @@ jobs:
         run: chmod +x ./prepare-release.sh && semantic-release
 
       - name: Make snapshot version
+        working-directory: frank-flow
         run: chmod +x ./prepare-snapshot.sh && ./prepare-snapshot.sh
 
       - name: Setup git config
+        working-directory: frank-flow
         run: |
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
       - name: Commit
+        working-directory: frank-flow
         run: |
           git add **/*.pom
           git commit -m "Make SNAPSHOT version [Skip CI]"
