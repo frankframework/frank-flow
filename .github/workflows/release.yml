@@ -44,6 +44,6 @@ jobs:
       - name: Commit
         working-directory: frank-flow
         run: |
-          git add **/*.pom
+          git add **/pom.xml
           git commit -m "Make SNAPSHOT version [Skip CI]"
           git push origin master
