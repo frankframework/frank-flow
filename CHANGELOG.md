@@ -1,3 +1,15 @@
+## [2.20.1](https://github.com/ibissource/frank-flow/compare/v2.20.0...v2.20.1) (2022-04-27)
+
+
+### 🐛 Bug Fixes
+
+* commit pom in ci ([fe37294](https://github.com/ibissource/frank-flow/commit/fe37294b3c743545668823185ea8e7e53543f33a))
+
+
+### ♻️ Chores
+
+* add m2 to cache ([943347c](https://github.com/ibissource/frank-flow/commit/943347cf5dad216987e8eea5d3d44b2e312160a5))
+
 # [2.20.0](https://github.com/ibissource/frank-flow/compare/v2.19.1...v2.20.0) (2022-04-27)
 
 
