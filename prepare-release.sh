@@ -1,9 +1,5 @@
 #!/bin/bash
 
-echo "Version = $1"
-SNAPSHOT_VERSION="${1}-SNAPSHOT"
-echo "Snapshot version = $SNAPSHOT_VERSION"
+echo "Release version: $1"
 
-mvn versions:set -DnewVersion=$SNAPSHOT_VERSION
-
-printenv
+mvn versions:set -DnewVersion=$1

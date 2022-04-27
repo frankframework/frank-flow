@@ -24,8 +24,23 @@ jobs:
           node-version: 16.x
       - name: Install dependencies
         run: yarn global add semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/exec conventional-changelog-metahub
+
       - name: Run semantic release
         working-directory: frank-flow
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: chmod +x ./prepare-release.sh && semantic-release
+
+      - name: Make snapshot version
+        run: chmod +x ./prepare-snapshot.sh && ./prepare-snapshot.sh
+
+      - name: Setup git config
+        run: |
+          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+      - name: Commit
+        run: |
+          git add **/*.pom
+          git commit -m "Make SNAPSHOT version [Skip CI]"
+          git push origin master
