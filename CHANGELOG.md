@@ -1,3 +1,28 @@
+# [2.20.0](https://github.com/ibissource/frank-flow/compare/v2.19.1...v2.20.0) (2022-04-27)
+
+
+### ✨ Features
+
+* add undo and redo buttons to header ([b2af57d](https://github.com/ibissource/frank-flow/commit/b2af57da9e96409fc4901049ce71a3f95362ce60))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([219fb51](https://github.com/ibissource/frank-flow/commit/219fb51b764e4c9f6b665a7b0839531c92e1c258))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([c08d2c6](https://github.com/ibissource/frank-flow/commit/c08d2c6756687ef0e305c32412e128dba0d65023))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([cb7f980](https://github.com/ibissource/frank-flow/commit/cb7f98026e8e2ab1e20bcad73356b49c1fe9eaff))
+* **deps-dev:** bump eslint in /frank-flow/src/frontend ([aace402](https://github.com/ibissource/frank-flow/commit/aace4021da7a081ba0cca342ce9c217f0d2c91f8))
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([8048799](https://github.com/ibissource/frank-flow/commit/8048799e6b353bead9dfc4dc5c37d302218ff3fe))
+* **deps:** bump maven-site-plugin from 3.11.0 to 3.12.0 ([9cbdf0a](https://github.com/ibissource/frank-flow/commit/9cbdf0afc4eaa50a6d4812b935850129b18a2873))
+* **deps:** bump tslib from 2.3.1 to 2.4.0 in /frank-flow/src/frontend ([05b6e03](https://github.com/ibissource/frank-flow/commit/05b6e031e5866e70cfc25fb6a52646197b9b659f))
+
+
+### ♻️ Chores
+
+* create snapshot version in ci for further development ([9cb7081](https://github.com/ibissource/frank-flow/commit/9cb7081e7e7f929c1f8aae69b33bc48dc5e4f15d))
+* disable double jars error ([a1d3608](https://github.com/ibissource/frank-flow/commit/a1d3608d9928c678d631cac952100310200cc9a0))
+* frank runner takes to much time to start ([1105efd](https://github.com/ibissource/frank-flow/commit/1105efdde6ebd60e36cef3a281a53f42b2568f16))
+
 ## [2.19.1](https://github.com/ibissource/frank-flow/compare/v2.19.0...v2.19.1) (2022-04-21)
 
 
