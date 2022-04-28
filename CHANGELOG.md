@@ -1,3 +1,16 @@
+## [2.20.2](https://github.com/ibissource/frank-flow/compare/v2.20.1...v2.20.2) (2022-04-28)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([03471ab](https://github.com/ibissource/frank-flow/commit/03471ab3062a6b4b36cdb17711086393bb58fdaf))
+* **deps:** bump ejs from 3.1.6 to 3.1.7 in /frank-flow/src/frontend ([f081656](https://github.com/ibissource/frank-flow/commit/f081656b48de0ea01ed31cbf8aaf214f729f9f31))
+
+
+### ♻️ Chores
+
+* add action for add and commit ([9718872](https://github.com/ibissource/frank-flow/commit/971887209d19e277c9b1b397d147703e38095183))
+
 ## [2.20.1](https://github.com/ibissource/frank-flow/compare/v2.20.0...v2.20.1) (2022-04-27)
 
 
