@@ -1,3 +1,19 @@
+## [2.20.4](https://github.com/ibissource/frank-flow/compare/v2.20.3...v2.20.4) (2022-04-28)
+
+
+### 🐛 Bug Fixes
+
+* commiting with token ([da537aa](https://github.com/ibissource/frank-flow/commit/da537aa84a1d66df8cab1c8c4d259a8a0e66ba84))
+* commiting with token and user ([47ea281](https://github.com/ibissource/frank-flow/commit/47ea281d666db45504e099541c75f3258633eb64))
+* commiting with token and user ([213ce62](https://github.com/ibissource/frank-flow/commit/213ce621f78996606cdc1725a3978a4c09778879))
+
+
+### ♻️ Chores
+
+* add snapshot release to semantic release script ([d9bccd2](https://github.com/ibissource/frank-flow/commit/d9bccd2b24b3335448662f756f7a4690cbeb2b42))
+* add token to push ([f4b18c3](https://github.com/ibissource/frank-flow/commit/f4b18c371089848835360956d63867d3f500f467))
+* add token to push and set persist-credentials to true ([7dd64cf](https://github.com/ibissource/frank-flow/commit/7dd64cfd443c2584160ef9eb82e6b4dc36010f2e))
+
 ## [2.20.3](https://github.com/ibissource/frank-flow/compare/v2.20.2...v2.20.3) (2022-04-28)
 
 
