@@ -1,6 +1,7 @@
 #!/bin/bash
 
-CURRENT_VERSION=$(git describe --tags --abbrev=0 | cut -d "v" -f 2)
+#CURRENT_VERSION=$(git describe --tags --abbrev=0 | cut -d "v" -f 2)
+CURRENT_VERSION=$1
 
 echo "Current version: $CURRENT_VERSION"
 

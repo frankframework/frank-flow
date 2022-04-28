@@ -29,28 +29,4 @@ jobs:
         working-directory: frank-flow
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: chmod +x ./prepare-release.sh && semantic-release
-  snapshot:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout frank-flow repository
-        uses: actions/checkout@v2
-        with:
-          path: frank-flow
-
-      - name: Make snapshot version
-        working-directory: frank-flow
-        run: chmod +x ./prepare-snapshot.sh && ./prepare-snapshot.sh
-
-      - name: Commit pom changes
-        uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
-        with:
-          add: '**/pom.xml'
-          cwd: 'frank-flow'
-          github_token: ${{ secrets.GH_TOKEN }}
-          default_author: github_actor
-          author_name: Sergi Philipsen
-          author_email: philipsen.sergi@gmail.com
-          committer_name: GitHub Actions
-          committer_email: actions@github.com
-          message: 'chore(release): create new snapshot version [skip ci]'
+        run: chmod +x ./prepare-release.sh ./prepare-snapshot.sh && semantic-release
