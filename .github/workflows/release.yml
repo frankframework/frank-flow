@@ -40,6 +40,8 @@ jobs:
         with:
           add: '**/pom.xml'
           cwd: 'frank-flow'
-          default_author: github_actions
+          default_author: github_actor
           github_token: ${{ secrets.GH_TOKEN }}
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
           message: 'chore(release): create new snapshot version [skip ci]'
