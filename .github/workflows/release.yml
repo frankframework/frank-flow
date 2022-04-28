@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          persist-credentials: false
+          persist-credentials: true
           path: frank-flow
       - name: Use Node.js 16.x
         uses: actions/setup-node@v2
