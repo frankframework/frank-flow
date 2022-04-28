@@ -35,15 +35,10 @@ jobs:
         working-directory: frank-flow
         run: chmod +x ./prepare-snapshot.sh && ./prepare-snapshot.sh
 
-      - name: Setup git config
-        working-directory: frank-flow
-        run: |
-          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
-      - name: Commit
-        working-directory: frank-flow
-        run: |
-          git add **/pom.xml
-          git commit -m "Make SNAPSHOT version [Skip CI]"
-          git push origin master
+      - name: Commit pom changes
+        uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
+        with:
+          add: '**/pom.xml'
+          cwd: 'frank-flow'
+          default_author: github-actions
+          message: 'chore(release): create new snapshot version [skip ci]'
