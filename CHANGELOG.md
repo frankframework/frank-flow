@@ -1,3 +1,10 @@
+## [2.20.3](https://github.com/ibissource/frank-flow/compare/v2.20.2...v2.20.3) (2022-04-28)
+
+
+### 🐛 Bug Fixes
+
+* issue in ci for making snapshot version ([72e4b40](https://github.com/ibissource/frank-flow/commit/72e4b40ccf66a91296e96d3f8fa55f83e05b613a))
+
 ## [2.20.2](https://github.com/ibissource/frank-flow/compare/v2.20.1...v2.20.2) (2022-04-28)
 
 
