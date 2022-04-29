@@ -266,8 +266,6 @@ export class CurrentFileService {
       file.type = FileType.CONFIGURATION;
     } else if (this.isFileAnOldSyntaxConfiguration(file)) {
       file.type = FileType.OLD_SYNTAX_CONFIGURATION;
-    } else {
-      file.type = FileType.EMPTY;
     }
   }
 
@@ -376,13 +374,13 @@ export class CurrentFileService {
   deleteFileOrFolder(): Promise<Response> {
     return this.currentDirectory.configuration
       ? this.fileService.removeDirectoryForConfiguration(
-        this.currentDirectory.configuration,
-        this.currentDirectory.path
-      )
+          this.currentDirectory.configuration,
+          this.currentDirectory.path
+        )
       : this.fileService.removeFileForConfiguration(
-        this.currentFile.configuration,
-        this.currentFile.path
-      );
+          this.currentFile.configuration,
+          this.currentFile.path
+        );
   }
 
   refreshFileTree(): void {
