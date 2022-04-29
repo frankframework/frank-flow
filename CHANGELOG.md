@@ -1,3 +1,24 @@
+# [2.21.0](https://github.com/ibissource/frank-flow/compare/v2.20.4...v2.21.0) (2022-04-29)
+
+
+### ✨ Features
+
+* make palette colapsible ([abdc036](https://github.com/ibissource/frank-flow/commit/abdc036f730f90291fe84e004f6ebb735ebce54f))
+
+
+### 🐛 Bug Fixes
+
+* hide palette button when editor mode is selected ([1dbbe26](https://github.com/ibissource/frank-flow/commit/1dbbe2606875d0200c36d49b834a698b47e8ed77))
+* non-configuration file was classified as empty file ([5d4a171](https://github.com/ibissource/frank-flow/commit/5d4a1717e8c9c7cd79ad0ce8a69950415f13ff0b))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([41ef37a](https://github.com/ibissource/frank-flow/commit/41ef37a809a795d907183f6031a87acf5b997f94))
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([6487b82](https://github.com/ibissource/frank-flow/commit/6487b82fe0f56b4686a70f999ab0f7ea73e3c7da))
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/cli in /frank-flow/src/frontend ([6e19acb](https://github.com/ibissource/frank-flow/commit/6e19acb7c831b71b013f69e9d42d9f99a8d63914))
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/config-conventional ([e9b63c3](https://github.com/ibissource/frank-flow/commit/e9b63c3cfe85fa4cc35d3ca2fa52beac3a811efa))
+
 ## [2.20.4](https://github.com/ibissource/frank-flow/compare/v2.20.3...v2.20.4) (2022-04-28)
 
 
