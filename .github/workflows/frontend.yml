@@ -27,6 +27,15 @@ jobs:
       - name: Build backend
         working-directory: frank-flow
         run: mvn install
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-maven-dependencies
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - name: Cache Frank!Runner dependencies
         uses: actions/cache@v2
         with:

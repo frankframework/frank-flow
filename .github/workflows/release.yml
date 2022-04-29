@@ -8,7 +8,7 @@ on:
       - completed
 
 jobs:
-  on-success:
+  release:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
@@ -24,8 +24,9 @@ jobs:
           node-version: 16.x
       - name: Install dependencies
         run: yarn global add semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/exec conventional-changelog-metahub
+
       - name: Run semantic release
         working-directory: frank-flow
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: chmod +x ./prepare-release.sh && semantic-release
+        run: chmod +x ./prepare-release.sh ./prepare-snapshot.sh && semantic-release
