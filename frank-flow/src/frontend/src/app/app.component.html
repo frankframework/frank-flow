@@ -30,19 +30,22 @@
           (click)="toggleExplorer()"
           [title]="(settings.showExplorer ? 'Hide' : 'Show') + ' Explorer'"
         >
-          <fa-icon [icon]="foldArrow()"></fa-icon>
+          <fa-icon [icon]="foldExplorerArrow()"></fa-icon>
         </app-button>
       </div>
       <div
         class="actions--item"
         [style.right]="settings.showPalette ? '256px' : 0"
-        *ngIf="currentFile?.type === fileType.CONFIGURATION"
+        *ngIf="
+          currentFile?.type === fileType.CONFIGURATION &&
+          !mode.is(modeType.editorMode)
+        "
       >
         <app-button
           (click)="togglePalette()"
           [title]="(settings.showPalette ? 'Hide' : 'Show') + ' Palette'"
         >
-          <fa-icon [icon]="foldArrowRight()"></fa-icon>
+          <fa-icon [icon]="foldPaletteArrow()"></fa-icon>
         </app-button>
       </div>
     </div>

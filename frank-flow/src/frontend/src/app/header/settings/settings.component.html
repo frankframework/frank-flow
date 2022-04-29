@@ -237,6 +237,16 @@
           (stateChange)="setSettings()"
         ></app-toggle>
       </div>
+      <div class="input-row">
+        <label
+          title="The palette shows all the nodes which you can drag and drop into the flow"
+          >Show Palette</label
+        >
+        <app-toggle
+          [(state)]="settings.showPalette"
+          (stateChange)="setSettings()"
+        ></app-toggle>
+      </div>
     </div>
   </div>
   <div class="content" *ngIf="currentSettingsTab === 'assistance'">
