@@ -32,10 +32,10 @@ export class AppComponent implements OnInit {
     }
   }
 
-  foldArrow = () =>
+  foldExplorerArrow = () =>
     this.settings.showExplorer ? faAngleDoubleLeft : faAngleDoubleRight;
 
-  foldArrowRight = () =>
+  foldPaletteArrow = () =>
     this.settings.showPalette ? faAngleDoubleRight : faAngleDoubleLeft;
 
   constructor(
