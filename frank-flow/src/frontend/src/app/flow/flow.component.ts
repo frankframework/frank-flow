@@ -49,7 +49,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   private currentFile!: File;
   private nodes!: Map<string, Node>;
   private currentFileSubscription!: Subscription;
-  private graphSubscription!: Subscription;
+  private layoutSubscription!: Subscription;
 
   public fileIsLoading!: boolean;
   public fileIsConfiguration!: boolean;
@@ -62,7 +62,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
     private renderer: Renderer2,
     private library: FaIconLibrary,
     private currentFileService: CurrentFileService,
-    private graphService: LayoutService,
+    private layoutService: LayoutService,
     private flowStructureService: FlowStructureService,
     private panZoomService: PanZoomService,
     private settingsService: SettingsService
@@ -98,7 +98,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.currentFileSubscription.unsubscribe();
-    this.graphSubscription.unsubscribe();
+    this.layoutSubscription.unsubscribe();
   }
 
   setCanvasElement(): void {
@@ -118,7 +118,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   setNodesSubscription(): void {
-    this.graphSubscription = this.graphService.nodesObservable.subscribe({
+    this.layoutSubscription = this.layoutService.nodesObservable.subscribe({
       next: (nodes: Map<string, Node>) => {
         this.nodes = nodes;
         this.setBasicCanvasSize();
