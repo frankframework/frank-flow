@@ -120,6 +120,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
       {
         language: 'xml',
         theme: 'vs-dark',
+        renderWhitespace: 'all',
       }
     );
   }
