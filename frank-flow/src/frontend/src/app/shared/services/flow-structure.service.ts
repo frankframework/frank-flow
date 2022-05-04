@@ -346,20 +346,18 @@ export class FlowStructureService {
     if (this.attributeListIsEmpty(pipeline.attributes)) {
       this.createFirstAttribute(firstPipeAttribute, pipeline, true);
     } else {
-      this.editSingleAttribute(firstPipeAttribute, pipeline.attributes, true);
+      this.editSingleAttribute(firstPipeAttribute, pipeline.attributes);
     }
   }
 
   editSingleAttribute(
     changedAttribute: ChangedAttribute,
-    attributeList: FlowNodeAttributes,
-    flowUpdate = false
+    attributeList: FlowNodeAttributes
   ): void {
     const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
     const editAttributeOperation = this.editAttribute(
       changedAttribute,
-      attributeList,
-      flowUpdate
+      attributeList
     );
     if (editAttributeOperation) {
       editOperations.push(editAttributeOperation);
@@ -732,8 +730,7 @@ export class FlowStructureService {
 
   editAttribute(
     changedAttribute: ChangedAttribute,
-    attributeList: FlowNodeAttributes,
-    flowUpdate = false
+    attributeList: FlowNodeAttributes
   ): monaco.editor.IIdentifiedSingleEditOperation | void {
     const attribute = this.findAttribute(attributeList, changedAttribute.name);
 
@@ -751,7 +748,7 @@ export class FlowStructureService {
 
       return { text, range };
     } else {
-      this.createAttribute(changedAttribute, attributeList, flowUpdate);
+      return this.createAttributeEditOperation(changedAttribute, attributeList);
     }
   }
 
@@ -855,7 +852,21 @@ export class FlowStructureService {
     changedAttribute: ChangedAttribute,
     attributeList: FlowNodeAttributes,
     flowUpdate = false
-  ): void {
+  ): monaco.editor.IIdentifiedSingleEditOperation | void {
+    const editOperation = this.createAttributeEditOperation(
+      changedAttribute,
+      attributeList
+    );
+
+    if (editOperation) {
+      this.monacoEditorComponent?.applyEdits([editOperation], flowUpdate);
+    }
+  }
+
+  createAttributeEditOperation(
+    changedAttribute: ChangedAttribute,
+    attributeList: FlowNodeAttributes
+  ): monaco.editor.IIdentifiedSingleEditOperation | void {
     if (this.attributeListIsEmpty(attributeList)) {
       return;
     }
@@ -871,8 +882,7 @@ export class FlowStructureService {
         startColumn: lastAttribute.endColumn,
         endColumn: lastAttribute.endColumn,
       };
-
-      this.monacoEditorComponent?.applyEdits([{ text, range }], flowUpdate);
+      return { range, text };
     }
   }
 
