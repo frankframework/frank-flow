@@ -133,7 +133,6 @@
       grid-column-start: 2;
       white-space: nowrap;
       overflow: hidden;
-      font-weight: bold;
       text-overflow: ellipsis;
     }
 
@@ -143,6 +142,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      font-weight: bold;
     }
 
     &__badges {
