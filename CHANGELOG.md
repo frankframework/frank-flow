@@ -1,3 +1,26 @@
+# [2.22.0](https://github.com/ibissource/frank-flow/compare/v2.21.0...v2.22.0) (2022-05-05)
+
+
+### ✨ Features
+
+* show tabs and spaces in the text editor ([1335e0b](https://github.com/ibissource/frank-flow/commit/1335e0b6b7e3367c59bef816c8be7617b3f5af96))
+
+
+### 🐛 Bug Fixes
+
+* make monaco use tabs instead of spaces ([2d6c59e](https://github.com/ibissource/frank-flow/commit/2d6c59e77520657cdeef324f79de1ab27f99bfe7))
+* make node moving consistant ([3e0ecaa](https://github.com/ibissource/frank-flow/commit/3e0ecaae96ad9ec0636497fcfad83978658bbc3c))
+* make node name bold ([200e57c](https://github.com/ibissource/frank-flow/commit/200e57c2ad7b6796721e8cf2d54fda07e05716fb))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([724ccec](https://github.com/ibissource/frank-flow/commit/724ccec3e8bdc34306df03b4fa9a6fe6dc2cadc8))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([5c4409d](https://github.com/ibissource/frank-flow/commit/5c4409dbb96b57cc7095c4ed47e90618ba7a04e8))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([05cf185](https://github.com/ibissource/frank-flow/commit/05cf185cac7e42cec69fa0369743a753817cc08c))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([6b2d8b1](https://github.com/ibissource/frank-flow/commit/6b2d8b10dc105957586e76e288a93e71cd14ac27))
+* **deps:** bump jqwidgets-ng in /frank-flow/src/frontend ([07aba0c](https://github.com/ibissource/frank-flow/commit/07aba0cf77c9c3d21f580f19e37be8627ee17f9e))
+
 # [2.21.0](https://github.com/ibissource/frank-flow/compare/v2.20.4...v2.21.0) (2022-04-29)
 
 
