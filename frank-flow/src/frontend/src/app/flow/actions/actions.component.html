@@ -1,9 +1,16 @@
-<app-button (click)="zoomIn()" title="Zoom in">
-  <fa-icon icon="search-plus"></fa-icon>
-</app-button>
-<app-button (click)="zoomReset()" title="Reset zoom and pan">
-  <fa-icon icon="home"></fa-icon>
-</app-button>
-<app-button (click)="zoomOut()" title="Zoom out">
-  <fa-icon icon="search-minus"></fa-icon>
-</app-button>
+<fa-icon
+  class="zoom-icon"
+  icon="search"
+  (click)="zoomIn()"
+  title="Zoom in"
+></fa-icon>
+<input
+  class="slider"
+  type="range"
+  min="0"
+  max="2"
+  value="1"
+  step="0.1"
+  [(ngModel)]="zoomLevel"
+  (change)="zoom()"
+/>

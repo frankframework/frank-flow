@@ -53,4 +53,8 @@ export class PanZoomService {
   panTo(x: number, y: number): void {
     this.panZoomAPI.panToPoint({ x, y });
   }
+
+  zoom(zoomLevel: number): void {
+    this.panZoomAPI.changeZoomLevel(zoomLevel, { x: 0, y: 0 });
+  }
 }
