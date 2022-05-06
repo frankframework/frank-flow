@@ -26,6 +26,7 @@ let configuration: FlowStructureNode;
 let xml: string;
 let tagStartLine: number;
 let tagStartColumn: number;
+let currentAdapter: FlowStructureNode;
 
 let originalFile: File;
 
@@ -98,7 +99,7 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     tagStartColumn + MONACO_COLUMN_OFFSET,
     parser.column + MONACO_COLUMN_OFFSET,
     tag.name,
-    path,
+    currentAdapter?.name + '=>' + path,
     bufferAttributes,
     tag.isSelfClosing
   );
@@ -150,6 +151,7 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
         configuration = currentNode;
         return;
       case 'Adapter':
+        currentAdapter = currentNode;
         return;
       case 'Pipeline':
         pipeline = currentNode;
