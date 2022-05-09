@@ -1,16 +1,17 @@
 <fa-icon
   class="zoom-icon"
   icon="search"
-  (click)="zoomIn()"
-  title="Zoom in"
+  (click)="zoomReset()"
+  title="Reset zoom"
 ></fa-icon>
 <input
   class="slider"
   type="range"
   min="0"
-  max="2"
+  max="4"
   value="1"
   step="0.1"
+  title="Slide to zoom"
   [(ngModel)]="zoomLevel"
   (change)="zoom()"
 />

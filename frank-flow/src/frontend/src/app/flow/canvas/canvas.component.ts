@@ -63,13 +63,21 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.jsPlumbInstance.setZoom(zoom);
   }
 
-  calculateZoomLevel(zoomLevel: number): number {
-    const neutralZoomLevel = 1;
-    const minZoomLevel = 0.5;
-    const zoomStep = 0.5;
-    const zoomOutLevel = minZoomLevel + zoomLevel * zoomStep;
-    const isZoomingIn = zoomLevel > neutralZoomLevel;
-    return isZoomingIn ? zoomLevel : zoomOutLevel;
+  calculateZoomLevel(panZoomZoomLevel: number): number {
+    console.log('----');
+    console.log(panZoomZoomLevel);
+    const MIN_JSPLUMB_ZOOM = 0.125;
+    const NEUTRAL_JSPLUMB_ZOOM = 1;
+
+    const NEUTRAL_PANZOOM_ZOOM = 3;
+    let zoom;
+    zoom =
+      panZoomZoomLevel < NEUTRAL_PANZOOM_ZOOM
+        ? 1
+        : (panZoomZoomLevel % NEUTRAL_PANZOOM_ZOOM) + NEUTRAL_JSPLUMB_ZOOM;
+
+    console.log(zoom);
+    return zoom;
   }
 
   ngAfterViewInit(): void {
