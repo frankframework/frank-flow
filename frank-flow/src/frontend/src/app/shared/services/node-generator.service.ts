@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NodeService } from 'src/app/flow/node/node.service';
 import Pipe from '../../flow/node/nodes/pipe.model';
-import Listener from '../../flow/node/nodes/listener.model';
+import Receiver from '../../flow/node/nodes/receiver.model';
 import Exit from '../../flow/node/nodes/exit.model';
 import { Node } from '../../flow/node/nodes/node.model';
 import { Forward } from '../models/forward.model';
@@ -9,6 +9,8 @@ import { FlowStructureNode } from '../models/flow-structure-node.model';
 import { FlowStructure } from '../models/flow-structure.model';
 import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
 import Sender from '../../flow/node/nodes/sender.model';
+import { FlowNodeNestedElements } from '../models/flow-node-nested-elements.model';
+import { Badge } from '../models/badge.model';
 
 @Injectable({
   providedIn: 'root',
@@ -42,13 +44,16 @@ export class NodeGeneratorService {
     for (const receiver of receivers) {
       const positions = receiver.positions;
       const attributes = receiver.attributes;
-      const listenerNode = new Listener({
+      const badges: any[] = this.generateBadges(receiver.nestedElements);
+
+      const listenerNode = new Receiver({
         id: receiver.uid,
         name: receiver.name,
         type: receiver.type,
         top: positions.y,
         left: positions.x,
         attributes,
+        badges,
       });
 
       const forwardTarget = pipes.find(
@@ -61,6 +66,47 @@ export class NodeGeneratorService {
     }
   }
 
+  generateBadges(nestedElements: FlowNodeNestedElements): Badge[] {
+    const filteredElements = this.getFilteredNestedElements(nestedElements);
+    return filteredElements.map(([typeGroup, elements]) =>
+      this.getBadgeForType(typeGroup, elements)
+    );
+  }
+
+  getFilteredNestedElements(nestedElements: FlowNodeNestedElements) {
+    const hiddenNestedElements = new Set(['forward']);
+    return Object.entries(nestedElements).filter(
+      ([typeGroup, _]) => !hiddenNestedElements.has(typeGroup)
+    );
+  }
+
+  getBadgeForType(typeGroup: string, elements: FlowStructureNode[]): Badge {
+    switch (typeGroup) {
+      case 'sender':
+        return {
+          title: this.getBadgeTitle(elements, 'sender'),
+          style: 'success',
+          icon: 'paper-plane',
+        };
+      case 'listener':
+        return {
+          title: this.getBadgeTitle(elements, 'listener'),
+          style: 'info',
+          icon: 'satellite-dish',
+        };
+      default:
+        return {
+          title: this.getBadgeTitle(elements, 'other'),
+          style: 'danger',
+          icon: 'question',
+        };
+    }
+  }
+
+  getBadgeTitle(value: FlowStructureNode[], type: string): string {
+    return value.length > 1 ? `${value.length} ${type}s` : value[0].type;
+  }
+
   generatePipeline(
     pipes: FlowStructureNode[],
     nodes: FlowStructureNode[]
@@ -69,6 +115,7 @@ export class NodeGeneratorService {
       const positions = pipe.positions;
       const attributes = pipe.attributes;
       const senders = pipe.senders;
+      const badges = this.generateBadges(pipe.nestedElements);
       const nodeOptions = {
         id: pipe.uid,
         name: pipe.name,
@@ -77,6 +124,7 @@ export class NodeGeneratorService {
         left: positions.x,
         attributes,
         senders,
+        badges,
       };
       const node =
         pipe.type === 'SenderPipe'

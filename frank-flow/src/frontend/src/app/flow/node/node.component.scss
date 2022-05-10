@@ -148,22 +148,47 @@
     &__badges {
       grid-column-start: 2;
       grid-row-start: 3;
+      grid-auto-flow: column;
       width: 100%;
       overflow: hidden;
     }
 
-    &__sender {
+    &__badge {
       display: inline-block;
       max-width: 100%;
       font-size: 11px;
-      color: var(--success);
-      background: var(--success-lighter-7);
-      border: 1px solid var(--success-darker-1);
+      color: var(--primary);
+      background: var(--primary-lighter-7);
+      border: 1px solid var(--primary-darker-1);
       border-radius: 5px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       padding: 2px;
+
+      &--success {
+        color: var(--success);
+        background: var(--success-lighter-7);
+        border: 1px solid var(--success-darker-1);
+      }
+
+      &--info {
+        color: var(--info);
+        background: var(--info-lighter-7);
+        border: 1px solid var(--info-darker-1);
+      }
+
+      &--warning {
+        color: var(--warning);
+        background: var(--warning-lighter-7);
+        border: 1px solid var(--warning-darker-1);
+      }
+
+      &--danger {
+        color: var(--danger);
+        background: var(--danger-lighter-7);
+        border: 1px solid var(--danger-darker-1);
+      }
     }
   }
 
