@@ -52,10 +52,6 @@ export class NodeComponent implements AfterViewInit, OnInit {
     return this.flowStructureService.selectedNode?.uid === this.node?.getId();
   }
 
-  public get senders() {
-    return this.node.getSenders() ?? [];
-  }
-
   public get badges() {
     return this.node.getBadges() ?? [];
   }

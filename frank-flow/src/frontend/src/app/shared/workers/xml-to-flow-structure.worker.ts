@@ -106,7 +106,6 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
 
   bufferAttributes = {};
   if (currentNode.type.endsWith('Sender')) {
-    unclosedNodes[unclosedNodes.length - 1].senders?.push(currentNode);
     if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.['sender']) {
       unclosedNodes[unclosedNodes.length - 1].nestedElements = {
         ...unclosedNodes[unclosedNodes.length - 1].nestedElements,
@@ -134,7 +133,6 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
       })
       ?.forwards?.push(currentNode);
   } else if (currentNode.type.endsWith('Listener')) {
-    unclosedNodes[unclosedNodes.length - 1].senders?.push(currentNode);
     if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.['listener']) {
       unclosedNodes[unclosedNodes.length - 1].nestedElements = {
         ...unclosedNodes[unclosedNodes.length - 1].nestedElements,
