@@ -6,7 +6,7 @@ import Exit from 'src/app/flow/node/nodes/exit.model';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
 import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
 import { FlowNodeAttributes } from '../models/flow-node-attributes.model';
-import Listener from '../../flow/node/nodes/listener.model';
+import Listener from '../../flow/node/nodes/receiver.model';
 import Pipe from '../../flow/node/nodes/pipe.model';
 import { CurrentFileService } from './current-file.service';
 import { File } from '../models/file.model';
