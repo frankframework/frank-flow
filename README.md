@@ -67,9 +67,9 @@ The available settings are:
 
 The easiest way to get started with the Frank!Flow is with help of the [Frank!Runner](https://github.com/ibissource/frank-runner). Start a Frank and navigate to http://localhost/frank-flow.
 
-### Existing Frank!
+### Without the Frank!Runner
 
-The Frank!Flow will be build as a `.jar` file. This file includes everything for the Frank!Flow to work in a Tomcat webapp. To get the Frank!Flow to work in an existing Frank! place the [Frank!Flow Artifact](https://nexus.frankframework.org/service/rest/repository/browse/releases/org/ibissource/frank-flow/) in the `WEB-INF/lib` folder of the Tomcat webapp.
+It is recommended to use the Frank!Runner, because it will ensure that the Frank!Flow can be used while configuring a Frank! without it getting in production. If you want to include the Frank!Flow manually, follow the [instructions for developers](#add-the-frankflow-to-a-frank).
 
 ## Developing the Frank!Flow
 
@@ -93,11 +93,13 @@ There are some basic requirements that are needed to test or develop the Frank!F
 - [Node.js](https://nodejs.org/en/)
 - [Yarn](https://yarnpkg.com/getting-started/install)
 
-##### Maven
+##### Add the Frank!Flow to a Frank!
 
 The Frank!Flow should run as part of the Frank!Framework so it has access to the Frank!Doc and configuration files.
 
-To include the Frank!Flow in a Frank! it's easiest to do this automatically with maven. Otherwise, you'll have to copy the build artifact to the [webapp folder](#existing-frank!).
+###### Maven
+
+To include the Frank!Flow in a Frank! it's easiest to do this automatically with maven. Otherwise, you'll have to copy the build artifact to the [webapp folder](#manually-add-the-frankflow) manually.
 
 The POM will tell Maven which extra dependencies you want to download. In this case we want the artifact “frank-flow”. Add the following dependencies and repository to the `pom.xml`:
 
@@ -124,6 +126,12 @@ The POM will tell Maven which extra dependencies you want to download. In this c
     </repository>
 </repositories>
 ```
+
+Notice the added repository, this is needed because the Frank!Flow is hosted on the [Frank!Framework Maven Repository](https://nexus.frankframework.org).
+
+###### Manually add the Frank!Flow
+
+The Frank!Flow will be build as a `.jar` file. This file  includes everything for the Frank!Flow to work in a Tomcat webapp. To  get the Frank!Flow to work in an existing Frank! place the [Frank!Flow Artifact](https://nexus.frankframework.org/service/rest/repository/browse/releases/org/ibissource/frank-flow/) in the `WEB-INF/lib` folder of the Tomcat webapp.
 
 #### DevTools
 
@@ -172,7 +180,7 @@ The other option to run `mvn install -P frontend`. This command builds both the 
 The Frank!Flow has some configuration options which are mainly used for the backend. The configuration options can be set by placing them in a `frank-flow.properties` file. Every property should be on it's own line and be followed by an equals sign (`=`) and a value. The properties file should be placed in the location from where the Frank!Flow gets start. While developing with the Frank!Runner this would be in the root of the folder `frank-runner`.
 
 | Property                   | Description                                      | Default value                        |
-| -------------------------- | ------------------------------------------------ |--------------------------------------|
+| -------------------------- | ------------------------------------------------ | ------------------------------------ |
 | `frank-flow.frontend-path` | The location of the dist folder for the frontend | The frontend in the JAR will be used |
 | `frank-flow.context-path`  | The URL at which the Frank!Flow will be served   | `/frank-flow/`                       |
 | `frank-flow.port`          | The port which the build-in Tomcat should use    | `8080`                               |
