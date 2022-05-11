@@ -311,6 +311,8 @@ export class CurrentFileService {
       .then((result) => {
         if (result) {
           this.setNewCurrentFile(file, result);
+        } else {
+          this.resetCurrentFile();
         }
       })
       .catch((error: Error) => {
