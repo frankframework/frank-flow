@@ -43,7 +43,7 @@ export class PanZoomService {
   }
 
   reset(): void {
-    this.panZoomAPI.resetView();
+    this.panZoomAPI.resetView?.();
   }
 
   panCenter(): void {
