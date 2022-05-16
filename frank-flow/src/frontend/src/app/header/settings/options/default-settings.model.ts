@@ -19,6 +19,6 @@ export class DefaultSettings implements Settings {
   showUnsavedChangesWarning = true;
   automaticPan = false;
   showConfirmPopup = true;
-  insetSpaces = false;
+  insertSpaces = false;
   showWhitespaces = false;
 }

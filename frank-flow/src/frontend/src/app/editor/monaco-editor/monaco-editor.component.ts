@@ -303,23 +303,23 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.settingsSubscription =
       this.settingsService.settingsObservable.subscribe({
         next: (settings) => {
-          this.onThemeChange(settings);
           this.onResize();
-          this.onSettingsChange(settings);
+          this.onSettingChangeEditor(settings);
+          this.onSettingsChangeModel(settings);
         },
       });
   }
 
-  onThemeChange(settings: Settings): void {
+  onSettingChangeEditor(settings: Settings): void {
     this.codeEditorInstance.updateOptions({
+      renderWhitespace: settings.showWhitespaces ? 'all' : 'none',
       theme: settings.darkMode ? 'vs-dark' : 'vs-light',
     });
   }
 
-  onSettingsChange(settings: Settings): void {
-    this.codeEditorInstance.updateOptions({
-      renderWhitespace: settings.showWhitespaces ? 'all' : 'none',
-      insertSpaces: settings.insetSpaces,
+  onSettingsChangeModel(settings: Settings): void {
+    this.codeEditorInstance.getModel()?.updateOptions({
+      insertSpaces: settings.insertSpaces,
     });
   }
 }
