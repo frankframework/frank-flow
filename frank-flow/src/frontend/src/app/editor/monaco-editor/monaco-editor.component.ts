@@ -110,7 +110,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     this.initializeNewFileSubscription();
     this.initializeOnDidChangeCursorPosition();
     this.initializeResizeObserver();
-    this.initializeThemeObserver();
+    this.initializeSettingsObserver();
     this.finishedLoading.emit();
   }
 
@@ -299,12 +299,13 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  initializeThemeObserver(): void {
+  initializeSettingsObserver(): void {
     this.settingsSubscription =
       this.settingsService.settingsObservable.subscribe({
         next: (settings) => {
           this.onThemeChange(settings);
           this.onResize();
+          this.onSettingsChange(settings);
         },
       });
   }
@@ -312,6 +313,13 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   onThemeChange(settings: Settings): void {
     this.codeEditorInstance.updateOptions({
       theme: settings.darkMode ? 'vs-dark' : 'vs-light',
+    });
+  }
+
+  onSettingsChange(settings: Settings): void {
+    this.codeEditorInstance.updateOptions({
+      renderWhitespace: settings.showWhitespaces ? 'all' : 'none',
+      insertSpaces: settings.insetSpaces,
     });
   }
 }
