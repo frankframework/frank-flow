@@ -13,4 +13,6 @@ export interface Settings extends FlowSettings {
   ignoreConfigurationSettings: boolean;
   automaticPan: boolean;
   showConfirmPopup: boolean;
+  insertSpaces: boolean;
+  showWhitespaces: boolean;
 }
