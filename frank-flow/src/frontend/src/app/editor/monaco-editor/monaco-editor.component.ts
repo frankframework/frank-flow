@@ -314,4 +314,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
       theme: settings.darkMode ? 'vs-dark' : 'vs-light',
     });
   }
+
+  getTextInRange(range: monaco.IRange): string | undefined {
+    return this.codeEditorInstance.getModel()?.getValueInRange(range);
+  }
 }

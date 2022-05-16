@@ -450,30 +450,23 @@ export class FlowStructureService {
     return this.getUniqueNodeName(this.flowStructure.listeners, name);
   }
 
-  addExit(exitData: Exit): void {
-    const exits = this.flowStructure.exits;
-    const lastExit = exits[exits.length - 1] ?? this.flowStructure.pipeline;
-    const line = lastExit.line + 1;
-    const exitName = this.getUniqueExitPath(exitData.getName());
+  addExit(exit: Exit): void {
+    const exitName = this.getUniqueExitPath(exit.getName());
+    let text = `\t\t\t\t<${exit.getType()} path="${exitName}" state="success" ${this.addXAndYIfPresent(
+      exit
+    )}/>\n`;
 
-    let text = `\t\t\t\t<${exitData.getType()} path="${exitName}" />\n`;
-    let range = {
-      startLineNumber: line,
-      startColumn: 0,
-      endColumn: 0,
-      endLineNumber: line,
-    };
-
-    if (this.ExitsTagsHaveContent()) {
-      this.monacoEditorComponent?.applyEdits([{ range, text }], true);
-    } else if (this.ExitsTagExists()) {
-      range.startLineNumber += 1;
-      range.endLineNumber += 1;
+    const exitsTag = this.getExitsTag();
+    if (exitsTag) {
+      const range = {
+        startLineNumber: exitsTag.endLine,
+        endLineNumber: exitsTag.endLine,
+        startColumn: 0,
+        endColumn: 0,
+      };
       this.monacoEditorComponent?.applyEdits([{ range, text }], true);
     } else {
-      text = this.generateExitTagsText(exitData.getType(), exitName);
-      range.startLineNumber -= this.flowStructure.exits.length;
-      this.monacoEditorComponent?.applyEdits([{ range, text }], true);
+      this.createExitsTagWithExit(text);
     }
   }
 
@@ -481,27 +474,51 @@ export class FlowStructureService {
     return this.getUniqueNodeName(this.flowStructure.exits, name);
   }
 
-  ExitsTagsHaveContent(): boolean {
-    return (
-      this.flowStructure.exits[0] &&
-      this.flowStructure.exits[0].uid.endsWith('Exits(Exits)')
-    );
+  addXAndYIfPresent(exit: Exit) {
+    return exit.getLeft() && exit.getTop()
+      ? `flow:y="${exit.getTop()}" flow:x="${exit.getLeft()}" `
+      : '';
   }
 
-  ExitsTagExists(): boolean {
-    return this.flowStructure.nodes.some((node: FlowStructureNode) =>
+  getExitsTag(): FlowStructureNode | undefined {
+    return this.flowStructure.nodes.find((node: FlowStructureNode) =>
       node.uid.startsWith('Exits(Exits)')
     );
   }
 
-  generateExitTagsText(type: string, exitName: string): string {
-    let text = `\t\t\t<Exits>\n`;
+  createExitsTagWithExit(currentExitText: string): void {
+    const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
+    const text = `\t\t\t<Exits>\n${this.getAllExistingExitTexts()}${currentExitText}\t\t\t</Exits>\n`;
+    const range = {
+      startLineNumber: this.flowStructure.pipeline.line + 1,
+      endLineNumber: this.flowStructure.pipeline.line + 1,
+      startColumn: 0,
+      endColumn: 0,
+    };
     for (const exit of this.flowStructure.exits) {
-      text += `\t\t\t\t<${exit.type} path="${exit.name}" />\n`;
+      const nodeDeleteOperation = this.getDeleteOperationForNode(exit);
+      editOperations.push(nodeDeleteOperation);
     }
-    text += `\t\t\t\t<${type} path="${exitName}" />\n\t\t\t</Exits>\n`;
+    editOperations.push({ range, text });
+    this.monacoEditorComponent?.applyEdits(editOperations, true);
+  }
 
-    return text;
+  getAllExistingExitTexts() {
+    const text = this.flowStructure.exits
+      .map((exit: FlowStructureNode) => this.getNodeText(exit))
+      .join('\n');
+    return text ? text + '\n' : text;
+  }
+
+  getNodeText(node: FlowStructureNode): string | undefined {
+    const range = {
+      startLineNumber: node.line,
+      startColumn: 0,
+      endColumn: node.column,
+      endLineNumber: node.endLine,
+    };
+
+    return this.monacoEditorComponent?.getTextInRange(range);
   }
 
   addSender(node: Sender): void {
