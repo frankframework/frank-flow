@@ -10,7 +10,7 @@ export interface Settings extends FlowSettings {
   defaultMode: ModeType;
   useLastMode: boolean;
   switchWithoutSaving: SwitchWithoutSavingOption;
-  ignoreConfigurationSettings: boolean;
+  ignoreFlowSettings: boolean;
   automaticPan: boolean;
   showConfirmPopup: boolean;
   insertSpaces: boolean;

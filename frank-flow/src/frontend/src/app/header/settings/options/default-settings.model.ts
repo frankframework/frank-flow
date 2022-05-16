@@ -13,7 +13,7 @@ export class DefaultSettings implements Settings {
   forwardStyle = ForwardStyle.flowchart;
   direction = FlowDirection.horizontal;
   gridSize = GridSize.tenth;
-  ignoreConfigurationSettings = false;
+  ignoreFlowSettings = false;
   showExplorer = true;
   showPalette = true;
   showUnsavedChangesWarning = true;

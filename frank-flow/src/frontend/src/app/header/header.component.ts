@@ -60,8 +60,8 @@ export class HeaderComponent implements OnInit {
       .open();
   }
 
-  openConfigurationSettings(): void {
-    this.ngxSmartModalService.getModal('configurationSettingsModal').open();
+  openFlowSettings(): void {
+    this.ngxSmartModalService.getModal('flowSettingsModal').open();
   }
 
   currentFileTitle() {
