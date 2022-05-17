@@ -4,6 +4,7 @@ import {
   HostBinding,
   HostListener,
   Input,
+  OnInit,
 } from '@angular/core';
 import { Node } from './nodes/node.model';
 import {
@@ -16,7 +17,13 @@ import {
 } from 'jsplumb';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
-import { faPuzzlePiece, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import {
+  faHeadphonesAlt,
+  faPaperPlane,
+  faPuzzlePiece,
+  faQuestion,
+  faSatelliteDish,
+} from '@fortawesome/free-solid-svg-icons';
 import { SettingsService } from 'src/app/header/settings/settings.service';
 import { Settings } from 'src/app/header/settings/settings.model';
 import { ForwardStyle } from 'src/app/header/settings/options/forward-style';
@@ -26,28 +33,28 @@ import { FlowSettingsService } from '../../shared/services/flow-settings.service
 import { DefaultSettings } from '../../header/settings/options/default-settings.model';
 import { FlowSettings } from '../../shared/models/flow-settings.model';
 import { FlowNamespaceService } from 'src/app/shared/services/flow-namespace.service';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-node',
   templateUrl: './node.component.html',
   styleUrls: ['./node.component.scss'],
 })
-export class NodeComponent implements AfterViewInit {
+export class NodeComponent implements AfterViewInit, OnInit {
   @Input() public node!: Node;
   @Input() public jsPlumbInstance!: jsPlumbInstance;
   @Input() public generating!: boolean;
   @HostBinding('style') public style?: string;
   @HostBinding('class') public cssClass?: string;
+
   @HostBinding('class.isActive')
   public get isActive() {
     return this.flowStructureService.selectedNode?.uid === this.node?.getId();
   }
-  public get senders() {
-    return this.node.getSenders() ?? [];
-  }
 
-  public readonly puzzlePiece = faPuzzlePiece;
-  public readonly paperPlane = faPaperPlane;
+  public get badges() {
+    return this.node.getBadges() ?? [];
+  }
 
   private defaultSettings = new DefaultSettings();
   private readonly bezierConnectionSpecification: ConnectorSpec = [
@@ -108,8 +115,18 @@ export class NodeComponent implements AfterViewInit {
     private settingsService: SettingsService,
     private flowSettingsService: FlowSettingsService,
     private currentFileService: CurrentFileService,
-    private flowNamespaceService: FlowNamespaceService
+    private flowNamespaceService: FlowNamespaceService,
+    private library: FaIconLibrary
   ) {}
+
+  ngOnInit(): void {
+    this.library.addIcons(
+      faPaperPlane,
+      faPuzzlePiece,
+      faQuestion,
+      faSatelliteDish
+    );
+  }
 
   @HostListener('dblclick') onDoubleClick(): void {
     this.openOptions();
@@ -147,7 +164,7 @@ export class NodeComponent implements AfterViewInit {
   }
 
   mergeSettings(): void {
-    if (!this.settings.ignoreConfigurationSettings) {
+    if (!this.settings.ignoreFlowSettings) {
       this.settings = { ...this.settings, ...this.flowSettings };
     }
   }
@@ -210,7 +227,6 @@ export class NodeComponent implements AfterViewInit {
     switch (this.settings.direction) {
       case 'vertical':
         return 'Bottom';
-      case 'horizontal':
       default:
         return 'RightMiddle';
     }
@@ -220,7 +236,6 @@ export class NodeComponent implements AfterViewInit {
     switch (this.settings.direction) {
       case 'vertical':
         return 'Top';
-      case 'horizontal':
       default:
         return 'LeftMiddle';
     }

@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { NodeService } from '../../node/node.service';
 import { FlowStructureService } from '../../../shared/services/flow-structure.service';
-import Listener from '../../node/nodes/listener.model';
+import Listener from '../../node/nodes/receiver.model';
 import Pipe from '../../node/nodes/pipe.model';
 import Exit from '../../node/nodes/exit.model';
 import Sender from '../../node/nodes/sender.model';

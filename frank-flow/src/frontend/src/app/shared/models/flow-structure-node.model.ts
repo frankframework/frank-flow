@@ -15,7 +15,6 @@ export class FlowStructureNode {
   public positions: { x: number; y: number };
   public parent?: FlowStructureNode;
   public nestedElements: FlowNodeNestedElements = {};
-  public senders: FlowStructureNode[];
   public path: string;
   public isSelfClosing: boolean;
   public active: string;
@@ -46,7 +45,6 @@ export class FlowStructureNode {
     this.id = this.getId();
     this.uid = this.getUid();
     this.positions = this.getPositions();
-    this.senders = [];
   }
 
   private getName(): string {

@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConfigurationSettingsComponent } from './configuration-settings.component';
+import { FlowSettingsComponent } from './flow-settings.component';
 import { NgxSmartModalComponent, NgxSmartModalModule } from 'ngx-smart-modal';
 
-describe('SettingsComponent', () => {
-  let component: ConfigurationSettingsComponent;
-  let fixture: ComponentFixture<ConfigurationSettingsComponent>;
+describe('FlowSettingsComponent', () => {
+  let component: FlowSettingsComponent;
+  let fixture: ComponentFixture<FlowSettingsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ConfigurationSettingsComponent, NgxSmartModalComponent],
+      declarations: [FlowSettingsComponent, NgxSmartModalComponent],
       imports: [NgxSmartModalModule.forChild()],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ConfigurationSettingsComponent);
+    fixture = TestBed.createComponent(FlowSettingsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
