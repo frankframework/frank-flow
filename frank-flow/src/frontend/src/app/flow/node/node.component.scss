@@ -192,6 +192,10 @@
     }
   }
 
+  &.dotted {
+    border: 3px dashed;
+  }
+
   &:hover {
     cursor: grab;
   }

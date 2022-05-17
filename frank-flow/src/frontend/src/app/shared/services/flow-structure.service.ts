@@ -169,7 +169,9 @@ export class FlowStructureService {
     let endLine = sourceNode.endLine ?? 0;
     endLine += sourceNode.isSelfClosing ? 1 : 0;
 
-    const text = `\t\t\t\t<Forward name="success" path="${target?.name}" />\n`;
+    const text = `\t\t\t\t<Forward name="success" path="${
+      target?.name ?? 'READY'
+    }" />\n`;
     const range = {
       startLineNumber: endLine,
       startColumn: 0,
@@ -183,6 +185,11 @@ export class FlowStructureService {
       this.addNestedElementToSingleLineElement(sourceNode, { text, range });
     } else {
       this.monacoEditorComponent?.applyEdits([{ range, text }]);
+    }
+
+    if (targetId === 'implicitExit') {
+      const exit = new Exit({ id: 'Exit', name: 'READY', type: 'Exit' });
+      this.addExit(exit);
     }
   }
 
@@ -1055,5 +1062,16 @@ export class FlowStructureService {
     }
 
     return currentLastNestedElement;
+  }
+
+  addDefaultExit(x: number = 700, y: number = 100): void {
+    const exit = new Exit({
+      id: 'Exit',
+      name: 'READY',
+      type: 'Exit',
+      top: y,
+      left: x,
+    });
+    this.addExit(exit);
   }
 }

@@ -33,7 +33,7 @@ export class NodeGeneratorService {
       firstPipe
     );
     this.generatePipeline(flowStructure.pipes, flowStructure.nodes);
-    this.generateExits(flowStructure.exits);
+    this.generateExits(flowStructure.exits, flowStructure.lastPipe);
   }
 
   generateReceivers(
@@ -149,7 +149,7 @@ export class NodeGeneratorService {
     }
   }
 
-  generateExits(exits: any[]): void {
+  generateExits(exits: any[], lastPipe: string | undefined): void {
     for (const exit of exits) {
       const positions = exit.positions;
       const attributes = exit.attributes;
@@ -163,6 +163,19 @@ export class NodeGeneratorService {
       });
       this.nodeMap.set(exit.uid, node);
     }
+    if (exits.length === 0 && lastPipe) {
+      this.addImplicitExit();
+    }
+  }
+
+  addImplicitExit(): void {
+    const implicitExitNode = new Exit({
+      id: 'implicitExit',
+      name: 'READY',
+      type: 'Exit',
+      class: 'dotted',
+    });
+    this.nodeMap.set('implicitExit', implicitExitNode);
   }
 
   generateForwards(): void {

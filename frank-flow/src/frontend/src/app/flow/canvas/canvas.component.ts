@@ -34,7 +34,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   public panzoomConfig!: PanZoomConfig;
   @HostBinding('tabindex')
   public tabindex = 1;
-  public flowUpdate = false;
+  public flowIsUpdating = false;
   public locked!: boolean;
   @ViewChild('canvas', { read: ViewContainerRef })
   private viewContainerRef!: ViewContainerRef;
@@ -137,11 +137,11 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   generateFlow(structure: FlowStructure): void {
-    if (this.flowUpdate) {
+    if (this.flowIsUpdating) {
       return;
     }
     this.jsPlumbInstance.ready(() => {
-      this.flowUpdate = true;
+      this.flowIsUpdating = true;
       this.jsPlumbInstance.reset(true);
       this.viewContainerRef.clear();
       this.nodeGeneratorService.resetNodes();
@@ -157,7 +157,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
         this.graphService.createLayout(this.nodeGeneratorService.nodeMap);
 
         this.nodeGeneratorService.generateForwards();
-        this.flowUpdate = false;
+        this.flowIsUpdating = false;
       });
     });
   }
