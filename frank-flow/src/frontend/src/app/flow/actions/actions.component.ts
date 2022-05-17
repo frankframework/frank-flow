@@ -1,6 +1,12 @@
 import { Component, NgZone } from '@angular/core';
 import { PanZoomService } from '../../shared/services/pan-zoom.service';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import {
+  faLocationArrow,
+  faSearch,
+  faSearchLocation,
+  faSearchMinus,
+  faSearchPlus,
+} from '@fortawesome/free-solid-svg-icons';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 
 @Component({
@@ -18,7 +24,12 @@ export class ActionsComponent {
     private panZoomService: PanZoomService,
     private ngZone: NgZone
   ) {
-    this.library.addIcons(faSearch);
+    this.library.addIcons(
+      faSearch,
+      faSearchPlus,
+      faSearchMinus,
+      faLocationArrow
+    );
   }
 
   ngOnInit() {
