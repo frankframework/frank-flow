@@ -9,8 +9,9 @@ export default class Exit extends Node {
     top?: number;
     left?: number;
     attributes?: FlowNodeAttributes;
+    class?: string;
   }) {
     super(options);
-    this.classes = 'shape--round color--danger';
+    this.classes = 'shape--round color--danger ' + options.class ?? '';
   }
 }

@@ -18,7 +18,6 @@ import {
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 import {
-  faHeadphonesAlt,
   faPaperPlane,
   faPuzzlePiece,
   faQuestion,
@@ -34,6 +33,7 @@ import { DefaultSettings } from '../../header/settings/options/default-settings.
 import { FlowSettings } from '../../shared/models/flow-settings.model';
 import { FlowNamespaceService } from 'src/app/shared/services/flow-namespace.service';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-node',
@@ -116,7 +116,8 @@ export class NodeComponent implements AfterViewInit, OnInit {
     private flowSettingsService: FlowSettingsService,
     private currentFileService: CurrentFileService,
     private flowNamespaceService: FlowNamespaceService,
-    private library: FaIconLibrary
+    private library: FaIconLibrary,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -189,7 +190,7 @@ export class NodeComponent implements AfterViewInit, OnInit {
   }
 
   nodeIsListener() {
-    return this.cssClass === 'shape--oval color--info';
+    return this.cssClass === 'color--info';
   }
 
   createListenerEndpoint(): void {
@@ -271,11 +272,15 @@ export class NodeComponent implements AfterViewInit, OnInit {
 
   handleDragStop(event: any): void {
     this.flowNamespaceService.handleNameSpace();
-    this.flowStructureService.editNodePositions({
-      nodeId: event.el.id,
-      xPos: event.pos[0],
-      yPos: event.pos[1],
-    });
+    if ('implicitExit' === event.el.id) {
+      this.flowStructureService.addDefaultExit(event.pos[0], event.pos[1]);
+    } else {
+      this.flowStructureService.editNodePositions({
+        nodeId: event.el.id,
+        xPos: event.pos[0],
+        yPos: event.pos[1],
+      });
+    }
   }
 
   nodeHasClass(event: any, className: string) {
@@ -283,9 +288,16 @@ export class NodeComponent implements AfterViewInit, OnInit {
   }
 
   openOptions(): void {
-    this.ngxSmartModalService
-      .getModal('optionsModal')
-      .setData(this.node, true)
-      .open();
+    if (this.node.getId() === 'implicitExit') {
+      this.toastr.info(
+        `Make the exit explicit by dragging it, this wil add it to the configuration.`,
+        `This is an implicit exit`
+      );
+    } else {
+      this.ngxSmartModalService
+        .getModal('optionsModal')
+        .setData(this.node, true)
+        .open();
+    }
   }
 }

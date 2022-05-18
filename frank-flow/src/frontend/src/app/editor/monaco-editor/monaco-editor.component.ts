@@ -322,4 +322,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
       insertSpaces: settings.insertSpaces,
     });
   }
+  
+  getTextInRange(range: monaco.IRange): string | undefined {
+    return this.codeEditorInstance.getModel()?.getValueInRange(range);
+  }
 }

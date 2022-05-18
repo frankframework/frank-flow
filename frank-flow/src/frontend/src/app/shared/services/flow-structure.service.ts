@@ -169,7 +169,9 @@ export class FlowStructureService {
     let endLine = sourceNode.endLine ?? 0;
     endLine += sourceNode.isSelfClosing ? 1 : 0;
 
-    const text = `\t\t\t\t<Forward name="success" path="${target?.name}" />\n`;
+    const text = `\t\t\t\t<Forward name="success" path="${
+      target?.name ?? 'READY'
+    }" />\n`;
     const range = {
       startLineNumber: endLine,
       startColumn: 0,
@@ -183,6 +185,11 @@ export class FlowStructureService {
       this.addNestedElementToSingleLineElement(sourceNode, { text, range });
     } else {
       this.monacoEditorComponent?.applyEdits([{ range, text }]);
+    }
+
+    if (targetId === 'implicitExit') {
+      const exit = new Exit({ id: 'Exit', name: 'READY', type: 'Exit' });
+      this.addExit(exit);
     }
   }
 
@@ -450,25 +457,75 @@ export class FlowStructureService {
     return this.getUniqueNodeName(this.flowStructure.listeners, name);
   }
 
-  addExit(exitData: Exit): void {
-    const exits = this.flowStructure.exits;
-    const lastExit = exits[exits.length - 1] ?? this.flowStructure.pipeline;
-    const line = lastExit.line + 1;
-    const exitName = this.getUniqueExitPath(exitData.getName());
+  addExit(exit: Exit): void {
+    const exitName = this.getUniqueExitPath(exit.getName());
+    let text = `\t\t\t\t<${exit.getType()} path="${exitName}" state="success" ${this.addXAndYIfPresent(
+      exit
+    )}/>\n`;
 
-    const text = `\t\t\t<${exitData.getType()} path="${exitName}" />\n`;
-    const range = {
-      startLineNumber: line,
-      startColumn: 0,
-      endColumn: 0,
-      endLineNumber: line,
-    };
-
-    this.monacoEditorComponent?.applyEdits([{ range, text }], true);
+    const exitsTag = this.getExitsTag();
+    if (exitsTag) {
+      const range = {
+        startLineNumber: exitsTag.endLine,
+        endLineNumber: exitsTag.endLine,
+        startColumn: 0,
+        endColumn: 0,
+      };
+      this.monacoEditorComponent?.applyEdits([{ range, text }], true);
+    } else {
+      this.createExitsTagWithExit(text);
+    }
   }
 
   getUniqueExitPath(name: string): string {
     return this.getUniqueNodeName(this.flowStructure.exits, name);
+  }
+
+  addXAndYIfPresent(exit: Exit) {
+    return exit.getLeft() && exit.getTop()
+      ? `flow:y="${exit.getTop()}" flow:x="${exit.getLeft()}" `
+      : '';
+  }
+
+  getExitsTag(): FlowStructureNode | undefined {
+    return this.flowStructure.nodes.find((node: FlowStructureNode) =>
+      node.uid.startsWith('Exits(Exits)')
+    );
+  }
+
+  createExitsTagWithExit(currentExitText: string): void {
+    const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
+    const text = `\t\t\t<Exits>\n${this.getAllExistingExitTexts()}${currentExitText}\t\t\t</Exits>\n`;
+    const range = {
+      startLineNumber: this.flowStructure.pipeline.line + 1,
+      endLineNumber: this.flowStructure.pipeline.line + 1,
+      startColumn: 0,
+      endColumn: 0,
+    };
+    for (const exit of this.flowStructure.exits) {
+      const nodeDeleteOperation = this.getDeleteOperationForNode(exit);
+      editOperations.push(nodeDeleteOperation);
+    }
+    editOperations.push({ range, text });
+    this.monacoEditorComponent?.applyEdits(editOperations, true);
+  }
+
+  getAllExistingExitTexts() {
+    const text = this.flowStructure.exits
+      .map((exit: FlowStructureNode) => this.getNodeText(exit))
+      .join('\n');
+    return text ? text + '\n' : text;
+  }
+
+  getNodeText(node: FlowStructureNode): string | undefined {
+    const range = {
+      startLineNumber: node.line,
+      startColumn: 0,
+      endColumn: node.column,
+      endLineNumber: node.endLine,
+    };
+
+    return this.monacoEditorComponent?.getTextInRange(range);
   }
 
   addSender(node: Sender): void {
@@ -1005,5 +1062,16 @@ export class FlowStructureService {
     }
 
     return currentLastNestedElement;
+  }
+
+  addDefaultExit(x: number = 700, y: number = 100): void {
+    const exit = new Exit({
+      id: 'Exit',
+      name: 'READY',
+      type: 'Exit',
+      top: y,
+      left: x,
+    });
+    this.addExit(exit);
   }
 }
