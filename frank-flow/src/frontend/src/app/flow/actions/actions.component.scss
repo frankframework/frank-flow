@@ -8,3 +8,41 @@
   box-shadow: var(--shadow-medium);
   backdrop-filter: blur(5px);
 }
+
+.zoom-icon {
+  color: var(--high-contrast-text-color);
+  align-self: center;
+}
+
+/* The slider itself */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 128px;
+  height: 5px;
+  background: var(--border-color);
+  outline: none;
+  border-radius: 5px;
+  align-self: center;
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--primary);
+  border-radius: 100%;
+  border: none;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: var(--primary);
+  border-radius: 100%;
+  border: none;
+  cursor: pointer;
+}

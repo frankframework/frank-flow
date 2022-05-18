@@ -1,12 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { PanZoomService } from '../../shared/services/pan-zoom.service';
 import {
-  faArrowDown,
-  faArrowLeft,
-  faArrowRight,
-  faArrowUp,
-  faDotCircle,
-  faHome,
+  faLocationArrow,
+  faSearch,
+  faSearchLocation,
   faSearchMinus,
   faSearchPlus,
 } from '@fortawesome/free-solid-svg-icons';
@@ -18,20 +15,37 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
   styleUrls: ['./actions.component.scss'],
 })
 export class ActionsComponent {
+  public zoomLevel!: number;
+
+  private manualZoom = false;
+
   constructor(
     private library: FaIconLibrary,
-    private panZoomService: PanZoomService
+    private panZoomService: PanZoomService,
+    private ngZone: NgZone
   ) {
     this.library.addIcons(
-      faArrowDown,
-      faArrowUp,
-      faArrowRight,
-      faArrowLeft,
-      faSearchMinus,
+      faSearch,
       faSearchPlus,
-      faHome,
-      faDotCircle
+      faSearchMinus,
+      faLocationArrow
     );
+  }
+
+  ngOnInit() {
+    this.subscribeToPanZoomModel();
+  }
+
+  subscribeToPanZoomModel() {
+    this.panZoomService.panZoomConfig.modelChanged.subscribe({
+      next: (model) => {
+        if (!this.manualZoom) {
+          this.ngZone.run(() => {
+            this.zoomLevel = model.zoomLevel;
+          });
+        }
+      },
+    });
   }
 
   zoomIn(): void {
@@ -44,5 +58,13 @@ export class ActionsComponent {
 
   zoomReset(): void {
     this.panZoomService.reset();
+  }
+
+  zoom(): void {
+    this.panZoomService.zoom(this.zoomLevel);
+    this.manualZoom = true;
+    setTimeout(() => {
+      this.manualZoom = false;
+    }, 200);
   }
 }

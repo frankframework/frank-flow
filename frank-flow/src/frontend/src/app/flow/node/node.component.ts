@@ -165,7 +165,7 @@ export class NodeComponent implements AfterViewInit, OnInit {
   }
 
   mergeSettings(): void {
-    if (!this.settings.ignoreConfigurationSettings) {
+    if (!this.settings.ignoreFlowSettings) {
       this.settings = { ...this.settings, ...this.flowSettings };
     }
   }
@@ -228,7 +228,6 @@ export class NodeComponent implements AfterViewInit, OnInit {
     switch (this.settings.direction) {
       case 'vertical':
         return 'Bottom';
-      case 'horizontal':
       default:
         return 'RightMiddle';
     }
@@ -238,7 +237,6 @@ export class NodeComponent implements AfterViewInit, OnInit {
     switch (this.settings.direction) {
       case 'vertical':
         return 'Top';
-      case 'horizontal':
       default:
         return 'LeftMiddle';
     }

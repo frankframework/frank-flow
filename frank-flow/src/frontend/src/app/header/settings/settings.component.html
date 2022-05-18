@@ -28,6 +28,12 @@
       Flow
     </h3>
     <h3
+      (click)="setCurrentPage('editor')"
+      [class.active]="currentSettingsTab === 'editor'"
+    >
+      Editor
+    </h3>
+    <h3
       (click)="setCurrentPage('assistance')"
       [class.active]="currentSettingsTab === 'assistance'"
     >
@@ -83,14 +89,6 @@
         ></app-toggle>
       </div>
     </div>
-    <!--    // TODO: This was one of the first features implemented for settings, but it never got used. I'm making a feature to implement this in more places.-->
-    <!--    <div class="input-row">-->
-    <!--      <label>Show confirmation popups</label>-->
-    <!--      <app-toggle-->
-    <!--        [(state)]="settings.showPopups"-->
-    <!--        (stateChange)="setSettings()"-->
-    <!--      ></app-toggle>-->
-    <!--    </div>-->
   </div>
   <div class="content" *ngIf="currentSettingsTab === 'explorer'">
     <h2>Explorer</h2>
@@ -233,7 +231,7 @@
           >Ignore settings defined in configuration</label
         >
         <app-toggle
-          [(state)]="settings.ignoreConfigurationSettings"
+          [(state)]="settings.ignoreFlowSettings"
           (stateChange)="setSettings()"
         ></app-toggle>
       </div>
@@ -244,6 +242,29 @@
         >
         <app-toggle
           [(state)]="settings.showPalette"
+          (stateChange)="setSettings()"
+        ></app-toggle>
+      </div>
+    </div>
+  </div>
+  <div class="content" *ngIf="currentSettingsTab === 'editor'">
+    <h2>Editor</h2>
+    <div class="content-section">
+      <div class="input-row">
+        <label title="The editor will place spaces when inserting a tab">
+          Insert spaces instead of tabs
+        </label>
+        <app-toggle
+          [(state)]="settings.insertSpaces"
+          (stateChange)="setSettings()"
+        ></app-toggle>
+      </div>
+      <div class="input-row">
+        <label title="The editor will show whitespaces">
+          Show whitespaces
+        </label>
+        <app-toggle
+          [(state)]="settings.showWhitespaces"
           (stateChange)="setSettings()"
         ></app-toggle>
       </div>

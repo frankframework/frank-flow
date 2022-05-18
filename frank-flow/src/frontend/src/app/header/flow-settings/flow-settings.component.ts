@@ -7,13 +7,15 @@ import { FlowSettingsService } from '../../shared/services/flow-settings.service
 import { FlowSettings } from 'src/app/shared/models/flow-settings.model';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 import { FlowNamespaceService } from 'src/app/shared/services/flow-namespace.service';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-configuration-settings',
-  templateUrl: './configuration-settings.component.html',
-  styleUrls: ['./configuration-settings.component.scss'],
+  selector: 'app-flow-settings',
+  templateUrl: './flow-settings.component.html',
+  styleUrls: ['./flow-settings.component.scss'],
 })
-export class ConfigurationSettingsComponent implements OnInit {
+export class FlowSettingsComponent implements OnInit {
   public forwardStyle = ForwardStyle;
   public gridSize = GridSize;
   public flowDirection = FlowDirection;
@@ -23,14 +25,16 @@ export class ConfigurationSettingsComponent implements OnInit {
     private flowSettingsService: FlowSettingsService,
     private flowStructureService: FlowStructureService,
     private ngxSmartModalService: NgxSmartModalService,
-    private flowNamespaceService: FlowNamespaceService
+    private flowNamespaceService: FlowNamespaceService,
+    private library: FaIconLibrary
   ) {}
 
   ngOnInit(): void {
-    this.getConfigurationSettings();
+    this.library.addIcons(faTrash);
+    this.getFlowSettings();
   }
 
-  getConfigurationSettings(): void {
+  getFlowSettings(): void {
     this.flowSettingsService.flowSettingsObservable.subscribe({
       next: (flowSettings) => {
         this.flowSettings = flowSettings;
@@ -38,7 +42,7 @@ export class ConfigurationSettingsComponent implements OnInit {
     });
   }
 
-  setConfigurationSettings(
+  setFlowSettings(
     settingName: string,
     settingValue: string | number | undefined
   ): void {
@@ -50,12 +54,12 @@ export class ConfigurationSettingsComponent implements OnInit {
     );
   }
 
-  deleteConfigurationSetting(attributeName: string) {
+  deleteFlowSetting(attributeName: string) {
     this.flowStructureService.deleteFlowSetting('flow:' + attributeName);
   }
 
   closeFlowSettingsAndOpenSettingsModal() {
-    this.ngxSmartModalService.getModal('configurationSettingsModal').close();
+    this.ngxSmartModalService.getModal('flowSettingsModal').close();
     this.ngxSmartModalService.getModal('settingsModal').open();
   }
 

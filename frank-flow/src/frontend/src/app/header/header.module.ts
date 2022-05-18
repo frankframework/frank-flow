@@ -5,7 +5,7 @@ import { SharedModule } from '../shared/components/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ModeComponent } from './modes/mode.component';
 import { SettingsComponent } from './settings/settings.component';
-import { ConfigurationSettingsComponent } from './configuration-settings/configuration-settings.component';
+import { FlowSettingsComponent } from './flow-settings/flow-settings.component';
 import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { FormsModule } from '@angular/forms';
 import { jqxTreeModule } from 'jqwidgets-ng/jqxtree';
@@ -16,7 +16,7 @@ import { jqxDropDownButtonModule } from 'jqwidgets-ng/jqxdropdownbutton';
     HeaderComponent,
     ModeComponent,
     SettingsComponent,
-    ConfigurationSettingsComponent,
+    FlowSettingsComponent,
   ],
   exports: [HeaderComponent],
   imports: [

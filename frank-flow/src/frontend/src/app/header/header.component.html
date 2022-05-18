@@ -11,10 +11,10 @@
     >
       <fa-icon icon="save"></fa-icon>
     </app-button>
-    <app-button (click)="undo()" color="dark" title="undo last action">
+    <app-button (click)="undo()" color="dark" title="Undo last action">
       <fa-icon icon="undo"></fa-icon>
     </app-button>
-    <app-button (click)="redo()" color="dark" title="redo last action">
+    <app-button (click)="redo()" color="dark" title="Redo last action">
       <fa-icon icon="redo"></fa-icon>
     </app-button>
     <app-button
@@ -26,9 +26,9 @@
     </app-button>
     <app-button
       *ngIf="currentFile?.type === fileType.CONFIGURATION"
-      (click)="openConfigurationSettings()"
+      (click)="openFlowSettings()"
       color="dark"
-      title="Modify flow settings"
+      title="Modify Flow settings"
     >
       <fa-icon icon="cogs"></fa-icon>
     </app-button>
@@ -38,16 +38,12 @@
   </div>
   <div class="header__actions--right">
     <app-modes></app-modes>
-    <app-button
-      (click)="openSettings()"
-      color="dark"
-      title="Open settings menu"
-    >
+    <app-button (click)="openSettings()" color="dark" title="Open Settings">
       <fa-icon icon="cog"></fa-icon>
     </app-button>
   </div>
 </div>
 <app-settings></app-settings>
-<app-configuration-settings></app-configuration-settings>
+<app-flow-settings></app-flow-settings>
 <app-save-dialog></app-save-dialog>
 <app-edit-dialog></app-edit-dialog>

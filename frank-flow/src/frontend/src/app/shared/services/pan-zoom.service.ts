@@ -6,18 +6,18 @@ import { PanZoomAPI, PanZoomConfig, PanZoomConfigOptions } from 'ngx-panzoom';
 })
 export class PanZoomService {
   private panZoomConfigOptions: PanZoomConfigOptions = {
-    zoomLevels: 3,
+    zoomLevels: 5,
     scalePerZoomLevel: 2,
     zoomStepDuration: 0.2,
     freeMouseWheel: false,
     invertMouseWheel: true,
     zoomToFitZoomLevelFactor: 1,
     dragMouseButton: 'left',
-    zoomButtonIncrement: 0.1,
+    zoomButtonIncrement: 0.4,
     zoomOnDoubleClick: false,
     dynamicContentDimensions: true,
-    neutralZoomLevel: 1,
-    initialZoomLevel: 1,
+    neutralZoomLevel: 3,
+    initialZoomLevel: 3,
   };
   public panZoomConfig: PanZoomConfig = new PanZoomConfig(
     this.panZoomConfigOptions
@@ -43,7 +43,7 @@ export class PanZoomService {
   }
 
   reset(): void {
-    this.panZoomAPI.resetView();
+    this.panZoomAPI.resetView?.();
   }
 
   panCenter(): void {
@@ -52,5 +52,9 @@ export class PanZoomService {
 
   panTo(x: number, y: number): void {
     this.panZoomAPI.panToPoint({ x, y });
+  }
+
+  zoom(zoomLevel: number): void {
+    this.panZoomAPI.changeZoomLevel(zoomLevel, { x: 0, y: 0 });
   }
 }

@@ -1,10 +1,10 @@
 <ngx-smart-modal
-  #configurationSettingsModal
-  class="configurationSettingsModal"
+  #flowSettingsModal
+  class="flowSettingsModal"
   customClass="nsm-centered"
-  identifier="configurationSettingsModal"
+  identifier="flowSettingsModal"
 >
-  <div class="configurationSettings-container">
+  <div class="flowSettings-container">
     <h1>Flow settings</h1>
     <p>
       These options change the way the Flow will appear for this particular
@@ -26,9 +26,7 @@
         <div class="input-row--input-with-button">
           <select
             [(ngModel)]="flowSettings.gridSize"
-            (ngModelChange)="
-              setConfigurationSettings('gridSize', flowSettings.gridSize)
-            "
+            (ngModelChange)="setFlowSettings('gridSize', flowSettings.gridSize)"
             id="grid-configuration"
           >
             <option [value]="undefined" hidden disabled selected>
@@ -48,7 +46,7 @@
           </select>
           <app-button
             *ngIf="flowSettings.gridSize !== undefined"
-            (click)="deleteConfigurationSetting('gridSize')"
+            (click)="deleteFlowSetting('gridSize')"
             title="Delete setting from configuration"
           >
             <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -65,10 +63,7 @@
           <select
             [(ngModel)]="flowSettings.forwardStyle"
             (ngModelChange)="
-              setConfigurationSettings(
-                'forwardStyle',
-                flowSettings.forwardStyle
-              )
+              setFlowSettings('forwardStyle', flowSettings.forwardStyle)
             "
             id="connection-type"
           >
@@ -93,7 +88,7 @@
           </select>
           <app-button
             *ngIf="flowSettings.forwardStyle"
-            (click)="deleteConfigurationSetting('forwardStyle')"
+            (click)="deleteFlowSetting('forwardStyle')"
             title="Delete setting from configuration"
           >
             <fa-icon [icon]="['fas', 'trash']"></fa-icon>
@@ -110,7 +105,7 @@
           <select
             [(ngModel)]="flowSettings.direction"
             (ngModelChange)="
-              setConfigurationSettings('direction', flowSettings.direction)
+              setFlowSettings('direction', flowSettings.direction)
             "
             id="forward-direction"
           >
@@ -132,7 +127,7 @@
           </select>
           <app-button
             *ngIf="flowSettings.direction"
-            (click)="deleteConfigurationSetting('direction')"
+            (click)="deleteFlowSetting('direction')"
             title="Delete setting from configuration"
           >
             <fa-icon [icon]="['fas', 'trash']"></fa-icon>
