@@ -80,9 +80,7 @@ export class FlowStructure {
   checkImplicitExit(): void {
     if (!this.nodes.some((node) => node.type === 'Exit')) {
       this.implicitExit = true;
-      this.lastPipe = this.nodes
-        ?.reverse()
-        .find((node) => node.type.endsWith('Pipe'))?.uid;
+      this.lastPipe = this.pipes[this.pipes.length - 1]?.uid;
     }
   }
 }

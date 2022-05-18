@@ -173,7 +173,7 @@ export class NodeGeneratorService {
       id: 'implicitExit',
       name: 'READY',
       type: 'Exit',
-      class: 'dotted',
+      class: 'dashed',
     });
     this.nodeMap.set('implicitExit', implicitExitNode);
   }
