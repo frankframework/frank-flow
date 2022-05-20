@@ -11,7 +11,6 @@ export class FlowStructure {
   implicitFirstPipe!: boolean;
   implicitExit!: boolean;
   firstPipe?: string;
-  lastPipe?: string;
   configuration?: FlowStructureNode;
 
   constructor(nodes: FlowStructureNode[] = [], firstPipe?: string) {
@@ -80,7 +79,6 @@ export class FlowStructure {
   checkImplicitExit(): void {
     if (!this.nodes.some((node) => node.type === 'Exit')) {
       this.implicitExit = true;
-      this.lastPipe = this.pipes[this.pipes.length - 1]?.uid;
     }
   }
 }

@@ -184,7 +184,7 @@ export class FlowStructureService {
     } else if (this.isElementOnSingleLine(sourceNode)) {
       this.addNestedElementToSingleLineElement(sourceNode, { text, range });
     } else {
-      this.monacoEditorComponent?.applyEdits([{ range, text }]);
+      this.monacoEditorComponent?.applyEdits([{ range, text }], true);
     }
 
     if (targetId === 'implicitExit') {
@@ -201,11 +201,14 @@ export class FlowStructureService {
     node: FlowStructureNode,
     editOperation: monaco.editor.ISingleEditOperation
   ): void {
-    this.monacoEditorComponent?.applyEdits([
-      this.getClosingBracketEditOperation(node),
-      editOperation,
-      this.getClosingTagEditOperation(node),
-    ]);
+    this.monacoEditorComponent?.applyEdits(
+      [
+        this.getClosingBracketEditOperation(node),
+        editOperation,
+        this.getClosingTagEditOperation(node),
+      ],
+      true
+    );
   }
 
   getSourceNode(sourceId: string): FlowStructureNode | undefined {
@@ -265,14 +268,10 @@ export class FlowStructureService {
       endLineNumber: node.line,
       endColumn: node.column,
     };
-    this.monacoEditorComponent?.applyEdits([{ range, text }]);
+    this.monacoEditorComponent?.applyEdits([{ range, text }], true);
   }
 
-  deleteConnection(
-    sourceId: string,
-    targetId: string,
-    doubleClickEvent = false
-  ): void {
+  deleteConnection(sourceId: string, targetId: string): void {
     const targetForward = this.getTargetForward(sourceId, targetId);
 
     const text = '';
@@ -283,7 +282,7 @@ export class FlowStructureService {
       endLineNumber: targetForward.line + 1,
     };
 
-    this.monacoEditorComponent?.applyEdits([{ range, text }], doubleClickEvent);
+    this.monacoEditorComponent?.applyEdits([{ range, text }], true);
   }
 
   moveConnection(
