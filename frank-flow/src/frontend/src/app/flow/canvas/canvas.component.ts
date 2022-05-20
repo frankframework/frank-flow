@@ -210,8 +210,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
       ? this.flowStructureService.removeFirstPipe()
       : this.flowStructureService.deleteConnection(
           info.sourceId,
-          info.targetId,
-          true
+          info.targetId
         );
   }
 

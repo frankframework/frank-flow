@@ -12,6 +12,7 @@ export class Node {
   private top?: number | undefined;
   private left?: number | undefined;
   private attributes?: FlowNodeAttributes | undefined;
+  private forwards?: string[] | undefined;
   private badges?: any[];
 
   constructor(options: {
@@ -21,6 +22,7 @@ export class Node {
     top?: number;
     left?: number;
     attributes?: FlowNodeAttributes;
+    forwards?: string[];
     badges?: any[];
   }) {
     this.id = options.id;
@@ -29,6 +31,7 @@ export class Node {
     this.top = options.top;
     this.left = options.left;
     this.attributes = options.attributes;
+    this.forwards = options.forwards;
     this.badges = options.badges;
   }
 
@@ -54,6 +57,10 @@ export class Node {
 
   getAttributes(): FlowNodeAttributes | undefined {
     return this.attributes;
+  }
+
+  getForwards(): string[] | undefined {
+    return this.forwards;
   }
 
   getBadges(): any[] | undefined {

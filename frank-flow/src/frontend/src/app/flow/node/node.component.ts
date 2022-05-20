@@ -205,6 +205,9 @@ export class NodeComponent implements AfterViewInit, OnInit {
   }
 
   createSourceEndpoint(id: string): void {
+    if (!this.hasForwards()) {
+      (this.bottomEndpointOptions.connectorStyle as any).dashstyle = '2 2';
+    }
     this.jsPlumbInstance.addEndpoint(
       id,
       {
@@ -214,6 +217,11 @@ export class NodeComponent implements AfterViewInit, OnInit {
       },
       this.bottomEndpointOptions
     );
+  }
+
+  hasForwards() {
+    const forwards = this.node.getForwards();
+    return !!forwards && forwards.length > 0;
   }
 
   createTargetEndpoint(id: string): void {

@@ -32,8 +32,12 @@ export class NodeGeneratorService {
       flowStructure.pipes,
       firstPipe
     );
-    this.generatePipeline(flowStructure.pipes, flowStructure.nodes);
-    this.generateExits(flowStructure.exits, flowStructure.lastPipe);
+    this.generatePipeline(
+      flowStructure.pipes,
+      flowStructure.nodes,
+      flowStructure.exits
+    );
+    this.generateExits(flowStructure.exits);
   }
 
   generateReceivers(
@@ -109,9 +113,10 @@ export class NodeGeneratorService {
 
   generatePipeline(
     pipes: FlowStructureNode[],
-    nodes: FlowStructureNode[]
+    nodes: FlowStructureNode[],
+    exits: FlowStructureNode[]
   ): void {
-    for (const pipe of pipes) {
+    for (const [index, pipe] of pipes.entries()) {
       const positions = pipe.positions;
       const attributes = pipe.attributes;
       const badges = this.generateBadges(pipe.nestedElements);
@@ -121,6 +126,7 @@ export class NodeGeneratorService {
         type: pipe.type,
         top: positions.y,
         left: positions.x,
+        forwards: pipe.forwards,
         attributes,
         badges,
       };
@@ -129,7 +135,7 @@ export class NodeGeneratorService {
           ? new Sender(nodeOptions)
           : new Pipe(nodeOptions);
 
-      if (pipe.forwards) {
+      if (pipe.forwards && pipe.forwards.length > 0) {
         for (const forward of pipe.forwards) {
           for (const [key, attribute] of Object.entries(forward.attributes) as [
             string,
@@ -143,13 +149,24 @@ export class NodeGeneratorService {
             }
           }
         }
+      } else {
+        this.forwards.push(
+          new Forward(
+            pipe.uid,
+            index + 1 === pipes.length
+              ? exits.length > 0
+                ? exits[0].uid
+                : 'implicitExit'
+              : pipes[index + 1]?.uid
+          )
+        );
       }
 
       this.nodeMap.set(pipe.uid, node);
     }
   }
 
-  generateExits(exits: any[], lastPipe: string | undefined): void {
+  generateExits(exits: any[]): void {
     for (const exit of exits) {
       const positions = exit.positions;
       const attributes = exit.attributes;
@@ -163,7 +180,7 @@ export class NodeGeneratorService {
       });
       this.nodeMap.set(exit.uid, node);
     }
-    if (exits.length === 0 && lastPipe) {
+    if (exits.length === 0) {
       this.addImplicitExit();
     }
   }
