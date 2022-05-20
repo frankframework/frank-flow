@@ -312,7 +312,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
 
   onSettingChangeEditor(settings: Settings): void {
     this.codeEditorInstance.updateOptions({
-      renderWhitespace: settings.showWhitespaces ? 'all' : 'none',
+      renderWhitespace: settings.showWhitespaces ? 'all' : 'selection',
       theme: settings.darkMode ? 'vs-dark' : 'vs-light',
     });
   }
@@ -322,7 +322,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
       insertSpaces: settings.insertSpaces,
     });
   }
-  
+
   getTextInRange(range: monaco.IRange): string | undefined {
     return this.codeEditorInstance.getModel()?.getValueInRange(range);
   }
