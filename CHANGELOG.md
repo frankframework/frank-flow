@@ -1,3 +1,72 @@
+# [2.23.0](https://github.com/ibissource/frank-flow/compare/v2.22.0...v2.23.0) (2022-05-23)
+
+
+### ✨ Features
+
+* add badges for the listeners ([70be8ae](https://github.com/ibissource/frank-flow/commit/70be8ae132fd06b09dd2100d8e71ae4615acb70c))
+* add exits correctly to configuration when an exit is added ([8fba69d](https://github.com/ibissource/frank-flow/commit/8fba69d91886f869a11f94ec39bba6f3c3a1430f))
+* add implicit forwards ([d566f70](https://github.com/ibissource/frank-flow/commit/d566f7091f68359e8baaebb1877875c9d0b15c16))
+* add more icons to zoom ([a232091](https://github.com/ibissource/frank-flow/commit/a2320912570624cad97ce5a1bb0e802ba6c15f29))
+* add settings to toggle 'show whitespaces' and 'insert spaces instead of tabs' ([2522e60](https://github.com/ibissource/frank-flow/commit/2522e60c21821ee0d81335caa1317599f644de77))
+* change zoom buttons to a slider for a better user experience ([6c90a68](https://github.com/ibissource/frank-flow/commit/6c90a68ec0ffa3ec70b4e2c7e31c5823f04b2a2d))
+* extend zoomlevels and add new caculation for zoomin in ([be32e56](https://github.com/ibissource/frank-flow/commit/be32e56b761ed527802b0c9c1feef33086f586a2))
+* implement implicit exit ([3ad5fed](https://github.com/ibissource/frank-flow/commit/3ad5fed64620129f45acc64fad2f036beb779cce))
+* implement Validators, Wrappers and Nested Elements for Sender ([d754ce8](https://github.com/ibissource/frank-flow/commit/d754ce8b6f7a27175c410f1ce81b42eaba4c1a9c))
+* remove exit and forward in new configuration template ([965af89](https://github.com/ibissource/frank-flow/commit/965af8952ee0a370d85cdbe4584d11bbd26c42ee))
+
+
+### 🐛 Bug Fixes
+
+* add exits correctly to Configuration when an exit is added ([24d7daa](https://github.com/ibissource/frank-flow/commit/24d7daa359679c40873fd773a1a476f02399ea0a))
+* add PR changes ([d1be679](https://github.com/ibissource/frank-flow/commit/d1be6790950071c80eedc3576c52f34a674ba357))
+* bug where flow doesnt trigger right after edding xmlns:flow ([eba27af](https://github.com/ibissource/frank-flow/commit/eba27afdd1cef7f4a3838b73eab699e8f51402dc))
+* deleting nodes didn't delete forwards or firstpipe ([5815bac](https://github.com/ibissource/frank-flow/commit/5815bac1b2071dc52412ee6ec7a41a07faca4343))
+* insert space when typing tab setting ([afd7730](https://github.com/ibissource/frank-flow/commit/afd7730ae6e7ece8be5f0760d55409b3973e2489))
+* parse error when mutiple senders have the same name ([1567e87](https://github.com/ibissource/frank-flow/commit/1567e87119edecb17685e49a19d643c913127825))
+* recalculate zoomlevel for jsPlumb ([6e6230a](https://github.com/ibissource/frank-flow/commit/6e6230ad9fdd33929ba2a3685bbf4be9bf2018e8))
+* rename configuration settings in code and add trash icon to flow settings ([56a9f62](https://github.com/ibissource/frank-flow/commit/56a9f62f72167965b7e6a97382df39d08daff230))
+* reset function coused error when flow wasn't loaded ([e0a0f07](https://github.com/ibissource/frank-flow/commit/e0a0f07b5e5cd5ec91d1ada87c03cec56a67e02c))
+* show whitespace off now shows whitespaces in selected code ([22aa11c](https://github.com/ibissource/frank-flow/commit/22aa11cf846816cbcefdfd157d87d7c0d958ff96))
+* when file is deleted the frankflow breaks ([ecc9463](https://github.com/ibissource/frank-flow/commit/ecc946376d6ab8b3bd8813226dce7b9b7c7ec6ce))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([6f64180](https://github.com/ibissource/frank-flow/commit/6f641809544aaac4b8fa1711cf6592e7c35b7718))
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([843a1c0](https://github.com/ibissource/frank-flow/commit/843a1c03cbed7a86729d89de824ca8431c07ec1b))
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([0a54ec6](https://github.com/ibissource/frank-flow/commit/0a54ec6cd0343ebbf2d3303dbcbe3c59e295d626))
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([64774b7](https://github.com/ibissource/frank-flow/commit/64774b75f4a00db9cdc2522716257a0ae1c270c9))
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/cli in /frank-flow/src/frontend ([8eb6d31](https://github.com/ibissource/frank-flow/commit/8eb6d313316e63f315667a64acf404a53f63b91a))
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/config-conventional ([8645938](https://github.com/ibissource/frank-flow/commit/864593801f5454d5c1762a155707caa8f6575bb7))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([939f54b](https://github.com/ibissource/frank-flow/commit/939f54beb6b3714e866b1b4ff34b564191039a4d))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([3ecf4aa](https://github.com/ibissource/frank-flow/commit/3ecf4aa6b042c93e7ef78286d04ba92a062aa237))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([1192af3](https://github.com/ibissource/frank-flow/commit/1192af3d62b837219800621baa3ef89b770c62b8))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([ae0cf10](https://github.com/ibissource/frank-flow/commit/ae0cf10068d7f0c1830175ed24ba45d7afa0abb3))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([f5d5df2](https://github.com/ibissource/frank-flow/commit/f5d5df21642ae6f56800c06bc46d7a5ecf5c4703))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([1d4669b](https://github.com/ibissource/frank-flow/commit/1d4669b6d4d7da78aab7cb6058ebace05b8e6ba7))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([a9afbd0](https://github.com/ibissource/frank-flow/commit/a9afbd010c45ad959bbc0f9b8021a105b7117217))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([a07edcc](https://github.com/ibissource/frank-flow/commit/a07edcc0206b1b66f4935b93b0fea51770a57e23))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([2f51536](https://github.com/ibissource/frank-flow/commit/2f515361119600fe2a3860eff16391b852985e7b))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([3a81720](https://github.com/ibissource/frank-flow/commit/3a81720cadc02a937a6f5228ae3cd6e3e73211c6))
+* **deps-dev:** bump eslint in /frank-flow/src/frontend ([2ef158f](https://github.com/ibissource/frank-flow/commit/2ef158ff9c849f42b0d178e467af99525b4a001a))
+* **deps-dev:** bump husky in /frank-flow/src/frontend ([2f5e654](https://github.com/ibissource/frank-flow/commit/2f5e654cd5b631fa1248515baa4bf93840d2bd29))
+* **deps-dev:** bump jasmine-core in /frank-flow/src/frontend ([ee8d9a7](https://github.com/ibissource/frank-flow/commit/ee8d9a76ce45819c1a615ed69a8eb8addbf016f0))
+* **deps-dev:** bump karma in /frank-flow/src/frontend ([20e070b](https://github.com/ibissource/frank-flow/commit/20e070b2e1d350fd959346bee0a7cbb1918d51f7))
+* **deps-dev:** bump karma-jasmine in /frank-flow/src/frontend ([83053d3](https://github.com/ibissource/frank-flow/commit/83053d3c84d82764e55092230b85da433ff996cb))
+* **deps:** bump async from 2.6.3 to 2.6.4 in /frank-flow/src/frontend ([eb59ec1](https://github.com/ibissource/frank-flow/commit/eb59ec1bdfb032dc6bfa7f884773a7cf781a8812))
+
+
+### 📦 Code Refactoring
+
+* remove unnecessary senders property on structure nodes ([1da32bd](https://github.com/ibissource/frank-flow/commit/1da32bdea7dfab50e1fbbd07517a3d4730c3a0da))
+* small refactor to generate pipline ([93b7b3f](https://github.com/ibissource/frank-flow/commit/93b7b3f42c0f433ed68d144b926e78eaba2d4cf2))
+
+
+### 📚 Documentation
+
+* **readme:** clarify adding the frank-flow to a frank ([fb83fd6](https://github.com/ibissource/frank-flow/commit/fb83fd6690ff188422c0a8572d42d7720cbab78c))
+* **readme:** update readme for latest frankrunner ([dd9a55f](https://github.com/ibissource/frank-flow/commit/dd9a55fe5165bde31d97e6d4bf28e2dedf5c80d3))
+
 # [2.22.0](https://github.com/ibissource/frank-flow/compare/v2.21.0...v2.22.0) (2022-05-05)
 
 
