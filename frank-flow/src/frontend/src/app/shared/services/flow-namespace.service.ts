@@ -39,6 +39,10 @@ export class FlowNamespaceService {
   }
 
   setNameSpace() {
-    this.flowStructureService.setFlowSetting('xmlns:flow', 'urn:frank-flow');
+    this.flowStructureService.setFlowSetting(
+      'xmlns:flow',
+      'urn:frank-flow',
+      false
+    );
   }
 }
