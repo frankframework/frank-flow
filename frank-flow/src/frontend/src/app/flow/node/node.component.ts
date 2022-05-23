@@ -186,7 +186,7 @@ export class NodeComponent implements AfterViewInit, OnInit {
   }
 
   nodeIsExit() {
-    return this.cssClass === 'shape--round color--danger';
+    return this.cssClass?.match('shape--round color--danger');
   }
 
   nodeIsListener() {
@@ -221,7 +221,7 @@ export class NodeComponent implements AfterViewInit, OnInit {
 
   hasForwards() {
     const forwards = this.node.getForwards();
-    return !!forwards && forwards.length > 0;
+    return forwards && forwards.length > 0;
   }
 
   createTargetEndpoint(id: string): void {

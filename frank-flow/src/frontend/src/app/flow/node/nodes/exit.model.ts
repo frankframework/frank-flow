@@ -12,6 +12,8 @@ export default class Exit extends Node {
     class?: string;
   }) {
     super(options);
-    this.classes = 'shape--round color--danger ' + options.class ?? '';
+    this.classes = `shape--round color--danger${
+      options.class ? ` ${options.class}` : ''
+    }`;
   }
 }
