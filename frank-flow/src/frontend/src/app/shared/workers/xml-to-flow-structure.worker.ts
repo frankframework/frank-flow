@@ -106,44 +106,41 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
 
   bufferAttributes = {};
   if (currentNode.type.endsWith('Sender')) {
-    if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.['sender']) {
-      unclosedNodes[unclosedNodes.length - 1].nestedElements = {
-        ...unclosedNodes[unclosedNodes.length - 1].nestedElements,
-        ['sender']: [],
-      };
-    }
-    unclosedNodes[unclosedNodes.length - 1].nestedElements['sender'].push(
-      currentNode
-    );
-  } else if (currentNode.type.endsWith('Pipe')) {
+    addSubElement('sender', currentNode);
+  } else if (
+    currentNode.type.endsWith('Pipe') ||
+    currentNode.type.endsWith('Validator') ||
+    currentNode.type.endsWith('Wrapper')
+  ) {
     currentNode.forwards = [];
-  } else if (currentNode.type === 'Forward') {
-    if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.['forward']) {
-      unclosedNodes[unclosedNodes.length - 1].nestedElements = {
-        ...unclosedNodes[unclosedNodes.length - 1].nestedElements,
-        ['forward']: [],
-      };
-    }
-    unclosedNodes[unclosedNodes.length - 1].nestedElements['forward'].push(
-      currentNode
-    );
-    flowStructure.nodes
-      .find((pipe: FlowStructureNode) => {
-        return pipe === unclosedNodes[unclosedNodes.length - 1];
-      })
-      ?.forwards?.push(currentNode);
   } else if (currentNode.type.endsWith('Listener')) {
-    if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.['listener']) {
-      unclosedNodes[unclosedNodes.length - 1].nestedElements = {
-        ...unclosedNodes[unclosedNodes.length - 1].nestedElements,
-        ['listener']: [],
-      };
-    }
-    unclosedNodes[unclosedNodes.length - 1].nestedElements['listener'].push(
-      currentNode
-    );
+    addSubElement('listener', currentNode);
+  } else if (currentNode.type.endsWith('MessageLog')) {
+    addSubElement('messageLog', currentNode);
+  } else if (currentNode.type.endsWith('InputValidator')) {
+    addSubElement('inputValidator', currentNode);
+  } else if (currentNode.type.endsWith('OutputValidator')) {
+    addSubElement('outputValidator', currentNode);
+  } else if (currentNode.type.endsWith('InputWrapper')) {
+    addSubElement('inputWrapper', currentNode);
+  } else if (currentNode.type.endsWith('OutputWrapper')) {
+    addSubElement('outputWrapper', currentNode);
   } else {
     switch (currentNode.type) {
+      case 'Param':
+        addSubElement('param', currentNode);
+        break;
+      case 'Locker':
+        addSubElement('locker', currentNode);
+        break;
+      case 'Forward':
+        addSubElement('forward', currentNode);
+        flowStructure.nodes
+          .find((pipe: FlowStructureNode) => {
+            return pipe === unclosedNodes[unclosedNodes.length - 1];
+          })
+          ?.forwards?.push(currentNode);
+        break;
       case 'Configuration':
       case 'Module':
         configuration = currentNode;
@@ -183,6 +180,18 @@ const checkIfIdAlreadyExists = (node: FlowStructureNode) => {
     errors.push(error);
   }
 };
+
+function addSubElement(subElement: string, currentNode: FlowStructureNode) {
+  if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.[subElement]) {
+    unclosedNodes[unclosedNodes.length - 1].nestedElements = {
+      ...unclosedNodes[unclosedNodes.length - 1].nestedElements,
+      [subElement]: [],
+    };
+  }
+  unclosedNodes[unclosedNodes.length - 1].nestedElements[subElement].push(
+    currentNode
+  );
+}
 
 parser.on('closetag', (tag: TagForOptions<{}>) => {
   const closingNode = unclosedNodes.pop();

@@ -974,7 +974,7 @@ export class FlowStructureService {
     return currentLastAttribute;
   }
 
-  deleteNode(node: FlowStructureNode, nestedElement = true): void {
+  deleteNode(node: FlowStructureNode, nestedElement = false): void {
     let editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
     if (!nestedElement) {
       const forwardsWithTarget = this.findForwardsWithTarget(node);

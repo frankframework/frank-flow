@@ -124,10 +124,7 @@ export class AddDialogComponent {
 \t\t\t<JavaListener name="${displayName}Listener" serviceName="${displayName}Service" />
 \t\t</Receiver>
 \t\t<Pipeline firstPipe="${displayName}Pipe">
-\t\t\t<FixedResultPipe name="${displayName}Pipe" returnString="Hello World">
-\t\t\t\t<Forward name="success" path="EXIT"/>
-\t\t\t</FixedResultPipe>
-\t\t\t<Exit path="EXIT" state="success"/>
+\t\t\t<FixedResultPipe name="${displayName}Pipe" returnString="Hello World"/>
 \t\t</Pipeline>
 \t</Adapter>
 </Configuration>`;
