@@ -197,11 +197,11 @@
 			<distributionManagement>
 				<repository>
 					<id>ibissource</id>
-					<url>https://nexus.ibissource.org/content/repositories/releases</url>
+					<url>https://nexus.ibissource.org/content/repositories/releases/</url>
 				</repository>
 				<snapshotRepository>
 					<id>ibissource</id>
-					<url>https://nexus.ibissource.org/content/repositories/snapshots</url>
+					<url>https://nexus.ibissource.org/content/repositories/snapshots/</url>
 				</snapshotRepository>
 				<site>
 					<id>www.ibissource.org</id>
