@@ -147,23 +147,32 @@ export class NodeGeneratorService {
               );
               this.forwards.push(new Forward(pipe.uid, forwardTarget?.uid!));
             }
+            if (
+              (exits.length === 0 && attribute.value === 'READY') ||
+              attribute.value === 'EXIT'
+            ) {
+              this.forwards.push(new Forward(pipe.uid, 'implicitExit'));
+            }
           }
         }
       } else {
         this.forwards.push(
-          new Forward(
-            pipe.uid,
-            index + 1 === pipes.length
-              ? exits.length > 0
-                ? exits[0].uid
-                : 'implicitExit'
-              : pipes[index + 1]?.uid
-          )
+          new Forward(pipe.uid, this.getImplicitTarget(index, pipes, exits))
         );
       }
 
       this.nodeMap.set(pipe.uid, node);
     }
+  }
+
+  getImplicitTarget(
+    index: number,
+    pipes: FlowStructureNode[],
+    exits: FlowStructureNode[]
+  ): string {
+    return index === pipes.length - 1
+      ? exits[0]?.uid ?? 'implicitExit'
+      : pipes[index + 1]?.uid;
   }
 
   generateExits(exits: any[]): void {

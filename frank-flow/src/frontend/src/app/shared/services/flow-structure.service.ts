@@ -358,7 +358,8 @@ export class FlowStructureService {
 
   editSingleAttribute(
     changedAttribute: ChangedAttribute,
-    attributeList: FlowNodeAttributes
+    attributeList: FlowNodeAttributes,
+    flowUpdate = true
   ): void {
     const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
     const editAttributeOperation = this.editAttribute(
@@ -368,7 +369,7 @@ export class FlowStructureService {
     if (editAttributeOperation) {
       editOperations.push(editAttributeOperation);
     }
-    this.monacoEditorComponent?.applyEdits(editOperations, true);
+    this.monacoEditorComponent?.applyEdits(editOperations, flowUpdate);
   }
 
   createFirstAttribute(
@@ -564,7 +565,11 @@ export class FlowStructureService {
     });
   }
 
-  setFlowSetting(name: string, value: string | number): void {
+  setFlowSetting(
+    name: string,
+    value: string | number,
+    flowUpdate = true
+  ): void {
     const configuration = this.flowStructure.configuration;
     if (configuration) {
       const flowSetting = { name, value };
@@ -572,7 +577,11 @@ export class FlowStructureService {
       if (this.attributeListIsEmpty(configuration.attributes)) {
         this.createFirstAttribute(flowSetting, configuration);
       } else {
-        this.editSingleAttribute(flowSetting, configuration.attributes);
+        this.editSingleAttribute(
+          flowSetting,
+          configuration.attributes,
+          flowUpdate
+        );
       }
     }
   }
