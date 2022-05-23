@@ -40,7 +40,7 @@ export class FlowStructure {
   getListeners(): FlowStructureNode[] {
     return (
       this.nodes.filter((node: FlowStructureNode) =>
-        node.type.match(/Listener/g)
+        node.type.match(/Listener$/g)
       ) ?? []
     );
   }
@@ -48,7 +48,7 @@ export class FlowStructure {
   getPipes(): FlowStructureNode[] {
     return (
       this.nodes.filter((node: FlowStructureNode) =>
-        node.type.match(/Pipe/g)
+        node.type.match(/(Pipe$)|(Validator$)|(Wrapper$)/g)
       ) ?? []
     );
   }
@@ -72,7 +72,7 @@ export class FlowStructure {
   getSenders(): FlowStructureNode[] {
     return (
       this.nodes.filter((node: FlowStructureNode) =>
-        node.type.match(/Senders/g)
+        node.type.match(/Sender$/g)
       ) ?? []
     );
   }
