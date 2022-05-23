@@ -135,8 +135,12 @@ export class NodeGeneratorService {
           ? new Sender(nodeOptions)
           : new Pipe(nodeOptions);
 
-      if (pipe.forwards && pipe.forwards.length > 0) {
-        for (const forward of pipe.forwards) {
+      if (!this.pipeHasForward(pipe)) {
+        this.forwards.push(
+          new Forward(pipe.uid, this.getImplicitTarget(index, pipes, exits))
+        );
+      } else {
+        for (const forward of pipe.forwards ?? []) {
           for (const [key, attribute] of Object.entries(forward.attributes) as [
             string,
             FlowNodeAttribute
@@ -147,22 +151,16 @@ export class NodeGeneratorService {
               );
               this.forwards.push(new Forward(pipe.uid, forwardTarget?.uid!));
             }
-            if (
-              (exits.length === 0 && attribute.value === 'READY') ||
-              attribute.value === 'EXIT'
-            ) {
-              this.forwards.push(new Forward(pipe.uid, 'implicitExit'));
-            }
           }
         }
-      } else {
-        this.forwards.push(
-          new Forward(pipe.uid, this.getImplicitTarget(index, pipes, exits))
-        );
       }
 
       this.nodeMap.set(pipe.uid, node);
     }
+  }
+
+  pipeHasForward(pipe: FlowStructureNode) {
+    return pipe.forwards && pipe.forwards.length > 0;
   }
 
   getImplicitTarget(
@@ -170,9 +168,11 @@ export class NodeGeneratorService {
     pipes: FlowStructureNode[],
     exits: FlowStructureNode[]
   ): string {
-    return index === pipes.length - 1
-      ? exits[0]?.uid ?? 'implicitExit'
-      : pipes[index + 1]?.uid;
+    const isLastPipe = index === pipes.length - 1;
+    const nextPipe = pipes[index + 1]?.uid;
+    const implicitExit = exits[0]?.uid ?? 'implicitExit';
+
+    return isLastPipe ? implicitExit : nextPipe;
   }
 
   generateExits(exits: any[]): void {
