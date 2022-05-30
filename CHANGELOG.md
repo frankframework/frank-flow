@@ -1,3 +1,24 @@
+## [2.23.1](https://github.com/ibissource/frank-flow/compare/v2.23.0...v2.23.1) (2022-05-30)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-devkit](https://github.com/angular-devkit)/build-angular ([b824fc7](https://github.com/ibissource/frank-flow/commit/b824fc7c93471204d649e0963f3995468c225e22))
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([c80d7f3](https://github.com/ibissource/frank-flow/commit/c80d7f3a633d4a8358e5fefa3764243354cc8963))
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/cli in /frank-flow/src/frontend ([ea2e411](https://github.com/ibissource/frank-flow/commit/ea2e4114493ba8709b2800665c9384fa1876a929))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([4bbc939](https://github.com/ibissource/frank-flow/commit/4bbc9392009861be1a0a78d32d5edd0970e52105))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([d7a7767](https://github.com/ibissource/frank-flow/commit/d7a7767cb552471f9a5d33f8041c826483fe56f8))
+* **deps-dev:** bump eslint in /frank-flow/src/frontend ([e85e2c3](https://github.com/ibissource/frank-flow/commit/e85e2c33398423122944b371ec8bfd7c308d79e2))
+* **deps-dev:** bump karma-jasmine-html-reporter ([d168c75](https://github.com/ibissource/frank-flow/commit/d168c753c66dfc58d976e93206728eb6a1f8da84))
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([96a0ba9](https://github.com/ibissource/frank-flow/commit/96a0ba9fdcc6fc52c9df88390db04fa3abcd7e08))
+* **deps-dev:** bump ts-node in /frank-flow/src/frontend ([87acfd5](https://github.com/ibissource/frank-flow/commit/87acfd572252891bb01870d6b1e108d2ac8c9e04))
+* **deps:** bump jqwidgets-ng in /frank-flow/src/frontend ([1915b34](https://github.com/ibissource/frank-flow/commit/1915b341ee17d354879c0d4b5b3c54706aa8dc06))
+
+
+### ♻️ Chores
+
+* jenkins build fail ([ee5a6b4](https://github.com/ibissource/frank-flow/commit/ee5a6b4ac667886389e54ec1fabfd39eb2e94a3d))
+
 # [2.23.0](https://github.com/ibissource/frank-flow/compare/v2.22.0...v2.23.0) (2022-05-23)
 
 
