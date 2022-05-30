@@ -64,7 +64,9 @@ export class NodeGeneratorService {
         (targetPipe) => targetPipe.name === firstPipe
       );
       if (forwardTarget) {
-        this.forwards.push(new Forward(receiver.uid, forwardTarget.uid));
+        this.forwards.push(
+          new Forward(receiver.uid, forwardTarget.uid, 'firstPipe')
+        );
       }
       this.nodeMap.set(receiver.uid, listenerNode);
     }
@@ -137,7 +139,11 @@ export class NodeGeneratorService {
 
       if (!this.pipeHasForward(pipe)) {
         this.forwards.push(
-          new Forward(pipe.uid, this.getImplicitTarget(index, pipes, exits))
+          new Forward(
+            pipe.uid,
+            this.getImplicitTarget(index, pipes, exits),
+            'implicitExit'
+          )
         );
       } else {
         for (const forward of pipe.forwards ?? []) {
@@ -149,7 +155,10 @@ export class NodeGeneratorService {
               const forwardTarget = nodes.find(
                 (targetNode) => targetNode.name === attribute.value
               );
-              this.forwards.push(new Forward(pipe.uid, forwardTarget?.uid!));
+              console.log(attribute.value);
+              this.forwards.push(
+                new Forward(pipe.uid, forwardTarget?.uid!, attribute.value)
+              );
             }
           }
         }
@@ -207,10 +216,15 @@ export class NodeGeneratorService {
   generateForwards(): void {
     setTimeout(() => {
       for (const forward of this.forwards) {
+        // console.log('-----')
+        // console.log(forward)
+        // console.log(forward.getSource() + forward.getName() + '-source')
+        // console.log(forward.getDestination() + '-target')
+        // console.log('-----')
         this.nodeService.addConnection({
           uuids: [
-            forward.getSource() + '_bottom',
-            forward.getDestination() + '_top',
+            forward.getSource() + forward.getName() + '-source',
+            forward.getDestination() + '-target',
           ],
         });
       }

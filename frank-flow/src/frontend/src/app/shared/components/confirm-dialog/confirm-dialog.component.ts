@@ -21,6 +21,7 @@ export class ConfirmDialogComponent {
   ) {}
 
   onDataAdded(): void {
+    console.log('test');
     this.resetPreviousData();
     this.modalData = this.ngxSmartModalService.getModalData('confirmDialog');
     this.actionFunction = this.modalData.actionFunction;

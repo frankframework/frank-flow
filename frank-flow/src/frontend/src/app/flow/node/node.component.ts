@@ -208,13 +208,18 @@ export class NodeComponent implements AfterViewInit, OnInit {
     if (!this.hasForwards()) {
       (this.bottomEndpointOptions.connectorStyle as any).dashstyle = '2 2';
     }
+
+    for (const forward of this.node.getForwards() ?? []) {
+      this.jsPlumbInstance.addEndpoint(
+        id,
+        this.getSourceEndPoint(id + forward.name),
+        this.bottomEndpointOptions
+      );
+    }
+
     this.jsPlumbInstance.addEndpoint(
       id,
-      {
-        anchor: this.getSourceAnchor(),
-        uuid: id + '_bottom',
-        maxConnections: -1,
-      },
+      this.getSourceEndPoint(id),
       this.bottomEndpointOptions
     );
   }
@@ -224,10 +229,24 @@ export class NodeComponent implements AfterViewInit, OnInit {
     return forwards && forwards.length > 0;
   }
 
+  getSourceEndPoint(uuid: string): EndpointOptions {
+    console.log(uuid + '-source');
+    return {
+      uuid: uuid + '-source',
+      maxConnections: 1,
+      isSource: true,
+      anchor: this.getSourceAnchor(),
+    };
+  }
+
   createTargetEndpoint(id: string): void {
     this.jsPlumbInstance.addEndpoint(
       id,
-      { anchor: this.getTargetAnchor(), uuid: id + '_top', maxConnections: -1 },
+      {
+        anchor: this.getTargetAnchor(),
+        uuid: id + '-target',
+        maxConnections: -1,
+      },
       this.topEndpointOptions
     );
   }
@@ -235,18 +254,18 @@ export class NodeComponent implements AfterViewInit, OnInit {
   getSourceAnchor(): AnchorSpec {
     switch (this.settings.direction) {
       case 'vertical':
-        return 'Bottom';
+        return 'ContinuousBottom';
       default:
-        return 'RightMiddle';
+        return 'ContinuousRight';
     }
   }
 
   getTargetAnchor(): AnchorSpec {
     switch (this.settings.direction) {
       case 'vertical':
-        return 'Top';
+        return 'ContinuousTop';
       default:
-        return 'LeftMiddle';
+        return 'ContinuousLeft';
     }
   }
 

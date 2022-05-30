@@ -10,6 +10,7 @@ import { NgxSmartModalModule } from 'ngx-smart-modal';
 import { AddDialogComponent } from './add-dialog/add-dialog.component';
 import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { CreateForwardComponent } from './create-forward/create-forward.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     AddDialogComponent,
     EditDialogComponent,
     ConfirmDialogComponent,
+    CreateForwardComponent,
   ],
   exports: [
     ButtonComponent,
@@ -29,6 +31,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     AddDialogComponent,
     EditDialogComponent,
     ConfirmDialogComponent,
+    CreateForwardComponent,
   ],
   imports: [
     CommonModule,

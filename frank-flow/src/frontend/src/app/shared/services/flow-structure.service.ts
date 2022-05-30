@@ -18,6 +18,7 @@ import { SettingsService } from '../../header/settings/settings.service';
 import { Settings } from '../../header/settings/settings.model';
 import { LayoutService } from './layout.service';
 import { Node } from '../../flow/node/nodes/node.model';
+import { NgxSmartModalService } from 'ngx-smart-modal';
 
 @Injectable({
   providedIn: 'root',
@@ -38,7 +39,8 @@ export class FlowStructureService {
     private currentFileService: CurrentFileService,
     private panZoomService: PanZoomService,
     private settingsService: SettingsService,
-    private graphService: LayoutService
+    private graphService: LayoutService,
+    private ngxSmartModalService: NgxSmartModalService
   ) {
     this.getCurrentFile();
     this.subscribeToSettings();
@@ -157,11 +159,46 @@ export class FlowStructureService {
     });
   }
 
-  addConnection(sourceId: string, targetId: string): void {
+  createForwardName(sourceId: string, targetId: string) {
     const sourceNode = this.getSourceNode(sourceId);
     if (!sourceNode) {
       return;
     }
+
+    if (this.hasSuccessForward(sourceNode)) {
+      this.ngxSmartModalService
+        .getModal('createForward')
+        .setData(
+          {
+            node: sourceNode,
+            targetId: targetId,
+            actionFunction: this.addConnectionFunction,
+          },
+          true
+        )
+        .open();
+    } else {
+      this.addConnection(sourceNode, targetId, 'success');
+    }
+  }
+
+  hasSuccessForward(sourceNode: FlowStructureNode) {
+    return sourceNode.forwards?.some((forward) => forward.name === 'success');
+  }
+
+  addConnectionFunction = (
+    sourceNode: FlowStructureNode,
+    targetId: string,
+    forwardName: string
+  ): void => {
+    this.addConnection(sourceNode, targetId, forwardName);
+  };
+
+  addConnection(
+    sourceNode: FlowStructureNode,
+    targetId: string,
+    forwardName: string
+  ): void {
     const target = this.flowStructure.nodes.find(
       (node) => node.uid == targetId
     );
@@ -169,7 +206,7 @@ export class FlowStructureService {
     let endLine = sourceNode.endLine ?? 0;
     endLine += sourceNode.isSelfClosing ? 1 : 0;
 
-    const text = `\t\t\t\t<Forward name="success" path="${
+    const text = `\t\t\t\t<Forward name="${forwardName}" path="${
       target?.name ?? 'READY'
     }" />\n`;
     const range = {
