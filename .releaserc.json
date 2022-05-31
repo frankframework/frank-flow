@@ -39,21 +39,6 @@
         ],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
-    ],
-    [
-      "@semantic-release/exec",
-      {
-        "prepareCmd": "./prepare-snapshot.sh ${nextRelease.version}"
-      }
-    ],
-    [
-      "@semantic-release/git",
-      {
-        "assets": [
-          "**/pom.xml"
-        ],
-        "message": "chore(release): create snapshot version [skip ci]"
-      }
     ]
   ]
 }

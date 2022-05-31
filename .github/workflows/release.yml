@@ -29,4 +29,4 @@ jobs:
         working-directory: frank-flow
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: chmod +x ./prepare-release.sh ./prepare-snapshot.sh && semantic-release
+        run: chmod +x ./prepare-release.sh && semantic-release
