@@ -7,7 +7,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<revision>2.23.2-SNAPSHOT</revision>
+		<revision>2.23.3-SNAPSHOT</revision>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<log4j2.version>2.17.2</log4j2.version>
 		<cxf.version>3.4.7</cxf.version>

@@ -1,3 +1,10 @@
+## [2.23.3](https://github.com/ibissource/frank-flow/compare/v2.23.2...v2.23.3) (2022-06-02)
+
+
+### 🐛 Bug Fixes
+
+* change automatic versioning: change automatic versioning ([9fb1545](https://github.com/ibissource/frank-flow/commit/9fb1545cc411425f385e2a6c8145a020ea603566))
+
 ## [2.23.2](https://github.com/ibissource/frank-flow/compare/v2.23.1...v2.23.2) (2022-06-02)
 
 
