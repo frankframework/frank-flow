@@ -1,3 +1,22 @@
+## [2.23.2](https://github.com/ibissource/frank-flow/compare/v2.23.1...v2.23.2) (2022-06-02)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/cli in /frank-flow/src/frontend ([a1c1c24](https://github.com/ibissource/frank-flow/commit/a1c1c2461911a6cd12c57e37058c5b82b861aec9))
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/config-conventional ([e114476](https://github.com/ibissource/frank-flow/commit/e1144765baf87210b05533ec29a1e2d7455a7f56))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([7644042](https://github.com/ibissource/frank-flow/commit/764404201d7dc83f640ee05be2e96ee38a5b894d))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([e31506f](https://github.com/ibissource/frank-flow/commit/e31506f979e5cf66b3d44107db70e591946d1d02))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([616a1c7](https://github.com/ibissource/frank-flow/commit/616a1c7dab11737f006d71faf70cf0262e4ca822))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([82d1214](https://github.com/ibissource/frank-flow/commit/82d1214ae38bf13411f83095b88817062024923b))
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([4046649](https://github.com/ibissource/frank-flow/commit/40466498d9d19be5aa3cc12c71fdafdf882866d2))
+* **deps-dev:** bump lint-staged in /frank-flow/src/frontend ([4c013e1](https://github.com/ibissource/frank-flow/commit/4c013e15daddbe8ff90752031750374802df1b08))
+
+
+### ♻️ Chores
+
+* **ci:** add snapshot release to own workflow ([909f7cd](https://github.com/ibissource/frank-flow/commit/909f7cdf3a1766f5787a8bf6a79c67e5aa73869e))
+
 ## [2.23.1](https://github.com/ibissource/frank-flow/compare/v2.23.0...v2.23.1) (2022-05-30)
 
 
