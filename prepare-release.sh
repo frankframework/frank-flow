@@ -2,4 +2,6 @@
 
 echo "Release version: $1"
 
-mvn versions:set -DnewVersion=$1
+SNAPSHOT_VERSION="$1-SNAPSHOT"
+
+mvn versions:set-property -Dproperty=revision -DnewVersion=$SNAPSHOT_VERSION

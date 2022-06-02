@@ -19,3 +19,4 @@ dependency-reduced-pom.xml
 
 **/META-INF/maven
 **/META-INF/MANIFEST.MF
+/node_modules/

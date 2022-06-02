@@ -3,10 +3,11 @@
 
 	<groupId>org.ibissource</groupId>
 	<artifactId>frank-flow-parent</artifactId>
-	<version>2.23.2</version>
+	<version>${revision}</version>
 	<packaging>pom</packaging>
 
 	<properties>
+		<revision>2.23.2-SNAPSHOT</revision>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<log4j2.version>2.17.2</log4j2.version>
 		<cxf.version>3.4.7</cxf.version>
@@ -41,17 +42,17 @@
 			<dependency>
 				<groupId>org.ibissource</groupId>
 				<artifactId>frank-flow</artifactId>
-				<version>2.23.2</version>
+				<version>${revision}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.ibissource</groupId>
 				<artifactId>frank-flow-launcher</artifactId>
-				<version>2.23.2</version>
+				<version>${revision}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.ibissource</groupId>
 				<artifactId>frank-flow-webapp</artifactId>
-				<version>2.23.2</version>
+				<version>${revision}</version>
 				<type>war</type>
 			</dependency>
 
@@ -197,11 +198,11 @@
 			<distributionManagement>
 				<repository>
 					<id>ibissource</id>
-					<url>https://nexus.ibissource.org/content/repositories/releases/</url>
+					<url>https://nexus.ibissource.org/content/repositories/frank-flow/</url>
 				</repository>
 				<snapshotRepository>
 					<id>ibissource</id>
-					<url>https://nexus.ibissource.org/content/repositories/snapshots/</url>
+					<url>https://nexus.ibissource.org/content/repositories/frank-flow/</url>
 				</snapshotRepository>
 				<site>
 					<id>www.ibissource.org</id>
