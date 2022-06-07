@@ -989,7 +989,6 @@ export class FlowStructureService {
       }
     }
 
-    node = node.parent ?? node;
     const nodeDeleteOperation = this.getDeleteOperationForNode(node);
     editOperations.push(nodeDeleteOperation);
     this.monacoEditorComponent?.applyEdits(editOperations, true);
@@ -1050,7 +1049,7 @@ export class FlowStructureService {
     } else if (this.isElementOnSingleLine(parent)) {
       this.addNestedElementToSingleLineElement(parent, { text, range });
     } else {
-      this.monacoEditorComponent?.applyEdits([{ range, text }]);
+      this.monacoEditorComponent?.applyEdits([{ range, text }], true);
     }
   }
 
