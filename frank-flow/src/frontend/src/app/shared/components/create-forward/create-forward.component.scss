@@ -1,0 +1,10 @@
+.createForward ::ng-deep .nsm-content {
+  width: 30vw;
+}
+
+.header {
+  width: calc(30vw - 16px - 2em);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

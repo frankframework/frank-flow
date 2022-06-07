@@ -400,4 +400,8 @@ export class CurrentFileService {
       this.convertConfigurationSyntaxWorker.postMessage(this.currentFile);
     }
   }
+
+  refreshFile(): void {
+    this.updateCurrentFile(this.currentFile);
+  }
 }
