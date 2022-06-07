@@ -1,0 +1,25 @@
+<ngx-smart-modal
+  #createForward
+  class="createForward"
+  (onDataAdded)="onDataAdded()"
+  customClass="nsm-centered"
+  identifier="createForward"
+>
+  <div>
+    <h2 class="header">Select a forward</h2>
+    <p>Please select what kind of forward you want to create.</p>
+    <select [(ngModel)]="forward" id="forward-dropdown">
+      <option [ngValue]="undefined" disabled hidden selected>
+        Select a forward...
+      </option>
+      <option *ngFor="let forward of forwards" [ngValue]="forward">
+        {{ forward.name }}
+      </option>
+    </select>
+  </div>
+
+  <div class="button-actions">
+    <app-button (click)="confirm()">Confirm</app-button>
+    <app-button (click)="cancel()">Cancel</app-button>
+  </div>
+</ngx-smart-modal>
