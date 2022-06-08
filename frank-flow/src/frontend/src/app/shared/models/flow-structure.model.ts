@@ -45,11 +45,10 @@ export class FlowStructure {
   }
 
   getPipes(): FlowStructureNode[] {
-    return (
-      this.nodes.filter((node: FlowStructureNode) =>
-        node.type.match(/(Pipe$)|(Validator$)|(Wrapper$)/g)
-      ) ?? []
+    const pipes = this.nodes.filter((node: FlowStructureNode) =>
+      node.type.match(/(Pipe$)|(Validator$)|(Wrapper$)/g)
     );
+    return pipes.filter((pipe) => !pipe.parent);
   }
 
   getExits(): FlowStructureNode[] {

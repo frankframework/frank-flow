@@ -104,15 +104,17 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     tag.isSelfClosing
   );
 
-  bufferAttributes = {};
-  if (currentNode.type.endsWith('Sender')) {
-    addSubElement('sender', currentNode);
-  } else if (
+  if (
     currentNode.type.endsWith('Pipe') ||
     currentNode.type.endsWith('Validator') ||
     currentNode.type.endsWith('Wrapper')
   ) {
     currentNode.forwards = [];
+  }
+
+  bufferAttributes = {};
+  if (currentNode.type.endsWith('Sender')) {
+    addSubElement('sender', currentNode);
   } else if (currentNode.type.endsWith('Listener')) {
     addSubElement('listener', currentNode);
   } else if (currentNode.type.endsWith('MessageLog')) {
@@ -182,12 +184,16 @@ const checkIfIdAlreadyExists = (node: FlowStructureNode) => {
 };
 
 function addSubElement(subElement: string, currentNode: FlowStructureNode) {
+  if (!unclosedNodes[unclosedNodes.length - 1]) {
+    return;
+  }
   if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.[subElement]) {
     unclosedNodes[unclosedNodes.length - 1].nestedElements = {
       ...unclosedNodes[unclosedNodes.length - 1].nestedElements,
       [subElement]: [],
     };
   }
+  currentNode.parent = unclosedNodes[unclosedNodes.length - 1].uid;
   unclosedNodes[unclosedNodes.length - 1].nestedElements[subElement].push(
     currentNode
   );
