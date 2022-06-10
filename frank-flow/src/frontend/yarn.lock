@@ -224,15 +224,6 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/cdk@^13.0.0 || ^14.0.0-0":
-  version "13.1.1"
-  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-13.1.1.tgz#bfc1050df357a26bda03410d821ae05826dcf88e"
-  integrity sha512-66PyWg+zKdxTe3b1pc1RduT8hsMs/hJ0aD0JX0pSEWVq7O0OJWJ5f0z+Mk03T9tAERA3NK1GifcKEDq5k7R2Zw==
-  dependencies:
-    tslib "^2.3.0"
-  optionalDependencies:
-    parse5 "^5.0.0"
-
 "@angular/cli@^13.3.7":
   version "13.3.7"
   resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-13.3.7.tgz#e8fe8dc1877f87a5b3b71c20375e407ca54bb9ed"
@@ -5493,12 +5484,10 @@ jest-worker@^27.0.2:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jqwidgets-ng@^14.1.4:
-  version "14.1.4"
-  resolved "https://registry.yarnpkg.com/jqwidgets-ng/-/jqwidgets-ng-14.1.4.tgz#4904642865bb0e3e4cb64e49db6ae0fca8159260"
-  integrity sha512-nG/uTtrDd8ig3Cjkoydbs0BfeFtHZTT5Pxt+6G5NDmrCsxfRgUtTwCyGQJ58FkWw9xwKLkNEJlSkOl+DrYlS3A==
-  dependencies:
-    "@angular/cdk" "^13.0.0 || ^14.0.0-0"
+jqwidgets-ng@^14.1.16:
+  version "14.1.16"
+  resolved "https://registry.yarnpkg.com/jqwidgets-ng/-/jqwidgets-ng-14.1.16.tgz#1ca39b0b5a8f57ffb48ac685d9faae08ca1f945c"
+  integrity sha512-OoHtVfUTEiLYxHJAsEqrJKRkz/JJNMLXXDLmXkL+P1Q1g0Fpy6v1QFu+FfWf5ditQZZ1W37ImJ5YpLhAiX5SLg==
 
 js-tokens@^4.0.0:
   version "4.0.0"
@@ -6746,11 +6735,6 @@ parse5-sax-parser@^6.0.1:
   integrity sha512-kXX+5S81lgESA0LsDuGjAlBybImAChYRMT+/uKCEXFBFOeEhS52qUCydGhU3qLRD8D9DVjaUo821WK7DM4iCeg==
   dependencies:
     parse5 "^6.0.1"
-
-parse5@^5.0.0:
-  version "5.1.1"
-  resolved "https://registry.npmjs.org/parse5/-/parse5-5.1.1.tgz"
-  integrity sha512-ugq4DFI0Ptb+WWjAdOK16+u/nHfiIrcE+sh8kZMaM0WllQKLI9rOUq6c2b7cwPkXdzfQESqvoqK6ug7U/Yyzug==
 
 parse5@^6.0.1:
   version "6.0.1"
