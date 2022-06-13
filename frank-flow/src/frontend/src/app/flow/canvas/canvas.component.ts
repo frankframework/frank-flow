@@ -228,6 +228,8 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   refreshFlow(): void {
-    this.generateFlow(this.currentFile.flowStructure!);
+    if (this.currentFile.flowStructure) {
+      this.generateFlow(this.currentFile.flowStructure);
+    }
   }
 }

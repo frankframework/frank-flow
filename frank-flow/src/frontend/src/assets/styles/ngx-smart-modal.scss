@@ -19,6 +19,13 @@
       flex-direction: column;
       justify-content: space-between;
 
+      .header {
+        width: calc(30vw - 16px - 2em);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
       h1 {
         word-wrap: anywhere;
       }
