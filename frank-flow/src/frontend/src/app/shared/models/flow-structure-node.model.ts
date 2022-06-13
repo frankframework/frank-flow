@@ -13,7 +13,7 @@ export class FlowStructureNode {
   public forwards?: any[];
   public name: string;
   public positions: { x: number; y: number };
-  public parent?: FlowStructureNode;
+  public parent?: string;
   public nestedElements: FlowNodeNestedElements = {};
   public path: string;
   public isSelfClosing: boolean;
