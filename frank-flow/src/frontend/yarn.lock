@@ -172,6 +172,11 @@
   resolved "https://registry.yarnpkg.com/@angular-eslint/bundled-angular-compiler/-/bundled-angular-compiler-13.3.0.tgz#0c44e8f8a424d845dca84a908c87a71305bbe988"
   integrity sha512-GQ6RPmJVAXO0Zl8GlMhPNQFbN2IbPfTlH2MET6Lnx3mmuRj4leFBHLY5NvrtUMx9vq5ZqQOtrgsM4jjAOUpnRQ==
 
+"@angular-eslint/bundled-angular-compiler@13.5.0":
+  version "13.5.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/bundled-angular-compiler/-/bundled-angular-compiler-13.5.0.tgz#5b417f7f4503b5588957bb4b963b752e0b76a158"
+  integrity sha512-7M/5ilxqPD3ydgqqdLsYs3kBwZgNg2Y6C01B5SEHZNLqLT9kAJa7I4y6GlxCZqejCIh554kdXGeV3abIxFccSg==
+
 "@angular-eslint/eslint-plugin-template@13.3.0", "@angular-eslint/eslint-plugin-template@^13.3.0":
   version "13.3.0"
   resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin-template/-/eslint-plugin-template-13.3.0.tgz#61c49e5300564e7789c7026db74cc179225f3b8e"
@@ -182,13 +187,21 @@
     aria-query "^4.2.2"
     axobject-query "^2.2.0"
 
-"@angular-eslint/eslint-plugin@13.3.0", "@angular-eslint/eslint-plugin@^13.3.0":
+"@angular-eslint/eslint-plugin@13.3.0":
   version "13.3.0"
   resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-13.3.0.tgz#1a5d51793a20b38d0add4eb2439ce7d339269b10"
   integrity sha512-V+k7HhdEX5KgGlAPKZvhz68h6xErTrO1gR6vVSOB0ccJIxMqS2FVvIGcH7r7G000C3ZRIsFVqdpjxGw/l/v45Q==
   dependencies:
     "@angular-eslint/utils" "13.3.0"
     "@typescript-eslint/experimental-utils" "5.17.0"
+
+"@angular-eslint/eslint-plugin@^13.5.0":
+  version "13.5.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-13.5.0.tgz#7af8414e2e51421079f3f92eccf1e548090adba0"
+  integrity sha512-k9o9WIqUkdO8tdYFCJ54PUWsNd9HHflih/GmA13EWciBYx8QxciwBh0u4NSAnbtOwp4Y7juGZ/Dta5ZrT/2VBA==
+  dependencies:
+    "@angular-eslint/utils" "13.5.0"
+    "@typescript-eslint/experimental-utils" "5.27.1"
 
 "@angular-eslint/schematics@^13.3.0":
   version "13.3.0"
@@ -216,6 +229,14 @@
   dependencies:
     "@angular-eslint/bundled-angular-compiler" "13.3.0"
     "@typescript-eslint/experimental-utils" "5.17.0"
+
+"@angular-eslint/utils@13.5.0":
+  version "13.5.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/utils/-/utils-13.5.0.tgz#bb4aefc2f1259084e9dfe6c2ac3e266acd929e6f"
+  integrity sha512-wX3W6STSDJDJ7ZyEsUdBp4HUPwmillMmKcdnFsy+qxbpJFzFOxOFpK1zet4ELsq1XpB89i9vRvC3vYbpHn3CSw==
+  dependencies:
+    "@angular-eslint/bundled-angular-compiler" "13.5.0"
+    "@typescript-eslint/experimental-utils" "5.27.1"
 
 "@angular/animations@^13.1.0":
   version "13.1.0"
@@ -2127,6 +2148,13 @@
   integrity sha512-U4sM5z0/ymSYqQT6I7lz8l0ZZ9zrya5VIwrwAP5WOJVabVtVsIpTMxPQe+D3qLyePT+VlETUTO2nA1+PufPx9Q==
   dependencies:
     "@typescript-eslint/utils" "5.17.0"
+
+"@typescript-eslint/experimental-utils@5.27.1":
+  version "5.27.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-5.27.1.tgz#c5c5121a75cf875bfae8083c50f5ae7bfde6145a"
+  integrity sha512-Vd8uewIixGP93sEnmTRIH6jHZYRQRkGPDPpapACMvitJKX8335VHNyqKTE+mZ+m3E2c5VznTZfSsSsS5IF7vUA==
+  dependencies:
+    "@typescript-eslint/utils" "5.27.1"
 
 "@typescript-eslint/parser@^5.27.1":
   version "5.27.1"
