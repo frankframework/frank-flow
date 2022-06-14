@@ -135,6 +135,10 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
 
   generateFlow(structure: FlowStructure): void {
     if (this.flowIsUpdating) {
+      // TODO remove later if a nicer way can be found. The problem here was that this was called the second time and not build the new flow.
+      setTimeout(() => {
+        this.generateFlow(structure);
+      });
       return;
     }
     this.jsPlumbInstance.ready(() => {
