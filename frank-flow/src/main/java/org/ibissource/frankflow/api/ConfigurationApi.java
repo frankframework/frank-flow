@@ -74,4 +74,24 @@ public class ConfigurationApi {
 
 		return methodBuilder;
 	}
+
+    @POST
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response makeDirectory(@PathParam("name") String configurationName, @QueryParam("path") String path) {
+        File rootFolder = FileUtils.getBaseDir();
+        File file = getFile(rootFolder, path);
+        system.out(rootFolder)
+        system.out(configurationName)
+        system.out(path)
+
+        if (file.exists()) {
+            throw new ApiException("directory already exists", Response.Status.CONFLICT);
+        }
+        if (FileUtils.createDir(file)) {
+            return Response.status(Response.Status.CREATED).build();
+        } else {
+            throw new ApiException("Could not create directory", Response.Status.CONFLICT);
+        }
+    }
 }

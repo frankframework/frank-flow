@@ -1,0 +1,22 @@
+<ngx-smart-modal
+  #greeterDialog
+  (onAnyCloseEvent)="close()"
+  class="greeterDialog"
+  customClass="nsm-centered"
+  identifier="greeterDialog"
+>
+  <div>
+    <h2 class="header" title="Welcome">Welcome to the Frank!Flow</h2>
+  </div>
+  <div class="input-row">
+    Welcome to the Frank!Flow. The Frank!Flow will help you visualize and edit
+    your adapters in a flow format.
+  </div>
+  <div *ngIf="!filesExist">
+    There are currently there are no files in your configuration. We will create
+    a folder with a configuration to help you get started!
+  </div>
+  <div class="button-actions">
+    <app-button (click)="close()">OK</app-button>
+  </div>
+</ngx-smart-modal>

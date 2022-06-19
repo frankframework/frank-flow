@@ -155,6 +155,15 @@ export class FileService {
     );
   }
 
+  createRootDirectoryForConfiguration(
+    configuration: string,
+    path: string
+  ): Promise<Response> {
+    return fetch(`${this.apiConfigurationsUrl}/testConfiguration`, {
+      method: 'POST',
+    });
+  }
+
   removeDirectoryForConfiguration(
     configuration: string,
     path: string
@@ -165,5 +174,10 @@ export class FileService {
         method: 'DELETE',
       }
     );
+  }
+
+  filesExist(): boolean {
+    const files = Object.entries(this.getConfigurations);
+    return files.length > 0;
   }
 }

@@ -12,6 +12,9 @@ import {
   faAngleDoubleRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { File } from './shared/models/file.model';
+import { FileService } from './shared/services/file.service';
+import { Subscription } from 'rxjs';
+import { NgxSmartModalService } from 'ngx-smart-modal';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +27,7 @@ export class AppComponent implements OnInit {
   public settings!: Settings;
   public fileType = FileType;
   public currentFile!: File;
+  private fileSubscription!: Subscription;
 
   @HostListener('window:beforeunload', ['$event'])
   unloadHandler(event: Event) {
@@ -42,7 +46,9 @@ export class AppComponent implements OnInit {
     private modeService: ModeService,
     private settingsService: SettingsService,
     private sessionService: SessionService,
-    private currentFileService: CurrentFileService
+    private currentFileService: CurrentFileService,
+    private fileService: FileService,
+    private ngxSmartModalService: NgxSmartModalService
   ) {}
 
   ngOnInit(): void {
@@ -71,8 +77,14 @@ export class AppComponent implements OnInit {
     const lastSessionFile = this.sessionService.getSessionFile();
     const lastSessionFileIsNotEmpty =
       lastSessionFile && lastSessionFile.type !== FileType.EMPTY;
-    if (lastSessionFileIsNotEmpty) {
-      this.currentFileService.fetchFileAndSetToCurrent(lastSessionFile);
+    // if (lastSessionFileIsNotEmpty) {
+    //   this.currentFileService.fetchFileAndSetToCurrent(lastSessionFile);
+    // }
+    // else
+    if (!this.fileService.filesExist()) {
+      console.log('zit erin');
+      this.ngxSmartModalService.getModal('greeterDialog').open();
+      this.currentFileService.resetCurrentFile();
     } else {
       this.currentFileService.resetCurrentFile();
     }
