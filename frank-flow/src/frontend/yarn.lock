@@ -216,21 +216,13 @@
     aria-query "^4.2.2"
     axobject-query "^2.2.0"
 
-"@angular-eslint/eslint-plugin@14.0.0":
+"@angular-eslint/eslint-plugin@14.0.0", "@angular-eslint/eslint-plugin@^14.0.0":
   version "14.0.0"
   resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-14.0.0.tgz#36305a7b279b75fcfa817f47987c95debf1737fe"
   integrity sha512-A4oCWgOwiP9aYuuMOyF1iLcjZONMjxuabG+FICLA7LosjIIgIf0Cktp74Ii4itBr2Ka+E5+sCvFBce8r2Cmosg==
   dependencies:
     "@angular-eslint/utils" "14.0.0"
     "@typescript-eslint/utils" "5.29.0"
-
-"@angular-eslint/eslint-plugin@^13.3.0":
-  version "13.5.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-13.5.0.tgz#7af8414e2e51421079f3f92eccf1e548090adba0"
-  integrity sha512-k9o9WIqUkdO8tdYFCJ54PUWsNd9HHflih/GmA13EWciBYx8QxciwBh0u4NSAnbtOwp4Y7juGZ/Dta5ZrT/2VBA==
-  dependencies:
-    "@angular-eslint/utils" "13.5.0"
-    "@typescript-eslint/experimental-utils" "5.27.1"
 
 "@angular-eslint/schematics@^14.0.0":
   version "14.0.0"
@@ -250,14 +242,6 @@
   dependencies:
     "@angular-eslint/bundled-angular-compiler" "14.0.0"
     eslint-scope "^5.1.0"
-
-"@angular-eslint/utils@13.5.0":
-  version "13.5.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/utils/-/utils-13.5.0.tgz#bb4aefc2f1259084e9dfe6c2ac3e266acd929e6f"
-  integrity sha512-wX3W6STSDJDJ7ZyEsUdBp4HUPwmillMmKcdnFsy+qxbpJFzFOxOFpK1zet4ELsq1XpB89i9vRvC3vYbpHn3CSw==
-  dependencies:
-    "@angular-eslint/bundled-angular-compiler" "13.5.0"
-    "@typescript-eslint/experimental-utils" "5.27.1"
 
 "@angular-eslint/utils@14.0.0":
   version "14.0.0"
