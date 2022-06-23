@@ -179,10 +179,10 @@
     ora "5.4.1"
     rxjs "6.6.7"
 
-"@angular-eslint/builder@^13.5.0":
-  version "13.5.0"
-  resolved "https://registry.yarnpkg.com/@angular-eslint/builder/-/builder-13.5.0.tgz#84480d7d02e4ac0dbee86d4533a4d1626eb1279e"
-  integrity sha512-IYY/HYS4fSddJLs2pAkMkKhHL07driUILPxGnGLblfWuoJBhRspyrVL3uZc3Q4iJXc1RJfaOno9oRw11FGyL6Q==
+"@angular-eslint/builder@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/builder/-/builder-14.0.0.tgz#c491cec171815771ccaa720b8d57c53be656dfb2"
+  integrity sha512-91/ZHivDD8ou/vEUsgY3nRv//2Kd0PA+JypI4jVs7nErmFtMkPAbpONn2cIqFlRgPilEm3LA78wemr7HxyxacA==
   dependencies:
     "@nrwl/devkit" "13.1.3"
 
