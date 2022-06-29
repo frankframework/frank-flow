@@ -54,7 +54,7 @@
     "@briebug/cypress-schematic": "^5.0.1",
     "@commitlint/cli": "^17.0.3",
     "@commitlint/config-conventional": "^17.0.3",
-    "@types/cytoscape": "^3.19.4",
+    "@types/cytoscape": "^3.19.5",
     "@types/jasmine": "^4.0.3",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@types/node": "^18.0.0",
