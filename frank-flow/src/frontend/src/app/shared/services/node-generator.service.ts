@@ -149,7 +149,11 @@ export class NodeGeneratorService {
               const forwardTarget = nodes.find(
                 (targetNode) => targetNode.name === attribute.value
               );
-              this.forwards.push(new Forward(pipe.uid, forwardTarget?.uid!));
+              if (forwardTarget) {
+                this.forwards.push(new Forward(pipe.uid, forwardTarget.uid!));
+              } else if (attribute.value.toUpperCase() === 'READY') {
+                this.forwards.push(new Forward(pipe.uid, 'implicitExit'));
+              }
             }
           }
         }
