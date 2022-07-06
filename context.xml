@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+	<JarScanner scanClassPath="false" scanAllFiles="false" scanAllDirectories="false"/>
+
+	<Resource name="jdbc/${database.instance.name}" auth="Container"
+			  type="javax.sql.DataSource"
+			  driverClassName="org.postgresql.Driver"
+			  url="jdbc:postgresql://${database.host}:${database.port:-5432}/${database.name}"
+			  username="${database/username:-postgres}"
+			  password="${database/password}"
+			  maxTotal="50"
+			  maxWaitMillis="5000"
+	/>
+
+</Context>

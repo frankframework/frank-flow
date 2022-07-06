@@ -61,7 +61,7 @@ public class FrankFlowProperties {
 		if(value == null) {
 			value = System.getProperty(string);
 		}
-		if(value == null || value.isEmpty()) {
+		if(value == null) {
 			value = defaultValue;
 		}
 		return value;
