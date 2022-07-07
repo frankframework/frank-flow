@@ -3626,10 +3626,10 @@ cypress@^7.7.0:
     url "^0.11.0"
     yauzl "^2.10.0"
 
-cytoscape@^3.21.2:
-  version "3.21.2"
-  resolved "https://registry.yarnpkg.com/cytoscape/-/cytoscape-3.21.2.tgz#95ce212092e82decf6a446ac06c64462b34d9d73"
-  integrity sha512-VFvgKCaiPnZHpBQFZP6lYAQrnzNAy62Dw7ehcgejxn1Lb2xX2oaVxTuMrAz0kwRifJK/z9sc6M6I3dObSckUrw==
+cytoscape@^3.22.0:
+  version "3.22.0"
+  resolved "https://registry.yarnpkg.com/cytoscape/-/cytoscape-3.22.0.tgz#acede24be255ce8ea2a5a6607c46db642f81fa54"
+  integrity sha512-qpucvQMk6ZtBXtXAHnn/1LXfQdsRaVrZlbfwu9bzf/lPW3LAVFhpXCyr3zTbolYkJs4tYPnT9CDHFJD0+Pqa7g==
   dependencies:
     heap "^0.2.6"
     lodash.debounce "^4.0.8"
