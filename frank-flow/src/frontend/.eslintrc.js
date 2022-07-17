@@ -38,6 +38,14 @@ module.exports = {
             type: 'attribute',
           },
         ],
+        "unicorn/prevent-abbreviations": [
+          "error",
+          {
+            "replacements": {
+              "doc": false,
+            }
+          }
+        ]
       },
     },
     {

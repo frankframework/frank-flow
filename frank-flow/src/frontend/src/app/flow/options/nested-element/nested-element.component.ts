@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FlowStructureNode } from '../../../shared/models/flow-structure-node.model';
 import { File } from '../../../shared/models/file.model';
 import { Subscription } from 'rxjs';
-import { FrankDocumentService } from '../../../shared/services/frank-document.service';
+import { FrankDoc } from '../../../shared/services/frank-doc.service';
 import { CurrentFileService } from '../../../shared/services/current-file.service';
 import { ChangedAttribute } from '../../../shared/models/changed-attribute.model';
 import { FlowStructureService } from '../../../shared/services/flow-structure.service';
@@ -52,7 +52,7 @@ export class NestedElementComponent implements OnInit, OnDestroy {
 
   constructor(
     private library: FaIconLibrary,
-    private frankDocumentService: FrankDocumentService,
+    private frankDocService: FrankDoc,
     private currentFileService: CurrentFileService,
     private flowStructureService: FlowStructureService
   ) {}
@@ -75,9 +75,9 @@ export class NestedElementComponent implements OnInit, OnDestroy {
   }
 
   getFrankDoc(): void {
-    this.frankDocSubscription = this.frankDocumentService
+    this.frankDocSubscription = this.frankDocService
       .getFrankDoc()
-      .subscribe((frankDocument: any) => (this.frankDoc = frankDocument));
+      .subscribe((frankDoc: any) => (this.frankDoc = frankDoc));
   }
 
   getCurrentFile(): void {

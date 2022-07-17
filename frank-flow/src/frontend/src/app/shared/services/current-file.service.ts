@@ -8,7 +8,7 @@ import { XmlParseError } from '../models/xml-parse-error.model';
 import { FileType } from '../enums/file-type.enum';
 import { SessionService } from './session.service';
 import { PanZoomService } from './pan-zoom.service';
-import { FrankDocumentService } from './frank-document.service';
+import { FrankDoc } from './frank-doc.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +24,7 @@ export class CurrentFileService {
 
   constructor(
     private fileService: FileService,
-    private frankDocumentService: FrankDocumentService,
+    private frankDocService: FrankDoc,
     private toastr: ToastrService,
     private sessionService: SessionService,
     private panZoomService: PanZoomService
@@ -33,7 +33,7 @@ export class CurrentFileService {
     this.initializeXmlToFlowStructureWorkerEventListener();
     this.initializeConvertConfigurationSyntaxWorker();
     this.initializeConvertConfigurationSyntaxWorkerEventListener();
-    this.subscribeToFrankDocumentService();
+    this.subscribeToFrankDoc();
   }
 
   initializeXmlToFlowStructureWorker(): void {
@@ -171,11 +171,11 @@ export class CurrentFileService {
     });
   }
 
-  subscribeToFrankDocumentService(): void {
-    this.frankDocumentService.getFrankDoc().subscribe((frankDocument) =>
+  subscribeToFrankDoc(): void {
+    this.frankDocService.getFrankDoc().subscribe((frankDoc) =>
       this.convertConfigurationSyntaxWorker.postMessage({
         event: 'init',
-        frankDoc: frankDocument,
+        frankDoc: frankDoc,
       })
     );
   }

@@ -14,7 +14,9 @@ import { Settings } from '../../header/settings/settings.model';
 import { File } from '../../shared/models/file.model';
 import { CurrentFileService } from '../../shared/services/current-file.service';
 import { Subscription } from 'rxjs';
-import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
+import {
+  FlowStructureService
+} from 'src/app/shared/services/flow-structure.service';
 import { FileType } from '../../shared/enums/file-type.enum';
 
 let loadedMonaco = false;
@@ -105,6 +107,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   initializeMonaco(): void {
     this.initializeEditor();
     this.initializeActions();
+    this.initializeCodeCompletion();
     this.initializeOnChangeEvent();
     this.initializeOnKeyUpEvent();
     this.initializeNewFileSubscription();
@@ -149,6 +152,13 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
 
   save(): void {
     this.currentFileService.save();
+  }
+
+  initializeCodeCompletion(): void {
+    monaco.languages.registerCompletionItemProvider(
+      'xml',
+      xsdCompletion.provider()
+    );
   }
 
   setValue(file: File | undefined): void {
