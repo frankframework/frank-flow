@@ -7,15 +7,18 @@ import {
   Enum,
 } from '../models/frank-doc.model';
 import { Injectable } from '@angular/core';
+import { FrankDoc } from './frank-doc.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FrankDocParser {
-  private frankDoc: FrankDocument;
+  private frankDoc!: FrankDocument;
 
-  constructor(frankDoc: FrankDocument) {
-    this.frankDoc = frankDoc;
+  constructor(private frankDocService: FrankDoc) {
+    this.frankDocService.getFrankDoc().subscribe((frankDoc) => {
+      this.frankDoc = frankDoc;
+    });
   }
 
   public searchElement(
@@ -38,39 +41,39 @@ export class FrankDocParser {
     );
   }
 
-  public getElement(name: string): Element | undefined {
-    return this.frankDoc.elements.find((element) => element.name === name);
+  public getElement(name: string): Element {
+    return this.frankDoc.elements.find((element) => element.name === name)!;
   }
 
   public getElementNames(elements: Element[]): string[] {
     return elements.flatMap((element) => element.elementNames);
   }
 
-  public getElementByFullName(fullName: string): Element | undefined {
+  public getElementByFullName(fullName: string): Element {
     return this.frankDoc.elements.find(
       (element) => element.fullName === fullName
-    );
+    )!;
   }
 
-  public getElementByElementName(elementName: string): Element | undefined {
+  public getElementByElementName(elementName: string): Element {
     return this.frankDoc.elements.find((element) =>
       element.elementNames.includes(elementName)
-    );
+    )!;
   }
 
   public getAttributes(element: Element): Attribute[] {
     let attributes = element.attributes || [];
-    if (!element.parent) return attributes;
-    const parent = this.getElementByFullName(element.parent);
-    if (!parent) return attributes;
-    attributes = [...attributes, ...this.getAttributes(parent)];
+    if (element.parent) {
+      const parent = this.getElementByFullName(element.parent);
+      attributes = [...this.getAttributes(parent), ...attributes];
+    }
     return attributes;
   }
 
-  public getAttribute(element: Element, name: string): Attribute | undefined {
+  public getAttribute(element: Element, name: string): Attribute {
     return this.getAttributes(element).find(
       (attribute) => attribute.name === name
-    );
+    )!;
   }
 
   public searchAttribute(
@@ -82,53 +85,66 @@ export class FrankDocParser {
     );
   }
 
-  public getEnumFromAttribute(attribute: Attribute): Enum | undefined {
-    if (!attribute.enum) return;
-    return this.getEnum(attribute.enum);
+  public getEnumFromAttribute(attribute: Attribute): Enum {
+    return this.getEnum(attribute.enum!);
   }
 
-  public getEnum(name: string): Enum | undefined {
-    return this.frankDoc.enums.find((enumElement) => enumElement.name === name);
+  public getEnum(name: string): Enum {
+    return this.frankDoc.enums.find(
+      (enumElement) => enumElement.name === name
+    )!;
   }
 
-  public getGroup(name: string): Group | undefined {
-    return this.frankDoc.groups.find((group) => group.name === name);
+  public getGroup(name: string): Group {
+    return this.frankDoc.groups.find((group) => group.name === name)!;
   }
 
-  public getType(name: string): TypeElement | undefined {
-    return this.frankDoc.types.find((type) => type.name === name);
+  public getType(name: string): TypeElement {
+    return this.frankDoc.types.find((type) => type.name === name)!;
   }
 
-  public getElementsForType(type: TypeElement): (Element | undefined)[] {
+  public getElementsForType(type: TypeElement): Element[] {
     return type.members.map((member) => this.getElementByFullName(member));
   }
 
-  public getElementsInGroup(groupName: string): (Element | undefined)[] {
+  public getElementsInGroup(groupName: string): Element[] {
     const group = this.getGroup(groupName);
-    if (!group) return [];
-    return group.types.flatMap((groupType) => {
-      const type = this.getType(groupType);
-      if (!type) return;
-      return this.getElementsForType(type);
-    });
+    return group.types.flatMap((type) =>
+      this.getElementsForType(this.getType(type))
+    );
   }
 
-  public getChildren(element: Element): (Element | undefined)[] {
-    if (!element.children) return [];
-    return element.children.flatMap((child) => {
-      if (!child.type) return;
-      const type = this.getType(child.type);
-      if (!type) return;
-      return this.getElementsForType(type);
-    });
+  public getChildren(element: Element): Element[] {
+    return (
+      element.children?.flatMap((child) =>
+        this.getElementsForType(this.getType(child.type!))
+      ) || []
+    );
   }
 
   public removeDuplicateElements(array: Element[]): Element[] {
-    return array.filter((element, index) => array.indexOf(element) === index);
+    return [...new Set(array)];
+  }
+
+  public removeDuplicateAttributes(array: Attribute[]): Attribute[] {
+    const map = new Map<string, Attribute>();
+    for (const attribute of array) {
+      map.set(attribute.name, attribute);
+    }
+    return [...map.values()];
   }
 
   public getMandatoryAttributes(element: Element) {
     const attributes = this.getAttributes(element);
     return attributes.filter((attribute) => attribute.mandatory);
   }
+
+  public getChildrenWithInheritance = (element: Element): Element[] => {
+    let children = this.getChildren(element);
+    if (element.parent) {
+      const parent = this.getElementByFullName(element.parent);
+      children = [...this.getChildrenWithInheritance(parent), ...children];
+    }
+    return children;
+  };
 }

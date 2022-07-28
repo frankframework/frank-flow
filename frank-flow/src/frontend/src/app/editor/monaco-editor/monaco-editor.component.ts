@@ -14,10 +14,9 @@ import { Settings } from '../../header/settings/settings.model';
 import { File } from '../../shared/models/file.model';
 import { CurrentFileService } from '../../shared/services/current-file.service';
 import { Subscription } from 'rxjs';
-import {
-  FlowStructureService
-} from 'src/app/shared/services/flow-structure.service';
+import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 import { FileType } from '../../shared/enums/file-type.enum';
+import { FrankDocCodeCompletionService } from './frank-doc-code-completion.service';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -32,8 +31,10 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   public editorContainer!: ElementRef;
 
   @Output()
+  // eslint-disable-next-line unicorn/prefer-event-target
   public codeChange = new EventEmitter<string>();
   @Output()
+  // eslint-disable-next-line unicorn/prefer-event-target
   public finishedLoading: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   private codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;
@@ -54,7 +55,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     private modeService: ModeService,
     private settingsService: SettingsService,
     private currentFileService: CurrentFileService,
-    private flowStructureService: FlowStructureService
+    private flowStructureService: FlowStructureService,
+    private frankDocCodeCompletionService: FrankDocCodeCompletionService
   ) {
     this.flowStructureService.setMonacoEditorComponent(this);
   }
@@ -157,7 +159,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   initializeCodeCompletion(): void {
     monaco.languages.registerCompletionItemProvider(
       'xml',
-      xsdCompletion.provider()
+      this.frankDocCodeCompletionService.provider()
     );
   }
 
