@@ -205,7 +205,7 @@ export class NodeComponent implements AfterViewInit, OnInit {
   }
 
   createSourceEndpoint(id: string): void {
-    if (!this.hasForwards()) {
+    if (!this.hasForwards() && !this.nodeIsListener()) {
       (this.bottomEndpointOptions.connectorStyle as any).dashstyle = '2 2';
     }
     this.jsPlumbInstance.addEndpoint(
