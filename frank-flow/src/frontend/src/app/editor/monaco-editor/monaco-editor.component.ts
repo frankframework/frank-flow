@@ -31,10 +31,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   public editorContainer!: ElementRef;
 
   @Output()
-  // eslint-disable-next-line unicorn/prefer-event-target
   public codeChange = new EventEmitter<string>();
   @Output()
-  // eslint-disable-next-line unicorn/prefer-event-target
   public finishedLoading: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   private codeEditorInstance!: monaco.editor.IStandaloneCodeEditor;

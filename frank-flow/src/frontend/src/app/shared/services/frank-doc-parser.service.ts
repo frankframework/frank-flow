@@ -16,6 +16,10 @@ export class FrankDocParser {
   private frankDoc!: FrankDocument;
 
   constructor(private frankDocService: FrankDoc) {
+    this.getFrankDoc();
+  }
+
+  private getFrankDoc() {
     this.frankDocService.getFrankDoc().subscribe((frankDoc) => {
       this.frankDoc = frankDoc;
     });
@@ -139,12 +143,12 @@ export class FrankDocParser {
     return attributes.filter((attribute) => attribute.mandatory);
   }
 
-  public getChildrenWithInheritance = (element: Element): Element[] => {
+  public getChildrenWithInheritance(element: Element): Element[] {
     let children = this.getChildren(element);
     if (element.parent) {
       const parent = this.getElementByFullName(element.parent);
       children = [...this.getChildrenWithInheritance(parent), ...children];
     }
     return children;
-  };
+  }
 }
