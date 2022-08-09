@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgxSmartModalService } from 'ngx-smart-modal';
 import { Subscription } from 'rxjs';
-import { FrankDocumentService } from '../../services/frank-document.service';
+import { FrankDoc } from '../../services/frank-doc.service';
 import { FlowStructureNode } from '../../models/flow-structure-node.model';
 import { CreateForwardModalData } from './create-forward-modal-data.model';
 import { ToastrService } from 'ngx-toastr';
@@ -33,7 +33,7 @@ export class CreateForwardComponent {
   constructor(
     private nodeService: NodeService,
     private ngxSmartModalService: NgxSmartModalService,
-    private frankDocumentService: FrankDocumentService,
+    private frankDocService: FrankDoc,
     private toastr: ToastrService,
     private currentFileService: CurrentFileService
   ) {
@@ -53,9 +53,9 @@ export class CreateForwardComponent {
   }
 
   getFrankDoc(): void {
-    this.frankDocSubscription = this.frankDocumentService
+    this.frankDocSubscription = this.frankDocService
       .getFrankDoc()
-      .subscribe((frankDocument: any) => (this.frankDoc = frankDocument));
+      .subscribe((frankDoc: any) => (this.frankDoc = frankDoc));
   }
 
   getFrankDocElement() {

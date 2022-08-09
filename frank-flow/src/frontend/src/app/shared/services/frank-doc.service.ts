@@ -5,7 +5,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class FrankDocumentService {
+export class FrankDoc {
   private readonly frankDocUrl =
     environment.runnerUri + '/' + environment.frankDocJsonPath;
   private frankDoc = new ReplaySubject<any>(1);

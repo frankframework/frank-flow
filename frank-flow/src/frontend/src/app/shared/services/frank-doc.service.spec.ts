@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FrankDocumentService as FrankDocumentService } from './frank-document.service';
+import { FrankDoc as FrankDoc } from './frank-doc.service';
 
 describe('FrankDocService', () => {
-  let service: FrankDocumentService;
+  let service: FrankDoc;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(FrankDocumentService);
+    service = TestBed.inject(FrankDoc);
   });
 
   it('should be created', () => {

@@ -16,6 +16,7 @@ import { CurrentFileService } from '../../shared/services/current-file.service';
 import { Subscription } from 'rxjs';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
 import { FileType } from '../../shared/enums/file-type.enum';
+import { FrankDocCodeCompletionService } from './frank-doc-code-completion.service';
 
 let loadedMonaco = false;
 let loadPromise: Promise<void>;
@@ -52,7 +53,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
     private modeService: ModeService,
     private settingsService: SettingsService,
     private currentFileService: CurrentFileService,
-    private flowStructureService: FlowStructureService
+    private flowStructureService: FlowStructureService,
+    private frankDocCodeCompletionService: FrankDocCodeCompletionService
   ) {
     this.flowStructureService.setMonacoEditorComponent(this);
   }
@@ -105,6 +107,7 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
   initializeMonaco(): void {
     this.initializeEditor();
     this.initializeActions();
+    this.initializeCodeCompletion();
     this.initializeOnChangeEvent();
     this.initializeOnKeyUpEvent();
     this.initializeNewFileSubscription();
@@ -149,6 +152,13 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
 
   save(): void {
     this.currentFileService.save();
+  }
+
+  initializeCodeCompletion(): void {
+    monaco.languages.registerCompletionItemProvider(
+      'xml',
+      this.frankDocCodeCompletionService.provider()
+    );
   }
 
   setValue(file: File | undefined): void {

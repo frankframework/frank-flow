@@ -19,7 +19,7 @@ let originalFile: File;
 let xml: string;
 let newXml: string;
 
-let frankDocument: { elements: any; types: any };
+let frankDoc: { elements: any; types: any };
 
 let unclosedElements: string[] = [];
 let newXmlOffset = 0;
@@ -29,7 +29,7 @@ let classNameAttribute: AttributeEventForOptions<{}>;
 
 addEventListener('message', ({ data }) => {
   if (data.event === 'init') {
-    frankDocument = data.frankDoc;
+    frankDoc = data.frankDoc;
     return;
   }
   if (typeof data.xml === 'string') {
@@ -135,7 +135,7 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
 });
 
 const getPostFix = (fullClassName: string) => {
-  for (const type of frankDocument.types) {
+  for (const type of frankDoc.types) {
     if (type.members.includes(fullClassName)) {
       return type.name.split('.I')[1];
     }

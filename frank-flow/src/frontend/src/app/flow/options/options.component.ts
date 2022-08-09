@@ -4,7 +4,7 @@ import { FlowNodeAttributeOptions } from 'src/app/shared/models/flow-node-attrib
 import { FlowNodeAttributes } from 'src/app/shared/models/flow-node-attributes.model';
 import { FlowStructureNode } from 'src/app/shared/models/flow-structure-node.model';
 import { FlowStructureService } from 'src/app/shared/services/flow-structure.service';
-import { FrankDocumentService } from 'src/app/shared/services/frank-document.service';
+import { FrankDoc } from 'src/app/shared/services/frank-doc.service';
 import { Node } from '../node/nodes/node.model';
 import { CurrentFileService } from '../../shared/services/current-file.service';
 import { File } from '../../shared/models/file.model';
@@ -55,7 +55,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   constructor(
     private library: FaIconLibrary,
     private ngxSmartModalService: NgxSmartModalService,
-    private frankDocumentService: FrankDocumentService,
+    private frankDocService: FrankDoc,
     private flowStructureService: FlowStructureService,
     private currentFileService: CurrentFileService
   ) {}
@@ -79,9 +79,9 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   getFrankDoc(): void {
-    this.frankDocSubscription = this.frankDocumentService
+    this.frankDocSubscription = this.frankDocService
       .getFrankDoc()
-      .subscribe((frankDocument: any) => (this.frankDoc = frankDocument));
+      .subscribe((frankDoc: any) => (this.frankDoc = frankDoc));
   }
 
   getCurrentFile(): void {

@@ -58,7 +58,6 @@
                 }
               ],
               "baseHref": "/frank-flow/",
-              "deployUrl": "/frank-flow/",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -81,7 +80,6 @@
             },
             "dev": {
               "baseHref": "/frank-flow/",
-              "deployUrl": "/frank-flow/",
               "outputHashing": "none",
               "sourceMap": false,
               "namedChunks": false,

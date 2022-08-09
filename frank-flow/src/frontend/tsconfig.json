@@ -20,7 +20,8 @@
     "paths": {
       "timers": ["node_modules/timers-browserify"],
       "stream": ["node_modules/stream-browserify"]
-    }
+    },
+    "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
