@@ -170,6 +170,7 @@ export class FrankDocCodeCompletionService {
       case '<':
         return CompletionType.incompleteElement;
       case ' ':
+      case '\t':
         return this.getCompletionTypeAfterWhitespace(text);
       case '/':
         return CompletionType.closingElement;
