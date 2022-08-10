@@ -1,19 +1,17 @@
-name: Frontend CI
+name: End to End Testing (Frank!Runner)
 
 on:
   workflow_dispatch:
-  pull_request:
-    branches: [ "master" ]
 
 jobs:
-  cypress-test:
+  e2e-frank-runner:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout frank-flow repository
         uses: actions/checkout@v2
         with:
           path: frank-flow
-      - name: Checkout frank-runner
+      - name: Checkout frank-runner repository
         uses: actions/checkout@v2
         with:
           repository: ibissource/frank-runner
@@ -24,7 +22,7 @@ jobs:
           node-version: 16.x
       - name: Write frank-flow.properties
         run: echo "frank-flow.frontend-path = $(pwd)/frank-flow/frank-flow/target/frontend" > frank-runner/frank-flow.properties
-      - name: Build backend
+      - name: Build the backend
         working-directory: frank-flow
         run: mvn install
       - name: Cache local Maven repository
@@ -36,7 +34,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - name: Cache Frank!Runner dependencies
+      - name: Cache frank-runner dependencies
         uses: actions/cache@v2
         with:
           path: |
@@ -45,7 +43,7 @@ jobs:
           key: ${{ runner.os }}-frank-runner
           restore-keys: |
             ${{ runner.os }}-frank-runner
-      - name: Run cypress using the Frank!Runner
+      - name: Run Cypress using the frank-runner
         uses: cypress-io/github-action@v2.9.7
         with:
           working-directory: frank-flow/frank-flow/src/frontend/
@@ -59,4 +57,3 @@ jobs:
           name: logs
           path: |
             frank-runner/build/apache-tomcat-9.0.50/logs/catalina.out
-            frank-flow/frank-flow/frontend/cypress/screenshots/

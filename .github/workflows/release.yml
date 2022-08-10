@@ -3,7 +3,7 @@ name: Semantic Release
 on:
   workflow_run:
     branches: [ "master" ]
-    workflows: [ "Frontend CI" ]
+    workflows: [ "End to End Testing (Docker)" ]
     types:
       - completed
 
