@@ -2,14 +2,11 @@
 <Context>
 	<JarScanner scanClassPath="false" scanAllFiles="false" scanAllDirectories="false"/>
 
-	<Resource name="jdbc/${database.instance.name}" auth="Container"
-			  type="javax.sql.DataSource"
-			  driverClassName="org.postgresql.Driver"
-			  url="jdbc:postgresql://${database.host}:${database.port:-5432}/${database.name}"
-			  username="${database/username:-postgres}"
-			  password="${database/password}"
-			  maxTotal="50"
-			  maxWaitMillis="5000"
+	<Resource
+			name="jdbc/${database.instance.name}"
+			factory="org.apache.naming.factory.BeanFactory"
+			type="org.h2.jdbcx.JdbcDataSource"
+			URL="jdbc:h2:mem:${database.name};NON_KEYWORDS=VALUE;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;TRACE_LEVEL_FILE=0;"
 	/>
 
 </Context>

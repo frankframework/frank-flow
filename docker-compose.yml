@@ -4,28 +4,15 @@ services:
   frank:
     image: nexus.frankframework.org/frank-framework:latest
     volumes:
-      - ./frank-flow/src/frontend/cypress/Frank/src/main/:/opt/frank/
+      - ./frank-flow/src/frontend/cypress/Frank/src/main/:/opt/frank/:${FRANK_FS_OPTION:-rw}
       - ./context.xml:/usr/local/tomcat/conf/context.xml
       - ./frank-flow-webapp/target/frank-flow-webapp-0.0.0-SNAPSHOT:/usr/local/tomcat/webapps/frank-flow
       - ./frank-flow/target/frontend:/frank-flow/frontend
     ports:
-      - 8080:8080
+      - ${FRANK_EXTERNAL_PORT:-8080}:8080
     environment:
       - dtap.stage=LOC
-      - instance.name=Frank2FrankFlow
       - database.instance.name=frank2frankflow
-      - database.host=database
       - database.name=database
-      - database/username=database_user
-      - database/password=database_password
-      - CATALINA_OPTS=-Dfrank-flow.context-path= -Dfrank-flow.frontend-path=/frank-flow/frontend
-    depends_on:
-      - database
-  database:
-    image: "postgres"
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=database_user
-      - POSTGRES_PASSWORD=database_password
-      - POSTGRES_DB=database
+      - CATALINA_OPTS=-Dinstance.name=Frank2FrankFlow -Dfrank-flow.context-path= -Dfrank-flow.frontend-path=/frank-flow/frontend
+    restart: unless-stopped
