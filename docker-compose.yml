@@ -4,12 +4,12 @@ services:
   frank:
     image: nexus.frankframework.org/frank-framework:latest
     volumes:
-      - ./frank-flow/src/frontend/cypress/Frank/src/main/:/opt/frank/:${FRANK_FS_OPTION:-rw}
+      - ./frank-flow/src/frontend/cypress/Frank/src/main/:/opt/frank/
       - ./context.xml:/usr/local/tomcat/conf/context.xml
       - ./frank-flow-webapp/target/frank-flow-webapp-0.0.0-SNAPSHOT:/usr/local/tomcat/webapps/frank-flow
       - ./frank-flow/target/frontend:/frank-flow/frontend
     ports:
-      - ${FRANK_EXTERNAL_PORT:-8080}:8080
+      - "8080:8080"
     environment:
       - dtap.stage=LOC
       - database.instance.name=frank2frankflow
