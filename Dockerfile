@@ -7,6 +7,9 @@ ENV database.name="database"
 ENV CATALINA_OPTS="-Dinstance.name=Frank2FrankFlow -Dfrank-flow.context-path="
 
 COPY --chown=tomcat ./frank-flow/src/frontend/cypress/Frank/src/main/ /opt/frank/
+# Make the Frank!Configurations read only, so the user can't change them.
+RUN chmod 500 /opt/frank/
+
 COPY --chown=tomcat ./context.xml /usr/local/tomcat/conf/context.xml
 COPY --chown=tomcat ./frank-flow-webapp/target/frank-flow-webapp-0.0.0-SNAPSHOT /usr/local/tomcat/webapps/frank-flow
 
