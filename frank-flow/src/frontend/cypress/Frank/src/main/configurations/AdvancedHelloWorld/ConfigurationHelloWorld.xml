@@ -1,0 +1,39 @@
+<Module
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../FrankConfig.xsd"
+	>
+	<Adapter
+		 name="HelloWorld"
+		 active="${HelloWorld.active}"
+		 description="Call http://localhost/api/hello-world to see Hello World! Call http://localhost/api/hello-world?message=Line%20One! to see Hello World One!"
+		 >
+		<Receiver name="ApiListener">
+			<!-- This listener is used when the API is called as specified in OpenAPI 3.0 at the Webservices page -->
+			<ApiListener name="HelloWorld" uriPattern="hello-world"/>
+		</Receiver>
+		<Receiver name="JavaListener">
+			<!-- This listener is used by the scheduler and IbisLocalSender in adapter HelloWorlds  -->
+			<JavaListener name="HelloWorld"/>
+		</Receiver>
+		<Pipeline firstPipe="HelloWorld">
+			<ReplacerPipe
+				name="HelloWorld"
+				getInputFromSessionKey="message"
+				emptyInputReplacement="Hello World!"
+				find="Line"
+				replace="Hello World"
+				>
+				<Forward name="success" path="READY"/>
+			</ReplacerPipe>
+		</Pipeline>
+	</Adapter>
+	<Scheduler>
+		<Job
+			name="HelloWorld"
+			javaListener="HelloWorld"
+			interval="0"
+			function="sendMessage"
+			active="${HelloWorld.active}"
+		/>
+	</Scheduler>
+</Module>

@@ -1,0 +1,148 @@
+<Module
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../FrankConfig.xsd"
+	
+	>
+	<Adapter
+		name="HelloLines"
+		active="${HelloLines.active}"
+		description="Call http://localhost/api/hello-lines to see &lt;results> ... Hello World One ... Two ... Three ... Four ... Five ... &lt;/results>"
+		>
+		<Receiver name="ApiListener" >
+			<!-- This listener is used when the API is called as specified in OpenAPI 3.0 at the Webservices page -->
+			<ApiListener
+				name="HelloLines"
+				uriPattern="hello-lines"
+			/>
+		</Receiver>
+		<Receiver name="WebServiceListener">
+			<!-- This listener is used when the SOAP endpoint is called as specified in WSDL at the Webservices page -->
+			<WebServiceListener
+				name="HelloLines"
+				serviceNamespaceURI="urn:hello-lines"
+				soap="false"
+				/>
+		</Receiver>
+		<Receiver name="JavaListener">
+			<!-- This listener is used by the scheduler -->
+			<JavaListener
+				name="HelloLines"
+			/>
+		</Receiver>
+		<Pipeline firstPipe="Remove namespaces">
+			<SoapInputValidator
+				name="ValidateInput"
+				schemaLocation="urn:hello-lines HelloLines/xsd/Lines.xsd"
+				addNamespaceToSchema="true"
+				soapBody="lines"
+				allowPlainXml="true"
+				acceptNamespacelessXml="true"
+				rootElementSessionKey="receivedRootElement"
+				reasonSessionKey="validatorMessage"
+				>
+				<Forward name="failure" path="Create example plain text message"/>
+				<Forward name="parserError" path="Transform plain text message to XML"/>
+			</SoapInputValidator>
+			<SoapInputWrapper
+				onlyIfSessionKey="receivedRootElement"
+				onlyIfValue="Envelope"
+				direction="UNWRAP"
+			/>
+			<SoapOutputWrapper
+				onlyIfSessionKey="receivedRootElement"
+				onlyIfValue="Envelope"
+			/>
+			<Exits>
+				<Exit name="READY" state="SUCCESS"/>
+			</Exits>
+			<XsltPipe
+				name="Remove namespaces"
+				removeNamespaces="true"
+				xpathExpression="/"
+				outputType="XML"
+				>
+				<Forward name="success" path="Only one line?"/>
+			</XsltPipe>
+			<XmlSwitchPipe
+				name="Only one line?"
+				xpathExpression="count(/lines/*) = 1"
+				>
+				<Forward name="true" path="Call HelloWorld"/>
+				<Forward name="false" path="Call HelloWorld for every line"/>
+			</XmlSwitchPipe>
+			<SenderPipe name="Call HelloWorld">
+				<IbisLocalSender javaListener="HelloWorld"/>
+				<Forward name="success" path="Transform result to XML"/>
+			</SenderPipe>
+			<Text2XmlPipe
+				name="Transform result to XML"
+				xmlTag="result"
+				>
+				<Forward name="success" path="Add documentation"/>
+			</Text2XmlPipe>
+			<ForEachChildElementPipe
+				name="Call HelloWorld for every line"
+				blockSize="2"
+				blockPrefix="&lt;batch>"
+				blockSuffix="&lt;/batch>"
+				elementXPathExpression="/lines/*"
+				>
+				<IbisLocalSender javaListener="HelloWorld"/>
+				<Param name="message"/>
+				<Forward name="success" path="Add documentation"/>
+			</ForEachChildElementPipe>
+			<XsltPipe
+				name="Add documentation"
+				styleSheetName="HelloLines/xsl/AddDocumentation.xsl"
+				>
+				<Param name="originalMessage" sessionKey="originalMessage"/>
+				<Param name="validatorMessage" sessionKey="validatorMessage"/>
+				<Param name="exampleMessage" sessionKey="exampleMessage"/>
+				<Param name="exampleMessageAsXml" sessionKey="exampleMessageAsXml"/>
+				<Param name="exampleMessageAsJson" sessionKey="exampleMessageAsJson"/>
+				<Forward name="success" path="READY" />
+			</XsltPipe>
+			<FixedResultPipe
+				name="Create example plain text message"
+				returnString="Line One&#10;Line Two&#10;Line Three&#10;Line Four&#10;Line Five"
+				storeResultInSessionKey="exampleMessage"
+				>
+				<Forward name="success" path="Transform plain text message to XML"/>
+			</FixedResultPipe>
+			<Text2XmlPipe
+				name="Transform plain text message to XML"
+				xmlTag="lines"
+				splitLines="true"
+				>
+				<Forward name="success" path="Add position to elements"/>
+			</Text2XmlPipe>
+			<XsltPipe
+				name="Add position to elements"
+				styleSheetName="HelloLines/xsl/AddPositionToElements.xsl"
+				storeResultInSessionKey="exampleMessageAsXml"
+				>
+				<Forward name="success" path="Transform XML message to JSON message"/>
+			</XsltPipe>
+			<Json2XmlValidatorPipe
+				name="Transform XML message to JSON message"
+				noNamespaceSchemaLocation="HelloLines/xsd/Lines.xsd"
+				root="lines"
+				outputFormat="JSON"
+				preserveInput="true"
+				storeResultInSessionKey="exampleMessageAsJson"
+				throwException="true"
+				>
+				<Forward name="success" path="Remove namespaces"/>
+			</Json2XmlValidatorPipe>
+		</Pipeline>
+	</Adapter>
+	<Scheduler>
+		<Job
+			name="HelloLines"
+			cronExpression="0 55 2 * * ?"
+			javaListener="HelloLines"
+			function="sendMessage"
+			active="${HelloLines.active}"
+		/>
+	</Scheduler>
+</Module>
