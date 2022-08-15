@@ -1,6 +1,7 @@
 <ngx-smart-modal
   #editDialog
-  (onAnyCloseEvent)="edit()"
+  (keyup.enter)="edit()"
+  (onAnyCloseEvent)="close()"
   (onDataAdded)="onDataAdded()"
   (onOpenFinished)="inputElement.focus()"
   class="editDialog"

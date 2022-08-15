@@ -172,7 +172,6 @@ export class FileTreeComponent implements OnInit, OnDestroy {
       const item: File = JSON.parse(itemValue);
 
       if (this.filesAreEqual(this.currentFile, item)) {
-        this.currentFileService.resetCurrentDirectory()
         return;
       }
 

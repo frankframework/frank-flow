@@ -60,10 +60,14 @@ export class ExplorerComponent implements OnInit, OnDestroy {
   }
 
   openEditDialog(): void {
-    if (this.checkIfConfigurationSelected(this.currentFileService.currentDirectory)) {
-      this.toastr.info(
-        `Configuration folders can't be renamed for now. Please rename the configuration from your file explorer.`
+    if (
+      this.checkIfConfigurationSelected(
+        this.currentFileService.currentDirectory
       )
+    ) {
+      this.toastr.info(
+        `Configuration folders can't be renamed. Please rename the configuration from your file explorer.`
+      );
     } else {
       this.ngxSmartModalService
         .getModal('editDialog')
@@ -73,19 +77,25 @@ export class ExplorerComponent implements OnInit, OnDestroy {
   }
 
   deleteFileOrFolder(): void {
-    if (this.checkIfConfigurationSelected(this.currentFileService.currentDirectory)) {
-        this.toastr.info(
-        `Configuration folders can't be deleted for now. Please delete the configuration from your file explorer.`
+    if (
+      this.checkIfConfigurationSelected(
+        this.currentFileService.currentDirectory
       )
+    ) {
+      this.toastr.info(
+        `Configuration folders can't be deleted. Please delete the configuration from your file explorer.`
+      );
     } else {
       this.ngxSmartModalService.getModal('confirmDialog').setData(
         {
           title: 'Are you sure?',
-          text: this.currentFileService.currentDirectory?.path ? `Do you want to delete folder ${this.currentFileService.currentDirectory?.path} and all of its contents? This action cannot be undone or reverted!` : `Do you want to delete ${this.currentFile.path} from ${this.currentFile.configuration}? This action cannot be undone or reverted!`,
+          text: this.currentFileService.currentDirectory?.path
+            ? `Do you want to delete folder ${this.currentFileService.currentDirectory?.path}? This action cannot be undone or reverted!`
+            : `Do you want to delete ${this.currentFile.path} from ${this.currentFile.configuration}? This action cannot be undone or reverted!`,
           actionFunction: this.deleteFunction,
         },
         true
-      )
+      );
     }
   }
 
@@ -98,6 +108,8 @@ export class ExplorerComponent implements OnInit, OnDestroy {
   }
 
   checkIfConfigurationSelected(currentDirectory: File): boolean {
-    return currentDirectory.path === '' && currentDirectory.configuration !== ''
+    return (
+      currentDirectory.path === '' && currentDirectory.configuration !== ''
+    );
   }
 }
