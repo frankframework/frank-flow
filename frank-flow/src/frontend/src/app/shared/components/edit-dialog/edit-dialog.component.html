@@ -1,6 +1,5 @@
 <ngx-smart-modal
   #editDialog
-  (keyup.enter)="edit()"
   (onAnyCloseEvent)="close()"
   (onDataAdded)="onDataAdded()"
   (onOpenFinished)="inputElement.focus()"
@@ -17,7 +16,7 @@
     <label for="inputElement">Name</label>
     <input
       #inputElement
-      (keyup.enter)="editDialog.close()"
+      (keyup.enter)="edit()"
       [(ngModel)]="fileName"
       id="inputElement"
       type="text"
