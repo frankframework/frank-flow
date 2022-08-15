@@ -1,6 +1,6 @@
 <ngx-smart-modal
   #editDialog
-  (onAnyCloseEvent)="edit()"
+  (onAnyCloseEvent)="close()"
   (onDataAdded)="onDataAdded()"
   (onOpenFinished)="inputElement.focus()"
   class="editDialog"
@@ -8,18 +8,22 @@
   identifier="editDialog"
 >
   <div>
-    <h2 class="header" title="{{ oldFileName }}">
-      Modify {{ currentDirectory?.path ? 'folder' : 'file' }}: {{ oldFileName }}
+    <h2 class="header" title="{{ oldName }}">
+      Modify {{ currentDirectory?.path ? 'folder' : 'file' }}: {{ oldName }}
     </h2>
   </div>
   <div class="input-row">
     <label for="inputElement">Name</label>
     <input
       #inputElement
-      (keyup.enter)="editDialog.close()"
+      (keyup.enter)="edit()"
       [(ngModel)]="fileName"
       id="inputElement"
       type="text"
     />
+  </div>
+  <div class="button-actions">
+    <app-button (click)="edit()">Confirm</app-button>
+    <app-button (click)="close()">Cancel</app-button>
   </div>
 </ngx-smart-modal>
