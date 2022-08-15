@@ -1,0 +1,34 @@
+<Configuration name="WeatherDemo" xmlns:flow="urn:frank-flow">
+    <Adapter name="Update temperature">
+        <Receiver name="Update temperature">
+            <JavaListener name="Update temperature"/>
+        </Receiver>
+        <Pipeline>
+            <SenderPipe name="Get temperature from OpenWeather">
+                <HttpSender
+                    url="http://api.openweathermap.org/data/2.5/weather?q=Rotterdam&amp;units=metric&amp;mode=xml&amp;appid=${openweathermap.appid}"
+                />
+            </SenderPipe>
+            <XsltPipe
+                name="Xml to Json"
+                xpathExpression="concat('{&quot;temperature&quot;:', /current/temperature/@value, '}')"
+            />
+            <SenderPipe name="Post temperature to ThingsBoard">
+                <HttpSender
+                    url="https://demo.thingsboard.io/api/v1/${thingsboard.apikey}/telemetry"
+                    methodType="POST"
+                    contentType="application/json"
+                />
+            </SenderPipe>
+        </Pipeline>
+    </Adapter>
+    <Scheduler>
+        <Job
+            name="Update temperature"
+            adapterName="Update temperature"
+            receiverName="Update temperature"
+            function="sendMessage"
+            interval="6000"
+        />
+    </Scheduler>
+</Configuration>

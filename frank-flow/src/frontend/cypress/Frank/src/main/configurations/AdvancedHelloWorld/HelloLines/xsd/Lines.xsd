@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="lines">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="line1" type="xs:string" minOccurs="1"/>
+				<xs:element name="line2" type="xs:string" minOccurs="0"/>
+				<xs:element name="line3" type="xs:string" minOccurs="0"/>
+				<xs:element name="line4" type="xs:string" minOccurs="0"/>
+				<xs:element name="line5" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
