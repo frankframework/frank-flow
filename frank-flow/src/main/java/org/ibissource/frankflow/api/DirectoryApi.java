@@ -103,7 +103,10 @@ public class DirectoryApi {
         if(file.delete()) {
 			return Response.status(Response.Status.OK).build();
         } else {
-			throw new ApiException("unable to remove file ["+path+"]");
+            if (file.listFiles().length > 0) {
+                throw new ApiException("Can't delete folder '"+path+"' with files. Please remove the files first.");
+            }
+			throw new ApiException("Unable to remove file ["+path+"]");
 		}
     }
 

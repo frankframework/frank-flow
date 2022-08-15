@@ -12,7 +12,7 @@ import { File } from '../../models/file.model';
 })
 export class EditDialogComponent {
   fileName!: string;
-  oldFileName!: string;
+  oldName!: string;
   currentFile!: File;
   currentDirectory!: File;
 
@@ -35,7 +35,7 @@ export class EditDialogComponent {
       : this.getShortFileOrDirectoryName(this.currentFile);
 
     this.fileName = shortName;
-    this.oldFileName = shortName;
+    this.oldName = shortName;
   }
 
   getShortFileOrDirectoryName(file: File): string {
@@ -44,7 +44,7 @@ export class EditDialogComponent {
   }
 
   edit(): void {
-    if (this.oldFileName === this.fileName) {
+    if (this.oldName === this.fileName) {
       return;
     }
 
@@ -166,7 +166,7 @@ export class EditDialogComponent {
     this.currentFileService.resetCurrentDirectory();
   }
 
-  discard(): void {
+  close(): void {
     this.ngxSmartModalService.close('editDialog');
   }
 }

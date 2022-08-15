@@ -60,30 +60,44 @@ export class ExplorerComponent implements OnInit, OnDestroy {
   }
 
   openEditDialog(): void {
-    const currentDirectory = this.currentFileService.currentDirectory;
-
-    this.ngxSmartModalService
-      .getModal('editDialog')
-      .setData(this.currentFile, true)
-      .open();
+    if (this.checkIfConfigurationSelected(this.currentFileService.currentDirectory)) {
+      this.toastr.info(
+        `Configuration folders can't be renamed for now. Please rename the configuration from your file explorer.`
+      )
+    } else {
+      this.ngxSmartModalService
+        .getModal('editDialog')
+        .setData(this.currentFile, true)
+        .open();
+    }
   }
 
-  deleteFile(): void {
-    this.ngxSmartModalService.getModal('confirmDialog').setData(
-      {
-        title: 'Are you sure?',
-        text: `Do you want to delete ${this.currentFile.path} from ${this.currentFile.configuration}? This action cannot be undone or reverted!`,
-        actionFunction: this.deleteFileFunction,
-      },
-      true
-    );
+  deleteFileOrFolder(): void {
+    if (this.checkIfConfigurationSelected(this.currentFileService.currentDirectory)) {
+        this.toastr.info(
+        `Configuration folders can't be deleted for now. Please delete the configuration from your file explorer.`
+      )
+    } else {
+      this.ngxSmartModalService.getModal('confirmDialog').setData(
+        {
+          title: 'Are you sure?',
+          text: this.currentFileService.currentDirectory?.path ? `Do you want to delete folder ${this.currentFileService.currentDirectory?.path} and all of its contents? This action cannot be undone or reverted!` : `Do you want to delete ${this.currentFile.path} from ${this.currentFile.configuration}? This action cannot be undone or reverted!`,
+          actionFunction: this.deleteFunction,
+        },
+        true
+      )
+    }
   }
 
-  deleteFileFunction = (): void => {
-    this.currentFileService.deleteFile();
+  deleteFunction = (): void => {
+    this.currentFileService.deleteItem();
   };
 
   refreshFileTree(): void {
     this.fileService.fetchFiles();
+  }
+
+  checkIfConfigurationSelected(currentDirectory: File): boolean {
+    return currentDirectory.path === '' && currentDirectory.configuration !== ''
   }
 }
