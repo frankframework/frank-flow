@@ -1,10 +1,10 @@
 <Configuration
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="../FrankConfig.xsd"
+	xsi:noNamespaceSchemaLocation="../FrankConfig.xsd" xmlns:flow="urn:frank-flow"
 	>
 	<Adapter name="Adapter1a">
-		<Receiver name="Receiver1a">
-			<ApiListener name="Listener1a" uriPattern="service1a"/>
+		<Receiver name="Match URI">
+			<ApiListener name="HelloWorldPattern" uriPattern="hello-world"/>
 		</Receiver>
 		<Pipeline>
 			<FixedResultPipe name="HelloWorld" returnString="Hello World!"/>
