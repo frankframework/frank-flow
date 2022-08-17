@@ -213,7 +213,13 @@ export class CurrentFileService {
           this.currentFile.xml!
         )
         .then((response) => {
-          response.ok ? this.saveFileSuccessfully() : this.saveFileFailed();
+          if (response.ok) {
+            this.saveFileSuccessfully();
+          }
+          return response.json();
+        })
+        .then((body) => {
+          this.saveFileFailed(body);
         });
     }
   }
@@ -238,11 +244,8 @@ export class CurrentFileService {
     this.updateCurrentFile(this.currentFile);
   }
 
-  saveFileFailed(): void {
-    this.toastr.error(
-      `The file ${this.currentFile.path} couldn't be saved.`,
-      'Error saving'
-    );
+  saveFileFailed(response: any): void {
+    this.toastr.error(response.error, 'Error saving');
   }
 
   updateCurrentFile(file: File): void {

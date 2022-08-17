@@ -20,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.ReadOnlyFileSystemException;
 import java.nio.file.StandardCopyOption;
 
 
@@ -120,8 +121,10 @@ public class FileApi {
 			try (InputStream is = fileAttachment.getObject(InputStream.class)) {
 				Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 				return Response.status(Response.Status.OK).tag(eTag).build();
+			} catch (ReadOnlyFileSystemException e) {
+				throw new ApiException("The file '"+path+"' can't be saved on a read-only file system");
 			} catch (IOException e) {
-				throw new ApiException("an error occured while saving file ["+path+"]", e);
+				throw new ApiException("An error occurred while saving file ["+path+"]", e);
 			}
 		}
 
@@ -134,8 +137,8 @@ public class FileApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response renameFolder(@PathParam("name") String configurationName, @QueryParam("path") String path, @FormParam("newName") String newName) {
 
-        if(newName == null || newName == "") {
-            throw new ApiException("an unexpected error occured, property [newName] does not exist or is empty");
+        if(newName == null || newName.equals("")) {
+            throw new ApiException("An unexpected error occurred, property [newName] does not exist or is empty");
         }
 
 
@@ -161,7 +164,7 @@ public class FileApi {
         if(file.renameTo(destFile)) {
 		    return Response.status(Response.Status.OK).entity(path).type(MediaType.TEXT_PLAIN).build();
         } else {
-            throw new ApiException("an unexpected error occured, file can't be renamed");
+            throw new ApiException("An unexpected error occurred, file can't be renamed");
         }
 	}
 
@@ -180,20 +183,20 @@ public class FileApi {
 		File rootFolder = FileUtils.getDir(configurationName);
 		File file = getFile(rootFolder, path);
 		if(file.exists()) {
-			throw new ApiException("file already exists", Response.Status.CONFLICT);
+			throw new ApiException("File already exists", Response.Status.CONFLICT);
 		}
 
 		try (InputStream is = fileAttachment.getObject(InputStream.class)) {
 			Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-			// the file should always exists, lets make sure though, you never know...
+			// the file should always exist, lets make sure though, you never know...
 			if(file.exists()) {
 				EntityTag eTag = new EntityTag("lm"+file.lastModified());
 				return Response.status(Response.Status.OK).tag(eTag).build();
 			}
-			throw new ApiException("an unexpected error occured, file ["+path+"] does not exists");
+			throw new ApiException("An unexpected error occurred, file ["+path+"] does not exists");
 		} catch (IOException e) {
-			throw new ApiException("an error occured while saving file ["+path+"]", e);
+			throw new ApiException("An error occurred while saving file ["+path+"]", e);
 		}
 	}
 
@@ -224,7 +227,7 @@ public class FileApi {
 		if(file.delete()) {
 			return Response.status(Response.Status.OK).build();
 		} else {
-			throw new ApiException("unable to remove file ["+path+"]");
+			throw new ApiException("Unable to remove file ["+path+"]");
 		}
 	}
 
@@ -233,18 +236,18 @@ public class FileApi {
 	 */
 	private File getFile(File rootFolder, String path) {
 		if(path == null) {
-			throw new ApiException("no (valid) path specified");
+			throw new ApiException("No (valid) path specified");
 		}
 
 		File file = new File(rootFolder, path);
 		String normalizedFilename = FilenameUtils.normalize(file.getAbsolutePath());
 		if(normalizedFilename == null) { //non absolute path, perhaps ../ is used?
-			throw new ApiException("unable to determine normalized filename");
+			throw new ApiException("Unable to determine normalized filename");
 		}
 		else if(normalizedFilename.equals(file.getPath())) {
 			return file;
 		}
 
-		throw new ApiException("inaccessible path ["+file+"]");
+		throw new ApiException("Inaccessible path ["+file+"]");
 	}
 }
