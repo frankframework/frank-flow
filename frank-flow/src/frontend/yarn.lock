@@ -207,12 +207,20 @@
     aria-query "5.0.0"
     axobject-query "3.0.1"
 
-"@angular-eslint/eslint-plugin@14.0.2", "@angular-eslint/eslint-plugin@^14.0.0":
+"@angular-eslint/eslint-plugin@14.0.2":
   version "14.0.2"
   resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-14.0.2.tgz#8bd852aa6d5f709e43972308dddbd1f604735f67"
   integrity sha512-TfiXWqaWGysnPB6JstZouvA9tNwIsCLvSIGqniE1U90kX6p5nL8Z09JOiv/9jlYfgAIEgUD48BGMZzDi86voGA==
   dependencies:
     "@angular-eslint/utils" "14.0.2"
+    "@typescript-eslint/utils" "5.29.0"
+
+"@angular-eslint/eslint-plugin@^14.0.3":
+  version "14.0.3"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/eslint-plugin/-/eslint-plugin-14.0.3.tgz#4fd2afd8b23e2a34d459390d5926ea76fd597ddd"
+  integrity sha512-s3rgibA+sFcDswpKUXbdykOBT7KoSk205bIBARJrIZr0zR7zsPLS/XQQGk83VICeAgcGHSPlNBmspOBrLfihEQ==
+  dependencies:
+    "@angular-eslint/utils" "14.0.3"
     "@typescript-eslint/utils" "5.29.0"
 
 "@angular-eslint/schematics@^14.0.2":
@@ -240,6 +248,14 @@
   integrity sha512-8cHyQFG3jIHMHBjlqMU9ExAgOFGqbvxUa5EUvdc8wJUXtwhYx5NCQupdSpy/qG8gHiXjxvxinEtACZJQ9/SOwQ==
   dependencies:
     "@angular-eslint/bundled-angular-compiler" "14.0.2"
+    "@typescript-eslint/utils" "5.29.0"
+
+"@angular-eslint/utils@14.0.3":
+  version "14.0.3"
+  resolved "https://registry.yarnpkg.com/@angular-eslint/utils/-/utils-14.0.3.tgz#3802e127daa4ebf11eb3c79623ac6b5bbe45bc7a"
+  integrity sha512-horyyq6shximqacDhHm6GhEJI71dvGfr2iiqP/PtT944dhY+Ml6fj85H9ywKQxd5ENYPBKrzOGCBxpLyQU07Ow==
+  dependencies:
+    "@angular-eslint/bundled-angular-compiler" "14.0.3"
     "@typescript-eslint/utils" "5.29.0"
 
 "@angular/animations@^13.1.0":
