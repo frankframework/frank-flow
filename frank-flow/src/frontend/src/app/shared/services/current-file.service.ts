@@ -14,13 +14,14 @@ import { FrankDoc } from './frank-doc.service';
   providedIn: 'root',
 })
 export class CurrentFileService {
-  currentDirectory!: File;
-  private editor!: monaco.editor.IStandaloneCodeEditor;
   private currentFile!: File;
   private currentFileSubject = new ReplaySubject<File>(1);
-  public currentFileObservable = this.currentFileSubject.asObservable();
   private xmlToFlowStructureWorker!: Worker;
   private convertConfigurationSyntaxWorker!: Worker;
+
+  public currentFileObservable = this.currentFileSubject.asObservable();
+  public currentDirectory!: File;
+  public fileSelectedInExplorer = true;
 
   constructor(
     private fileService: FileService,
@@ -343,13 +344,18 @@ export class CurrentFileService {
     this.panZoomService.reset();
   }
 
-  deleteFile(): void {
+  deleteItem(): void {
     this.deleteFileOrFolder().then((response) => {
-      response.ok ? this.deleteFileSuccessfully() : this.deleteFileFailed();
+      if (response.ok) {
+        this.deleteItemSuccessfully()
+      }
+      return response.json()
+    }).then((body) => {
+      this.deleteItemFailed(body)
     });
   }
 
-  deleteFileSuccessfully(): void {
+  deleteItemSuccessfully(): void {
     const isFolder = !!this.currentDirectory.configuration;
     this.showDeleteSuccessfullMessage(isFolder);
     this.resetCurrentFile();
@@ -366,13 +372,11 @@ export class CurrentFileService {
     );
   }
 
-  deleteFileFailed(): void {
+  deleteItemFailed(response: any): void {
     const isFolder = this.currentDirectory.configuration;
     this.toastr.error(
-      `The ${isFolder ? 'folder' : 'file'} ${
-        isFolder ? this.currentDirectory.path : this.currentFile.path
-      } couldn't be removed.`,
-      `${isFolder ? 'Folder' : 'File'} removing`
+      `${response.error}`,
+      `Error removing ${isFolder ? 'Folder' : 'File'}`
     );
   }
 

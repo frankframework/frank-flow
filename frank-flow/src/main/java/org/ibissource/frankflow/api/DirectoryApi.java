@@ -65,26 +65,26 @@ public class DirectoryApi {
         File rootFolder = FileUtils.getDir(configurationName);
         File file = getFile(rootFolder, path);
 
-		if(path.contains("/")) {
-			path = path.replaceFirst("(?<=/?.{0,10}/)[^/]*(?!/)$", newName);
-		} else {
-			path = newName;
-		}
+        if(path.contains("/")) {
+            path = path.replaceFirst("(?<=/?.{0,10}/)[^/]*(?!/)$", newName);
+        } else {
+            path = newName;
+        }
         File destFile = getFile(rootFolder, path);
 
         if(!file.exists()) {
-			return Response.status(Response.Status.NOT_FOUND).build();
-		}
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
         if(!file.isDirectory()) {
-			return Response.status(Response.Status.BAD_REQUEST).build();
-		}
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
 
         if(file.renameTo(destFile)) {
-		    return Response.status(Response.Status.OK).entity(path).type(MediaType.TEXT_PLAIN).build();
+            return Response.status(Response.Status.OK).entity(path).type(MediaType.TEXT_PLAIN).build();
         } else {
             throw new ApiException("an unexpected error occured, folder can't be renamed");
         }
-	}
+    }
 
     @DELETE
     @Path("/")
@@ -94,17 +94,20 @@ public class DirectoryApi {
         File file = getFile(rootFolder, path);
 
         if(!file.exists()) {
-			return Response.status(Response.Status.NOT_FOUND).build();
-		}
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
         if(!file.isDirectory()) {
-			return Response.status(Response.Status.BAD_REQUEST).build();
-		} 
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        } 
             
         if(file.delete()) {
-			return Response.status(Response.Status.OK).build();
+            return Response.status(Response.Status.OK).build();
         } else {
-			throw new ApiException("unable to remove file ["+path+"]");
-		}
+            if (file.listFiles().length > 0) {
+                throw new ApiException("Can't delete folder '"+path+"' with files. Please remove the files first.");
+            }
+            throw new ApiException("Unable to remove file ["+path+"]");
+        }
     }
 
     /**
