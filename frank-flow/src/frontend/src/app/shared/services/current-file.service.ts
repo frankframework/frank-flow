@@ -213,12 +213,9 @@ export class CurrentFileService {
           this.currentFile.path,
           this.currentFile.xml!
         )
-        .then((response) => {
-          if (response.ok) {
-            this.saveFileSuccessfully();
-          }
-          return response.json();
-        })
+        .then((response) =>
+          response.ok ? this.saveFileSuccessfully() : response.json()
+        )
         .then((body) => {
           this.saveFileFailed(body);
         });
@@ -312,17 +309,34 @@ export class CurrentFileService {
   fetchFileAndSetToCurrent(file: File): void {
     this.fileService
       .getFileFromConfiguration(file.configuration, file.path)
+      .then((response) =>
+        response.status === 500 ? response.json() : response.text()
+      )
       .then((result) => {
-        if (result) {
-          this.setNewCurrentFile(file, result);
-        } else {
-          this.resetCurrentFile();
-        }
-      })
-      .catch((error: Error) => {
-        console.error(error);
-        this.toastr.error(error.message, `File can't be fetched`);
+        result
+          ? result?.error
+            ? this.showFetchingErrorMessage(result.error)
+            : this.setNewCurrentFile(file, result)
+          : this.showFileNotFountMessage(file);
       });
+  }
+
+  showFileNotFountMessage(file: File): void {
+    this.resetCurrentFile();
+    this.toastr.error(
+      `The file ${file.path} could not be found.`,
+      'File not found',
+      {
+        disableTimeOut: true,
+      }
+    );
+  }
+
+  showFetchingErrorMessage(error: string): void {
+    this.resetCurrentFile();
+    this.toastr.error(error, 'Error fetching file', {
+      disableTimeOut: true,
+    });
   }
 
   setNewCurrentFile(file: File, content: string): void {
@@ -345,14 +359,13 @@ export class CurrentFileService {
   }
 
   deleteItem(): void {
-    this.deleteFileOrFolder().then((response) => {
-      if (response.ok) {
-        this.deleteItemSuccessfully()
-      }
-      return response.json()
-    }).then((body) => {
-      this.deleteItemFailed(body)
-    });
+    this.deleteFileOrFolder()
+      .then((response) =>
+        response.ok ? this.deleteItemSuccessfully() : response.json()
+      )
+      .then((body) => {
+        this.deleteItemFailed(body);
+      });
   }
 
   deleteItemSuccessfully(): void {
