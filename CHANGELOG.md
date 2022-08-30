@@ -1,3 +1,83 @@
+# [2.26.0](https://github.com/ibissource/frank-flow/compare/v2.25.0...v2.26.0) (2022-08-30)
+
+
+### ✨ Features
+
+* add better example configurations ([0751c37](https://github.com/ibissource/frank-flow/commit/0751c37bb0108997e92ed4d879f6255e0428872d))
+* change docker compose file to include parameters and simplefy database ([0d1fdbf](https://github.com/ibissource/frank-flow/commit/0d1fdbfc207b652a26a963fd1f012d3b818fdf79))
+* create Docker image for usage in CI and revert compose file ([f39e13c](https://github.com/ibissource/frank-flow/commit/f39e13c6f41c317e6f3ad26860af50bed5cc13ca))
+* give the error from the backend to the user, it contains more info ([62bbcbf](https://github.com/ibissource/frank-flow/commit/62bbcbfa622730caedd38fc137ca05814d9dda79))
+* make frank configuration for demo read only ([9bb56a5](https://github.com/ibissource/frank-flow/commit/9bb56a55ef8947e3cd538782abb16b954931cab7))
+* run the demo in read-only mode ([9736252](https://github.com/ibissource/frank-flow/commit/9736252e4a5afb177f6a2a16a9830a665f8d1867))
+
+
+### 🐛 Bug Fixes
+
+* changes for PR 989 ([b73abda](https://github.com/ibissource/frank-flow/commit/b73abda5bd405e525710fcab3f10a698d7628fe8))
+* description in options modal can now scroll on the x axis ([66d9b6b](https://github.com/ibissource/frank-flow/commit/66d9b6b31bc5388a549526e840accc67dc468810))
+* give the right error when a file cant be found or cand be read, also reset current file ([ce7e4bd](https://github.com/ibissource/frank-flow/commit/ce7e4bd98469d2018ae6c0fb111094fb7181087f))
+* make basehref relative ([b4e6413](https://github.com/ibissource/frank-flow/commit/b4e6413da9db981311052d3a70958be7e65b0065))
+* make url's relative ([cbb2343](https://github.com/ibissource/frank-flow/commit/cbb234377e093ad26fd6210820f099a98fd9d25f))
+* options and modal title wordwrap and width ([01d6203](https://github.com/ibissource/frank-flow/commit/01d62037d98f72593108b460ab008d97487254ea))
+* removing a directory will remove the previously selected configuration ([daca49a](https://github.com/ibissource/frank-flow/commit/daca49a0ad87c7a31067c601d59bc54934ca3612))
+* revert some changes and move save on enter ([7d15b4f](https://github.com/ibissource/frank-flow/commit/7d15b4fd4b98d14896eddc7ac0fe402f21ee82df))
+* saving name twice broke the flow ([185aa2b](https://github.com/ibissource/frank-flow/commit/185aa2b5917ab91a2ca8d7722b548624f4b84cad))
+* switch file after auto save ([0e738ba](https://github.com/ibissource/frank-flow/commit/0e738ba3f20fe606c5a670aea116b8aa86b57578))
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular-eslint](https://github.com/angular-eslint)/builder ([73ef49e](https://github.com/ibissource/frank-flow/commit/73ef49e966f95c38dc6cc026745877d5dfc5e1ea))
+* **deps-dev:** bump [@angular-eslint](https://github.com/angular-eslint)/eslint-plugin ([46d550a](https://github.com/ibissource/frank-flow/commit/46d550adcc47b0434174696ffe0cb1be82953cd1))
+* **deps-dev:** bump [@angular-eslint](https://github.com/angular-eslint)/schematics ([cd2d40f](https://github.com/ibissource/frank-flow/commit/cd2d40f6543d1480ca07d0f6cf7e10315a27aff5))
+* **deps-dev:** bump [@angular-eslint](https://github.com/angular-eslint)/template-parser ([ed30571](https://github.com/ibissource/frank-flow/commit/ed3057196f2c0020d912b3cc9eb5a8d8da2796d8))
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([d51fe69](https://github.com/ibissource/frank-flow/commit/d51fe69dc3bc3a8d3eb6b617cd7e4085fa82766c))
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([5bb4616](https://github.com/ibissource/frank-flow/commit/5bb461692033284a226934c751788f3665beab02))
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([13b50dc](https://github.com/ibissource/frank-flow/commit/13b50dc533f347664c67bf24967ca174d2a6b1eb))
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([a438867](https://github.com/ibissource/frank-flow/commit/a438867c6a0677d5235b30f473d65439e131aeaa))
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/cli in /frank-flow/src/frontend ([4fc74be](https://github.com/ibissource/frank-flow/commit/4fc74bebfaf89b9c4f214229a98b0963431aab7c))
+* **deps-dev:** bump [@commitlint](https://github.com/commitlint)/config-conventional ([dfd9bd4](https://github.com/ibissource/frank-flow/commit/dfd9bd49c49172aeb14dfd9d2acda96b4512d7ec))
+* **deps-dev:** bump [@types](https://github.com/types)/jasmine in /frank-flow/src/frontend ([5c02dbe](https://github.com/ibissource/frank-flow/commit/5c02dbec9c0ed3c2ba87e3559fff56b9bfbdc7b6))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([1c925a8](https://github.com/ibissource/frank-flow/commit/1c925a83c713dabc9e675078505adeb2934fa01c))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([110dafb](https://github.com/ibissource/frank-flow/commit/110dafb851165a9a386f09fc0ec0dc960459d7fc))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([e1cef78](https://github.com/ibissource/frank-flow/commit/e1cef78026b2f66a24af070c3a80ddc9191309b6))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([8280bd7](https://github.com/ibissource/frank-flow/commit/8280bd701b45c34f787fe68da910ebc1298f01e0))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([1352fa0](https://github.com/ibissource/frank-flow/commit/1352fa00b2a7cf4567ea9c8f4c652a2467d63c29))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([ee1386a](https://github.com/ibissource/frank-flow/commit/ee1386a7fbc06d34f70c54405d09b8d5defeea12))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([b8e9500](https://github.com/ibissource/frank-flow/commit/b8e95008c96dafa64b7b452e4a763c29fc770015))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([2c24114](https://github.com/ibissource/frank-flow/commit/2c2411441983171c63b45e0eeb642484d18d4679))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([433ce97](https://github.com/ibissource/frank-flow/commit/433ce97ab2488c3df18ad00837448700cb7b7df1))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([0c13ab6](https://github.com/ibissource/frank-flow/commit/0c13ab64bc522dab5d543a3e5a996a01d0fbd1df))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([4c33012](https://github.com/ibissource/frank-flow/commit/4c33012bfbff884cd2a6b729f5cb940177a846cf))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([ce5f222](https://github.com/ibissource/frank-flow/commit/ce5f22296317a34a7981f035c833245c1c6f7d4d))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([6f4138f](https://github.com/ibissource/frank-flow/commit/6f4138fda7c6203c7ad35451d230cd027735efea))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([dd41e27](https://github.com/ibissource/frank-flow/commit/dd41e273ed492ab11ea52512ddf0fa3b2d1cd04b))
+* **deps-dev:** bump eslint in /frank-flow/src/frontend ([c5e309e](https://github.com/ibissource/frank-flow/commit/c5e309e4a82096444c7b701ad999b075c8bb166b))
+* **deps-dev:** bump eslint in /frank-flow/src/frontend ([77e8452](https://github.com/ibissource/frank-flow/commit/77e8452202647527e9578fd76a5233d91d4f728c))
+* **deps-dev:** bump webpack-bundle-analyzer ([05aecd2](https://github.com/ibissource/frank-flow/commit/05aecd25e8912ea2a6ef50a73e8990aabb743551))
+* **deps-dev:** bump webpack-bundle-analyzer ([d9e4375](https://github.com/ibissource/frank-flow/commit/d9e43752c4eabcc5635dc4ed33795947f1d1da76))
+* **deps:** bump cxf-rt-rs-client from 3.4.7 to 3.5.3 ([26b012d](https://github.com/ibissource/frank-flow/commit/26b012df8209a9d9aa9e328e8ccc095501190878))
+* **deps:** bump log4j2.version from 2.17.2 to 2.18.0 ([0e5fa84](https://github.com/ibissource/frank-flow/commit/0e5fa843585fe79ae4ae4cc3a9fe01799275ce32))
+* **deps:** bump maven-assembly-plugin from 3.3.0 to 3.4.2 ([645775d](https://github.com/ibissource/frank-flow/commit/645775d3dc01d8304cc88e8501d2e4e235d3c35f))
+* **deps:** bump maven-deploy-plugin from 2.8.2 to 3.0.0 ([c42c4d8](https://github.com/ibissource/frank-flow/commit/c42c4d83463a2c015d888f1c7bb06cb3b18396ff))
+* **deps:** bump maven-site-plugin from 3.12.0 to 3.12.1 ([0003db3](https://github.com/ibissource/frank-flow/commit/0003db3ef41733bf95179a7546e2fcd139891978))
+* **deps:** bump spring-core from 5.3.18 to 5.3.20 in /frank-flow ([2ac74f3](https://github.com/ibissource/frank-flow/commit/2ac74f3923a1a54628511f750df8d08f5cbbf3f3))
+* **deps:** bump spring.version from 5.3.18 to 5.3.22 ([cff2bab](https://github.com/ibissource/frank-flow/commit/cff2bab6117a34edd56ee69c3997d4bd35ed7d7c))
+* **deps:** bump tomcat.version from 9.0.62 to 9.0.65 ([955ea3f](https://github.com/ibissource/frank-flow/commit/955ea3f05932949407bcef25b89d35a4b1c7d32f))
+* **deps:** bump zone.js in /frank-flow/src/frontend ([9709322](https://github.com/ibissource/frank-flow/commit/9709322132e27a1e921181d9a1e8053fcae8a2ae))
+
+
+### 🚨 Tests
+
+* change default configurations and fix canvas test ([0a9ceda](https://github.com/ibissource/frank-flow/commit/0a9ceda0aca750166b3465a8fa4e593645536064))
+* change the tests and move some parts for relevance ([859c4c4](https://github.com/ibissource/frank-flow/commit/859c4c4a73c5e2a40eef0dcb28a2fc6cd1fcda42))
+* move relevant code into different tests ([8573e19](https://github.com/ibissource/frank-flow/commit/8573e193a66fcefd310fa4d116baefa8b47dbb5b))
+
+
+### 🗑 Reverts
+
+* exception didn't work ([e5c17e8](https://github.com/ibissource/frank-flow/commit/e5c17e886cbfb059ad2de76189f663edf1b2db72))
+
 # [2.25.0](https://github.com/ibissource/frank-flow/compare/v2.24.0...v2.25.0) (2022-08-10)
 
 
