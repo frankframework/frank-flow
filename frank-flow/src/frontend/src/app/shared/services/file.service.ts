@@ -57,12 +57,10 @@ export class FileService {
   getFileFromConfiguration(
     configuration: string,
     path: string
-  ): Promise<string | void> {
+  ): Promise<Response> {
     return fetch(
       `${this.apiConfigurationsUrl}/${configuration}/files/?path=${path}`
-    )
-      .then((response) => response.text())
-      .catch((error) => console.error(error));
+    );
   }
 
   createFileForConfiguration(

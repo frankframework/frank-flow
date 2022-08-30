@@ -7,16 +7,13 @@
   customClass="nsm-centered"
   identifier="optionsModal"
 >
-  <div class="header">
-    <h2>
-      {{ structureNode?.type }}
-      <ng-container *ngIf="frankDocElement?.name !== structureNode?.type">
-        ({{ frankDocElement?.name }})
-      </ng-container>
-      :
-      {{ structureNode?.name }}
-    </h2>
-  </div>
+  <h2 class="header">
+    {{ structureNode?.type
+    }}<ng-container *ngIf="frankDocElement?.name !== structureNode?.type"
+      >({{ frankDocElement?.name }}) </ng-container
+    >:
+    {{ structureNode?.name }}
+  </h2>
   <div class="sidebar">
     <h3
       (click)="setNestedElement(undefined)"

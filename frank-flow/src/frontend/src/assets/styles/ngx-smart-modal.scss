@@ -24,6 +24,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        margin: 0 0 0.5rem;
       }
 
       h1 {
@@ -63,7 +64,7 @@
 }
 
 .modal--sidebar .nsm-content {
-  width: 40vw;
+  width: 50vw;
   background: var(--bg-color-muted);
 
   .nsm-body {
@@ -72,10 +73,7 @@
 
     .header {
       grid-column: span 2;
-
-      h2 {
-        margin: 0 0 0.5rem;
-      }
+      width: calc(50vw - 16px - 2em);
     }
 
     .sidebar {
@@ -97,6 +95,7 @@
 
     .content {
       grid-column-start: 2;
+      width: 40vw;
 
       &-section {
         padding: 1em;

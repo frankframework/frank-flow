@@ -208,6 +208,7 @@ export class FileTreeComponent implements OnInit, OnDestroy {
         break;
       case SwitchWithoutSavingOption.save:
         this.currentFileService.save();
+        this.currentFileService.switchToFileTreeItem(item);
         break;
       case SwitchWithoutSavingOption.discard:
         this.currentFileService.switchToFileTreeItem(item);
