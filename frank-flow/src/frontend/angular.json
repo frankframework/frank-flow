@@ -24,6 +24,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "baseHref": "/frank-flow/",
             "allowedCommonJsDependencies": ["saxes, cytoscape"],
             "outputPath": "../../target/frontend",
             "index": "src/index.html",
@@ -57,7 +58,7 @@
                   "with": "src/environments/environment.production.ts"
                 }
               ],
-              "baseHref": "/frank-flow/",
+              "baseHref": "./",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -79,7 +80,7 @@
               ]
             },
             "dev": {
-              "baseHref": "/frank-flow/",
+              "baseHref": "./",
               "outputHashing": "none",
               "sourceMap": false,
               "namedChunks": false,
