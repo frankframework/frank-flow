@@ -121,8 +121,6 @@ public class FileApi {
 			try (InputStream is = fileAttachment.getObject(InputStream.class)) {
 				Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 				return Response.status(Response.Status.OK).tag(eTag).build();
-			} catch (ReadOnlyFileSystemException e) {
-				throw new ApiException("The file '"+path+"' can't be saved on a read-only file system");
 			} catch (IOException e) {
 				throw new ApiException("An error occurred while saving file ["+path+"]", e);
 			}
