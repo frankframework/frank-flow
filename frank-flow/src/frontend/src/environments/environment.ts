@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  runnerUri: window.location.origin,
+  originURL: window.location.origin + '/',
+  relativeURL: window.location.href,
   frankDocJsonPath: 'iaf/api/frankdoc/files/frankdoc.json',
   frankDocElements: 'iaf/frankdoc/#!/All',
 };

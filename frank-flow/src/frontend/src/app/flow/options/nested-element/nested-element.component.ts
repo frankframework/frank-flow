@@ -47,7 +47,7 @@ export class NestedElementComponent implements OnInit, OnDestroy {
   public frankDocParentElements: any[] = [];
   public structureNode!: FlowStructureNode;
   public frankDocElementsURI =
-    environment.runnerUri + '/' + environment.frankDocElements;
+    environment.originURL + environment.frankDocElements;
   public selectedNestedElement!: string;
 
   constructor(

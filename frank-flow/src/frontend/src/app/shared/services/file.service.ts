@@ -9,7 +9,7 @@ import { environment } from '../../../environments/environment';
 })
 export class FileService {
   private readonly apiConfigurationsUrl =
-    environment.runnerUri + '/frank-flow/api/configurations';
+    environment.relativeURL + 'api/configurations';
   private configurationFiles = new BehaviorSubject<Configuration[]>([]);
 
   constructor() {

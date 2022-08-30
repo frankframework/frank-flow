@@ -41,7 +41,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   public frankDocParentElements: any[] = [];
   public structureNode!: FlowStructureNode;
   public frankDocElementsURI =
-    environment.runnerUri + '/' + environment.frankDocElements;
+    environment.originURL + environment.frankDocElements;
   public selectedNestedElement!: any;
   public showNestedElements = false;
 
