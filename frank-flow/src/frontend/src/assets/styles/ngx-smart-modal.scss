@@ -95,7 +95,7 @@
 
     .content {
       grid-column-start: 2;
-      width: 40vw;
+      width: calc(50vw / 4 * 3 - 14px);
 
       &-section {
         padding: 1em;
