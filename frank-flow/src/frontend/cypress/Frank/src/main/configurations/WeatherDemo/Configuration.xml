@@ -1,4 +1,4 @@
-<Configuration name="WeatherDemo" xmlns:flow="urn:frank-flow">
+<Configuration name="WeatherDemo">
     <Adapter name="Update temperature">
         <Receiver name="Update temperature">
             <JavaListener name="Update temperature"/>
