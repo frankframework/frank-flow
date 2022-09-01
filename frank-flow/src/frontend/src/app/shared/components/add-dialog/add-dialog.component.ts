@@ -37,13 +37,27 @@ export class AddDialogComponent {
       return;
     }
 
-    this.createFileOrFolder().then((response) => {
-      this.giveMessage(response);
-      this.clearForm();
-      this.clearDirectory();
-      this.fileService.fetchFiles();
-      this.ngxSmartModalService.close('addDialog');
-    });
+    this.createFileOrFolder()
+      .then((response) =>
+        response.status !== 200 ? response.json() : response.text()
+      )
+      .then((data) => {
+        if (data?.error) {
+          this.toastr.error(
+            data.error,
+            `Error creating ${this.isFolder ? 'folder' : 'file'}`
+          );
+        } else {
+          this.toastr.success(
+            `${this.isFolder ? 'Folder' : 'File'} created successfully.`,
+            `Success`
+          );
+        }
+        this.clearForm();
+        this.clearDirectory();
+        this.fileService.fetchFiles();
+        this.ngxSmartModalService.close('addDialog');
+      });
   }
 
   createFileOrFolder(): Promise<Response> {
@@ -62,48 +76,6 @@ export class AddDialogComponent {
       this.currentDirectory.configuration,
       this.currentDirectory.path + '/' + this.fileName,
       this.helloWorldFileTemplate(this.fileName)
-    );
-  }
-
-  giveMessage(response: Response): void {
-    switch (response.status) {
-      case 200:
-      case 201:
-        this.giveSuccessMessage();
-        break;
-      case 409:
-        this.giveConflictMessage();
-        break;
-      default:
-        this.giveErrorMessage();
-        break;
-    }
-  }
-
-  giveSuccessMessage(): void {
-    this.toastr.success(
-      `The ${this.isFolder ? 'folder' : 'file'} ${
-        this.fileName
-      } has been created.`,
-      `${this.isFolder ? 'Folder' : 'File'} created!`
-    );
-  }
-
-  giveConflictMessage(): void {
-    this.toastr.error(
-      `The ${this.isFolder ? 'folder' : 'file'} ${
-        this.fileName
-      } already exists.`,
-      `${this.isFolder ? 'Folder' : 'File'} already exists!`
-    );
-  }
-
-  giveErrorMessage(): void {
-    this.toastr.error(
-      `The ${this.isFolder ? 'folder' : 'file'} ${
-        this.fileName
-      } couldn't be created.`,
-      `Error creating ${this.isFolder ? 'folder' : 'file'}`
     );
   }
 

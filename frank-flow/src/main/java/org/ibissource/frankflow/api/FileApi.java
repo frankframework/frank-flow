@@ -194,7 +194,7 @@ public class FileApi {
 			}
 			throw new ApiException("An unexpected error occurred, file ["+path+"] does not exists");
 		} catch (IOException e) {
-			throw new ApiException("An error occurred while saving file ["+path+"]", e);
+			throw new ApiException("An error occurred while creating file ["+path+"]", e);
 		}
 	}
 

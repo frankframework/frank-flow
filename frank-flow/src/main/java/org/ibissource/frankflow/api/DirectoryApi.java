@@ -16,6 +16,7 @@ limitations under the License.
 package org.ibissource.frankflow.api;
 
 import java.io.File;
+import java.util.Objects;
 
 import javax.ws.rs.PATCH;
 import javax.ws.rs.DELETE;
@@ -43,12 +44,12 @@ public class DirectoryApi {
         File file = getFile(rootFolder, path);
 
         if (file.exists()) {
-            throw new ApiException("directory already exists", Response.Status.CONFLICT);
+            throw new ApiException("Directory already exists", Response.Status.CONFLICT);
         }
         if (FileUtils.createDir(file)) {
             return Response.status(Response.Status.CREATED).build();
         } else {
-            throw new ApiException("Could not create file", Response.Status.CONFLICT);
+            throw new ApiException("Could not create directory", Response.Status.CONFLICT);
         }
 
     }
@@ -58,8 +59,8 @@ public class DirectoryApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response renameFolder(@PathParam("name") String configurationName, @QueryParam("path") String path, @FormParam("newName") String newName) {
 
-        if(newName == null || newName == "") {
-            throw new ApiException("an unexpected error occured, property [newName] does not exist or is empty");
+        if(newName == null || newName.equals("")) {
+            throw new ApiException("An unexpected error occurred, property [newName] does not exist or is empty");
         }
 
         File rootFolder = FileUtils.getDir(configurationName);
@@ -82,7 +83,7 @@ public class DirectoryApi {
         if(file.renameTo(destFile)) {
             return Response.status(Response.Status.OK).entity(path).type(MediaType.TEXT_PLAIN).build();
         } else {
-            throw new ApiException("an unexpected error occured, folder can't be renamed");
+            throw new ApiException("An unexpected error occurred, directory can't be renamed");
         }
     }
 
@@ -103,10 +104,10 @@ public class DirectoryApi {
         if(file.delete()) {
             return Response.status(Response.Status.OK).build();
         } else {
-            if (file.listFiles().length > 0) {
-                throw new ApiException("Can't delete folder '"+path+"' with files. Please remove the files first.");
+            if (Objects.requireNonNull(file.listFiles()).length > 0) {
+                throw new ApiException("Can't delete directory '"+path+"' with content. Please remove the content first.");
             }
-            throw new ApiException("Unable to remove file ["+path+"]");
+            throw new ApiException("Unable to remove directory ["+path+"]");
         }
     }
 
@@ -116,17 +117,17 @@ public class DirectoryApi {
      */
     private File getFile(File rootFolder, String path) {
         if (path == null) {
-            throw new ApiException("no (valid) path specified");
+            throw new ApiException("No (valid) path specified");
         }
 
         File file = new File(rootFolder, path);
         String normalizedFilename = FilenameUtils.normalize(file.getAbsolutePath());
         if (normalizedFilename == null) { // non absolute path, perhaps ../ is used?
-            throw new ApiException("unable to determine normalized filename");
+            throw new ApiException("Unable to determine normalized filename");
         } else if (normalizedFilename.equals(file.getPath())) {
             return file;
         }
 
-        throw new ApiException("inaccessible path [" + file + "]");
+        throw new ApiException("Inaccessible path [" + file + "]");
     }
 }
