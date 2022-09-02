@@ -100,11 +100,12 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
   let newElementName: string;
 
   if (fullClassName) {
-    const postFix = getPostFix(fullClassName);
+    const tagNameWithCapitalLetter = capitalizeFirstLetter(tag.name);
+    const postFix = getPostFix(fullClassName, tagNameWithCapitalLetter);
     const fullClassNameParts = fullClassName.split('.');
     const className = fullClassNameParts[fullClassNameParts.length - 1];
     const newElementPrefix = className.replace(postFix, '');
-    newElementName = newElementPrefix + capitalizeFirstLetter(tag.name);
+    newElementName = newElementPrefix + tagNameWithCapitalLetter;
     replaceStringOnPositions(
       tagStartIndex - tag.name.length,
       tagStartIndex,
@@ -134,12 +135,17 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
   }
 });
 
-const getPostFix = (fullClassName: string) => {
+const getPostFix = (fullClassName: string, tagName: string) => {
+  let postFix = '';
   for (const type of frankDoc.types) {
     if (type.members.includes(fullClassName)) {
-      return type.name.split('.I')[1];
+      postFix = type.name.split('.I')[1];
+      if (tagName.includes(postFix)) {
+        return postFix;
+      }
     }
   }
+  return postFix;
 };
 
 const capitalizeFirstLetter = (string: string) => {
