@@ -6,8 +6,16 @@ This project will help you visualize and edit your adapters in a flow format. Th
 
 The project has been tested in Mozilla Firefox and Google Chrome, other browsers will possibly give an inaccurate representation of the editor. If you'd like to report a bug, you can do so [here](https://github.com/ibissource/frank-flow/issues/new?assignees=&labels=bug&template=bug_report.md).
 
+## Demo's
+
+### 📺 Frank!Flow workflow demonstration video
+
 [![image](https://user-images.githubusercontent.com/12416423/163985224-0acb276c-bd0c-4c86-bc8c-14dbf22d1bdc.png)](https://wearefrank.tv/watch/151)
-Watch [this video on WeAreFrank! TV](https://wearefrank.tv/watch/151) for a demo on how to create a configuration with the Frank!Flow.
+Watch [this video on WeAreFrank! TV](https://wearefrank.tv/watch/151) for a demonstration on how to create a configuration with the Frank!Flow.
+
+### 🕹️ Hands-on online demo
+
+A demo of the Frank!Flow is made general available and can be visited at [flow.frankframework.org](https://flow.frankframework.org). This demo makes use of a read-only file-system, so it won't be possible to save files or to perform other actions on the file-system.
 
 ## Features of the Frank!Flow
 
