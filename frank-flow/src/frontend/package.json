@@ -46,7 +46,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^13.3.7",
     "@angular-eslint/builder": "^14.0.3",
-    "@angular-eslint/eslint-plugin": "^14.0.3",
+    "@angular-eslint/eslint-plugin": "^14.0.4",
     "@angular-eslint/eslint-plugin-template": "^14.0.0",
     "@angular-eslint/schematics": "^14.0.3",
     "@angular-eslint/template-parser": "^14.0.4",
@@ -59,7 +59,7 @@
     "@types/jasmine": "^4.3.0",
     "@types/turndown": "^5.0.1",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
-    "@types/node": "^18.7.15",
+    "@types/node": "^18.7.16",
     "@typescript-eslint/parser": "^5.36.2",
     "cypress": "^7.7.0",
     "eslint": "^8.23.0",
