@@ -78,9 +78,9 @@ export class NodeGeneratorService {
   }
 
   getFilteredNestedElements(nestedElements: FlowNodeNestedElements) {
-    const hiddenNestedElements = new Set(['forward']);
-    return Object.entries(nestedElements).filter(
-      ([typeGroup, _]) => !hiddenNestedElements.has(typeGroup)
+    const wantedNestedElements = new Set(['sender', 'listener']);
+    return Object.entries(nestedElements).filter(([typeGroup, _]) =>
+      wantedNestedElements.has(typeGroup)
     );
   }
 
