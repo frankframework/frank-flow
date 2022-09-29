@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   originURL: window.location.origin + '/',
   relativeURL: window.location.href,
-  frankDocJsonPath: 'iaf/api/frankdoc/files/frankdoc.json',
+  frankDocJsonPath: 'iaf/frankdoc/js/frankdoc.json',
   frankDocElements: 'iaf/frankdoc/#!/All',
 };
 
