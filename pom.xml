@@ -8,7 +8,7 @@
 
 	<properties>
 		<revision>0.0.0-SNAPSHOT</revision>
-		<nexusVersion>2.26.0-SNAPSHOT</nexusVersion>
+		<nexusVersion>2.27.0-SNAPSHOT</nexusVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<log4j2.version>2.18.0</log4j2.version>
 		<cxf.version>3.5.3</cxf.version>
