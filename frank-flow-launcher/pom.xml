@@ -13,7 +13,7 @@
 	<name>Frank!Flow Launcher</name>
 
 	<properties>
-		<tomcat.version>9.0.65</tomcat.version>
+		<tomcat.version>9.0.67</tomcat.version>
 		<jetty.version>9.4.42.v20210604</jetty.version>
 	</properties>
 
