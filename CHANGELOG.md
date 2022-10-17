@@ -1,3 +1,36 @@
+## [2.27.1](https://github.com/ibissource/frank-flow/compare/v2.27.0...v2.27.1) (2022-10-17)
+
+
+### 🛠 Builds
+
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([d12c6b3](https://github.com/ibissource/frank-flow/commit/d12c6b3908d7dae9a6a638a51bf34f42fad00e45))
+* **deps-dev:** bump [@angular](https://github.com/angular)/cli in /frank-flow/src/frontend ([f1a394e](https://github.com/ibissource/frank-flow/commit/f1a394e19242ee028ed0face58ee865cce89a5c1))
+* **deps-dev:** bump [@types](https://github.com/types)/cytoscape in /frank-flow/src/frontend ([0b81827](https://github.com/ibissource/frank-flow/commit/0b818274110e8dbc42d3b5891365acebfa425d90))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([a8d982f](https://github.com/ibissource/frank-flow/commit/a8d982ff7bc61a484e4d69dcd9d39f7fc631ff5f))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([b4f334c](https://github.com/ibissource/frank-flow/commit/b4f334c5a4357ac3f1bc6c1135cbb0bc208c63de))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([5f5ed95](https://github.com/ibissource/frank-flow/commit/5f5ed95a492701c4a5818f4baf812e5164f9deb5))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([d2f3086](https://github.com/ibissource/frank-flow/commit/d2f3086dfe1bfed7858f6493da01df2eb16e3238))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([5ddcc88](https://github.com/ibissource/frank-flow/commit/5ddcc88ae8651b37cf801619e795b93b37f53d64))
+* **deps-dev:** bump [@types](https://github.com/types)/node in /frank-flow/src/frontend ([bdc6859](https://github.com/ibissource/frank-flow/commit/bdc685993cb374a889524fcc5f73fe5380f228b2))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([b0b9038](https://github.com/ibissource/frank-flow/commit/b0b903864d82bf7d90a708059e5aaa7ed7594cb3))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/eslint-plugin ([72c0fad](https://github.com/ibissource/frank-flow/commit/72c0fad9e5ee6c49ead916972908860529069fd7))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([43b84b9](https://github.com/ibissource/frank-flow/commit/43b84b9221cc0842673d00fdf815157284eedceb))
+* **deps-dev:** bump [@typescript-eslint](https://github.com/typescript-eslint)/parser ([487f23a](https://github.com/ibissource/frank-flow/commit/487f23a493106531b2be29cc042666c867258f47))
+* **deps-dev:** bump eslint in /frank-flow/src/frontend ([8f8a695](https://github.com/ibissource/frank-flow/commit/8f8a69516e9e39c71d757764125f96cb2c66773c))
+* **deps-dev:** bump eslint-plugin-unicorn in /frank-flow/src/frontend ([a4ae134](https://github.com/ibissource/frank-flow/commit/a4ae134fe69c022401596f1103264cee1fcdd00c))
+* **deps-dev:** bump eslint-plugin-unicorn in /frank-flow/src/frontend ([c6cce77](https://github.com/ibissource/frank-flow/commit/c6cce774bb078761a25405c31bc2d7b956cd4553))
+* **deps-dev:** bump eslint-plugin-unicorn in /frank-flow/src/frontend ([deca44e](https://github.com/ibissource/frank-flow/commit/deca44ef903f9a9bb40a0fc47659f01df9ae8c09))
+* **deps:** bump cxf-rt-rs-client from 3.5.3 to 3.5.4 ([dc5b18e](https://github.com/ibissource/frank-flow/commit/dc5b18e58dc35b0db44721f5577c54f894812588))
+* **deps:** bump log4j2.version from 2.18.0 to 2.19.0 ([78ab84e](https://github.com/ibissource/frank-flow/commit/78ab84e0ad57161272078497624c1fd1369662b0))
+* **deps:** bump maven-jar-plugin from 3.2.2 to 3.3.0 ([604a971](https://github.com/ibissource/frank-flow/commit/604a971023902940646dcafa10524728e6359376))
+* **deps:** bump spring.version from 5.3.22 to 5.3.23 ([5f72195](https://github.com/ibissource/frank-flow/commit/5f7219595a30a6c785f28002fae713bca5269976))
+* **deps:** bump tomcat.version from 9.0.65 to 9.0.68 ([b87f6c5](https://github.com/ibissource/frank-flow/commit/b87f6c55144bc96a475b3aa39b71d139983b7b10))
+
+
+### ♻️ Chores
+
+* **bot:** decrease the frequency of dependabot, to limit nightly builds ([721c82d](https://github.com/ibissource/frank-flow/commit/721c82dfc5ebb137ac69b471a104ae132832e928))
+
 # [2.27.0](https://github.com/ibissource/frank-flow/compare/v2.26.0...v2.27.0) (2022-09-29)
 
 
