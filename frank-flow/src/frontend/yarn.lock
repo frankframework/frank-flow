@@ -5844,10 +5844,10 @@ jest-worker@^27.0.2:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jqwidgets-ng@^14.1.17:
-  version "14.1.17"
-  resolved "https://registry.yarnpkg.com/jqwidgets-ng/-/jqwidgets-ng-14.1.17.tgz#a9043abe2f35e99319d05a5141ea3ba9a702e2a8"
-  integrity sha512-y6xiCXgwKgHsSIxqu6k+sC9Cr04rAM+Punzm1xSatkp2Tl9tbfEVJ/ajKR/VYSgyo9fodCcTDiEvyzJ5f4gZVQ==
+jqwidgets-ng@^15.0.3:
+  version "15.0.3"
+  resolved "https://registry.yarnpkg.com/jqwidgets-ng/-/jqwidgets-ng-15.0.3.tgz#14152e83d48eda99d9bf5135900280d07ddbb91c"
+  integrity sha512-SJz+qDY89fwvx/al9K9SxyY4b2q2Ust3TUGGONBGx9Aeq3594GMx+cjxqqlzJRwAPjiwFxFKGJBks7Kp5ci5AA==
 
 js-sdsl@^4.1.4:
   version "4.1.4"
