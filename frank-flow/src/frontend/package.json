@@ -54,7 +54,7 @@
     "@angular/compiler-cli": "^13.1.0",
     "@briebug/cypress-schematic": "^5.0.1",
     "@commitlint/cli": "^17.3.0",
-    "@commitlint/config-conventional": "^17.2.0",
+    "@commitlint/config-conventional": "^17.4.2",
     "@types/cytoscape": "^3.19.9",
     "@types/jasmine": "^4.3.0",
     "@types/turndown": "^5.0.1",
