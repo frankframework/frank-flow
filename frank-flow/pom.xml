@@ -11,7 +11,7 @@
 	<name>Frank!Flow</name>
 
 	<properties>
-		<spring.version>5.3.23</spring.version>
+		<spring.version>5.3.26</spring.version>
 	</properties>
 
 	<dependencies>
