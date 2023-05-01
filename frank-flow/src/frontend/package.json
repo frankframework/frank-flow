@@ -37,7 +37,7 @@
     "ngx-panzoom": "^13.0.0",
     "ngx-smart-modal": "^7.4.1",
     "ngx-toastr": "^14.3.0",
-    "rxjs": "~7.8.0",
+    "rxjs": "~7.8.1",
     "saxes": "^6.0.0",
     "tslib": "^2.5.0",
     "turndown": "^7.1.2",
