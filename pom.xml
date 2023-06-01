@@ -11,7 +11,7 @@
 		<nexusVersion>2.27.1-SNAPSHOT</nexusVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<log4j2.version>2.19.0</log4j2.version>
-		<cxf.version>3.5.4</cxf.version>
+		<cxf.version>4.0.1</cxf.version>
 	</properties>
 
 	<name>Frank!Flow Parent</name>
