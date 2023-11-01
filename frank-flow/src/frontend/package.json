@@ -33,7 +33,7 @@
     "cytoscape": "^3.25.0",
     "jqwidgets-ng": "^17.0.0",
     "jsplumb": "^2.15.6",
-    "monaco-editor": "^0.34.1",
+    "monaco-editor": "^0.44.0",
     "ngx-panzoom": "^13.0.0",
     "ngx-smart-modal": "^7.4.1",
     "ngx-toastr": "^14.3.0",
