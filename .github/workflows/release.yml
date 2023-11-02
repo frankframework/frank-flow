@@ -18,10 +18,10 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
           path: frank-flow
-      - name: Use Node.js 16.x
+      - name: Use Node.js 20.x
         uses: actions/setup-node@v2
         with:
-          node-version: 16.x
+          node-version: 20.x
       - name: Install dependencies
         run: yarn global add semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/exec conventional-changelog-metahub
 
