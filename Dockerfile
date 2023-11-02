@@ -1,5 +1,5 @@
 # This image is created for the https://flow.frankframework.org demo.
-FROM nexus.frankframework.org/frank-framework:latest
+FROM nexus.frankframework.org/frankframework:latest
 
 ENV dtap.stage="LOC"
 ENV database.instance.name="frank2frankflow"
