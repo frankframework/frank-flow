@@ -9,12 +9,14 @@
   <div>
     <h1>Switching files without saving</h1>
     <p>
-      <strong>{{ currentFile?.configuration }}: {{ currentFile?.path }}</strong>
+      <strong
+        >{{ currentFile?.configurationName }}: {{ currentFile?.path }}</strong
+      >
       has unsaved changes.
     </p>
     <p>
       What would you like to do before switching to
-      <strong>{{ this.item?.configuration }}: {{ this.item?.path }}</strong
+      <strong>{{ this.item?.configurationName }}: {{ this.item?.path }}</strong
       >?
     </p>
   </div>

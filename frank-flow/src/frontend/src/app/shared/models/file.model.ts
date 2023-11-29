@@ -3,7 +3,7 @@ import { FlowStructure } from './flow-structure.model';
 
 export interface File {
   path: string;
-  configuration: string;
+  configurationName: string;
   xml?: string;
   flowStructure?: FlowStructure;
   errors?: string[];

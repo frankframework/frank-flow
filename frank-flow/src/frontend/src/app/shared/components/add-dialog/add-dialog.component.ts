@@ -29,7 +29,7 @@ export class AddDialogComponent {
   }
 
   add(): void {
-    if (!this.currentDirectory.configuration) {
+    if (!this.currentDirectory.configurationName) {
       this.toastr.error(
         `Please select a configuration or directory.`,
         `Error creating ${this.isFolder ? 'folder' : 'file'}`
@@ -39,7 +39,7 @@ export class AddDialogComponent {
 
     this.createFileOrFolder()
       .then((response) =>
-        response.status !== 200 ? response.json() : response.text()
+        response.status === 200 ? response.text() : response.json()
       )
       .then((data) => {
         if (data?.error) {
@@ -66,14 +66,14 @@ export class AddDialogComponent {
 
   createFolder(): Promise<Response> {
     return this.fileService.createDirectoryForConfiguration(
-      this.currentDirectory.configuration,
+      this.currentDirectory.configurationName,
       this.currentDirectory.path + '/' + this.fileName
     );
   }
 
   createFile(): Promise<Response> {
     return this.fileService.createFileForConfiguration(
-      this.currentDirectory.configuration,
+      this.currentDirectory.configurationName,
       this.currentDirectory.path + '/' + this.fileName,
       this.helloWorldFileTemplate(this.fileName)
     );

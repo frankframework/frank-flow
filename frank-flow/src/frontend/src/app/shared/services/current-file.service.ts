@@ -187,16 +187,16 @@ export class CurrentFileService {
 
   resetCurrentDirectory(): void {
     this.setCurrentDirectory({
-      configuration: '',
+      configurationName: '',
       path: '',
       type: FileType.FOLDER,
     });
   }
 
   resetCurrentFile(): void {
-    const emptyFile = {
+    const emptyFile: File = {
       path: '',
-      configuration: '',
+      configurationName: '',
       xml: 'No file selected, please select a file in the Explorer',
       saved: true,
       firstLoad: true,
@@ -209,7 +209,7 @@ export class CurrentFileService {
     if (this.fileCanBeSaved()) {
       this.fileService
         .updateFileForConfiguration(
-          this.currentFile.configuration,
+          this.currentFile.configurationName,
           this.currentFile.path,
           this.currentFile.xml!
         )
@@ -225,7 +225,7 @@ export class CurrentFileService {
   fileCanBeSaved(): boolean {
     return <boolean>(
       (this.currentFile &&
-        this.currentFile.configuration &&
+        this.currentFile.configurationName &&
         this.currentFile.path &&
         this.currentFile.xml &&
         !this.currentFile.saved)
@@ -253,12 +253,14 @@ export class CurrentFileService {
     this.clearErrorToasts();
 
     switch (file.type) {
-      case FileType.CONFIGURATION:
+      case FileType.CONFIGURATION: {
         this.xmlToFlowStructureWorker.postMessage(file);
         break;
-      default:
+      }
+      default: {
         this.currentFileSubject.next(file);
         break;
+      }
     }
   }
 
@@ -298,17 +300,17 @@ export class CurrentFileService {
       this.currentFile === undefined ||
       !!(
         this.currentFile &&
-        file.configuration &&
+        file.configurationName &&
         file.path &&
         (this.currentFile.path !== file.path ||
-          this.currentFile.configuration !== file.configuration)
+          this.currentFile.configurationName !== file.configurationName)
       )
     );
   }
 
   fetchFileAndSetToCurrent(file: File): void {
     this.fileService
-      .getFileFromConfiguration(file.configuration, file.path)
+      .getFileFromConfiguration(file.configurationName, file.path)
       .then((response) =>
         response.status === 500 ? response.json() : response.text()
       )
@@ -340,9 +342,9 @@ export class CurrentFileService {
   }
 
   setNewCurrentFile(file: File, content: string): void {
-    const currentFile = {
+    const currentFile: File = {
       type: FileType.FILE,
-      configuration: file.configuration,
+      configurationName: file.configurationName,
       path: file.path,
       xml: content,
       saved: true,
@@ -369,7 +371,7 @@ export class CurrentFileService {
   }
 
   deleteItemSuccessfully(): void {
-    const isFolder = !!this.currentDirectory.configuration;
+    const isFolder = !!this.currentDirectory.configurationName;
     this.showDeleteSuccessfullMessage(isFolder);
     this.resetCurrentFile();
     this.resetCurrentDirectory();
@@ -386,7 +388,7 @@ export class CurrentFileService {
   }
 
   deleteItemFailed(response: any): void {
-    const isFolder = this.currentDirectory.configuration;
+    const isFolder = this.currentDirectory.configurationName;
     this.toastr.error(
       `${response.error}`,
       `Error removing ${isFolder ? 'Folder' : 'File'}`
@@ -394,13 +396,13 @@ export class CurrentFileService {
   }
 
   deleteFileOrFolder(): Promise<Response> {
-    return this.currentDirectory.configuration
+    return this.currentDirectory.configurationName
       ? this.fileService.removeDirectoryForConfiguration(
-          this.currentDirectory.configuration,
+          this.currentDirectory.configurationName,
           this.currentDirectory.path
         )
       : this.fileService.removeFileForConfiguration(
-          this.currentFile.configuration,
+          this.currentFile.configurationName,
           this.currentFile.path
         );
   }

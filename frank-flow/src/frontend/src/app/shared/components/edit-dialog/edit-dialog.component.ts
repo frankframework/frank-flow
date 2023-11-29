@@ -93,12 +93,14 @@ export class EditDialogComponent {
   giveEditMessage(response: Response): void {
     switch (response.status) {
       case 200:
-      case 201:
+      case 201: {
         this.giveSuccessMessage();
         break;
-      default:
+      }
+      default: {
         this.giveErrorMessage();
         break;
+      }
     }
   }
 
@@ -123,11 +125,11 @@ export class EditDialogComponent {
   removeFileOrFolder(): Promise<Response> {
     return this.currentDirectory?.path
       ? this.fileService.removeDirectoryForConfiguration(
-          this.currentDirectory.configuration,
+          this.currentDirectory.configurationName,
           this.currentDirectory.path
         )
       : this.fileService.removeFileForConfiguration(
-          this.currentFile.configuration,
+          this.currentFile.configurationName,
           this.currentFile.path
         );
   }
@@ -135,12 +137,14 @@ export class EditDialogComponent {
   giveDeleteMessage(response: Response): void {
     switch (response.status) {
       case 200:
-      case 201:
+      case 201: {
         this.giveDeleteSuccessMessage();
         break;
-      default:
+      }
+      default: {
         this.giveDeleteErrorMessage();
         break;
+      }
     }
   }
 
