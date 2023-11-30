@@ -129,13 +129,17 @@ export class FileTreeComponent implements OnInit, OnDestroy {
   }
 
   isItemSelected(configuration: string, path: string): boolean {
-    return this.filesAreEqual(
-      {
-        configurationName: configuration,
-        path: path,
-        type: FileType.FILE,
-      },
-      this.currentFile ?? {}
+    return (
+      this.currentFile &&
+      this.filesAreEqual(
+        {
+          adapters: [],
+          configurationName: configuration,
+          path: path,
+          type: FileType.FILE,
+        },
+        this.currentFile
+      )
     );
   }
 
