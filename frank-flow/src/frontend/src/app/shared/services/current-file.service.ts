@@ -319,11 +319,11 @@ export class CurrentFileService {
           ? result?.error
             ? this.showFetchingErrorMessage(result.error)
             : this.setNewCurrentFile(file, result)
-          : this.showFileNotFountMessage(file);
+          : this.showFileNotFoundMessage(file);
       });
   }
 
-  showFileNotFountMessage(file: File): void {
+  showFileNotFoundMessage(file: File): void {
     this.resetCurrentFile();
     this.toastr.error(
       `The file ${file.path} could not be found.`,
