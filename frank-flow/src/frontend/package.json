@@ -49,7 +49,7 @@
     "@angular-eslint/eslint-plugin": "^16.0.3",
     "@angular-eslint/eslint-plugin-template": "^16.0.3",
     "@angular-eslint/schematics": "^16.2.0",
-    "@angular-eslint/template-parser": "^16.2.0",
+    "@angular-eslint/template-parser": "^17.1.1",
     "@angular/cli": "^16.2.4",
     "@angular/compiler-cli": "^13.1.0",
     "@briebug/cypress-schematic": "^5.0.1",
