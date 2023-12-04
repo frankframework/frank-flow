@@ -4,10 +4,10 @@
 
 export const environment = {
   production: false,
-  originURL: window.location.origin + '/',
-  relativeURL: window.location.href,
-  frankDocJsonPath: 'iaf/frankdoc/js/frankdoc.json',
-  frankDocElements: 'iaf/frankdoc/#!/All',
+  originURL: 'http://localhost:8080' + '/',
+  relativeURL: 'http://localhost:8080/frank-flow/',
+  frankDocJsonPath: window.location.origin + '/js/frankdoc.json',
+  frankDocElements: 'https://frankdoc.frankframework.org/#/All',
 };
 
 /*

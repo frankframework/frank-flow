@@ -46,8 +46,7 @@ export class NestedElementComponent implements OnInit, OnDestroy {
   public newAttributeValue!: string;
   public frankDocParentElements: any[] = [];
   public structureNode!: FlowStructureNode;
-  public frankDocElementsURI =
-    environment.originURL + environment.frankDocElements;
+  public frankDocElementsURI = environment.frankDocElements;
   public selectedNestedElement!: string;
 
   constructor(
@@ -188,10 +187,10 @@ export class NestedElementComponent implements OnInit, OnDestroy {
     );
 
     const value = event as any as string | number;
-    if (index !== -1) {
-      this.changedAttributes[index] = { name, value };
-    } else {
+    if (index === -1) {
       this.changedAttributes.push({ name, value });
+    } else {
+      this.changedAttributes[index] = { name, value };
     }
   }
 

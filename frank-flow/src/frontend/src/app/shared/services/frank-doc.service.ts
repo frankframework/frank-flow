@@ -6,8 +6,7 @@ import { Observable, ReplaySubject } from 'rxjs';
   providedIn: 'root',
 })
 export class FrankDoc {
-  private readonly frankDocUrl =
-    environment.originURL + environment.frankDocJsonPath;
+  private readonly frankDocUrl = environment.frankDocJsonPath;
   private frankDoc = new ReplaySubject<any>(1);
 
   constructor() {
