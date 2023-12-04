@@ -14,7 +14,7 @@ export const seededData: FileTreeItemModel[] = [
         expanded: false,
         children: [
           {
-            name: 'FrankConfig',
+            name: 'FrankConfig.xml',
             path: 'home/HelloWorldFolder/WeAreFrankFolder/FrankConfig.xml',
             type: 'file',
             xml: '<Frank>WeAreFrank!</Frank>',
@@ -26,7 +26,7 @@ export const seededData: FileTreeItemModel[] = [
             flowStructures: ['Adapter1', 'Adapter2'],
           },
           {
-            name: 'SergiConfig',
+            name: 'SergiConfig.xml',
             path: 'home/HelloWorldFolder/WeAreFrankFolder/SergiConfig.xml',
             type: 'file',
             xml: '<Frank>Wizard Sergi!</Frank>',
@@ -37,10 +37,19 @@ export const seededData: FileTreeItemModel[] = [
             extension: 'xml',
             flowStructures: ['Adapter1', 'Adapter2'],
           },
+          {
+            name: 'StageSpecifics_LOC.properties',
+            path: 'home/HelloWorldFolder/WeAreFrankFolder/StageSpecifics_LOC.properties',
+            type: 'file',
+            fileType: 'other',
+            extension: 'properties',
+            saved: false,
+            firstLoad: false,
+          },
         ],
       },
       {
-        name: 'HelloWorldConfiguration',
+        name: 'HelloWorldConfiguration.xml',
         path: 'home/HelloWorldFolder/HelloWorldConfiguration',
         type: 'file',
         extension: 'xml',
@@ -52,7 +61,7 @@ export const seededData: FileTreeItemModel[] = [
         flowStructures: ['Adapter1', 'Adapter2'],
       },
       {
-        name: 'helloworld',
+        name: 'helloworld.txt',
         path: 'home/HelloWorldFolder/helloworld.txt',
         type: 'file',
         extension: 'txt',
@@ -63,7 +72,7 @@ export const seededData: FileTreeItemModel[] = [
     ],
   },
   {
-    name: 'GoodByeWorld',
+    name: 'GoodByeWorld.xml',
     path: 'home/GoodByeWorld.xml',
     type: 'file',
     extension: 'xml',
