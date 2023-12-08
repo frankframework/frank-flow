@@ -16,3 +16,34 @@
   flex-direction: row;
   gap: 16px;
 }
+
+.tree {
+  padding-inline-start: 0.75rem;
+  padding-right: 0.75rem;
+  height: 100%;
+}
+
+.scrollbar {
+  height: calc(100% - 64px);
+  overflow: auto;
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  height: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #bad5d5;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--dark-cyan);
+}

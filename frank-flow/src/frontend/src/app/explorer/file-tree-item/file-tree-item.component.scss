@@ -1,0 +1,38 @@
+.item {
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  padding: 0.125rem 0.35rem 0.125rem 0.25rem;
+  cursor: pointer;
+  align-items: center;
+  text-overflow: clip;
+  width: fit-content;
+}
+
+.item-selected {
+  background-color: #fdc300;
+  border-radius: 5px;
+}
+
+.item-child {
+  border-left: 1px solid darkgrey;
+  margin-left: 0.355rem;
+  padding-inline-start: 1rem;
+  cursor: pointer;
+}
+
+.item-child-node {
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  align-items: center;
+  border-left: 1px solid darkgray;
+  margin-inline-start: 0.335rem;
+  padding-inline-start: 0.75rem;
+  cursor: pointer;
+}
+
+.item-child-node-icon {
+  margin-inline-start: 1.5rem;
+  margin-inline-end: 0.25rem;
+}

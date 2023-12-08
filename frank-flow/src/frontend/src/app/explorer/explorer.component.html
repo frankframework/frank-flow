@@ -12,5 +12,9 @@
     <fa-icon icon="redo-alt"></fa-icon>
   </app-button>
 </div>
-<app-file-tree [height]="'calc(100% - 64px)'" [width]="'100%'"></app-file-tree>
+<div class="tree">
+  <div class="scrollbar">
+    <app-custom-file-tree></app-custom-file-tree>
+  </div>
+</div>
 <app-confirm-dialog></app-confirm-dialog>

@@ -1,6 +1,6 @@
 /// <reference path="../../../../node_modules/monaco-editor/monaco.d.ts" />
 import { Injectable } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subject, Subscription } from 'rxjs';
 import { File } from '../models/file.model';
 import { FileService } from './file.service';
 import { ToastrService } from 'ngx-toastr';
@@ -9,6 +9,11 @@ import { FileType } from '../enums/file-type.enum';
 import { SessionService } from './session.service';
 import { PanZoomService } from './pan-zoom.service';
 import { FrankDoc } from './frank-doc.service';
+import { FileTreeItemModel } from '../models/file-tree-item.model';
+import { SwitchWithoutSavingOption } from '../../header/settings/options/switch-without-saving-option';
+import { SettingsService } from '../../header/settings/settings.service';
+import { Settings } from '../../header/settings/settings.model';
+import { NgxSmartModalService } from 'ngx-smart-modal';
 
 @Injectable({
   providedIn: 'root',
@@ -23,18 +28,25 @@ export class CurrentFileService {
   public currentDirectory!: File;
   public fileSelectedInExplorer = true;
 
+  public userSelectedNewFileObservable = new Subject<boolean>();
+  private settingsSubscription!: Subscription;
+  private settings!: Settings;
+
   constructor(
     private fileService: FileService,
     private frankDocService: FrankDoc,
     private toastr: ToastrService,
     private sessionService: SessionService,
-    private panZoomService: PanZoomService
+    private panZoomService: PanZoomService,
+    private settingsService: SettingsService,
+    private ngxSmartModalService: NgxSmartModalService
   ) {
     this.initializeXmlToFlowStructureWorker();
     this.initializeXmlToFlowStructureWorkerEventListener();
     this.initializeConvertConfigurationSyntaxWorker();
     this.initializeConvertConfigurationSyntaxWorkerEventListener();
     this.subscribeToFrankDoc();
+    this.getSettings();
   }
 
   initializeXmlToFlowStructureWorker(): void {
@@ -58,6 +70,7 @@ export class CurrentFileService {
         if (this.parsingErrorsFound(data)) {
           this.showParsingErrors(data.errors);
         }
+        this.currentFile = data;
         this.currentFileSubject.next(data);
       }
     });
@@ -253,12 +266,14 @@ export class CurrentFileService {
     this.clearErrorToasts();
 
     switch (file.type) {
-      case FileType.CONFIGURATION:
+      case FileType.CONFIGURATION: {
         this.xmlToFlowStructureWorker.postMessage(file);
         break;
-      default:
+      }
+      default: {
         this.currentFileSubject.next(file);
         break;
+      }
     }
   }
 
@@ -423,5 +438,99 @@ export class CurrentFileService {
 
   refreshFile(): void {
     this.updateCurrentFile(this.currentFile);
+  }
+
+  handleFileClick(item: FileTreeItemModel): void {
+    const file: File | undefined = this.transformFileTreeItemModelToFile(item);
+    if (file) {
+      if (
+        this.currentFile.path === file.path &&
+        this.currentFile.configuration === file.configuration
+      ) {
+        return;
+      }
+      this.currentFileSubject.next(file);
+    }
+
+    if (file) {
+      if (this.filesAreEqual(this.currentFile, file)) {
+        this.resetCurrentDirectory();
+        return;
+      }
+
+      if (file.type === FileType.FILE) {
+        if (this.fileNeedsToBeSaved()) {
+          this.switchUnsavedChangesDecision(file);
+        } else {
+          this.switchToFileTreeItem(file);
+        }
+      } else if (file.type === FileType.FOLDER) {
+        this.setCurrentDirectory(file);
+      }
+    }
+  }
+
+  fileNeedsToBeSaved(): boolean {
+    return this.currentFile && !this.currentFile?.saved;
+  }
+
+  filesAreEqual(file1: File, file2: File): boolean {
+    return (
+      file1.configuration === file2.configuration && file1.path === file2.path
+    );
+  }
+
+  transformFileTreeItemModelToFile(item: FileTreeItemModel): File | undefined {
+    if (item.type === 'file') {
+      if (item.fileType === 'configuration') {
+        return {
+          path: item.path,
+          configuration: item.name,
+          xml: item.xml,
+          flowStructure: item.flowStructure,
+          saved: item.saved,
+          flowNeedsUpdate: item.flowNeedsUpdate,
+          type: FileType.FILE,
+          firstLoad: item.firstLoad,
+        } as File;
+      } else if (item.fileType === 'other') {
+        return {
+          path: item.path,
+          configuration: item.name,
+          saved: item.saved,
+          type: FileType.FILE,
+          firstLoad: item.firstLoad,
+        } as File;
+      }
+    }
+    return undefined;
+  }
+
+  switchUnsavedChangesDecision(file: File): void {
+    switch (this.settings.switchWithoutSaving) {
+      case SwitchWithoutSavingOption.ask: {
+        this.ngxSmartModalService
+          .getModal('saveDialog')
+          .setData({ file, fileTreeComponent: this }, true)
+          .open();
+        break;
+      }
+      case SwitchWithoutSavingOption.save: {
+        this.save();
+        this.switchToFileTreeItem(file);
+        break;
+      }
+      case SwitchWithoutSavingOption.discard: {
+        this.switchToFileTreeItem(file);
+        break;
+      }
+    }
+  }
+
+  getSettings(): void {
+    this.settingsSubscription =
+      this.settingsService.settingsObservable.subscribe(
+        (settings) => (this.settings = settings)
+      );
   }
 }

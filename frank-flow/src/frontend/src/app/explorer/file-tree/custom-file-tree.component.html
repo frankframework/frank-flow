@@ -1,3 +1,4 @@
-<div *ngFor="let item of treeData" class="ps-3 cursor-pointer">
-  <app-file-tree-item [item]="item"></app-file-tree-item>
-</div>
+<app-file-tree-item
+  *ngFor="let item of treeData"
+  [item]="item"
+></app-file-tree-item>

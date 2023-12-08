@@ -1,3 +1,5 @@
+import { FlowStructure } from './flow-structure.model';
+
 export const typeConst = ['folder', 'file'] as const;
 
 export type FileTreeItemType = typeof typeConst;
@@ -19,18 +21,20 @@ export type FolderItemModel = {
 
 export type FileItemModel = {
   type: FileTreeItemType[1]; //file
-  extension: string;
+  currentlySelected: boolean;
+  extension: string | undefined;
   saved: boolean;
   firstLoad: boolean;
 } & (ConfigurationFile | OtherFile);
 
 export type ConfigurationFile = {
-  fileType: FileTreeFileType[0]; //configuration
+  fileType: 'configuration'; //configuration
+  expanded: boolean;
   flowNeedsUpdate: boolean;
-  flowStructures: string[];
-  xml: string;
+  flowStructure?: FlowStructure;
+  xml?: string;
 };
 
 export type OtherFile = {
-  fileType: FileTreeFileType[1]; //other
+  fileType: 'other'; //other
 };

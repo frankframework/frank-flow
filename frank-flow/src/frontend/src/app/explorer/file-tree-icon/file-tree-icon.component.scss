@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.chevron-container {
+  width: 16px;
+}
+
+.chevron {
+  margin-inline-end: 0.5rem;
+}
+
+.icon-container {
+  width: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  margin-right: 0.375rem;
+}
