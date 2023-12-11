@@ -60,17 +60,26 @@ export class CustomFileTreeComponent implements OnInit, OnDestroy {
   addFilesToTree(): void {
     this.treeData = this.files.map(
       (configuration: Configuration): FileTreeItemModel => {
-        return this.parseFolder(configuration.name, configuration.content);
+        return this.parseFolder(
+          configuration.name,
+          configuration.name,
+          configuration.content
+        );
       }
     );
   }
 
-  parseFolder(name: string, content: any): FileTreeItemModel {
+  parseFolder(
+    name: string,
+    configuration: string,
+    content: any,
+    path: string = ''
+  ): FileTreeItemModel {
     return {
       name: name,
-      path: name,
+      path: path + name,
       type: 'folder',
-      children: this.parseFiles(name, content, name + '/'),
+      children: this.parseFiles(configuration, content, path + name + '/'),
       expanded: false,
     };
   }
@@ -88,6 +97,8 @@ export class CustomFileTreeComponent implements OnInit, OnDestroy {
             items.push(this.parseFile(configuration, file, path));
           }
         }
+      } else if (this.getFileExtension(path) === undefined) {
+        items.push(this.parseFolder(key, configuration, content[key], path));
       } else {
         items.push(this.parseFile(configuration, content[key], path));
       }
@@ -104,7 +115,7 @@ export class CustomFileTreeComponent implements OnInit, OnDestroy {
       return content['string'].endsWith('.xml')
         ? {
             name: configuration,
-            path: content['string'],
+            path: path + content['string'],
             currentlySelected: false,
             type: 'file',
             fileType: 'configuration',
@@ -116,7 +127,7 @@ export class CustomFileTreeComponent implements OnInit, OnDestroy {
           }
         : {
             name: configuration,
-            path: content['string'],
+            path: path + content['string'],
             currentlySelected: false,
             type: 'file',
             fileType: 'other',
@@ -125,7 +136,7 @@ export class CustomFileTreeComponent implements OnInit, OnDestroy {
             firstLoad: true,
           };
     } else {
-      return this.parseFolder(configuration, content);
+      return this.parseFolder(configuration, configuration, content);
     }
   }
 

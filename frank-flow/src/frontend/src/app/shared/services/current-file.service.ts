@@ -323,7 +323,10 @@ export class CurrentFileService {
 
   fetchFileAndSetToCurrent(file: File): void {
     this.fileService
-      .getFileFromConfiguration(file.configuration, file.path)
+      .getFileFromConfiguration(
+        file.configuration,
+        this.cleanUpFilePath(file.path, file.configuration)
+      )
       .then((response) =>
         response.status === 500 ? response.json() : response.text()
       )
@@ -334,6 +337,10 @@ export class CurrentFileService {
             : this.setNewCurrentFile(file, result)
           : this.showFileNotFountMessage(file);
       });
+  }
+
+  cleanUpFilePath(path: string, configuration: string): string {
+    return path.replace(configuration, '');
   }
 
   showFileNotFountMessage(file: File): void {
