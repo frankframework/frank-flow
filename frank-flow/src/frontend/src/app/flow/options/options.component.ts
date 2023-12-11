@@ -13,6 +13,8 @@ import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { Adapter } from '../../shared/models/adapter.model';
+import { CurrentAdapterService } from '../../shared/services/current-adapter.service';
 
 @Component({
   selector: 'app-options',
@@ -48,15 +50,18 @@ export class OptionsComponent implements OnInit, OnDestroy {
   private flowNode!: Node;
   private changedAttributes: ChangedAttribute[] = [];
   private currentFile!: File;
+  private currentAdapter!: Adapter;
   private frankDocSubscription!: Subscription;
   private currentFileSubscription!: Subscription;
+  private currentAdapterSubscription!: Subscription;
 
   constructor(
     private library: FaIconLibrary,
     private ngxSmartModalService: NgxSmartModalService,
     private frankDocService: FrankDoc,
     private flowStructureService: FlowStructureService,
-    private currentFileService: CurrentFileService
+    private currentFileService: CurrentFileService,
+    private currentAdapterService: CurrentAdapterService
   ) {}
 
   get shownAvailableAttributes() {
@@ -70,6 +75,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
     this.library.addIcons(faTrash);
     this.getFrankDoc();
     this.getCurrentFile();
+    this.getCurrentAdapter();
   }
 
   ngOnDestroy(): void {
@@ -89,6 +95,15 @@ export class OptionsComponent implements OnInit, OnDestroy {
         next: (currentFile: File) => {
           this.currentFile = currentFile;
           this.getAttributesOnNode();
+        },
+      });
+  }
+
+  getCurrentAdapter(): void {
+    this.currentAdapterSubscription =
+      this.currentAdapterService.currentAdapterObservable.subscribe({
+        next: (adapter: Adapter) => {
+          this.currentAdapter = adapter;
         },
       });
   }
@@ -147,18 +162,21 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   getConnectionsWithTarget(): FlowStructureNode[] | undefined {
-    return this.currentFile.flowStructure?.nodes.filter(
-      (node: FlowStructureNode) =>
-        node.forwards?.find(
-          (forward) =>
-            forward.attributes['path'].value === this.flowNode.getName()
-        )
-    );
+    if (this.currentAdapter) {
+      return this.currentAdapter.flowStructure?.nodes.filter(
+        (node: FlowStructureNode) =>
+          node.forwards?.find(
+            (forward) =>
+              forward.attributes['path'].value === this.flowNode.getName()
+          )
+      );
+    }
+    return undefined;
   }
 
   editFirstPipe(newName: string) {
     const firstPipe =
-      this.currentFile.flowStructure?.pipeline.attributes['firstPipe'];
+      this.currentAdapter.flowStructure?.pipeline.attributes['firstPipe'];
 
     if (firstPipe?.value === this.flowNode.getName()) {
       this.flowStructureService.changeFirstPipe(newName);
@@ -191,13 +209,15 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   getAttributesOnNode(): void {
-    const node = this.currentFile.flowStructure?.nodes.find(
-      (node: FlowStructureNode) => node.uid === this.flowNode?.getId()
-    );
+    if (this.currentAdapter) {
+      const node = this.currentAdapter.flowStructure?.nodes.find(
+        (node: FlowStructureNode) => node.uid === this.flowNode?.getId()
+      );
 
-    if (node) {
-      this.structureNode = node;
-      this.attributes = node.attributes;
+      if (node) {
+        this.structureNode = node;
+        this.attributes = node.attributes;
+      }
     }
   }
 

@@ -68,7 +68,7 @@ export class HeaderComponent implements OnInit {
     if (this.currentFile?.type === FileType.EMPTY) {
       return 'No file selected';
     } else if (this.currentFile) {
-      return this.currentFile.configuration + ': ' + this.currentFile.path;
+      return this.currentFile.configurationName + ': ' + this.currentFile.path;
     } else {
       return 'Loading file...';
     }

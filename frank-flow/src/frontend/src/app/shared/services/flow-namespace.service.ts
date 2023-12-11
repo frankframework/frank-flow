@@ -3,6 +3,8 @@ import { CurrentFileService } from './current-file.service';
 import { File } from '../models/file.model';
 import { MonacoEditorComponent } from 'src/app/editor/monaco-editor/monaco-editor.component';
 import { FlowStructureService } from './flow-structure.service';
+import { Adapter } from '../models/adapter.model';
+import { CurrentAdapterService } from './current-adapter.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,12 +12,23 @@ import { FlowStructureService } from './flow-structure.service';
 export class FlowNamespaceService {
   public monacoEditorComponent?: MonacoEditorComponent;
   private currentFile!: File;
+  private currentAdapter!: Adapter;
 
   constructor(
     private currentFileService: CurrentFileService,
-    private flowStructureService: FlowStructureService
+    private flowStructureService: FlowStructureService,
+    private currentAdapterService: CurrentAdapterService
   ) {
     this.getCurrentFile();
+    this.getCurrentAdapter();
+  }
+
+  getCurrentAdapter(): void {
+    this.currentAdapterService.currentAdapterObservable.subscribe({
+      next: (adapter: Adapter): void => {
+        this.currentAdapter = adapter;
+      },
+    });
   }
 
   getCurrentFile(): void {
@@ -33,7 +46,7 @@ export class FlowNamespaceService {
   }
 
   namespacePresent(): boolean {
-    return !!this.currentFile.flowStructure?.configuration?.attributes[
+    return !!this.currentAdapter.flowStructure?.configuration?.attributes[
       'xmlns:flow'
     ];
   }

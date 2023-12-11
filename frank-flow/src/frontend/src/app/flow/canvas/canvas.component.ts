@@ -23,6 +23,8 @@ import { PanZoomConfig } from 'ngx-panzoom/lib/panzoom-config';
 import { PanZoomModel } from 'ngx-panzoom/lib/panzoom-model';
 import { File } from '../../shared/models/file.model';
 import { SettingsService } from 'src/app/header/settings/settings.service';
+import { Adapter } from '../../shared/models/adapter.model';
+import { CurrentAdapterService } from '../../shared/services/current-adapter.service';
 
 @Component({
   selector: 'app-canvas',
@@ -40,15 +42,18 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   private viewContainerRef!: ViewContainerRef;
   private jsPlumbInstance!: jsPlumbInstance;
   private currentFileSubscription!: Subscription;
+  private currentAdapterSubscription!: Subscription;
   private settingsSubscription!: Subscription;
   private errors!: string[] | undefined;
   private connectionIsMoving = false;
   private modelChangedSubscription!: Subscription;
   private currentFile!: File;
+  private currentAdapter!: Adapter;
 
   constructor(
     private nodeService: NodeService,
     private currentFileService: CurrentFileService,
+    private currentAdapterService: CurrentAdapterService,
     private flowStructureService: FlowStructureService,
     private graphService: LayoutService,
     private nodeGeneratorService: NodeGeneratorService,
@@ -72,6 +77,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.nodeService.setRootViewContainerRef(this.viewContainerRef);
     this.subscribeToCurrentFile();
+    this.subscribeToCurrentAdapter();
     this.subscribeToSettings();
     if (this.panzoomConfig) {
       this.modelChangedSubscription = this.panzoomConfig.modelChanged.subscribe(
@@ -83,6 +89,7 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.currentFileSubscription.unsubscribe();
     this.settingsSubscription.unsubscribe();
+    this.currentAdapterSubscription.unsubscribe();
     this.jsPlumbInstance.reset();
     this.viewContainerRef.clear();
   }
@@ -94,8 +101,20 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
           this.errors = currentFile.errors;
           this.locked = this.XmlErrorsFound();
           this.currentFile = currentFile;
-          if (currentFile.flowStructure && currentFile.flowNeedsUpdate) {
-            this.generateFlow(currentFile.flowStructure);
+        },
+      });
+  }
+
+  subscribeToCurrentAdapter(): void {
+    this.currentAdapterSubscription =
+      this.currentAdapterService.currentAdapterObservable.subscribe({
+        next: (adapter: Adapter) => {
+          this.currentAdapter = adapter;
+          if (
+            this.currentAdapter.flowStructure &&
+            this.currentFile.flowNeedsUpdate
+          ) {
+            this.generateFlow(this.currentAdapter.flowStructure);
           }
         },
       });
@@ -105,13 +124,13 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.settingsSubscription =
       this.settingsService.settingsObservable.subscribe(() => {
         if (this.flowStructureIsReceived()) {
-          this.generateFlow(this.currentFile.flowStructure!);
+          this.generateFlow(this.currentAdapter.flowStructure!);
         }
       });
   }
 
   flowStructureIsReceived(): boolean {
-    return !!(this.currentFile && this.currentFile.flowStructure);
+    return !!(this.currentFile && this.currentAdapter.flowStructure);
   }
 
   XmlErrorsFound(): boolean {
@@ -222,14 +241,14 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   sourceIsReceiver(source: string): boolean {
-    return !!this.currentFile.flowStructure?.receivers.find(
+    return !!this.currentAdapter.flowStructure?.receivers.find(
       (listener) => listener.uid === source
     );
   }
 
   refreshFlow(): void {
-    if (this.currentFile.flowStructure) {
-      this.generateFlow(this.currentFile.flowStructure);
+    if (this.currentAdapter.flowStructure) {
+      this.generateFlow(this.currentAdapter.flowStructure);
     }
   }
 }

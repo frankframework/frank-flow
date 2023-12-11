@@ -101,7 +101,7 @@ export class FileTreeComponent implements OnInit, OnDestroy {
               label: file,
               selected: this.isItemSelected(configuration, path + file),
               value: JSON.stringify({
-                configuration,
+                configurationName: configuration,
                 path: path + file,
                 type: FileType.FILE,
               }),
@@ -117,7 +117,7 @@ export class FileTreeComponent implements OnInit, OnDestroy {
             path + key + '/'
           ),
           value: JSON.stringify({
-            configuration,
+            configurationName: configuration,
             path: path + key,
             type: FileType.FOLDER,
           }),
@@ -129,19 +129,23 @@ export class FileTreeComponent implements OnInit, OnDestroy {
   }
 
   isItemSelected(configuration: string, path: string): boolean {
-    return this.filesAreEqual(
-      {
-        configuration,
-        path,
-        type: FileType.FILE,
-      },
-      this.currentFile ?? {}
+    return (
+      this.currentFile &&
+      this.filesAreEqual(
+        {
+          adapters: [],
+          configurationName: configuration,
+          path: path,
+          type: FileType.FILE,
+        },
+        this.currentFile
+      )
     );
   }
 
   isSelectedItemInFolder(configuration: string, path: string): boolean {
     return (
-      this.currentFile?.configuration === configuration &&
+      this.currentFile?.configurationName === configuration &&
       this.currentFile?.path.startsWith(path)
     );
   }
@@ -190,7 +194,8 @@ export class FileTreeComponent implements OnInit, OnDestroy {
 
   filesAreEqual(file1: File, file2: File): boolean {
     return (
-      file1.configuration === file2.configuration && file1.path === file2.path
+      file1.configurationName === file2.configurationName &&
+      file1.path === file2.path
     );
   }
 
@@ -200,19 +205,22 @@ export class FileTreeComponent implements OnInit, OnDestroy {
 
   switchUnsavedChangesDecision(item: File): void {
     switch (this.settings.switchWithoutSaving) {
-      case SwitchWithoutSavingOption.ask:
+      case SwitchWithoutSavingOption.ask: {
         this.ngxSmartModalService
           .getModal('saveDialog')
           .setData({ item, fileTreeComponent: this }, true)
           .open();
         break;
-      case SwitchWithoutSavingOption.save:
+      }
+      case SwitchWithoutSavingOption.save: {
         this.currentFileService.save();
         this.currentFileService.switchToFileTreeItem(item);
         break;
-      case SwitchWithoutSavingOption.discard:
+      }
+      case SwitchWithoutSavingOption.discard: {
         this.currentFileService.switchToFileTreeItem(item);
         break;
+      }
     }
   }
 }

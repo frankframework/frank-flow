@@ -54,8 +54,7 @@ public class ConfigurationApi {
 	public Response getConfigurations(@PathParam("name") String configurationName) {
 		File dir = FileUtils.getDir(configurationName);
 
-		//TODO fix this build.tostring thing
-		return Response.status(Response.Status.OK).entity(readDirectory(dir).build().toString()).build();
+		return Response.status(Response.Status.OK).entity(readDirectory(dir).build()).build();
 	}
 
 	public static JsonObjectBuilder readDirectory(File directory) {

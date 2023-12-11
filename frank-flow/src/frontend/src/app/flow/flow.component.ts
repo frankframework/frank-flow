@@ -29,7 +29,8 @@ import { FlowStructureService } from '../shared/services/flow-structure.service'
 import { PanZoomService } from '../shared/services/pan-zoom.service';
 import { SettingsService } from '../header/settings/settings.service';
 import { Settings } from '../header/settings/settings.model';
-import { animate, style, transition, trigger } from '@angular/animations';
+import { Adapter } from '../shared/models/adapter.model';
+import { CurrentAdapterService } from '../shared/services/current-adapter.service';
 
 type canvasDirection = 'height' | 'width';
 type CanvasSize = { x: number; y: number };
@@ -47,8 +48,10 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private canvasElement?: HTMLElement;
   private currentFile!: File;
+  private currentAdapter!: Adapter;
   private nodes!: Map<string, Node>;
   private currentFileSubscription!: Subscription;
+  private currentAdapterSubscription!: Subscription;
   private layoutSubscription!: Subscription;
 
   public fileIsLoading!: boolean;
@@ -62,6 +65,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
     private renderer: Renderer2,
     private library: FaIconLibrary,
     private currentFileService: CurrentFileService,
+    private currentAdapterService: CurrentAdapterService,
     private layoutService: LayoutService,
     private flowStructureService: FlowStructureService,
     private panZoomService: PanZoomService,
@@ -87,6 +91,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   ngOnInit(): void {
     this.showCanvasOrMessage();
     this.setCurrentFileSubscription();
+    this.setCurrentAdapterSubscription();
     this.setNodesSubscription();
     this.subscribeToSettings();
   }
@@ -115,6 +120,14 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
           this.setBasicCanvasSize();
         },
       });
+  }
+
+  setCurrentAdapterSubscription(): void {
+    this.currentAdapterService.currentAdapterObservable.subscribe({
+      next: (adapter: Adapter): void => {
+        this.currentAdapter = adapter;
+      },
+    });
   }
 
   setNodesSubscription(): void {
@@ -244,7 +257,7 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   getMinimumCanvasSizeForFlowStructure(positions: CanvasSize): void {
-    for (const node of this.currentFile?.flowStructure?.nodes ?? []) {
+    for (const node of this.currentAdapter?.flowStructure?.nodes ?? []) {
       positions.x = this.comparePositions(positions.x, node.positions.x);
       positions.y = this.comparePositions(positions.y, node.positions.y);
     }

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { CurrentFileService } from './current-file.service';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
 import { ReplaySubject } from 'rxjs';
 import { FlowSettings } from '../models/flow-settings.model';
@@ -7,6 +6,8 @@ import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
 import { ForwardStyle } from '../../header/settings/options/forward-style';
 import { GridSize } from '../../header/settings/options/grid-size';
 import { FlowDirection } from '../enums/flow-direction.model';
+import { CurrentAdapterService } from './current-adapter.service';
+import { Adapter } from '../models/adapter.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,15 +17,17 @@ export class FlowSettingsService {
     new ReplaySubject<FlowSettings | undefined>(1);
   public flowSettingsObservable = this.flowSettings.asObservable();
 
-  constructor(private currentFileService: CurrentFileService) {
-    this.subscribeToCurrentFile();
+  constructor(private currentAdapterService: CurrentAdapterService) {
+    this.subscribeToCurrentAdapter();
   }
 
-  subscribeToCurrentFile() {
-    this.currentFileService.currentFileObservable.subscribe({
-      next: (file) => {
-        if (file.flowStructure?.configuration) {
-          this.getSettingsFromConfiguration(file.flowStructure.configuration);
+  subscribeToCurrentAdapter() {
+    this.currentAdapterService.currentAdapterObservable.subscribe({
+      next: (adapter: Adapter) => {
+        if (adapter.flowStructure?.configuration) {
+          this.getSettingsFromConfiguration(
+            adapter.flowStructure.configuration
+          );
         } else {
           this.flowSettings.next(undefined!);
         }
@@ -52,7 +55,7 @@ export class FlowSettingsService {
     const key = name.replace('flow:', '');
     const value = this.getValueFromString(attribute.value);
     switch (key) {
-      case 'direction':
+      case 'direction': {
         if (
           this.typeHasValue({
             value,
@@ -63,7 +66,8 @@ export class FlowSettingsService {
           flowSettings.direction = value;
         }
         break;
-      case 'forwardStyle':
+      }
+      case 'forwardStyle': {
         if (
           this.typeHasValue({
             value,
@@ -74,14 +78,17 @@ export class FlowSettingsService {
           flowSettings.forwardStyle = value;
         }
         break;
-      case 'gridSize':
+      }
+      case 'gridSize': {
         if (this.typeHasValue({ value, type: GridSize, name: 'gridSize' })) {
           flowSettings.gridSize = value;
         }
         break;
-      default:
+      }
+      default: {
         console.error(`Unknown flow setting: ${key}`);
         break;
+      }
     }
   }
 
@@ -90,10 +97,10 @@ export class FlowSettingsService {
       return true;
     } else if (string === 'false') {
       return false;
-    } else if (!Number.isNaN(+string)) {
-      return +string;
-    } else {
+    } else if (Number.isNaN(+string)) {
       return string;
+    } else {
+      return +string;
     }
   }
 

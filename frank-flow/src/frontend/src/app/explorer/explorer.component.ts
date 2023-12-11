@@ -49,7 +49,7 @@ export class ExplorerComponent implements OnInit, OnDestroy {
   openAddDialog(): void {
     const currentDirectory = this.currentFileService.currentDirectory;
 
-    if (currentDirectory?.configuration) {
+    if (currentDirectory?.configurationName) {
       this.ngxSmartModalService
         .getModal('addDialog')
         .setData(this.currentFile, true)
@@ -91,7 +91,7 @@ export class ExplorerComponent implements OnInit, OnDestroy {
           title: 'Are you sure?',
           text: this.currentFileService.currentDirectory?.path
             ? `Do you want to delete folder ${this.currentFileService.currentDirectory?.path}? This action cannot be undone or reverted!`
-            : `Do you want to delete ${this.currentFile.path} from ${this.currentFile.configuration}? This action cannot be undone or reverted!`,
+            : `Do you want to delete ${this.currentFile.path} from ${this.currentFile.configurationName}? This action cannot be undone or reverted!`,
           actionFunction: this.deleteFunction,
         },
         true
@@ -109,7 +109,7 @@ export class ExplorerComponent implements OnInit, OnDestroy {
 
   checkIfConfigurationSelected(currentDirectory: File): boolean {
     return (
-      currentDirectory.path === '' && currentDirectory.configuration !== ''
+      currentDirectory.path === '' && currentDirectory.configurationName !== ''
     );
   }
 }

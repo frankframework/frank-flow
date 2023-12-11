@@ -50,7 +50,7 @@ export class FileService {
       .catch((error) => console.error(error));
   }
 
-  getFiles(): Observable<any> {
+  getFiles(): Observable<Configuration[]> {
     return this.configurationFiles.asObservable();
   }
 
@@ -88,7 +88,7 @@ export class FileService {
     formData.append('newName', newName);
 
     return fetch(
-      `${this.apiConfigurationsUrl}/${file.configuration}/files/?path=${file.path}`,
+      `${this.apiConfigurationsUrl}/${file.configurationName}/files/?path=${file.path}`,
       {
         method: 'PATCH',
         body: formData,
@@ -104,7 +104,7 @@ export class FileService {
     formData.append('newName', newName);
 
     return fetch(
-      `${this.apiConfigurationsUrl}/${folder.configuration}/directories/?path=${folder.path}`,
+      `${this.apiConfigurationsUrl}/${folder.configurationName}/directories/?path=${folder.path}`,
       {
         method: 'PATCH',
         body: formData,
