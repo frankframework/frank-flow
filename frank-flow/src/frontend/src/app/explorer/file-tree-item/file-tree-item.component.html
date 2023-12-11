@@ -6,7 +6,7 @@
   (click)="onClick()"
 >
   <app-file-tree-icon [item]="item" [expanded]="expanded"></app-file-tree-icon>
-  {{ item.path }}
+  {{ item.path | filename }}
 </div>
 <div *ngIf="expanded">
   <div *ngIf="item.type === 'folder'">
