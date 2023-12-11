@@ -11,6 +11,7 @@ import { AddDialogComponent } from './add-dialog/add-dialog.component';
 import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { CreateForwardComponent } from './create-forward/create-forward.component';
+import { FilenamePipe } from '../pipes/filename.pipe';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { CreateForwardComponent } from './create-forward/create-forward.componen
     EditDialogComponent,
     ConfirmDialogComponent,
     CreateForwardComponent,
+    FilenamePipe,
   ],
   exports: [
     ButtonComponent,
@@ -32,6 +34,7 @@ import { CreateForwardComponent } from './create-forward/create-forward.componen
     EditDialogComponent,
     ConfirmDialogComponent,
     CreateForwardComponent,
+    FilenamePipe,
   ],
   imports: [
     CommonModule,
