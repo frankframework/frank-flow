@@ -50,7 +50,7 @@ export class FileService {
       .catch((error) => console.error(error));
   }
 
-  getFiles(): Observable<any> {
+  getFiles(): Observable<Configuration[]> {
     return this.configurationFiles.asObservable();
   }
 

@@ -53,14 +53,17 @@ export class CurrentFileService {
   }
 
   initializeXmlToFlowStructureWorkerEventListener(): void {
-    this.xmlToFlowStructureWorker.addEventListener('message', ({ data }) => {
-      if (data) {
-        if (this.parsingErrorsFound(data)) {
-          this.showParsingErrors(data.errors);
+    this.xmlToFlowStructureWorker.addEventListener(
+      'message',
+      (messageEvent: MessageEvent<File>): void => {
+        if (messageEvent.data) {
+          if (this.parsingErrorsFound(messageEvent.data)) {
+            this.showParsingErrors(messageEvent.data.errors!);
+          }
+          this.currentFileSubject.next(messageEvent.data);
         }
-        this.currentFileSubject.next(data);
       }
-    });
+    );
   }
 
   initializeConvertConfigurationSyntaxWorker(): void {
@@ -81,12 +84,12 @@ export class CurrentFileService {
   initializeConvertConfigurationSyntaxWorkerEventListener(): void {
     this.convertConfigurationSyntaxWorker.addEventListener(
       'message',
-      ({ data }) => {
-        if (data) {
-          if (this.parsingErrorsFound(data)) {
-            this.showParsingErrors(data.errors);
+      (messageEvent: MessageEvent<File>): void => {
+        if (messageEvent.data) {
+          if (this.parsingErrorsFound(messageEvent.data)) {
+            this.showParsingErrors(messageEvent.data.errors!);
           }
-          this.updateCurrentFile(data);
+          this.updateCurrentFile(messageEvent.data);
         }
       }
     );
@@ -190,7 +193,7 @@ export class CurrentFileService {
       configurationName: '',
       path: '',
       type: FileType.FOLDER,
-    });
+    } as File);
   }
 
   resetCurrentFile(): void {
@@ -201,6 +204,7 @@ export class CurrentFileService {
       saved: true,
       firstLoad: true,
       type: FileType.EMPTY,
+      adapters: [],
     };
     this.updateCurrentFile(emptyFile);
   }
@@ -350,6 +354,7 @@ export class CurrentFileService {
       saved: true,
       flowNeedsUpdate: true,
       firstLoad: true,
+      adapters: file.adapters,
     };
     this.setCurrentFile(currentFile);
     this.resetCurrentDirectory();

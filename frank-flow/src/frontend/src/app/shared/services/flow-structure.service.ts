@@ -19,6 +19,8 @@ import { Settings } from '../../header/settings/settings.model';
 import { LayoutService } from './layout.service';
 import { Node } from '../../flow/node/nodes/node.model';
 import { NgxSmartModalService } from 'ngx-smart-modal';
+import { Adapter } from '../models/adapter.model';
+import { FileType } from '../enums/file-type.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +31,7 @@ export class FlowStructureService {
   public settings!: Settings;
 
   private currentFile!: File;
+  private currentAdapter!: Adapter;
   private flowStructure!: FlowStructure;
   private waitingOnNewStructure = false;
   private editAttributeQueue: Map<string, ChangedAttribute[]> = new Map();
@@ -65,8 +68,11 @@ export class FlowStructureService {
     this.currentFileService.currentFileObservable.subscribe({
       next: (currentFile: File): void => {
         this.currentFile = currentFile;
-        if (currentFile.flowStructure) {
-          this.setFlowStructure(currentFile.flowStructure);
+        if (currentFile.type == FileType.FILE) {
+          this.currentAdapter = currentFile.adapters[0];
+          if (this.currentAdapter && this.currentAdapter.flowStructure) {
+            this.setFlowStructure(this.currentAdapter.flowStructure);
+          }
         }
       },
     });
@@ -772,10 +778,10 @@ export class FlowStructureService {
       options.nodeId,
       options.attribute.name
     );
-    if (indexOfSameAttribute !== undefined) {
-      options.nodeAttributes[indexOfSameAttribute] = options.attribute;
-    } else {
+    if (indexOfSameAttribute === undefined) {
       options.nodeAttributes.push(options.attribute);
+    } else {
+      options.nodeAttributes[indexOfSameAttribute] = options.attribute;
     }
     return options.nodeAttributes;
   }
@@ -809,7 +815,7 @@ export class FlowStructureService {
     | void {
     const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
     for (const [nodeId, editAttributes] of this.editAttributeQueue.entries()) {
-      const node = this.currentFile.flowStructure?.nodes.find(
+      const node = this.currentAdapter.flowStructure?.nodes.find(
         (node: FlowStructureNode) => node.uid === nodeId
       );
 
