@@ -65,8 +65,11 @@ export class FlowStructureService {
     this.currentFileService.currentFileObservable.subscribe({
       next: (currentFile: File): void => {
         this.currentFile = currentFile;
-        if (currentFile.flowStructure) {
-          this.setFlowStructure(currentFile.flowStructure);
+        if (
+          currentFile.currentAdapter &&
+          currentFile.currentAdapter.flowStructure
+        ) {
+          this.setFlowStructure(currentFile.currentAdapter.flowStructure);
         }
       },
     });
@@ -772,10 +775,10 @@ export class FlowStructureService {
       options.nodeId,
       options.attribute.name
     );
-    if (indexOfSameAttribute !== undefined) {
-      options.nodeAttributes[indexOfSameAttribute] = options.attribute;
-    } else {
+    if (indexOfSameAttribute === undefined) {
       options.nodeAttributes.push(options.attribute);
+    } else {
+      options.nodeAttributes[indexOfSameAttribute] = options.attribute;
     }
     return options.nodeAttributes;
   }
@@ -809,7 +812,7 @@ export class FlowStructureService {
     | void {
     const editOperations: monaco.editor.IIdentifiedSingleEditOperation[] = [];
     for (const [nodeId, editAttributes] of this.editAttributeQueue.entries()) {
-      const node = this.currentFile.flowStructure?.nodes.find(
+      const node = this.currentFile.currentAdapter?.flowStructure?.nodes.find(
         (node: FlowStructureNode) => node.uid === nodeId
       );
 

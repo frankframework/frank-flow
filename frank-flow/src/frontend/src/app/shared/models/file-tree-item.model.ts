@@ -1,4 +1,5 @@
 import { FlowStructure } from './flow-structure.model';
+import { Adapter } from './adapter.model';
 
 export const typeConst = ['folder', 'file'] as const;
 
@@ -33,6 +34,7 @@ export type ConfigurationFile = {
   flowNeedsUpdate: boolean;
   flowStructure?: FlowStructure;
   xml?: string;
+  adapters?: Adapter[];
 };
 
 export type OtherFile = {

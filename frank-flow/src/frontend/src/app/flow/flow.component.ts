@@ -29,7 +29,6 @@ import { FlowStructureService } from '../shared/services/flow-structure.service'
 import { PanZoomService } from '../shared/services/pan-zoom.service';
 import { SettingsService } from '../header/settings/settings.service';
 import { Settings } from '../header/settings/settings.model';
-import { animate, style, transition, trigger } from '@angular/animations';
 
 type canvasDirection = 'height' | 'width';
 type CanvasSize = { x: number; y: number };
@@ -244,7 +243,8 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   getMinimumCanvasSizeForFlowStructure(positions: CanvasSize): void {
-    for (const node of this.currentFile?.flowStructure?.nodes ?? []) {
+    for (const node of this.currentFile?.currentAdapter?.flowStructure?.nodes ??
+      []) {
       positions.x = this.comparePositions(positions.x, node.positions.x);
       positions.y = this.comparePositions(positions.y, node.positions.y);
     }

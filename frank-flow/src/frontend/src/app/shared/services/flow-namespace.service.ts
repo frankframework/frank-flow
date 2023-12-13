@@ -33,9 +33,11 @@ export class FlowNamespaceService {
   }
 
   namespacePresent(): boolean {
-    return !!this.currentFile.flowStructure?.configuration?.attributes[
-      'xmlns:flow'
-    ];
+    return (
+      !!this.currentFile.currentAdapter &&
+      !!this.currentFile.currentAdapter.flowStructure?.configuration
+        ?.attributes['xmlns:flow']
+    );
   }
 
   setNameSpace() {

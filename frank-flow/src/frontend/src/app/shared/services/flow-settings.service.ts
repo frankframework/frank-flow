@@ -23,8 +23,13 @@ export class FlowSettingsService {
   subscribeToCurrentFile() {
     this.currentFileService.currentFileObservable.subscribe({
       next: (file) => {
-        if (file.flowStructure?.configuration) {
-          this.getSettingsFromConfiguration(file.flowStructure.configuration);
+        if (
+          file.currentAdapter &&
+          file.currentAdapter.flowStructure?.configuration
+        ) {
+          this.getSettingsFromConfiguration(
+            file.currentAdapter.flowStructure.configuration
+          );
         } else {
           this.flowSettings.next(undefined!);
         }
@@ -52,7 +57,7 @@ export class FlowSettingsService {
     const key = name.replace('flow:', '');
     const value = this.getValueFromString(attribute.value);
     switch (key) {
-      case 'direction':
+      case 'direction': {
         if (
           this.typeHasValue({
             value,
@@ -63,7 +68,8 @@ export class FlowSettingsService {
           flowSettings.direction = value;
         }
         break;
-      case 'forwardStyle':
+      }
+      case 'forwardStyle': {
         if (
           this.typeHasValue({
             value,
@@ -74,14 +80,17 @@ export class FlowSettingsService {
           flowSettings.forwardStyle = value;
         }
         break;
-      case 'gridSize':
+      }
+      case 'gridSize': {
         if (this.typeHasValue({ value, type: GridSize, name: 'gridSize' })) {
           flowSettings.gridSize = value;
         }
         break;
-      default:
+      }
+      default: {
         console.error(`Unknown flow setting: ${key}`);
         break;
+      }
     }
   }
 
@@ -90,10 +99,10 @@ export class FlowSettingsService {
       return true;
     } else if (string === 'false') {
       return false;
-    } else if (!Number.isNaN(+string)) {
-      return +string;
-    } else {
+    } else if (Number.isNaN(+string)) {
       return string;
+    } else {
+      return +string;
     }
   }
 

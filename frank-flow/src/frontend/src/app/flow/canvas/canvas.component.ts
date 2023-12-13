@@ -94,8 +94,12 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
           this.errors = currentFile.errors;
           this.locked = this.XmlErrorsFound();
           this.currentFile = currentFile;
-          if (currentFile.flowStructure && currentFile.flowNeedsUpdate) {
-            this.generateFlow(currentFile.flowStructure);
+          if (
+            currentFile.currentAdapter &&
+            currentFile.currentAdapter.flowStructure &&
+            currentFile.flowNeedsUpdate
+          ) {
+            this.generateFlow(currentFile.currentAdapter.flowStructure);
           }
         },
       });
@@ -105,13 +109,17 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
     this.settingsSubscription =
       this.settingsService.settingsObservable.subscribe(() => {
         if (this.flowStructureIsReceived()) {
-          this.generateFlow(this.currentFile.flowStructure!);
+          this.generateFlow(this.currentFile.currentAdapter!.flowStructure!);
         }
       });
   }
 
   flowStructureIsReceived(): boolean {
-    return !!(this.currentFile && this.currentFile.flowStructure);
+    return !!(
+      this.currentFile &&
+      this.currentFile.currentAdapter &&
+      this.currentFile.currentAdapter?.flowStructure
+    );
   }
 
   XmlErrorsFound(): boolean {
@@ -222,14 +230,17 @@ export class CanvasComponent implements AfterViewInit, OnDestroy {
   }
 
   sourceIsReceiver(source: string): boolean {
-    return !!this.currentFile.flowStructure?.receivers.find(
+    return !!this.currentFile.currentAdapter?.flowStructure?.receivers.find(
       (listener) => listener.uid === source
     );
   }
 
   refreshFlow(): void {
-    if (this.currentFile.flowStructure) {
-      this.generateFlow(this.currentFile.flowStructure);
+    if (
+      this.currentFile.currentAdapter &&
+      this.currentFile.currentAdapter.flowStructure
+    ) {
+      this.generateFlow(this.currentFile.currentAdapter.flowStructure);
     }
   }
 }

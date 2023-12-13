@@ -116,14 +116,14 @@ export class CustomFileTreeComponent implements OnInit, OnDestroy {
         ? {
             name: configuration,
             path: path + content['string'],
-            currentlySelected: false,
             type: 'file',
-            fileType: 'configuration',
-            flowNeedsUpdate: false,
+            currentlySelected: false,
             extension: this.getFileExtension(configuration),
             saved: false,
-            firstLoad: true,
+            fileType: 'configuration',
             expanded: false,
+            flowNeedsUpdate: false,
+            firstLoad: true,
           }
         : {
             name: configuration,

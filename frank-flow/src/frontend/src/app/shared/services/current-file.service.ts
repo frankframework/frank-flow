@@ -214,7 +214,7 @@ export class CurrentFileService {
       saved: true,
       firstLoad: true,
       type: FileType.EMPTY,
-    };
+    } as File;
     this.updateCurrentFile(emptyFile);
   }
 
@@ -370,7 +370,7 @@ export class CurrentFileService {
       saved: true,
       flowNeedsUpdate: true,
       firstLoad: true,
-    };
+    } as File;
     this.setCurrentFile(currentFile);
     this.resetCurrentDirectory();
     this.resetPanZoom();
@@ -499,6 +499,8 @@ export class CurrentFileService {
           flowNeedsUpdate: item.flowNeedsUpdate,
           type: FileType.FILE,
           firstLoad: item.firstLoad,
+          adapters: item.adapters,
+          currentAdapter: item.adapters?.[0],
         } as File;
       } else if (item.fileType === 'other') {
         return {

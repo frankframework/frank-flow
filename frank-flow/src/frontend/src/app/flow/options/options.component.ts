@@ -147,7 +147,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   getConnectionsWithTarget(): FlowStructureNode[] | undefined {
-    return this.currentFile.flowStructure?.nodes.filter(
+    return this.currentFile.currentAdapter?.flowStructure?.nodes.filter(
       (node: FlowStructureNode) =>
         node.forwards?.find(
           (forward) =>
@@ -158,7 +158,9 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   editFirstPipe(newName: string) {
     const firstPipe =
-      this.currentFile.flowStructure?.pipeline.attributes['firstPipe'];
+      this.currentFile.currentAdapter?.flowStructure?.pipeline.attributes[
+        'firstPipe'
+      ];
 
     if (firstPipe?.value === this.flowNode.getName()) {
       this.flowStructureService.changeFirstPipe(newName);
@@ -191,7 +193,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   getAttributesOnNode(): void {
-    const node = this.currentFile.flowStructure?.nodes.find(
+    const node = this.currentFile.currentAdapter?.flowStructure?.nodes.find(
       (node: FlowStructureNode) => node.uid === this.flowNode?.getId()
     );
 
