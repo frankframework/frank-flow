@@ -2,7 +2,7 @@ version: "3"
 
 services:
   frank:
-    image: nexus.frankframework.org/frankframework:latest
+    image: frankframework/frankframework:8
     volumes:
       - ./frank-flow/src/frontend/cypress/Frank/src/main/:/opt/frank/
       - ./context.xml:/usr/local/tomcat/conf/context.xml
