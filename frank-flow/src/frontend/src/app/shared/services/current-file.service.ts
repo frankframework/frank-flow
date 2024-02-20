@@ -138,7 +138,7 @@ export class CurrentFileService {
   groupSimilarErrors(errors: string[]): XmlParseError[] {
     const groupedErrors: XmlParseError[] = [];
     for (const errorMessage of errors) {
-      const lastError = groupedErrors[groupedErrors.length - 1];
+      const lastError = groupedErrors.at(-1);
       const error = this.parseErrorMessage(errorMessage);
       if (this.errorMessageEqualToLast(error, lastError)) {
         if (this.errorColumnFollowsLast(error, lastError)) {
@@ -457,7 +457,7 @@ export class CurrentFileService {
     if (file) {
       if (
         this.currentFile.path === file.path &&
-        this.currentFile.configuration === file.configuration
+        this.currentFile.configurationName === file.configurationName
       ) {
         return;
       }
@@ -488,7 +488,8 @@ export class CurrentFileService {
 
   filesAreEqual(file1: File, file2: File): boolean {
     return (
-      file1.configuration === file2.configuration && file1.path === file2.path
+      file1.configurationName === file2.configurationName &&
+      file1.path === file2.path
     );
   }
 
@@ -497,7 +498,7 @@ export class CurrentFileService {
       if (item.fileType === 'configuration') {
         return {
           path: item.path,
-          configurationNa: item.name,
+          configurationName: item.name,
           xml: item.xml,
           flowStructure: item.flowStructure,
           saved: item.saved,
@@ -508,7 +509,7 @@ export class CurrentFileService {
       } else if (item.fileType === 'other') {
         return {
           path: item.path,
-          configuration: item.name,
+          configurationName: item.name,
           saved: item.saved,
           type: FileType.FILE,
           firstLoad: item.firstLoad,

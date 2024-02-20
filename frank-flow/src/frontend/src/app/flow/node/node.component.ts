@@ -198,7 +198,12 @@ export class NodeComponent implements AfterViewInit, OnInit {
       stroke: '#00abff',
       strokeWidth: 3,
     };
-    if (this.currentFile.flowStructure?.implicitFirstPipe) {
+    if (
+      this.currentFile.adapters &&
+      this.currentFile.adapters[0] &&
+      this.currentFile.adapters[0].flowStructure &&
+      this.currentFile.adapters[0].flowStructure.implicitFirstPipe
+    ) {
       (this.bottomEndpointOptions.connectorStyle as any).dashstyle = '2 2';
     }
     this.bottomEndpointOptions.paintStyle = { fill: '#00abff' };
@@ -234,19 +239,23 @@ export class NodeComponent implements AfterViewInit, OnInit {
 
   getSourceAnchor(): AnchorSpec {
     switch (this.settings.direction) {
-      case 'vertical':
+      case 'vertical': {
         return 'Bottom';
-      default:
+      }
+      default: {
         return 'RightMiddle';
+      }
     }
   }
 
   getTargetAnchor(): AnchorSpec {
     switch (this.settings.direction) {
-      case 'vertical':
+      case 'vertical': {
         return 'Top';
-      default:
+      }
+      default: {
         return 'LeftMiddle';
+      }
     }
   }
 
@@ -256,13 +265,16 @@ export class NodeComponent implements AfterViewInit, OnInit {
 
   getConnectorSpecification(): ConnectorSpec {
     switch (this.settings.forwardStyle) {
-      case ForwardStyle.flowchart:
+      case ForwardStyle.flowchart: {
         return this.flowchartConnectionSpecification;
-      case ForwardStyle.straight:
+      }
+      case ForwardStyle.straight: {
         return this.straightConnectionSpecification;
+      }
       default:
-      case ForwardStyle.bezier:
+      case ForwardStyle.bezier: {
         return this.bezierConnectionSpecification;
+      }
     }
   }
 

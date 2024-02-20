@@ -68,7 +68,7 @@ export class FlowStructureService {
     this.currentFileService.currentFileObservable.subscribe({
       next: (currentFile: File): void => {
         this.currentFile = currentFile;
-        if (currentFile.type == FileType.FILE) {
+        if (currentFile.type == FileType.FILE && currentFile.adapters) {
           this.currentAdapter = currentFile.adapters[0];
           if (this.currentAdapter && this.currentAdapter.flowStructure) {
             this.setFlowStructure(this.currentAdapter.flowStructure);
@@ -444,9 +444,8 @@ export class FlowStructureService {
 
   addPipe(pipeData: Pipe): void {
     const pipes = this.flowStructure.pipes;
-    const lastPipe = pipes[pipes.length - 1] ?? this.flowStructure.pipeline;
-    const line =
-      (pipes[pipes.length - 1] ? lastPipe.endLine : lastPipe.line) + 1;
+    const lastPipe = pipes.at(-1) ?? this.flowStructure.pipeline;
+    const line = (pipes.at(-1) ? lastPipe.endLine : lastPipe.line) + 1;
     const pipeName = this.getUniquePipeName(pipeData.getName());
 
     const text = `\t\t\t<${pipeData.getType()} name="${pipeName}" />\n`;
@@ -570,9 +569,8 @@ export class FlowStructureService {
 
   addSender(node: Sender): void {
     const pipes = this.flowStructure.pipes;
-    const lastPipe = pipes[pipes.length - 1] ?? this.flowStructure.pipeline;
-    const line =
-      (pipes[pipes.length - 1] ? lastPipe.endLine : lastPipe.line) + 1;
+    const lastPipe = pipes.at(-1) ?? this.flowStructure.pipeline;
+    const line = (pipes.at(-1) ? lastPipe.endLine : lastPipe.line) + 1;
     const senderName = this.getUniqueSenderName(node.getName());
 
     const text = `\t\t<SenderPipe name="${senderName}Pipe">\n\t\t\t<${node.getType()} name="${senderName}" />\n\t\t</SenderPipe>\n`;
@@ -715,7 +713,7 @@ export class FlowStructureService {
     const editOperations: any[] = [];
     for (const [line, columns] of Object.entries(ranges)) {
       for (const column of Object.values(columns)) {
-        const lastEditOperation = editOperations[editOperations.length - 1];
+        const lastEditOperation = editOperations.at(-1);
         if (
           lastEditOperation &&
           lastEditOperation.range &&
@@ -877,11 +875,11 @@ export class FlowStructureService {
   escapeSpecialChars(value: any): string {
     return typeof value === 'string'
       ? value
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&apos;')
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&apos;')
       : value;
   }
 
@@ -1099,7 +1097,7 @@ export class FlowStructureService {
     let currentLastNestedElement: FlowStructureNode | undefined;
 
     for (const [category, nodes] of Object.entries(parent.nestedElements)) {
-      const lastNode = nodes[nodes.length - 1];
+      const lastNode = nodes.at(-1);
       if (!currentLastNestedElement) {
         currentLastNestedElement = lastNode;
       }

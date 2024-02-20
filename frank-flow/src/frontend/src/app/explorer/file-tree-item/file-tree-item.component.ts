@@ -24,7 +24,7 @@ export class FileTreeItemComponent implements OnInit {
       next: (value: File): void => {
         if (
           value.path === this.item.path &&
-          value.configuration === this.item.name
+          value.configurationName === this.item.name
         ) {
           this.setSelected(true);
           this.toggleExpanded();
@@ -35,7 +35,8 @@ export class FileTreeItemComponent implements OnInit {
           for (let child of this.item.children) {
             if (!this.expanded) {
               this.expanded =
-                value.path === child.path && value.configuration === child.name;
+                value.path === child.path &&
+                value.configurationName === child.name;
             }
           }
         }

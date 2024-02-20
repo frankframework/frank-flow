@@ -5,7 +5,7 @@ export interface File {
   path: string;
   configurationName: string;
   xml?: string;
-  adapters: Adapter[];
+  adapters?: Adapter[];
   errors?: string[];
   saved?: boolean;
   flowNeedsUpdate?: boolean;
