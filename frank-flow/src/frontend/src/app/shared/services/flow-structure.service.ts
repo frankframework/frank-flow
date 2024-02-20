@@ -876,7 +876,7 @@ export class FlowStructureService {
     return typeof value === 'string'
       ? value
           .replaceAll('&', '&amp;')
-          .replaceAll('<', '&lt;')
+          .replaceAll("<'", '&lt;')
           .replaceAll('>', '&gt;')
           .replaceAll('"', '&quot;')
           .replaceAll("'", '&apos;')
