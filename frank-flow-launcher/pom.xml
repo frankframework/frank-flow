@@ -13,7 +13,7 @@
 	<name>Frank!Flow Launcher</name>
 
 	<properties>
-		<tomcat.version>9.0.68</tomcat.version>
+		<tomcat.version>9.0.83</tomcat.version>
 		<jetty.version>9.4.42.v20210604</jetty.version>
 	</properties>
 
@@ -59,7 +59,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.6.1</version>
 				<executions>
 					<execution>
 						<id>copy war file</id>
@@ -82,7 +82,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.4.2</version>
+				<version>3.6.0</version>
 				<configuration>
 					<descriptors>
 						<descriptor>src/assembly/fat-jar.xml</descriptor>
