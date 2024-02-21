@@ -1,23 +1,42 @@
+/*
+   Copyright 2022-2024 WeAreFrank!
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
 package org.ibissource.frankflow;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ibissource.frankflow.util.FileUtils;
-import org.ibissource.frankflow.util.FrankFlowProperties;
 import org.ibissource.frankflow.util.MimeTypeUtil;
 import org.springframework.util.StringUtils;
 
+/**
+ * 
+ * @author Niels Meijer
+ */
 public class FrontendServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 123L;
@@ -30,10 +49,10 @@ public class FrontendServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
+		ServletContext context = getServletConfig().getServletContext();
 
-		frontendPath = FileUtils.getAbsPath(FrankFlowProperties.getProperty("frank-flow.frontend-path"));
-
-		basePath = (String) getServletConfig().getServletContext().getAttribute("basepath");
+		frontendPath = (String) context.getAttribute("frontend-location");
+		basePath = (String) context.getAttribute("basepath");
 	}
 
 	@Override
@@ -49,13 +68,7 @@ public class FrontendServlet extends HttpServlet {
 			path += "index.html";
 		}
 
-		URL resource = null;
-		if(StringUtils.isEmpty(frontendPath)) {
-			resource = this.getClass().getResource("/frontend"+path);
-		} else {
-			resource = new URL(frontendPath+path);
-		}
-
+		URL resource = findResource(path);
 		if(resource == null) {
 			resp.sendError(404, "file not found");
 			return;
@@ -69,10 +82,24 @@ public class FrontendServlet extends HttpServlet {
 		try(InputStream in = resource.openStream()) {
 			IOUtils.copy(in, resp.getOutputStream());
 		} catch (IOException e) {
+			log.warn("error reading or writing resource to servlet", e);
 			resp.sendError(500, e.getMessage());
 			return;
 		}
 
 		resp.flushBuffer();
+	}
+
+	private URL findResource(String path) {
+		String normalizedPath = FilenameUtils.normalize(path, true);
+		if(normalizedPath.startsWith("/")) {
+			normalizedPath = normalizedPath.substring(1);
+		}
+
+		if(!StringUtils.hasLength(frontendPath)) {
+			return this.getClass().getResource("/frontend/"+normalizedPath);
+		} else {
+			return this.getClass().getResource(frontendPath+normalizedPath);
+		}
 	}
 }
