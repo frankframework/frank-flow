@@ -62,31 +62,6 @@
 				<artifactId>javax.ws.rs-api</artifactId>
 				<version>2.1.1</version>
 			</dependency>
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-rs-client</artifactId>
-				<version>${cxf.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>com.sun.activation</groupId>
-						<artifactId>jakarta.activation</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>jakarta.xml.bind</groupId>
-						<artifactId>jakarta.xml.bind-api</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.activation</groupId>
-				<artifactId>jakarta.activation</artifactId>
-				<version>2.0.1</version>
-			</dependency>
-			<dependency>
-				<groupId>jakarta.xml.bind</groupId>
-				<artifactId>jakarta.xml.bind-api</artifactId>
-				<version>3.0.1</version>
-			</dependency>
 
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
@@ -131,8 +106,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.10.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>11</source>
+					<target>11</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -199,11 +174,11 @@
 			<distributionManagement>
 				<repository>
 					<id>ibissource</id>
-					<url>https://nexus.ibissource.org/content/repositories/frank-flow/</url>
+					<url>https://nexus.frankframework.org/content/repositories/frank-flow/</url>
 				</repository>
 				<snapshotRepository>
 					<id>ibissource</id>
-					<url>https://nexus.ibissource.org/content/repositories/frank-flow/</url>
+					<url>https://nexus.frankframework.org/content/repositories/frank-flow/</url>
 				</snapshotRepository>
 				<site>
 					<id>www.ibissource.org</id>
@@ -213,7 +188,7 @@
 			<repositories>
 				<repository>
 					<id>ibissource</id>
-					<url>https://nexus.ibissource.org/content/groups/public</url>
+					<url>https://nexus.frankframework.org/content/groups/public</url>
 				</repository>
 			</repositories>
 		</profile>
@@ -227,8 +202,6 @@
 			</activation>
 			<modules>
 				<module>frank-flow</module>
-				<module>frank-flow-webapp</module>
-				<module>frank-flow-launcher</module>
 			</modules>
 		</profile>
 	</profiles>

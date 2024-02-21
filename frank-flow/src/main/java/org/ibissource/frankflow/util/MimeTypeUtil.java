@@ -1,17 +1,17 @@
 /*
-Copyright 2020 WeAreFrank!
+   Copyright 2022-2024 WeAreFrank!
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+       http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
 */
 package org.ibissource.frankflow.util;
 
@@ -55,22 +55,22 @@ public abstract class MimeTypeUtil {
 		String extension = path.substring(i+1); //Get the extension
 		int p = extension.indexOf("?");
 		if(p > -1) {
-			extension = extension.substring(0, p); //String all parameters
+			extension = extension.substring(0, p); //Remove all parameters
 		}
 
-		log.debug("extruded extension ["+extension+"] from path ["+path+"]");
+		log.debug("determined extension [{}] from path [{}]", extension, path);
 		return findMediaType(extension);
 	}
 
 	public static MediaType findMediaType(String extension) throws IOException {
-		log.debug("trying to find MimeType for extension ["+extension+"]");
+		log.debug("trying to find MimeType for extension [{}]", extension);
 
 		MediaType type = getMimeTypeMap().get(extension);
 		if(type == null) {
-			log.warn("unable to find MimeType for extension ["+extension+"] using default [application/octet-stream]");
+			log.warn("unable to find MimeType for extension [{}] using default [application/octet-stream]", extension);
 			type = MediaType.APPLICATION_OCTET_STREAM_TYPE;
 		} else {
-			log.debug("determined MimeType ["+type+"] for extension ["+extension+"]");
+			log.debug("determined MimeType [{}] for extension [{}]", type, extension);
 		}
 		return type;
 	}
