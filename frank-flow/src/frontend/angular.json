@@ -104,11 +104,15 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "frank-flow:build"
+            "browserTarget": "frank-flow:build",
+            "proxyConfig": "src/proxy.conf.mjs"
           },
           "configurations": {
             "production": {
               "browserTarget": "frank-flow:build:production"
+            },
+            "development": {
+              "browserTarget": "frank-flow:build:development"
             }
           }
         },
