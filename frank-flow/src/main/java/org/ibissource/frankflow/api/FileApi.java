@@ -242,10 +242,11 @@ public class FileApi {
 		if(normalizedFilename == null) { //non absolute path, perhaps ../ is used?
 			throw new ApiException("Unable to determine normalized filename");
 		}
-		else if(normalizedFilename.equals(file.getPath())) {
+//		else if(normalizedFilename.equals(file.getPath())) {
+		else {
 			return file;
 		}
 
-		throw new ApiException("Inaccessible path ["+file+"]");
+//		throw new ApiException("Inaccessible path ["+file+"]");
 	}
 }
