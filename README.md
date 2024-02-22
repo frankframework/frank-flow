@@ -1,4 +1,4 @@
-# Frank!Flow
+# Frank!Flow<sup>beta</sub>
 
 _Graphical flow editor for Frank configurations._
 
