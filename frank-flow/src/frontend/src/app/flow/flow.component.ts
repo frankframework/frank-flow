@@ -29,7 +29,6 @@ import { FlowStructureService } from '../shared/services/flow-structure.service'
 import { PanZoomService } from '../shared/services/pan-zoom.service';
 import { SettingsService } from '../header/settings/settings.service';
 import { Settings } from '../header/settings/settings.model';
-import { animate, style, transition, trigger } from '@angular/animations';
 
 type canvasDirection = 'height' | 'width';
 type CanvasSize = { x: number; y: number };
@@ -46,15 +45,16 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
   private nodeContainerRef!: ElementRef;
 
   private canvasElement?: HTMLElement;
-  private currentFile!: File;
   private nodes!: Map<string, Node>;
   private currentFileSubscription!: Subscription;
   private layoutSubscription!: Subscription;
 
+  public currentFile!: File;
   public fileIsLoading!: boolean;
   public fileIsConfiguration!: boolean;
   public fileIsOldSyntaxConfiguration!: boolean;
   public fileIsEmpty!: boolean;
+  public fileHasMultipleAdapters!: boolean;
   public panZoomConfig = this.panZoomService.panZoomConfig;
   public settings!: Settings;
 
@@ -139,6 +139,8 @@ export class FlowComponent implements AfterViewInit, OnInit, OnDestroy {
     this.fileIsOldSyntaxConfiguration =
       this.currentFile?.type === FileType.OLD_SYNTAX_CONFIGURATION;
     this.fileIsEmpty = this.currentFile?.type === FileType.EMPTY;
+    this.fileHasMultipleAdapters =
+      (this.currentFile?.adapters?.length || 0) > 1;
   }
 
   handleKeyboardUpEvent(kbdEvent: KeyboardEvent): void {

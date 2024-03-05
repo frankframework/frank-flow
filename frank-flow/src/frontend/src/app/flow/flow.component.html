@@ -8,11 +8,18 @@
         <app-canvas #nodeContainer [panzoomConfig]="panZoomConfig"></app-canvas>
       </div>
     </pan-zoom>
-    <app-actions
-      *ngIf="fileIsConfiguration; else noCanvas"
-      class="flow-container__actions"
-    >
-    </app-actions>
+    <div class="flow-container__header">
+      <app-actions
+        *ngIf="fileIsConfiguration; else noCanvas"
+        class="flow-container__actions"
+      >
+      </app-actions>
+      <app-adapter-selector
+        *ngIf="fileHasMultipleAdapters"
+        class="flow-container__adapter-selector"
+      >
+      </app-adapter-selector>
+    </div>
   </div>
   <app-palette
     *ngIf="settings.showPalette && fileIsConfiguration"

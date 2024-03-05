@@ -1,0 +1,3 @@
+<select #selector class="selector" [(ngModel)]="currentAdapterName" (ngModelChange)="onAdapterChange()">
+  <option *ngFor="let adapterName of adapterNames">{{ adapterName }}</option>
+</select>

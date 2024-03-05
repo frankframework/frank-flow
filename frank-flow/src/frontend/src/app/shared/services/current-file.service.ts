@@ -9,6 +9,7 @@ import { FileType } from '../enums/file-type.enum';
 import { SessionService } from './session.service';
 import { PanZoomService } from './pan-zoom.service';
 import { FrankDoc } from './frank-doc.service';
+import { Adapter } from '../models/adapter.model';
 
 @Injectable({
   providedIn: 'root',
@@ -53,14 +54,18 @@ export class CurrentFileService {
   }
 
   initializeXmlToFlowStructureWorkerEventListener(): void {
-    this.xmlToFlowStructureWorker.addEventListener('message', ({ data }) => {
-      if (data) {
-        if (this.parsingErrorsFound(data)) {
-          this.showParsingErrors(data.errors);
+    this.xmlToFlowStructureWorker.addEventListener(
+      'message',
+      (messageEvent: MessageEvent<File>) => {
+        if (messageEvent.data) {
+          if (this.parsingErrorsFound(messageEvent.data)) {
+            this.showParsingErrors(messageEvent.data.errors!);
+          }
+          this.currentFile = messageEvent.data;
+          this.currentFileSubject.next(messageEvent.data);
         }
-        this.currentFileSubject.next(data);
       }
-    });
+    );
   }
 
   initializeConvertConfigurationSyntaxWorker(): void {
@@ -251,14 +256,15 @@ export class CurrentFileService {
     this.sessionService.setSessionFile(file);
     this.determineIfFileIsAConfiguration(file);
     this.clearErrorToasts();
-
     switch (file.type) {
-      case FileType.CONFIGURATION:
+      case FileType.CONFIGURATION: {
         this.xmlToFlowStructureWorker.postMessage(file);
         break;
-      default:
+      }
+      default: {
         this.currentFileSubject.next(file);
         break;
+      }
     }
   }
 

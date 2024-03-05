@@ -8,7 +8,7 @@
       <JavaListener name="01 JavaListener"/>
     </Receiver>
     <Pipeline>
-      <SenderPipe name="Send" flow:y="100" flow:x="410">
+      <SenderPipe name="Send" flow:y="360" flow:x="490">
         <JdbcMessageLog slotId="${instance.name}/TestMessageLog"/>
         <IbisLocalSender javaListener="02 JavaListener"/>
       </SenderPipe>
@@ -34,7 +34,7 @@
       name="03 MessageStoreReceiver"
       numThreads="4"
       transactionAttribute="Required"
-      pollInterval="1"
+      pollInterval="1" flow:y="100" flow:x="0"
     >
       <MessageStoreListener
         name="03 MessageStoreListener"
@@ -43,7 +43,10 @@
       />
     </Receiver>
     <Pipeline>
-      <SenderPipe name="Send">
+			<Exits>
+				<Exit path="READY" state="success" flow:y="150" flow:x="30" />
+			</Exits>
+      <SenderPipe name="Send" flow:y="50" flow:x="0">
         <IbisLocalSender
           javaListener="04 JavaListener"
           dependencyTimeOut="0"
@@ -53,11 +56,11 @@
   </Adapter>
 
   <Adapter name="04 FF receiving (backend) system emulation" description="Stop this adapter to emulate a backend system failure">
-    <Receiver name="04 JavaReceiver">
+    <Receiver name="04 JavaReceiver" flow:y="100" flow:x="100">
       <JavaListener name="04 JavaListener"/>
     </Receiver>
     <Pipeline>
-      <EchoPipe name="Echo"/>
+      <EchoPipe name="Echo" flow:y="310" flow:x="280"/>
     </Pipeline>
   </Adapter>
 

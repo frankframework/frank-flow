@@ -11,6 +11,7 @@ import { FlowStructure } from '../models/flow-structure.model';
 import { FlowStructureNode } from '../models/flow-structure-node.model';
 import { File } from '../models/file.model';
 import { FlowNodeAttribute } from '../models/flow-node-attribute.model';
+import { Adapter } from '../models/adapter.model';
 
 const MONACO_COLUMN_OFFSET = 1;
 const QUOTE_AND_EQUALS = 2;
@@ -26,7 +27,8 @@ let configuration: FlowStructureNode;
 let xml: string;
 let tagStartLine: number;
 let tagStartColumn: number;
-let currentAdapter: FlowStructureNode;
+let adapters: Adapter[] = [];
+let currentAdapter: Adapter;
 
 let originalFile: File;
 
@@ -35,6 +37,7 @@ addEventListener('message', ({ data }) => {
     originalFile = data;
     flowStructure = new FlowStructure();
     errors = [];
+    adapters = [];
     xml = data.xml;
     parserWrite(data.xml);
   }
@@ -53,16 +56,15 @@ parser.on('error', (error) => {
 });
 
 parser.on('end', () => {
-  const newFlowStructure = new FlowStructure(
-    flowStructure.nodes,
-    flowStructure.firstPipe
-  );
-  newFlowStructure.pipeline = pipeline;
-  newFlowStructure.configuration = configuration;
-
+  currentAdapter =
+    adapters.find(
+      (adapter) => adapter.name == originalFile.currentAdapter?.name
+    ) ?? adapters[0];
   postMessage({
     ...originalFile,
-    flowStructure: newFlowStructure,
+    currentAdapter: currentAdapter,
+    flowStructure: currentAdapter.flowStructure,
+    adapters: adapters,
     errors: errors,
   } as File);
 });
@@ -99,7 +101,7 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     tagStartColumn + MONACO_COLUMN_OFFSET,
     parser.column + MONACO_COLUMN_OFFSET,
     tag.name,
-    currentAdapter?.name + '=>' + path,
+    adapters[adapters.length - 1]?.name + '=>' + path,
     bufferAttributes,
     tag.isSelfClosing
   );
@@ -113,46 +115,54 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
   }
 
   bufferAttributes = {};
-  if (currentNode.type.endsWith('Sender')) {
-    addSubElement('sender', currentNode);
-  } else if (currentNode.type.endsWith('Listener')) {
-    addSubElement('listener', currentNode);
-  } else if (currentNode.type.endsWith('MessageLog')) {
-    addSubElement('messageLog', currentNode);
-  } else if (currentNode.type.endsWith('InputValidator')) {
-    addSubElement('inputValidator', currentNode);
-  } else if (currentNode.type.endsWith('OutputValidator')) {
-    addSubElement('outputValidator', currentNode);
-  } else if (currentNode.type.endsWith('InputWrapper')) {
-    addSubElement('inputWrapper', currentNode);
-  } else if (currentNode.type.endsWith('OutputWrapper')) {
-    addSubElement('outputWrapper', currentNode);
-  } else {
-    switch (currentNode.type) {
-      case 'Param':
-        addSubElement('param', currentNode);
-        break;
-      case 'Locker':
-        addSubElement('locker', currentNode);
-        break;
-      case 'Forward':
-        addSubElement('forward', currentNode);
-        flowStructure.nodes
-          .find((pipe: FlowStructureNode) => {
-            return pipe === unclosedNodes[unclosedNodes.length - 1];
-          })
-          ?.forwards?.push(currentNode);
-        break;
-      case 'Configuration':
-      case 'Module':
-        configuration = currentNode;
-        return;
-      case 'Adapter':
-        currentAdapter = currentNode;
-        return;
-      case 'Pipeline':
-        pipeline = currentNode;
-        return;
+  switch (currentNode.type) {
+    case 'Param': {
+      addSubElement('param', currentNode);
+      break;
+    }
+    case 'Locker': {
+      addSubElement('locker', currentNode);
+      break;
+    }
+    case 'Forward': {
+      addSubElement('forward', currentNode);
+      flowStructure.nodes
+        .find((pipe: FlowStructureNode) => {
+          return pipe === unclosedNodes[unclosedNodes.length - 1];
+        })
+        ?.forwards?.push(currentNode);
+      break;
+    }
+    case 'Configuration':
+    case 'Module': {
+      configuration = currentNode;
+      return;
+    }
+    case 'Adapter': {
+      currentAdapter = { name: currentNode.name };
+      adapters.push(currentAdapter);
+      return;
+    }
+    case 'Pipeline': {
+      pipeline = currentNode;
+      return;
+    }
+    default: {
+      if (currentNode.type.endsWith('Sender')) {
+        addSubElement('sender', currentNode);
+      } else if (currentNode.type.endsWith('Listener')) {
+        addSubElement('listener', currentNode);
+      } else if (currentNode.type.endsWith('MessageLog')) {
+        addSubElement('messageLog', currentNode);
+      } else if (currentNode.type.endsWith('InputValidator')) {
+        addSubElement('inputValidator', currentNode);
+      } else if (currentNode.type.endsWith('OutputValidator')) {
+        addSubElement('outputValidator', currentNode);
+      } else if (currentNode.type.endsWith('InputWrapper')) {
+        addSubElement('inputWrapper', currentNode);
+      } else if (currentNode.type.endsWith('OutputWrapper')) {
+        addSubElement('outputWrapper', currentNode);
+      }
     }
   }
 
@@ -163,6 +173,20 @@ parser.on('opentag', (tag: TagForOptions<{}>) => {
     unclosedNodes.push(currentNode);
   }
 });
+
+function addSubElement(subElement: string, currentNode: FlowStructureNode) {
+  if (!unclosedNodes[unclosedNodes.length - 1]) {
+    return;
+  }
+  if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.[subElement]) {
+    unclosedNodes[unclosedNodes.length - 1].nestedElements = {
+      ...unclosedNodes[unclosedNodes.length - 1].nestedElements,
+      [subElement]: [],
+    };
+  }
+  currentNode.parent = unclosedNodes[unclosedNodes.length - 1].uid;
+  unclosedNodes[unclosedNodes.length - 1].nestedElements[subElement].push(currentNode);
+}
 
 const checkIfTypeStartWithUppercase = (node: FlowStructureNode) => {
   if (node.type.charAt(0) !== node.type.charAt(0).toUpperCase()) {
@@ -183,22 +207,6 @@ const checkIfIdAlreadyExists = (node: FlowStructureNode) => {
   }
 };
 
-function addSubElement(subElement: string, currentNode: FlowStructureNode) {
-  if (!unclosedNodes[unclosedNodes.length - 1]) {
-    return;
-  }
-  if (!unclosedNodes[unclosedNodes.length - 1].nestedElements?.[subElement]) {
-    unclosedNodes[unclosedNodes.length - 1].nestedElements = {
-      ...unclosedNodes[unclosedNodes.length - 1].nestedElements,
-      [subElement]: [],
-    };
-  }
-  currentNode.parent = unclosedNodes[unclosedNodes.length - 1].uid;
-  unclosedNodes[unclosedNodes.length - 1].nestedElements[subElement].push(
-    currentNode
-  );
-}
-
 parser.on('closetag', (tag: TagForOptions<{}>) => {
   const closingNode = unclosedNodes.pop();
   if (tag.name === closingNode?.type && !tag.isSelfClosing) {
@@ -207,6 +215,17 @@ parser.on('closetag', (tag: TagForOptions<{}>) => {
     if (closingNode != undefined) {
       unclosedNodes.push(closingNode);
     }
+  }
+  if (tag.name == 'Adapter') {
+    const newFlowStructure = new FlowStructure(
+      flowStructure.nodes,
+      flowStructure.firstPipe
+    );
+    newFlowStructure.pipeline = pipeline;
+    newFlowStructure.configuration = configuration;
+
+    currentAdapter.flowStructure = newFlowStructure;
+    flowStructure = new FlowStructure();
   }
 });
 

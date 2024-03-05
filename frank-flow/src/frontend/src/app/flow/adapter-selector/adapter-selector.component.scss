@@ -1,0 +1,14 @@
+:host {
+  padding: 16px;
+  background: var(--bg-color-muted-transparant);
+  display: flex;
+  gap: 16px;
+  width: fit-content;
+  border-radius: 5px;
+  box-shadow: var(--shadow-medium);
+  backdrop-filter: blur(5px);
+}
+
+.selector {
+  flex-grow: 1;
+}
