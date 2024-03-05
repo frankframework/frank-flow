@@ -4,11 +4,20 @@
   height: 100%;
   background-color: var(--border-color);
 
-  &__actions {
+  &__header {
     margin: 16px;
     position: relative;
     top: calc(64px - 100vh);
     right: 0;
+    display: flex;
+    gap: 16px;
+  }
+
+  &__actions {
+  }
+
+  &__adapter-selector {
+    flex-grow: 1;
   }
 
   &__no-canvas-message {

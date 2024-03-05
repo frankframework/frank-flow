@@ -90,15 +90,15 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
           });
         };
 
-        if (!(window as any).require) {
+        if ((window as any).require) {
+          onAmdLoader();
+        } else {
           const loaderScript: HTMLScriptElement =
             document.createElement('script');
           loaderScript.type = 'text/javascript';
           loaderScript.src = 'assets/monaco/vs/loader.js';
           loaderScript.addEventListener('load', onAmdLoader);
           document.body.append(loaderScript);
-        } else {
-          onAmdLoader();
         }
       });
     }
@@ -220,8 +220,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnDestroy {
             file.firstLoad = false;
             this.setValue(file);
             this.checkIfReadOnly(file);
-            this.currentFile = file;
           }
+          this.currentFile = file;
         },
       });
   }
