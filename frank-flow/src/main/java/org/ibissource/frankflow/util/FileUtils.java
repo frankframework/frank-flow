@@ -62,18 +62,6 @@ public abstract class FileUtils {
 		return dir;
 	}
 
-	public static String getAbsPath(String path) {
-
-		if(StringUtils.isEmpty(path)) {
-			return null;
-		}
-
-		String absPath = getDir((File)null, path).toURI().toString();
-		log.info("found local frontend path ["+absPath+"]");
-
-		return path;
-	}
-
 	public static boolean createDir(File file) {
 		if(!file.exists()) {
 			return file.mkdirs();
