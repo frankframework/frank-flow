@@ -16,7 +16,10 @@
 package org.ibissource.frankflow.util;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.util.StringUtils;
@@ -68,7 +71,7 @@ public abstract class FileUtils {
 		String absPath = getDir((File)null, path).toURI().toString();
 		log.info("found local frontend path ["+absPath+"]");
 
-		return absPath;
+		return path;
 	}
 
 	public static boolean createDir(File file) {

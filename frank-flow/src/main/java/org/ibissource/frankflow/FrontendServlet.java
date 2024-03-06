@@ -15,8 +15,10 @@
 */
 package org.ibissource.frankflow;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.servlet.ServletContext;
@@ -96,10 +98,19 @@ public class FrontendServlet extends HttpServlet {
 			normalizedPath = normalizedPath.substring(1);
 		}
 
-		if(!StringUtils.hasLength(frontendPath)) {
-			return this.getClass().getResource("/frontend/"+normalizedPath);
-		} else {
-			return this.getClass().getResource(frontendPath+normalizedPath);
+		URL url = null;
+		try {
+			if(!StringUtils.hasLength(frontendPath)) {
+				url = new File("/frontend/"+normalizedPath).toURI().toURL();
+				log.debug("looking up resource from path [/frontend/{}] to url [{}]", normalizedPath, url);
+			} else {
+				url = new File(frontendPath+"/"+normalizedPath).toURI().toURL();
+				log.debug("looking up resource from frontendPath [{}/{}] to url [{}]", frontendPath, normalizedPath, url);
+			}
+		} catch (MalformedURLException e) {
+			log.error(e);
 		}
-	}
+		log.debug("{} resource from path [{}]", url==null?"did not find": "found", normalizedPath);
+        return url;
+    }
 }
