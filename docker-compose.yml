@@ -6,7 +6,7 @@ services:
     volumes:
       - ./frank-flow/src/frontend/cypress/Frank/src/main/:/opt/frank/
       - ./context.xml:/usr/local/tomcat/conf/context.xml
-      - ./frank-flow-webapp/target/frank-flow-webapp-0.0.0-SNAPSHOT:/usr/local/tomcat/webapps/frank-flow
+      - ./frank-flow/target/frank-flow-0.0.0-SNAPSHOT:/usr/local/tomcat/webapps/frank-flow
       - ./frank-flow/target/frontend:/frank-flow/frontend
     ports:
       - "8080:8080"
@@ -14,5 +14,5 @@ services:
       - dtap.stage=LOC
       - database.instance.name=frank2frankflow
       - database.name=database
-      - CATALINA_OPTS=-Dinstance.name=Frank2FrankFlow -Dfrank-flow.context-path= -Dfrank-flow.frontend-path=/frank-flow/frontend
+      - CATALINA_OPTS=-Dinstance.name=Frank2FrankFlow -Dfrank-flow.context-path=
     restart: unless-stopped
