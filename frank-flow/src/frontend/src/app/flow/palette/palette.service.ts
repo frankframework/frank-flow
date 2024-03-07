@@ -42,14 +42,20 @@ export class PaletteService {
   }
 
   getElementsForTypes(types: ElementType, data: any): Element[] {
-    return types.map((type: ElementType): Element => {
+    const elements: Element[] = [];
+    for (const type of types) {
       const element = data.elements.find(
         (element: any) => element.fullName === type.name
       );
-      return element.elementNames.map((elementName: string) => ({
+      if (element.deprecated) {
+        continue;
+      }
+      const elementNames = element.elementNames.map((elementName: string) => ({
         name: elementName,
         type,
       }));
-    });
+      elements.push(elementNames);
+    }
+    return elements;
   }
 }
