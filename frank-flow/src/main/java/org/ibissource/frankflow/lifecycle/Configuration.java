@@ -60,9 +60,8 @@ public class Configuration implements ServletContextAware {
 			servletContext.setAttribute("basepath", basePath);
 		}
 
-		String frontendLocation = FileUtils.getAbsPath(frontendPath);
-		if(StringUtils.hasLength(frontendLocation)) {
-			servletContext.setAttribute("frontend-location", frontendLocation);
+		if(StringUtils.hasLength(frontendPath)) {
+			servletContext.setAttribute("frontend-location", frontendPath);
 		}
 
 		return basePath;
