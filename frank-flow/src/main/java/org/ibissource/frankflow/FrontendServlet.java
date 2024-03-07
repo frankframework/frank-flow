@@ -99,18 +99,19 @@ public class FrontendServlet extends HttpServlet {
 		}
 
 		URL url = null;
-		try {
-			if(StringUtils.hasLength(frontendPath)) {
+		if(StringUtils.hasLength(frontendPath)) {
+			try {
 				url = new File(frontendPath + "/" + normalizedPath).toURI().toURL();
 				log.debug("looking up resource from frontendPath [{}/{}] to url [{}]", frontendPath, normalizedPath, url);
-			} else {
-				url = new File("/frontend/"+normalizedPath).toURI().toURL();
-				log.debug("looking up resource from path [/frontend/{}] to url [{}]", normalizedPath, url);
+			} catch (MalformedURLException e) {
+				log.error(e);
 			}
-		} catch (MalformedURLException e) {
-			log.error(e);
+		} else {
+			url = this.getClass().getResource("/frontend/"+normalizedPath);
+			log.debug("looking up resource from path [/frontend/{}] to url [{}]", normalizedPath, url);
 		}
+
 		log.debug("{} resource from path [{}]", url == null ? "did not find" : "found", normalizedPath);
-        return url;
+		return url;
     }
 }
