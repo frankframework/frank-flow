@@ -14,5 +14,5 @@ services:
       - dtap.stage=LOC
       - database.instance.name=frank2frankflow
       - database.name=database
-      - CATALINA_OPTS=-Dinstance.name=Frank2FrankFlow -Dfrank-flow.context-path=
+      - CATALINA_OPTS=-Dinstance.name=Frank2FrankFlow -Dfrank-flow.context-path= -Dfrank-flow.frontend-path=/frank-flow/frontend
     restart: unless-stopped
