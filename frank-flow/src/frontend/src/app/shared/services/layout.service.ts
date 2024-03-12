@@ -9,18 +9,41 @@ import { BehaviorSubject } from 'rxjs';
 export class LayoutService {
   private nodesSubject = new BehaviorSubject<Map<string, Node>>(new Map());
   public nodesObservable = this.nodesSubject.asObservable();
+
   private readonly LEFT_MARGIN = 100;
   private readonly TOP_MARGIN = 100;
   private readonly NODE_HEIGHT = 100;
   private readonly NODE_WIDTH = 200;
   private readonly rows = new Map<string, number>();
+  private rowStartingPointPerColumn: number[] = []
 
   constructor(private nodeService: NodeService) {}
 
   createLayout(nodeMap: Map<string, Node>): void {
     this.rows.clear();
+    this.rowStartingPointPerColumn = [];
+    this.determineStartingPointPerRow(nodeMap);
     this.addNodesToCanvas(nodeMap);
     this.nodesSubject.next(nodeMap);
+  }
+
+  determineStartingPointPerRow(nodeMap: Map<string, Node>) {
+    for (const node of nodeMap.values()) {
+      let row: number
+      let column: number
+      if (node.getType().includes('Receiver')) {
+        column = 1;
+      } else if (node.getType() === 'Exit') {
+        column = 3;
+      } else {
+        column = 2;
+      }
+      const top = node.getTop() || 0
+      this.rowStartingPointPerColumn[column] ??= 0
+      if (top > (this.rowStartingPointPerColumn[column])) {
+        this.rowStartingPointPerColumn[column] = top + this.TOP_MARGIN
+      }
+    }
   }
 
   addNodesToCanvas(nodeMap: Map<string, Node>): void {
@@ -31,8 +54,8 @@ export class LayoutService {
   }
 
   handlePositions(node: Node): void {
-    const [row, column] = this.getRowAndColumn(node.getType());
     if (this.nodeNeedsPositions(node)) {
+      const [row, column] = this.getRowAndColumn(node.getType());
       const cachedLocations = this.getCachedLocations(node);
       const [left, top] =
         cachedLocations ?? this.calculatePositions(row, column);
@@ -77,7 +100,7 @@ export class LayoutService {
 
   calculatePositions(row: number, column: number) {
     const left = this.NODE_WIDTH * (column - 1) + this.LEFT_MARGIN * column;
-    const top = this.NODE_HEIGHT * (row - 1) + this.TOP_MARGIN * row;
+    const top = this.rowStartingPointPerColumn[column] + this.NODE_HEIGHT * (row - 1) + this.TOP_MARGIN * row;
     return [left, top];
   }
 }
