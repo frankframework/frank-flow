@@ -41,7 +41,7 @@ public class Configuration implements ServletContextAware {
 	@Value("${frank-flow.context-path}/")
 	private String contextPath; // must start with SLASH and may not end with a SLASH, or Spring will FAIL.
 
-	@Value("${frank-flow.frontend-path}")
+	@Value("${frank-flow.frontend-path:}")
 	private String frontendPath;
 
 	@Value("${configurations.directory}")
