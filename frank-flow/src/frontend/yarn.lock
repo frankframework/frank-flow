@@ -2279,10 +2279,10 @@
   resolved "https://registry.npmjs.org/@types/cors/-/cors-2.8.12.tgz"
   integrity sha512-vt+kDhq/M2ayberEtJcIN/hxXy1Pk+59g2FV/ZQceeaTyCtCucjL2Q7FXlFjtWn4n15KCr1NE2lNNFhp0lEThw==
 
-"@types/cytoscape@^3.19.9":
-  version "3.19.9"
-  resolved "https://registry.npmjs.org/@types/cytoscape/-/cytoscape-3.19.9.tgz"
-  integrity sha512-oqCx0ZGiBO0UESbjgq052vjDAy2X53lZpMrWqiweMpvVwKw/2IiYDdzPFK6+f4tMfdv9YKEM9raO5bAZc3UYBg==
+"@types/cytoscape@^3.21.0":
+  version "3.21.0"
+  resolved "https://registry.yarnpkg.com/@types/cytoscape/-/cytoscape-3.21.0.tgz#30f5634774862b9a507b89a1b10616efabf1bf88"
+  integrity sha512-RN5SPiyVDpUP+LoOlxxlOYAMzkE7iuv3gA1jt3Hx2qTwArpZVPPdO+SI0hUj49OAn4QABR7JK9Gi0hibzGE0Aw==
 
 "@types/eslint-scope@^3.7.3":
   version "3.7.3"
@@ -4042,10 +4042,10 @@ cypress@^7.7.0:
     url "^0.11.0"
     yauzl "^2.10.0"
 
-cytoscape@^3.25.0:
-  version "3.25.0"
-  resolved "https://registry.npmjs.org/cytoscape/-/cytoscape-3.25.0.tgz"
-  integrity sha512-7MW3Iz57mCUo6JQCho6CmPBCbTlJr7LzyEtIkutG255HLVd4XuBg2I9BkTZLI/e4HoaOB/BiAzXuQybQ95+r9Q==
+cytoscape@^3.28.1:
+  version "3.28.1"
+  resolved "https://registry.yarnpkg.com/cytoscape/-/cytoscape-3.28.1.tgz#f32c3e009bdf32d47845a16a4cd2be2bbc01baf7"
+  integrity sha512-xyItz4O/4zp9/239wCcH8ZcFuuZooEeF8KHRmzjDfGdXsj3OG9MFSMA0pJE0uX3uCN/ygof6hHf4L7lst+JaDg==
   dependencies:
     heap "^0.2.6"
     lodash "^4.17.21"
