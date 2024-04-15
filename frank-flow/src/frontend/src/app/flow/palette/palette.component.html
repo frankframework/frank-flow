@@ -1,18 +1,18 @@
 <app-search [(term)]="search"></app-search>
 <app-group
-  [items]="paletteService.data.get('Listener') | filter : search"
+  [items]="paletteService.data.get('Listeners') | filter : search"
   [locked]="locked"
   color="info"
   type="Listeners"
 ></app-group>
 <app-group
-  [items]="paletteService.data.get('Pipe') | filter : search"
+  [items]="paletteService.data.get('Pipes') | filter : search"
   [locked]="locked"
   color="accent"
   type="Pipes"
 ></app-group>
 <app-group
-  [items]="paletteService.data.get('Sender') | filter : search"
+  [items]="paletteService.data.get('Senders') | filter : search"
   [locked]="locked"
   color="success"
   type="Senders"
