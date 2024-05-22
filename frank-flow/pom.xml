@@ -12,7 +12,7 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<spring.version>5.3.33</spring.version>
+		<spring.version>5.3.35</spring.version>
 		<spring.boot.version>2.7.18</spring.boot.version>
 	</properties>
 
