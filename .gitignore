@@ -16,6 +16,7 @@ bin
 /target
 .mvn
 dependency-reduced-pom.xml
+.flattened-pom.xml
 
 **/META-INF/maven
 **/META-INF/MANIFEST.MF
