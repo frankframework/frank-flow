@@ -31,7 +31,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "cytoscape": "^3.28.1",
-    "jqwidgets-ng": "^19.0.5",
+    "jqwidgets-ng": "^19.2.0",
     "jsplumb": "^2.15.6",
     "monaco-editor": "^0.44.0",
     "ngx-panzoom": "^13.0.0",
