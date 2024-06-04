@@ -18,6 +18,7 @@ package org.ibissource.frankflow.api;
 import java.util.List;
 import java.util.Optional;
 
+import org.ibissource.frankflow.util.InputStreamHttpMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.FormHttpMessageConverter;
@@ -42,6 +43,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 			converter.setPrettyPrint(true);
 		}
 
+		converters.add(new InputStreamHttpMessageConverter());
 		converters.add(new FormHttpMessageConverter());
 	}
 

@@ -34,7 +34,6 @@ public class ConfigurationApi {
 
 	@GetMapping(value = "/configurations", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getConfigurations() {
-
 		List<String> configurations = new ArrayList<>();
 		for(File folder : FileUtils.getBaseDir().listFiles()) {
 			configurations.add(folder.getName());
