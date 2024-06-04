@@ -1,17 +1,17 @@
 /*
-Copyright 2020 WeAreFrank!
+   Copyright 2020 - 2024 WeAreFrank!
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+       http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
 */
 package org.ibissource.frankflow.api;
 
@@ -20,84 +20,50 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.ReadOnlyFileSystemException;
 import java.nio.file.StandardCopyOption;
 
-
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.PATCH;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.EntityTag;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.Response;
-
 import org.apache.commons.io.FilenameUtils;
-import org.apache.cxf.jaxrs.ext.multipart.Attachment;
-import org.apache.cxf.jaxrs.ext.multipart.MultipartBody;
 import org.ibissource.frankflow.util.FileUtils;
 import org.ibissource.frankflow.util.MimeTypeUtil;
-  
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-
-@Path("/configurations/{name}/files")
+@RestController
 public class FileApi {
 
-
-	@Context Request request;
-
-	@GET
-	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getFile(@PathParam("name") String configurationName, @QueryParam("path") String path) {
+	@GetMapping(value = "/configurations/{name}/files", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getFile(@PathVariable("name") String configurationName, @RequestParam("path") String path) {
 		File rootFolder = FileUtils.getDir(configurationName);
 		File file = getFile(rootFolder, path);
 		if(!file.exists()) {
-			return Response.status(Response.Status.NOT_FOUND).build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 		if(file.isDirectory()) {
-			return Response.status(Response.Status.BAD_REQUEST).build();
-		}
-
-		Response.ResponseBuilder response = null;
-		//Calculate the ETag on last modified date of user resource 
-		EntityTag eTag = new EntityTag("lm"+file.lastModified());
-
-		//Verify if it matched with etag available in http request
-		response = request.evaluatePreconditions(eTag);
-
-		//If ETag matches the response will be non-null; 
-		if (response != null) {
-			return response.tag(eTag).build();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
 
 		try {
-			FileInputStream fis = new FileInputStream(file); //Can't wrap this in try, may not auto close!
+			FileInputStream fis = new FileInputStream(file); // Can't wrap this in try, may not auto close!
 			MediaType mediaType = MimeTypeUtil.determineFromPathMimeType(file.getName());
-			return Response.status(Response.Status.OK).entity(fis).type(mediaType).tag(eTag).build();
+			return ResponseEntity.status(HttpStatus.OK).contentType(mediaType).body(fis);
 		} catch (IOException e) {
-			return Response.status(Response.Status.NOT_FOUND).build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	}
 
-	@PUT
-	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response createFolder(@PathParam("name") String configurationName, @QueryParam("path") String path,  MultipartBody inputDataMap) {
-
-		if(inputDataMap == null) {
-			throw new ApiException("Missing form-data post parameters");
-		}
-		Attachment fileAttachment = inputDataMap.getAttachment("file");
+	@PutMapping(value = "/configurations/{name}/files", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> createFolder(@PathVariable("name") String configurationName, @RequestParam("path") String path, @RequestPart MultipartFile fileAttachment) {
 		if(fileAttachment == null) {
 			throw new ApiException("Missing form-data [file] parameter");
 		}
@@ -106,42 +72,32 @@ public class FileApi {
 		File file = getFile(rootFolder, path);
 		if(file.exists()) {
 			if(file.isDirectory()) {
-				return Response.status(Response.Status.BAD_REQUEST).build();
-			}
-			Response.ResponseBuilder response = null;
-
-			EntityTag eTag = new EntityTag("lm"+file.lastModified());
-			response = request.evaluatePreconditions(eTag);
-
-			if (response != null) { //If ETag matches the response will be non-null;
-				throw new WebApplicationException(response.build());
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 			}
 
-			
-			try (InputStream is = fileAttachment.getObject(InputStream.class)) {
+			try(InputStream is = fileAttachment.getInputStream()) {
 				Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-				return Response.status(Response.Status.OK).tag(eTag).build();
+				return ResponseEntity.status(HttpStatus.OK).build();
 			} catch (IOException e) {
-				throw new ApiException("An error occurred while saving file ["+path+"]", e);
+				throw new ApiException("An error occurred while saving file [" + path + "]", e);
 			}
 		}
 
-
-		return Response.status(Response.Status.OK).build();
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
-	@PATCH
-    @Path("/")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response renameFolder(@PathParam("name") String configurationName, @QueryParam("path") String path, @FormParam("newName") String newName) {
+	public static record FormFileModel(MultipartFile file) {
+	}
 
-        if(newName == null || newName.equals("")) {
-            throw new ApiException("An unexpected error occurred, property [newName] does not exist or is empty");
-        }
+	@PatchMapping(value = "/configurations/{name}/files", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> renameFolder(@PathVariable("name") String configurationName, @RequestParam("path") String path, @RequestPart("newName") String newName) {
 
+		if(newName == null || newName.equals("")) {
+			throw new ApiException("An unexpected error occurred, property [newName] does not exist or is empty");
+		}
 
-        File rootFolder = FileUtils.getDir(configurationName);
-        File file = getFile(rootFolder, path);
+		File rootFolder = FileUtils.getDir(configurationName);
+		File file = getFile(rootFolder, path);
 
 		if(path.contains("/")) {
 			path = path.replaceFirst("(?<=/?.{0,10}/)[^/]*(?!/)$", newName);
@@ -149,31 +105,24 @@ public class FileApi {
 			path = newName;
 		}
 
-        File destFile = getFile(rootFolder, path);
+		File destFile = getFile(rootFolder, path);
 
-        if(!file.exists()) {
-			return Response.status(Response.Status.NOT_FOUND).build();
+		if(!file.exists()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
-        if(file.isDirectory()) {
-			return Response.status(Response.Status.BAD_REQUEST).build();
+		if(file.isDirectory()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
 
-
-        if(file.renameTo(destFile)) {
-		    return Response.status(Response.Status.OK).entity(path).type(MediaType.TEXT_PLAIN).build();
-        } else {
-            throw new ApiException("An unexpected error occurred, file can't be renamed");
-        }
+		if(file.renameTo(destFile)) {
+			return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.TEXT_PLAIN).body(path);
+		} else {
+			throw new ApiException("An unexpected error occurred, file can't be renamed");
+		}
 	}
 
-	@POST
-	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response saveFile(@PathParam("name") String configurationName, @QueryParam("path") String path, MultipartBody inputDataMap) {
-		if(inputDataMap == null) {
-			throw new ApiException("Missing form-data post parameters");
-		}
-		Attachment fileAttachment = inputDataMap.getAttachment("file");
+	@PostMapping(value = "/configurations/{name}/files", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> saveFile(@PathVariable("name") String configurationName, @RequestParam("path") String path, @RequestPart MultipartFile fileAttachment) {
 		if(fileAttachment == null) {
 			throw new ApiException("Missing form-data [file] parameter");
 		}
@@ -181,56 +130,43 @@ public class FileApi {
 		File rootFolder = FileUtils.getDir(configurationName);
 		File file = getFile(rootFolder, path);
 		if(file.exists()) {
-			throw new ApiException("File already exists", Response.Status.CONFLICT);
+			throw new ApiException("File already exists", HttpStatus.CONFLICT);
 		}
 
-		try (InputStream is = fileAttachment.getObject(InputStream.class)) {
+		try(InputStream is = fileAttachment.getInputStream()) {
 			Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
 			// the file should always exist, lets make sure though, you never know...
 			if(file.exists()) {
-				EntityTag eTag = new EntityTag("lm"+file.lastModified());
-				return Response.status(Response.Status.OK).tag(eTag).build();
+				return ResponseEntity.status(HttpStatus.OK).build();
 			}
-			throw new ApiException("An unexpected error occurred, file ["+path+"] does not exists");
+			throw new ApiException("An unexpected error occurred, file [" + path + "] does not exists");
 		} catch (IOException e) {
-			throw new ApiException("An error occurred while creating file ["+path+"]", e);
+			throw new ApiException("An error occurred while creating file [" + path + "]", e);
 		}
 	}
 
-	@DELETE
-	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response deleteFile(@PathParam("name") String configurationName, @QueryParam("path") String path) {
+	@DeleteMapping(value = "/configurations/{name}/files", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> deleteFile(@PathVariable("name") String configurationName, @RequestParam("path") String path) {
 		File rootFolder = FileUtils.getDir(configurationName);
 		File file = getFile(rootFolder, path);
 		if(!file.exists()) {
-			return Response.status(Response.Status.NOT_FOUND).build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 		if(file.isDirectory()) {
-			return Response.status(Response.Status.BAD_REQUEST).build();
-		}
-
-		Response.ResponseBuilder response = null;
-		//Calculate the ETag on last modified date of user resource 
-		EntityTag eTag = new EntityTag("lm"+file.lastModified());
-
-		//Verify if it matched with etag available in http request
-		response = request.evaluatePreconditions(eTag);
-
-		if (response != null) { //If ETag matches the response will be non-null;
-			throw new WebApplicationException(response.build());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
 
 		if(file.delete()) {
-			return Response.status(Response.Status.OK).build();
+			return ResponseEntity.status(HttpStatus.OK).build();
 		} else {
-			throw new ApiException("Unable to remove file ["+path+"]");
+			throw new ApiException("Unable to remove file [" + path + "]");
 		}
 	}
 
 	/**
-	 * Check if file is accessible and is a child of the rootFolder (eq. no ../ in path)
+	 * Check if file is accessible and is a child of the rootFolder (eq. no ../ in
+	 * path)
 	 */
 	private File getFile(File rootFolder, String path) {
 		if(path == null) {
@@ -239,7 +175,7 @@ public class FileApi {
 
 		File file = new File(rootFolder, path);
 		String normalizedFilename = FilenameUtils.normalize(file.getAbsolutePath());
-		if(normalizedFilename == null) { //non absolute path, perhaps ../ is used?
+		if(normalizedFilename == null) { // non absolute path, perhaps ../ is used?
 			throw new ApiException("Unable to determine normalized filename");
 		}
 //		else if(normalizedFilename.equals(file.getPath())) {

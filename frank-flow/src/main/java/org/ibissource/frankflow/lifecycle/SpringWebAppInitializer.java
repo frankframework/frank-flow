@@ -1,14 +1,24 @@
+/*
+   Copyright 2020-2024 WeAreFrank!
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
 package org.ibissource.frankflow.lifecycle;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletException;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.Ordered;
@@ -17,6 +27,11 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.ServletException;
 
 @Order(Ordered.LOWEST_PRECEDENCE)
 public class SpringWebAppInitializer implements WebApplicationInitializer {
@@ -42,7 +57,7 @@ public class SpringWebAppInitializer implements WebApplicationInitializer {
 		}
 
 		context.setDisplayName(NAME);
-		context.register(Configuration.class);
+		context.register(AnnotationConfig.class);
 		context.setServletContext(servletContext);
 		context.refresh();
 	}
@@ -53,7 +68,7 @@ public class SpringWebAppInitializer implements WebApplicationInitializer {
 	 */
 	private String getModuleVersion(String module) {
 		ClassLoader classLoader = this.getClass().getClassLoader();
-		String basePath = "META-INF/maven/org.ibissource/";
+		String basePath = "META-INF/maven/org.frankframework/";
 		URL pomProperties = classLoader.getResource(basePath+module+"/pom.properties");
 
 		if(pomProperties != null) {

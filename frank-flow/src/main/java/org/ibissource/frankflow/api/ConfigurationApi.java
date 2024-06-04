@@ -1,76 +1,67 @@
 /*
-Copyright 2020 WeAreFrank!
+   Copyright 2020 - 2024 WeAreFrank!
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+       http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
 */
 package org.ibissource.frankflow.api;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import java.util.Map;
 
 import org.ibissource.frankflow.util.FileUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
-@Path("/configurations")
+@RestController
 public class ConfigurationApi {
 
-	@GET
-	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getConfigurations() {
+	@GetMapping(value = "/configurations", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getConfigurations() {
 
 		List<String> configurations = new ArrayList<>();
 		for(File folder : FileUtils.getBaseDir().listFiles()) {
 			configurations.add(folder.getName());
 		}
 
-		return Response.status(Response.Status.OK).entity(configurations).build();
+		return ResponseEntity.status(HttpStatus.OK).body(configurations);
 	}
 
-	@GET
-	@Path("/{name}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getConfigurations(@PathParam("name") String configurationName) {
+	@GetMapping(value = "/configurations/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getConfigurations(@PathVariable("name") String configurationName) {
 		File dir = FileUtils.getDir(configurationName);
 
-		//TODO fix this build.tostring thing
-		return Response.status(Response.Status.OK).entity(readDirectory(dir).build().toString()).build();
+		return ResponseEntity.status(HttpStatus.OK).body(readDirectory(dir));
 	}
 
-	public static JsonObjectBuilder readDirectory(File directory) {
-		JsonObjectBuilder methodBuilder = Json.createObjectBuilder();
-		JsonArrayBuilder files = Json.createArrayBuilder();
+	private static Map<String, Object> readDirectory(File directory) {
+		Map<String, Object> methodBuilder = new HashMap<>();
+		ArrayList<String> files = new ArrayList<String>();
 		for(File file : directory.listFiles()) {
 			if(file.isDirectory()) {
-				methodBuilder.add(file.getName(), readDirectory(file));
+				methodBuilder.put(file.getName(), readDirectory(file));
 			} else {
 				files.add(file.getName());
 			}
 		}
-		JsonArray filesArray = files.build();
-		if(!filesArray.isEmpty())
-			methodBuilder.add("_files", filesArray);
+		if(!files.isEmpty())
+			methodBuilder.put("_files", files);
 
 		return methodBuilder;
 	}

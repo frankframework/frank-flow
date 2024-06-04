@@ -18,8 +18,6 @@ package org.ibissource.frankflow.lifecycle;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ibissource.frankflow.BackendServlet;
@@ -28,12 +26,15 @@ import org.ibissource.frankflow.util.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.ServletContextAware;
 
-@org.springframework.context.annotation.Configuration
-public class Configuration implements ServletContextAware {
+import jakarta.servlet.ServletContext;
+
+@Configuration
+public class AnnotationConfig implements ServletContextAware {
 	private Logger log = LogManager.getLogger(this);
 	private String basePath = null;
 	private ServletContext servletContext;

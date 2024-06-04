@@ -26,7 +26,7 @@ import org.springframework.boot.WebApplicationType;
  *
  * @author Niels Meijer
  */
-public class StandaloneInitializer {
+public class FlowStandaloneInitializer {
 
 	// Should start a XmlServletWebServerApplicationContext.
 	public static void main(String[] args) {

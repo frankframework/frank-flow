@@ -15,103 +15,130 @@
 */
 package org.ibissource.frankflow;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.MediaType;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ibissource.frankflow.util.MimeTypeUtil;
-import org.springframework.util.StringUtils;
+import org.frankframework.util.ClassUtils;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
+
+import jakarta.annotation.Nullable;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * 
  * @author Niels Meijer
  */
-public class FrontendServlet extends HttpServlet {
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+public class FrontendServlet extends HttpServlet implements InitializingBean {
 
-	private static final long serialVersionUID = 123L;
+	private static final long serialVersionUID = 2L;
+	private Logger log = LogManager.getLogger(this);
+	private static final String WELCOME_FILE = "index.html";
+	private static final String DEFAULT_CONSOLE_PATH = "console"; //WebSphere doesn't like the classpath: protocol and resources should not start with a slash?
 
 	private String frontendPath = null;
-	private final Logger log = LogManager.getLogger(this);
 
-	private String basePath;
+	@Autowired
+	private transient Environment environment;
 
 	@Override
-	public void init() throws ServletException {
-		super.init();
-		ServletContext context = getServletConfig().getServletContext();
+	public void afterPropertiesSet() {
+		if(environment != null && Arrays.asList(environment.getActiveProfiles()).contains("dev")) {
+			String devFrontendLocation = environment.getProperty("frontend.resources.location");
+			if(devFrontendLocation == null) {
+				Path rootPath = Paths.get("").toAbsolutePath(); // get default location based on current working directory, in IntelliJ this is the project root.
+				devFrontendLocation = rootPath.resolve("console/frontend/target/frontend/").toString(); //Navigate to the target of the frontend module
+			}
 
-		frontendPath = (String) context.getAttribute("frontend-location");
-		basePath = (String) context.getAttribute("basepath");
+			frontendPath = ResourceUtils.FILE_URL_PREFIX + FilenameUtils.getFullPath(devFrontendLocation);
+			log.info("found frontend path [{}]", frontendPath);
+		}
+
+		frontendPath = DEFAULT_CONSOLE_PATH;
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String path = req.getPathInfo();
-		if(path == null) {
-			log.warn("no path found, redirecting to ["+basePath+"]");
-
-			resp.sendRedirect(req.getContextPath() + basePath);
-			return;
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+		try {
+			doGetSafely(req, resp);
+		} catch (IOException e) {
+			log.error("unable to process request", e);
 		}
-		if(path.equals("/")) {
-			path += "index.html";
+	}
+
+	/**
+	 * @throws IOException only when sendError or sendRedirect cannot process the request.
+	 */
+	private void doGetSafely(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		String path = req.getPathInfo();
+		if(StringUtils.isBlank(path)) { //getPathInfo may return null, redirect to {base}+'/' when that happens.
+			String fullPath = req.getRequestURI();
+			if(!fullPath.endsWith("/")) {
+				resp.sendRedirect(req.getContextPath() + req.getServletPath() + "/");
+				return;
+			} else {
+				//WebSphere likes to add a slash to the requestURI but leaves it out of the pathInfo
+				if(path == null) {
+					path = "/";
+				} else {
+					resp.sendError(404);
+					return;
+				}
+			}
+		}
+		if("/".equals(path)) {
+			path += WELCOME_FILE;
 		}
 
 		URL resource = findResource(path);
 		if(resource == null) {
-			resp.sendError(404, "file not found");
+			resp.sendError(404);
 			return;
 		}
 
-		MediaType mimeType = MimeTypeUtil.determineFromPathMimeType(path);
-		if(mimeType != null) {
-			resp.setContentType(mimeType.toString());
-		}
+		String mimeType = getServletContext().getMimeType(path);
+		resp.setContentType(mimeType != null ? mimeType : "application/octet-stream");
 
 		try(InputStream in = resource.openStream()) {
 			IOUtils.copy(in, resp.getOutputStream());
-		} catch (IOException e) {
-			log.warn("error reading or writing resource to servlet", e);
-			resp.sendError(500, e.getMessage());
-			return;
-		}
 
-		resp.flushBuffer();
+			resp.flushBuffer();
+		} catch (IOException e) {
+			// Either something has gone wrong, or the request has been cancelled
+			log.debug("error reading resource [{}]", resource, e);
+		}
 	}
 
-	private URL findResource(String path) {
-		String normalizedPath = FilenameUtils.normalize(path, true);
-		if(normalizedPath.startsWith("/")) {
-			normalizedPath = normalizedPath.substring(1);
-		}
-
-		URL url = null;
-		if(StringUtils.hasLength(frontendPath)) {
-			try {
-				url = new File(frontendPath + "/" + normalizedPath).toURI().toURL();
-				log.debug("looking up resource from frontendPath [{}/{}] to url [{}]", frontendPath, normalizedPath, url);
-			} catch (MalformedURLException e) {
-				log.error(e);
+	private @Nullable URL findResource(String path) {
+		try {
+			String normalized = FilenameUtils.normalize(frontendPath+path, true);
+			log.trace("trying to find resource [{}]", normalized);
+			URL resource = ClassUtils.getResourceURL(normalized);
+			if(resource == null) {
+				log.debug("unable to locate resource [{}]", path);
 			}
-		} else {
-			url = this.getClass().getResource("/frontend/"+normalizedPath);
-			log.debug("looking up resource from path [/frontend/{}] to url [{}]", normalizedPath, url);
+			return resource;
+		} catch (IOException e) {
+			log.warn("exception while locating file [{}]", path, e);
+			return null;
 		}
-
-		log.debug("{} resource from path [{}]", url == null ? "did not find" : "found", normalizedPath);
-		return url;
-    }
+	}
 }

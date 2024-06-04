@@ -11,7 +11,6 @@
 
 	<bean id="tomcat" class="org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory">
 		<property name="port" value="${frank-flow.port}"/>
-<!-- 		<property name="contextPath" value="${frank-flow.context-path}"/> -->
 	</bean>
 
 	<import resource="FrankConsoleContext.xml"/>

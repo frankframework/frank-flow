@@ -21,10 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.ws.rs.core.MediaType;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.MediaType;
 
 public abstract class MimeTypeUtil {
 
@@ -68,7 +67,7 @@ public abstract class MimeTypeUtil {
 		MediaType type = getMimeTypeMap().get(extension);
 		if(type == null) {
 			log.warn("unable to find MimeType for extension [{}] using default [application/octet-stream]", extension);
-			type = MediaType.APPLICATION_OCTET_STREAM_TYPE;
+			type = MediaType.APPLICATION_OCTET_STREAM;
 		} else {
 			log.debug("determined MimeType [{}] for extension [{}]", type, extension);
 		}
