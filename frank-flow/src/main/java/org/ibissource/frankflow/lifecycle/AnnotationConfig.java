@@ -15,16 +15,15 @@
 */
 package org.ibissource.frankflow.lifecycle;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ibissource.frankflow.BackendServlet;
 import org.ibissource.frankflow.FrontendServlet;
 import org.ibissource.frankflow.util.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -39,27 +38,20 @@ public class AnnotationConfig implements ServletContextAware {
 	private String basePath = null;
 	private ServletContext servletContext;
 
-	@Value("${frank-flow.context-path}/")
-	private String contextPath; // must start with SLASH and may not end with a SLASH, or Spring will FAIL.
-
 	@Value("${frank-flow.frontend-path:}")
 	private String frontendPath;
 
 	@Value("${configurations.directory}")
 	private String configurationsDirectory;
 
+	@Autowired
+	private ApplicationContext applicationContext;
+
 	@Bean
 	@Scope("singleton")
 	public String getBasePath() {
 		FileUtils.BASE_DIR = configurationsDirectory;
 		log.info("using configurations.directory [{}]", configurationsDirectory);
-
-		if(basePath == null) {
-			log.info("loading Frank!Flow using context-path [{}]", contextPath);
-			basePath = contextPath;
-
-			servletContext.setAttribute("basepath", basePath);
-		}
 
 		if(StringUtils.hasLength(frontendPath)) {
 			servletContext.setAttribute("frontend-location", frontendPath);
@@ -71,20 +63,18 @@ public class AnnotationConfig implements ServletContextAware {
 	@Bean
 	@Scope("singleton")
 	public ServletRegistrationBean<FrontendServlet> frontend() {
-		ServletRegistrationBean<FrontendServlet> servlet = new ServletRegistrationBean<>(new FrontendServlet());
-		servlet.addUrlMappings(getBasePath()+"*");
+		FrontendServlet frontendServlet = applicationContext.getAutowireCapableBeanFactory().createBean(FrontendServlet.class);
+		ServletRegistrationBean<FrontendServlet> servlet = new ServletRegistrationBean<>(frontendServlet);
+		servlet.addUrlMappings("/*");
 		return servlet;
 	}
 
 	@Bean
 	@Scope("singleton")
 	public ServletRegistrationBean<BackendServlet> backend() {
-		ServletRegistrationBean<BackendServlet> servlet = new ServletRegistrationBean<>(new BackendServlet());
-		Map<String, String> parameters = new HashMap<>();
-		parameters.put("config-location", "ApiContext.xml");
-		parameters.put("bus", "frank-flow-bus");
-		servlet.setInitParameters(parameters);
-		servlet.addUrlMappings(getBasePath()+"api/*");
+		BackendServlet backendServlet = applicationContext.getAutowireCapableBeanFactory().createBean(BackendServlet.class);
+		ServletRegistrationBean<BackendServlet> servlet = new ServletRegistrationBean<>(backendServlet);
+		servlet.addUrlMappings("/api/*");
 		return servlet;
 	}
 

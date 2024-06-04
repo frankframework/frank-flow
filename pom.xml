@@ -48,6 +48,11 @@
 		<dependencies>
 			<dependency>
 				<groupId>org.frankframework</groupId>
+				<artifactId>frank-flow-frontend</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.frankframework</groupId>
 				<artifactId>frank-flow</artifactId>
 				<version>${revision}</version>
 				<type>war</type>
@@ -267,6 +272,7 @@
 			</activation>
 			<modules>
 				<module>frank-flow</module>
+				<module>frontend</module>
 			</modules>
 		</profile>
 
