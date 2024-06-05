@@ -9,6 +9,10 @@
 
 	<context:property-placeholder location="classpath:application.properties"/>
 
-	<context:component-scan base-package="org.ibissource.frankflow.lifecycle" />
+	<context:component-scan base-package="org.ibissource.frankflow.lifecycle,org.ibissource.frankflow.api" />
+
+	<bean id="handlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+		<property name="useTrailingSlashMatch" value="true" />
+	</bean>
 
 </beans>

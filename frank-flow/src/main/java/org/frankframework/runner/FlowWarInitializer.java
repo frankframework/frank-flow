@@ -45,7 +45,7 @@ public class FlowWarInitializer extends SpringBootServletInitializer {
 	@Override
 	protected WebApplicationContext run(SpringApplication application) {
 		Set<String> set = new HashSet<>();
-		set.add("FrankConsoleContext.xml");
+		set.add("FrankFlowContext.xml");
 		application.setSources(set);
 
 		return super.run(application);

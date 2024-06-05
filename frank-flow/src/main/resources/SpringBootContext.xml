@@ -13,5 +13,5 @@
 		<property name="port" value="${frank-flow.port}"/>
 	</bean>
 
-	<import resource="FrankConsoleContext.xml"/>
+	<import resource="FrankFlowContext.xml"/>
 </beans>

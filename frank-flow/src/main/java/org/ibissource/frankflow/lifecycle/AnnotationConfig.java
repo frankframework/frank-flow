@@ -17,7 +17,6 @@ package org.ibissource.frankflow.lifecycle;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ibissource.frankflow.BackendServlet;
 import org.ibissource.frankflow.FrontendServlet;
 import org.ibissource.frankflow.util.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.ServletContextAware;
+import org.springframework.web.servlet.DispatcherServlet;
 
 import jakarta.servlet.ServletContext;
 
@@ -71,9 +71,9 @@ public class AnnotationConfig implements ServletContextAware {
 
 	@Bean
 	@Scope("singleton")
-	public ServletRegistrationBean<BackendServlet> backend() {
-		BackendServlet backendServlet = applicationContext.getAutowireCapableBeanFactory().createBean(BackendServlet.class);
-		ServletRegistrationBean<BackendServlet> servlet = new ServletRegistrationBean<>(backendServlet);
+	public ServletRegistrationBean<DispatcherServlet> backend() {
+		DispatcherServlet backendServlet = applicationContext.getAutowireCapableBeanFactory().createBean(DispatcherServlet.class);
+		ServletRegistrationBean<DispatcherServlet> servlet = new ServletRegistrationBean<>(backendServlet);
 		servlet.addUrlMappings("/api/*");
 		return servlet;
 	}
