@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package org.ibissource.frankflow.api;
+package org.frankframework.frankflow.api;
 
 import java.io.Serializable;
 import java.util.HashMap;

@@ -13,12 +13,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package org.ibissource.frankflow.lifecycle;
+package org.frankframework.frankflow.lifecycle;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.frankframework.frankflow.util.FileUtils;
 import org.ibissource.frankflow.FrontendServlet;
-import org.ibissource.frankflow.util.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;

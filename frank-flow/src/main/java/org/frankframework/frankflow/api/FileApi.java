@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package org.ibissource.frankflow.api;
+package org.frankframework.frankflow.api;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,8 +23,8 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
 import org.apache.commons.io.FilenameUtils;
-import org.ibissource.frankflow.util.FileUtils;
-import org.ibissource.frankflow.util.MimeTypeUtil;
+import org.frankframework.frankflow.util.FileUtils;
+import org.frankframework.frankflow.util.MimeTypeUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package org.ibissource.frankflow.api;
+package org.frankframework.frankflow.api;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.ibissource.frankflow.util.FileUtils;
+import org.frankframework.frankflow.util.FileUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

@@ -13,12 +13,12 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-package org.ibissource.frankflow.api;
+package org.frankframework.frankflow.api;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.ibissource.frankflow.util.InputStreamHttpMessageConverter;
+import org.frankframework.frankflow.util.InputStreamHttpMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.FormHttpMessageConverter;
