@@ -15,4 +15,8 @@
 		<property name="useTrailingSlashMatch" value="true" />
 	</bean>
 
+	<!-- Messaging Gateway -->
+	<bean id="outboundGateway" class="org.frankframework.management.bus.OutboundGatewayFactory">
+		<property name="gatewayClassname" value="${management.gateway.outbound.class}" />
+	</bean>
 </beans>

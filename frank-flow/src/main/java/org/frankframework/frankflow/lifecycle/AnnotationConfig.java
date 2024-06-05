@@ -26,20 +26,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.springframework.util.StringUtils;
-import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import jakarta.servlet.ServletContext;
-
 @Configuration
-public class AnnotationConfig implements ServletContextAware {
+public class AnnotationConfig {
 	private Logger log = LogManager.getLogger(this);
 	private String basePath = null;
-	private ServletContext servletContext;
-
-	@Value("${frank-flow.frontend-path:}")
-	private String frontendPath;
 
 	@Value("${configurations.directory}")
 	private String configurationsDirectory;
@@ -49,13 +41,9 @@ public class AnnotationConfig implements ServletContextAware {
 
 	@Bean
 	@Scope("singleton")
-	public String getBasePath() {
+	public String getConfigurationsDirectory() {
 		FileUtils.BASE_DIR = configurationsDirectory;
 		log.info("using configurations.directory [{}]", configurationsDirectory);
-
-		if(StringUtils.hasLength(frontendPath)) {
-			servletContext.setAttribute("frontend-location", frontendPath);
-		}
 
 		return basePath;
 	}
@@ -76,10 +64,5 @@ public class AnnotationConfig implements ServletContextAware {
 		ServletRegistrationBean<DispatcherServlet> servlet = new ServletRegistrationBean<>(backendServlet);
 		servlet.addUrlMappings("/api/*");
 		return servlet;
-	}
-
-	@Override
-	public void setServletContext(ServletContext servletContext) {
-		this.servletContext = servletContext;
 	}
 }
