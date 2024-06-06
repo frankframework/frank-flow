@@ -28,64 +28,48 @@ import org.frankframework.management.bus.BusMessageUtils;
 import org.frankframework.management.bus.BusTopic;
 import org.frankframework.management.bus.OutboundGateway;
 import org.frankframework.util.JacksonUtils;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ConfigurationApi implements InitializingBean {
-	private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
+public class ConfigurationApi {
 	private static final String DEFAULT_FF_CONFIGURATION_PREFIX = "IAF_";
 
 	@Autowired
-	private ApplicationContext applicationContext;
-
-	private OutboundGateway<String> gateway;
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public void afterPropertiesSet() throws Exception {
-		gateway = applicationContext.getBean(OutboundGateway.class);
-	}
+	private OutboundGateway gateway;
 
 	@GetMapping(value = "/configurations", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getConfigurations() {
 		Message<String> request = MessageBuilder.withPayload("NONE").setHeader(BusTopic.TOPIC_HEADER_NAME, BusTopic.CONFIGURATION.name()).setHeader(BusAction.ACTION_HEADER_NAME, BusAction.FIND.name()).build();
-		Message<String> response = gateway.sendSyncMessage(request);
+
+		Message<Object> response = gateway.sendSyncMessage(request);
+		List<ConfigurationDTO> configs = getConfigurations(response);
 		List<String> configurations = new ArrayList<>();
-		if(MediaType.APPLICATION_JSON_VALUE.equals(response.getHeaders().get(BusMessageUtils.HEADER_PREFIX+"type"))) {
-			ConfigurationDTO[] configs = JacksonUtils.convertToDTO(response.getPayload(), ConfigurationDTO[].class);
-			for(ConfigurationDTO config : configs) {
-				if(!config.getName().startsWith(DEFAULT_FF_CONFIGURATION_PREFIX)) {
-					configurations.add(config.getName());
-				}
+		for(ConfigurationDTO config : configs) {
+			if(!config.getName().startsWith(DEFAULT_FF_CONFIGURATION_PREFIX)) {
+				configurations.add(config.getName());
 			}
-		} else {
-			new ApiException("Bus response was in unknown format");
 		}
 
 		return ResponseEntity.status(HttpStatus.OK).body(configurations);
 	}
 
-	@GetMapping(value = "/configurations2", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getConfigurations2() {
-		List<String> configurations = new ArrayList<>();
-		for(File folder : FileUtils.getBaseDir().listFiles()) {
-			configurations.add(folder.getName());
+	@SuppressWarnings("unchecked")
+	private List<ConfigurationDTO> getConfigurations(Message<?> response) {
+		if(MediaType.APPLICATION_JSON_VALUE.equals(response.getHeaders().get(BusMessageUtils.HEADER_PREFIX+"type"))) {
+			ConfigurationDTO[] arr = JacksonUtils.convertToDTO(response.getPayload(), ConfigurationDTO[].class);
+			return List.of(arr); //TODO new TypeReference<List<ConfigurationDTO>>(){}
+		} else if(response.getPayload() instanceof List configs) {
+			return configs;
 		}
-
-		return ResponseEntity.status(HttpStatus.OK).body(configurations);
+		throw new ApiException("unexpected result returned by Bus");
 	}
 
 	@GetMapping(value = "/configurations/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
