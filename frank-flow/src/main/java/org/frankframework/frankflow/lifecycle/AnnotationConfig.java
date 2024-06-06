@@ -18,8 +18,8 @@ package org.frankframework.frankflow.lifecycle;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.frankframework.frankflow.standalone.LocalFlowGateway;
 import org.frankframework.frankflow.util.FileUtils;
+import org.frankframework.management.bus.LocalGateway;
 import org.frankframework.management.bus.OutboundGatewayFactory;
 import org.frankframework.management.gateway.HazelcastOutboundGateway;
 import org.ibissource.frankflow.FrontendServlet;
@@ -75,9 +75,8 @@ public class AnnotationConfig {
 	public OutboundGatewayFactory createOutboundGatewayFactory() {
 		OutboundGatewayFactory factory = new OutboundGatewayFactory();
 		String configDirectory = applicationContext.getEnvironment().getProperty("configurations.directory");
-		String gatewayClassName = StringUtils.isEmpty(configDirectory) ? HazelcastOutboundGateway.class.getCanonicalName() : LocalFlowGateway.class.getCanonicalName();
+		String gatewayClassName = StringUtils.isEmpty(configDirectory) ? HazelcastOutboundGateway.class.getCanonicalName() : LocalGateway.class.getCanonicalName();
 		factory.setGatewayClassname(gatewayClassName);
-		factory.setGatewayClassname(HazelcastOutboundGateway.class.getCanonicalName());
 		return factory;
 	}
 

@@ -61,13 +61,10 @@ public class ConfigurationApi {
 		return ResponseEntity.status(HttpStatus.OK).body(configurations);
 	}
 
-	@SuppressWarnings("unchecked")
 	private List<ConfigurationDTO> getConfigurations(Message<?> response) {
 		if(MediaType.APPLICATION_JSON_VALUE.equals(response.getHeaders().get(BusMessageUtils.HEADER_PREFIX+"type"))) {
 			ConfigurationDTO[] arr = JacksonUtils.convertToDTO(response.getPayload(), ConfigurationDTO[].class);
 			return List.of(arr); //TODO new TypeReference<List<ConfigurationDTO>>(){}
-		} else if(response.getPayload() instanceof List configs) {
-			return configs;
 		}
 		throw new ApiException("unexpected result returned by Bus");
 	}
