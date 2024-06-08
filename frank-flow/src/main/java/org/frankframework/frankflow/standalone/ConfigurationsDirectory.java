@@ -74,6 +74,7 @@ public class ConfigurationsDirectory {
 		for(File folder : FileUtils.getBaseDir().listFiles()) {
 			ConfigurationDTO dto = new ConfigurationDTO();
 			dto.setName(folder.getName());
+			dto.setDirectory(folder.getAbsolutePath());
 			configurations.add(dto);
 		}
 
