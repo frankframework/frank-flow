@@ -20,6 +20,7 @@ import java.util.Objects;
 
 import org.apache.commons.io.FilenameUtils;
 import org.frankframework.frankflow.util.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +35,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DirectoryApi {
 
+	@Autowired
+	private Configurations configurations;
+
 	@PostMapping(value = "/configurations/{name}/directories", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> makeDirectory(@PathVariable("name") String configurationName, @RequestParam("path") String path) {
-		File rootFolder = FileUtils.getDir(configurationName);
+		File rootFolder = FileUtils.getConfigurationRoot(configurations.getConfiguration(configurationName));
 		File file = getFile(rootFolder, path);
 
 		if(file.exists()) {
@@ -56,7 +60,7 @@ public class DirectoryApi {
 			throw new ApiException("An unexpected error occurred, property [newName] does not exist or is empty");
 		}
 
-		File rootFolder = FileUtils.getDir(configurationName);
+		File rootFolder = FileUtils.getConfigurationRoot(configurations.getConfiguration(configurationName));
 		File file = getFile(rootFolder, path);
 
 		if(path.contains("/")) {
@@ -82,7 +86,7 @@ public class DirectoryApi {
 
 	@DeleteMapping(value = "/configurations/{name}/directories", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> deleteDirectory(@PathVariable("name") String configurationName, @RequestParam("path") String path) {
-		File rootFolder = FileUtils.getDir(configurationName);
+		File rootFolder = FileUtils.getConfigurationRoot(configurations.getConfiguration(configurationName));
 		File file = getFile(rootFolder, path);
 
 		if(!file.exists()) {

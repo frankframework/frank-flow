@@ -1,5 +1,5 @@
 /*
-   Copyright 2020 WeAreFrank!
+   Copyright 2020 - 2024 WeAreFrank!
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -17,38 +17,19 @@ package org.frankframework.frankflow.util;
 
 import java.io.File;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.frankframework.frankflow.dto.ConfigurationDTO;
 
 public abstract class FileUtils {
 
-	private static final Logger log = LogManager.getLogger(FileUtils.class);
-	public static String BASE_DIR;
-
-	public static File getBaseDir() {
-		log.info("using configurations.directory [{}]", BASE_DIR);
-		return getDir((File)null, BASE_DIR);
+	public static File getConfigurationRoot(ConfigurationDTO config) {
+		return getDir(config.getDirectory());
 	}
 
 	/**
 	 * Get sub-directory relative to baseDir
 	 */
-	public static File getDir(String directory) {
-		return getDir(getBaseDir(), directory);
-	}
-
-	/**
-	 * Get sub-directory relative to baseDir
-	 */
-	public static File getDir(String baseDir, String directory) {
-		return getDir(getDir(baseDir), directory);
-	}
-
-	/**
-	 * Get sub-directory relative to baseDir
-	 */
-	private static File getDir(File baseDir, String directory) {
-		File dir = new File(baseDir, directory);
+	private static File getDir(String directory) {
+		File dir = new File(directory);
 		if(!dir.exists()) {
 			throw new IllegalStateException("path ["+directory+"] doesn't not exist");
 		}

@@ -25,6 +25,7 @@ import java.nio.file.StandardCopyOption;
 import org.apache.commons.io.FilenameUtils;
 import org.frankframework.frankflow.util.FileUtils;
 import org.frankframework.frankflow.util.MimeTypeUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,9 +43,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class FileApi {
 
+	@Autowired
+	private Configurations configurations;
+
 	@GetMapping(value = "/configurations/{name}/files", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getFile(@PathVariable("name") String configurationName, @RequestParam("path") String path) {
-		File rootFolder = FileUtils.getDir(configurationName);
+		File rootFolder = FileUtils.getConfigurationRoot(configurations.getConfiguration(configurationName));
 		File file = getFile(rootFolder, path);
 		if(!file.exists()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -68,7 +72,7 @@ public class FileApi {
 			throw new ApiException("Missing form-data [file] parameter");
 		}
 
-		File rootFolder = FileUtils.getDir(configurationName);
+		File rootFolder = FileUtils.getConfigurationRoot(configurations.getConfiguration(configurationName));
 		File file = getFile(rootFolder, path);
 		if(file.exists()) {
 			if(file.isDirectory()) {
@@ -96,7 +100,7 @@ public class FileApi {
 			throw new ApiException("An unexpected error occurred, property [newName] does not exist or is empty");
 		}
 
-		File rootFolder = FileUtils.getDir(configurationName);
+		File rootFolder = FileUtils.getConfigurationRoot(configurations.getConfiguration(configurationName));
 		File file = getFile(rootFolder, path);
 
 		if(path.contains("/")) {
@@ -127,7 +131,7 @@ public class FileApi {
 			throw new ApiException("Missing form-data [file] parameter");
 		}
 
-		File rootFolder = FileUtils.getDir(configurationName);
+		File rootFolder = FileUtils.getConfigurationRoot(configurations.getConfiguration(configurationName));
 		File file = getFile(rootFolder, path);
 		if(file.exists()) {
 			throw new ApiException("File already exists", HttpStatus.CONFLICT);
@@ -148,7 +152,7 @@ public class FileApi {
 
 	@DeleteMapping(value = "/configurations/{name}/files", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> deleteFile(@PathVariable("name") String configurationName, @RequestParam("path") String path) {
-		File rootFolder = FileUtils.getDir(configurationName);
+		File rootFolder = FileUtils.getConfigurationRoot(configurations.getConfiguration(configurationName));
 		File file = getFile(rootFolder, path);
 		if(!file.exists()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

@@ -19,11 +19,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.frankframework.frankflow.dto.ConfigurationDTO;
-import org.frankframework.frankflow.util.FileUtils;
 import org.frankframework.management.bus.BusAction;
 import org.frankframework.management.bus.BusTopic;
 import org.frankframework.management.bus.message.JsonMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.integration.core.MessageSelector;
 import org.springframework.integration.dispatcher.MessageDispatcher;
@@ -40,6 +42,10 @@ import jakarta.annotation.security.RolesAllowed;
  */
 @Component
 public class ConfigurationsDirectory {
+	private static final Logger log = LogManager.getLogger(ConfigurationsDirectory.class);
+
+	@Value("${configurations.directory}")
+	private String configurationsDirectory;
 
 	/**
 	 * This method is picked up by the IbisInitializer annotation and autowired via the SpringEnvironmentContext.
@@ -65,13 +71,26 @@ public class ConfigurationsDirectory {
 		return serviceActivator;
 	}
 
+	private File getConfigurationsDirectory() {
+		log.info("using configurations.directory [{}]", configurationsDirectory);
+		File dir = new File(configurationsDirectory);
+
+		if(!dir.exists()) {
+			throw new IllegalStateException("path ["+configurationsDirectory+"] doesn't not exist");
+		}
+		if(!dir.isDirectory()) {
+			throw new IllegalStateException("path ["+configurationsDirectory+"] is not a directory");
+		}
+		return dir;
+	}
+
 	/**
 	 * The actual action that is performed when calling the bus with the LOGGING topic.
 	 */
 	@RolesAllowed({"IbisObserver", "IbisDataAdmin", "IbisAdmin", "IbisTester"})
 	public Message<String> getConfigurationsDirectory(Message<?> message) {
 		List<ConfigurationDTO> configurations = new ArrayList<>();
-		for(File folder : FileUtils.getBaseDir().listFiles()) {
+		for(File folder : getConfigurationsDirectory().listFiles()) {
 			ConfigurationDTO dto = new ConfigurationDTO();
 			dto.setName(folder.getName());
 			dto.setDirectory(folder.getAbsolutePath());

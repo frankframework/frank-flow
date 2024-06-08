@@ -16,15 +16,11 @@
 package org.frankframework.frankflow.lifecycle;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.frankframework.frankflow.util.FileUtils;
 import org.frankframework.management.bus.LocalGateway;
 import org.frankframework.management.bus.OutboundGatewayFactory;
 import org.frankframework.management.gateway.HazelcastOutboundGateway;
 import org.ibissource.frankflow.FrontendServlet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -34,23 +30,9 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 @Configuration
 public class AnnotationConfig {
-	private Logger log = LogManager.getLogger(this);
-	private String basePath = null;
-
-	@Value("${configurations.directory}")
-	private String configurationsDirectory;
 
 	@Autowired
 	private ApplicationContext applicationContext;
-
-	@Bean
-	@Scope("singleton")
-	public String getConfigurationsDirectory() {
-		FileUtils.BASE_DIR = configurationsDirectory;
-		log.info("using configurations.directory [{}]", configurationsDirectory);
-
-		return basePath;
-	}
 
 	@Bean
 	@Scope("singleton")
