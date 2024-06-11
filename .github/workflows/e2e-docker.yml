@@ -33,8 +33,8 @@ jobs:
       - name: Run Cypress using the frank-framework Docker image
         uses: cypress-io/github-action@v2.9.7
         with:
-          working-directory: frank-flow/src/frontend/
-          build: yarn build
+          working-directory: frontend/src/main/frontend/
+          build: npx ng build
           start: docker-compose up -d
           wait-on: "http://localhost:8080/"
           wait-on-timeout: 360

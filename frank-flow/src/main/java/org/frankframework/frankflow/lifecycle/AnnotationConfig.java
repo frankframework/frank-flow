@@ -15,6 +15,7 @@
 */
 package org.frankframework.frankflow.lifecycle;
 
+import jakarta.servlet.MultipartConfigElement;
 import org.apache.commons.lang3.StringUtils;
 import org.frankframework.management.bus.LocalGateway;
 import org.frankframework.management.bus.OutboundGatewayFactory;
@@ -48,6 +49,7 @@ public class AnnotationConfig {
 	public ServletRegistrationBean<DispatcherServlet> backend() {
 		DispatcherServlet backendServlet = applicationContext.getAutowireCapableBeanFactory().createBean(DispatcherServlet.class);
 		ServletRegistrationBean<DispatcherServlet> servlet = new ServletRegistrationBean<>(backendServlet);
+		servlet.setMultipartConfig(new MultipartConfigElement(""));
 		servlet.addUrlMappings("/api/*");
 		return servlet;
 	}

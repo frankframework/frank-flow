@@ -15,13 +15,11 @@
 */
 package org.frankframework.frankflow.api;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
+import jakarta.servlet.annotation.MultipartConfig;
 import org.apache.commons.io.FilenameUtils;
 import org.frankframework.frankflow.util.FileUtils;
 import org.frankframework.frankflow.util.MimeTypeUtil;
@@ -67,7 +65,7 @@ public class FileApi {
 	}
 
 	@PutMapping(value = "/configurations/{name}/files", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> createFolder(@PathVariable("name") String configurationName, @RequestParam("path") String path, @RequestPart MultipartFile fileAttachment) {
+	public ResponseEntity<?> createFolder(@PathVariable("name") String configurationName, @RequestParam("path") String path, @RequestPart("file") String fileAttachment) {
 		if(fileAttachment == null) {
 			throw new ApiException("Missing form-data [file] parameter");
 		}
@@ -79,7 +77,7 @@ public class FileApi {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 			}
 
-			try(InputStream is = fileAttachment.getInputStream()) {
+			try(InputStream is = new ByteArrayInputStream(fileAttachment.getBytes())) {
 				Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 				return ResponseEntity.status(HttpStatus.OK).build();
 			} catch (IOException e) {
@@ -90,13 +88,10 @@ public class FileApi {
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
-	public static record FormFileModel(MultipartFile file) {
-	}
-
 	@PatchMapping(value = "/configurations/{name}/files", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> renameFolder(@PathVariable("name") String configurationName, @RequestParam("path") String path, @RequestPart("newName") String newName) {
 
-		if(newName == null || newName.equals("")) {
+		if(newName == null || newName.isEmpty()) {
 			throw new ApiException("An unexpected error occurred, property [newName] does not exist or is empty");
 		}
 
@@ -126,7 +121,7 @@ public class FileApi {
 	}
 
 	@PostMapping(value = "/configurations/{name}/files", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> saveFile(@PathVariable("name") String configurationName, @RequestParam("path") String path, @RequestPart MultipartFile fileAttachment) {
+	public ResponseEntity<?> saveFile(@PathVariable("name") String configurationName, @RequestParam("path") String path, @RequestPart("file") String fileAttachment) {
 		if(fileAttachment == null) {
 			throw new ApiException("Missing form-data [file] parameter");
 		}
@@ -137,7 +132,7 @@ public class FileApi {
 			throw new ApiException("File already exists", HttpStatus.CONFLICT);
 		}
 
-		try(InputStream is = fileAttachment.getInputStream()) {
+		try(InputStream is = new ByteArrayInputStream(fileAttachment.getBytes())) {
 			Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
 			// the file should always exist, lets make sure though, you never know...
