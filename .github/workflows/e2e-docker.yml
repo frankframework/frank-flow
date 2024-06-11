@@ -11,9 +11,9 @@ jobs:
     steps:
 
       - name: Checkout frank-flow repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Use Node.js 21.x
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: 21.x
 
@@ -27,7 +27,7 @@ jobs:
         run: mvn install -P frankframework,ci
 
       - name: Cache local Maven repository
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         env:
           cache-name: cache-maven-dependencies
         with:
@@ -37,7 +37,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Run Cypress using the frank-framework Docker image
-        uses: cypress-io/github-action@v6.7.0
+        uses: cypress-io/github-action@v6
         with:
           working-directory: frontend/src/main/frontend/
           build: npm run build:prod
