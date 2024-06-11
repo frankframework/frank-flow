@@ -59,11 +59,11 @@
 					<execution>
 						<id>npm build</id>
 						<goals>
-							<goal>npx</goal>
+							<goal>npm</goal>
 						</goals>
 						<phase>generate-resources</phase>
 						<configuration>
-							<arguments>ng build -c development</arguments>
+							<arguments>run build:prod</arguments>
 						</configuration>
 					</execution>
 				</executions>
@@ -221,10 +221,10 @@
 								</goals>
 								<phase>generate-resources</phase>
 								<configuration>
-									<executable>npx</executable>
+									<executable>npm</executable>
 									<arguments>
-										<argument>ng</argument>
-										<argument>build</argument>
+										<argument>run</argument>
+										<argument>build:prod</argument>
 									</arguments>
 								</configuration>
 							</execution>

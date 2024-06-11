@@ -40,7 +40,7 @@ jobs:
         uses: cypress-io/github-action@v2.9.7
         with:
           working-directory: frontend/src/main/frontend/
-          build: npx ng build
+          build: npm run build:prod
           start: docker-compose up -d
           wait-on: "http://localhost:8080/"
           wait-on-timeout: 360
