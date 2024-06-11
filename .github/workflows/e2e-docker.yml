@@ -17,6 +17,12 @@ jobs:
         with:
           node-version: 21.x
 
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
       - name: Build the backend
         run: mvn install -P frankframework
 
