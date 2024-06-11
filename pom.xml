@@ -1,26 +1,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.ibissource</groupId>
+	<groupId>org.frankframework</groupId>
 	<artifactId>frank-flow-parent</artifactId>
 	<version>${revision}</version>
 	<packaging>pom</packaging>
 
 	<properties>
-		<revision>0.0.0-SNAPSHOT</revision>
-		<nexusVersion>2.27.1-SNAPSHOT</nexusVersion>
+		<revision>3.0.0-SNAPSHOT</revision>
+		<nexusVersion>3.0.0-SNAPSHOT</nexusVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<log4j2.version>2.19.0</log4j2.version>
-		<cxf.version>3.5.4</cxf.version>
+
+		<log4j2.version>2.23.1</log4j2.version>
+		<spring.version>6.1.8</spring.version>
+		<spring-security.version>6.3.0</spring-security.version>
+		<spring-integration.version>6.2.4</spring-integration.version>
+		<spring.boot.version>3.3.0</spring.boot.version>
+		<tomcat.version>10.1.24</tomcat.version>
+		<frankframework.version>8.2.0-20240611.042327</frankframework.version>
 	</properties>
 
 	<name>Frank!Flow Parent</name>
-	<description>Graphical flow editor for Frank configurations</description>
-	<url>https://github.com/ibissource/frank-flow</url>
+	<description>Graphical flow editor for Frank!Configurations</description>
+	<url>https://github.com/frankframework/frank-flow</url>
 
 	<organization>
-		<name>Ibissource.org</name>
-		<url>https://ibissource.org</url>
+		<name>frankframework.org</name>
+		<url>https://frankframework.org</url>
 	</organization>
 
 	<licenses>
@@ -32,69 +38,141 @@
 	</licenses>
 
 	<scm>
-		<url>https://github.com/ibissource/frank-flow.git</url>
-		<connection>scm:git:https://github.com/ibissource/frank-flow.git</connection>
-		<developerConnection>scm:git:https://github.com/ibissource/frank-flow.git</developerConnection>
+		<url>https://github.com/frankframework/frank-flow.git</url>
+		<connection>scm:git:https://github.com/frankframework/frank-flow.git</connection>
+		<developerConnection>scm:git:https://github.com/frankframework/frank-flow.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.ibissource</groupId>
+				<groupId>org.frankframework</groupId>
+				<artifactId>frank-flow-frontend</artifactId>
+				<version>${revision}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.frankframework</groupId>
 				<artifactId>frank-flow</artifactId>
-				<version>${revision}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.ibissource</groupId>
-				<artifactId>frank-flow-launcher</artifactId>
-				<version>${revision}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.ibissource</groupId>
-				<artifactId>frank-flow-webapp</artifactId>
 				<version>${revision}</version>
 				<type>war</type>
 			</dependency>
 
 			<dependency>
-				<groupId>javax.ws.rs</groupId>
-				<artifactId>javax.ws.rs-api</artifactId>
-				<version>2.1.1</version>
+				<groupId>org.frankframework</groupId>
+				<artifactId>frankframework-parent</artifactId>
+				<version>${frankframework.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- import BOM to lock all versions -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>${spring.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- import BOM to lock all versions -->
+			<dependency>
+				<groupId>org.springframework.integration</groupId>
+				<artifactId>spring-integration-bom</artifactId>
+				<version>${spring-integration.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- explicitly define Spring dependencies, to avoid version conflicts with Spring Security (https://www.baeldung.com/spring-security-with-maven) -->
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-bom</artifactId>
+				<version>${spring-security.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- import BOM to lock all versions -->
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-bom</artifactId>
+				<version>${log4j2.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- Spring Boot context loaders -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter</artifactId>
+				<version>${spring.boot.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-starter-logging</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-autoconfigure</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.yaml</groupId>
+						<artifactId>snakeyaml</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-security</artifactId>
+				<version>${spring.boot.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-tomcat</artifactId>
+				<version>${spring.boot.version}</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- contains the class and application 'loaders' for executable archives -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-loader</artifactId>
+				<version>${spring.boot.version}</version>
+				<scope>provided</scope>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.logging.log4j</groupId>
-				<artifactId>log4j-core</artifactId>
-				<version>${log4j2.version}</version>
-			</dependency>
-			<!-- Servlet support for multiple contexts -->
-			<dependency>
-				<groupId>org.apache.logging.log4j</groupId>
-				<artifactId>log4j-web</artifactId>
-				<version>${log4j2.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.logging.log4j</groupId>
-				<artifactId>log4j-api</artifactId>
-				<version>${log4j2.version}</version>
-			</dependency>
-			<!-- LOG4J SLF4J bridge -->
-			<dependency>
-				<groupId>org.apache.logging.log4j</groupId>
-				<artifactId>log4j-slf4j-impl</artifactId>
-				<version>${log4j2.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>javax.servlet-api</artifactId>
-				<version>3.1.0</version>
+				<groupId>jakarta.servlet</groupId>
+				<artifactId>jakarta.servlet-api</artifactId>
+				<version>6.0.0</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>[4.13.1,)</version>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-logging</artifactId>
+				<version>${spring.boot.version}</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- test scoped dependencies -->
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-engine</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-params</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -106,8 +184,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.10.1</version>
 				<configuration>
-					<source>11</source>
-					<target>11</target>
+					<source>17</source>
+					<target>17</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -153,15 +231,6 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.3</version>
-				<configuration>
-					<tagNameFormat>v@{project.version}</tagNameFormat>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 				<version>3.12.1</version>
 			</plugin>
@@ -203,6 +272,7 @@
 			</activation>
 			<modules>
 				<module>frank-flow</module>
+				<module>frontend</module>
 			</modules>
 		</profile>
 
@@ -211,7 +281,7 @@
 			<distributionManagement>
 				<repository>
 					<id>frankframework</id>
-					<url>https://nexus.frankframework.org/content/repositories/releases</url>
+					<url>https://nexus.frankframework.org/content/repositories/frank-flow</url>
 				</repository>
 				<snapshotRepository>
 					<id>frankframework</id>

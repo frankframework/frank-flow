@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
-	<JarScanner scanClassPath="false" scanAllFiles="false" scanAllDirectories="false"/>
+<!--	<JarScanner scanClassPath="false" scanAllFiles="false" scanAllDirectories="false"/>-->
 
 	<Resource
 			name="jdbc/${database.instance.name}"

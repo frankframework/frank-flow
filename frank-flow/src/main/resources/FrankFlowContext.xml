@@ -2,16 +2,20 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:integration="http://www.springframework.org/schema/integration"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-5.2.xsd
 	">
 
 	<context:property-placeholder location="classpath:application.properties"/>
 
-	<bean id="tomcat" class="org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory">
-		<property name="port" value="${frank-flow.port}"/>
+	<context:component-scan base-package="org.frankframework.frankflow" />
+
+	<bean id="handlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+		<property name="useTrailingSlashMatch" value="true" />
 	</bean>
 
-	<import resource="FrankFlowContext.xml"/>
+	<integration:publish-subscribe-channel id="frank-management-bus" />
 </beans>

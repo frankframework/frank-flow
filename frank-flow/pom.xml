@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.ibissource</groupId>
+		<groupId>org.frankframework</groupId>
 		<artifactId>frank-flow-parent</artifactId>
 		<version>${revision}</version>
 	</parent>
@@ -11,42 +11,47 @@
 	<name>Frank!Flow</name>
 	<packaging>war</packaging>
 
-	<properties>
-		<spring.version>5.3.33</spring.version>
-		<spring.boot.version>2.7.18</spring.boot.version>
-	</properties>
-
 	<dependencies>
+		<dependency>
+			<groupId>org.frankframework</groupId>
+			<artifactId>frank-flow-frontend</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.frankframework</groupId>
+			<artifactId>frankframework-commons</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.frankframework</groupId>
+			<artifactId>frankframework-management-gateway</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
-			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
 		</dependency>
 
 		<dependency>
@@ -55,117 +60,58 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-rs-client</artifactId>
-			<version>${cxf.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.sun.activation</groupId>
-					<artifactId>jakarta.activation</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>jakarta.xml.bind</groupId>
-					<artifactId>jakarta.xml.bind-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.activation</groupId>
-			<artifactId>jakarta.activation</artifactId>
-			<version>2.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>jakarta.xml.bind</groupId>
-			<artifactId>jakarta.xml.bind-api</artifactId>
-			<version>2.3.3</version>
-		</dependency>
-		<dependency>
-			<groupId>jakarta.xml.ws</groupId>
-			<artifactId>jakarta.xml.ws-api</artifactId>
-			<version>2.3.3</version>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.10.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
 		</dependency>
-
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-jaxrs</artifactId>
-			<version>1.1.1</version>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>javax.json</artifactId>
-			<version>1.0.4</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
 		</dependency>
-
 		<dependency>
-			<groupId>javax.ws.rs</groupId>
-			<artifactId>javax.ws.rs-api</artifactId>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
 		</dependency>
 
 		<!-- executable war deps -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
-			<version>${spring.boot.version}</version>
 		</dependency>
 
 		<!-- provided dependencies will be added to the executable (Spring) WAR -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<version>${spring.boot.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-loader</artifactId>
-			<version>${spring.boot.version}</version>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<defaultGoal>package spring-boot:repackage</defaultGoal>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<directory>target/frontend</directory>
-				<includes>
-					<include>**/**</include>
-				</includes>
-				<targetPath>frontend</targetPath>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>2.7.18</version>
 				<configuration>
-					<mainClass>org.frankframework.runner.StandaloneInitializer</mainClass>
+					<mainClass>org.frankframework.runner.FlowStandaloneInitializer</mainClass>
 					<layout>WAR</layout>
 				</configuration>
 				<executions>
@@ -178,100 +124,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>frontend</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>com.github.eirslett</groupId>
-						<artifactId>frontend-maven-plugin</artifactId>
-						<version>1.12.1</version>
-						<configuration>
-							<workingDirectory>src/frontend</workingDirectory>
-							<installDirectory>src/frontend</installDirectory>
-						</configuration>
-						<executions>
-							<execution>
-								<phase>generate-resources</phase>
-								<id>install node and npm</id>
-								<goals>
-									<goal>install-node-and-yarn</goal>
-								</goals>
-								<configuration>
-									<nodeVersion>v20.10.0</nodeVersion>
-									<yarnVersion>v1.22.17</yarnVersion>
-								</configuration>
-							</execution>
-
-							<execution>
-								<phase>generate-resources</phase>
-								<id>yarn</id>
-								<goals>
-									<goal>yarn</goal>
-								</goals>
-							</execution>
-
-							<execution>
-								<phase>generate-resources</phase>
-								<id>Angular build production</id>
-								<goals>
-									<goal>yarn</goal>
-								</goals>
-								<configuration>
-									<arguments>build:prod</arguments>
-									<workingDirectory>src/frontend</workingDirectory>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>ci</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>3.1.1</version>
-						<configuration>
-							<workingDirectory>${project.basedir}/src/frontend</workingDirectory>
-						</configuration>
-						<executions>
-							<execution>
-								<id>npm install</id>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<phase>generate-resources</phase>
-								<configuration>
-									<executable>npm</executable>
-									<arguments>
-										<argument>install</argument>
-									</arguments>
-								</configuration>
-							</execution>
-							<execution>
-								<id>build</id>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<phase>generate-resources</phase>
-								<configuration>
-									<executable>npm</executable>
-									<arguments>
-										<argument>run</argument>
-										<argument>build:prod</argument>
-									</arguments>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>

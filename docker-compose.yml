@@ -6,9 +6,4 @@ services:
     build: .
     ports:
       - "8080:8080"
-    environment:
-      - dtap.stage=LOC
-      - instance.name=Frank2FrankFlow
-      - database.instance.name=frank2frankflow
-      - database.name=database
     restart: unless-stopped

@@ -1,0 +1,237 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.frankframework</groupId>
+		<artifactId>frank-flow-parent</artifactId>
+		<version>${revision}</version>
+	</parent>
+
+	<artifactId>frank-flow-frontend</artifactId>
+	<name>Frank!Flow Frontend</name>
+
+	<properties>
+		<frontend.source.location>${project.basedir}/src/main/frontend</frontend.source.location>
+		<frontend.target.location>${project.build.directory}/frontend</frontend.target.location>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.frankframework</groupId>
+			<artifactId>frankframework-commons</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<defaultGoal>generate-resources</defaultGoal>
+		<plugins>
+			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>install node and npm</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<phase>generate-resources</phase>
+					</execution>
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm build</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<arguments>run build:prod</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.3.1</version>
+				<executions>
+					<execution>
+						<id>copy NPM dist to Maven build folder</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.outputDirectory}/flow-frontend</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${frontend.target.location}</directory>
+									<filtering>false</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!-- This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>com.github.eirslett</groupId>
+										<artifactId>frontend-maven-plugin</artifactId>
+										<versionRange>[1.12,)</versionRange>
+										<goals>
+											<goal>install-node-and-npm</goal>
+											<goal>npm</goal>
+											<goal>npx</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>com.github.hazendaz.maven</groupId>
+										<artifactId>directory-maven-plugin</artifactId>
+										<versionRange>[1,)</versionRange>
+										<goals>
+											<goal>directory-of</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>com.github.eirslett</groupId>
+					<artifactId>frontend-maven-plugin</artifactId>
+					<version>1.15.0</version>
+					<configuration>
+						<nodeVersion>v20.11.1</nodeVersion>
+						<workingDirectory>${frontend.source.location}</workingDirectory><!-- frontend resources -->
+						<installDirectory>${project.build.directory}</installDirectory><!-- npm + npx install folder -->
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${javadoc-plugin.version}</version>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<developers>
+		<developer>
+			<name>Niels Meijer</name>
+			<email>niels@frankframework.org</email>
+			<organization>Frank!Framework</organization>
+			<organizationUrl>https://frankframework.org</organizationUrl>
+		</developer>
+		<developer>
+			<name>Vivy Booman</name>
+			<email>vivy@frankframework.org</email>
+			<organization>Frank!Framework</organization>
+			<organizationUrl>https://frankframework.org</organizationUrl>
+		</developer>
+		<developer>
+			<name>Sergi Philipsen</name>
+			<email>sergi@frankframework.org</email>
+			<organization>Frank!Framework</organization>
+			<organizationUrl>https://frankframework.org</organizationUrl>
+		</developer>
+	</developers>
+
+	<profiles>
+		<profile>
+			<id>ci</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.3.0</version>
+						<configuration>
+							<workingDirectory>${frontend.source.location}</workingDirectory>
+						</configuration>
+						<executions>
+							<execution>
+								<id>npm install</id>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<phase>generate-resources</phase>
+								<configuration>
+									<executable>npm</executable>
+									<arguments>
+										<argument>install</argument>
+									</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>ng build</id>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<phase>generate-resources</phase>
+								<configuration>
+									<executable>npm</executable>
+									<arguments>
+										<argument>run</argument>
+										<argument>build:prod</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>
