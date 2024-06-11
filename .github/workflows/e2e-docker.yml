@@ -24,7 +24,7 @@ jobs:
           java-version: 17
 
       - name: Build the backend
-        run: mvn install -P frankframework
+        run: mvn install -P frankframework,ci
 
       - name: Cache local Maven repository
         uses: actions/cache@v2
@@ -37,7 +37,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Run Cypress using the frank-framework Docker image
-        uses: cypress-io/github-action@v2.9.7
+        uses: cypress-io/github-action@v6.7.0
         with:
           working-directory: frontend/src/main/frontend/
           build: npm run build:prod
