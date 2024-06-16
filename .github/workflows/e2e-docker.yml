@@ -41,6 +41,6 @@ jobs:
         with:
           working-directory: frontend/src/main/frontend/
           build: npm run build:prod
-          start: docker-compose up -d
+          start: docker-compose -f ../../../../docker-compose.demo.yml up -d
           wait-on: "http://localhost:8080/"
           wait-on-timeout: 360
