@@ -1,9 +1,15 @@
-version: "3"
-
 services:
-  frank:
+  frankframework:
+    image: frankframework/frankframework:latest
+    ports:
+      - "8080:8080"
+    volumes: &frank-volumes
+      - ./frontend/src/main/frontend/cypress/Frank/src/main/:/opt/frank/
+    environment:
+      management.gateway.inbound.class: "org.frankframework.management.gateway.HazelcastInboundGateway"
+  frank-flow:
     image: frank-flow
     build: .
     ports:
-      - "8080:8080"
-    restart: unless-stopped
+      - "8081:8080"
+    volumes: *frank-volumes

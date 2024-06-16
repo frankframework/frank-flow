@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  frank:
+    image: frank-flow
+    build:
+      dockerfile: Dockerfile.demo
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
