@@ -1,0 +1,5 @@
+# This image is created for the https://flow.frankframework.org demo.
+FROM frankframework/frankframework:latest
+
+COPY --chown=tomcat ./frontend/src/main/frontend/cypress/Frank/src/main/ /opt/frank/
+COPY --chown=tomcat ./frank-flow/target/frank-flow-3.0.0-SNAPSHOT.war /usr/local/tomcat/webapps/frank-flow.war
