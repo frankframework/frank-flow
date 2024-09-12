@@ -1,0 +1,186 @@
+<Configuration
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../FrankConfig.xsd" xmlns:flow="urn:frank-flow" flow:gridSize="25" flow:forwardStyle="flowchart" flow:direction="horizontal"
+>
+
+  <Adapter
+    name="Exercise 1"
+    active="${HelloLines.active}"
+    description="Call http://localhost/api/hello-lines to see &lt;results> ... Hello World One ... Two ... Three ... Four ... Five ... &lt;/results>"
+  >
+    <Receiver name="ApiListener" flow:y="1000" flow:x="400" >
+      <!-- This listener is used when the API is called as specified in OpenAPI 3.0 at the Webservices page -->
+      <ApiListener
+        name="HelloLines"
+        uriPattern="hello-lines"
+      />
+    </Receiver>
+    <Receiver name="WebServiceListener" flow:y="800" flow:x="400">
+      <!-- This listener is used when the SOAP endpoint is called as specified in WSDL at the Webservices page -->
+      <WebServiceListener
+        name="HelloLines"
+        serviceNamespaceURI="urn:hello-lines"
+        soap="false"
+      />
+    </Receiver>
+    <Receiver name="JavaListener" flow:y="600" flow:x="400">
+      <!-- This listener is used by the scheduler -->
+      <JavaListener
+        name="HelloLines"
+      />
+    </Receiver>
+    <Pipeline>
+      <SoapInputValidator
+        name="ValidateInput"
+        schemaLocation="urn:hello-lines HelloLines/xsd/Lines.xsd"
+        addNamespaceToSchema="true"
+        soapBody="lines"
+        allowPlainXml="true"
+        acceptNamespacelessXml="true"
+        rootElementSessionKey="receivedRootElement"
+        reasonSessionKey="validatorMessage" flow:y="200" flow:x="100"
+      >
+      </SoapInputValidator>
+      <SoapInputWrapper
+        onlyIfSessionKey="receivedRootElement"
+        onlyIfValue="Envelope"
+        direction="UNWRAP" flow:y="400" flow:x="100"
+      />
+      <SoapOutputWrapper
+        onlyIfSessionKey="receivedRootElement"
+        onlyIfValue="Envelope" flow:y="400" flow:x="400"
+      />
+      <Exits>
+      </Exits>
+      <XsltPipe
+        name="Remove namespaces"
+        removeNamespaces="true"
+        xpathExpression="/"
+        outputType="XML" flow:y="400" flow:x="700"
+      >
+      </XsltPipe>
+      <XmlSwitchPipe
+        name="Only one line?"
+        xpathExpression="count(/lines/*) = 1" flow:y="400" flow:x="1000"
+      >
+      </XmlSwitchPipe>
+      <SenderPipe name="Call HelloWorld" flow:y="600" flow:x="1300">
+        <IbisLocalSender javaListener="HelloWorld"/>
+      </SenderPipe>
+      <Text2XmlPipe
+        name="Transform result to XML"
+        xmlTag="result" flow:y="600" flow:x="1600"
+      >
+      </Text2XmlPipe>
+      <ForEachChildElementPipe
+        name="Call HelloWorld for every line"
+        blockSize="2"
+        blockPrefix="&lt;batch>"
+        blockSuffix="&lt;/batch>"
+        elementXPathExpression="/lines/*" flow:y="400" flow:x="1300"
+      >
+        <IbisLocalSender javaListener="HelloWorld"/>
+        <Param name="message"/>
+      </ForEachChildElementPipe>
+      <XsltPipe
+        name="Add documentation"
+        styleSheetName="HelloLines/xsl/AddDocumentation.xsl" flow:y="400" flow:x="1900"
+      >
+        <Param name="originalMessage" sessionKey="originalMessage"/>
+        <Param name="validatorMessage" sessionKey="validatorMessage"/>
+        <Param name="exampleMessage" sessionKey="exampleMessage"/>
+        <Param name="exampleMessageAsXml" sessionKey="exampleMessageAsXml"/>
+        <Param name="exampleMessageAsJson" sessionKey="exampleMessageAsJson"/>
+      </XsltPipe>
+      <FixedResultPipe
+        name="Create example plain text message"
+        returnString="Line One&#10;Line Two&#10;Line Three&#10;Line Four&#10;Line Five"
+        storeResultInSessionKey="exampleMessage" flow:y="100" flow:x="400"
+      >
+      </FixedResultPipe>
+      <Text2XmlPipe
+        name="Transform plain text message to XML"
+        xmlTag="lines"
+        splitLines="true" flow:y="200" flow:x="700"
+      >
+      </Text2XmlPipe>
+      <XsltPipe
+        name="Add position to elements"
+        styleSheetName="HelloLines/xsl/AddPositionToElements.xsl"
+        storeResultInSessionKey="exampleMessageAsXml" flow:y="200" flow:x="1000"
+      >
+      </XsltPipe>
+      <Json2XmlValidatorPipe
+        name="Transform XML message to JSON message"
+        noNamespaceSchemaLocation="HelloLines/xsd/Lines.xsd"
+        root="lines"
+        outputFormat="JSON"
+        preserveInput="true"
+        storeResultInSessionKey="exampleMessageAsJson"
+        throwException="true" flow:y="200" flow:x="1300"
+      >
+      </Json2XmlValidatorPipe>
+    </Pipeline>
+  </Adapter>
+  <Scheduler>
+    <Job
+      name="HelloLines"
+      cronExpression="0 55 2 * * ?"
+      javaListener="HelloLines"
+      function="sendMessage"
+      active="${HelloLines.active}"
+    />
+  </Scheduler>
+
+  <Adapter name="Exercise 2" description="Do the translation">
+    <Receiver name="Update temperature" flow:y="100" flow:x="100">
+      <JavaListener name="Update temperature"/>
+    </Receiver>
+    <Pipeline>
+      <SenderPipe name="Get temperature from OpenWeather" flow:y="100" flow:x="400">
+        <HttpSender
+          url="http://api.openweathermap.org/data/2.5/weather?q=Rotterdam&amp;units=metric&amp;mode=xml&amp;appid=${openweathermap.appid}"
+        />
+      </SenderPipe>
+      <!-- concat('{&quot;temperature&quot;:', /current/temperature/@value, '}') -->
+      <SenderPipe name="Post temperature to ThingsBoard" flow:y="500" flow:x="400">
+        <HttpSender
+          url="https://demo.thingsboard.io/api/v1/${thingsboard.apikey}/telemetry"
+          methodType="POST"
+          contentType="application/json"
+        />
+      </SenderPipe>
+    </Pipeline>
+    <Scheduler>
+      <Job
+        name="Update temperature"
+        adapterName="Exercise 2"
+        receiverName="Update temperature"
+        function="sendMessage"
+        interval="6000"
+      />
+    </Scheduler>
+  </Adapter>
+
+  <Adapter name="Exercise 3">
+    <Receiver name="Manual trigger" flow:y="100" flow:x="100">
+      <JavaListener name="Manual trigger"/>
+    </Receiver>
+    <Pipeline>
+      <SenderPipe name="List dummy directory" flow:y="100" flow:x="400">
+        <FileSender name="List dummy directory" directory="/dummy" actions="list" />
+      </SenderPipe>
+    </Pipeline>
+  </Adapter>
+
+  <Adapter name="Exercise 4">
+    <Receiver name="Manual trigger" flow:y="100" flow:x="100">
+      <JavaListener name="Manual trigger"/>
+    </Receiver>
+    <Pipeline>
+      <SenderPipe name="List dummy directory" flow:y="100" flow:x="400">
+        <LocalFileSystemSender name="List dummy directory" directory="/dummy" action="list" />
+      </SenderPipe>
+    </Pipeline>
+  </Adapter>
+</Configuration>
