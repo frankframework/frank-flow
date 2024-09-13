@@ -1,6 +1,7 @@
 <Configuration
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="../FrankConfig.xsd" xmlns:flow="urn:frank-flow" flow:gridSize="25" flow:forwardStyle="flowchart" flow:direction="horizontal"
+  xsi:noNamespaceSchemaLocation="../FrankConfig.xsd" xmlns:flow="urn:frank-flow"
+  flow:gridSize="25" flow:forwardStyle="flowchart" flow:direction="horizontal"
 >
 
   <Adapter
@@ -8,7 +9,7 @@
     active="${HelloLines.active}"
     description="Call http://localhost/api/hello-lines to see &lt;results> ... Hello World One ... Two ... Three ... Four ... Five ... &lt;/results>"
   >
-    <Receiver name="ApiListener" flow:y="1000" flow:x="400" >
+    <Receiver name="ApiListener" flow:y="1000" flow:x="400">
       <!-- This listener is used when the API is called as specified in OpenAPI 3.0 at the Webservices page -->
       <ApiListener
         name="HelloLines"
@@ -84,7 +85,8 @@
       </ForEachChildElementPipe>
       <XsltPipe
         name="Add documentation"
-        styleSheetName="HelloLines/xsl/AddDocumentation.xsl" flow:y="400" flow:x="1900"
+        styleSheetName="HelloLines/xsl/AddDocumentation.xsl" flow:y="400"
+        flow:x="1900"
       >
         <Param name="originalMessage" sessionKey="originalMessage"/>
         <Param name="validatorMessage" sessionKey="validatorMessage"/>
@@ -137,13 +139,15 @@
       <JavaListener name="Update temperature"/>
     </Receiver>
     <Pipeline>
-      <SenderPipe name="Get temperature from OpenWeather" flow:y="100" flow:x="400">
+      <SenderPipe name="Get temperature from OpenWeather" flow:y="100"
+                  flow:x="400">
         <HttpSender
           url="http://api.openweathermap.org/data/2.5/weather?q=Rotterdam&amp;units=metric&amp;mode=xml&amp;appid=${openweathermap.appid}"
         />
       </SenderPipe>
       <!-- concat('{&quot;temperature&quot;:', /current/temperature/@value, '}') -->
-      <SenderPipe name="Post temperature to ThingsBoard" flow:y="500" flow:x="400">
+      <SenderPipe name="Post temperature to ThingsBoard" flow:y="500"
+                  flow:x="400">
         <HttpSender
           url="https://demo.thingsboard.io/api/v1/${thingsboard.apikey}/telemetry"
           methodType="POST"
@@ -151,16 +155,15 @@
         />
       </SenderPipe>
     </Pipeline>
-    <Scheduler>
-      <Job
-        name="Update temperature"
-        adapterName="Exercise 2"
-        receiverName="Update temperature"
-        function="sendMessage"
-        interval="6000"
-      />
-    </Scheduler>
   </Adapter>
+  <Scheduler>
+    <Job
+      name="Update temperature"
+      javaListener="Update temperature"
+      function="sendMessage"
+      interval="6000"
+    />
+  </Scheduler>
 
   <Adapter name="Exercise 3">
     <Receiver name="Manual trigger" flow:y="100" flow:x="100">
@@ -168,7 +171,8 @@
     </Receiver>
     <Pipeline>
       <SenderPipe name="List dummy directory" flow:y="100" flow:x="400">
-        <FileSender name="List dummy directory" directory="/dummy" actions="list" />
+        <FileSender name="List dummy directory" directory="/dummy"
+                    actions="list"/>
       </SenderPipe>
     </Pipeline>
   </Adapter>
@@ -179,7 +183,8 @@
     </Receiver>
     <Pipeline>
       <SenderPipe name="List dummy directory" flow:y="100" flow:x="400">
-        <LocalFileSystemSender name="List dummy directory" directory="/dummy" action="list" />
+        <LocalFileSystemSender name="List dummy directory" directory="/dummy"
+                               action="list"/>
       </SenderPipe>
     </Pipeline>
   </Adapter>

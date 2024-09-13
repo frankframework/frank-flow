@@ -26,7 +26,7 @@
         <Job
             name="Update temperature"
             adapterName="Update temperature"
-            receiverName="Update temperature"
+            javaListener="Update temperature"
             function="sendMessage"
             interval="6000"
         />
