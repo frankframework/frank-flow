@@ -11,5 +11,8 @@ export default [
   {
     context: ['/frank-flow/api'],
     target: 'http://localhost:8080',
+    pathRewrite: {
+      '/frank-flow/api': '/api',
+    },
   },
 ];
